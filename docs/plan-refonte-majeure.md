@@ -532,17 +532,17 @@ Source normative : `docs/refonte-sorts.md` (v2.3). La table 14.2 se reporte à l
 **Fichiers :** Étendre `data/engine.json`, `data/cards.json`, `data/monsters.json`, `src/engine/stats.js`, `src/engine/migrate.js`
 **Interfaces :** `engine.json` : `"profils": { "guerrier": { "stat": "atk" }, "assassin": { "stat": "agi" }, "mage": { "stat": "int" }, "occultiste": { "stat": "int" }, "pretre": { "stat": "int" }, "gardien": { "stat": "hp" } }` (le gardien : proposition ouverte, donc une donnée, EXI-P3-1) ; chaque carte porte `agi` et `int`, réparties par les crans +10/+20/+30 %.
 
-- [ ] **Étape 1 :** poser `agi`/`int` sur toutes les cartes (dérivation par palier et rareté selon la répartition du design ; la formule est notée au rapport de phase).
-- [ ] **Étape 2 :** `v10to11(save)` : chaque exemplaire reçoit ses deux stats (ACC-3-6) ; `CURRENT_VERSION` = 11.
-- [ ] **Étape 3 :** commit `data+feat : agilite et intelligence, profils par stat principale`.
+- [x] **Étape 1 :** poser `agi`/`int` sur toutes les cartes (dérivation par palier et rareté selon la répartition du design ; la formule est notée au rapport de phase).
+- [x] **Étape 2 :** `v10to11(save)` : chaque exemplaire reçoit ses deux stats (ACC-3-6) ; `CURRENT_VERSION` = 11.
+- [x] **Étape 3 :** commit `data+feat : agilite et intelligence, profils par stat principale`.
 
 ### Tâche T3.2 : la base des mults
 
 **Fichiers :** Étendre `src/engine/spells.js`, `tests/spells.test.js`
 **Interfaces :** `castSpell` calcule `mult × statPrincipale(lanceur)` ; le soin plafonne à la vie max de la cible (EXI-P3-2).
 
-- [ ] **Étape 1 :** tests (ACC-3-1, ACC-3-2) : mage → intelligence, guerrier → attaque, assassin → agilité ; changer `"stat"` du profil dans `engine.json` (en copie) change la base ; le soin plafonne.
-- [ ] **Étape 2 :** commit `feat : le mult tire sur la stat principale du profil`.
+- [x] **Étape 1 :** tests (ACC-3-1, ACC-3-2) : mage → intelligence, guerrier → attaque, assassin → agilité ; changer `"stat"` du profil dans `engine.json` (en copie) change la base ; le soin plafonne.
+- [x] **Étape 2 :** commit `feat : le mult tire sur la stat principale du profil`.
 
 ### Tâche T3.3 : la zone
 
@@ -559,24 +559,24 @@ function pickZoneTargets(ligne, choix = null) {
 }
 ```
 
-- [ ] **Étape 1 :** coder + tests (ACC-3-3) : exactement 3 contiguës sur 5 ; le centre en auto ; pas de remplacement ; la largeur vient du cran (données).
-- [ ] **Étape 2 :** commit `feat : la zone, 3 cibles contigues sur 5, sans glissement`.
+- [x] **Étape 1 :** coder + tests (ACC-3-3) : exactement 3 contiguës sur 5 ; le centre en auto ; pas de remplacement ; la largeur vient du cran (données).
+- [x] **Étape 2 :** commit `feat : la zone, 3 cibles contigues sur 5, sans glissement`.
 
 ### Tâche T3.4 : l'ordre du tour
 
 **Fichiers :** Étendre `src/engine/combat.js`, `tests/combat.test.js`
 
-- [ ] **Étape 1 :** l'ordre se calcule sur l'agilité, tri stable à égalité (EXI-P3-4) ; test (ACC-3-4) : plus d'agilité agit avant, à égalité l'ordre ne bouge pas ; `grep -n "atk" src/engine/combat.js` ne montre plus l'initiative sur l'attaque.
-- [ ] **Étape 2 :** commit `feat : l'ordre du tour suit l'agilite`.
+- [x] **Étape 1 :** l'ordre se calcule sur l'agilité, tri stable à égalité (EXI-P3-4) ; test (ACC-3-4) : plus d'agilité agit avant, à égalité l'ordre ne bouge pas ; `grep -n "atk" src/engine/combat.js` ne montre plus l'initiative sur l'attaque.
+- [x] **Étape 2 :** commit `feat : l'ordre du tour suit l'agilite`.
 
 ### Tâche T3.5 : les seuils
 
 **Fichiers :** Étendre `data/engine.json`, `src/engine/spells.js`, `tests/spells.test.js`
 **Interfaces :** `engine.json` : `"seuils": { "parPalier": [...], "parCamp": {} }` selon le mécanisme retenu au design (EXI-P3-5) ; tout taux se joue contre le seuil de la cible.
 
-- [ ] **Étape 1 :** test statistique (ACC-3-5) : un stun 25 % contre un seuil donné, RNG semé, 10 000 tirages, fréquence observée dans ±0,5 % de l'attendu ; formule et tolérance documentées dans le test.
-- [ ] **Étape 2 :** commit `feat : les taux se jouent contre les seuils (donnees)`.
-- [ ] **Étape 3 :** `node build.mjs`, vérification visuelle (un combat Tactique), rapport de phase 3, `VERDICT: PASS`.
+- [x] **Étape 1 :** test statistique (ACC-3-5) : un stun 25 % contre un seuil donné, RNG semé, 10 000 tirages, fréquence observée dans ±0,5 % de l'attendu ; formule et tolérance documentées dans le test.
+- [x] **Étape 2 :** commit `feat : les taux se jouent contre les seuils (donnees)`.
+- [x] **Étape 3 :** `node build.mjs`, vérification visuelle (un combat Tactique), rapport de phase 3, `VERDICT: PASS`.
 
 ---
 
