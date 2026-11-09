@@ -83,3 +83,47 @@ function applyRemplace(instances, eveil, targetIid) {
   }
   return retires;
 }
+
+// écoles (phase 2) : un sort dépend de son école ouverte, jamais d'une classe (EXI-P2-1)
+function profilSchools(classe) {
+  const out = [];
+  for (const [id, ecole] of Object.entries(DATA.schools ?? {})) {
+    if ((ecole.ouvrePar?.profils ?? []).includes(classe)) out.push(id);
+  }
+  return out;
+}
+function openSchools(voie) {
+  const out = [];
+  const v = String(voie ?? '').toLowerCase();
+  for (const [id, ecole] of Object.entries(DATA.schools ?? {})) {
+    if ((ecole.ouvrePar?.voies ?? []).some((x) => v.includes(String(x).toLowerCase()))) out.push(id);
+  }
+  return out;
+}
+function ecolesOfInstance(inst) {
+  return new Set([...(inst.ecoles ?? []), ...profilSchools(inst.classe ?? ''), ...(inst.voie ? openSchools(inst.voie) : [])]);
+}
+function canCast(inst, spellId) {
+  const def = getSpellDef(spellId);
+  if (!def || !def.ecole) return true;
+  return ecolesOfInstance(inst).has(def.ecole);
+}
+// acquisition de départ (EXI-P2-6) : une naissance naît avec son commun + son sort de race
+function raceOfNaissance(c) {
+  if (!c.raciale) return null;
+  if (c.dungeon === 'divin') return 'divine';
+  const n = Number(String(c.id).replace(/\D/g, ''));
+  if (n <= 4) return 'humaine';
+  if (n <= 9) return 'bestiau';
+  return 'enge';
+}
+function sortsDeDepart(cardId) {
+  const c = getCard(cardId);
+  if (!c) return [];
+  const commun = (DATA.grimoire.communs ?? []).find((s) => (c.role === 'support') === (s.role === 'soin'));
+  const out = commun ? [commun.id] : [];
+  const race = raceOfNaissance(c);
+  const raceSpell = race ? (DATA.grimoire.race ?? []).find((s) => s.race === race) : null;
+  if (raceSpell) out.push(raceSpell.id);
+  return out;
+}
