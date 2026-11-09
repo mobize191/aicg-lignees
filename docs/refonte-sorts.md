@@ -6,7 +6,7 @@ type: "text/markdown"
 
 # Refonte des sorts : le grimoire mutualisé, les écoles et l'acquisition (v2)
 
-Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (quatre crans, inférieur, normal, supérieur, majeur, le RPG à l'ancienne), et les L, M et quelques cartes clés gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée (v2.1, ton retour)** : ×1.3 de quoi ? De la **stat principale du personnage** : l'attaque du guerrier, l'agilité de l'assassin, l'intelligence du mage, de l'occultiste et du prêtre. La réponse en section 2. **Et le tri des 189 est lancé (v2.2)** : le gabarit de fusion est posé (six règles, section 14.1), les Marées valident le moule (30 signatures : 7 uniques, 23 fondues vers 8 sorts d'école nés et 3 crans des entrées), la section 14.
+Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (quatre crans, inférieur, normal, supérieur, majeur, le RPG à l'ancienne), et les L, M et quelques cartes clés gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée (v2.1, ton retour)** : ×1.3 de quoi ? De la **stat principale du personnage** : l'attaque du guerrier, l'agilité de l'assassin, l'intelligence du mage, de l'occultiste et du prêtre. La réponse en section 2. **Et le tri des 189 est lancé (v2.2)** : le gabarit de fusion est posé (six règles, section 14.1), les Marées valident le moule (30 signatures : 7 uniques, 23 fondues vers 6 sorts d'école nés et 3 crans des entrées), la section 14. **Et le cran élargit le ciblage (v2.3, ton retour)** : un sort passe de 1 cible à 2, puis à la zone ou à l'équipe (l'échelle des frappes : 1, 2, 3, 5 ; la zone définie en 14.6) ; et la future séparation mono/multi est notée (section 12).
 
 Ce document reste le DESIGN CIBLE de la refonte. L'état embarqué reste le repo (`dist.html`, `inventaire-sorts.md`, `arbres-sorts.md`, `audit-sorts.md`) ; ce qui est acté ici descendra au dist lors de la grosse mise à jour (section 11).
 
@@ -70,9 +70,9 @@ Le constat (ta remarque) : 189 signatures, et beaucoup se ressemblent : les brû
 
 La règle (acté) :
 
-1. **Mutualiser au maximum** : les effets proches fusionnent en **un seul sort, à crans**. Les crans sont l'échelle à l'ancienne, **quatre marches : inférieur, normal, supérieur, majeur** (notés I, II, III, IV sur les fiches ; l'exemple des soins : Soins inférieurs, Soins, Soins supérieurs, Soins majeurs). Le cran monte les taux et la puissance, jamais le rôle. La littérature des jeux le vérifie : l'échelle française de D&D monte soins légers, modérés, importants, intensifs, et Final Fantasy suffixe ses sorts sur trois crans ; notre échelle à quatre marches prend le meilleur des deux.
+1. **Mutualiser au maximum** : les effets proches fusionnent en **un seul sort, à crans**. Les crans sont l'échelle à l'ancienne, **quatre marches : inférieur, normal, supérieur, majeur** (notés I, II, III, IV sur les fiches ; l'exemple des soins : Soins inférieurs, Soins, Soins supérieurs, Soins majeurs). Le cran monte les taux et la puissance et, depuis la v2.3, élargit le ciblage (1 cible, 2, la zone, tous ; ou 1 allié, 2 alliés, l'équipe) ; jamais le rôle. La littérature des jeux le vérifie : l'échelle française de D&D monte soins légers, modérés, importants, intensifs, et Final Fantasy suffixe ses sorts sur trois crans ; notre échelle à quatre marches prend le meilleur des deux.
 2. **Les L, M et quelques cartes clés gardent une ou deux uniques** : le geste que personne d'autre ne fait (Tranche-Monde, Nuit Éternelle, Aube Éternelle, la Fauchade Universelle de la Mort, l'Abîme Absolu de Léviathan). La liste des cartes clés tombera au tri des 189. Les autres cartes rendent leurs signatures au pot commun.
-3. **La fusion se fait par école et par biome** : les trente signatures des Marées deviennent une douzaine de sorts d'école à crans (les chants de sirène : l'Entrave I, II, III ; les morsures d'eau : la Lame I, II, III) ; les brûlures de la Forge : le Mauvais Œil brûlant I, II, III ; les hurlements de la Crypte : l'Entrave I, II, III.
+3. **La fusion se fait par école et par biome** : les trente signatures des Marées fondent en 6 sorts d'école à crans et 3 crans des entrées (le chant de sirène : l'Entrave de 1 ennemi à tous ; la morsure d'écume : la Lame de 1 à tous, la première ligne pleine) ; les brûlures de la Forge : le Mauvais Œil brûlant, de 1 à tous ; les hurlements de la Crypte : l'Entrave, de 1 à tous.
 4. **Décompte visé (proposition)** : les 189 signatures fondent en une soixantaine de sorts partagés à quatre crans, plus une vingtaine d'uniques (une ou deux par L, M et carte clé) : environ 80 sorts au grimoire, tous typés, tous lisibles. Le tri exact, biome par biome, en 13.1.
 
 Ce que le joueur y gagne : chaque sort du grimoire se lit (rôle, école, ciblage, taux, base), se compare, et se reconnaît d'une carte à l'autre ; un cran supérieur est une récompense, pas un nouveau nom à mémoriser.
@@ -261,26 +261,28 @@ Chaque famille neuve suit le gabarit (6 sorts, 2/3/5/9/14/20✦, un rôle-cadre,
 | Les anges dévoyés (depuis l'Ange Éveillé) | dégâts solaires + malus | l'astre qui brûle ce qu'il éclaire |
 | Les lignées d'accueil des Enge | selon la famille d'accueil | pour l'essentiel elles existent (les webs) : le tri famille par famille se fait ici |
 
+**La future séparation mono/multi (noté, ton idée v2.3)** : aujourd'hui, un sort d'école élargit son ciblage en montant de cran (14.1) ; demain, si la méta le demande, chaque école peut porter deux lignes qui évoluent en parallèle : **la ligne simple** (une cible, les gros chiffres : ×4 sur la cible unique) et **la ligne multiple** (2 cibles, la zone, tous : ×3 ou ×2.5, moins fort par tête). La ligne simple sert les duels et les boss, la ligne multiple les packs ; les deux apprennent leurs crans séparément. À rouvrir après la grosse mise à jour (section 11).
+
 ## 13. Le carrefour
 
 ### 13.1 À trancher
 
 1. **Le sort L d'Argus** : « Argus : Forteresse Vivante » répète le nom de sa carte ; proposition : **Assise Éternelle**.
 2. **Le sort L de Maïa** : « Maïa : Cœur du Bosquet » porte le nom de la M du Vivant : garder le clin d'œil ou le renommer ?
-3. **Le tri des 189** : **lancé (v2.2, section 14)** : le gabarit est posé, les Marées sont fondues ; restent Forge, Bosquet, Crypte, Zénith, naissances, solos, divines ; en suspens : le sort des L au geste répétitif (14.4) et la corrosion (14.2).
+3. **Le tri des 189** : **lancé (v2.2, repris v2.3, section 14)** : le gabarit est posé, les Marées sont fondues ; restent Forge, Bosquet, Crypte, Zénith, naissances, solos, divines ; en suspens : le sort des L au geste répétitif (14.4) et la corrosion (14.2).
 4. **La saveur des crans** : quatre marches actées (inférieur, normal, supérieur, majeur) ; l'échelle française de D&D dit léger, modéré, important, intensif, Final Fantasy suffixe : quelle dénomination sur les fiches ?
 5. **Les écoles** : valider les huit noms (la Lame, le Baume, le Rempart, l'Appel, l'Entrave, le Mauvais Œil, la Ferveur, la Ruse) et le tableau des profils de classe.
 6. **Les invocations** : la fiche des renforts, leur durée, combien simultanément ; les élémentaires d'eau d'abord (le chemin du mage).
 7. **L'apprentissage** : où chaque cran s'apprend (zones d'errance ? donjons ? paliers ? événements ?), et à quel rythme.
 8. **Les sorts de race et les renommages** : Instinct Sauvage et Ferveur Céleste gardent leurs noms (proposition) ?
 9. **Les seuils de résistance** : le mécanisme exact des taux (le palier ? un stat ? le camp ?).
-10. **La zone** : la grille de ciblage (combien de cases, comment on la pose en Tactique).
+10. **La zone** : **définie (v2.3, 14.6)** : 3 cibles contiguës sur les 5 (le centre en auto, le trio au choix en Tactique) ; restent la pose exacte en Tactique et le cas du boss seul.
 11. **Le gardien** : ses boucliers tirent sur sa vie (la proposition de la v2.1) : acté ou ajusté ?
 
 ### 13.2 Acté et validé
 
 1. **Mutualiser au maximum** : les 189 signatures redondantes fondent en un grimoire partagé ; les L, M et quelques cartes clés gardent une ou deux uniques.
-2. **Les crans** : **quatre marches**, inférieur, normal, supérieur, majeur (I, II, III, IV) ; le cran monte les taux et la puissance, jamais le rôle ; l'échelle vérifiée contre la littérature des jeux (D&D en français : soins légers, modérés, importants, intensifs ; Final Fantasy : les suffixes).
+2. **Les crans** : **quatre marches**, inférieur, normal, supérieur, majeur (I, II, III, IV) ; le cran monte les taux et la puissance et **élargit le ciblage (v2.3)**, jamais le rôle ; l'échelle vérifiée contre la littérature des jeux (D&D en français : soins légers, modérés, importants, intensifs ; Final Fantasy : les suffixes).
 3. **Un sort dépend de son effet, pas de sa classe** : les écoles remplacent le verrou ; les classes deviennent des profils ; changer de voie change les écoles ouvertes.
 4. **Le déblocage progressif** : une carte naît avec son commun (+ la race pour une naissance), le reste s'apprend ; le grimoire dépassera les cartes actuelles.
 5. **La fiche type** : rôle, école, ciblage, taux, base ; les descriptions restent la saveur.
@@ -291,15 +293,15 @@ Chaque famille neuve suit le gabarit (6 sorts, 2/3/5/9/14/20✦, un rôle-cadre,
 10. **Les Pouvoirs restent sans mana** : la même typologie, deux blocs sur la fiche.
 11. **Les zones d'errance portent l'apprentissage** : la cadence (zone, donjon, zone, donjon), les éclats, les N, et maintenant les crans.
 
-## 14. Le tri des 189 : le gabarit et la fusion des Marées (v2.2)
+## 14. Le tri des 189 : le gabarit et la fusion des Marées (v2.2, élargi v2.3)
 
 Le gros chantier est lancé. Les Marées servent de biome témoin : leurs trente signatures (e1 à e30) valident le gabarit, les quatre autres biomes suivront le même moule. Les textes de référence : la section « Les 189 signatures » de `inventaire-sorts.md`.
 
 ### 14.1 Le gabarit de fusion (six règles)
 
 1. **Trier par effet, pas par nom** : chaque signature rejoint un sort d'école défini par son triplet (école, rôle, ciblage) ; le nom de la carte meurt, le geste survit. Et le tri recale : les taux épars du dist (30 % ici, 35 % là) se normalisent sur l'échelle des crans (14.3).
-2. **Un ciblage par sort** : élargir le ciblage, c'est un autre sort de la même école (Carapace de Corail sur un allié, Écran de Galets sur l'équipe) ; le cran, lui, monte les taux et la puissance, jamais le rôle ni le ciblage.
-3. **Le cran suit le palier** : C et UC nourrissent les crans I-II, R et SR les crans II-III, UR les crans III-IV ; un cran qu'un biome ne remplit pas attend un autre biome ou s'apprend en zone d'errance.
+2. **Le cran élargit le ciblage (v2.3, ton retour)** : une seule ligne par sort, qui s'élargit en montant de cran ; les frappes passent de 1 ennemi (I) à 2 (II), à la zone de 3 (III), à tous les ennemis (IV) ; les soutiens de 1 allié (I) à 2 alliés (II), à l'équipe (III), que le cran IV renforce (la largeur plafonne à l'équipe) ; les sorts sur soi ne s'élargissent pas, leurs crans montent les taux. Le cran ne change jamais le rôle, et les taux baissent quand la largeur monte (l'équilibre acté, section 1).
+3. **Le cran suit la largeur, le palier affine** : la largeur native de la signature choisit son cran (une frappe de zone tombe au cran III, un bouclier d'équipe aussi), le palier règle les litiges (un UR au geste étroit monte d'un cran : Frappe Royale, recalée tous au cran IV) ; un cran qu'un biome ne remplit pas attend un autre biome ou s'apprend en zone d'errance.
 4. **Le nom du sort d'école vient de sa signature la plus évocatrice, débarrassée de sa carte** : Chant de Sirène naît des sirènes des Marées, Hurlement naîtra des banshees de la Crypte ; la saveur du biome d'origine reste, la fiche est la même partout où le sort s'apprend.
 5. **Les signatures génériques deviennent des crans des entrées d'école** (section 6) : le Sergent des Brumes nourrit Brise-Garde (sa signature portait déjà le nom), le Prophète des Marées nourrit Œil du Malheur, le Confesseur des Abysses nourrit Onde Consacrée ; pas de nouveau sort pour un geste qui existe déjà.
 6. **Les L et M gardent leurs uniques** (une ou deux par carte), les cartes clés aussi ; tout le reste rend son geste au pot commun.
@@ -320,45 +322,42 @@ Le gros chantier est lancé. Les Marées servent de biome témoin : leurs trente
 
 **Les 23 fondues, école par école** :
 
-| Le sort d'école | École | Rôle | Ciblage | Cran | Les signatures fondues |
-| --- | --- | --- | --- | --- | --- |
-| Morsure d'Écume | la Lame | dégâts | 1 ennemi | I | Jet d'Écume (e1), Trait de Corail (e2), Larme Salée (e10) |
-| Morsure d'Écume | la Lame | dégâts | 1 ennemi | II | Morsure des Récifs (e3), Pince de Silex (e11) |
-| Morsure d'Écume | la Lame | dégâts | 1 ennemi | III | Frappe Royale (e18) |
-| Déferlante | la Lame | dégâts | zone | II | Colère Sismique (e12), Écume Tranchante (e26) |
-| Brise-Garde (l'entrée, section 6) | la Lame | dégâts | 1 ennemi | II | le Sergent des Brumes (e4), qui portait déjà le nom |
-| Chant de Sirène | l'Entrave | contrôle | 1 ennemi | I | Chant de la Marée (e7), Berceuse des Récifs (e23) |
-| Chant de Sirène | l'Entrave | contrôle | 1 ennemi | II | Marée Traîtresse (e24) |
-| Chant de Sirène | l'Entrave | contrôle | 1 ennemi | III | Chant Paralysant (e25) |
-| Chant de Sirène | l'Entrave | contrôle | 1 ennemi | IV | Chant Ensorceleur (e27) |
-| Étreinte des Profondeurs | l'Entrave | contrôle (immobilisation) | 1 ennemi | III | Étreinte de l'Abîme (e6) |
-| Carapace de Corail | le Rempart | bouclier | 1 allié | II | Carapace de Corail (e8) |
-| Carapace de Corail | le Rempart | bouclier | 1 allié | III | Corail Vengeur (e29, +10 % de riposte) |
-| Écran de Galets | le Rempart | bouclier | l'équipe | II | Mur de Galet (e15) |
-| Écran de Galets | le Rempart | bouclier | l'équipe | III | Écran de Galets (e21) |
-| Œil du Malheur (l'entrée, section 6) | le Mauvais Œil | malus | 1 ennemi | II | Vision Noyée (e5) |
-| Marque Corrosive | le Mauvais Œil | malus (corrosion) | 1 ennemi | III | Rituel des Écumes (e16) |
-| Onde Consacrée (l'entrée, section 6) | le Baume | soin | l'équipe | II | Bénédiction de l'Abîme (e9) |
-| Guet des Fonds | la Ferveur | boost | 1 allié | II | Guet des Fonds (e20, +15 % de précision ce tour) |
+| Le sort d'école | École | Rôle | Cran (la largeur) | Les signatures fondues |
+| --- | --- | --- | --- | --- |
+| Morsure d'Écume | la Lame | dégâts | I (1 ennemi) | Jet d'Écume (e1), Trait de Corail (e2), Larme Salée (e10) |
+| Morsure d'Écume | la Lame | dégâts | II (2 ennemis) | Morsure des Récifs (e3), Pince de Silex (e11) |
+| Morsure d'Écume | la Lame | dégâts | III (la zone) | Colère Sismique (e12), Écume Tranchante (e26) |
+| Morsure d'Écume | la Lame | dégâts | IV (tous) | Frappe Royale (e18, recalée : la frappe du roi s'abat sur la ligne entière) |
+| Chant de Sirène | l'Entrave | contrôle | I (1 ennemi) | Chant de la Marée (e7), Berceuse des Récifs (e23) |
+| Chant de Sirène | l'Entrave | contrôle | II (2 ennemis) | Marée Traîtresse (e24) |
+| Chant de Sirène | l'Entrave | contrôle | III (la zone) | Chant Paralysant (e25) |
+| Chant de Sirène | l'Entrave | contrôle | IV (tous) | Chant Ensorceleur (e27, le chant porte à toute la ligne) |
+| Étreinte des Profondeurs | l'Entrave | contrôle (immobilisation) | III (la zone) | Étreinte de l'Abîme (e6) |
+| Carapace de Corail | le Rempart | bouclier | I (1 allié) | Carapace de Corail (e8) |
+| Carapace de Corail | le Rempart | bouclier | III (l'équipe) | Mur de Galet (e15), Écran de Galets (e21) |
+| Carapace de Corail | le Rempart | bouclier | IV (l'équipe renforcée) | Corail Vengeur (e29, +10 % de riposte) |
+| Marque Corrosive | le Mauvais Œil | malus (corrosion) | III (la zone) | Rituel des Écumes (e16) |
+| Guet des Fonds | la Ferveur | boost | II (2 alliés) | Guet des Fonds (e20) |
+| Brise-Garde (l'entrée, section 6) | la Lame | dégâts | II (2 ennemis) | le Sergent des Brumes (e4), qui portait déjà le nom |
+| Œil du Malheur (l'entrée, section 6) | le Mauvais Œil | malus | II (2 ennemis) | Vision Noyée (e5) |
+| Onde Consacrée (l'entrée, section 6) | le Baume | soin | II (2 alliés) | Bénédiction de l'Abîme (e9) |
 
-Le bilan : **30 signatures fondent en 7 uniques + 8 sorts d'école nés + 3 crans greffés sur les entrées** (Brise-Garde II, Œil du Malheur II, Onde Consacrée II). Les crans vides (Morsure d'Écume IV, Étreinte des Profondeurs I-II, Marque Corrosive I-II, Guet des Fonds I et III-IV, Déferlante I, III et IV...) attendent les autres biomes ou les zones d'errance.
+Le bilan : **30 signatures fondent en 7 uniques + 6 sorts d'école nés + 3 crans greffés sur les entrées** (Brise-Garde II, Œil du Malheur II, Onde Consacrée II ; les entrées suivent le gabarit d'élargissement, leurs fiches de la section 6 se recâbleront crans par crans à la grosse mise à jour, section 11). **Morsure d'Écume est la première ligne pleine** (I à IV) ; les crans vides (Étreinte des Profondeurs I, II et IV ; Carapace de Corail II ; Marque Corrosive I, II et IV ; Guet des Fonds I, III et IV) attendent les autres biomes ou les zones d'errance.
 
 **La corrosion (proposition)** : la brûlure des Marées de l'inventaire (e16, e17, e30) devient la **corrosion**, le DoT d'eau du Mauvais Œil ; la Forge garde la brûlure, l'Ombre le poison, le Bosquet la sève rongeuse : un mot-clé par élément, la même règle (pourcentage par tour, contre le seuil de la cible).
 
 ### 14.3 Les taux nés des Marées (proposition)
 
-Les sorts d'école se calent entre les communs (2✦) et les lignées hautes (9✦ et plus) : **le coût monte d'une marche par cran (3, 4, 5, 6✦) et la puissance suit** ; toutes les puissances tirent sur la stat principale du lanceur (section 2), tous les taux se jouent contre le seuil de la cible (section 10).
+Les sorts d'école se calent entre les communs (2✦) et les lignées hautes (9✦ et plus) : **le coût monte d'une marche par cran (3, 4, 5, 6✦), la largeur suit (v2.3), la puissance totale monte et les taux baissent quand la largeur monte** ; toutes les puissances tirent sur la stat principale du lanceur (section 2), tous les taux se jouent contre le seuil de la cible (section 10).
 
-| Le sort (école, ciblage) | Cran I | Cran II | Cran III | Cran IV |
+| Le sort (école, rôle) | Cran I | Cran II | Cran III | Cran IV |
 | --- | --- | --- | --- | --- |
-| Morsure d'Écume (la Lame, 1 ennemi) : l'échelle générique | 3✦ ×1.5 | 4✦ ×1.6 | 5✦ ×1.7 | 6✦ ×1.8 |
-| Déferlante (la Lame, zone) : la zone tape plus large | ×1.9 | ×2.0 | ×2.1 | ×2.2 |
-| Chant de Sirène (l'Entrave, 1 ennemi) : stun | 15 % × 1 tour | 20 % | 25 % | 30 % |
-| Étreinte des Profondeurs (l'Entrave, 1 ennemi) : immobilisation | 20 % | 25 % | 30 % | 35 % |
-| Carapace de Corail (le Rempart, 1 allié) : bouclier | ×1.5 | ×1.7 | ×1.9 | ×2.1 |
-| Écran de Galets (le Rempart, l'équipe) : bouclier | ×1.8 | ×2.0 | ×2.2 | ×2.4 |
-| Marque Corrosive (le Mauvais Œil, 1 ennemi) : corrosion | 15 % × 2 tours | 20 % | 25 % | 30 % |
-| Guet des Fonds (la Ferveur, 1 allié) : précision | +10 % | +15 % | +20 % | +25 % |
+| Morsure d'Écume (la Lame, dégâts) | 3✦, 1 ennemi, ×1.5 | 4✦, 2 ennemis, ×1.8 | 5✦, la zone, ×2.2 | 6✦, tous, ×2.6 |
+| Chant de Sirène (l'Entrave, stun) | 25 % × 1 tour, 1 ennemi | 20 %, 2 ennemis | 15 %, la zone | 10 %, tous |
+| Étreinte des Profondeurs (l'Entrave, immobilisation) | 30 %, 1 ennemi | 25 %, 2 ennemis | 20 %, la zone | 15 %, tous |
+| Carapace de Corail (le Rempart, bouclier) | ×1.7, 1 allié | ×1.5, 2 alliés | ×1.3, l'équipe | ×1.6, l'équipe renforcée |
+| Marque Corrosive (le Mauvais Œil, corrosion) | 25 % × 2 tours, 1 ennemi | 20 %, 2 ennemis | 15 %, la zone | 10 %, tous |
+| Guet des Fonds (la Ferveur, précision) | +25 %, 1 allié | +20 %, 2 alliés | +15 %, l'équipe | +20 %, l'équipe renforcée |
 
 ### 14.4 Le décompte global (à trancher en cours de tri)
 
@@ -379,3 +378,7 @@ La Forge, le prochain biome du tri, dira si ses 4 L tiennent toutes une vraie un
 | 4. Zénith Ardent | z1-z30 | les colonnes solaires (la Lame zone), les hymnes (la Ferveur), les renvois (le Rempart), deux M (Couronnement, Prophétie du Plein Jour) |
 | 5. Naissances et solos | n1-n15 et les 21 solos | 36 signatures à 5✦ ×1.85 : des crans I-II des écoles existantes, sauf cartes clés |
 | 6. Les divines | d1-d18 | leurs gestes dessinent les familles divines (section 12) ; les 3 L (Kairos, Écho, Ananké) gardent leurs uniques |
+
+### 14.6 La zone, définie (v2.3, ta question)
+
+Le champ aligne **5 ennemis**, l'échelle des frappes devient nette : **1 (le mono), 2 (le double), 3 (la zone), 5 (tous)**. La zone frappe **3 cibles contiguës sur les 5** (trois voisins : les positions 1-2-3, 2-3-4 ou 3-4-5 de la ligne adverse) ; en Tactique, on pose le trio où l'on veut ; en auto, le jeu frappe le centre (les positions 2, 3, 4). Si une cible du trio tombe avant l'impact, la zone frappe les restants, sans glisser vers un voisin. Restent à câbler (13.1-10) : la pose exacte en Tactique et le comportement de la zone contre un boss seul.
