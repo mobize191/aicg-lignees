@@ -1120,5 +1120,72 @@
   "family": "bosquet",
   "branch": true,
   "archived": true
+ },
+ {
+  "id": "p1",
+  "dungeon": "divin",
+  "name": "Ange Éveillé",
+  "rarity": "UC",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 8,
+  "hp": 66,
+  "effect": {
+   "kind": "heal",
+   "value": 24
+  },
+  "soloSpell": "Éclat d’Aube",
+  "raciale": true,
+  "voie": "l’éveil du service — l’Ange Éveillé"
+ },
+ {
+  "id": "p2",
+  "dungeon": "divin",
+  "name": "Ange Gardien",
+  "rarity": "C",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 6,
+  "hp": 58,
+  "effect": {
+   "kind": "heal",
+   "value": 20
+  },
+  "soloSpell": "Éclat d’Aube",
+  "raciale": true,
+  "archived": true,
+  "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)"
+ },
+ {
+  "id": "p3",
+  "name": "Pousse des Sèves",
+  "rarity": "C",
+  "classe": "Prêtre",
+  "element": "Terre",
+  "role": "support",
+  "atk": 5,
+  "hp": 60,
+  "effect": {
+   "kind": "heal",
+   "value": 16
+  },
+  "voie": "voie sylvestre — les Gens des Sèves"
+ },
+ {
+  "id": "p4",
+  "name": "Fidèle du Jour",
+  "rarity": "C",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 6,
+  "hp": 58,
+  "effect": {
+   "kind": "heal",
+   "value": 18
+  },
+  "voie": "voie du zèle — la commune du zèle"
  }
 ]

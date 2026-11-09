@@ -1,0 +1,112 @@
+{
+ "lame": {
+  "nom": "la Lame",
+  "role": "degats",
+  "ouvrePar": {
+   "profils": [
+    "Guerrier",
+    "Assassin"
+   ],
+   "voies": [
+    "voie du sabre",
+    "voie du bretteur",
+    "voie de l’assassinat"
+   ]
+  }
+ },
+ "baume": {
+  "nom": "le Baume",
+  "role": "soin",
+  "ouvrePar": {
+   "profils": [
+    "Prêtre"
+   ],
+   "voies": [
+    "la foi",
+    "voie de la protection"
+   ]
+  }
+ },
+ "rempart": {
+  "nom": "le Rempart",
+  "role": "bouclier",
+  "ouvrePar": {
+   "profils": [
+    "Gardien"
+   ],
+   "voies": [
+    "voie du rempart",
+    "voie mécanique"
+   ]
+  }
+ },
+ "appel": {
+  "nom": "l’Appel",
+  "role": "invocation",
+  "ouvrePar": {
+   "profils": [
+    "Mage",
+    "Occultiste"
+   ],
+   "voies": [
+    "voie céleste",
+    "le zèle",
+    "nécromancie"
+   ]
+  }
+ },
+ "entrave": {
+  "nom": "l’Entrave",
+  "role": "controle",
+  "ouvrePar": {
+   "profils": [
+    "Occultiste"
+   ],
+   "voies": [
+    "l’ombre",
+    "voie des sirènes"
+   ]
+  }
+ },
+ "mauvais-oeil": {
+  "nom": "le Mauvais Œil",
+  "role": "malus",
+  "ouvrePar": {
+   "profils": [
+    "Occultiste"
+   ],
+   "voies": [
+    "l’ombre",
+    "voie du caveau"
+   ]
+  }
+ },
+ "ferveur": {
+  "nom": "la Ferveur",
+  "role": "boost",
+  "ouvrePar": {
+   "profils": [
+    "Guerrier",
+    "Prêtre"
+   ],
+   "voies": [
+    "voie du guerrier",
+    "la foi",
+    "voie du zèle"
+   ]
+  }
+ },
+ "ruse": {
+  "nom": "la Ruse",
+  "role": "manip",
+  "ouvrePar": {
+   "profils": [
+    "Assassin"
+   ],
+   "voies": [
+    "voie du vol",
+    "voie des quais"
+   ]
+  }
+ }
+}
