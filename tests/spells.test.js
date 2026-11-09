@@ -48,7 +48,7 @@ test('Chant de Sirène : stun 25/20/15/10 % sur les largeurs 1/2/3/5, contre le 
   E.castSpell(E.DATA, 'chant-de-sirene', 'I', { lanceur: lanceur(E), cibles, events, rng: () => 0 });
   assert.ok(events.some((e) => e.type === 'stun'), 'stun appliqué quand le jet passe sous le taux moins le seuil');
   const cibles2 = ligne5(E);
-  cibles2[0].seuil = 0.30;
+  cibles2[0].rarity = 'L'; // seuil 0,25 au palier L (données engine.json)
   const events2 = [];
   E.castSpell(E.DATA, 'chant-de-sirene', 'I', { lanceur: lanceur(E), cibles: cibles2, events: events2, rng: () => 0 });
   assert.ok(!events2.some((e) => e.type === 'stun'), 'le seuil de la cible bloque le stun (0 < 0.25 - 0.30 est faux)');
@@ -90,4 +90,53 @@ test('acquisition de départ : commun + sort de race à la naissance (EXI-P2-6)'
   assert.deepEqual(E.sortsDeDepart('n3'), ['premiers-soins', 'discipline-de-ligne']);
   assert.deepEqual(E.sortsDeDepart('n13'), ['premiers-soins', 'ferveur-celeste']);
   assert.deepEqual(E.sortsDeDepart('a1'), ['frappe-precise']);
+});
+
+test('la stat principale du profil est la base du mult (ACC-3-1)', () => {
+  const E = loadEngine();
+  const mage = { uid: 'm', classe: 'Mage', atk: 5, int: 20, agi: 8 };
+  const guerrier = { uid: 'g', classe: 'Guerrier', atk: 20, int: 5, agi: 8 };
+  const assassin = { uid: 'a', classe: 'Assassin', atk: 5, int: 5, agi: 20 };
+  const cible = () => ({ uid: 'c', hp: 1000, maxHp: 1000, alive: true, shield: 0, status: {} });
+  assert.equal(E.castSpell(E.DATA, 'morsure-decume', 'I', { lanceur: mage, cibles: [cible()], events: [] }).degats, Math.round(20 * 1.5));
+  assert.equal(E.castSpell(E.DATA, 'morsure-decume', 'I', { lanceur: guerrier, cibles: [cible()], events: [] }).degats, Math.round(20 * 1.5));
+  assert.equal(E.castSpell(E.DATA, 'morsure-decume', 'I', { lanceur: assassin, cibles: [cible()], events: [] }).degats, Math.round(20 * 1.5));
+  // changer la stat principale d'un profil en données change la base
+  const dir = 'tests/fixtures/data-profils';
+  const data = loadData();
+  data.engine.profils.Mage.stat = 'atk';
+  rmSync(dir, { recursive: true, force: true });
+  cpSync('data', dir, { recursive: true });
+  writeFileSync(`${dir}/engine.json`, JSON.stringify(data.engine, null, 1) + '\n');
+  const E2 = loadEngine(dir);
+  assert.equal(E2.castSpell(E2.DATA, 'morsure-decume', 'I', { lanceur: mage, cibles: [cible()], events: [] }).degats, Math.round(5 * 1.5));
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test('le soin plafonne à la vie max de la cible, au cran comme à l\u2019unique (ACC-3-2)', () => {
+  const E = loadEngine();
+  const soigneur = E.makeUnit(E.getMonster('e22'));
+  const t = { uid: 't', hp: 95, maxHp: 100, alive: true, shield: 0, status: {} };
+  const events = [];
+  E.applySupport(soigneur, { attaque: [t], support: [] }, {}, events, 'team', []);
+  assert.equal(t.hp, 100);
+});
+
+test('seuil : un stun de 25 % contre un seuil donné, fréquence statistique (ACC-3-5)', () => {
+  const E = loadEngine();
+  // formule : proba = taux - seuil ; 10 000 tirages, tolérance ±0,5 % (écart-type ~0,43 % pour p=0,25)
+  const cible = { uid: 'c', hp: 100, maxHp: 100, alive: true, shield: 0, status: {}, rarity: 'C' };
+  const seuil = E.seuilOf(cible);
+  assert.equal(seuil, 0);
+  const taux = E.cranOf('chant-de-sirene', 'I').taux;
+  const N = 10000;
+  let stuns = 0;
+  const rng = mulberry32(123);
+  for (let i = 0; i < N; i++) {
+    const c = { ...cible, status: {} };
+    E.castSpell(E.DATA, 'chant-de-sirene', 'I', { lanceur: { uid: 'x', classe: 'Occultiste', int: 10 }, cibles: [c], events: [], rng });
+    if (c.status.stun) stuns++;
+  }
+  const freq = stuns / N;
+  assert.ok(Math.abs(freq - taux) <= 0.005, `fréquence ${freq} dans ±0,5 % de ${taux}`);
 });

@@ -38,3 +38,16 @@ test('v8 -> v9 -> v10 : les sorts connus survivent au re-mappage (ACC-2-7)', () 
   assert.deepEqual(sorts[1], { sort: 'maree-noire', unique: true });
   assert.deepEqual(sorts[2], { nom: 'Frappe Pratics', legacy: true });
 });
+
+test('v8 -> v11 : chaque exemplaire reçoit agilité et intelligence, aucune régression (ACC-3-6)', () => {
+  const E = loadEngine();
+  const save = JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
+  const out = E.migrate(structuredClone(save));
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.equal(out.instances.length, save.instances.length);
+  for (const inst of out.instances) {
+    assert.ok(Number.isFinite(inst.agi) && inst.agi >= 1, `${inst.id} a une agilité`);
+    assert.ok(Number.isFinite(inst.int) && inst.int >= 1, `${inst.id} a une intelligence`);
+  }
+  assert.deepEqual(out.tokens.length, save.tokens.length);
+});

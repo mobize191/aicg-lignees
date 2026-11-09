@@ -14,6 +14,8 @@ function makeUnit(card, uid = card.id, level = null) {
     atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100))),
     hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
     maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
+    agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + cranPct / 100))),
+    int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + cranPct / 100))),
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
@@ -230,7 +232,7 @@ function beginRound(state) {
   team.support.forEach((s, si) => { if (s.alive) items.push({ u: s, side: 'team', kind: 'support', idx: si }); });
   eStrikers.forEach((e, ei) => { if (e.alive) items.push({ u: e, side: 'enemies', kind: 'strike', idx: ei }); });
   enemies.support.forEach((es, si) => { if (es.alive) items.push({ u: es, side: 'enemies', kind: 'support', idx: si }); });
-  items.sort((a, b) => (b.u.atk - a.u.atk) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
+  items.sort((a, b) => (b.u.agi - a.u.agi) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
   state.round = { items, i: 0, ctx };
   return events;
 }
@@ -833,4 +835,13 @@ function openDivineBooster(rng) {
     pull(DIVINE_MID_SLOT),
     pull(DIVINE_TOP_SLOT),
   ];
+}
+
+// la zone (phase 3, EXI-P3-3) : 3 cibles contiguës sur 5, centre en auto, sans glissement
+function pickZoneTargets(ligne, choix = null) {
+  const largeur = 3;
+  const debut = choix !== null
+    ? Math.max(0, Math.min(choix, ligne.length - largeur))
+    : Math.floor((ligne.length - largeur) / 2);
+  return ligne.slice(debut, debut + largeur).filter((u) => u.hp > 0);
 }

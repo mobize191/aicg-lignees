@@ -56,11 +56,11 @@ test('la boucle complete se termine avec un vainqueur (ACC-0-6)', () => {
   assert.ok(log.some((e) => e.type === 'end'));
 });
 
-test('l\u2019ordre du tour actuel se calcule sur l\u2019attaque (ACC-0-6)', () => {
+test('l\u2019ordre du tour se calcule sur l\u2019agilité depuis la phase 3 (ACC-3-4)', () => {
   const E = loadEngine();
   const st = fixtureCombat(E);
   E.beginRound(st);
-  const atks = st.round.items.map((it) => it.u.atk);
-  const sorted = [...atks].sort((a, b) => b - a);
-  assert.deepEqual(atks, sorted);
+  const agis = st.round.items.map((it) => it.u.agi);
+  const sorted = [...agis].sort((a, b) => b - a);
+  assert.deepEqual(agis, sorted);
 });

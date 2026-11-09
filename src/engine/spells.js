@@ -191,12 +191,7 @@ function largeurCibles(ligne, largeur, choix = null) {
   const n = (largeur === 'equipe' || largeur === 'equipe-renforcee') ? ligne.length : Number(largeur) || 1;
   const vivantes = ligne.filter((u) => u.hp > 0);
   if (n >= vivantes.length) return vivantes;
-  if (n === 3) {
-    const debut = choix !== null && Number.isFinite(choix)
-      ? Math.max(0, Math.min(choix, vivantes.length - 3))
-      : Math.floor((vivantes.length - 3) / 2);
-    return vivantes.slice(debut, debut + 3);
-  }
+  if (n === 3) return pickZoneTargets(vivantes, choix);
   return vivantes.slice(0, n);
 }
 // castSpell(data, spellId, cran, contexte) : résout largeur, coût, mult, taux depuis les données
@@ -209,7 +204,7 @@ function castSpell(data, spellId, cran, contexte = {}) {
   const { lanceur = null, cibles = [], events = [], side = 'enemies' } = contexte;
   const res = { sort: spellId, cran, ecole: def.ecole, role: def.role, cout: c.cout, largeur: c.largeur, mult: c.mult ?? null, taux: c.taux ?? null };
   if (def.role === 'degats' && c.mult) {
-    const base = lanceur ? (lanceur.atk ?? 1) : 1;
+    const base = lanceur ? statOf(lanceur) : 1;
     const targets = largeurCibles(cibles, c.largeur, contexte.choix ?? null);
     const dmg = Math.max(1, Math.round(base * c.mult));
     for (const t of targets) {
@@ -222,7 +217,7 @@ function castSpell(data, spellId, cran, contexte = {}) {
   if (c.taux !== undefined && typeof contexte.rng === 'function') {
     const targets = largeurCibles(cibles, c.largeur, contexte.choix ?? null);
     for (const t of targets) {
-      const seuil = t.seuil ?? 0;
+      const seuil = seuilOf(t);
       if (contexte.rng() < c.taux - seuil) {
         t.status = t.status ?? {};
         t.status.stun = { tours: c.tours ?? 1 };

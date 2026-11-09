@@ -13,7 +13,10 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
   'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard',
-  'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods'];
+  'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
+  'getSpellDef', 'getSchoolSpell', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
+  'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
+  'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',
