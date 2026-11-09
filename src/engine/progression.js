@@ -127,3 +127,33 @@ function sortsDeDepart(cardId) {
   if (raceSpell) out.push(raceSpell.id);
   return out;
 }
+
+// zones d'errance (phase 4) : passage scripté, récoltes et enseignements depuis les données
+function runZone(zoneId, rng, opts = {}) {
+  const z = getZone(zoneId);
+  if (!z) throw new Error(`zone inconnue : ${zoneId}`);
+  const recoltes = [];
+  const rEclats = z.recoltes?.eclats;
+  if (rEclats && rng() < rEclats.taux) {
+    const tiers = rEclats.tiers?.length ? rEclats.tiers : ['brut'];
+    recoltes.push({ type: 'eclat', tier: tiers[Math.floor(rng() * tiers.length)] });
+  }
+  if (rng() < (z.drops?.N ?? 0)) {
+    const pool = z.poolN?.length ? z.poolN : [];
+    recoltes.push({ type: 'N', carte: pool[Math.floor(rng() * pool.length)] ?? null });
+  }
+  if (z.recoltes?.jetons && rng() < z.recoltes.jetons.taux) recoltes.push({ type: 'jeton' });
+  return { zone: zoneId, recoltes, enseignements: [...(z.ecolages ?? [])], opts };
+}
+// apprentissage (EXI-P4-3) : un cran appris rejoint le grimoire persisté du joueur
+function learnCran(grimoire, spellId, cran) {
+  if (!Array.isArray(grimoire)) grimoire = [];
+  if (!grimoire.some((g) => g.sort === spellId && g.cran === cran)) grimoire.push({ sort: spellId, cran });
+  return grimoire;
+}
+function isLearned(grimoire, spellId, cran) {
+  return (grimoire ?? []).some((g) => g.sort === spellId && g.cran === cran);
+}
+function canCastLearned(inst, grimoire, spellId, cran) {
+  return isLearned(grimoire, spellId, cran) && canCast(inst, spellId);
+}

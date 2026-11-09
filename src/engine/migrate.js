@@ -50,7 +50,13 @@ function v10to11(s) {
   }
   return s;
 }
-function v11to12(s) { s.version = 12; return s; }
+// v11 -> v12 (zones, EXI-P4-5) : la forme gagne le grimoire appris et les zones visitées.
+function v11to12(s) {
+  s.version = 12;
+  if (!Array.isArray(s.grimoire)) s.grimoire = [];
+  if (!Array.isArray(s.zonesVisitees)) s.zonesVisitees = [];
+  return s;
+}
 const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12 };
 function migrate(save) {
   let s = save;

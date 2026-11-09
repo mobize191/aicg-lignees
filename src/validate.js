@@ -71,15 +71,35 @@ function validate(data, errors) {
   // noms de cartes : pas de collision Ange Éveillé / Éveillé du Seuil (EXI-P1-2)
   const noms = (data.cards ?? []).map((c) => c.name);
   if (new Set(noms).size !== noms.length) push('des cartes partagent le meme nom', 'EXI-P1-2');
-  // zones (EXI-P1-4) : cadence, drops N, références
+  // zones (EXI-P1-4, EXI-P4-1, EXI-P4-2) : cadence, drops N, rencontres, récoltes, enseignements
+  const gemTiers = new Set(data.engine?.GEM_TIERS ?? []);
+  const sortsEcoleIds = new Set((data.grimoire?.ecole ?? []).map((s) => s.id));
   for (const z of data.zones ?? []) {
     if (z.cadence !== 'zone') push(`la zone ${z.id} n'a pas la cadence "zone"`, 'EXI-P4-2');
+    if (z.apres !== 'donjon') push(`la zone ${z.id} n'est pas suivie d'un donjon (jamais deux zones consécutives)`, 'EXI-P4-2');
     for (const id of z.poolN ?? []) {
       if (!allIds.has(id)) push(`la zone ${z.id} référence la naissance inconnue ${id}`, 'EXI-P1-4');
+    }
+    for (const id of z.rencontres ?? []) {
+      if (!monsterIds.has(id)) push(`la zone ${z.id} a une rencontre inconnue ${id}`, 'EXI-P4-1');
+    }
+    for (const tier of z.recoltes?.eclats?.tiers ?? []) {
+      if (!gemTiers.has(tier)) push(`la zone ${z.id} récolte un éclat de tier inconnu ${tier}`, 'EXI-P4-1');
     }
     const taux = z.drops?.N;
     if (taux !== undefined && (typeof taux !== 'number' || taux < 0 || taux > 1)) {
       push(`la zone ${z.id} a un taux N invalide (${taux})`, 'EXI-P1-4');
+    }
+    for (const tauxR of [z.recoltes?.eclats?.taux, z.recoltes?.jetons?.taux]) {
+      if (tauxR !== undefined && (typeof tauxR !== 'number' || tauxR < 0 || tauxR > 1)) {
+        push(`la zone ${z.id} a un taux de récolte hors bornes (${tauxR})`, 'EXI-P4-1');
+      }
+    }
+    for (const e of z.ecolages ?? []) {
+      if (!sortsEcoleIds.has(e.sort)) push(`la zone ${z.id} enseigne le sort inconnu ${e.sort}`, 'EXI-P4-1');
+      else if (!(data.grimoire.ecole.find((s) => s.id === e.sort)?.crans ?? {})[e.cran]) {
+        push(`la zone ${z.id} enseigne le cran inconnu ${e.cran} de ${e.sort}`, 'EXI-P4-1');
+      }
     }
   }
   // sorts d'école (EXI-P2-2, ACC-2-1) : école existante, 4 marches ou vide motivé,

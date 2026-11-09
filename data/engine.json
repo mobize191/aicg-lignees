@@ -338,7 +338,7 @@
  "DMG_REDUCTION_MAX": 0.8,
  "SAVE_VERSION": 8,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 11,
+ "CURRENT_VERSION": 12,
  "CROSS": {
   "yield": 0.6,
   "healThreshold": 0.2,
