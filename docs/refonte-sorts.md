@@ -1,12 +1,12 @@
 ---
-name: refonte-sorts
+name: "refonte-sorts"
 title: "Refonte des sorts : le grimoire mutualisé, les écoles et l'acquisition (v2)"
-type: text/markdown
+type: "text/markdown"
 ---
 
 # Refonte des sorts : le grimoire mutualisé, les écoles et l'acquisition (v2)
 
-Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (normal, supérieur, très supérieur, le RPG à l'ancienne), et seules les L et M gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée** : ×1.3 de quoi ? La réponse en section 2.
+Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (quatre crans, inférieur, normal, supérieur, majeur, le RPG à l'ancienne), et les L, M et quelques cartes clés gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée** : ×1.3 de quoi ? La réponse en section 2.
 
 Ce document reste le DESIGN CIBLE de la refonte. L'état embarqué reste le repo (`dist.html`, `inventaire-sorts.md`, `arbres-sorts.md`, `audit-sorts.md`) ; ce qui est acté ici descendra au dist lors de la grosse mise à jour (section 11).
 
@@ -27,7 +27,7 @@ Les 6 ciblages : **soi**, **1 allié**, **l'équipe**, **1 ennemi**, **la zone**
 
 ## 2. La base : ×1.3 de quoi ?
 
-Ta question : « la puissance, c'est ×1.3, mais ×1.3 de quoi ? » Réponse posée, à valider (13.1) :
+Ta question : « la puissance, c'est ×1.3, mais ×1.3 de quoi ? » Réponse (acté v2 : ton feu vert) :
 
 | Rôle | La base du multiplicateur | Exemple |
 | --- | --- | --- |
@@ -69,10 +69,10 @@ Le constat (ta remarque) : 189 signatures, et beaucoup se ressemblent : les brû
 
 La règle (acté) :
 
-1. **Mutualiser au maximum** : les effets proches fusionnent en **un seul sort, à crans**. Les crans sont l'échelle à l'ancienne : **normal, supérieur, très supérieur** (notés I, II, III sur les fiches). Le cran monte les taux et la puissance, jamais le rôle.
-2. **Chaque L et M garde une ou deux uniques** : le geste que personne d'autre ne fait (Tranche-Monde, Nuit Éternelle, Aube Éternelle, la Fauchade Universelle de la Mort, l'Abîme Absolu de Léviathan). Les autres cartes rendent leurs signatures au pot commun.
+1. **Mutualiser au maximum** : les effets proches fusionnent en **un seul sort, à crans**. Les crans sont l'échelle à l'ancienne, **quatre marches : inférieur, normal, supérieur, majeur** (notés I, II, III, IV sur les fiches ; l'exemple des soins : Soins inférieurs, Soins, Soins supérieurs, Soins majeurs). Le cran monte les taux et la puissance, jamais le rôle. La littérature des jeux le vérifie : l'échelle française de D&D monte soins légers, modérés, importants, intensifs, et Final Fantasy suffixe ses sorts sur trois crans ; notre échelle à quatre marches prend le meilleur des deux.
+2. **Les L, M et quelques cartes clés gardent une ou deux uniques** : le geste que personne d'autre ne fait (Tranche-Monde, Nuit Éternelle, Aube Éternelle, la Fauchade Universelle de la Mort, l'Abîme Absolu de Léviathan). La liste des cartes clés tombera au tri des 189. Les autres cartes rendent leurs signatures au pot commun.
 3. **La fusion se fait par école et par biome** : les trente signatures des Marées deviennent une douzaine de sorts d'école à crans (les chants de sirène : l'Entrave I, II, III ; les morsures d'eau : la Lame I, II, III) ; les brûlures de la Forge : le Mauvais Œil brûlant I, II, III ; les hurlements de la Crypte : l'Entrave I, II, III.
-4. **Décompte visé (proposition)** : les 189 signatures fondent en une soixantaine de sorts partagés à trois crans, plus une vingtaine d'uniques (une ou deux par L et M) : environ 80 sorts au grimoire, tous typés, tous lisibles. Le tri exact, biome par biome, en 13.1.
+4. **Décompte visé (proposition)** : les 189 signatures fondent en une soixantaine de sorts partagés à quatre crans, plus une vingtaine d'uniques (une ou deux par L, M et carte clé) : environ 80 sorts au grimoire, tous typés, tous lisibles. Le tri exact, biome par biome, en 13.1.
 
 Ce que le joueur y gagne : chaque sort du grimoire se lit (rôle, école, ciblage, taux, base), se compare, et se reconnaît d'une carte à l'autre ; un cran supérieur est une récompense, pas un nouveau nom à mémoriser.
 
@@ -266,26 +266,25 @@ Chaque famille neuve suit le gabarit (6 sorts, 2/3/5/9/14/20✦, un rôle-cadre,
 
 1. **Le sort L d'Argus** : « Argus : Forteresse Vivante » répète le nom de sa carte ; proposition : **Assise Éternelle**.
 2. **Le sort L de Maïa** : « Maïa : Cœur du Bosquet » porte le nom de la M du Vivant : garder le clin d'œil ou le renommer ?
-3. **Le tri des 189** : la table de fusion, biome par biome (quelle signature devient quel cran de quel sort d'école) ; c'est le gros chantier de la v2.
-4. **Les uniques** : qui garde une unique en dehors des L et M ? Proposition : personne, une ou deux par sommet, point final.
-5. **Les crans** : trois (normal, supérieur, très supérieur), ou plus tard un quatrième (l'épique) ?
-6. **La base des mults** : valider la section 2 (la puissance × mult ; les soins et boucliers en intelligence ; les boucliers en points de réserve).
-7. **Les écoles** : valider les huit noms (la Lame, le Baume, le Rempart, l'Appel, l'Entrave, le Mauvais Œil, la Ferveur, la Ruse) et le tableau des profils de classe.
-8. **Les invocations** : la fiche des renforts, leur durée, combien simultanément ; les élémentaires d'eau d'abord (le chemin du mage).
-9. **L'apprentissage** : où chaque cran s'apprend (zones d'errance ? donjons ? paliers ? événements ?), et à quel rythme.
-10. **Les sorts de race et les renommages** : Instinct Sauvage et Ferveur Céleste gardent leurs noms (proposition) ?
-11. **Les seuils de résistance** : le mécanisme exact des taux (le palier ? un stat ? le camp ?).
-12. **La zone** : la grille de ciblage (combien de cases, comment on la pose en Tactique).
+3. **Le tri des 189** : la table de fusion, biome par biome (quelle signature devient quel cran de quel sort d'école), avec la liste des cartes clés qui gardent une unique ; c'est le gros chantier de la v2.
+4. **La saveur des crans** : quatre marches actées (inférieur, normal, supérieur, majeur) ; l'échelle française de D&D dit léger, modéré, important, intensif, Final Fantasy suffixe : quelle dénomination sur les fiches ?
+5. **Les écoles** : valider les huit noms (la Lame, le Baume, le Rempart, l'Appel, l'Entrave, le Mauvais Œil, la Ferveur, la Ruse) et le tableau des profils de classe.
+6. **Les invocations** : la fiche des renforts, leur durée, combien simultanément ; les élémentaires d'eau d'abord (le chemin du mage).
+7. **L'apprentissage** : où chaque cran s'apprend (zones d'errance ? donjons ? paliers ? événements ?), et à quel rythme.
+8. **Les sorts de race et les renommages** : Instinct Sauvage et Ferveur Céleste gardent leurs noms (proposition) ?
+9. **Les seuils de résistance** : le mécanisme exact des taux (le palier ? un stat ? le camp ?).
+10. **La zone** : la grille de ciblage (combien de cases, comment on la pose en Tactique).
 
 ### 13.2 Acté et validé
 
-1. **Mutualiser au maximum** : les 189 signatures redondantes fondent en un grimoire partagé ; seules les L et M gardent une ou deux uniques.
-2. **Les crans** : normal, supérieur, très supérieur (I, II, III) ; le cran monte les taux et la puissance, jamais le rôle.
+1. **Mutualiser au maximum** : les 189 signatures redondantes fondent en un grimoire partagé ; les L, M et quelques cartes clés gardent une ou deux uniques.
+2. **Les crans** : **quatre marches**, inférieur, normal, supérieur, majeur (I, II, III, IV) ; le cran monte les taux et la puissance, jamais le rôle ; l'échelle vérifiée contre la littérature des jeux (D&D en français : soins légers, modérés, importants, intensifs ; Final Fantasy : les suffixes).
 3. **Un sort dépend de son effet, pas de sa classe** : les écoles remplacent le verrou ; les classes deviennent des profils ; changer de voie change les écoles ouvertes.
 4. **Le déblocage progressif** : une carte naît avec son commun (+ la race pour une naissance), le reste s'apprend ; le grimoire dépassera les cartes actuelles.
 5. **La fiche type** : rôle, école, ciblage, taux, base ; les descriptions restent la saveur.
-6. **La couche lignée reste** : un sort par palier, 2/3/5/9/14/20✦, le cumul 100 %, la L les connaît toutes ; le sort de race se garde à l'éveil.
-7. **Les noms v0.47** : Tranche-Monde et Nuit Éternelle ; l'exception assumée (Aube Éternelle) ; « Kenji : Zénith Tranchant » reste.
-8. **L'Appel est une école** : les élémentaires d'eau par le chemin du mage, les Foyers, les défunts, le gardien du Bosquet.
-9. **Les Pouvoirs restent sans mana** : la même typologie, deux blocs sur la fiche.
-10. **Les zones d'errance portent l'apprentissage** : la cadence (zone, donjon, zone, donjon), les éclats, les N, et maintenant les crans.
+6. **La base des mults (ton feu vert v2)** : les frappes tirent sur l'attaque, les sorts magiques, les soins et les boucliers sur l'intelligence, les boucliers en points de réserve, les taux en pourcentage contre le seuil de la cible.
+7. **La couche lignée reste** : un sort par palier, 2/3/5/9/14/20✦, le cumul 100 %, la L les connaît toutes ; le sort de race se garde à l'éveil.
+8. **Les noms v0.47** : Tranche-Monde et Nuit Éternelle ; l'exception assumée (Aube Éternelle) ; « Kenji : Zénith Tranchant » reste.
+9. **L'Appel est une école** : les élémentaires d'eau par le chemin du mage, les Foyers, les défunts, le gardien du Bosquet.
+10. **Les Pouvoirs restent sans mana** : la même typologie, deux blocs sur la fiche.
+11. **Les zones d'errance portent l'apprentissage** : la cadence (zone, donjon, zone, donjon), les éclats, les N, et maintenant les crans.
