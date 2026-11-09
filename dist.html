@@ -768,15 +768,16 @@ nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .9
 .tac-target.armed { color: #d9b45a; font-weight: 700; }
 
 /* ==== v0.44 : le combat tient sur un écran, sans scroll (retour terrain) ==== */
-body.in-combat { overflow: hidden; }
-body.in-combat #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
+body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }
+body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }
+body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
 body.in-combat #app > h2 { font-size: .92rem; margin: 0 0 2px; }
 body.in-combat #controls { margin: 2px 0; padding: 5px; gap: 4px; }
 body.in-combat #controls .btn.ctrl { padding: 4px 8px; font-size: .7rem; }
 body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; }
 body.in-combat .row { margin: 2px 0; gap: 6px; min-height: 0; }
-body.in-combat .unit { width: clamp(72px, 14vw, 96px); }
-body.in-combat .unit.boss { width: clamp(92px, 19vw, 122px); }
+body.in-combat .unit { width: clamp(84px, 17vw, 108px); }
+body.in-combat .unit.boss { width: clamp(108px, 22vw, 140px); }
 body.in-combat #tac-panel { flex: 0 1 auto; overflow: hidden; }
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
 body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
