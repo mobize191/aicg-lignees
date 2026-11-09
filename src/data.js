@@ -10,7 +10,7 @@ const IDX = {
   cards: index(DATA.cards), monsters: index(DATA.monsters),
   families: Object.fromEntries(Object.entries(DATA.families ?? {})),
   schools: index(DATA.schools), grimoire: index(DATA.grimoire?.spells),
-  trees: index(DATA.trees), zones: index(DATA.zones),
+  trees: Object.fromEntries(Object.entries(DATA.trees ?? {})), zones: index(DATA.zones),
 };
 const getCard = (id) => IDX.cards[id];
 const getMonster = (id) => IDX.monsters[id];

@@ -1,0 +1,132 @@
+[
+ {
+  "id": "zone-marees",
+  "nature": "zone d’errance du biome marees",
+  "cadence": "zone",
+  "drops": {
+   "N": 0.02
+  },
+  "poolN": [
+   "n1",
+   "n2",
+   "n3",
+   "n4",
+   "n5",
+   "n6",
+   "n7",
+   "n8",
+   "n9",
+   "n10",
+   "n11",
+   "n12",
+   "n13",
+   "n14",
+   "n15"
+  ],
+  "ecolages": []
+ },
+ {
+  "id": "zone-forge",
+  "nature": "zone d’errance du biome forge",
+  "cadence": "zone",
+  "drops": {
+   "N": 0.02
+  },
+  "poolN": [
+   "n1",
+   "n2",
+   "n3",
+   "n4",
+   "n5",
+   "n6",
+   "n7",
+   "n8",
+   "n9",
+   "n10",
+   "n11",
+   "n12",
+   "n13",
+   "n14",
+   "n15"
+  ],
+  "ecolages": []
+ },
+ {
+  "id": "zone-bosquet",
+  "nature": "zone d’errance du biome bosquet",
+  "cadence": "zone",
+  "drops": {
+   "N": 0.02
+  },
+  "poolN": [
+   "n1",
+   "n2",
+   "n3",
+   "n4",
+   "n5",
+   "n6",
+   "n7",
+   "n8",
+   "n9",
+   "n10",
+   "n11",
+   "n12",
+   "n13",
+   "n14",
+   "n15"
+  ],
+  "ecolages": []
+ },
+ {
+  "id": "zone-crypte",
+  "nature": "zone d’errance du biome crypte",
+  "cadence": "zone",
+  "drops": {
+   "N": 0.02
+  },
+  "poolN": [
+   "n1",
+   "n2",
+   "n3",
+   "n4",
+   "n5",
+   "n6",
+   "n7",
+   "n8",
+   "n9",
+   "n10",
+   "n11",
+   "n12",
+   "n13",
+   "n14",
+   "n15"
+  ],
+  "ecolages": []
+ },
+ {
+  "id": "zone-zenith",
+  "nature": "zone d’errance du biome zenith",
+  "cadence": "zone",
+  "drops": {
+   "N": 0.02
+  },
+  "poolN": [
+   "n1",
+   "n2",
+   "n3",
+   "n4",
+   "n5",
+   "n6",
+   "n7",
+   "n8",
+   "n9",
+   "n10",
+   "n11",
+   "n12",
+   "n13",
+   "n14",
+   "n15"
+  ],
+  "ecolages": []
+ }
+]
