@@ -271,13 +271,19 @@ async function main() {
   check('43.1 g 0 exception après collection', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
-  check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden;'), '');
-  check('44 a one-screen : unités de combat agrandies et panneau compact', html.includes('body.in-combat .unit { width: clamp(84px, 17vw, 108px); }') && html.includes('body.in-combat .unit.boss { width: clamp(108px, 22vw, 140px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+  check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
+  check('45 b rien de coupé : #app défile en interne, Tactique borné et défilable', html.includes('body.in-combat #tac-panel { flex: 0 0 auto; max-height: 40dvh; overflow-y: auto; }') && !html.includes('body.in-combat #tac-panel { flex: 0 1 auto; overflow: hidden; }'), '');
+  check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
+  check('44 a one-screen : unités de combat agrandies et panneau compact', html.includes('body.in-combat .unit { width: clamp(96px, 22vw, 128px); }') && html.includes('body.in-combat .unit.boss { width: clamp(122px, 28vw, 162px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+  check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
   check('44 a one-screen : journal borné et rappels clampés à 2 lignes', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && html.includes('-webkit-line-clamp: 2'), '');
   check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
   check('44 b la base v0.43.1 des unités reste en place (override seulement)', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)'), '');
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');
   check('44 c changelog v0.44 écrit', html.includes('v0.44 : Le combat plein écran'), '');
+  check('45 a emojis réparés : aucun code brut \\U0001F9xx, vrai 🤖 présent', !html.includes('\\U0001F9') && html.includes('🤖') && html.includes('🧭'), '');
+  check('45 e sorts spéciaux : bandeau non couvrant (pas de voile plein écran)', html.includes('.special-overlay {\nposition: fixed; inset: 0; z-index: 70; pointer-events: none;\ndisplay: flex; align-items: flex-start; justify-content: center;\npadding-top: 9dvh;\nanimation: fadein .2s ease;\n}') && !html.includes('background: rgba(5, 7, 12, .72);') && html.includes('.special-txt { min-width: 0; }') && html.includes('.special-art { position: relative; flex: 0 0 92px; width: 92px; height: 116px;'), '');
+  check('45 f changelog v0.45 écrit', html.includes('v0.45 : Rien de caché, des pions à voir'), '');
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n3', 'a29'], 15);
   api._setAuto(true);

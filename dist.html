@@ -285,9 +285,9 @@ animation: bannerin .45s cubic-bezier(.2, 1.4, .4, 1);
 @keyframes bannerout { to { opacity: 0; transform: translate(-50%, -64%) scale(1.05); } }
 
 .special-overlay {
-position: fixed; inset: 0; z-index: 70;
-display: flex; align-items: center; justify-content: center;
-background: rgba(5, 7, 12, .72);
+position: fixed; inset: 0; z-index: 70; pointer-events: none;
+display: flex; align-items: flex-start; justify-content: center;
+padding-top: 9dvh;
 animation: fadein .2s ease;
 }
 .special-overlay.out { animation: fadeout .35s ease forwards; }
@@ -296,19 +296,21 @@ animation: fadein .2s ease;
 .special-flash { position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,255,255,.5), transparent 60%); animation: sflash .7s ease-out forwards; }
 @keyframes sflash { from { opacity: 1; } to { opacity: 0; } }
 .special-card {
-position: relative; z-index: 2; width: min(320px, 84vw); text-align: center;
-border-radius: 18px; padding: 18px;
+position: relative; z-index: 2; width: min(330px, 88vw);
+display: flex; align-items: center; gap: 10px; text-align: left;
+border-radius: 14px; padding: 8px 12px;
 background: linear-gradient(180deg, rgba(26, 33, 51, .97), rgba(13, 17, 24, .97));
 border: 2px solid rgba(255, 213, 79, .6);
-box-shadow: 0 0 60px rgba(255, 213, 79, .35);
+box-shadow: 0 0 40px rgba(255, 213, 79, .3);
 animation: specialin .45s cubic-bezier(.2, 1.3, .4, 1);
 }
+.special-txt { min-width: 0; }
 @keyframes specialin { from { transform: scale(.7); opacity: 0; } }
-.special-art { position: relative; height: 220px; border-radius: 12px; overflow: hidden; background: #0d1119; }
+.special-art { position: relative; flex: 0 0 92px; width: 92px; height: 116px; border-radius: 10px; overflow: hidden; background: #0d1119; }
 .special-art .glyph { font-size: 4rem; }
-.special-title { margin-top: 10px; font-size: .8rem; font-weight: 800; letter-spacing: .22em; color: #ffd54f; }
-.special-name { font-size: 1.3rem; font-weight: 900; margin-top: 2px; }
-.special-owner { margin-top: 4px; font-size: .85rem; color: #93a0b5; }
+.special-title { margin-top: 0; font-size: .66rem; font-weight: 800; letter-spacing: .18em; color: #ffd54f; }
+.special-name { font-size: 1.02rem; font-weight: 900; margin-top: 1px; }
+.special-owner { margin-top: 1px; font-size: .78rem; color: #93a0b5; }
 
 .line { margin: 14px 0; }
 .line .row { justify-content: center; }
@@ -611,7 +613,7 @@ h2 { font-size: 1.1rem; }
 .dungeon-card { flex-direction: column; }
 .dungeon-art { flex: none; width: 100%; height: 140px; aspect-ratio: auto; }
 .reveal-cell { width: min(150px, 46%); }
-.special-art { height: 170px; }
+.special-art { flex-basis: 72px; width: 72px; height: 92px; }
 .float { font-size: .98rem; }
 .float.fx-special { font-size: 1.25rem; }
 .banner { font-size: 1.05rem; }
@@ -770,15 +772,21 @@ nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .9
 /* ==== v0.44 : le combat tient sur un écran, sans scroll (retour terrain) ==== */
 body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }
 body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }
-body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
+body.in-combat nav.open { position: fixed; top: 55px; left: 0; right: 0; z-index: 60; max-height: 72dvh; overflow-y: auto; background: rgba(10, 14, 22, .98); border-bottom: 1px solid rgba(124, 77, 255, .35); box-shadow: 0 18px 40px rgba(0, 0, 0, .55); }
+body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto; box-sizing: border-box; }
 body.in-combat #app > h2 { font-size: .92rem; margin: 0 0 2px; }
 body.in-combat #controls { margin: 2px 0; padding: 5px; gap: 4px; }
 body.in-combat #controls .btn.ctrl { padding: 4px 8px; font-size: .7rem; }
 body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; }
 body.in-combat .row { margin: 2px 0; gap: 6px; min-height: 0; }
-body.in-combat .unit { width: clamp(84px, 17vw, 108px); }
-body.in-combat .unit.boss { width: clamp(108px, 22vw, 140px); }
-body.in-combat #tac-panel { flex: 0 1 auto; overflow: hidden; }
+body.in-combat .unit { width: clamp(96px, 22vw, 128px); }
+body.in-combat .unit.boss { width: clamp(122px, 28vw, 162px); }
+body.in-combat .card.battle { aspect-ratio: 5 / 6; }
+body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
+body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
+body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
+body.in-combat #tac-panel { flex: 0 0 auto; max-height: 40dvh; overflow-y: auto; }
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
 body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
 body.in-combat .tac-name { min-width: 78px; font-size: .72rem; }
@@ -4827,7 +4835,7 @@ function renderTacPanel() {
       ${target}
     </div>`;
   };
-  panel.innerHTML = `<div class="tac-head">\U0001F9ED Tactique — l'action de chaque carte, puis « Lancer le tour »</div>`
+  panel.innerHTML = `<div class="tac-head">🧭 Tactique — l'action de chaque carte, puis « Lancer le tour »</div>`
     + strikers.map((u) => mkRow(u, false)).join('')
     + supports.map((u) => mkRow(u, true)).join('')
     + `<p class="muted">Viser : touchez la rangée d'une carte (\u2694 ou \u2726), puis l'ennemi — ou l'allié pour les soins. \u23f8 = attendre et économiser le mana. Les soins et les invocations sont des sorts comme les autres. « Auto ce tour » laisse l'IA jouer (compté auto, récompenses réduites au prorata).</p>`;
@@ -5340,9 +5348,11 @@ async function castSpecial(ev, ms) {
     <div class="special-flash"></div>
     <div class="special-card t-${card?.classe} o-${card?.element}">
       <div class="special-art">${card ? artOf({ ...card, cardId: card.id }) : '✦'}</div>
-      <div class="special-title">${title}</div>
-      <div class="special-name">« ${ev.name} »</div>
-      <div class="special-owner">${card ? card.name : ''}</div>
+      <div class="special-txt">
+        <div class="special-title">${title}</div>
+        <div class="special-name">« ${ev.name} »</div>
+        <div class="special-owner">${card ? card.name : ''}</div>
+      </div>
     </div>`;
   combatApp.appendChild(ov);
   if (el) el.classList.add('casting');
@@ -5648,11 +5658,11 @@ async function animate(events, ms) {
           runLog.xpBase = Math.round(baseXp * 10) / 10;
           registerXpRun(iids);
           save();
-          xpLine = `⭐ XP de run (${runLog.stages} étage${runLog.stages > 1 ? 's' : ''} × ×${DIFFX.pts}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 \U0001F9ED XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
+          xpLine = `⭐ XP de run (${runLog.stages} étage${runLog.stages > 1 ? 's' : ''} × ×${DIFFX.pts}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 🧭 XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
         }
-        if (won && tactMult < 0.999) rewardLine += ` \u00b7 \U0001F9ED \u00d7${tactMult.toFixed(2)} \u2014 tours jou\u00e9s en auto : pts, \u00e9clats et XP r\u00e9duits`;
-        else if (won) rewardLine += ' \u00b7 \U0001F9ED Tactique : r\u00e9compenses int\u00e9grales';
-        if (won && (loot.pts > 1 || loot.drop > 1)) rewardLine += ` \u00b7 \U0001F3B0 ${runModById(store.defiActive ? null : store.runMod)?.name ?? ''} : butin major\u00e9`;
+        if (won && tactMult < 0.999) rewardLine += ` \u00b7 🧭 \u00d7${tactMult.toFixed(2)} \u2014 tours jou\u00e9s en auto : pts, \u00e9clats et XP r\u00e9duits`;
+        else if (won) rewardLine += ' \u00b7 🧭 Tactique : r\u00e9compenses int\u00e9grales';
+        if (won && (loot.pts > 1 || loot.drop > 1)) rewardLine += ` \u00b7 🎰 ${runModById(store.defiActive ? null : store.runMod)?.name ?? ''} : butin major\u00e9`;
         drawBoard();
         const banner = document.createElement('div');
         banner.className = `banner ${won ? 'win' : 'lose'} bannerin`;
@@ -5869,7 +5879,7 @@ function renderCombat(root, opts = {}) {
       <button class="btn ctrl" id="mode">${autoMode ? 'Mode : Auto' : 'Mode : Tactique'}</button>
       <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
-      <button class="btn ctrl" id="auto-turn">\U0001F916 Auto ce tour</button>
+      <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
       <button class="btn big" id="fight">${autoMode ? 'Combattre' : '\u2694 Lancer le tour'}</button>
     </div>
     <div class="enemy-zone" id="enemy-zone"></div>
@@ -6239,6 +6249,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v0.45 : Rien de caché, des pions à voir', 'SIX RETOURS DU TERRAIN CORRIGÉS. (1) Le code brut à la place de l’emoji disparaît : le bouton 🤖 « Auto ce tour », l’en-tête du panneau Tactique et les récompenses affichent enfin leurs pictogrammes. (2) Le menu ☰ reste joignable EN COMBAT : la navigation s’ouvre par-dessus l’écran, opaque et déroulante. (3) Le panneau Tactique n’est plus jamais coupé : il défile à l’intérieur de sa zone. (4) Les pions de combat grandissent (128 px, boss 162 px) et deviennent plus carrés : l’illustration occupe presque toute la carte, nom et stats en surimpression. (5) L’écran de combat ne coupe PLUS rien : si l’écran est trop petit, le contenu défile à l’intérieur de l’écran. (6) Les sorts spéciaux n’assombrissent plus le plateau : une bande compacte (illustration du lanceur + nom du sort) passe au-dessus sans rien masquer.'],
   ['v0.44 : Le combat plein écran', 'DEUX DEMANDES DE TERRAIN APPLIQUÉES. (1) Le combat tient sur UN SEUL ÉCRAN : en exploration la page ne scrolle plus, ni en bas ni sur les côtés — titre, boutons, plateau, panneau Tactique et journal se partagent la hauteur de l’écran, et les rappels restent compacts. (2) Les cartes s’agrandissent partout où l’image a sa place : collection, familles, équipe et fiche — les futures illustrations s’y liront ; en combat, chaque carte reste un pion lisible et l’image se loge en fond de carte.'],
   ['v0.43.1 : Correctifs terrain', 'QUATRE RETOURS DU TERRAIN APPLIQUÉS. (1) Le plateau applique une TAILLE UNIFORME : chaque carte garde la même largeur dans les deux camps, quel que soit le nombre de voisines — seul le boss garde sa prestance. (2) Le modificateur de run redevient réellement OPTIONNEL : l’accepter est gratuit (butin majoré), entrer sans lui aussi — seul le REMPLACEMENT du tirage coûte 1 éclat brut. Plus aucune obligation d’éclat pour refuser. (3) La collection montre la PORTE de chaque famille : le novice (ou la greffe) qui y entre figure en tête de chaîne. (4) Les anciennes branches SR (Yuki, Onyx, Naïa…) sont ARCHIVÉES : hors des tirages et des arbres, visibles seulement dans la section archives si vous en possédez.'],
   ['v0.43 : La grammaire des sorts, le plateau en ligne et l’indice de force', 'PLUS DE FAUX JUMEAUX, PLUS DE NIVEAUX VIDES. Chaque carte connaît désormais ses sorts par couches : le COMMUN (2✦), le sort DE RACE (3✦), le sort DE CLASSE (4✦) et sa SIGNATURE (5✦). L’Épéiste Novice et le Bestiau des Cieux ne partagent plus que le commun, et le Prêtre Novice a enfin son grimoire complet : des soins gradués, du pansement à la bénédiction. Le panneau Tactique détaille nom, coût et infobulle de chaque sort — y compris pour les soigneurs — et le Souffle Croisé est étiqueté pour ce qu’il est : une action d’équipe, pas un sort. Le plateau passe à une seule ligne par camp : fini la ligne support repoussée à l’arrière. Et la force conseillée des donjons devient un INDICE pondéré (ATQ, PV, rareté, nombre de sorts), auto-calibré sur le boss final réel — un niveau moyen ne veut rien dire : une équipe de SR niveau 5 n’est pas une équipe de communes niveau 5.'],
