@@ -8,7 +8,11 @@ export function loadData(dataDir = 'data') {
 }
 const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell', 'getSchool',
   'getFamily', 'getTree', 'getZone', 'applyDamage', 'resolveTurn', 'applySupport', 'castSummon',
-  'setRoll', 'roll', 'migrate', 'statsAt', 'castSpell', 'pickZoneTargets', 'evolve', 'openSchools'];
+  'setRoll', 'roll', 'migrate', 'statsAt', 'castSpell', 'pickZoneTargets', 'evolve', 'openSchools',
+  'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'playAuto',
+  'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
+  'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
+  'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',
