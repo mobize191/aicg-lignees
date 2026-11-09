@@ -179,6 +179,7 @@ padding: 4px 6px 6px; font-size: .66rem; font-weight: 700;
 .cardfoot .mana { color: #b39dff; }
 
 .card.unit-art .art { position: absolute; inset: 0; height: 100%; z-index: 0; }
+body.in-combat .card.unit-art .art { filter: brightness(1.12) contrast(1.04); }
 .card.unit-art .cardbody {
 position: relative; z-index: 2;
 background: linear-gradient(180deg, transparent, rgba(8, 11, 17, .88) 45%);
@@ -270,7 +271,6 @@ animation: burst .7s ease-out forwards;
 #log { min-height: 30px; font-size: .82rem; margin: 8px 0; }
 .logline.win { color: #69f0ae; }
 .logline.lose { color: #ff8a9e; }
-#mode-hint { min-height: 1.3em; }
 
 .banner {
 position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 60;
@@ -527,6 +527,9 @@ background: rgba(16, 21, 33, .85); border: 1px solid rgba(105, 240, 174, .3);
 .modal.end-modal h3 { font-size: 1.25rem; margin: 4px 0 8px; }
 .modal.end-modal p { color: #aeb9cc; line-height: 1.45; margin: 0 0 14px; }
 .modal.end-modal .btn { margin: 0 auto; }
+.modal-hero { height: 176px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #0d1119; display: flex; align-items: center; justify-content: center; }
+.modal-hero .art-img { width: 100%; height: 100%; object-fit: contain; }
+.modal-hero .glyph { font-size: 4.4rem; }
 
 .in-team {
 position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 4;
@@ -603,6 +606,8 @@ h2 { font-size: 1.1rem; }
 .cardfoot { font-size: .76rem; }
 .meta { font-size: .68rem; }
 .rar-chip, .lvl-chip, .badge { font-size: .7rem; }
+.info-chip { cursor: pointer; border: 1px solid rgba(147, 160, 181, .35); background: rgba(147, 160, 181, .08); color: inherit; border-radius: 999px; padding: 1px 8px; font-size: .72rem; vertical-align: middle; }
+.info-chip:hover { background: rgba(147, 160, 181, .18); }
 .slot .card .name { font-size: .92rem; }
 .fam-card { width: 92px; }
 .shop-grid { grid-template-columns: 1fr; }
@@ -617,6 +622,8 @@ h2 { font-size: 1.1rem; }
 .float { font-size: .98rem; }
 .float.fx-special { font-size: 1.25rem; }
 .banner { font-size: 1.05rem; }
+body.in-combat .unit { width: clamp(104px, 26vw, 136px); }
+body.in-combat .unit.boss { width: clamp(130px, 32vw, 172px); }
 }
 @media (prefers-reduced-motion: reduce) {
 * { animation-duration: .01s !important; transition-duration: .01s !important; }
@@ -758,7 +765,18 @@ nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .9
 .mstone-pick { background: none; border: 2px solid transparent; border-radius: 12px; cursor: pointer; padding: 6px; }
 .mstone-pick:hover { border-color: #d9b45a; }
 /* v0.40 : le panneau de planification tactique */
-#tac-panel { margin: 8px 0 4px; }
+/* v0.46 : la fenêtre d'action RPG, une carte à la fois */
+.act-modal { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 12px 14px; background: rgba(10, 14, 22, .97); border-top: 2px solid rgba(77, 208, 225, .35); border-radius: 16px 16px 0 0; box-shadow: 0 -12px 40px rgba(0, 0, 0, .5); }
+.act-head { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+.act-art { flex: 0 0 76px; width: 76px; height: 95px; border-radius: 10px; overflow: hidden; background: #0d1119; display: flex; align-items: center; justify-content: center; }
+.act-art .art-img { width: 100%; height: 100%; object-fit: contain; }
+.act-art .glyph { font-size: 2.4rem; }
+.act-title { font-size: .92rem; line-height: 1.3; }
+.act-stats { font-size: .8rem; color: #9fd8a8; }
+.act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.act-lab { width: 100%; margin: 0 0 2px; font-size: .82rem; }
+.act-target { max-width: 46vw; }
+.tac-btn.off { opacity: .45; }
 .tac-head { font-weight: 600; color: #d9b45a; margin: 4px 0; }
 .tac-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 8px; border: 1px solid rgba(255,255,255,.12); border-radius: 10px; margin: 4px 0; background: rgba(255,255,255,.04); }
 .tac-row.armed { border-color: #d9b45a; box-shadow: 0 0 0 1px #d9b45a; }
@@ -786,13 +804,12 @@ body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-
 body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
 body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
-body.in-combat #tac-panel { flex: 0 0 auto; max-height: 40dvh; overflow-y: auto; }
+body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
 body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
 body.in-combat .tac-name { min-width: 78px; font-size: .72rem; }
 body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }
 body.in-combat #log { min-height: 20px; max-height: 20dvh; overflow: hidden; margin: 4px 0; font-size: .74rem; }
-body.in-combat #mode-hint, body.in-combat #app > p.muted { font-size: .66rem; line-height: 1.25; margin: 2px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
 /* v0.42 : la carte du modificateur de run */
 .run-mod-card { display: flex; align-items: center; gap: 14px; border: 1px solid #d9b45a; border-radius: 12px; padding: 12px 16px; margin: 10px 0; background: rgba(217,180,90,.08); }
@@ -1893,29 +1910,20 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   }
 }
 
-function resolveTurn(state, choices = null) {
+function beginRound(state) {
   const events = [];
   state.turn += 1;
   events.push({ type: 'turn', n: state.turn });
   tickStatuses(state, events);
   const { team, enemies, mods } = state;
-  
-  
-  
   const rage = state.turn > 15 ? 1 + 0.08 * (state.turn - 15) : 1;
   const alive = (arr) => arr.filter((u) => u.alive);
   const enemyAll = () => alive([...enemies.attaque, ...enemies.support]);
   const teamAll = () => alive([...team.attaque, ...team.support]);
   const reduction = (side) => (side === 'team' ? Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0) : 0);
-  
-  
-  const finish = (winner) => {
-    state.winner = winner;
-    events.push({ type: 'end', winner });
-    return events;
-  };
-
-  
+  const ctx = { state, events, rage, alive, enemyAll, teamAll, reduction, frontEmpty: false, firstAttack: true, finish: null };
+  const finish = (winner) => { state.winner = winner; ctx.events.push({ type: 'end', winner }); return ctx.events; };
+  ctx.finish = finish;
   if (mods.regen) {
     for (const u of teamAll()) {
       const amount = Math.min(Math.round(u.maxHp * mods.regen), u.maxHp - u.hp);
@@ -1925,88 +1933,108 @@ function resolveTurn(state, choices = null) {
       }
     }
   }
-
-  
-  
-  
   if (teamAll().some((u) => u.gimmick === 'ronde')) {
     for (const u of teamAll()) u.ronde = (u.ronde ?? 0) + 1;
   }
   const frontEmpty = alive(team.attaque).length === 0;
+  ctx.frontEmpty = frontEmpty;
   const strikers = frontEmpty ? [...team.support] : [...team.attaque];
-  let firstAttack = true;
-  for (let i = 0; i < strikers.length; i++) {
-    const u = strikers[i];
-    if (!u.alive) continue;
-    const foes = enemyAll();
-    if (!foes.length) break;
-    if (u.status && u.status.stun > 0) {
-      events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'stun', value: u.status.stun });
-      u.status.stun -= 1;
-      if (u.status.stun <= 0) delete u.status.stun;
-      continue;
-    }
-    
-    const tacAct = choices?.actions ? (choices.actions[i] ?? null) : null;
-    if (tacAct && tacAct.kind === 'pass') {
-      u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-      events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'attente' });
-      continue;
-    }
-    if (tacAct && tacAct.kind === 'cross') {
-      u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-      if (u.mana >= CROSS.attaque.cost) {
-        u.mana -= CROSS.attaque.cost;
-        const wounded2 = teamAll().filter((a) => a.hp < a.maxHp).sort((a, b) => a.hp - b.hp);
-        const t = (tacAct.allyUid && wounded2.find((a) => a.uid === tacAct.allyUid)) ?? wounded2[0];
-        events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: CROSS.attaque.name, fx: 'heal', mana: u.mana });
-        if (t) {
-          const amount = Math.min(Math.round(u.atk * CROSS.yield * (1 + (mods.healPct || 0))), t.maxHp - t.hp);
-          if (amount > 0) {
-            t.hp += amount;
-            events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
-          }
-        }
-      } else {
-        events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'mana' });
-      }
-      if (!enemyAll().length) return finish('team');
-      continue;
-    }
-    if (!tacAct && u.role === 'attaque') {
-      const wounded = teamAll().filter((a) => a.hp < a.maxHp * CROSS.healThreshold).sort((a, b) => a.hp - b.hp);
-      if (wounded.length && u.mana + u.manaRegen >= CROSS.attaque.cost) {
-        u.mana = Math.min(u.manaMax, u.mana + u.manaRegen) - CROSS.attaque.cost;
-        const t = wounded[0];
-        events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: CROSS.attaque.name, fx: 'heal', mana: u.mana });
+  const eFrontEmpty = alive(enemies.attaque).length === 0;
+  const eStrikers = eFrontEmpty ? [...enemies.support] : [...enemies.attaque];
+  const items = [];
+  strikers.forEach((u, i) => { if (u.alive) items.push({ u, side: 'team', kind: 'strike', idx: i }); });
+  team.support.forEach((s, si) => { if (s.alive) items.push({ u: s, side: 'team', kind: 'support', idx: si }); });
+  eStrikers.forEach((e, ei) => { if (e.alive) items.push({ u: e, side: 'enemies', kind: 'strike', idx: ei }); });
+  enemies.support.forEach((es, si) => { if (es.alive) items.push({ u: es, side: 'enemies', kind: 'support', idx: si }); });
+  items.sort((a, b) => (b.u.atk - a.u.atk) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
+  state.round = { items, i: 0, ctx };
+  return events;
+}
+
+function peekRound(state) {
+  const r = state.round;
+  if (!r) return null;
+  const ctx = r.ctx;
+  while (r.i < r.items.length) {
+    const it = r.items[r.i];
+    if (!it.u.alive) { r.i += 1; continue; }
+    if (it.side === 'team' && it.kind === 'strike' && !ctx.enemyAll().length) { r.i += 1; continue; }
+    if (it.side === 'enemies' && it.kind === 'strike' && !ctx.teamAll().length) { r.i += 1; continue; }
+    return it;
+  }
+  return null;
+}
+
+function actTeamStriker(u, i, ctx, step) {
+  const { team, enemies, mods } = ctx.state;
+  const tacAct = step && step.tacAct ? step.tacAct : null;
+  const foes = ctx.enemyAll();
+  if (!foes.length) return false;
+  if (u.status && u.status.stun > 0) {
+    ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'stun', value: u.status.stun });
+    u.status.stun -= 1;
+    if (u.status.stun <= 0) delete u.status.stun;
+    return false;
+  }
+  if (tacAct && tacAct.kind === 'pass') {
+    u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
+    ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'attente' });
+    return false;
+  }
+  if (tacAct && tacAct.kind === 'cross') {
+    u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
+    if (u.mana >= CROSS.attaque.cost) {
+      u.mana -= CROSS.attaque.cost;
+      const wounded2 = ctx.teamAll().filter((a) => a.hp < a.maxHp).sort((a, b) => a.hp - b.hp);
+      const t = (tacAct.allyUid && wounded2.find((a) => a.uid === tacAct.allyUid)) ?? wounded2[0];
+      ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: CROSS.attaque.name, fx: 'heal', mana: u.mana });
+      if (t) {
         const amount = Math.min(Math.round(u.atk * CROSS.yield * (1 + (mods.healPct || 0))), t.maxHp - t.hp);
         if (amount > 0) {
           t.hp += amount;
-          events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+          ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
         }
-        firstAttack = false;
-        continue;
       }
+    } else {
+      ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'mana' });
     }
-    let spell = null;
-    if (!mods.aoe || !firstAttack) {
-      if (tacAct && tacAct.kind === 'spell') {
-        u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-        const cand = (u.spells ?? [])[tacAct.idx ?? 0];
-        if (cand && cand.cost <= u.mana) {
-          spell = cand;
-          u.mana -= cand.cost;
-        } else {
-          events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'mana' });
-        }
-      } else if (tacAct && tacAct.kind === 'attack') {
-        u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
+    if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
+    return false;
+  }
+  if (!tacAct && u.role === 'attaque') {
+    const wounded = ctx.teamAll().filter((a) => a.hp < a.maxHp * CROSS.healThreshold).sort((a, b) => a.hp - b.hp);
+    if (wounded.length && u.mana + u.manaRegen >= CROSS.attaque.cost) {
+      u.mana = Math.min(u.manaMax, u.mana + u.manaRegen) - CROSS.attaque.cost;
+      const t = wounded[0];
+      ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: CROSS.attaque.name, fx: 'heal', mana: u.mana });
+      const amount = Math.min(Math.round(u.atk * CROSS.yield * (1 + (mods.healPct || 0))), t.maxHp - t.hp);
+      if (amount > 0) {
+        t.hp += amount;
+        ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+      }
+      ctx.firstAttack = false;
+      return false;
+    }
+  }
+  let spell = null;
+  if (!mods.aoe || !ctx.firstAttack) {
+    if (tacAct && tacAct.kind === 'spell') {
+      u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
+      const cand = (u.spells ?? [])[tacAct.idx ?? 0];
+      if (cand && cand.cost <= u.mana) {
+        spell = cand;
+        u.mana -= cand.cost;
       } else {
+        ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'mana' });
+      }
+    } else if (tacAct && tacAct.kind === 'attack') {
+      u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
+    } else {
       const cp = u.status ? u.status.copy : null;
-      if (cp && !cp.spell && state.lastEnemySpell) {
-        cp.spell = { ...state.lastEnemySpell };
+      if (cp && !cp.spell && ctx.state.lastEnemySpell) {
+        cp.spell = { ...ctx.state.lastEnemySpell };
         cp.expiry = 2;
-        events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'copy', value: cp.spell.name });
+        ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'copy', value: cp.spell.name });
       }
       if (cp && cp.spell) {
         spell = cp.spell;
@@ -2014,254 +2042,296 @@ function resolveTurn(state, choices = null) {
       } else {
         spell = pickSpell(u);
       }
-      }
     }
-    if (spell) {
-      events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
-    }
-    if (spell && u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') {
-      if (castSummon(u, team, mods, events, 'team')) {
-        firstAttack = false;
-        continue;
-      }
-    }
-    const cSelf = u.status && u.status.curse ? u.status.curse.value : 0;
-    let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * rage));
-    u.atkBuff = 0; 
-    if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + 0.03 * Math.min(u.ronde, 30))));
-    if (u.gimmick === 'belier' && !u.belierUsed) {
-      dmg = Math.max(1, Math.round(dmg * 1.5));
-      u.belierUsed = true;
-    }
-    const kind = spell ? 'special' : 'basic';
-    if (mods.aoe && firstAttack) {
-      
-      events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
-      for (const f of [...foes]) {
-        applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(u.element, f.element))), events, 'enemies');
-      }
-      firstAttack = false;
-      if (!enemyAll().length) return finish('team');
-      continue;
-    }
-    if (u.gimmick === 'carrousel' && state.rng() < 0.15) {
-      events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
-      for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * 0.4)), events, 'enemies');
-      if (!enemyAll().length) return finish('team');
-      firstAttack = false;
-      continue;
-    }
-    if (!spell && classeMods(u).wave) {
-      events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
-      for (const f of [...foes]) {
-        applyDamage(f, Math.max(1, Math.round(dmg * elementMult(u.element, f.element))), events, 'enemies', null, true);
-      }
-      if (!enemyAll().length) return finish('team');
-      firstAttack = false;
-      continue;
-    }
-    const idx = !frontEmpty && choices?.targets ? choices.targets[i] : null;
-    const target = idx !== null && enemies.attaque[idx]?.alive ? enemies.attaque[idx] : foes[0];
-    if (mods.weakBonus && target === foes.reduce((a, b) => (a.hp <= b.hp ? a : b))) {
-      dmg = Math.round(dmg * (1 + mods.weakBonus));
-    }
-    const cmU = classeMods(u);
-    if (cmU.exec && target.hp < target.maxHp * cmU.execBelow) {
-      dmg = Math.max(1, Math.round(dmg * (1 + cmU.exec)));
-      events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'exec', value: cmU.exec });
-    }
-
-    const elem = elementTag(u.element, target.element);
-    dmg = Math.max(1, Math.round(dmg * elementMult(u.element, target.element)));
-    const slowed = foes.some((f) => f.status && f.status.slow > 0);
-    const hits = (mods.doubleChance && state.rng() < mods.doubleChance) || slowed ? 2 : 1;
-    for (let h = 0; h < hits; h++) {
-      if (!target.alive) break;
-      if (classeMods(target).dodge && state.rng() < classeMods(target).dodge) {
-        events.push({ type: 'dodge', side: 'enemies', targetId: target.uid });
-        break;
-      }
-      events.push({ type: 'attack', sourceId: u.uid, targetId: target.uid, amount: dmg, kind, mana: u.mana, elem, side: 'team' });
-      applyDamage(target, dmg, events, 'enemies', { allies: foes }, true);
-      if (target.alive && spell && spell.dot) {
-        target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? 0.3))), turns: spell.dot.turns ?? 2 };
-        events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'dot', value: target.status.dot.dmg });
-      }
-      if (target.alive && target.status && target.status.reflect && dmg > 0) {
-        const back = Math.max(1, Math.round(dmg * target.status.reflect.pct));
-        events.push({ type: 'attack', sourceId: target.uid, targetId: u.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'enemies' });
-        applyDamage(u, back, events, 'team', { allies: teamAll() });
-      }
-    }
-    if (!spell && cmU.splash) {
-      const ratio = cmU.splash / cmU.strike;
-      const others = enemyAll().filter((f) => f !== target && f.alive);
-      for (const f of others) {
-        const half = Math.max(1, Math.round(dmg * ratio));
-        events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, f.element), side: 'team' });
-        applyDamage(f, Math.max(1, Math.round(half * elementMult(u.element, f.element))), events, 'enemies', null, true);
-      }
-    }
-    if (u.gimmick === 'volee') {
-      const others = enemyAll().filter((f) => f !== target && f.alive);
-      if (others.length) {
-        const t2 = others[0];
-        const half = Math.max(1, Math.round(dmg * 0.5));
-        events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, t2.element), side: 'team' });
-        applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), events, 'enemies');
-      }
-    }
-    if (!enemyAll().length) return finish('team');
-    firstAttack = false;
   }
-
-  
-  for (let si = 0; si < team.support.length; si++) {
-    const s = team.support[si];
-    if (!s.alive) continue;
-    const supAct = choices?.support ? (choices.support[si] ?? null) : null;
-    applySupport(s, team, mods, events, 'team', enemyAll(), null, supAct);
+  if (spell) {
+    ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
   }
+  if (spell && u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') {
+    if (castSummon(u, team, mods, ctx.events, 'team')) {
+      ctx.firstAttack = false;
+      return false;
+    }
+  }
+  const cSelf = u.status && u.status.curse ? u.status.curse.value : 0;
+  let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage));
+  u.atkBuff = 0;
+  if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + 0.03 * Math.min(u.ronde, 30))));
+  if (u.gimmick === 'belier' && !u.belierUsed) {
+    dmg = Math.max(1, Math.round(dmg * 1.5));
+    u.belierUsed = true;
+  }
+  const kind = spell ? 'special' : 'basic';
+  if (mods.aoe && ctx.firstAttack) {
+    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
+    for (const f of [...foes]) {
+      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(u.element, f.element))), ctx.events, 'enemies');
+    }
+    ctx.firstAttack = false;
+    if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
+    return false;
+  }
+  if (u.gimmick === 'carrousel' && ctx.state.rng() < 0.15) {
+    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
+    for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * 0.4)), ctx.events, 'enemies');
+    if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
+    ctx.firstAttack = false;
+    return false;
+  }
+  if (!spell && classeMods(u).wave) {
+    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
+    for (const f of [...foes]) {
+      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true);
+    }
+    if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
+    ctx.firstAttack = false;
+    return false;
+  }
+  const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
+  const target = idx !== null && enemies.attaque[idx]?.alive ? enemies.attaque[idx] : foes[0];
+  if (mods.weakBonus && target === foes.reduce((a, b) => (a.hp <= b.hp ? a : b))) {
+    dmg = Math.round(dmg * (1 + mods.weakBonus));
+  }
+  const cmU = classeMods(u);
+  if (cmU.exec && target.hp < target.maxHp * cmU.execBelow) {
+    dmg = Math.max(1, Math.round(dmg * (1 + cmU.exec)));
+    ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'exec', value: cmU.exec });
+  }
+  const elem = elementTag(u.element, target.element);
+  dmg = Math.max(1, Math.round(dmg * elementMult(u.element, target.element)));
+  const slowed = foes.some((f) => f.status && f.status.slow > 0);
+  const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
+  for (let h = 0; h < hits; h++) {
+    if (!target.alive) break;
+    if (classeMods(target).dodge && ctx.state.rng() < classeMods(target).dodge) {
+      ctx.events.push({ type: 'dodge', side: 'enemies', targetId: target.uid });
+      break;
+    }
+    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: target.uid, amount: dmg, kind, mana: u.mana, elem, side: 'team' });
+    applyDamage(target, dmg, ctx.events, 'enemies', { allies: foes }, true);
+    if (target.alive && spell && spell.dot) {
+      target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? 0.3))), turns: spell.dot.turns ?? 2 };
+      ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'dot', value: target.status.dot.dmg });
+    }
+    if (target.alive && target.status && target.status.reflect && dmg > 0) {
+      const back = Math.max(1, Math.round(dmg * target.status.reflect.pct));
+      ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: u.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'enemies' });
+      applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
+    }
+  }
+  if (!spell && cmU.splash) {
+    const ratio = cmU.splash / cmU.strike;
+    const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
+    for (const f of others) {
+      const half = Math.max(1, Math.round(dmg * ratio));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, f.element), side: 'team' });
+      applyDamage(f, Math.max(1, Math.round(half * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true);
+    }
+  }
+  if (u.gimmick === 'volee') {
+    const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
+    if (others.length) {
+      const t2 = others[0];
+      const half = Math.max(1, Math.round(dmg * 0.5));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, t2.element), side: 'team' });
+      applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), ctx.events, 'enemies');
+    }
+  }
+  if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
+  ctx.firstAttack = false;
+  return false;
+}
 
-  
-  
-  
-  
-  
-  
-  
-  
-  const enemyPickTarget = (e, targets, dmgBase) => {
-    const score = (t) => {
-      const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
-      let s = 0;
-      if (t.hp <= dmg) s += 1000; 
-      if (elementTag(e.element, t.element) === 'fort') s += 100; 
-      return s - t.hp; 
-    };
-    return targets.reduce((a, b) => (score(b) > score(a) ? b : a), targets[0]);
+function actTeamSupport(s, ctx, step) {
+  if (!s.alive) return;
+  const supAct = step && step.tacAct ? step.tacAct : null;
+  applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), null, supAct);
+}
+
+function enemyPickTarget(e, targets, dmgBase) {
+  const score = (t) => {
+    const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
+    let s = 0;
+    if (t.hp <= dmg) s += 1000;
+    if (elementTag(e.element, t.element) === 'fort') s += 100;
+    return s - t.hp;
   };
-  const eFrontEmpty = alive(enemies.attaque).length === 0;
-  const eStrikers = eFrontEmpty ? [...enemies.support] : [...enemies.attaque];
-  for (const e of eStrikers) {
-    if (!e.alive) continue;
-    if (e.status && e.status.stun > 0) {
-      events.push({ type: 'status', side: 'enemies', targetId: e.uid, kind: 'stun', value: e.status.stun });
-      e.status.stun -= 1;
-      if (e.status.stun <= 0) delete e.status.stun;
-      continue;
-    }
-    const targets = alive(team.attaque).length ? alive(team.attaque) : alive(team.support);
-    if (!targets.length) break;
-    const spell = pickSpell(e);
-    if (spell) {
-      events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big: !!spell.big, fx: 'atk', mana: e.mana });
-      state.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
-    }
-    const cmE = classeMods(e);
-    if (spell && e.classe === 'Invocateur' && e.effect && e.effect.kind === 'summon') {
-      if (castSummon(e, enemies, {}, events, 'enemies')) {
-        continue;
-      }
-    }
-    const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? 1.5 : 1;
-    if (belierBoost > 1) e.belierUsed = true;
-    const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
-    const dmgBase = Math.max(1, Math.round(e.atk * (1 - reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * rage * belierBoost));
-    const kind = spell ? 'special' : 'basic';
-    const target = enemyPickTarget(e, targets, dmgBase);
-    const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
-    const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
-    const redFactor = gRed >= DMG_REDUCTION_MAX ? 1
-      : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed)) / (1 - gRed));
-    const dmg = Math.max(1, Math.round(dmgBase * redFactor * elementMult(e.element, target.element)));
-    const eHits = targets.some((t) => t.status && t.status.slow > 0) ? 2 : 1;
-    let dmgFinal = dmg;
-    let died = false;
-    if (!spell && cmE.wave) {
-      for (const t of targets.filter((t) => t !== target)) {
-        if (!t.alive) continue;
-        const tRed2 = t.status && t.status.dmgRed ? t.status.dmgRed.pct : 0;
-        const rf2 = gRed >= DMG_REDUCTION_MAX ? 1
-          : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
-        const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(e.element, t.element)));
-        events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(e.element, t.element), side: 'enemies' });
-        died = applyDamage(t, d2, events, 'team', { allies: teamAll() }, true) || died;
-        if (t.alive && t.status && t.status.reflect && d2 > 0) {
-          const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
-          events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
-          applyDamage(e, back, events, 'enemies', { allies: enemyAll() });
-        }
-      }
-    }
-    if (cmE.exec && target.hp < target.maxHp * cmE.execBelow) {
-      dmgFinal = Math.max(1, Math.round(dmg * (1 + cmE.exec)));
-      events.push({ type: 'status', side: 'team', targetId: target.uid, kind: 'exec', value: cmE.exec });
-    }
-    for (let h = 0; h < eHits && target.alive; h++) {
-      if (classeMods(target).dodge && state.rng() < classeMods(target).dodge) {
-        events.push({ type: 'dodge', side: 'team', targetId: target.uid });
-        break;
-      }
-      events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(e.element, target.element), side: 'enemies' });
-      if (target.gimmick === 'voile' && state.rng() < 0.25) {
-        events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
-      } else {
-        const partner = target.linkedTo ? teamAll().find((a) => a.uid === target.linkedTo) : null;
-        if (partner) {
-          const half = Math.max(1, Math.round(dmgFinal / 2));
-          events.push({ type: 'link', side: 'team', sourceId: target.uid, targetId: partner.uid, amount: half });
-          died = applyDamage(target, dmgFinal - half, events, 'team', { allies: teamAll() }, true) || died;
-          applyDamage(partner, half, events, 'team', { allies: teamAll() }, true);
-        } else {
-          died = applyDamage(target, dmgFinal, events, 'team', { allies: teamAll() }, true) || died;
-        }
-        if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
-          const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
-          events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'team' });
-          applyDamage(e, back, events, 'enemies', { allies: enemyAll() });
-        }
-        if (target.alive && target.gimmick === 'mirage' && dmg > 0) {
-          const reflet = Math.max(1, Math.round(dmg * 0.2));
-          events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: reflet, kind: 'basic', mana: target.mana, elem: null, side: 'team' });
-          applyDamage(e, reflet, events, 'enemies');
-        }
-      }
-    }
-    if (died && target.gimmick === 'benediction') {
-      for (const u of teamAll()) {
-        const amount = Math.min(Math.round(u.maxHp * 0.2), u.maxHp - u.hp);
-        if (amount > 0) {
-          u.hp += amount;
-          events.push({ type: 'heal', side: 'team', sourceId: target.uid, targetId: u.uid, amount, kind: 'special' });
-        }
-      }
-    }
-    if (!teamAll().length) return finish('enemies');
-    if (died && mods.vengeance) {
-      for (const u of teamAll().filter((x) => x.role === 'attaque')) {
-        u.atk = Math.round(u.atk * (1 + mods.vengeance));
-      }
-      events.push({ type: 'vengeance', value: mods.vengeance });
-    }
-  }
-  for (const es of enemies.support) {
-    if (!es.alive) continue;
-    applySupport(es, enemies, {}, events, 'enemies', teamAll(), state);
-  }
+  return targets.reduce((a, b) => (score(b) > score(a) ? b : a), targets[0]);
+}
 
-  
-  
-  if (!enemyAll().length) {
-    state.winner = 'team';
-    events.push({ type: 'end', winner: 'team' });
-  } else if (!teamAll().length) {
-    state.winner = 'enemies';
-    events.push({ type: 'end', winner: 'enemies' });
+function actEnemyStriker(e, ctx) {
+  const { team, enemies, mods } = ctx.state;
+  if (e.status && e.status.stun > 0) {
+    ctx.events.push({ type: 'status', side: 'enemies', targetId: e.uid, kind: 'stun', value: e.status.stun });
+    e.status.stun -= 1;
+    if (e.status.stun <= 0) delete e.status.stun;
+    return false;
   }
+  const targets = ctx.alive(team.attaque).length ? ctx.alive(team.attaque) : ctx.alive(team.support);
+  if (!targets.length) return false;
+  const spell = pickSpell(e);
+  if (spell) {
+    ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big: !!spell.big, fx: 'atk', mana: e.mana });
+    ctx.state.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  }
+  const cmE = classeMods(e);
+  if (spell && e.classe === 'Invocateur' && e.effect && e.effect.kind === 'summon') {
+    if (castSummon(e, enemies, {}, ctx.events, 'enemies')) {
+      return false;
+    }
+  }
+  const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? 1.5 : 1;
+  if (belierBoost > 1) e.belierUsed = true;
+  const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
+  const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost));
+  const kind = spell ? 'special' : 'basic';
+  const target = enemyPickTarget(e, targets, dmgBase);
+  const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
+  const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
+  const redFactor = gRed >= DMG_REDUCTION_MAX ? 1
+    : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed)) / (1 - gRed));
+  const dmg = Math.max(1, Math.round(dmgBase * redFactor * elementMult(e.element, target.element)));
+  const eHits = targets.some((t) => t.status && t.status.slow > 0) ? 2 : 1;
+  let dmgFinal = dmg;
+  let died = false;
+  if (!spell && cmE.wave) {
+    for (const t of targets.filter((t) => t !== target)) {
+      if (!t.alive) continue;
+      const tRed2 = t.status && t.status.dmgRed ? t.status.dmgRed.pct : 0;
+      const rf2 = gRed >= DMG_REDUCTION_MAX ? 1
+        : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
+      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(e.element, t.element)));
+      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(e.element, t.element), side: 'enemies' });
+      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
+      if (t.alive && t.status && t.status.reflect && d2 > 0) {
+        const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
+        ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
+        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() });
+      }
+    }
+  }
+  if (cmE.exec && target.hp < target.maxHp * cmE.execBelow) {
+    dmgFinal = Math.max(1, Math.round(dmg * (1 + cmE.exec)));
+    ctx.events.push({ type: 'status', side: 'team', targetId: target.uid, kind: 'exec', value: cmE.exec });
+  }
+  for (let h = 0; h < eHits && target.alive; h++) {
+    if (classeMods(target).dodge && ctx.state.rng() < classeMods(target).dodge) {
+      ctx.events.push({ type: 'dodge', side: 'team', targetId: target.uid });
+      break;
+    }
+    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(e.element, target.element), side: 'enemies' });
+    if (target.gimmick === 'voile' && ctx.state.rng() < 0.25) {
+      ctx.events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
+    } else {
+      const partner = target.linkedTo ? ctx.teamAll().find((a) => a.uid === target.linkedTo) : null;
+      if (partner) {
+        const half = Math.max(1, Math.round(dmgFinal / 2));
+        ctx.events.push({ type: 'link', side: 'team', sourceId: target.uid, targetId: partner.uid, amount: half });
+        died = applyDamage(target, dmgFinal - half, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
+        applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true);
+      } else {
+        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
+      }
+      if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
+        const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
+        ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'team' });
+        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() });
+      }
+      if (target.alive && target.gimmick === 'mirage' && dmg > 0) {
+        const reflet = Math.max(1, Math.round(dmg * 0.2));
+        ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: reflet, kind: 'basic', mana: target.mana, elem: null, side: 'team' });
+        applyDamage(e, reflet, ctx.events, 'enemies');
+      }
+    }
+  }
+  if (died && target.gimmick === 'benediction') {
+    for (const u of ctx.teamAll()) {
+      const amount = Math.min(Math.round(u.maxHp * 0.2), u.maxHp - u.hp);
+      if (amount > 0) {
+        u.hp += amount;
+        ctx.events.push({ type: 'heal', side: 'team', sourceId: target.uid, targetId: u.uid, amount, kind: 'special' });
+      }
+    }
+  }
+  if (!ctx.teamAll().length) { ctx.finish('enemies'); return true; }
+  if (died && mods.vengeance) {
+    for (const u of ctx.teamAll().filter((x) => x.role === 'attaque')) {
+      u.atk = Math.round(u.atk * (1 + mods.vengeance));
+    }
+    ctx.events.push({ type: 'vengeance', value: mods.vengeance });
+  }
+  return false;
+}
+
+function actEnemySupport(es, ctx) {
+  if (!es.alive) return;
+  applySupport(es, ctx.state.enemies, {}, ctx.events, 'enemies', ctx.teamAll(), ctx.state);
+}
+
+function stepRound(state, stepChoice = null) {
+  const r = state.round;
+  if (!r) return { events: [], done: true };
+  const ctx = r.ctx;
+  const it = peekRound(state);
+  if (!it) {
+    const ev = [];
+    if (!ctx.enemyAll().length && !state.winner) { state.winner = 'team'; ev.push({ type: 'end', winner: 'team' }); }
+    else if (!ctx.teamAll().length && !state.winner) { state.winner = 'enemies'; ev.push({ type: 'end', winner: 'enemies' }); }
+    state.round = null;
+    return { events: ev, done: true };
+  }
+  r.i += 1;
+  ctx.events = [];
+  let tacAct = null;
+  let targetIdx = null;
+  if (stepChoice) {
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid };
+    if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
+    else if (stepChoice.targetUid != null) {
+      const ti = state.enemies.attaque.findIndex((x) => x.uid === stepChoice.targetUid);
+      if (ti >= 0) targetIdx = ti;
+    }
+  }
+  const step = { tacAct, targetIdx };
+  let done = false;
+  if (it.side === 'team' && it.kind === 'strike') done = actTeamStriker(it.u, it.idx, ctx, step);
+  else if (it.side === 'team' && it.kind === 'support') actTeamSupport(it.u, ctx, step);
+  else if (it.side === 'enemies' && it.kind === 'strike') done = actEnemyStriker(it.u, ctx);
+  else actEnemySupport(it.u, ctx);
+  if (state.winner) done = true;
+  if (r.i >= r.items.length) {
+    done = true;
+    if (!state.winner) {
+      if (!ctx.enemyAll().length) { state.winner = 'team'; ctx.events.push({ type: 'end', winner: 'team' }); }
+      else if (!ctx.teamAll().length) { state.winner = 'enemies'; ctx.events.push({ type: 'end', winner: 'enemies' }); }
+    }
+  }
+  if (done) state.round = null;
+  return { events: ctx.events, done };
+}
+
+function resolveTurn(state, choices = null) {
+  const events = beginRound(state);
+  let guard = 0;
+  while (guard++ < 200) {
+    const nxt = peekRound(state);
+    let sc = null;
+    if (choices && nxt) {
+      if (nxt.side === 'team' && nxt.kind === 'strike' && choices.actions) {
+        const a = choices.actions[nxt.idx] ?? null;
+        const t = choices.targets ? (choices.targets[nxt.idx] ?? null) : null;
+        sc = a ? { kind: a.kind, idx: a.idx, allyUid: a.allyUid, targetIdx: t } : null;
+      } else if (nxt.side === 'team' && nxt.kind === 'support' && choices.support) {
+        sc = choices.support[nxt.idx] ?? null;
+      }
+    }
+    const r = stepRound(state, sc);
+    events.push(...r.events);
+    if (r.done) break;
+  }
+  state.round = null;
   return events;
 }
-;
 
 const DIFFICULTIES = [
   { id: 1, name: 'Facile', minR: 'C', mobCap: 'R', boss5: 'R', boss10: 'SR', allBoss: false, pts: 1, monsterDrop: 0.25, shardDrop: 0.3 },
@@ -3451,6 +3521,7 @@ let suppressHash = false;
 function go(hash) {
   (routes[hash] || routes['#accueil'])(document.getElementById('app'));
   document.body.classList.toggle('in-combat', hash === '#combat');
+  if (hash !== '#combat') closeActModal();
   updatePtsBadge();
   const nv = document.getElementById('main-nav');
   if (nv) nv.classList.remove('open');
@@ -3871,7 +3942,7 @@ function addStatus(id) {
   if (store.team.slots.length >= 5) return { ok: false, label: 'équipe pleine (5/5)' };
   const copies = usedInTeam(id);
   const owned = store.collection.get(id) ?? 0;
-  if (copies >= 2) return { ok: false, label: 'déjà 2 exemplaires placés' };
+  if (copies >= 3) return { ok: false, label: 'déjà 3 exemplaires placés' };
   if (copies >= owned) return { ok: false, label: 'pas d\u2019autre exemplaire libre' };
   return { ok: true, label: `${store.team.slots.length}/5 dans l\u2019équipe` };
 }
@@ -4274,7 +4345,7 @@ function addCardIid(iid) {
   }
   const copies = usedInTeam(inst.id);
   const owned = store.collection.get(inst.id) ?? 0;
-  if (copies >= 2) return { ok: false, reason: 'D\u00e9j\u00e0 2 exemplaires de cette carte plac\u00e9s.' };
+  if (copies >= 3) return { ok: false, reason: 'D\u00e9j\u00e0 3 exemplaires de cette carte plac\u00e9s.' };
   if (copies >= owned) return { ok: false, reason: 'Vous ne poss\u00e9dez pas d\u2019autre exemplaire libre.' };
   store.team.slots.push(iid);
   save();
@@ -4776,147 +4847,153 @@ let busy = false;
 let chainTimer = null;
 let reduceFlashes = false; 
 
-let manualTargets = [];
-
-
-let tacPlan = {};
-let tacArmed = null;
 let combatTally = { auto: 0, manual: 0 };
 let lastTactMult = 1;
-
-function tacHintText() {
-  return autoMode
-    ? 'Mode auto : le combat se joue et s\u2019encha\u00eene tout seul. Les r\u00e9compenses sont r\u00e9duites \u00e0 proportion des tours auto : basculez en Tactique pour les pleines r\u00e9compenses.'
-    : 'Mode Tactique : pour chaque carte, choisissez son action (\u2694 attaque, \u2726 sort, \u23f8 attendre), touchez sa rang\u00e9e puis un ennemi (ou l\u2019alli\u00e9 \u00e0 soigner) pour viser, puis \u00ab Lancer le tour \u00bb. \u00ab Auto ce tour \u00bb laisse l\u2019IA jouer ce tour (compt\u00e9 auto).';
-}
-
-
-function renderTacPanel() {
-  const panel = combatApp.querySelector('#tac-panel');
-  if (!panel) return;
-  if (autoMode || !state || state.winner) { panel.innerHTML = ''; return; }
-  const frontAlive = state.team.attaque.filter((u) => u.alive);
-  const strikers = frontAlive.length ? frontAlive : state.team.support.filter((u) => u.alive);
-  const supports = frontAlive.length ? state.team.support.filter((u) => u.alive) : [];
-  const allUnits = [...state.team.attaque, ...state.team.support, ...state.enemies.attaque, ...state.enemies.support];
-  const nameOf = (uid) => { const u = allUnits.find((x) => x.uid === uid); return u ? u.name : '?'; };
-  const btn = (label, on, act, idx, title) => `<button type="button" class="btn tac-btn${on ? ' on' : ''}" data-act="${act}"${idx !== undefined ? ` data-idx="${idx}"` : ''}${title ? ` title="${title}"` : ''}>${label}</button>`;
-  const mkRow = (u, isSupport) => {
-    const p = tacPlan[u.uid] ?? {};
-    const kind = p.kind ?? (isSupport ? 'cast' : 'attack');
-    const parts = [];
-    
-    const spTitle = (sp) => `${sp.name}${sp.cat ? ' [' + SPELL_CAT_LABEL[sp.cat] + ']' : ''} : ${sp.desc ?? ''}`;
-    if (isSupport) {
-      (u.spells ?? []).forEach((sp, k) => parts.push(btn(`✦ ${sp.name}${sp.cost ? ` (${sp.cost}✦)` : ''}`, kind === 'cast' && (p.idx ?? 0) === k, 'cast', k, spTitle(sp))));
-      parts.push(btn('⚔ Sans sort', kind === 'basic', 'basic', undefined, 'Soin de base, sans dépenser de mana.'));
-      parts.push(btn('⏸', kind === 'pass', 'pass', undefined, 'Attendre ce tour : la carte économise son mana.'));
-    } else {
-      parts.push(btn('⚔ Attaque', kind === 'attack', 'attack', undefined, 'Frappe basique : gratuite, aucun mana.'));
-      (u.spells ?? []).forEach((sp, k) => parts.push(btn(`✦ ${sp.name}${sp.cost ? ` (${sp.cost}✦)` : ''}`, kind === 'spell' && (p.idx ?? 0) === k, 'spell', k, spTitle(sp))));
-      if (u.role === 'attaque' && [...state.team.attaque, ...state.team.support].some((a) => a.alive && a.hp < a.maxHp)) {
-        parts.push(btn(`➕ ${CROSS.attaque.name} (${CROSS.attaque.cost}✦)`, kind === 'cross', 'cross', undefined, `Action d'équipe, pas un sort : ${CROSS.attaque.desc}`));
-      }
-      parts.push(btn('⏸', kind === 'pass', 'pass', undefined, 'Attendre ce tour : la carte économise son mana.'));
-    }
-    let target;
-    if (kind === 'pass') {
-      target = '<span class="tac-target muted">\u2014</span>';
-    } else if (kind === 'cross' || (isSupport && u.effect && u.effect.kind === 'heal')) {
-      target = `<span class="tac-target${tacArmed === u.uid ? ' armed' : ''}">${p.allyUid ? '\u2192 ' + nameOf(p.allyUid) : '\u2192 alli\u00e9 bless\u00e9'}</span>`;
-    } else if (isSupport) {
-      target = '<span class="tac-target muted">auto</span>';
-    } else {
-      target = `<span class="tac-target${tacArmed === u.uid ? ' armed' : ''}">${p.targetUid ? '\u2192 ' + nameOf(p.targetUid) : '\u2192 premi\u00e8re ennemie'}</span>`;
-    }
-    return `<div class="tac-row${tacArmed === u.uid ? ' armed' : ''}" data-uid="${u.uid}" data-support="${isSupport ? 1 : 0}">
-      <span class="tac-name">${u.name}</span>
-      <span class="tac-acts">${parts.join('')}</span>
-      ${target}
-    </div>`;
-  };
-  panel.innerHTML = `<div class="tac-head">🧭 Tactique — l'action de chaque carte, puis « Lancer le tour »</div>`
-    + strikers.map((u) => mkRow(u, false)).join('')
-    + supports.map((u) => mkRow(u, true)).join('')
-    + `<p class="muted">Viser : touchez la rangée d'une carte (\u2694 ou \u2726), puis l'ennemi — ou l'allié pour les soins. \u23f8 = attendre et économiser le mana. Les soins et les invocations sont des sorts comme les autres. « Auto ce tour » laisse l'IA jouer (compté auto, récompenses réduites au prorata).</p>`;
-  panel.querySelectorAll('.tac-row').forEach((row) => {
-    row.onclick = (e) => {
-      const uid = row.dataset.uid;
-      const isSupport = row.dataset.support === '1';
-      const b = e.target && e.target.closest ? e.target.closest('button') : null;
-      if (b) {
-        const act = b.dataset.act;
-        const idx = b.dataset.idx !== undefined ? Number(b.dataset.idx) : undefined;
-        const prev = tacPlan[uid] ?? {};
-        if (act === 'attack') tacPlan[uid] = { kind: 'attack', targetUid: prev.targetUid };
-        else if (act === 'spell') tacPlan[uid] = { kind: 'spell', idx, targetUid: prev.targetUid };
-        else if (act === 'cross') tacPlan[uid] = { kind: 'cross', allyUid: prev.allyUid };
-        else if (act === 'cast') tacPlan[uid] = { kind: 'cast', idx: idx ?? 0, allyUid: prev.allyUid };
-        else if (act === 'basic') tacPlan[uid] = { kind: 'basic', allyUid: prev.allyUid };
-        else if (act === 'pass') tacPlan[uid] = { kind: 'pass' };
-        renderTacPanel();
-        drawTargetMarkers();
-        return;
-      }
-      const pl = tacPlan[uid];
-      if (!pl || pl.kind === 'pass') return;
-      tacArmed = tacArmed === uid ? null : uid;
-      renderTacPanel();
-    };
-  });
-}
-
-
-function buildTactChoices() {
-  const frontEmpty = !state.team.attaque.some((u) => u.alive);
-  const strikers = frontEmpty ? state.team.support : state.team.attaque;
-  const actions = strikers.map((u) => {
-    if (!u.alive) return null;
-    const p = tacPlan[u.uid] ?? {};
-    return { kind: p.kind ?? 'attack', idx: p.idx, allyUid: p.allyUid };
-  });
-  const targets = strikers.map((u, i) => {
-    if (!u.alive) return undefined;
-    const p = tacPlan[u.uid] ?? {};
-    if (p.targetUid) {
-      const idx = state.enemies.attaque.findIndex((e) => e.uid === p.targetUid && e.alive);
-      if (idx >= 0) return idx;
-    }
-    if (manualTargets.length) {
-      const uid = manualTargets[i % manualTargets.length];
-      const idx = state.enemies.attaque.findIndex((e) => e.uid === uid && e.alive);
-      if (idx >= 0) return idx;
-    }
-    return undefined;
-  });
-  const support = frontEmpty ? null : state.team.support.map((u) => {
-    if (!u.alive) return null;
-    const p = tacPlan[u.uid] ?? {};
-    return { kind: p.kind ?? 'cast', idx: p.idx ?? 0, allyUid: p.allyUid };
-  });
-  return { actions, targets, ...(support ? { support } : {}) };
-}
-
-
-function drawTargetMarkers() {
-  if (!state) return;
-  for (const u of [...state.enemies.attaque, ...state.enemies.support]) {
-    const el = elOf(u.uid);
-    if (el) el.classList.toggle('targeted', manualTargets.includes(u.uid) || Object.values(tacPlan).some((p) => p && p.targetUid === u.uid));
-  }
-}
 
 let runLog = null;
 function freshRunLog() { return { points: 0, cards: [], monsters: [], shards: [], stages: 0, guaranteed: 0, xp: [], tokens: [], gems: [], xpBase: 0 }; }
 
-function toggleManualTarget(uid) {
-  const i = manualTargets.indexOf(uid);
-  if (i >= 0) manualTargets.splice(i, 1);
-  else manualTargets.push(uid);
-  const el = elOf(uid);
-  if (el) el.classList.toggle('targeted', manualTargets.includes(uid));
-  return manualTargets.includes(uid);
+let actBox = null;
+let promptState = null;
+const ACT_ABORT = Symbol('act-abort');
+let combatGen = 0;
+
+function clearActHighlights() {
+  if (!combatApp) return;
+  for (const el of combatApp.querySelectorAll('.unit')) el.classList.remove('targeted');
 }
+
+function closeActModal() {
+  if (actBox) { actBox.remove(); actBox = null; }
+  clearActHighlights();
+  const ps = promptState;
+  promptState = null;
+  if (ps && ps.pick) ps.pick(ACT_ABORT);
+}
+
+function renderActModal(u, zoneHtml) {
+  closeCardModal();
+  if (actBox) { actBox.remove(); actBox = null; }
+  const card = byIdSoft(u.cardId) ?? { id: u.cardId, name: u.name, spells: u.spells ?? [] };
+  actBox = document.createElement('div');
+  actBox.className = 'act-modal';
+  actBox.innerHTML = `
+    <div class="act-head">
+      <div class="act-art">${artOf(card)}</div>
+      <div class="act-title"><b>${u.name}</b> <span class="muted">— à vous d’agir</span><br>
+      <span class="act-stats">♥ ${u.hp}/${u.maxHp} · ⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))} · ✦ ${u.mana}/${u.manaMax}</span></div>
+    </div>
+    <div class="act-zone">${zoneHtml}</div>`;
+  document.body.appendChild(actBox);
+}
+
+function askActTarget(mode, pending) {
+  if (!promptState) return;
+  promptState.phase = 'target';
+  promptState.mode = mode;
+  promptState.pending = pending;
+  const list = mode === 'enemy'
+    ? state.enemies.attaque.filter((e) => e.alive)
+    : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
+  if (!list.length) {
+    if (mode === 'enemy') promptState.pick({ ...promptState.pending });
+    return;
+  }
+  clearActHighlights();
+  for (const t of list) {
+    const el = elOf(t.uid);
+    if (el) el.classList.add('targeted');
+  }
+  if (!actBox) return;
+  const zoneEl = actBox.querySelector('.act-zone');
+  if (!zoneEl) return;
+  zoneEl.innerHTML = `<p class="act-lab">Choisissez votre cible <span class="muted">(ou touchez un pion du plateau)</span></p>`
+    + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">♥ ${t.hp}/${t.maxHp}</span></button>`).join(' ');
+  zoneEl.querySelectorAll('.act-target').forEach((b) => {
+    b.onclick = () => {
+      if (!promptState || promptState.phase !== 'target') return;
+      const uid = b.dataset.uid;
+      const choice = mode === 'enemy' ? { ...promptState.pending, targetUid: uid } : { ...promptState.pending, allyUid: uid };
+      promptState.pick(choice);
+    };
+  });
+}
+
+function promptUnitAction(u, kind) {
+  const isStrike = kind === 'strike';
+  const parts = [`<button type="button" class="btn tac-btn act-attack">⚔ ${isStrike ? 'Attaque' : 'Soin de base'}</button>`];
+  (u.spells ?? []).forEach((sp, k) => {
+    const off = sp.cost > u.mana + u.manaRegen;
+    parts.push(`<button type="button" class="btn tac-btn act-spell${off ? ' off' : ''}" data-k="${k}" title="${sp.desc || 'Puissance ×' + sp.mult + ' — coût ' + sp.cost + ' ✦'}">✦ ${sp.name} <span class="muted">✦${sp.cost}</span></button>`);
+  });
+  parts.push(`<button type="button" class="btn tac-btn act-pass">⏸ Attendre</button>`);
+  if (isStrike && u.role === 'attaque') {
+    const crossCost = CROSS.attaque.cost;
+    const crossOff = u.mana + u.manaRegen < crossCost;
+    parts.push(`<button type="button" class="btn tac-btn act-cross${crossOff ? ' off' : ''}" title="${CROSS.attaque.desc}">➕ ${CROSS.attaque.name} <span class="muted">✦${crossCost}</span></button>`);
+  }
+  renderActModal(u, parts.join(' '));
+  return new Promise((resolve) => {
+    promptState = {
+      phase: 'action', unit: u, kind, mode: null, pending: null,
+      pick: (choice) => {
+        promptState = null;
+        clearActHighlights();
+        if (actBox) { actBox.remove(); actBox = null; }
+        resolve(choice);
+      },
+    };
+    const box = actBox;
+    box.querySelector('.act-pass').onclick = () => { if (promptState) promptState.pick({ kind: 'pass' }); };
+    const bAtk = box.querySelector('.act-attack');
+    if (bAtk) {
+      bAtk.onclick = () => {
+        if (!promptState) return;
+        if (isStrike) askActTarget('enemy', { kind: 'attack' });
+        else promptState.pick({ kind: 'basic' });
+      };
+    }
+    const bCross = box.querySelector('.act-cross');
+    if (bCross) {
+      bCross.onclick = () => {
+        if (!promptState || bCross.classList.contains('off')) return;
+        askActTarget('ally', { kind: 'cross' });
+      };
+    }
+    box.querySelectorAll('.act-spell').forEach((b) => {
+      b.onclick = () => {
+        if (!promptState || b.classList.contains('off')) return;
+        const k = Number(b.dataset.k);
+        if (isStrike) askActTarget('enemy', { kind: 'spell', idx: k });
+        else askActTarget('ally', { kind: 'cast', idx: k });
+      };
+    });
+  });
+}
+
+async function runTacTurn() {
+  const myState = state;
+  const myGen = combatGen;
+  const pre = beginRound(state);
+  state._events = [...(state._events ?? []), ...pre];
+  await animate(pre, SPEEDS[speedIdx], myGen);
+  while (true) {
+    if (state !== myState || myGen !== combatGen || !document.body.classList.contains('in-combat')) { closeActModal(); return; }
+    const next = peekRound(state);
+    if (!next || state.winner) break;
+    let choice = null;
+    if (next.side === 'team') choice = await promptUnitAction(next.u, next.kind);
+    if (choice === ACT_ABORT) return;
+    if (state !== myState || myGen !== combatGen) { closeActModal(); return; }
+    const r = stepRound(state, choice);
+    state._events = [...(state._events ?? []), ...r.events];
+    await animate(r.events, SPEEDS[speedIdx], myGen);
+    if (r.done) break;
+  }
+  closeActModal();
+}
+
+
 
 const hpShown = new Map();
 
@@ -4949,6 +5026,19 @@ const FX_DOC = {
   phoenix: () => `\ud83d\udd25 Ph\u00e9nix : cette unit\u00e9 rena\u00eet de ses cendres une fois tomb\u00e9e.`,
 };
 
+function openInfoModal(title, html) {
+  closeCardModal();
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const box = document.createElement('div');
+  box.className = 'modal end-modal';
+  box.innerHTML = `<h3>${title}</h3>${html}<div class="actions"><button type="button" class="btn" id="info-close">Fermer</button></div>`;
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  box.querySelector('#info-close').onclick = () => overlay.remove();
+  document.body.appendChild(overlay);
+}
+
 function openUnitModal(u) {
   closeCardModal();
   const card = byIdSoft(u.cardId) ?? { id: u.cardId, name: u.name, spells: u.spells ?? [], effect: null };
@@ -4976,7 +5066,7 @@ function openUnitModal(u) {
   overlay.className = 'modal-overlay';
   const box = document.createElement('div');
   box.className = 'modal end-modal';
-  box.innerHTML = `<h3>${card ? card.name : 'Unit\u00e9'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
+  box.innerHTML = `<div class="modal-hero">${artOf(card)}</div><h3>${card ? card.name : 'Unit\u00e9'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
     <p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
@@ -5007,6 +5097,7 @@ function unitEl(u) {
   const el = document.createElement('div');
   el.className = 'unit' + (u.boss ? ' boss' : '');
   el.dataset.uid = u.uid;
+  el.setAttribute('data-uid', u.uid);
   
   
   el.innerHTML = cardFront(
@@ -5030,32 +5121,11 @@ function unitEl(u) {
   
   
   el.onclick = () => {
-    if (!autoMode && state && !state.winner) {
-      if (tacArmed) {
-        const pl = tacPlan[tacArmed];
-        if (pl) {
-          const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
-          const isAlly = state.team.attaque.includes(u) || state.team.support.includes(u);
-          if (isEnemy && (pl.kind === 'attack' || pl.kind === 'spell')) {
-            pl.targetUid = u.uid;
-            tacArmed = null;
-            renderTacPanel();
-            drawTargetMarkers();
-            return;
-          }
-          if (isAlly && (pl.kind === 'cross' || pl.kind === 'cast' || pl.kind === 'basic')) {
-            pl.allyUid = u.uid;
-            tacArmed = null;
-            renderTacPanel();
-            drawTargetMarkers();
-            return;
-          }
-        }
-      }
-      if (state.enemies.attaque.includes(u)) {
-        toggleManualTarget(u.uid);
-        return;
-      }
+    if (state && !state.winner && promptState && promptState.phase === 'target' && u.alive) {
+      const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
+      if (promptState.mode === 'enemy' && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
+      if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
+      return;
     }
     openUnitModal(u);
   };
@@ -5087,13 +5157,12 @@ function drawBoard() {
   line(enemyZone, [...state.enemies.attaque, ...state.enemies.support]);
   
   
-  for (const uid of manualTargets) {
-    const el = elOf(uid);
-    if (el) el.classList.add('targeted');
-  }
-  for (const p of Object.values(tacPlan)) {
-    if (p && p.targetUid) {
-      const el = elOf(p.targetUid);
+  if (promptState && promptState.phase === 'target') {
+    const list = promptState.mode === 'enemy'
+      ? state.enemies.attaque.filter((e) => e.alive)
+      : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
+    for (const t of list) {
+      const el = elOf(t.uid);
       if (el) el.classList.add('targeted');
     }
   }
@@ -5108,7 +5177,13 @@ function sleep(ms) {
 }
 
 function elOf(uid) {
-  return combatApp.querySelector(`[data-uid="${uid}"]`);
+  if (!combatApp) return null;
+  const el = combatApp.querySelector(`[data-uid="${uid}"]`);
+  if (el) return el;
+  for (const u of combatApp.querySelectorAll('.unit')) {
+    if (u._unit && u._unit.uid === uid) return u;
+  }
+  return null;
 }
 
 function findUnit(uid) {
@@ -5384,9 +5459,11 @@ function pickTargets() {
   return foes.map((f) => ({ uid: f.uid }));
 }
 
-async function animate(events, ms) {
+async function animate(events, ms, gen = null) {
   let lastSingle = null; 
   for (const ev of events) {
+    if (gen !== null && gen !== combatGen) return;
+    if (!document.body.classList.contains('in-combat')) return;
     switch (ev.type) {
       case 'turn':
         break;
@@ -5697,6 +5774,7 @@ async function animate(events, ms) {
         } else if (won && store.stage < dungeonById(store.dungeon).floors) {
           chainTimer = setTimeout(() => {
             chainTimer = null;
+            if (!document.body.classList.contains('in-combat')) return;
             store.stage += 1;
             save();
             renderCombat(combatApp, { autoFight: autoMode });
@@ -5758,14 +5836,15 @@ async function animate(events, ms) {
 async function run(autoTurn = false) {
   if (busy || !state || state.winner) return;
   busy = true;
+  const myGen = combatGen;
   if (autoMode) {
     
     
     
-    while (!state.winner && state.turn < 60 && autoMode) {
+    while (!state.winner && state.turn < 60 && autoMode && myGen === combatGen && document.body.classList.contains('in-combat')) {
       combatTally.auto += 1;
       const events = resolveTurn(state);
-      await animate(events, SPEEDS[speedIdx]);
+      await animate(events, SPEEDS[speedIdx], myGen);
     }
   } else {
     
@@ -5773,16 +5852,14 @@ async function run(autoTurn = false) {
       
       combatTally.auto += 1;
       const events = resolveTurn(state);
-      await animate(events, SPEEDS[speedIdx]);
+      await animate(events, SPEEDS[speedIdx], myGen);
     } else {
       
       combatTally.manual += 1;
-      const events = resolveTurn(state, buildTactChoices());
-      await animate(events, SPEEDS[speedIdx]);
+      await runTacTurn();
     }
-    tacArmed = null;
-    renderTacPanel();
   }
+  if (myGen !== combatGen) { closeActModal(); return; }
   
   
   if (!state.winner && state.turn >= 60) {
@@ -5804,9 +5881,8 @@ function renderCombat(root, opts = {}) {
     chainTimer = null;
   }
   busy = false;
-  manualTargets = []; 
-  tacPlan = {};
-  tacArmed = null;
+  combatGen += 1;
+  closeActModal();
   combatTally = { auto: 0, manual: 0 };
   lastTactMult = 1;
   const defi = !!store.defiActive;
@@ -5872,8 +5948,14 @@ function renderCombat(root, opts = {}) {
     for (const u of [...state.team.attaque, ...state.team.support]) u.manaRegen = Math.max(1, u.manaRegen - 1);
   }
   const isBossFloor = store.stage % 5 === 0;
+  const runModDef = (!defi && runModById(store.runMod)) || null;
+  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, toujours une naissance raciale) et 1 éclat brut de son élément.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
+  const infoChips = [`<button type="button" class="info-chip" data-info="rules" title="Comment joue une carte ?">ℹ️</button>`]
+    .concat(runModDef ? [`<button type="button" class="info-chip" data-info="mod" title="Modificateur du run">🎰 ${runModDef.name}</button>`] : [])
+    .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
+    .join(' ');
   combatApp.innerHTML = `
-    <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span></h2>
+    <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
       ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
       <button class="btn ctrl" id="mode">${autoMode ? 'Mode : Auto' : 'Mode : Tactique'}</button>
@@ -5884,27 +5966,27 @@ function renderCombat(root, opts = {}) {
     </div>
     <div class="enemy-zone" id="enemy-zone"></div>
     <div class="team-zone" id="team-zone"></div>
-    <div id="tac-panel"></div>
     <div id="log"></div>
-    <p class="muted" id="mode-hint"></p>
-    <p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, toujours une naissance raciale) et 1 éclat brut de son élément.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>
-    ${discovery ? `<p class="muted">${discovery}</p>` : ''}${(!defi && runModById(store.runMod)) ? `<p class="muted">🎰 Modificateur du run : <b>${runModById(store.runMod).glyph} ${runModById(store.runMod).name}</b> — ${runModById(store.runMod).desc}</p>` : ''}
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
   combatApp.style.background = d.art
     ? `linear-gradient(rgba(12,12,20,.85), rgba(12,12,20,.92)), url("${d.art}") center/cover no-repeat`
     : '';
-  const hint = combatApp.querySelector('#mode-hint');
-  hint.textContent = tacHintText();
+  combatApp.querySelectorAll('.info-chip').forEach((chipEl) => {
+    chipEl.onclick = () => {
+      const kind = chipEl.dataset.info;
+      if (kind === 'rules') openInfoModal('Comment joue une carte ?', rulesHtml);
+      else if (kind === 'mod' && runModDef) openInfoModal(`Modificateur du run : ${runModDef.name}`, `<p class="muted">🎰 <b>${runModDef.glyph} ${runModDef.name}</b> — ${runModDef.desc}</p>`);
+      else if (kind === 'disc') openInfoModal('Bonus de découverte', `<p class="muted">${discovery}</p>`);
+    };
+  });
   combatApp.querySelector('#mode').onclick = (e) => {
     autoMode = !autoMode;
     e.target.textContent = autoMode ? 'Mode : Auto' : 'Mode : Tactique';
-    hint.textContent = tacHintText();
-    
-    renderTacPanel();
+    if (autoMode) closeActModal();
     const fb = combatApp.querySelector('#fight');
     if (fb) fb.textContent = autoMode ? 'Combattre' : '\u2694 Lancer le tour';
-    if (autoMode && !busy && state && !state.winner) setTimeout(() => run(), 120);
+    if (autoMode && !busy && state && !state.winner) { const tg = combatGen; setTimeout(() => { if (tg === combatGen) run(); }, 120); }
   };
   combatApp.querySelector('#speed').onclick = (e) => {
     speedIdx = (speedIdx + 1) % SPEEDS.length;
@@ -5917,12 +5999,9 @@ function renderCombat(root, opts = {}) {
   combatApp.querySelector('#fight').onclick = () => run();
   combatApp.querySelector('#auto-turn').onclick = () => run(true);
   drawBoard();
-  
-  drawTargetMarkers();
-  renderTacPanel();
-  
   if (autoMode && !teamEmpty && state && !state.winner) {
-    setTimeout(() => run(), instant() ? 120 : 450);
+    const tg = combatGen;
+    setTimeout(() => { if (tg === combatGen) run(); }, instant() ? 120 : 450);
   }
 }
 ;
@@ -6249,6 +6328,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v0.46 : Le RPG tour par tour', 'LE CHANTIER PROMIS. Le mode 🧭 Tactique devient un vrai tour de RPG : plus de panneau à remplir en bas de page. Chaque tour, les cartes des deux camps agissent une par une, de la plus forte attaque à la moins forte (la vôtre d’abord à égalité). Quand vient le tour d’une de vos cartes, une fenêtre s’ouvre pour elle : illustration, points de vie, attaque, mana — puis ses choix : ⚔ Attaque, sorts ✦ avec leur coût (atténués si le mana manque), ➕ Souffle Croisé pour les attaquants, ⏸ Attendre pour économiser le mana. Désignez ensuite la cible : ennemie à frapper ou allié à soigner, dans une liste cliquable — et le pion correspondant s’illumine sur le plateau. L’action s’exécute aussitôt, animée, puis la carte suivante joue, et les ennemis agissent de la même façon sous vos yeux. Le ciblage des ennemis, demandé au retour du terrain, est enfin explicite.'],
   ['v0.45 : Rien de caché, des pions à voir', 'SIX RETOURS DU TERRAIN CORRIGÉS. (1) Le code brut à la place de l’emoji disparaît : le bouton 🤖 « Auto ce tour », l’en-tête du panneau Tactique et les récompenses affichent enfin leurs pictogrammes. (2) Le menu ☰ reste joignable EN COMBAT : la navigation s’ouvre par-dessus l’écran, opaque et déroulante. (3) Le panneau Tactique n’est plus jamais coupé : il défile à l’intérieur de sa zone. (4) Les pions de combat grandissent (128 px, boss 162 px) et deviennent plus carrés : l’illustration occupe presque toute la carte, nom et stats en surimpression. (5) L’écran de combat ne coupe PLUS rien : si l’écran est trop petit, le contenu défile à l’intérieur de l’écran. (6) Les sorts spéciaux n’assombrissent plus le plateau : une bande compacte (illustration du lanceur + nom du sort) passe au-dessus sans rien masquer.'],
   ['v0.44 : Le combat plein écran', 'DEUX DEMANDES DE TERRAIN APPLIQUÉES. (1) Le combat tient sur UN SEUL ÉCRAN : en exploration la page ne scrolle plus, ni en bas ni sur les côtés — titre, boutons, plateau, panneau Tactique et journal se partagent la hauteur de l’écran, et les rappels restent compacts. (2) Les cartes s’agrandissent partout où l’image a sa place : collection, familles, équipe et fiche — les futures illustrations s’y liront ; en combat, chaque carte reste un pion lisible et l’image se loge en fond de carte.'],
   ['v0.43.1 : Correctifs terrain', 'QUATRE RETOURS DU TERRAIN APPLIQUÉS. (1) Le plateau applique une TAILLE UNIFORME : chaque carte garde la même largeur dans les deux camps, quel que soit le nombre de voisines — seul le boss garde sa prestance. (2) Le modificateur de run redevient réellement OPTIONNEL : l’accepter est gratuit (butin majoré), entrer sans lui aussi — seul le REMPLACEMENT du tirage coûte 1 éclat brut. Plus aucune obligation d’éclat pour refuser. (3) La collection montre la PORTE de chaque famille : le novice (ou la greffe) qui y entre figure en tête de chaîne. (4) Les anciennes branches SR (Yuki, Onyx, Naïa…) sont ARCHIVÉES : hors des tirages et des arbres, visibles seulement dans la section archives si vous en possédez.'],
@@ -6357,7 +6437,7 @@ function renderGlossaire(root) {
       <summary>⚔️ Mécaniques du jeu</summary>
       <h3>Le combat</h3>
       <ul class="glo-list">
-        <li><b>Tour par tour</b> : vos attaquants agissent, puis vos supports, puis les ennemis (et leurs supports), et ainsi de suite jusqu’au KO d’un camp.</li>
+        <li><b>Tour par tour</b> : les cartes des deux camps agissent une par une, de la plus forte attaque à la moins forte (la vôtre d’abord à égalité), jusqu’au KO d’un camp. En Tactique, une fenêtre d’action s’ouvre pour chacune de vos cartes.</li>
         <li><b>Mana et sorts</b> : chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu’elle peut payer ; si son gros sort arrive bientôt, elle épargne un tour.</li>
         <li><b>Contrôle sous embargo</b> : les effets de contrôle (étourdissement, lenteur, poison, renvoi, malédiction, invocation…) ne s’appliquent que si le sort est lancé. Un sort qui coûte 6 part environ tous les 3 tours. Les ennemis suivent la même règle.</li>
         <li><b>Frappe sans sort</b> : sans mana pour son sort, chaque classe frappe à son rendement (voir le tableau des classes). Tant qu’un sort part, il frappe au multiplicateur du sort.</li>
@@ -6370,6 +6450,11 @@ function renderGlossaire(root) {
         <li><b>Verrou</b> : une carte verrouillée porte son cadenas et sa condition en fiche ; le standard sera le SR des nouvelles lignées, jamais après L.</li>
         <li><b>Évolutions typées</b> : chaque maillon exposera ses options d’évolution — standard, partagée (plusieurs parents), convergence, régression, chute, malédiction, événement de héros, secrète (floutée « ?? ») ; les arbres des novices les ouvriront.</li>
         <li><b>Statuts</b> : voir la liste plus bas dans cette section.</li>
+      </ul>
+      <h3>Les symboles de l’écran</h3>
+      <ul class="glo-list">
+        <li><b>ℹ️ 🎰 🌱</b> : les pastilles en haut de l’écran de combat. ℹ️ rappelle comment joue une carte, 🎰 le modificateur du run tiré à l’entrée du donjon, 🌱 le bonus de découverte du premier donjon. Touchez-les pour relire le texte à tout moment.</li>
+        <li><b>⚡ ✦ ♥ 🛡 ⚔</b> : points de la Forge, mana, PV, bouclier (absorbe les dégâts avant les PV), attaque.</li>
       </ul>
       <h3>Les six classes</h3>
       <table class="glo-table"><tr><th>Classe</th><th>Stats</th><th>Comportement</th></tr>${classRows}</table>

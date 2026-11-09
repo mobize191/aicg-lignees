@@ -91,24 +91,70 @@ async function main() {
   }
   check('43 B plus de shift/back', !appEl._innerHTML.includes('row back'), '');
 
-  // ---------- panneau tactique (43 C) ----------
+  // ---------- fenêtre RPG tour par tour (43 C, 46 f/g/h) ----------
   api._setAuto(false);
+  api.go('#combat');
+  await wait(60);
   const stC = api._state();
-  check('43 C combat lancé', !!stC, '');
+  check('43 C combat tactique lancé (fenêtre RPG)', !!stC, '');
   if (stC) {
+    api._speed(6);
     stC.team.attaque[0].hp = Math.max(1, Math.round(stC.team.attaque[0].maxHp * 0.05));
-    api.renderTacPanel();
-    const panel = els.get('tac-panel') ?? appEl.querySelector('#tac-panel');
-    const pi = panel ? panel._innerHTML : '';
-    check('43 C panneau tactique rendu', pi.length > 100, String(pi.length));
-    check('43 C sorts nommés (Onde Consacrée)', pi.includes('Onde Consacrée') && pi.includes('Bénédiction Modeste'), '');
-    check('43 C pas de bouton ✦ Sort générique', !pi.includes('>✦ Sort<'), '');
-    check('43 C souffle croisé étiqueté (apostrophe droite)', pi.includes("Action d'équipe, pas un sort"), '');
-    check('43 C infobulle du sort commun', pi.includes('title="Frappe Précise'), '');
+    els.get('fight').click();
+    let am = null;
+    for (let w = 0; w < 120 && !am; w++) { await wait(25); am = api._actEl(); }
+    const amTxt = am ? am._innerHTML : '';
+    check('46 f fenêtre d’action : titre, stats, illustration, sorts', !!am && amTxt.includes('à vous d’agir') && amTxt.includes('♥') && !!am.querySelector('.act-art') && amTxt.includes('✦'), amTxt.slice(0, 90));
+    check('46 f boutons ⚔ Attaque et ⏸ Attendre', !!am && amTxt.includes('⚔ Attaque') && amTxt.includes('⏸ Attendre'), '');
+    const bAtk = am ? am.querySelector('.act-attack') : null;
+    const bPass = am ? am.querySelector('.act-pass') : null;
+    if (bAtk && bPass) {
+      bAtk.click();
+      await wait(30);
+      am = api._actEl();
+      const zoneEl = am ? am.querySelector('.act-zone') : null;
+      const tTxt = zoneEl ? zoneEl._innerHTML : '';
+      check('46 g cible proposée : liste cliquable', !!zoneEl && tTxt.includes('Choisissez votre cible') && !!am.querySelector('.act-target'), tTxt.slice(0, 90));
+      check('46 g pion ennemi surligné sur le plateau', appEl.querySelectorAll('.unit').some((el) => el.classList.contains('targeted')), '');
+      const tg = am ? am.querySelector('.act-target') : null;
+      if (tg) {
+        const tid = tg.dataset.uid;
+        tg.click();
+        for (let w = 0; w < 120 && !api._actEl() && !stC.winner && api._busy(); w++) await wait(25);
+        check('46 g attaque portée à la cible choisie', (stC._events ?? []).some((e) => e.type === 'attack' && e.targetId === tid), `events=${(stC._events ?? []).length}`);
+      } else {
+        check('46 g attaque portée à la cible choisie', false, 'pas de bouton cible');
+      }
+      let guard = 0;
+      while (guard++ < 40) {
+        let w = 0;
+        am = api._actEl();
+        while (!am && w++ < 120 && !stC.winner && api._busy()) { await wait(25); am = api._actEl(); }
+        if (!am) break;
+        const pb = am.querySelector('.act-pass');
+        if (!pb) break;
+        pb.click();
+        await wait(25);
+      }
+      await wait(80);
+      check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', !api._actEl() && !api._busy(), `act=${!!api._actEl()} busy=${api._busy()} winner=${stC.winner}`);
+    } else {
+      check('46 g cible proposée : liste cliquable', false, 'fenêtre sans boutons');
+      check('46 g pion ennemi surligné sur le plateau', false, '');
+      check('46 g attaque portée à la cible choisie', false, '');
+      check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', false, '');
+    }
+  } else {
+    check('46 f fenêtre d’action : titre, stats, illustration, sorts', false, 'pas de combat');
+    check('46 f boutons ⚔ Attaque et ⏸ Attendre', false, '');
+    check('46 g cible proposée : liste cliquable', false, '');
+    check('46 g pion ennemi surligné sur le plateau', false, '');
+    check('46 g attaque portée à la cible choisie', false, '');
+    check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', false, '');
   }
-  check('43 C 0 exception après panneau', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  check('43 C 0 exception après fenêtre RPG', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
-  // ---------- victoire tactique (40) ----------
+  // ---------- victoire pas-à-pas au moteur (40) + équivalence (46 i) ----------
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n4', 'a29'], 20);
   api._setAuto(false);
@@ -116,16 +162,49 @@ async function main() {
   await wait(60);
   let stT = api._state();
   let turns = 0;
-  while (stT && !stT.winner && turns < 40) {
-    const plan = api._tac();
-    for (const u of [...stT.team.attaque, ...stT.team.support]) {
-      if (u.alive) plan[u.uid] = { kind: 'spell', idx: 0 };
+  while (stT && !stT.winner && stT.turn < 60 && turns < 40) {
+    api.beginRound(stT);
+    let guard = 0;
+    while (guard++ < 40) {
+      const next = api.peekRound(stT);
+      if (!next || stT.winner) break;
+      let choice = null;
+      if (next.side === 'team') {
+        const sp = (next.u.spells ?? [])[0];
+        if (next.kind === 'strike') choice = sp && next.u.mana >= sp.cost ? { kind: 'spell', idx: 0 } : { kind: 'attack' };
+        else choice = sp && next.u.mana >= sp.cost ? { kind: 'cast', idx: 0 } : { kind: 'basic' };
+      }
+      api.stepRound(stT, choice);
     }
-    api.resolveTurn(stT, api.buildTactChoices());
     turns++;
   }
-  check('40 victoire tactique 100% manuelle (Nv20, étage 1)', stT && stT.winner === 'team', `winner=${stT && stT.winner} en ${turns} tours`);
+  check('40 victoire pas-à-pas 100 % manuelle (Nv20, étage 1)', stT && stT.winner === 'team', `winner=${stT && stT.winner} en ${turns} tours`);
   check('40 récompense tactique intégrale', api._lastTactMult() >= 0.999, String(api._lastTactMult()));
+
+  const mkSt46 = () => {
+    const wave = api.makeWave(77, 2, 'marees', 1);
+    const teamCards = {
+      attaque: [{ ...api.byId('a1'), level: 15 }, { ...api.byId('g9'), level: 15 }],
+      support: [{ ...api.byId('d2'), level: 15 }],
+    };
+    return api.initCombat(teamCards, wave, 1234);
+  };
+  const stA = mkSt46();
+  const evA = [];
+  for (let t = 0; t < 5 && !stA.winner; t++) evA.push(...api.resolveTurn(stA));
+  const stB = mkSt46();
+  const evB = [];
+  for (let t = 0; t < 5 && !stB.winner; t++) {
+    evB.push(...api.beginRound(stB));
+    let guard = 0;
+    while (guard++ < 60) {
+      if (!api.peekRound(stB) || stB.winner) break;
+      const r = api.stepRound(stB, null);
+      evB.push(...r.events);
+      if (r.done) break;
+    }
+  }
+  check('46 i pas-à-pas : événements identiques à resolveTurn', JSON.stringify(evA) === JSON.stringify(evB) && evA.length > 10, `A=${evA.length} B=${evB.length}`);
 
   // ---------- modificateurs de run (42) ----------
   check('42 A ids uniques', api.RUN_MODS.length === 4 && new Set(api.RUN_MODS.map((m) => m.id)).size === 4, api.RUN_MODS.map((m) => m.id).join(','));
@@ -157,7 +236,7 @@ async function main() {
   ov.querySelector('#mod-accept').click();
   await wait(40);
   check('42 C accepter ferme la modale et ouvre le combat', doc.body.children.at(-1) !== ov && store.runMod !== null, '');
-  check('42 C bandeau du mod en combat', (els.get('app')?._innerHTML ?? '').includes('Modificateur du run'), '');
+  check('42 C pastille du mod en tête de combat', (els.get('app')?._innerHTML ?? '').includes('data-info="mod"'), '');
 
   // modale : entrer sans modificateur (GRATUIT)
   mem.clear();
@@ -272,11 +351,11 @@ async function main() {
 
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
   check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
-  check('45 b rien de coupé : #app défile en interne, Tactique borné et défilable', html.includes('body.in-combat #tac-panel { flex: 0 0 auto; max-height: 40dvh; overflow-y: auto; }') && !html.includes('body.in-combat #tac-panel { flex: 0 1 auto; overflow: hidden; }'), '');
+  check('45 b rien de coupé : #app défile en interne, fenêtre d’action bornée et défilable', html.includes('body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }') && !html.includes('#tac-panel'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
   check('44 a one-screen : unités de combat agrandies et panneau compact', html.includes('body.in-combat .unit { width: clamp(96px, 22vw, 128px); }') && html.includes('body.in-combat .unit.boss { width: clamp(122px, 28vw, 162px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
-  check('44 a one-screen : journal borné et rappels clampés à 2 lignes', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && html.includes('-webkit-line-clamp: 2'), '');
+  check('44 a one-screen : journal borné, rappels bas disparus', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && !html.includes('-webkit-line-clamp'), '');
   check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
   check('44 b la base v0.43.1 des unités reste en place (override seulement)', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)'), '');
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');
@@ -297,6 +376,25 @@ async function main() {
   await wait(40);
   check('44 d retour en combat, la classe revient (toggle à force)', doc.body.classList.contains('in-combat'), String(doc.body.className));
   api._setAuto(false);
+
+  // ---------- v0.46a : correctifs terrain (46 a-e) ----------
+  mem.clear();
+  for (const t of store.teams) t.slots = [];
+  const v1 = api.newInst('n1', 5); const v2 = api.newInst('n1', 5); const v3 = api.newInst('n1', 5);
+  check('46 a 3 exemplaires de la m\u00eame carte posables', api.addCardIid(v1.iid).ok && api.addCardIid(v2.iid).ok && api.addCardIid(v3.iid).ok, '');
+  const v4 = api.newInst('n1', 5);
+  const r4 = api.addCardIid(v4.iid);
+  check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
+  check('46 b pions mobiles 26vw (media 600)', html.includes('clamp(104px, 26vw, 136px)') && html.includes('clamp(130px, 32vw, 172px)'), '');
+  check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
+  check('46 b fiche : h\u00e9ro en t\u00eate de fiche', html.includes('.modal-hero') && html.includes('<div class="modal-hero">${artOf(card)}</div>'), '');
+  check('46 c pastilles info en t\u00eate, rappels bas supprim\u00e9s', html.includes('.info-chip') && html.includes('openInfoModal') && !html.includes('mode-hint') && !html.includes('tacHintText'), '');
+  check('46 c les 3 pastilles cliquables existent', html.includes('data-info="rules"') && html.includes('data-info="mod"') && html.includes('data-info="disc"'), '');
+  api.go('#glossaire');
+  await wait(30);
+  check('46 e glossaire : les symboles document\u00e9s', (els.get('app')?._innerHTML ?? '').includes('Les symboles de l\u2019\u00e9cran'), '');
+
+  check('46 j historique et glossaire v0.46', html.includes('v0.46 : Le RPG tour par tour') && html.includes('de la plus forte attaque à la moins forte'), '');
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
