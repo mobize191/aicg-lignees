@@ -51,3 +51,14 @@ test('v8 -> v11 : chaque exemplaire reçoit agilité et intelligence, aucune ré
   }
   assert.deepEqual(out.tokens.length, save.tokens.length);
 });
+
+test('v8 -> v12 : grimoire appris et zones visitées présents, chaîne complète (EXI-SAVE-1)', () => {
+  const E = loadEngine();
+  const save = JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
+  const out = E.migrate(structuredClone(save));
+  assert.equal(out.version, 12);
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.ok(Array.isArray(out.grimoire));
+  assert.ok(Array.isArray(out.zonesVisitees));
+  assert.equal(out.instances.length, save.instances.length);
+});

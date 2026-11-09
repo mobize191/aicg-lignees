@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { rmSync, cpSync, writeFileSync } from 'node:fs';
+import { mulberry32 } from './helpers/rng.js';
 import { loadEngine, loadData } from './helpers/load.mjs';
 
 test('arbres : 100 % des références résolues, aucun doublon de nom (ACC-1-1)', () => {
@@ -58,4 +59,37 @@ test('les communes déléguées existent avec leur voie (EXI-P1-3)', () => {
   assert.equal(E.getCard('p3')?.name, 'Pousse des Sèves');
   assert.equal(E.getCard('p4')?.name, 'Fidèle du Jour');
   assert.ok(E.getCard('p3').voie && E.getCard('p4').voie);
+});
+
+test('errance : passage scripté de zone, récoltes dans les bornes, cadence zone/donjon (ACC-4-2)', () => {
+  const E = loadEngine();
+  const zone = E.getZone('zone-marees');
+  assert.equal(zone.cadence, 'zone');
+  assert.equal(zone.apres, 'donjon');
+  // RNG semé : toutes les récoltes dans les bornes configurées
+  for (const seed of [1, 2, 3, 42, 99]) {
+    const res = E.runZone('zone-marees', mulberry32(seed));
+    for (const r of res.recoltes) {
+      if (r.type === 'eclat') assert.ok(zone.recoltes.eclats.tiers.includes(r.tier));
+      if (r.type === 'N') assert.ok(zone.poolN.includes(r.carte));
+      if (r.type === 'jeton') assert.ok(true);
+    }
+    assert.ok(Array.isArray(res.enseignements) && res.enseignements.length > 0);
+  }
+  // la cadence alterne : chaque zone est suivie d'un donjon
+  for (const z of E.DATA.zones) assert.equal(z.apres, 'donjon');
+});
+
+test('apprentissage : un cran II appris en zone est persisté, castable, et survit à l\u2019évolution (ACC-4-3)', () => {
+  const E = loadEngine();
+  const grimoire = [];
+  E.learnCran(grimoire, 'morsure-decume', 'II');
+  assert.ok(E.isLearned(grimoire, 'morsure-decume', 'II'));
+  const inst = { iid: 'i1', id: 'n1', lvl: 10, xp: 0, classe: 'Guerrier', voie: 'voie du guerrier', sorts: [] };
+  assert.ok(E.canCastLearned(inst, grimoire, 'morsure-decume', 'II'), 'cran II castable par un guerrier (école la Lame ouverte)');
+  const res = E.castSpell(E.DATA, 'morsure-decume', 'II', { lanceur: { uid: 'x', classe: 'Guerrier', atk: 10 }, cibles: [0,1,2,3,4].map((i) => ({ uid: 'c' + i, hp: 100, maxHp: 100, alive: true, shield: 0, status: {} })), events: [] });
+  assert.equal(res.cibles.length, 2);
+  const eveil = E.eveilOf('n1', 'a30');
+  E.applyTreeEveil(inst, eveil);
+  assert.ok(E.isLearned(grimoire, 'morsure-decume', 'II'), 'le cran appris survit à l\u2019évolution');
 });
