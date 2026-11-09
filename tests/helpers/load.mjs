@@ -1,0 +1,20 @@
+// charge les modules du moteur comme le build le fait, pour les tests (pas de DOM, pas de build)
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+export function loadData(dataDir = 'data') {
+  return Object.fromEntries(
+    readdirSync(dataDir).filter((f) => f.endsWith('.json')).sort()
+      .map((f) => [f.replace(/\.json$/, ''), JSON.parse(readFileSync(`${dataDir}/${f}`, 'utf8'))])
+  );
+}
+const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell', 'getSchool',
+  'getFamily', 'getTree', 'getZone', 'applyDamage', 'resolveTurn', 'applySupport', 'castSummon',
+  'setRoll', 'roll', 'migrate', 'statsAt', 'castSpell', 'pickZoneTargets', 'evolve', 'openSchools'];
+export function loadEngine(dataDir = 'data') {
+  const data = loadData(dataDir);
+  const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',
+    'src/engine/combat.js', 'src/engine/summon.js', 'src/engine/progression.js', 'src/engine/migrate.js'];
+  const body = files.filter((f) => existsSync(f)).map((f) => readFileSync(f, 'utf8')).join('\n');
+  const code = `const DATA = ${JSON.stringify(data)};\n${body}\n`
+    + `const out = {};\nfor (const n of ${JSON.stringify(NAMES)}) { try { out[n] = eval(n); } catch {} }\nreturn out;`;
+  return (new Function(code))();
+}

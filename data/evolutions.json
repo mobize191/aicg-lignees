@@ -1,0 +1,188 @@
+{
+ "n1": [
+  {
+   "to": "a30",
+   "voie": "voie du guerrier"
+  },
+  {
+   "to": "s14",
+   "voie": "voie de la protection"
+  },
+  {
+   "to": "a33",
+   "voie": "voie sylvestre"
+  }
+ ],
+ "n2": [
+  {
+   "to": "a29",
+   "voie": "les flots — l’Eau"
+  },
+  {
+   "to": "a32",
+   "voie": "la fournaise — le Feu"
+  },
+  {
+   "to": "a33",
+   "voie": "les Sylvains — la Terre"
+  },
+  {
+   "to": "s13",
+   "voie": "la lumière — l’élue de l’Aube"
+  },
+  {
+   "to": "a31",
+   "voie": "l’ombre — l’élue du Crépuscule"
+  }
+ ],
+ "n3": [
+  {
+   "to": "s13",
+   "voie": "la lumière — la foi"
+  },
+  {
+   "to": "s14",
+   "voie": "la garde — protéger les vivants"
+  }
+ ],
+ "n4": [
+  {
+   "to": "a31",
+   "voie": "voie de l’assassinat"
+  },
+  {
+   "to": "a34",
+   "voie": "voie des quais"
+  },
+  {
+   "to": "a37",
+   "voie": "voie de la fête"
+  }
+ ],
+ "a29": [
+  {
+   "to": "a8",
+   "voie": "fidèle à l’Eau"
+  },
+  {
+   "to": "s5",
+   "voie": "élue de la lumière — rejoint la lignée de Léna"
+  }
+ ],
+ "a32": [
+  {
+   "to": "a20",
+   "voie": "fidèle au Feu"
+  },
+  {
+   "to": "s5",
+   "voie": "élue de la lumière — rejoint la lignée de Léna"
+  }
+ ],
+ "n5": [
+  {
+   "to": "e3",
+   "voie": "voie du pillage — les récifs"
+  },
+  {
+   "to": "e11",
+   "voie": "voie des berges"
+  }
+ ],
+ "n6": [
+  {
+   "to": "f3",
+   "voie": "voie de la suie"
+  },
+  {
+   "to": "f15",
+   "voie": "voie de la fournaise"
+  },
+  {
+   "to": "f24",
+   "voie": "voie du goblin"
+  }
+ ],
+ "n7": [
+  {
+   "to": "g3",
+   "voie": "voie de la mousse"
+  },
+  {
+   "to": "g12",
+   "voie": "voie des sèves"
+  }
+ ],
+ "n8": [
+  {
+   "to": "k3",
+   "voie": "le gouffre"
+  },
+  {
+   "to": "k12",
+   "voie": "le deuil marin"
+  },
+  {
+   "to": "k24",
+   "voie": "le devoir brisé"
+  }
+ ],
+ "n10": [
+  {
+   "to": "e24",
+   "voie": "la forme — Sirène"
+  }
+ ],
+ "n11": [
+  {
+   "to": "g12",
+   "voie": "la forme — Dryade"
+  }
+ ],
+ "n12": [
+  {
+   "to": "k3",
+   "voie": "la forme — le gouffre"
+  },
+  {
+   "to": "k12",
+   "voie": "la forme — le deuil marin"
+  },
+  {
+   "to": "k24",
+   "voie": "la forme — le devoir brisé"
+  }
+ ],
+ "n9": [
+  {
+   "to": "z3",
+   "voie": "la voie dorée — la Légion Solaire"
+  },
+  {
+   "to": "z16",
+   "voie": "la voie du feu céleste — les Phénix"
+  },
+  {
+   "to": "z23",
+   "voie": "la voie du plein jour — le Clergé"
+  }
+ ],
+ "n13": [
+  {
+   "to": "d3",
+   "voie": "la voie des Arbitres — la Loi de Lumière"
+  }
+ ],
+ "n14": [
+  {
+   "to": "d8",
+   "voie": "la voie du Chœur Miroir — la Réflexion"
+  }
+ ],
+ "n15": [
+  {
+   "to": "d14",
+   "voie": "la voie du Pont — le Liage"
+  }
+ ]
+}

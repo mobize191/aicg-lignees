@@ -1,1 +1,342 @@
-{}
+{
+ "CLASSES": [
+  "Guerrier",
+  "Mage",
+  "Prêtre",
+  "Assassin",
+  "Occultiste",
+  "Invocateur"
+ ],
+ "ELEMENTS": [
+  "Feu",
+  "Eau",
+  "Terre",
+  "Ombre",
+  "Lumière"
+ ],
+ "PALIERS": [
+  2,
+  4
+ ],
+ "SPELL_CAT_LABEL": {
+  "commun": "commun",
+  "race": "de race",
+  "classe": "de classe",
+  "unique": "signature",
+  "lignée": "de lignée"
+ },
+ "RARITY_POWER": {
+  "C": 1,
+  "UC": 1.08,
+  "R": 1.16,
+  "SR": 1.26,
+  "UR": 1.38,
+  "L": 1.52
+ },
+ "RANK": {
+  "C": 0,
+  "UC": 1,
+  "R": 2,
+  "SR": 3,
+  "UR": 4,
+  "L": 5,
+  "M": 6
+ },
+ "BEATS": {
+  "Feu": "Terre",
+  "Terre": "Eau",
+  "Eau": "Feu",
+  "Lumière": "Ombre",
+  "Ombre": "Lumière"
+ },
+ "BEATEN_BY": {
+  "Feu": "Eau",
+  "Eau": "Terre",
+  "Terre": "Feu",
+  "Lumière": "Ombre",
+  "Ombre": "Lumière"
+ },
+ "RACES": [
+  "humaine",
+  "monstre",
+  "mystique",
+  "divine"
+ ],
+ "RACE_LABEL": {
+  "humaine": "Humaine",
+  "monstre": "Monstre",
+  "mystique": "Mystique",
+  "divine": "Divine"
+ },
+ "RACE_MOD": {
+  "humaine": 0,
+  "monstre": 0.1,
+  "mystique": 0.2,
+  "divine": 0.3
+ },
+ "CLASSE_MODS": {
+  "Guerrier": {
+   "atkPct": 0.1,
+   "hpPct": 0.15,
+   "strike": 1,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0.05
+  },
+  "Assassin": {
+   "atkPct": 0.05,
+   "hpPct": -0.1,
+   "strike": 1,
+   "dodge": 0.15,
+   "exec": 0.25,
+   "execBelow": 0.35,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Mage": {
+   "atkPct": 0.05,
+   "hpPct": -0.05,
+   "strike": 0.8,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0.4,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Prêtre": {
+   "atkPct": -0.15,
+   "hpPct": 0,
+   "strike": 0.7,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Occultiste": {
+   "atkPct": -0.2,
+   "hpPct": 0,
+   "strike": 0.6,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": true,
+   "shieldOnHit": 0
+  },
+  "Invocateur": {
+   "atkPct": -0.1,
+   "hpPct": -0.1,
+   "strike": 0.8,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  }
+ },
+ "CLASSE_DEFAULT": {
+  "atkPct": 0,
+  "hpPct": 0,
+  "strike": 1,
+  "dodge": 0,
+  "exec": 0,
+  "execBelow": 0,
+  "splash": 0,
+  "wave": false,
+  "shieldOnHit": 0
+ },
+ "MONSTER_MANA": {
+  "max": 10,
+  "regen": 2
+ },
+ "FAMILY_MANA": [
+  {
+   "max": 8,
+   "regen": 2
+  },
+  {
+   "max": 11,
+   "regen": 3
+  },
+  {
+   "max": 14,
+   "regen": 3
+  },
+  {
+   "max": 22,
+   "regen": 5
+  },
+  {
+   "max": 30,
+   "regen": 6
+  },
+  {
+   "max": 40,
+   "regen": 8
+  }
+ ],
+ "SOLO_MANA": {
+  "max": 10,
+  "regen": 2
+ },
+ "EVO_COST": {
+  "C": [
+   "brut",
+   3
+  ],
+  "UC": [
+   "poli",
+   2
+  ],
+  "R": [
+   "poli",
+   4
+  ],
+  "SR": [
+   "grave",
+   2
+  ],
+  "UR": [
+   "grave",
+   4
+  ],
+  "L": [
+   "eternel",
+   10
+  ]
+ },
+ "GEM_TIERS": [
+  "brut",
+  "poli",
+  "grave",
+  "eternel"
+ ],
+ "GEM_LABEL": {
+  "brut": "bruts",
+  "poli": "polis",
+  "grave": "gravés",
+  "eternel": "éternels"
+ },
+ "BOSS_GEM": {
+  "1": [
+   "brut",
+   "brut"
+  ],
+  "2": [
+   "brut",
+   "poli"
+  ],
+  "3": [
+   "poli",
+   "grave"
+  ],
+  "4": [
+   "grave",
+   "grave"
+  ],
+  "5": [
+   "grave",
+   "eternel"
+  ]
+ },
+ "TOKEN_RAR": [
+  "C",
+  "UC",
+  "R",
+  "SR",
+  "UR"
+ ],
+ "NEXT_RAR": {
+  "C": "UC",
+  "UC": "R",
+  "R": "SR",
+  "SR": "UR",
+  "UR": "L"
+ },
+ "SHARD_MAX": 3,
+ "SHARD_BONUS": 0.03,
+ "PITY_MAX": 3,
+ "ALL_SHARDS": [
+  "a34",
+  "a35",
+  "a36",
+  "a37",
+  "a38",
+  "a39"
+ ],
+ "REWARD_TABLE": [
+  [
+   "C",
+   0.38
+  ],
+  [
+   "UC",
+   0.22
+  ],
+  [
+   "R",
+   0.26
+  ],
+  [
+   "SR",
+   0.12
+  ],
+  [
+   "UR",
+   0.02
+  ]
+ ],
+ "DIVINE_LOW_SLOT": [
+  [
+   "C",
+   0.5
+  ],
+  [
+   "UC",
+   0.5
+  ]
+ ],
+ "DIVINE_MID_SLOT": [
+  [
+   "R",
+   0.65
+  ],
+  [
+   "SR",
+   0.35
+  ]
+ ],
+ "DIVINE_TOP_SLOT": [
+  [
+   "SR",
+   0.75
+  ],
+  [
+   "UR",
+   0.25
+  ]
+ ],
+ "REG_ECLAT_RATE": [
+  0,
+  0,
+  0.012,
+  0.025,
+  0.05
+ ],
+ "TEAM_MAX": 5,
+ "OPP_BONUS": 0.25,
+ "LEVEL_BONUS": 0.08,
+ "LEVEL_CAP": 20,
+ "DMG_REDUCTION_MAX": 0.8,
+ "SAVE_VERSION": 8,
+ "SAVE_KEY": "fondations-cards-v1",
+ "CURRENT_VERSION": 8
+}
