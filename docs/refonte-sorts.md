@@ -6,7 +6,7 @@ type: "text/markdown"
 
 # Refonte des sorts : le grimoire mutualisé, les écoles et l'acquisition (v2)
 
-Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (quatre crans, inférieur, normal, supérieur, majeur, le RPG à l'ancienne), et les L, M et quelques cartes clés gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée** : ×1.3 de quoi ? La réponse en section 2.
+Ce qui change de la v1 après ta relecture (v2) : **les 189 signatures redondantes meurent (acté, ta demande)** : on mutualise au maximum, les effets proches fusionnent en un sort à crans (quatre crans, inférieur, normal, supérieur, majeur, le RPG à l'ancienne), et les L, M et quelques cartes clés gardent une ou deux uniques. **Un sort ne dépend plus d'une classe, il dépend de son effet (acté)** : les écoles remplacent le verrou de classe, changer de voie change les écoles ouvertes ; ton exemple : un mage, par le chemin de l'eau, peut invoquer des élémentaires d'eau. **Les sorts se débloquent au fil du jeu (acté)** : une carte ne naît plus avec tout, le grimoire s'apprend palier après palier, zone après zone, et dépassera un jour les sorts des cartes actuelles. **Et la base des multiplicateurs est posée (v2.1, ton retour)** : ×1.3 de quoi ? De la **stat principale du personnage** : l'attaque du guerrier, l'agilité de l'assassin, l'intelligence du mage, de l'occultiste et du prêtre. La réponse en section 2.
 
 Ce document reste le DESIGN CIBLE de la refonte. L'état embarqué reste le repo (`dist.html`, `inventaire-sorts.md`, `arbres-sorts.md`, `audit-sorts.md`) ; ce qui est acté ici descendra au dist lors de la grosse mise à jour (section 11).
 
@@ -27,17 +27,18 @@ Les 6 ciblages : **soi**, **1 allié**, **l'équipe**, **1 ennemi**, **la zone**
 
 ## 2. La base : ×1.3 de quoi ?
 
-Ta question : « la puissance, c'est ×1.3, mais ×1.3 de quoi ? » Réponse (acté v2 : ton feu vert) :
+Ta question : « la puissance, c'est ×1.3, mais ×1.3 de quoi ? » Réponse (v2.1, ton retour) : **le mult tire sur la stat principale de la carte**. Chaque profil a sa stat, et tous ses sorts, frappes comme soins, tirent dessus :
 
-| Rôle | La base du multiplicateur | Exemple |
-| --- | --- | --- |
-| Dégâts (une frappe d'arme) | la **puissance de frappe** de la carte (l'attaque) | Lame Éclair ×1.9 = 1.9 × l'attaque du spadassin |
-| Dégâts (un sort de magie) | l'**intelligence** de la carte | Décharge Arcanique ×1.65 = 1.65 × l'intelligence du mage |
-| Soin | l'**intelligence** du lanceur | Onde Consacrée ×1.3 = 1.3 × l'intelligence de la prête |
-| Bouclier | l'intelligence du lanceur, en **points de bouclier** (une réserve qui s'ajoute aux points de vie) | Égide Renforcée ×1.7 = 1.7 × l'intelligence du gardien, en bouclier sur l'allié |
-| Taux (stun, brûlure, malus) | une **chance en pourcentage**, jouée contre le seuil de la cible | 25 % de stun = un quart de tours perdus, en moyenne |
+| Le profil | Sa stat principale | Le mult tire sur | Exemple |
+| --- | --- | --- | --- |
+| Le guerrier, l'épéiste | l'attaque | toutes ses frappes | Lame Éclair ×1.9 = 1.9 × l'attaque du spadassin |
+| L'assassin, le voleur | l'agilité | ses frappes (et l'initiative, et l'esquive) | Faux du Croissant ×1.9 = 1.9 × l'agilité du faucheur |
+| Le mage, l'occultiste | l'intelligence | ses sorts | Décharge Arcanique ×1.65 = 1.65 × l'intelligence du mage |
+| Le prêtre | l'intelligence (ton feu vert) | ses soins et ses onctions | Aube Éternelle ×6 = 6 × l'intelligence de Léna |
+| Le gardien, la voie du Bouclier | la vie (proposition, 13.1) | ses boucliers, en points de réserve | Égide Renforcée ×1.7 = 1.7 × la vie du gardien, en bouclier sur l'allié |
+| Les taux, tous profils | une **chance en pourcentage**, jouée contre le seuil de la cible | le sort affiche sa chance | 25 % de stun = un quart de tours perdus, en moyenne |
 
-Trois conséquences : (1) le multiplicateur est le **langage**, la stat est la **base** : une L soigne plus qu'une C au même sort parce que son intelligence est plus haute, pas parce que la règle change ; (2) les stats de race (+10, +20, +30 %) montent la puissance et l'intelligence, pas les mults ; (3) l'agilité et l'intelligence (acté v17, section 10) entrent par ici : l'intelligence tire les sorts magiques, les soins et les boucliers, l'agilité tire l'ordre du tour et l'esquive.
+Quatre conséquences : (1) le multiplicateur est le **langage**, la stat est la **base** : une L soigne plus qu'une C au même sort parce que son intelligence est plus haute, pas parce que la règle change ; (2) chaque profil monte SA stat : les évolutions, les crans de race (+10, +20, +30 %) et l'équipement renforcent la stat principale, jamais les mults ; (3) l'agilité devient la stat complète de l'assassin (ses dégâts, son initiative, son esquive : les trois au même endroit) ; (4) le soin plafonne à la vie max de la cible : la vie entre par la cible, pas par le lanceur.
 
 ## 3. Les écoles : le sort dépend de son effet, pas de sa classe
 
@@ -232,7 +233,7 @@ Un Pouvoir n'est pas un sort : il ne coûte rien et se déclenche tout seul, à 
 
 **Les seuils de résistance** : chaque taux (stun, brûlure, poison, malus) se joue contre le seuil de la cible (son palier, son camp ; le mécanisme exact en 13.1). Le taux baisse quand la largeur du ciblage monte.
 
-**L'agilité et l'intelligence (acté v17)** : l'intelligence est la base des sorts magiques, des soins et des boucliers (section 2) ; l'agilité tire l'ordre du tour (le mode Tactique trie par attaque aujourd'hui, demain par agilité) et l'esquive. La répartition fine par race suit les crans actés (+10, +20, +30 %).
+**L'agilité et l'intelligence (acté v17)** : chaque profil tire sur sa stat principale (section 2, v2.1) ; l'agilité tire en plus l'ordre du tour (le mode Tactique trie par attaque aujourd'hui, demain par agilité) et l'esquive. La répartition fine par race suit les crans actés (+10, +20, +30 %).
 
 **Les zones d'errance (acté v17)** : la cadence reste (une zone, un donjon, une zone, un donjon, une zone, un donjon) ; les zones portent les récoltes (les éclats des évolutions, les naissances N à des taux très bas) et, depuis cette v2, **l'apprentissage : les crans supérieurs et les sorts d'école neufs s'y dénichent**.
 
@@ -274,6 +275,7 @@ Chaque famille neuve suit le gabarit (6 sorts, 2/3/5/9/14/20✦, un rôle-cadre,
 8. **Les sorts de race et les renommages** : Instinct Sauvage et Ferveur Céleste gardent leurs noms (proposition) ?
 9. **Les seuils de résistance** : le mécanisme exact des taux (le palier ? un stat ? le camp ?).
 10. **La zone** : la grille de ciblage (combien de cases, comment on la pose en Tactique).
+11. **Le gardien** : ses boucliers tirent sur sa vie (la proposition de la v2.1) : acté ou ajusté ?
 
 ### 13.2 Acté et validé
 
@@ -282,7 +284,7 @@ Chaque famille neuve suit le gabarit (6 sorts, 2/3/5/9/14/20✦, un rôle-cadre,
 3. **Un sort dépend de son effet, pas de sa classe** : les écoles remplacent le verrou ; les classes deviennent des profils ; changer de voie change les écoles ouvertes.
 4. **Le déblocage progressif** : une carte naît avec son commun (+ la race pour une naissance), le reste s'apprend ; le grimoire dépassera les cartes actuelles.
 5. **La fiche type** : rôle, école, ciblage, taux, base ; les descriptions restent la saveur.
-6. **La base des mults (ton feu vert v2)** : les frappes tirent sur l'attaque, les sorts magiques, les soins et les boucliers sur l'intelligence, les boucliers en points de réserve, les taux en pourcentage contre le seuil de la cible.
+6. **La base des mults (v2.1, ton retour)** : le mult tire sur la **stat principale du profil** : l'attaque du guerrier, l'agilité de l'assassin, l'intelligence du mage, de l'occultiste et du prêtre (ton feu vert), la vie du gardien (proposition) ; les taux en pourcentage contre le seuil de la cible.
 7. **La couche lignée reste** : un sort par palier, 2/3/5/9/14/20✦, le cumul 100 %, la L les connaît toutes ; le sort de race se garde à l'éveil.
 8. **Les noms v0.47** : Tranche-Monde et Nuit Éternelle ; l'exception assumée (Aube Éternelle) ; « Kenji : Zénith Tranchant » reste.
 9. **L'Appel est une école** : les élémentaires d'eau par le chemin du mage, les Foyers, les défunts, le gardien du Bosquet.
