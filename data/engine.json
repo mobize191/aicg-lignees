@@ -458,5 +458,24 @@
   "n7",
   "n8",
   "n9"
+ ],
+ "EVO_TYPES": [
+  "standard",
+  "partage",
+  "convergence",
+  "regression",
+  "chute",
+  "malediction",
+  "evenement",
+  "secrete"
+ ],
+ "FAM_ORDER": [
+  "eau",
+  "aube",
+  "lame",
+  "ombre",
+  "bouclier",
+  "braise",
+  "bosquet"
  ]
 }
