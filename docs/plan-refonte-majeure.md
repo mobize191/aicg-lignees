@@ -586,16 +586,16 @@ function pickZoneTargets(ligne, choix = null) {
 
 **Fichiers :** Remplir `data/zones.json`, étendre `src/validate.js`, `tests/data.test.js`
 
-- [ ] **Étape 1 :** remplir depuis les designs (v17 et v2.3 section 10) : nature, rencontres, récoltes (éclats, N à taux très bas, jetons), enseignements (crans, sorts d'école) ; le validateur vérifie la cadence (jamais deux zones ni deux donjons consécutifs), les références (cartes, crans), les bornes des taux (EXI-P4-1, EXI-P4-2, ACC-4-1).
-- [ ] **Étape 2 :** commit `data : les zones d'errance completes (cadence, recoltes, ecolages)`.
+- [x] **Étape 1 :** remplir depuis les designs (v17 et v2.3 section 10) : nature, rencontres, récoltes (éclats, N à taux très bas, jetons), enseignements (crans, sorts d'école) ; le validateur vérifie la cadence (jamais deux zones ni deux donjons consécutifs), les références (cartes, crans), les bornes des taux (EXI-P4-1, EXI-P4-2, ACC-4-1).
+- [x] **Étape 2 :** commit `data : les zones d'errance completes (cadence, recoltes, ecolages)`.
 
 ### Tâche T4.2 : l'apprentissage en zone
 
 **Fichiers :** Étendre `src/engine/progression.js`, `src/engine/migrate.js`, `tests/progression.test.js`
 
-- [ ] **Étape 1 :** apprendre un cran en zone l'ajoute au grimoire du joueur (persisté) ; un cran appris survit à l'évolution (EXI-P4-3) ; `v11to12` si la forme change (EXI-P4-5). Tests : ACC-4-2 (récoltes scriptées, RNG semé, bornes respectées), ACC-4-3 (cran II appris : persisté, castable, survit à l'évolution).
-- [ ] **Étape 2 :** commit `feat : l'apprentissage des crans en zone d'errance`.
-- [ ] **Étape 3 :** vérification visuelle (une session zone, donjon, zone : le grimoire grossit à l'écran, ACC-4-4), rapport de phase 4, `VERDICT: PASS`.
+- [x] **Étape 1 :** apprendre un cran en zone l'ajoute au grimoire du joueur (persisté) ; un cran appris survit à l'évolution (EXI-P4-3) ; `v11to12` si la forme change (EXI-P4-5). Tests : ACC-4-2 (récoltes scriptées, RNG semé, bornes respectées), ACC-4-3 (cran II appris : persisté, castable, survit à l'évolution).
+- [x] **Étape 2 :** commit `feat : l'apprentissage des crans en zone d'errance`.
+- [x] **Étape 3 :** vérification visuelle (une session zone, donjon, zone : le grimoire grossit à l'écran, ACC-4-4), rapport de phase 4, `VERDICT: PASS`.
 
 ---
 
