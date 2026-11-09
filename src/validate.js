@@ -82,5 +82,45 @@ function validate(data, errors) {
       push(`la zone ${z.id} a un taux N invalide (${taux})`, 'EXI-P1-4');
     }
   }
+  // sorts d'école (EXI-P2-2, ACC-2-1) : école existante, 4 marches ou vide motivé,
+  // coûts strictement croissants, taux décroissants quand la largeur monte
+  const ecoles = data.schools ?? {};
+  const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
+  const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
+  const idsSorts = new Set();
+  for (const s of [...tousSortsEcole, ...(data.grimoire?.communs ?? []), ...(data.grimoire?.race ?? []), ...(data.grimoire?.uniques ?? [])]) {
+    if (idsSorts.has(s.id)) push(`doublon de sort ${s.id}`, 'EXI-DATA-3');
+    idsSorts.add(s.id);
+    if (s.ecole && !ecoles[s.ecole]) push(`le sort ${s.id} référence l'école inconnue ${s.ecole}`, 'EXI-P2-1');
+  }
+  for (const s of data.grimoire?.ecole ?? []) {
+    const crans = Object.entries(s.crans ?? {});
+    if (crans.length !== 4) push(`le sort ${s.id} n'a pas 4 crans`, 'EXI-P2-2');
+    let prevCout = 0, prevTaux = 1, prevLarg = 0;
+    for (const [nom, c] of crans) {
+      if (c.vide) { if (!c.raison) push(`le cran ${nom} de ${s.id} est vide sans raison`, 'EXI-P2-2'); continue; }
+      if (!(c.cout > prevCout)) push(`les coûts du sort ${s.id} ne sont pas strictement croissants (${nom})`, 'EXI-P2-2');
+      prevCout = c.cout;
+      const larg = largeurRang(c.largeur);
+      if (c.taux !== undefined) {
+        if (larg > prevLarg && !(c.taux < prevTaux)) push(`les taux de ${s.id} ne baissent pas quand la largeur monte (${nom})`, 'EXI-DATA-4');
+        prevTaux = c.taux;
+      }
+      prevLarg = larg;
+    }
+  }
+  // fusion (EXI-P2-3, EXI-P2-4) : un biome marqué trié couvre 100 % de ses signatures
+  for (const [biome, b] of Object.entries(data['fusion-map'] ?? {})) {
+    const sigsBiome = (data.monsters ?? []).filter((m) => m.dungeon === biome).map((m) => m.id);
+    if (!b.trie) continue;
+    for (const id of sigsBiome) {
+      const entry = (b.signatures ?? {})[id];
+      if (!entry) { push(`le biome ${biome} est trié mais la signature ${id} n'est pas couverte`, 'EXI-P2-3'); continue; }
+      const cible = entry.unique ?? entry.fusion;
+      if (!idsSorts.has(cible) && !(data.grimoire?.entrees ?? []).some((e) => e.id === cible)) {
+        push(`la signature ${id} fond vers le sort inconnu ${cible}`, 'EXI-P2-3');
+      }
+    }
+  }
   return errors;
 }

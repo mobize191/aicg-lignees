@@ -9,7 +9,7 @@ const index = (arr) => Object.fromEntries((arr ?? []).map((x) => [x.id ?? x.key,
 const IDX = {
   cards: index(DATA.cards), monsters: index(DATA.monsters),
   families: Object.fromEntries(Object.entries(DATA.families ?? {})),
-  schools: index(DATA.schools), grimoire: index(DATA.grimoire?.spells),
+  schools: Object.fromEntries(Object.entries(DATA.schools ?? {})), grimoire: index(DATA.grimoire?.spells),
   trees: Object.fromEntries(Object.entries(DATA.trees ?? {})), zones: index(DATA.zones),
 };
 const getCard = (id) => IDX.cards[id];
@@ -29,9 +29,14 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const COMMON_SPELLS = DATA.grimoire.communs;
-const RACE_SPELLS = DATA.grimoire.race;
-const CLASS_SPELLS = DATA.grimoire.classe;
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc });
+const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
+  .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
+const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
+const CLASS_SPELLS = Object.fromEntries((DATA.grimoire.entrees ?? []).filter((s) => s.classe).map((s) => [s.classe, legacySpell(s, 'classe')]));
+const SCHOOLS = DATA.schools ?? {};
+const KEYWORDS = DATA.keywords ?? {};
+const FUSION_MAP = DATA['fusion-map'] ?? {};
 const SPELL_CAT_LABEL = E.SPELL_CAT_LABEL;
 const RARITY_POWER = E.RARITY_POWER;
 const FAMILY_SPELLS = DATA['lineage-spells'];
