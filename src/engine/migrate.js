@@ -1,6 +1,15 @@
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
-function v8to9(s) { s.version = 9; return s; }
+// v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
+// nouvel arbre ; la voie est re-choisie depuis trees.json quand la carte en a un éveil.
+function v8to9(s) {
+  s.version = 9;
+  for (const inst of s.instances ?? []) {
+    const ev = eveilsOf(inst.id)[0];
+    if (ev && !inst.voie) inst.voie = ev.voie;
+  }
+  return s;
+}
 function v9to10(s) { s.version = 10; return s; }
 function v10to11(s) { s.version = 11; return s; }
 function v11to12(s) { s.version = 12; return s; }

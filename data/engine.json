@@ -338,7 +338,7 @@
  "DMG_REDUCTION_MAX": 0.8,
  "SAVE_VERSION": 8,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 8,
+ "CURRENT_VERSION": 9,
  "CROSS": {
   "yield": 0.6,
   "healThreshold": 0.2,
@@ -541,6 +541,7 @@
   },
   "POWER_ATK_WEIGHT": 2.5,
   "POWER_HP_WEIGHT": 0.6,
-  "POWER_SPELL_STEP": 0.03
+  "POWER_SPELL_STEP": 0.03,
+  "DEBUT_JEU_N": 2
  }
 }
