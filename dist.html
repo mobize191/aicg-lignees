@@ -2007,6 +2007,73 @@ const DATA = {
    "family": "bosquet",
    "branch": true,
    "archived": true
+  },
+  {
+   "id": "p1",
+   "dungeon": "divin",
+   "name": "Ange Éveillé",
+   "rarity": "UC",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "role": "support",
+   "atk": 8,
+   "hp": 66,
+   "effect": {
+    "kind": "heal",
+    "value": 24
+   },
+   "soloSpell": "Éclat d’Aube",
+   "raciale": true,
+   "voie": "l’éveil du service — l’Ange Éveillé"
+  },
+  {
+   "id": "p2",
+   "dungeon": "divin",
+   "name": "Ange Gardien",
+   "rarity": "C",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "role": "support",
+   "atk": 6,
+   "hp": 58,
+   "effect": {
+    "kind": "heal",
+    "value": 20
+   },
+   "soloSpell": "Éclat d’Aube",
+   "raciale": true,
+   "archived": true,
+   "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)"
+  },
+  {
+   "id": "p3",
+   "name": "Pousse des Sèves",
+   "rarity": "C",
+   "classe": "Prêtre",
+   "element": "Terre",
+   "role": "support",
+   "atk": 5,
+   "hp": 60,
+   "effect": {
+    "kind": "heal",
+    "value": 16
+   },
+   "voie": "voie sylvestre — les Gens des Sèves"
+  },
+  {
+   "id": "p4",
+   "name": "Fidèle du Jour",
+   "rarity": "C",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "role": "support",
+   "atk": 6,
+   "hp": 58,
+   "effect": {
+    "kind": "heal",
+    "value": 18
+   },
+   "voie": "voie du zèle — la commune du zèle"
   }
  ],
  "difficulties": [
@@ -2525,7 +2592,7 @@ const DATA = {
   "DMG_REDUCTION_MAX": 0.8,
   "SAVE_VERSION": 8,
   "SAVE_KEY": "fondations-cards-v1",
-  "CURRENT_VERSION": 8,
+  "CURRENT_VERSION": 9,
   "CROSS": {
    "yield": 0.6,
    "healThreshold": 0.2,
@@ -2728,7 +2795,8 @@ const DATA = {
    },
    "POWER_ATK_WEIGHT": 2.5,
    "POWER_HP_WEIGHT": 0.6,
-   "POWER_SPELL_STEP": 0.03
+   "POWER_SPELL_STEP": 0.03,
+   "DEBUT_JEU_N": 2
   }
  },
  "evolutions": {
@@ -6219,7 +6287,426 @@ const DATA = {
     "regen": 0.03
    }
   }
- }
+ },
+ "trees": {
+  "humaine": {
+   "rang": 0,
+   "crans": {
+    "0": 0
+   },
+   "eveils": [
+    {
+     "de": "n1",
+     "vers": "a30",
+     "voie": "voie du guerrier",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n1",
+     "vers": "s14",
+     "voie": "voie de la protection",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n1",
+     "vers": "a33",
+     "voie": "voie sylvestre",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n2",
+     "vers": "a29",
+     "voie": "les flots — l’Eau",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n2",
+     "vers": "a32",
+     "voie": "la fournaise — le Feu",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n2",
+     "vers": "a33",
+     "voie": "les Sylvains — la Terre",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n2",
+     "vers": "s13",
+     "voie": "la lumière — l’élue de l’Aube",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n2",
+     "vers": "a31",
+     "voie": "l’ombre — l’élue du Crépuscule",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n3",
+     "vers": "s13",
+     "voie": "la lumière — la foi",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n3",
+     "vers": "s14",
+     "voie": "la garde — protéger les vivants",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n4",
+     "vers": "a31",
+     "voie": "voie de l’assassinat",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n4",
+     "vers": "a34",
+     "voie": "voie des quais",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n4",
+     "vers": "a37",
+     "voie": "voie de la fête",
+     "effet": "standard",
+     "ecoles": []
+    }
+   ]
+  },
+  "monstre": {
+   "rang": 1,
+   "crans": {
+    "1": 10
+   },
+   "eveils": [
+    {
+     "de": "n5",
+     "vers": "e3",
+     "voie": "voie du pillage — les récifs",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n5",
+     "vers": "e11",
+     "voie": "voie des berges",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n6",
+     "vers": "f3",
+     "voie": "voie de la suie",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n6",
+     "vers": "f15",
+     "voie": "voie de la fournaise",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n6",
+     "vers": "f24",
+     "voie": "voie du goblin",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n7",
+     "vers": "g3",
+     "voie": "voie de la mousse",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n7",
+     "vers": "g12",
+     "voie": "voie des sèves",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n8",
+     "vers": "k3",
+     "voie": "le gouffre",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n8",
+     "vers": "k12",
+     "voie": "le deuil marin",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n8",
+     "vers": "k24",
+     "voie": "le devoir brisé",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n9",
+     "vers": "z3",
+     "voie": "la voie dorée — la Légion Solaire",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n9",
+     "vers": "z16",
+     "voie": "la voie du feu céleste — les Phénix",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n9",
+     "vers": "z23",
+     "voie": "la voie du plein jour — le Clergé",
+     "effet": "standard",
+     "ecoles": []
+    }
+   ]
+  },
+  "mystique": {
+   "rang": 2,
+   "crans": {
+    "2": 20
+   },
+   "eveils": [
+    {
+     "de": "n10",
+     "vers": "e24",
+     "voie": "la forme — Sirène",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n11",
+     "vers": "g12",
+     "voie": "la forme — Dryade",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n12",
+     "vers": "k3",
+     "voie": "la forme — le gouffre",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n12",
+     "vers": "k12",
+     "voie": "la forme — le deuil marin",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n12",
+     "vers": "k24",
+     "voie": "la forme — le devoir brisé",
+     "effet": "standard",
+     "ecoles": []
+    }
+   ]
+  },
+  "divine": {
+   "rang": 3,
+   "crans": {
+    "3": 30
+   },
+   "eveils": [
+    {
+     "de": "n13",
+     "vers": "p1",
+     "voie": "l’éveil du service — l’Ange Éveillé",
+     "effet": "remplace",
+     "ecoles": [],
+     "disparait": "p2",
+     "portes": [
+      {
+       "id": "coloration",
+       "nom": "la coloration (l’eau, l’aube, le sabre)"
+      },
+      {
+       "id": "voie-celeste",
+       "nom": "la voie céleste (l’Archange)"
+      },
+      {
+       "id": "mauvaise-volonte",
+       "nom": "la mauvaise volonté (les anges dévoyés)"
+      }
+     ]
+    },
+    {
+     "de": "n14",
+     "vers": "d8",
+     "voie": "la voie du Chœur Miroir — la Réflexion",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n15",
+     "vers": "d14",
+     "voie": "la voie du Pont — le Liage",
+     "effet": "standard",
+     "ecoles": []
+    }
+   ]
+  }
+ },
+ "zones": [
+  {
+   "id": "zone-marees",
+   "nature": "zone d’errance du biome marees",
+   "cadence": "zone",
+   "drops": {
+    "N": 0.02
+   },
+   "poolN": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15"
+   ],
+   "ecolages": []
+  },
+  {
+   "id": "zone-forge",
+   "nature": "zone d’errance du biome forge",
+   "cadence": "zone",
+   "drops": {
+    "N": 0.02
+   },
+   "poolN": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15"
+   ],
+   "ecolages": []
+  },
+  {
+   "id": "zone-bosquet",
+   "nature": "zone d’errance du biome bosquet",
+   "cadence": "zone",
+   "drops": {
+    "N": 0.02
+   },
+   "poolN": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15"
+   ],
+   "ecolages": []
+  },
+  {
+   "id": "zone-crypte",
+   "nature": "zone d’errance du biome crypte",
+   "cadence": "zone",
+   "drops": {
+    "N": 0.02
+   },
+   "poolN": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15"
+   ],
+   "ecolages": []
+  },
+  {
+   "id": "zone-zenith",
+   "nature": "zone d’errance du biome zenith",
+   "cadence": "zone",
+   "drops": {
+    "N": 0.02
+   },
+   "poolN": [
+    "n1",
+    "n2",
+    "n3",
+    "n4",
+    "n5",
+    "n6",
+    "n7",
+    "n8",
+    "n9",
+    "n10",
+    "n11",
+    "n12",
+    "n13",
+    "n14",
+    "n15"
+   ],
+   "ecolages": []
+  }
+ ]
 };
 // src/data.js : acces unique aux donnees + validation au chargement (EXI-P0-3)
 const errors = [];
@@ -6233,7 +6720,7 @@ const IDX = {
   cards: index(DATA.cards), monsters: index(DATA.monsters),
   families: Object.fromEntries(Object.entries(DATA.families ?? {})),
   schools: index(DATA.schools), grimoire: index(DATA.grimoire?.spells),
-  trees: index(DATA.trees), zones: index(DATA.zones),
+  trees: Object.fromEntries(Object.entries(DATA.trees ?? {})), zones: index(DATA.zones),
 };
 const getCard = (id) => IDX.cards[id];
 const getMonster = (id) => IDX.monsters[id];
@@ -6362,6 +6849,39 @@ function validate(data, errors) {
           if (!monsterIds.has(id)) push(`la famille ${fam.name} reference le monstre inconnu ${id}`, 'EXI-DATA-1');
         }
       }
+    }
+  }
+  // arbres de race (EXI-P1-1) : refs, crans 10/20/30, noms d'éveils uniques, remplace exige disparait
+  const nomsEveils = new Set();
+  for (const [race, tree] of Object.entries(data.trees ?? {})) {
+    for (const [cran, pct] of Object.entries(tree.crans ?? {})) {
+      if (![0, 10, 20, 30].includes(pct)) push(`la race ${race} a un cran ${cran} à ${pct} % (attendu 0/10/20/30)`, 'EXI-P1-1');
+    }
+    for (const ev of tree.eveils ?? []) {
+      if (!allIds.has(ev.de)) push(`l'éveil de ${race} part de la carte inconnue ${ev.de}`, 'EXI-P1-1');
+      if (!allIds.has(ev.vers)) push(`l'éveil de ${race} mène à la carte inconnue ${ev.vers}`, 'EXI-P1-1');
+      const nom = (cards.find((c) => c.id === ev.vers)?.name ?? '') + '|' + ev.de;
+      if (nomsEveils.has(nom)) push(`doublon d'éveil ${ev.de} -> ${ev.vers} dans ${race}`, 'EXI-P1-2');
+      nomsEveils.add(nom);
+      if (ev.effet === 'remplace' && !ev.disparait) push(`l'éveil ${ev.de} -> ${ev.vers} est "remplace" sans disparait`, 'EXI-P1-2');
+      if (ev.disparait && !allIds.has(ev.disparait)) push(`l'éveil ${ev.de} -> ${ev.vers} fait disparaître la carte inconnue ${ev.disparait}`, 'EXI-P1-2');
+      for (const p of ev.portes ?? []) {
+        if (!p.id || !p.nom) push(`la porte d'un éveil de ${race} manque id ou nom`, 'EXI-P1-1');
+      }
+    }
+  }
+  // noms de cartes : pas de collision Ange Éveillé / Éveillé du Seuil (EXI-P1-2)
+  const noms = (data.cards ?? []).map((c) => c.name);
+  if (new Set(noms).size !== noms.length) push('des cartes partagent le meme nom', 'EXI-P1-2');
+  // zones (EXI-P1-4) : cadence, drops N, références
+  for (const z of data.zones ?? []) {
+    if (z.cadence !== 'zone') push(`la zone ${z.id} n'a pas la cadence "zone"`, 'EXI-P4-2');
+    for (const id of z.poolN ?? []) {
+      if (!allIds.has(id)) push(`la zone ${z.id} référence la naissance inconnue ${id}`, 'EXI-P1-4');
+    }
+    const taux = z.drops?.N;
+    if (taux !== undefined && (typeof taux !== 'number' || taux < 0 || taux > 1)) {
+      push(`la zone ${z.id} a un taux N invalide (${taux})`, 'EXI-P1-4');
     }
   }
   return errors;
@@ -6656,12 +7176,14 @@ function makeUnit(card, uid = card.id, level = null) {
   const lvl = level ?? card.level ?? 1;
   const m = 1 + LEVEL_BONUS * (lvl - 1);
   const cm = classeMods(card);
+  const cranPct = cranPctOfRace(raceOfCard(card));
   const u = {
     uid, cardId: card.id, name: card.name, rarity: card.rarity,
     classe: card.classe, element: card.element, role: card.role, race: raceOfCard(card),
-    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct))),
-    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct))),
-    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct))),
+    cranPct,
+    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100))),
+    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
+    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
@@ -7540,9 +8062,71 @@ function evoCostOf(id) {
   return EVO_COST[byId(id).rarity] ?? null;
 }
 
+// arbres de race (phase 1) : le moteur parcourt trees.json, il ne le connaît pas
+function treeOfRace(race) {
+  return (DATA.trees ?? {})[race] ?? null;
+}
+function cranPctOfRace(race) {
+  const t = treeOfRace(race);
+  if (!t) return 0;
+  return Number((t.crans ?? {})[String(t.rang)] ?? 0);
+}
+function eveilsOf(cardId) {
+  const out = [];
+  for (const tree of Object.values(DATA.trees ?? {})) {
+    for (const ev of tree.eveils ?? []) if (ev.de === cardId) out.push(ev);
+  }
+  return out;
+}
+function eveilOf(de, vers) {
+  return eveilsOf(de).find((ev) => ev.vers === vers) ?? null;
+}
+// applique un éveil depuis les données : id, cran de race sur les stats de base, voie
+function applyTreeEveil(inst, eveil) {
+  const to = getCard(eveil.vers) ?? getMonster(eveil.vers);
+  if (!to) throw new Error(`éveil vers une carte inconnue : ${eveil.vers}`);
+  const pct = cranPctOfRace(raceOfCard(to));
+  const from = getCard(inst.id) ?? getMonster(inst.id) ?? {};
+  const oldSpells = (from.spells ?? []).map((sp) => ({ ...sp }));
+  if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
+  inst.id = eveil.vers;
+  inst.voie = eveil.voie;
+  inst.cranPct = pct;
+  inst.baseAtk = Math.max(1, Math.round((to.atk ?? 1) * (1 + pct / 100)));
+  inst.baseHp = Math.max(1, Math.round((to.hp ?? 1) * (1 + pct / 100)));
+  inst.lvl = 1;
+  inst.xp = 0;
+  return inst;
+}
+// règle "remplace" (EXI-P1-2) : l'exemplaire ciblé disparaît, ses pouvoirs passent à l'éveillé
+function applyRemplace(instances, eveil, targetIid) {
+  if (eveil.effet !== 'remplace' || !eveil.disparait) return [];
+  const retires = [];
+  for (const inst of instances) {
+    if (inst.id === eveil.disparait) {
+      const cible = instances.find((i) => i.iid === targetIid);
+      if (cible) {
+        const pouvoirs = [...(inst.acc ?? []), ...(getCard(inst.id)?.spells ?? []).map((s) => ({ ...s }))];
+        cible.acc = [...(cible.acc ?? []), ...pouvoirs];
+      }
+      retires.push(inst.iid);
+    }
+  }
+  return retires;
+}
+
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
-function v8to9(s) { s.version = 9; return s; }
+// v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
+// nouvel arbre ; la voie est re-choisie depuis trees.json quand la carte en a un éveil.
+function v8to9(s) {
+  s.version = 9;
+  for (const inst of s.instances ?? []) {
+    const ev = eveilsOf(inst.id)[0];
+    if (ev && !inst.voie) inst.voie = ev.voie;
+  }
+  return s;
+}
 function v9to10(s) { s.version = 10; return s; }
 function v10to11(s) { s.version = 11; return s; }
 function v11to12(s) { s.version = 12; return s; }
@@ -8461,9 +9045,21 @@ function evolveInstance(iid, targetId = null) {
   const oldSpells = (cur.spells ?? []).map((sp) => ({ ...sp }));
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   const prevId = inst.id;
-  inst.id = nextId;
-  inst.lvl = 1;
-  inst.xp = 0;
+  const eveil = eveilOf(prevId, nextId);
+  if (eveil) applyTreeEveil(inst, eveil);
+  else {
+    inst.id = nextId;
+    inst.lvl = 1;
+    inst.xp = 0;
+  }
+  if (eveil && eveil.effet === 'remplace') {
+    const retires = applyRemplace(store.instances, eveil, inst.iid);
+    for (const iid of retires) {
+      for (const t of store.teams) t.slots = (t.slots ?? []).filter((x) => x !== iid);
+      store.instances = store.instances.filter((i) => i.iid !== iid);
+    }
+  }
+  if (eveil && !inst.voie) inst.voie = eveil.voie;
   syncCount(prevId);
   syncCount(nextId);
   markSeen(nextId);
