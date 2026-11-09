@@ -1,0 +1,3 @@
+# EXI-MOD-1 : nombres autorises dans le moteur (structure du champ, pas design)
+5   # largeur de la ligne ennemie (structure du champ)
+3   # largeur de la zone (structure du champ)
