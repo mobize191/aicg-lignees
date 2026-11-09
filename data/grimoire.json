@@ -86,7 +86,7 @@
    "ecole": "lame",
    "role": "degats",
    "cible": "zone",
-   "cout": 4,
+   "cout": 5,
    "mult": 1.65,
    "classe": "Mage",
    "desc": "Le mage vide un fragment de mana en un trait brut."
