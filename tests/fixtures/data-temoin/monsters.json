@@ -9,7 +9,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 58,
-  "soloSpell": "Jet d’Écume"
+  "soloSpell": "Jet d’Écume",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "e2",
@@ -21,7 +23,9 @@
   "role": "attaque",
   "atk": 7,
   "hp": 46,
-  "soloSpell": "Trait de Corail"
+  "soloSpell": "Trait de Corail",
+  "agi": 6,
+  "int": 4
  },
  {
   "id": "e3",
@@ -33,7 +37,9 @@
   "role": "attaque",
   "atk": 11,
   "hp": 52,
-  "soloSpell": "Morsure des Récifs"
+  "soloSpell": "Morsure des Récifs",
+  "agi": 9,
+  "int": 7
  },
  {
   "id": "e4",
@@ -45,7 +51,9 @@
   "role": "attaque",
   "atk": 14,
   "hp": 74,
-  "soloSpell": "Brise-Garde"
+  "soloSpell": "Brise-Garde",
+  "agi": 11,
+  "int": 8
  },
  {
   "id": "e5",
@@ -57,7 +65,9 @@
   "role": "attaque",
   "atk": 20,
   "hp": 62,
-  "soloSpell": "Vision Noyée"
+  "soloSpell": "Vision Noyée",
+  "agi": 16,
+  "int": 12
  },
  {
   "id": "e6",
@@ -69,7 +79,9 @@
   "role": "attaque",
   "atk": 28,
   "hp": 78,
-  "soloSpell": "Étreinte de l’Abîme"
+  "soloSpell": "Étreinte de l’Abîme",
+  "agi": 22,
+  "int": 17
  },
  {
   "id": "e13",
@@ -81,7 +93,9 @@
   "role": "attaque",
   "atk": 38,
   "hp": 108,
-  "soloSpell": "Marée Noire"
+  "soloSpell": "Marée Noire",
+  "agi": 30,
+  "int": 23
  },
  {
   "id": "e14",
@@ -93,7 +107,9 @@
   "role": "attaque",
   "atk": 52,
   "hp": 145,
-  "soloSpell": "Abîme Absolu"
+  "soloSpell": "Abîme Absolu",
+  "agi": 42,
+  "int": 31
  },
  {
   "id": "e11",
@@ -105,7 +121,9 @@
   "role": "attaque",
   "atk": 11,
   "hp": 55,
-  "soloSpell": "Pince de Silex"
+  "soloSpell": "Pince de Silex",
+  "agi": 9,
+  "int": 7
  },
  {
   "id": "e12",
@@ -117,7 +135,9 @@
   "role": "attaque",
   "atk": 21,
   "hp": 66,
-  "soloSpell": "Colère Sismique"
+  "soloSpell": "Colère Sismique",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "e7",
@@ -133,7 +153,9 @@
    "kind": "heal",
    "value": 15
   },
-  "soloSpell": "Chant de la Marée"
+  "soloSpell": "Chant de la Marée",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "e10",
@@ -149,7 +171,9 @@
    "kind": "heal",
    "value": 18
   },
-  "soloSpell": "Larme Salée"
+  "soloSpell": "Larme Salée",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "e8",
@@ -165,7 +189,9 @@
    "kind": "shield",
    "value": 22
   },
-  "soloSpell": "Carapace de Corail"
+  "soloSpell": "Carapace de Corail",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "e9",
@@ -181,7 +207,9 @@
    "kind": "heal",
    "value": 34
   },
-  "soloSpell": "Bénédiction de l’Abîme"
+  "soloSpell": "Bénédiction de l’Abîme",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "e15",
@@ -197,7 +225,9 @@
    "kind": "shield",
    "value": 40
   },
-  "soloSpell": "Mur de Galet"
+  "soloSpell": "Mur de Galet",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "e16",
@@ -214,7 +244,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 21,
+  "int": 16
  },
  {
   "id": "e17",
@@ -231,7 +263,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 3
-  }
+  },
+  "agi": 28,
+  "int": 21
  },
  {
   "id": "e18",
@@ -244,7 +278,9 @@
   "atk": 27,
   "hp": 82,
   "soloSpell": "Frappe Royale",
-  "gimmick": "belier"
+  "gimmick": "belier",
+  "agi": 22,
+  "int": 16
  },
  {
   "id": "e19",
@@ -257,7 +293,9 @@
   "atk": 37,
   "hp": 110,
   "soloSpell": "Couronne des Écumes",
-  "gimmick": "belier"
+  "gimmick": "belier",
+  "agi": 30,
+  "int": 22
  },
  {
   "id": "e20",
@@ -269,7 +307,9 @@
   "role": "attaque",
   "atk": 14,
   "hp": 70,
-  "soloSpell": "Guet des Fonds"
+  "soloSpell": "Guet des Fonds",
+  "agi": 11,
+  "int": 8
  },
  {
   "id": "e21",
@@ -285,7 +325,9 @@
    "kind": "shield",
    "value": 52
   },
-  "soloSpell": "Écran de Galets"
+  "soloSpell": "Écran de Galets",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "e22",
@@ -301,7 +343,9 @@
    "kind": "heal",
    "value": 58
   },
-  "soloSpell": "Bénédiction des Berges"
+  "soloSpell": "Bénédiction des Berges",
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "e23",
@@ -317,7 +361,9 @@
    "kind": "heal",
    "value": 14
   },
-  "soloSpell": "Berceuse des Récifs"
+  "soloSpell": "Berceuse des Récifs",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "e24",
@@ -333,7 +379,9 @@
    "kind": "slow"
   },
   "soloSpell": "Marée Traîtresse",
-  "soloCost": 8
+  "soloCost": 8,
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "e25",
@@ -350,7 +398,9 @@
    "count": 1
   },
   "soloSpell": "Chant Paralysant",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "e26",
@@ -363,7 +413,9 @@
   "atk": 20,
   "hp": 64,
   "soloSpell": "Écume Tranchante",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 16,
+  "int": 12
  },
  {
   "id": "e27",
@@ -382,7 +434,9 @@
   },
   "soloSpell": "Chant Ensorceleur",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "e28",
@@ -400,7 +454,9 @@
   },
   "soloSpell": "Chant du Naufrage",
   "soloCost": 7,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "e29",
@@ -413,7 +469,9 @@
   "atk": 27,
   "hp": 80,
   "soloSpell": "Corail Vengeur",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 22,
+  "int": 16
  },
  {
   "id": "e30",
@@ -430,7 +488,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 30,
+  "int": 22
  },
  {
   "id": "f1",
@@ -442,7 +502,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 62,
-  "soloSpell": "Poing de Cendre"
+  "soloSpell": "Poing de Cendre",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "f2",
@@ -454,7 +516,9 @@
   "role": "attaque",
   "atk": 9,
   "hp": 44,
-  "soloSpell": "Lancer de Suie"
+  "soloSpell": "Lancer de Suie",
+  "agi": 7,
+  "int": 5
  },
  {
   "id": "f3",
@@ -466,7 +530,9 @@
   "role": "attaque",
   "atk": 12,
   "hp": 50,
-  "soloSpell": "Entaille Rousse"
+  "soloSpell": "Entaille Rousse",
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "f4",
@@ -478,7 +544,9 @@
   "role": "attaque",
   "atk": 14,
   "hp": 76,
-  "soloSpell": "Frappe de Magma"
+  "soloSpell": "Frappe de Magma",
+  "agi": 11,
+  "int": 8
  },
  {
   "id": "f5",
@@ -497,7 +565,9 @@
    "ttl": 3,
    "summonName": "Golem de Fournaise"
   },
-  "soloSpell": "Fournaise Invoquée"
+  "soloSpell": "Fournaise Invoquée",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "f6",
@@ -509,7 +579,9 @@
   "role": "attaque",
   "atk": 30,
   "hp": 90,
-  "soloSpell": "Éruption"
+  "soloSpell": "Éruption",
+  "agi": 24,
+  "int": 18
  },
  {
   "id": "f11",
@@ -521,7 +593,9 @@
   "role": "attaque",
   "atk": 15,
   "hp": 70,
-  "soloSpell": "Poigne de Suie"
+  "soloSpell": "Poigne de Suie",
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "f12",
@@ -540,7 +614,9 @@
    "ttl": 3,
    "summonName": "Titan de Fournaise"
   },
-  "soloSpell": "Fournaise Éternelle"
+  "soloSpell": "Fournaise Éternelle",
+  "agi": 31,
+  "int": 23
  },
  {
   "id": "f13",
@@ -553,7 +629,9 @@
   "atk": 54,
   "hp": 142,
   "soloSpell": "Nuit de Cendres",
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 43,
+  "int": 32
  },
  {
   "id": "f14",
@@ -565,7 +643,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 46,
-  "soloSpell": "Flammèche Errante"
+  "soloSpell": "Flammèche Errante",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "f15",
@@ -581,7 +661,9 @@
   "soloDot": {
    "pct": 0.25,
    "turns": 2
-  }
+  },
+  "agi": 9,
+  "int": 7
  },
  {
   "id": "f19",
@@ -598,7 +680,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 18,
+  "int": 13
  },
  {
   "id": "f20",
@@ -615,7 +699,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 2
-  }
+  },
+  "agi": 24,
+  "int": 18
  },
  {
   "id": "f21",
@@ -632,7 +718,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 3
-  }
+  },
+  "agi": 30,
+  "int": 23
  },
  {
   "id": "f22",
@@ -649,7 +737,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 32,
+  "int": 24
  },
  {
   "id": "f24",
@@ -661,7 +751,9 @@
   "role": "attaque",
   "atk": 11,
   "hp": 48,
-  "soloSpell": "Poignée de Suie"
+  "soloSpell": "Poignée de Suie",
+  "agi": 9,
+  "int": 7
  },
  {
   "id": "f7",
@@ -677,7 +769,9 @@
    "kind": "heal",
    "value": 14
   },
-  "soloSpell": "Onguent de Suie"
+  "soloSpell": "Onguent de Suie",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "f10",
@@ -693,7 +787,9 @@
    "kind": "shield",
    "value": 16
   },
-  "soloSpell": "Cendre Protectrice"
+  "soloSpell": "Cendre Protectrice",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "f8",
@@ -709,7 +805,9 @@
    "kind": "atkBuff",
    "value": 0.15
   },
-  "soloSpell": "Cri de la Forge"
+  "soloSpell": "Cri de la Forge",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "f9",
@@ -725,7 +823,9 @@
    "kind": "shield",
    "value": 36
   },
-  "soloSpell": "Peau de Lave"
+  "soloSpell": "Peau de Lave",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "f16",
@@ -741,7 +841,9 @@
    "kind": "slow"
   },
   "soloSpell": "Filet de Suie",
-  "soloCost": 8
+  "soloCost": 8,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "f17",
@@ -760,7 +862,9 @@
   },
   "soloSpell": "Tissage Ensorcelé",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "f18",
@@ -778,7 +882,9 @@
   },
   "soloSpell": "Linceul de Suie",
   "soloCost": 7,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "f23",
@@ -797,7 +903,9 @@
    "ttl": 3,
    "summonName": "Familier de Fournaise"
   },
-  "soloSpell": "Gardiens Invoqués"
+  "soloSpell": "Gardiens Invoqués",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "g1",
@@ -809,7 +917,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 58,
-  "soloSpell": "Étreinte de Racines"
+  "soloSpell": "Étreinte de Racines",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "g2",
@@ -821,7 +931,9 @@
   "role": "attaque",
   "atk": 9,
   "hp": 45,
-  "soloSpell": "Éclat Vif"
+  "soloSpell": "Éclat Vif",
+  "agi": 7,
+  "int": 5
  },
  {
   "id": "g3",
@@ -833,7 +945,9 @@
   "role": "attaque",
   "atk": 11,
   "hp": 54,
-  "soloSpell": "Culbute de Mousse"
+  "soloSpell": "Culbute de Mousse",
+  "agi": 9,
+  "int": 7
  },
  {
   "id": "g4",
@@ -845,7 +959,9 @@
   "role": "attaque",
   "atk": 14,
   "hp": 74,
-  "soloSpell": "Fronde de Ronce"
+  "soloSpell": "Fronde de Ronce",
+  "agi": 11,
+  "int": 8
  },
  {
   "id": "g5",
@@ -857,7 +973,9 @@
   "role": "attaque",
   "atk": 21,
   "hp": 63,
-  "soloSpell": "Rayon Prismatique"
+  "soloSpell": "Rayon Prismatique",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "g6",
@@ -869,7 +987,9 @@
   "role": "attaque",
   "atk": 29,
   "hp": 82,
-  "soloSpell": "Poing Séculaire"
+  "soloSpell": "Poing Séculaire",
+  "agi": 23,
+  "int": 17
  },
  {
   "id": "g7",
@@ -881,7 +1001,9 @@
   "role": "attaque",
   "atk": 40,
   "hp": 104,
-  "soloSpell": "Aube Foliaire"
+  "soloSpell": "Aube Foliaire",
+  "agi": 32,
+  "int": 24
  },
  {
   "id": "g8",
@@ -893,7 +1015,9 @@
   "role": "attaque",
   "atk": 53,
   "hp": 146,
-  "soloSpell": "Racine-Monde"
+  "soloSpell": "Racine-Monde",
+  "agi": 42,
+  "int": 32
  },
  {
   "id": "g13",
@@ -912,7 +1036,9 @@
    "ttl": 3,
    "summonName": "Rampant Sylvestre"
   },
-  "soloSpell": "Sève Éveillée"
+  "soloSpell": "Sève Éveillée",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "g14",
@@ -929,7 +1055,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 2
-  }
+  },
+  "agi": 16,
+  "int": 12
  },
  {
   "id": "g15",
@@ -946,7 +1074,9 @@
   "soloDot": {
    "pct": 0.4,
    "turns": 2
-  }
+  },
+  "agi": 22,
+  "int": 17
  },
  {
   "id": "g16",
@@ -963,7 +1093,9 @@
   "soloDot": {
    "pct": 0.4,
    "turns": 3
-  }
+  },
+  "agi": 30,
+  "int": 22
  },
  {
   "id": "g20",
@@ -976,7 +1108,9 @@
   "atk": 29,
   "hp": 76,
   "soloSpell": "Lames de Branchage",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 23,
+  "int": 17
  },
  {
   "id": "g21",
@@ -993,7 +1127,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 30,
+  "int": 23
  },
  {
   "id": "g9",
@@ -1009,7 +1145,9 @@
    "kind": "heal",
    "value": 15
   },
-  "soloSpell": "Baume Lumineux"
+  "soloSpell": "Baume Lumineux",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "g12",
@@ -1025,7 +1163,9 @@
    "kind": "shield",
    "value": 18
   },
-  "soloSpell": "Claie de Branches"
+  "soloSpell": "Claie de Branches",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "g10",
@@ -1044,7 +1184,9 @@
    "ttl": 3,
    "summonName": "Sylvain des Sèves"
   },
-  "soloSpell": "Sève Vitale"
+  "soloSpell": "Sève Vitale",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "g11",
@@ -1060,7 +1202,9 @@
    "kind": "shield",
    "value": 38
   },
-  "soloSpell": "Voûte de Clairière"
+  "soloSpell": "Voûte de Clairière",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "g17",
@@ -1076,7 +1220,9 @@
    "kind": "heal",
    "value": 48
   },
-  "soloSpell": "Rosée Radieuse"
+  "soloSpell": "Rosée Radieuse",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "g18",
@@ -1093,7 +1239,9 @@
    "value": 0.6
   },
   "soloSpell": "Première Clarté",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "g19",
@@ -1109,7 +1257,9 @@
    "kind": "slow"
   },
   "soloSpell": "Ombre Tissée",
-  "soloCost": 8
+  "soloCost": 8,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "k1",
@@ -1121,7 +1271,9 @@
   "role": "attaque",
   "atk": 9,
   "hp": 50,
-  "soloSpell": "Griffe Ténébreuse"
+  "soloSpell": "Griffe Ténébreuse",
+  "agi": 7,
+  "int": 5
  },
  {
   "id": "k2",
@@ -1133,7 +1285,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 52,
-  "soloSpell": "Crachat Trouble"
+  "soloSpell": "Crachat Trouble",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "k3",
@@ -1145,7 +1299,9 @@
   "role": "attaque",
   "atk": 12,
   "hp": 52,
-  "soloSpell": "Coup de Bêche Noire"
+  "soloSpell": "Coup de Bêche Noire",
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "k4",
@@ -1157,7 +1313,9 @@
   "role": "attaque",
   "atk": 15,
   "hp": 72,
-  "soloSpell": "Frappe Rigide"
+  "soloSpell": "Frappe Rigide",
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "k5",
@@ -1169,7 +1327,9 @@
   "role": "attaque",
   "atk": 21,
   "hp": 60,
-  "soloSpell": "Brume Mordante"
+  "soloSpell": "Brume Mordante",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "k6",
@@ -1181,7 +1341,9 @@
   "role": "attaque",
   "atk": 30,
   "hp": 76,
-  "soloSpell": "Hurlement Froid"
+  "soloSpell": "Hurlement Froid",
+  "agi": 24,
+  "int": 18
  },
  {
   "id": "k7",
@@ -1200,7 +1362,9 @@
    "ttl": 3,
    "summonName": "Garde du Tombeau"
   },
-  "soloSpell": "Voie du Tombeau"
+  "soloSpell": "Voie du Tombeau",
+  "agi": 30,
+  "int": 23
  },
  {
   "id": "k8",
@@ -1212,7 +1376,9 @@
   "role": "attaque",
   "atk": 54,
   "hp": 148,
-  "soloSpell": "Abîme Remontant"
+  "soloSpell": "Abîme Remontant",
+  "agi": 43,
+  "int": 32
  },
  {
   "id": "k13",
@@ -1224,7 +1390,9 @@
   "role": "attaque",
   "atk": 15,
   "hp": 72,
-  "soloSpell": "Morsure Putride"
+  "soloSpell": "Morsure Putride",
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "k14",
@@ -1241,7 +1409,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 2
-  }
+  },
+  "agi": 32,
+  "int": 24
  },
  {
   "id": "k17",
@@ -1254,7 +1424,9 @@
   "atk": 55,
   "hp": 150,
   "soloSpell": "Fauchade Universelle",
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 44,
+  "int": 33
  },
  {
   "id": "k20",
@@ -1267,7 +1439,9 @@
   "atk": 22,
   "hp": 70,
   "soloSpell": "Sabre Englouti",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 18,
+  "int": 13
  },
  {
   "id": "k21",
@@ -1284,7 +1458,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 22,
+  "int": 17
  },
  {
   "id": "k22",
@@ -1301,7 +1477,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 32,
+  "int": 24
  },
  {
   "id": "k23",
@@ -1313,7 +1491,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 60,
-  "soloSpell": "Estoc Rouillé"
+  "soloSpell": "Estoc Rouillé",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "k24",
@@ -1325,7 +1505,9 @@
   "role": "attaque",
   "atk": 12,
   "hp": 54,
-  "soloSpell": "Étendard Funèbre"
+  "soloSpell": "Étendard Funèbre",
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "k25",
@@ -1338,7 +1520,9 @@
   "atk": 20,
   "hp": 72,
   "soloSpell": "Vigilance Éternelle",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 16,
+  "int": 12
  },
  {
   "id": "k27",
@@ -1351,7 +1535,9 @@
   "atk": 39,
   "hp": 108,
   "soloSpell": "Épée de l’Aube",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 31,
+  "int": 23
  },
  {
   "id": "k28",
@@ -1364,7 +1550,9 @@
   "atk": 21,
   "hp": 68,
   "soloSpell": "Serment Brisé",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "k30",
@@ -1377,7 +1565,9 @@
   "atk": 40,
   "hp": 98,
   "soloSpell": "Lame du Serment",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 32,
+  "int": 24
  },
  {
   "id": "k9",
@@ -1393,7 +1583,9 @@
    "kind": "heal",
    "value": 14
   },
-  "soloSpell": "Soupir Glacé"
+  "soloSpell": "Soupir Glacé",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "k12",
@@ -1409,7 +1601,9 @@
    "kind": "shield",
    "value": 17
   },
-  "soloSpell": "Drap de Nappe"
+  "soloSpell": "Drap de Nappe",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "k10",
@@ -1425,7 +1619,9 @@
    "kind": "atkBuff",
    "value": 0.18
   },
-  "soloSpell": "Deuil Martial"
+  "soloSpell": "Deuil Martial",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "k11",
@@ -1441,7 +1637,9 @@
    "kind": "heal",
    "value": 42
   },
-  "soloSpell": "Eau Bénite"
+  "soloSpell": "Eau Bénite",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "k15",
@@ -1460,7 +1658,9 @@
    "ttl": 3,
    "summonName": "Goule Éveillée"
   },
-  "soloSpell": "Rite d’Éveil"
+  "soloSpell": "Rite d’Éveil",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "k16",
@@ -1479,7 +1679,9 @@
    "ttl": 3,
    "summonName": "Serviteur Squelettique"
   },
-  "soloSpell": "Légion des Caveaux"
+  "soloSpell": "Légion des Caveaux",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "k18",
@@ -1498,7 +1700,9 @@
   },
   "soloSpell": "Chagrin Noyé",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "k19",
@@ -1516,7 +1720,9 @@
   },
   "soloSpell": "Deuil Éternel",
   "soloCost": 7,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "k26",
@@ -1532,7 +1738,9 @@
    "kind": "shield",
    "value": 50
   },
-  "soloSpell": "Égide Défunte"
+  "soloSpell": "Égide Défunte",
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "k29",
@@ -1550,7 +1758,9 @@
    "red": 0.15
   },
   "soloSpell": "Serment Rallié",
-  "soloCost": 7
+  "soloCost": 7,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "z1",
@@ -1562,7 +1772,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 60,
-  "soloSpell": "Estoc Brillant"
+  "soloSpell": "Estoc Brillant",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "z2",
@@ -1574,7 +1786,9 @@
   "role": "attaque",
   "atk": 9,
   "hp": 46,
-  "soloSpell": "Étincelle"
+  "soloSpell": "Étincelle",
+  "agi": 7,
+  "int": 5
  },
  {
   "id": "z3",
@@ -1586,7 +1800,9 @@
   "role": "attaque",
   "atk": 12,
   "hp": 50,
-  "soloSpell": "Carreau Doré"
+  "soloSpell": "Carreau Doré",
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "z4",
@@ -1598,7 +1814,9 @@
   "role": "attaque",
   "atk": 14,
   "hp": 73,
-  "soloSpell": "Lance Héliale"
+  "soloSpell": "Lance Héliale",
+  "agi": 11,
+  "int": 8
  },
  {
   "id": "z5",
@@ -1610,7 +1828,9 @@
   "role": "attaque",
   "atk": 21,
   "hp": 62,
-  "soloSpell": "Falaise de Lumière"
+  "soloSpell": "Falaise de Lumière",
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "z6",
@@ -1625,7 +1845,9 @@
   "soloSpell": "Pluie de Feu",
   "phoenix": {
    "delay": 4
-  }
+  },
+  "agi": 23,
+  "int": 17
  },
  {
   "id": "z7",
@@ -1637,7 +1859,9 @@
   "role": "attaque",
   "atk": 41,
   "hp": 103,
-  "soloSpell": "Sentence Solaire"
+  "soloSpell": "Sentence Solaire",
+  "agi": 33,
+  "int": 25
  },
  {
   "id": "z8",
@@ -1649,7 +1873,9 @@
   "role": "attaque",
   "atk": 53,
   "hp": 144,
-  "soloSpell": "Couronnement"
+  "soloSpell": "Couronnement",
+  "agi": 42,
+  "int": 32
  },
  {
   "id": "z13",
@@ -1666,7 +1892,9 @@
   "soloDot": {
    "pct": 0.35,
    "turns": 2
-  }
+  },
+  "agi": 24,
+  "int": 18
  },
  {
   "id": "z14",
@@ -1679,7 +1907,9 @@
   "atk": 29,
   "hp": 82,
   "soloSpell": "Perce-Aube",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 23,
+  "int": 17
  },
  {
   "id": "z15",
@@ -1692,7 +1922,9 @@
   "atk": 39,
   "hp": 96,
   "soloSpell": "Éclipse Montante",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 31,
+  "int": 23
  },
  {
   "id": "z16",
@@ -1708,7 +1940,9 @@
   "soloDot": {
    "pct": 0.25,
    "turns": 2
-  }
+  },
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "z17",
@@ -1724,7 +1958,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "z18",
@@ -1743,7 +1979,9 @@
   },
   "phoenix": {
    "delay": 3
-  }
+  },
+  "agi": 17,
+  "int": 13
  },
  {
   "id": "z19",
@@ -1763,7 +2001,9 @@
   },
   "phoenix": {
    "delay": 3
-  }
+  },
+  "agi": 30,
+  "int": 23
  },
  {
   "id": "z28",
@@ -1776,7 +2016,9 @@
   "atk": 30,
   "hp": 78,
   "soloSpell": "Verdict Solaire",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 24,
+  "int": 18
  },
  {
   "id": "z29",
@@ -1789,7 +2031,9 @@
   "atk": 39,
   "hp": 100,
   "soloSpell": "Peine Capitale",
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 31,
+  "int": 23
  },
  {
   "id": "z30",
@@ -1806,7 +2050,9 @@
   "soloDot": {
    "pct": 0.3,
    "turns": 2
-  }
+  },
+  "agi": 42,
+  "int": 31
  },
  {
   "id": "z9",
@@ -1822,7 +2068,9 @@
    "kind": "heal",
    "value": 16
   },
-  "soloSpell": "Hymne du Matin"
+  "soloSpell": "Hymne du Matin",
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "z12",
@@ -1838,7 +2086,9 @@
    "kind": "shield",
    "value": 18
   },
-  "soloSpell": "Rempart Ardent"
+  "soloSpell": "Rempart Ardent",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "z10",
@@ -1854,7 +2104,9 @@
    "kind": "heal",
    "value": 24
   },
-  "soloSpell": "Aile du Matin"
+  "soloSpell": "Aile du Matin",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "z11",
@@ -1870,7 +2122,9 @@
    "kind": "heal",
    "value": 44
   },
-  "soloSpell": "Bénédiction Solaire"
+  "soloSpell": "Bénédiction Solaire",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "z20",
@@ -1888,7 +2142,9 @@
    "turns": 2
   },
   "soloSpell": "Plumage Miroir",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "z21",
@@ -1906,7 +2162,9 @@
    "turns": 2
   },
   "soloSpell": "Renvoi Céleste",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "z22",
@@ -1925,7 +2183,9 @@
   },
   "soloSpell": "Immolation Retournée",
   "soloCost": 7,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "z23",
@@ -1941,7 +2201,9 @@
    "kind": "shield",
    "value": 18
   },
-  "soloSpell": "Aube Bénie"
+  "soloSpell": "Aube Bénie",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "z24",
@@ -1957,7 +2219,9 @@
    "kind": "heal",
    "value": 26
   },
-  "soloSpell": "Office du Matin"
+  "soloSpell": "Office du Matin",
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "z25",
@@ -1975,7 +2239,9 @@
    "red": 0.15
   },
   "soloSpell": "Hymne du Zénith",
-  "soloCost": 7
+  "soloCost": 7,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "z26",
@@ -1991,7 +2257,9 @@
    "kind": "atkBuff",
    "value": 0.3
   },
-  "soloSpell": "Cantique Final"
+  "soloSpell": "Cantique Final",
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "z27",
@@ -2010,7 +2278,9 @@
   },
   "soloSpell": "Colonne de Purge",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "d1",
@@ -2023,7 +2293,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 60,
-  "soloSpell": "Interdiction"
+  "soloSpell": "Interdiction",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "d2",
@@ -2040,7 +2312,9 @@
    "kind": "slow"
   },
   "soloSpell": "Sable Glissant",
-  "soloCost": 8
+  "soloCost": 8,
+  "agi": 2,
+  "int": 1
  },
  {
   "id": "d3",
@@ -2058,7 +2332,9 @@
    "count": 1
   },
   "soloSpell": "Sentence Lente",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "d4",
@@ -2073,7 +2349,9 @@
   "hp": 72,
   "soloSpell": "Balance du Temps",
   "soloCost": 5,
-  "soloMult": 1.8
+  "soloMult": 1.8,
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "d5",
@@ -2093,7 +2371,9 @@
   },
   "soloSpell": "Sablier Ensorcelé",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "d6",
@@ -2112,7 +2392,9 @@
   },
   "soloSpell": "Arrêt du Temps",
   "soloCost": 7,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "d7",
@@ -2125,7 +2407,9 @@
   "role": "attaque",
   "atk": 9,
   "hp": 46,
-  "soloSpell": "Frappe Réfléchie"
+  "soloSpell": "Frappe Réfléchie",
+  "agi": 7,
+  "int": 5
  },
  {
   "id": "d8",
@@ -2140,7 +2424,9 @@
   "hp": 50,
   "soloSpell": "Voix Doubles",
   "soloCost": 4,
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "agi": 10,
+  "int": 7
  },
  {
   "id": "d9",
@@ -2157,7 +2443,9 @@
    "kind": "shield",
    "value": 22
   },
-  "soloSpell": "Reflet Protecteur"
+  "soloSpell": "Reflet Protecteur",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "d10",
@@ -2174,7 +2462,9 @@
    "kind": "copy"
   },
   "soloSpell": "Chant Miroir",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "d11",
@@ -2193,7 +2483,9 @@
    "turns": 2
   },
   "soloSpell": "Renvoi en Chœur",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "d12",
@@ -2211,7 +2503,9 @@
   },
   "soloSpell": "Refrain Éternel",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "d13",
@@ -2224,7 +2518,9 @@
   "role": "attaque",
   "atk": 8,
   "hp": 58,
-  "soloSpell": "Fil Tendu"
+  "soloSpell": "Fil Tendu",
+  "agi": 6,
+  "int": 5
  },
  {
   "id": "d14",
@@ -2241,7 +2537,9 @@
    "kind": "shield",
    "value": 17
   },
-  "soloSpell": "Point Serré"
+  "soloSpell": "Point Serré",
+  "agi": 2,
+  "int": 2
  },
  {
   "id": "d15",
@@ -2256,7 +2554,9 @@
   "hp": 70,
   "soloSpell": "Point de Croix",
   "soloCost": 5,
-  "soloMult": 1.8
+  "soloMult": 1.8,
+  "agi": 12,
+  "int": 9
  },
  {
   "id": "d16",
@@ -2273,7 +2573,9 @@
    "kind": "link"
   },
   "soloSpell": "Nœud d’Or",
-  "soloCost": 6
+  "soloCost": 6,
+  "agi": 3,
+  "int": 2
  },
  {
   "id": "d17",
@@ -2290,7 +2592,9 @@
    "kind": "link"
   },
   "soloSpell": "Deux Rives",
-  "soloCost": 5
+  "soloCost": 5,
+  "agi": 4,
+  "int": 3
  },
  {
   "id": "d18",
@@ -2308,7 +2612,9 @@
   },
   "soloSpell": "Destin Tissé",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "agi": 5,
+  "int": 4
  },
  {
   "id": "x-temoin",
@@ -2320,6 +2626,8 @@
   "role": "attaque",
   "atk": 12,
   "hp": 60,
+  "agi": 10,
+  "int": 7,
   "soloSpell": "Coup Témoin"
  }
 ]
