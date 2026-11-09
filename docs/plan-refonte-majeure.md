@@ -412,51 +412,51 @@ Source normative : `docs/design-arbres.md` (v17). Chaque valeur vient du documen
 **Fichiers :** Créer `data/trees.json`, étendre `src/validate.js`, `tests/data.test.js`
 **Interfaces :** `trees.json` : `{ "<race>": { "crans": { "1": 10, "2": 20, "3": 30 }, "eveils": [{ "de": "<id>", "vers": "<id>", "voie": "<id voie>", "effet": "standard" }] } }` ; les voies dans `data/schools.json` (nées en T2.1, la colonne écoles y est vide jusqu'à la phase 2, avertissement toléré).
 
-- [ ] **Étape 1 :** poser le schéma ; le validateur vérifie : chaque `de`/`vers` existe dans les cartes ; les crans valent 10/20/30 ; les noms d'éveils uniques sans collision (le dédoublonnage Éveillé du Seuil / Ange Éveillé se vérifie ici, EXI-P1-2) ; l'effet `remplace` exige `disparait: "<id>"`.
-- [ ] **Étape 2 :** `node --test --test-name-pattern "trees"` → vert.
-- [ ] **Étape 3 :** commit `data : schema des arbres de race + validateur (EXI-P1-1)`.
+- [x] **Étape 1 :** poser le schéma ; le validateur vérifie : chaque `de`/`vers` existe dans les cartes ; les crans valent 10/20/30 ; les noms d'éveils uniques sans collision (le dédoublonnage Éveillé du Seuil / Ange Éveillé se vérifie ici, EXI-P1-2) ; l'effet `remplace` exige `disparait: "<id>"`.
+- [x] **Étape 2 :** `node --test --test-name-pattern "trees"` → vert.
+- [x] **Étape 3 :** commit `data : schema des arbres de race + validateur (EXI-P1-1)`.
 
 ### Tâche T1.2 : les arbres v17 en données
 
 **Fichiers :** Remplir `data/trees.json`, `data/cards.json` depuis `docs/design-arbres.md`
 
-- [ ] **Étape 1 :** lire le design section par section ; pour chaque éveil/voie, créer l'entrée. Règle : une entrée par ligne du design, aucune interprétation libre ; ce qui est ambigu est noté au rapport, jamais deviné.
-- [ ] **Étape 2 :** les communes déléguées (Pousse des Sèves, Fidèle du Jour) entrent dans `cards.json` avec leur voie d'obtention (EXI-P1-3).
-- [ ] **Étape 3 :** `npm test` → 100 % des références résolues (ACC-1-1) ; commit `data : les arbres v17 en donnees (eves, voies, communes deleguees)`.
+- [x] **Étape 1 :** lire le design section par section ; pour chaque éveil/voie, créer l'entrée. Règle : une entrée par ligne du design, aucune interprétation libre ; ce qui est ambigu est noté au rapport, jamais deviné.
+- [x] **Étape 2 :** les communes déléguées (Pousse des Sèves, Fidèle du Jour) entrent dans `cards.json` avec leur voie d'obtention (EXI-P1-3).
+- [x] **Étape 3 :** `npm test` → 100 % des références résolues (ACC-1-1) ; commit `data : les arbres v17 en donnees (eves, voies, communes deleguees)`.
 
 ### Tâche T1.3 : la progression par les arbres
 
 **Fichiers :** Étendre `src/engine/progression.js`, créer `tests/progression.test.js`
 **Interfaces :** `evolve(instance, tree)` applique l'éveil (id, stats, crans +10/+20/+30 %, sort de lignée du palier) ; l'évolution traverse `trees.json`, plus aucune table codée.
 
-- [ ] **Étape 1 :** brancher l'évolution existante sur `trees.json` (EVO_CHOICES reste en données, la traversée devient générique).
-- [ ] **Étape 2 :** test (ACC-1-3) : un éveil applique les crans depuis les données ; passer +10 à +12 dans la copie du test change le résultat d'autant.
-- [ ] **Étape 3 :** commit `feat : progression cablee sur trees.json`.
+- [x] **Étape 1 :** brancher l'évolution existante sur `trees.json` (EVO_CHOICES reste en données, la traversée devient générique).
+- [x] **Étape 2 :** test (ACC-1-3) : un éveil applique les crans depuis les données ; passer +10 à +12 dans la copie du test change le résultat d'autant.
+- [x] **Étape 3 :** commit `feat : progression cablee sur trees.json`.
 
 ### Tâche T1.4 : les règles d'éveil spéciales
 
 **Fichiers :** Étendre `src/engine/progression.js`, `tests/progression.test.js`
 **Interfaces :** L'entrée `"effet": "remplace", "disparait": "<id>"` : à l'éveil, l'exemplaire ciblé disparaît, ses pouvoirs passent à l'éveillé (EXI-P1-2 : l'Ange Éveillé, l'Ange Gardien meurt, la mauvaise volonté suit).
 
-- [ ] **Étape 1 :** coder la règle générique en données (EXI-MOD-2) ; l'entrée de l'Ange Éveillé dans `trees.json` porte le `disparait`.
-- [ ] **Étape 2 :** test (ACC-1-2) : `node --test --test-name-pattern "Ange"` → l'éveil retire l'Ange Gardien, la mauvaise volonté est portée par l'Éveillé, les deux noms coexistent.
-- [ ] **Étape 3 :** commit `feat : regle d'eveil remplace (Ange Eveille) en donnees`.
+- [x] **Étape 1 :** coder la règle générique en données (EXI-MOD-2) ; l'entrée de l'Ange Éveillé dans `trees.json` porte le `disparait`.
+- [x] **Étape 2 :** test (ACC-1-2) : `node --test --test-name-pattern "Ange"` → l'éveil retire l'Ange Gardien, la mauvaise volonté est portée par l'Éveillé, les deux noms coexistent.
+- [x] **Étape 3 :** commit `feat : regle d'eveil remplace (Ange Eveille) en donnees`.
 
 ### Tâche T1.5 : le squelette des zones (drops N)
 
 **Fichiers :** Créer `data/zones.json` (squelette), étendre `src/validate.js`
 **Interfaces :** `zones.json` : `[{ "id": "...", "nature": "...", "cadence": "zone", "drops": { "N": <taux> }, "ecolages": [] }]` ; les taux viennent du design v17 (EXI-P1-4).
 
-- [ ] **Étape 1 :** poser les entrées de drop du design ; le validateur vérifie que chaque drop référence une carte existante.
-- [ ] **Étape 2 :** `npm test` vert ; commit `data : squelette zones.json (drops N du design v17)`.
+- [x] **Étape 1 :** poser les entrées de drop du design ; le validateur vérifie que chaque drop référence une carte existante.
+- [x] **Étape 2 :** `npm test` vert ; commit `data : squelette zones.json (drops N du design v17)`.
 
 ### Tâche T1.6 : la migration v9
 
 **Fichiers :** Étendre `src/engine/migrate.js`, `tests/migration.test.js`
 **Interfaces :** `v8to9(save)` : les exemplaires évolués restent jouables dans le nouvel arbre ; la règle de re-choix de voie suit le design v17 (EXI-P1-6).
 
-- [ ] **Étape 1 :** coder + tester (ACC-1-4) ; `CURRENT_VERSION` = 9 ; commit `feat : migration v9 (arbre, voies)`.
-- [ ] **Étape 2 :** `node build.mjs`, vérification visuelle (l'écran d'équipe montre les voies), rapport de phase 1, `VERDICT: PASS`.
+- [x] **Étape 1 :** coder + tester (ACC-1-4) ; `CURRENT_VERSION` = 9 ; commit `feat : migration v9 (arbre, voies)`.
+- [x] **Étape 2 :** `node build.mjs`, vérification visuelle (l'écran d'équipe montre les voies), rapport de phase 1, `VERDICT: PASS`.
 
 ---
 
