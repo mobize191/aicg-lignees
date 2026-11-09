@@ -469,59 +469,59 @@ Source normative : `docs/refonte-sorts.md` (v2.3). La table 14.2 se reporte à l
 **Fichiers :** Créer `data/schools.json`, `data/keywords.json`, étendre `src/validate.js`
 **Interfaces :** `schools.json` : `{ "lame": { "nom": "la Lame", "role": "degats" }, ... }` les 8 écoles du design ; `keywords.json` : brûlure (feu), corrosion (eau), poison (ombre), sève (vivant) (EXI-P2-5).
 
-- [ ] **Étape 1 :** les 8 écoles (la Lame, le Baume, le Rempart, l'Appel, l'Entrave, le Mauvais Œil, la Ferveur, la Ruse) ; le validateur : écoles uniques, noms français avec article, chaque école ouverte par au moins un profil ou une voie (exigé en fin de phase).
-- [ ] **Étape 2 :** `npm test` vert ; commit `data : les 8 ecoles et les mots-cles par element`.
+- [x] **Étape 1 :** les 8 écoles (la Lame, le Baume, le Rempart, l'Appel, l'Entrave, le Mauvais Œil, la Ferveur, la Ruse) ; le validateur : écoles uniques, noms français avec article, chaque école ouverte par au moins un profil ou une voie (exigé en fin de phase).
+- [x] **Étape 2 :** `npm test` vert ; commit `data : les 8 ecoles et les mots-cles par element`.
 
 ### Tâche T2.2 : le grimoire (communs, race, entrées, lignées)
 
 **Fichiers :** Créer `data/grimoire.json`, étendre `tests/data.test.js`
 **Interfaces :** `grimoire.json` : `{ "communs": [...], "race": [...], "entrees": [...], "lignee": [...], "ecole": [...], "uniques": [...] }` ; un sort d'école : `{ "id": "morsure-decume", "ecole": "lame", "role": "degats", "crans": { "I": { "cout": 3, "largeur": 1, "mult": 1.5 }, "II": { "cout": 4, "largeur": 2, "mult": 1.8 }, "III": { "cout": 5, "largeur": 3, "mult": 2.2 }, "IV": { "cout": 6, "largeur": 5, "mult": 2.6 } } }` ; un cran vide : `{ "vide": true, "raison": "attend un autre biome ou la zone d'errance" }`.
 
-- [ ] **Étape 1 :** y ranger depuis le design et l'inventaire : les communs (Frappe Précise, Premiers Soins), les sorts de race (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), les entrées (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur), les lignées (référencées depuis `lineage-spells.json`, 6 par famille, C à L).
-- [ ] **Étape 2 :** le validateur (ACC-2-1) : chaque sort référence une école existante ; coût strictement croissant ; 4 marches ou `vide: true` motivé ; taux décroissants quand la largeur monte.
-- [ ] **Étape 3 :** commit `data : le grimoire (communs, race, entrees, lignees)`.
+- [x] **Étape 1 :** y ranger depuis le design et l'inventaire : les communs (Frappe Précise, Premiers Soins), les sorts de race (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), les entrées (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur), les lignées (référencées depuis `lineage-spells.json`, 6 par famille, C à L).
+- [x] **Étape 2 :** le validateur (ACC-2-1) : chaque sort référence une école existante ; coût strictement croissant ; 4 marches ou `vide: true` motivé ; taux décroissants quand la largeur monte.
+- [x] **Étape 3 :** commit `data : le grimoire (communs, race, entrees, lignees)`.
 
 ### Tâche T2.3 : la fusion des Marées
 
 **Fichiers :** Créer `data/fusion-map.json`, étendre `src/engine/spells.js`, `tests/spells.test.js`
 **Interfaces :** `fusion-map.json` : `{ "marees": { "trie": true, "signatures": { "e1": { "fusion": "morsure-decume", "cran": "I" }, "e13": { "unique": "maree-noire" } } }, "forge": { "trie": false } }` (le `trie: false` garde le chemin legacy, EXI-P2-4).
 
-- [ ] **Étape 1 :** reporter la table 14.2 à l'identique : les 7 uniques (Léviathan : Marée Noire ; Titan : Abîme Absolu ; Zikka : Songe des Profondeurs ; Griknir : Couronne des Écumes ; Pontos : Bénédiction des Berges ; Méliane : Chant du Naufrage ; Thalassa : Colère des Récifs) et les 23 fondues (Morsure d'Écume I-IV, Chant de Sirène I-IV, Étreinte des Profondeurs III, Carapace de Corail I/III/IV, Marque Corrosive III, Guet des Fonds II, et les crans des entrées : Brise-Garde II, Œil du Malheur II, Onde Consacrée II). Les taux du design (14.3) vont dans les crans.
-- [ ] **Étape 2 :** test de couverture (ACC-2-4) : 30 signatures sur 30 résolues pour les Marées ; un monstre des Marées caste son cran de fusion ; un monstre d'un biome non trié caste sa signature actuelle.
-- [ ] **Étape 3 :** commit `data : fusion des Marees (7 uniques + 23 fondues, table 14.2 a l'identique)`.
+- [x] **Étape 1 :** reporter la table 14.2 à l'identique : les 7 uniques (Léviathan : Marée Noire ; Titan : Abîme Absolu ; Zikka : Songe des Profondeurs ; Griknir : Couronne des Écumes ; Pontos : Bénédiction des Berges ; Méliane : Chant du Naufrage ; Thalassa : Colère des Récifs) et les 23 fondues (Morsure d'Écume I-IV, Chant de Sirène I-IV, Étreinte des Profondeurs III, Carapace de Corail I/III/IV, Marque Corrosive III, Guet des Fonds II, et les crans des entrées : Brise-Garde II, Œil du Malheur II, Onde Consacrée II). Les taux du design (14.3) vont dans les crans.
+- [x] **Étape 2 :** test de couverture (ACC-2-4) : 30 signatures sur 30 résolues pour les Marées ; un monstre des Marées caste son cran de fusion ; un monstre d'un biome non trié caste sa signature actuelle.
+- [x] **Étape 3 :** commit `data : fusion des Marees (7 uniques + 23 fondues, table 14.2 a l'identique)`.
 
 ### Tâche T2.4 : la résolution par crans
 
 **Fichiers :** Étendre `src/engine/spells.js`, `tests/spells.test.js`
 **Interfaces :** `castSpell(data, spellId, cran, contexte)` : résout largeur, coût, mult, taux contre le seuil ; le ciblage vient du cran (frappes 1/2/3/5 ; soutiens 1/2/équipe/équipe renforcée, le cran IV renforce) ; aucune référence à un sort en dur.
 
-- [ ] **Étape 1 :** coder la résolution générique.
-- [ ] **Étape 2 :** tests (ACC-2-2, ACC-2-3) : Morsure d'Écume touche 1/2/3/5 aux mults 1.5/1.8/2.2/2.6 et coûts 3/4/5/6✦ ; Chant de Sirène stun 25/20/15/10 % ; les deux tests modifient le JSON en copie et voient le résultat suivre.
-- [ ] **Étape 3 :** commit `feat : resolution des sorts a crans (largeur, cout, mult, taux vs seuil)`.
+- [x] **Étape 1 :** coder la résolution générique.
+- [x] **Étape 2 :** tests (ACC-2-2, ACC-2-3) : Morsure d'Écume touche 1/2/3/5 aux mults 1.5/1.8/2.2/2.6 et coûts 3/4/5/6✦ ; Chant de Sirène stun 25/20/15/10 % ; les deux tests modifient le JSON en copie et voient le résultat suivre.
+- [x] **Étape 3 :** commit `feat : resolution des sorts a crans (largeur, cout, mult, taux vs seuil)`.
 
 ### Tâche T2.5 : la fin du verrou de classe
 
 **Fichiers :** Étendre `src/engine/progression.js`, `tests/spells.test.js`
 **Interfaces :** `openSchools(voie)` alimente le casting : un sort exige son école ouverte, jamais une classe (EXI-P2-1).
 
-- [ ] **Étape 1 :** test (ACC-2-5) : deux profils avec la même école ouverte castent le même sort, même effet ; changer la voie en données change l'école suivie.
-- [ ] **Étape 2 :** l'extensibilité complète (ACC-2-6) : l'école fictive « l'Éclipse » + son sort à crans, en données seules, castent sur les quatre largeurs.
-- [ ] **Étape 3 :** commit `feat : le sort depend de son ecole, plus de la classe`.
+- [x] **Étape 1 :** test (ACC-2-5) : deux profils avec la même école ouverte castent le même sort, même effet ; changer la voie en données change l'école suivie.
+- [x] **Étape 2 :** l'extensibilité complète (ACC-2-6) : l'école fictive « l'Éclipse » + son sort à crans, en données seules, castent sur les quatre largeurs.
+- [x] **Étape 3 :** commit `feat : le sort depend de son ecole, plus de la classe`.
 
 ### Tâche T2.6 : l'acquisition de départ
 
 **Fichiers :** Étendre `src/engine/progression.js`, `tests/progression.test.js`
 
-- [ ] **Étape 1 :** coder + tester (EXI-P2-6) : une naissance N possède son commun et son sort de race à l'obtention, rien d'autre ; l'éveil ouvre les écoles de la voie.
-- [ ] **Étape 2 :** commit `feat : acquisition de depart (commun + race a la naissance)`.
+- [x] **Étape 1 :** coder + tester (EXI-P2-6) : une naissance N possède son commun et son sort de race à l'obtention, rien d'autre ; l'éveil ouvre les écoles de la voie.
+- [x] **Étape 2 :** commit `feat : acquisition de depart (commun + race a la naissance)`.
 
 ### Tâche T2.7 : la migration v10
 
 **Fichiers :** Étendre `src/engine/migrate.js`, `tests/migration.test.js`
 **Interfaces :** `v9to10(save)` : les sorts connus sont re-mappés selon `fusion-map.json` (signature → cran ou unique) ; aucun sort appris perdu (EXI-P2-7).
 
-- [ ] **Étape 1 :** coder + tester (ACC-2-7) ; `CURRENT_VERSION` = 10 ; commit `feat : migration v10 (re-mappage des sorts par la fusion-map)`.
-- [ ] **Étape 2 :** `node build.mjs`, vérification visuelle (le glossaire montre le grimoire), rapport de phase 2, `VERDICT: PASS`.
+- [x] **Étape 1 :** coder + tester (ACC-2-7) ; `CURRENT_VERSION` = 10 ; commit `feat : migration v10 (re-mappage des sorts par la fusion-map)`.
+- [x] **Étape 2 :** `node build.mjs`, vérification visuelle (le glossaire montre le grimoire), rapport de phase 2, `VERDICT: PASS`.
 
 ---
 
