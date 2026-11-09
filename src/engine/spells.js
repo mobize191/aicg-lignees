@@ -169,3 +169,74 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     }
   }
 }
+
+// grimoire à crans (phase 2) : la résolution lit les données, jamais de sort en dur
+function getSchoolSpell(spellId) {
+  return (DATA.grimoire?.ecole ?? []).find((s) => s.id === spellId) ?? null;
+}
+function getEntree(spellId) {
+  return (DATA.grimoire?.entrees ?? []).find((s) => s.id === spellId) ?? null;
+}
+function getSpellDef(spellId) {
+  return getSchoolSpell(spellId) ?? getEntree(spellId)
+    ?? (DATA.grimoire?.communs ?? []).find((s) => s.id === spellId)
+    ?? (DATA.grimoire?.race ?? []).find((s) => s.id === spellId)
+    ?? (DATA.grimoire?.uniques ?? []).find((s) => s.id === spellId) ?? null;
+}
+function cranOf(spellId, cran) {
+  const s = getSchoolSpell(spellId);
+  return s?.crans?.[cran] ?? null;
+}
+function largeurCibles(ligne, largeur, choix = null) {
+  const n = (largeur === 'equipe' || largeur === 'equipe-renforcee') ? ligne.length : Number(largeur) || 1;
+  const vivantes = ligne.filter((u) => u.hp > 0);
+  if (n >= vivantes.length) return vivantes;
+  if (n === 3) {
+    const debut = choix !== null && Number.isFinite(choix)
+      ? Math.max(0, Math.min(choix, vivantes.length - 3))
+      : Math.floor((vivantes.length - 3) / 2);
+    return vivantes.slice(debut, debut + 3);
+  }
+  return vivantes.slice(0, n);
+}
+// castSpell(data, spellId, cran, contexte) : résout largeur, coût, mult, taux depuis les données
+function castSpell(data, spellId, cran, contexte = {}) {
+  void data;
+  const def = getSpellDef(spellId);
+  if (!def) throw new Error(`sort inconnu : ${spellId}`);
+  const c = def.crans ? def.crans[cran] : def;
+  if (!c || c.vide) return null;
+  const { lanceur = null, cibles = [], events = [], side = 'enemies' } = contexte;
+  const res = { sort: spellId, cran, ecole: def.ecole, role: def.role, cout: c.cout, largeur: c.largeur, mult: c.mult ?? null, taux: c.taux ?? null };
+  if (def.role === 'degats' && c.mult) {
+    const base = lanceur ? (lanceur.atk ?? 1) : 1;
+    const targets = largeurCibles(cibles, c.largeur, contexte.choix ?? null);
+    const dmg = Math.max(1, Math.round(base * c.mult));
+    for (const t of targets) {
+      events.push({ type: 'attack', sourceId: lanceur?.uid ?? null, targetId: t.uid, amount: dmg, sort: spellId, cran });
+      applyDamage(t, dmg, events, side);
+    }
+    res.cibles = targets.map((t) => t.uid);
+    res.degats = dmg;
+  }
+  if (c.taux !== undefined && typeof contexte.rng === 'function') {
+    const targets = largeurCibles(cibles, c.largeur, contexte.choix ?? null);
+    for (const t of targets) {
+      const seuil = t.seuil ?? 0;
+      if (contexte.rng() < c.taux - seuil) {
+        t.status = t.status ?? {};
+        t.status.stun = { tours: c.tours ?? 1 };
+        events.push({ type: 'stun', sourceId: lanceur?.uid ?? null, targetId: t.uid, sort: spellId, cran, taux: c.taux });
+      }
+    }
+    res.tauxApplique = true;
+  }
+  return res;
+}
+// la fusion (phase 2) : une signature de monstre se résout en cran ou unique selon fusion-map
+function resolveSignature(monsterId) {
+  const biome = (DATA.monsters ?? []).find((m) => m.id === monsterId)?.dungeon;
+  const entry = FUSION_MAP[biome]?.signatures?.[monsterId];
+  if (!entry) return null;
+  return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
+}
