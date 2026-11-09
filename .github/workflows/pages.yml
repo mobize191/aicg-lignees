@@ -18,9 +18,12 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - run: cp dist.html index.html
+      - run: |
+          mkdir -p site
+          cp dist.html site/index.html
+          cp assets.json site/assets.json
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: site
       - uses: actions/deploy-pages@v4
         id: deployment
