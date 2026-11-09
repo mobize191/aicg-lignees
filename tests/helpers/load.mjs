@@ -12,7 +12,8 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'playAuto',
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
-  'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard'];
+  'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard',
+  'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',

@@ -901,9 +901,21 @@ function evolveInstance(iid, targetId = null) {
   const oldSpells = (cur.spells ?? []).map((sp) => ({ ...sp }));
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   const prevId = inst.id;
-  inst.id = nextId;
-  inst.lvl = 1;
-  inst.xp = 0;
+  const eveil = eveilOf(prevId, nextId);
+  if (eveil) applyTreeEveil(inst, eveil);
+  else {
+    inst.id = nextId;
+    inst.lvl = 1;
+    inst.xp = 0;
+  }
+  if (eveil && eveil.effet === 'remplace') {
+    const retires = applyRemplace(store.instances, eveil, inst.iid);
+    for (const iid of retires) {
+      for (const t of store.teams) t.slots = (t.slots ?? []).filter((x) => x !== iid);
+      store.instances = store.instances.filter((i) => i.iid !== iid);
+    }
+  }
+  if (eveil && !inst.voie) inst.voie = eveil.voie;
   syncCount(prevId);
   syncCount(nextId);
   markSeen(nextId);

@@ -6,12 +6,14 @@ function makeUnit(card, uid = card.id, level = null) {
   const lvl = level ?? card.level ?? 1;
   const m = 1 + LEVEL_BONUS * (lvl - 1);
   const cm = classeMods(card);
+  const cranPct = cranPctOfRace(raceOfCard(card));
   const u = {
     uid, cardId: card.id, name: card.name, rarity: card.rarity,
     classe: card.classe, element: card.element, role: card.role, race: raceOfCard(card),
-    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct))),
-    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct))),
-    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct))),
+    cranPct,
+    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100))),
+    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
+    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
