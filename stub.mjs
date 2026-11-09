@@ -82,7 +82,7 @@ export function makeEl(tag = 'div') {
       return {
         add: (...c) => c.forEach((x) => s.add(x)),
         remove: (...c) => c.forEach((x) => s.delete(x)),
-        toggle(c) { if (s.has(c)) { s.delete(c); return false; } s.add(c); return true; },
+        toggle(c, force) { const on = force === undefined ? !s.has(c) : !!force; if (on) s.add(c); else s.delete(c); return on; },
         contains: (c) => s.has(c),
         _set: s,
       };

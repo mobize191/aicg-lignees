@@ -374,7 +374,7 @@ animation: fadein .18s ease;
 }
 .modal {
 position: relative; width: min(660px, 100%); margin: 5vh auto 40px;
-display: grid; grid-template-columns: 210px 1fr; gap: 16px;
+display: grid; grid-template-columns: 232px 1fr; gap: 16px;
 border-radius: 18px; padding: 18px;
 background: linear-gradient(180deg, #161d2c, #0e131d);
 border: 1px solid rgba(77, 208, 225, .25);
@@ -596,13 +596,13 @@ h2 { font-size: 1.1rem; }
 .enemy-zone .row, .team-zone .row, .line.team .row { flex-wrap: wrap; }
 .row { gap: 7px; }
 .slot { flex: 0 1 auto; width: calc((100% - 14px) / 3); }
-.grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px 8px; }
+.grid { grid-template-columns: repeat(auto-fill, minmax(186px, 1fr)); gap: 10px 8px; }
 .name { font-size: .86rem; }
 .cardfoot { font-size: .76rem; }
 .meta { font-size: .68rem; }
 .rar-chip, .lvl-chip, .badge { font-size: .7rem; }
 .slot .card .name { font-size: .92rem; }
-.fam-card { width: 84px; }
+.fam-card { width: 92px; }
 .shop-grid { grid-template-columns: 1fr; }
 .home-stats { grid-template-columns: repeat(2, 1fr); }
 .modal { grid-template-columns: 1fr; gap: 10px; padding: 14px; }
@@ -766,15 +766,34 @@ nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .9
 .tac-btn.on { border-color: #d9b45a; background: rgba(217,180,90,.18); }
 .tac-target { margin-left: auto; font-size: .8rem; color: #9fd8a8; }
 .tac-target.armed { color: #d9b45a; font-weight: 700; }
+
+/* ==== v0.44 : le combat tient sur un écran, sans scroll (retour terrain) ==== */
+body.in-combat { overflow: hidden; }
+body.in-combat #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box; }
+body.in-combat #app > h2 { font-size: .92rem; margin: 0 0 2px; }
+body.in-combat #controls { margin: 2px 0; padding: 5px; gap: 4px; }
+body.in-combat #controls .btn.ctrl { padding: 4px 8px; font-size: .7rem; }
+body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; }
+body.in-combat .row { margin: 2px 0; gap: 6px; min-height: 0; }
+body.in-combat .unit { width: clamp(72px, 14vw, 96px); }
+body.in-combat .unit.boss { width: clamp(92px, 19vw, 122px); }
+body.in-combat #tac-panel { flex: 0 1 auto; overflow: hidden; }
+body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
+body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
+body.in-combat .tac-name { min-width: 78px; font-size: .72rem; }
+body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }
+body.in-combat #log { min-height: 20px; max-height: 20dvh; overflow: hidden; margin: 4px 0; font-size: .74rem; }
+body.in-combat #mode-hint, body.in-combat #app > p.muted { font-size: .66rem; line-height: 1.25; margin: 2px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
 /* v0.42 : la carte du modificateur de run */
 .run-mod-card { display: flex; align-items: center; gap: 14px; border: 1px solid #d9b45a; border-radius: 12px; padding: 12px 16px; margin: 10px 0; background: rgba(217,180,90,.08); }
 .run-mod-glyph { font-size: 2rem; }
 
 /* ==== v0.33.1 : lisibilite — cartes plus grandes, badge nouvelle carte ==== */
 #app { max-width: 840px; }
-.slot { flex: 0 1 144px; width: min(144px, calc((100% - 32px) / 5)); }
-.grid { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
-.fam-card { width: 106px; }
+.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }
+.grid { grid-template-columns: repeat(auto-fill, minmax(186px, 1fr)); }
+.fam-card { width: 118px; }
 .cardfoot { font-size: .74rem; }
 .forge-card { position: relative; }
 .new-badge {
@@ -3422,6 +3441,7 @@ let suppressHash = false;
 
 function go(hash) {
   (routes[hash] || routes['#accueil'])(document.getElementById('app'));
+  document.body.classList.toggle('in-combat', hash === '#combat');
   updatePtsBadge();
   const nv = document.getElementById('main-nav');
   if (nv) nv.classList.remove('open');
@@ -6218,6 +6238,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v0.44 : Le combat plein écran', 'DEUX DEMANDES DE TERRAIN APPLIQUÉES. (1) Le combat tient sur UN SEUL ÉCRAN : en exploration la page ne scrolle plus, ni en bas ni sur les côtés — titre, boutons, plateau, panneau Tactique et journal se partagent la hauteur de l’écran, et les rappels restent compacts. (2) Les cartes s’agrandissent partout où l’image a sa place : collection, familles, équipe et fiche — les futures illustrations s’y liront ; en combat, chaque carte reste un pion lisible et l’image se loge en fond de carte.'],
   ['v0.43.1 : Correctifs terrain', 'QUATRE RETOURS DU TERRAIN APPLIQUÉS. (1) Le plateau applique une TAILLE UNIFORME : chaque carte garde la même largeur dans les deux camps, quel que soit le nombre de voisines — seul le boss garde sa prestance. (2) Le modificateur de run redevient réellement OPTIONNEL : l’accepter est gratuit (butin majoré), entrer sans lui aussi — seul le REMPLACEMENT du tirage coûte 1 éclat brut. Plus aucune obligation d’éclat pour refuser. (3) La collection montre la PORTE de chaque famille : le novice (ou la greffe) qui y entre figure en tête de chaîne. (4) Les anciennes branches SR (Yuki, Onyx, Naïa…) sont ARCHIVÉES : hors des tirages et des arbres, visibles seulement dans la section archives si vous en possédez.'],
   ['v0.43 : La grammaire des sorts, le plateau en ligne et l’indice de force', 'PLUS DE FAUX JUMEAUX, PLUS DE NIVEAUX VIDES. Chaque carte connaît désormais ses sorts par couches : le COMMUN (2✦), le sort DE RACE (3✦), le sort DE CLASSE (4✦) et sa SIGNATURE (5✦). L’Épéiste Novice et le Bestiau des Cieux ne partagent plus que le commun, et le Prêtre Novice a enfin son grimoire complet : des soins gradués, du pansement à la bénédiction. Le panneau Tactique détaille nom, coût et infobulle de chaque sort — y compris pour les soigneurs — et le Souffle Croisé est étiqueté pour ce qu’il est : une action d’équipe, pas un sort. Le plateau passe à une seule ligne par camp : fini la ligne support repoussée à l’arrière. Et la force conseillée des donjons devient un INDICE pondéré (ATQ, PV, rareté, nombre de sorts), auto-calibré sur le boss final réel — un niveau moyen ne veut rien dire : une équipe de SR niveau 5 n’est pas une équipe de communes niveau 5.'],
   ['v0.42 : Les modificateurs de run', 'CHAQUE EXPLORATION A SON TARIF. En entrant dans un donjon, un modificateur est tiré et montré AVANT le combat : 🐗 la Horde (+1 ennemi par vague, butin +20 %), 🕯 le Mana Stérile (régénération −1 pendant le combat, points +25 %), 🛡 la Muraille (ennemis +25 % PV, éclats +50 %), ⚔ la Rage Partagée (ennemis +15 % ATQ, points +40 %). La face rude paie la face compense : les points, les chances d’éclats d’évolution et de régression suivent le modificateur accepté. Le refuser coûte 1 éclat brut et le run se joue sans modificateur ; sans brut, on entre avec le tirage. Le moteur de vague reçoit le modificateur en paramètre OPTIONNEL — sans modificateur, le digest de 3000 combats reste IDENTIQUE (dormance prouvée).'],

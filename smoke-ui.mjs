@@ -270,6 +270,28 @@ async function main() {
   check('43.1 f l\'archivée possédée y est visible', (els.get('app')?._innerHTML ?? '').includes('Yuki'), '');
   check('43.1 g 0 exception après collection', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
+  // ---------- v0.44 : combat plein écran + grandes cartes ----------
+  check('44 a one-screen : la classe in-combat verrouille le scroll', html.includes('body.in-combat { overflow: hidden; }') && html.includes('body.in-combat #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden;'), '');
+  check('44 a one-screen : unités et panneau compacts en combat', html.includes('body.in-combat .unit { width: clamp(72px, 14vw, 96px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+  check('44 a one-screen : journal borné et rappels clampés à 2 lignes', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && html.includes('-webkit-line-clamp: 2'), '');
+  check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
+  check('44 b la base v0.43.1 des unités reste en place (override seulement)', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)'), '');
+  check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');
+  check('44 c changelog v0.44 écrit', html.includes('v0.44 : Le combat plein écran'), '');
+  mem.clear();
+  setup(['a1', 'g9', 'd2', 'n3', 'a29'], 15);
+  api._setAuto(true);
+  api.go('#combat');
+  await wait(40);
+  check('44 d en combat, le body porte la classe in-combat', doc.body.classList.contains('in-combat'), String(doc.body.className));
+  api.go('#equipe');
+  await wait(40);
+  check('44 d hors combat, la classe est retirée', !doc.body.classList.contains('in-combat'), String(doc.body.className));
+  api.go('#combat');
+  await wait(40);
+  check('44 d retour en combat, la classe revient (toggle à force)', doc.body.classList.contains('in-combat'), String(doc.body.className));
+  api._setAuto(false);
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }
