@@ -408,6 +408,8 @@ Mythe : z30 Apolline, Prophétesse du Jour (M), hors chaîne d'évolution.
 
 Trois familles divines, chacune en deux lignes reliées par un pont (d3 → d4, d9 → d10, d15 → d16). Elles n'entrent jamais dans l'opposition des éléments, une seule par famille en équipe, trois maximum. Leur richesse vit dans leurs Pouvoirs (automatiques, sans mana) : étourdissement et lenteur chez les Arbitres, copie et renvoi chez le Chœur, liens entre alliés chez les Tisseuses.
 
+Naissances d’entrée : n13 Ange → d3 Huissier de l’Entre-Deux (les Arbitres) ; n14 Démon → d8 Choriste Miroir (le Chœur) ; n15 Éveillé du Seuil → d14 Aiguille du Pont (les Tisseuses).
+
 | ID | Nom | Palier | Classe | Camp | Signature | Pouvoir |
 | --- | --- | --- | --- | --- | --- | --- |
 | d1 | Garde du Seuil | C | Guerrier | Lumière | Interdiction (3✦ ×1.5) |  |
