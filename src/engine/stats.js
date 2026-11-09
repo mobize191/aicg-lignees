@@ -106,3 +106,17 @@ function monsterNextLine(id) {
   }
   return null;
 }
+
+// mode RPG (phase 3) : stat principale par profil et seuils, en données (EXI-P3-1, EXI-P3-5)
+function statPrincipaleOf(classe) {
+  return (DATA.engine.profils ?? {})[classe]?.stat ?? 'atk';
+}
+function statOf(u) {
+  const s = statPrincipaleOf(u.classe);
+  return u[s] ?? u.atk ?? 1;
+}
+function seuilOf(u) {
+  const s = DATA.engine.seuils ?? {};
+  const palier = RANK[u.rarity] ?? 0;
+  return (s.parPalier?.[palier] ?? 0) + (s.parCamp?.[u.race] ?? 0);
+}

@@ -37,7 +37,19 @@ function v9to10(s) {
   }
   return s;
 }
-function v10to11(s) { s.version = 11; return s; }
+// v10 -> v11 (mode RPG, EXI-P3-6) : chaque exemplaire reçoit agilité et intelligence,
+// dérivées de sa carte et de son niveau (formule : stat de base x bonus de niveau).
+function v10to11(s) {
+  s.version = 11;
+  for (const inst of s.instances ?? []) {
+    const c = getCard(inst.id) ?? getMonster(inst.id);
+    if (!c) continue;
+    const m = 1 + LEVEL_BONUS * ((inst.lvl ?? 1) - 1);
+    inst.agi = Math.max(1, Math.round((c.agi ?? Math.round(c.atk * M.AGI_RATIO)) * m));
+    inst.int = Math.max(1, Math.round((c.int ?? Math.round(c.atk * M.INT_RATIO)) * m));
+  }
+  return s;
+}
 function v11to12(s) { s.version = 12; return s; }
 const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12 };
 function migrate(save) {

@@ -338,7 +338,7 @@
  "DMG_REDUCTION_MAX": 0.8,
  "SAVE_VERSION": 8,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 10,
+ "CURRENT_VERSION": 11,
  "CROSS": {
   "yield": 0.6,
   "healThreshold": 0.2,
@@ -542,6 +542,43 @@
   "POWER_ATK_WEIGHT": 2.5,
   "POWER_HP_WEIGHT": 0.6,
   "POWER_SPELL_STEP": 0.03,
-  "DEBUT_JEU_N": 2
+  "DEBUT_JEU_N": 2,
+  "AGI_RATIO": 0.8,
+  "INT_RATIO": 0.6
+ },
+ "profils": {
+  "Guerrier": {
+   "stat": "atk"
+  },
+  "Mage": {
+   "stat": "int"
+  },
+  "Prêtre": {
+   "stat": "int"
+  },
+  "Assassin": {
+   "stat": "agi"
+  },
+  "Occultiste": {
+   "stat": "int"
+  },
+  "Invocateur": {
+   "stat": "int"
+  },
+  "gardien": {
+   "stat": "hp"
+  }
+ },
+ "seuils": {
+  "parPalier": [
+   0,
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.25,
+   0.3
+  ],
+  "parCamp": {}
  }
 }
