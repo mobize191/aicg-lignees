@@ -22,6 +22,7 @@ const getZone = (id) => IDX.zones[id];
 
 // alias des constantes extraites : le moteur et l'UI lisent DATA, jamais de valeur en dur
 const E = DATA.engine;
+const M = E.moteur;
 const CLASSES = E.CLASSES;
 const ELEMENTS = E.ELEMENTS;
 const PALIERS = E.PALIERS;

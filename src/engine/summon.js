@@ -11,10 +11,10 @@ function castSummon(s, allies, mods, events, side) {
   const inv = makeUnit({
     id: `${s.cardId}-inv`, name: s.effect.summonName ?? 'Invocation',
     rarity: 'C', classe: s.classe, element: s.element, role: 'attaque',
-    atk: Math.max(1, Math.round(s.atk * (s.effect.value ?? 0.6) * (1 + atkBonus))),
-    hp: Math.max(1, Math.round(s.maxHp * (s.effect.hpPct ?? 0.5) * (1 + hpBonus))),
+    atk: Math.max(1, Math.round(s.atk * (s.effect.value ?? M.SUMMON_ATK_DEFAULT) * (1 + atkBonus))),
+    hp: Math.max(1, Math.round(s.maxHp * (s.effect.hpPct ?? M.SUMMON_HP_DEFAULT) * (1 + hpBonus))),
   }, `${s.uid}-inv${nb}`);
-  inv.spells = [{ name: 'Frappe', cost: 3, mult: 1.2 }];
+  inv.spells = [{ ...M.SUMMON_SPELL }];
   inv.mana = 6; inv.manaMax = 6; inv.manaRegen = 2;
   inv.status.ttl = s.effect.ttl ?? 3;
   pool.push(inv);

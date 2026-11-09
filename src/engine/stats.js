@@ -64,11 +64,11 @@ function elementTag(atkEl, defEl) {
 function cardPower(card, lvl) {
   const st = statsAt(card, lvl, 0);
   const spellsN = (card.spells ?? []).length;
-  return (st.atk * 2.5 + st.hp * 0.6) * (RARITY_POWER[card.rarity] ?? 1) * (1 + 0.03 * Math.max(0, spellsN - 1));
+  return (st.atk * M.POWER_ATK_WEIGHT + st.hp * M.POWER_HP_WEIGHT) * (RARITY_POWER[card.rarity] ?? 1) * (1 + M.POWER_SPELL_STEP * Math.max(0, spellsN - 1));
 }
 
 function statsAt(card, lvl, asc = 0) {
-  const m = 1 + 0.08 * ((lvl ?? 1) - 1);
+  const m = 1 + LEVEL_BONUS * ((lvl ?? 1) - 1);
   const a = 1 + (asc ?? 0) / 100;
   return { atk: Math.max(1, Math.round(card.atk * m * a)), hp: Math.max(1, Math.round(card.hp * m * a)) };
 }
@@ -83,4 +83,26 @@ function monstersOf(dungeonId) {
 
 function allMonsters() {
   return MONSTERS;
+}
+
+function forgeOnly(c) {
+  return !!(c.branch || c.evolved);
+}
+
+function byId(id) {
+  const c = CATALOG.find((c) => c.id === id);
+  if (!c) throw new Error(`Carte inconnue : ${id}`);
+  return c;
+}
+
+function monsterNextLine(id) {
+  for (const dk of Object.keys(MONSTER_FAMS)) {
+    for (const fam of MONSTER_FAMS[dk]) {
+      for (const line of fam.lines) {
+        const i = line.indexOf(id);
+        if (i >= 0 && i < line.length - 1) return { nextId: line[i + 1], famName: fam.name };
+      }
+    }
+  }
+  return null;
 }

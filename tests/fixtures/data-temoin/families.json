@@ -1,0 +1,86 @@
+{
+ "eau": {
+  "name": "Famille de l’Eau",
+  "steps": [
+   "a5",
+   "a29",
+   "a8",
+   "a11",
+   "a13",
+   "a14"
+  ],
+  "future": []
+ },
+ "lame": {
+  "name": "Famille du Sabre",
+  "steps": [
+   "a1",
+   "a30",
+   "a6",
+   "a10",
+   "a15",
+   "a17"
+  ],
+  "future": []
+ },
+ "ombre": {
+  "name": "Famille de l’Ombre",
+  "steps": [
+   "a2",
+   "a31",
+   "a7",
+   "a12",
+   "a16",
+   "a18"
+  ],
+  "future": []
+ },
+ "aube": {
+  "name": "Famille de l’Aube",
+  "steps": [
+   "s1",
+   "s13",
+   "s5",
+   "s8",
+   "s9",
+   "s10"
+  ],
+  "future": []
+ },
+ "bouclier": {
+  "name": "Famille du Bouclier",
+  "steps": [
+   "s4",
+   "s14",
+   "s6",
+   "s7",
+   "s11",
+   "s12"
+  ],
+  "future": []
+ },
+ "braise": {
+  "name": "Famille de la Braise",
+  "steps": [
+   "a19",
+   "a32",
+   "a20",
+   "a21",
+   "a22",
+   "a23"
+  ],
+  "future": []
+ },
+ "bosquet": {
+  "name": "Famille du Bosquet",
+  "steps": [
+   "a24",
+   "a33",
+   "a25",
+   "a26",
+   "a27",
+   "a28"
+  ],
+  "future": []
+ }
+}

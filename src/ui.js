@@ -71,9 +71,6 @@ function recommendedPower(d, diff) {
 
 ;
 
-function forgeOnly(c) {
-  return !!(c.branch || c.evolved);
-}
 
 for (const c of CATALOG) {
   if (c.family) {
@@ -103,11 +100,6 @@ for (const m of allMonsters()) {
   CATALOG.push({ ...m, monster: true });
 }
 
-function byId(id) {
-  const c = CATALOG.find((c) => c.id === id);
-  if (!c) throw new Error(`Carte inconnue : ${id}`);
-  return c;
-}
 
 function byIdSoft(id) { return CATALOG.find((c) => c.id === id) ?? null; }
 
@@ -1024,17 +1016,6 @@ function addPoints(n) {
   return store.points;
 }
 
-function monsterNextLine(id) {
-  for (const dk of Object.keys(MONSTER_FAMS)) {
-    for (const fam of MONSTER_FAMS[dk]) {
-      for (const line of fam.lines) {
-        const i = line.indexOf(id);
-        if (i >= 0 && i < line.length - 1) return { nextId: line[i + 1], famName: fam.name };
-      }
-    }
-  }
-  return null;
-}
 
 function todayKey() {
   const d = new Date();

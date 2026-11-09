@@ -1,0 +1,85 @@
+{
+ "communs": {
+  "attaque": {
+   "name": "Frappe Précise",
+   "cost": 2,
+   "mult": 1.3,
+   "cat": "commun",
+   "desc": "Le geste que toute carte de combat connaît : un coup net, sans gaspillage."
+  },
+  "support": {
+   "name": "Premiers Soins",
+   "cost": 2,
+   "mult": 1.15,
+   "cat": "commun",
+   "desc": "Le soin élémentaire que tout soigneur connaît : un pansement rapide sur la pire plaie."
+  }
+ },
+ "race": {
+  "humaine": {
+   "name": "Discipline de Ligne",
+   "cost": 3,
+   "mult": 1.5,
+   "cat": "race",
+   "desc": "Le geste des lignes humaines : appris au drill, exécuté sans penser."
+  },
+  "bestiau": {
+   "name": "Instinct Sauvage",
+   "cost": 3,
+   "mult": 1.5,
+   "cat": "race",
+   "desc": "Le bestiau agit comme il respire : par instinct, vite et fort."
+  },
+  "enge": {
+   "name": "Vol en Rase-Mottes",
+   "cost": 3,
+   "mult": 1.5,
+   "cat": "race",
+   "desc": "L’enge plonge du ciel et remonte avant la riposte."
+  },
+  "divine": {
+   "name": "Ferveur Céleste",
+   "cost": 3,
+   "mult": 1.5,
+   "cat": "race",
+   "desc": "Une onction des camps divins qui aiguise le geste."
+  }
+ },
+ "classe": {
+  "Guerrier": {
+   "name": "Brise-Garde",
+   "cost": 4,
+   "mult": 1.6,
+   "cat": "classe",
+   "desc": "Le coup du guerrier : chercher la jointure de la garde."
+  },
+  "Mage": {
+   "name": "Décharge Arcanique",
+   "cost": 4,
+   "mult": 1.65,
+   "cat": "classe",
+   "desc": "Le mage vide un fragment de mana en un trait brut."
+  },
+  "Prêtre": {
+   "name": "Onde Consacrée",
+   "cost": 3,
+   "mult": 1.3,
+   "cat": "classe",
+   "desc": "Le soin du prêtre : une onde qui referme les plaies."
+  },
+  "Assassin": {
+   "name": "Frappe dans le Dos",
+   "cost": 4,
+   "mult": 1.7,
+   "cat": "classe",
+   "desc": "L’assassin frappe là où l’on ne regarde pas."
+  },
+  "Occultiste": {
+   "name": "Œil du Malheur",
+   "cost": 4,
+   "mult": 1.6,
+   "cat": "classe",
+   "desc": "L’occultiste marque sa proie d’un mauvais présage."
+  }
+ }
+}

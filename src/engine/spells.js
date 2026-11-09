@@ -66,7 +66,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   
   
   
-  const cap = (t) => Math.round(t.maxHp * 0.35);
+  const cap = (t) => Math.round(t.maxHp * M.HEAL_CAP_RATIO);
   if (s.effect.kind === 'heal') {
     const value = Math.round(s.effect.value * (1 + (side === 'team' ? mods.healPct || 0 : 0)) * mult);
     for (const t of hurt.slice(0, n)) {
@@ -76,7 +76,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
         events.push({ type: 'heal', side, sourceId: s.uid, targetId: t.uid, amount, kind });
         const p = t.linkedTo ? aliveAllies.find((a) => a.uid === t.linkedTo) : null;
         if (p) {
-          const share = Math.min(Math.round(amount * 0.5), p.maxHp - p.hp);
+          const share = Math.min(Math.round(amount * M.LINK_SHARE), p.maxHp - p.hp);
           if (share > 0) {
             p.hp += share;
             events.push({ type: 'heal', side, sourceId: s.uid, targetId: p.uid, amount: share, kind: 'link' });
@@ -91,8 +91,8 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
       events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: kind });
       const p = t.linkedTo ? aliveAllies.find((a) => a.uid === t.linkedTo) : null;
       if (p) {
-        p.atkBuff += value * 0.5;
-        events.push({ type: 'buff', side, sourceId: s.uid, targetId: p.uid, kind: 'atk', value: value * 0.5, kindTag: 'link' });
+        p.atkBuff += value * M.LINK_BUFF_SHARE;
+        events.push({ type: 'buff', side, sourceId: s.uid, targetId: p.uid, kind: 'atk', value: value * M.LINK_BUFF_SHARE, kindTag: 'link' });
       }
     }
   } else if (s.effect.kind === 'shield') {
@@ -119,7 +119,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     if (!spell) return;
     for (const f of foes) {
       f.status.dot = {
-        dmg: Math.max(1, Math.round(s.atk * (s.effect.pct ?? 0.4) * mult)),
+        dmg: Math.max(1, Math.round(s.atk * (s.effect.pct ?? M.DOT_EFFECT_DEFAULT) * mult)),
         turns: s.effect.turns ?? 2,
       };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: f.uid, kind: 'dot', value: f.status.dot.dmg });
@@ -127,15 +127,15 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   } else if (s.effect.kind === 'reflect') {
     if (!spell) return;
     for (const t of aliveAllies) {
-      t.status.reflect = { pct: s.effect.value ?? 0.25, turns: s.effect.turns ?? 2 };
+      t.status.reflect = { pct: s.effect.value ?? M.REFLECT_DEFAULT_PCT, turns: s.effect.turns ?? 2 };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'reflect', value: t.status.reflect.pct });
     }
   } else if (s.effect.kind === 'warcry') {
     if (!spell) return;
-    const value = s.effect.value ?? 0.25;
+    const value = s.effect.value ?? M.WARCRY_DEFAULT;
     for (const t of allies.attaque.filter((u) => u.alive)) {
       t.atkBuff += value;
-      t.status.dmgRed = { pct: s.effect.red ?? 0.2, turns: 1 };
+      t.status.dmgRed = { pct: s.effect.red ?? M.DMGRED_DEFAULT, turns: 1 };
       events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: kind });
     }
   } else if (s.effect.kind === 'summon') {
@@ -144,7 +144,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   } else if (s.effect.kind === 'curse') {
     if (!spell) return;
     for (const f of foes) {
-      const value = (s.effect.value ?? 0.2) * (1 + (side === 'team' ? mods.cursePct || 0 : 0)) * (f.boss ? 0.5 : 1);
+      const value = (s.effect.value ?? M.CURSE_DEFAULT) * (1 + (side === 'team' ? mods.cursePct || 0 : 0)) * (f.boss ? M.CURSE_BOSS_FACTOR : 1);
       f.status.curse = { value, turns: s.effect.turns ?? 2 };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: f.uid, kind: 'curse', value: Math.round(value * 100) / 100 });
     }
@@ -153,7 +153,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     const dead = [...allies.attaque, ...allies.support].filter((u) => !u.alive && !(u.status && u.status.reviving));
     if (dead.length) {
       const t = dead.sort((a, b) => b.maxHp - a.maxHp)[0];
-      t.hp = Math.max(1, Math.round(t.maxHp * (s.effect.value ?? 0.5)));
+      t.hp = Math.max(1, Math.round(t.maxHp * (s.effect.value ?? M.REVIVE_DEFAULT)));
       t.alive = true;
       events.push({ type: 'revive', side, sourceId: s.uid, targetId: t.uid, amount: t.hp });
     }

@@ -17,8 +17,8 @@ function makeUnit(card, uid = card.id, level = null) {
     effect: card.effect ? { ...card.effect } : null,
     spells: (card.spells ?? []).map((s) => ({ ...s })),
     crossName: card.soloSpell ?? null,
-    mana: Math.round((card.mana ?? 10) * 0.6),
-    manaMax: card.mana ?? 10,
+    mana: Math.round((card.mana ?? SOLO_MANA.max) * M.MANA_START_RATIO),
+    manaMax: card.mana ?? SOLO_MANA.max,
     manaRegen: (card.manaRegen ?? 2) + (card.gimmick === 'prestige' ? 2 : 0),
     boss: !!card.boss,
     final: !!card.final,
@@ -45,8 +45,8 @@ function teamModifiers(units) {
   
   const divines = units.filter((u) => u && u.race === 'divine');
   if (divines.length >= 2) {
-    mods.dmgPct = (mods.dmgPct ?? 0) + 0.1;
-    mods.healPct = (mods.healPct ?? 0) + 0.1;
+    mods.dmgPct = (mods.dmgPct ?? 0) + M.DIVINE_PAIR_BONUS;
+    mods.healPct = (mods.healPct ?? 0) + M.DIVINE_PAIR_BONUS;
   }
   return mods;
 }
@@ -80,8 +80,8 @@ function initCombat(teamCards, enemyCards, seed, levels = {}) {
   }
   if (mods.shieldPct) for (const u of all) u.shield = Math.round(u.maxHp * mods.shieldPct);
   for (const u of all) {
-    if (u.gimmick === 'cale') u.shield += Math.round(u.maxHp * 0.25);
-    if (u.gimmick === 'litiere') for (const a of all) a.shield += Math.round(a.maxHp * 0.15);
+    if (u.gimmick === 'cale') u.shield += Math.round(u.maxHp * M.GIMMICK_CALE_SHIELD);
+    if (u.gimmick === 'litiere') for (const a of all) a.shield += Math.round(a.maxHp * M.GIMMICK_LITIERE_SHIELD);
   }
   return { rng: mulberry32(seed), turn: 0, team, enemies, mods, winner: null };
 }
@@ -139,7 +139,7 @@ function tickStatuses(state, events) {
         st.reviving -= 1;
         if (st.reviving <= 0) {
           delete st.reviving;
-          u.hp = Math.max(1, Math.round(u.maxHp * 0.5));
+          u.hp = Math.max(1, Math.round(u.maxHp * M.PHOENIX_REVIVE_RATIO));
           u.alive = true;
           events.push({ type: 'revive', side, targetId: u.uid, amount: u.hp });
         }
@@ -198,7 +198,7 @@ function beginRound(state) {
   events.push({ type: 'turn', n: state.turn });
   tickStatuses(state, events);
   const { team, enemies, mods } = state;
-  const rage = state.turn > 15 ? 1 + 0.08 * (state.turn - 15) : 1;
+  const rage = state.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (state.turn - M.RAGE_TURN) : 1;
   const alive = (arr) => arr.filter((u) => u.alive);
   const enemyAll = () => alive([...enemies.attaque, ...enemies.support]);
   const teamAll = () => alive([...team.attaque, ...team.support]);
@@ -338,9 +338,9 @@ function actTeamStriker(u, i, ctx, step) {
   const cSelf = u.status && u.status.curse ? u.status.curse.value : 0;
   let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage));
   u.atkBuff = 0;
-  if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + 0.03 * Math.min(u.ronde, 30))));
+  if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + M.RONDE_RATE * Math.min(u.ronde, M.RONDE_CAP))));
   if (u.gimmick === 'belier' && !u.belierUsed) {
-    dmg = Math.max(1, Math.round(dmg * 1.5));
+    dmg = Math.max(1, Math.round(dmg * M.BELIER_BOOST));
     u.belierUsed = true;
   }
   const kind = spell ? 'special' : 'basic';
@@ -353,9 +353,9 @@ function actTeamStriker(u, i, ctx, step) {
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     return false;
   }
-  if (u.gimmick === 'carrousel' && ctx.state.rng() < 0.15) {
+  if (u.gimmick === 'carrousel' && ctx.state.rng() < M.CARROUSEL_CHANCE) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
-    for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * 0.4)), ctx.events, 'enemies');
+    for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * M.CARROUSEL_SPLASH)), ctx.events, 'enemies');
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
     return false;
@@ -392,7 +392,7 @@ function actTeamStriker(u, i, ctx, step) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: target.uid, amount: dmg, kind, mana: u.mana, elem, side: 'team' });
     applyDamage(target, dmg, ctx.events, 'enemies', { allies: foes }, true);
     if (target.alive && spell && spell.dot) {
-      target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? 0.3))), turns: spell.dot.turns ?? 2 };
+      target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
       ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'dot', value: target.status.dot.dmg });
     }
     if (target.alive && target.status && target.status.reflect && dmg > 0) {
@@ -414,7 +414,7 @@ function actTeamStriker(u, i, ctx, step) {
     const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
     if (others.length) {
       const t2 = others[0];
-      const half = Math.max(1, Math.round(dmg * 0.5));
+      const half = Math.max(1, Math.round(dmg * M.BELIER_SPLASH));
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, t2.element), side: 'team' });
       applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), ctx.events, 'enemies');
     }
@@ -434,8 +434,8 @@ function enemyPickTarget(e, targets, dmgBase) {
   const score = (t) => {
     const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
     let s = 0;
-    if (t.hp <= dmg) s += 1000;
-    if (elementTag(e.element, t.element) === 'fort') s += 100;
+    if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
+    if (elementTag(e.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
     return s - t.hp;
   };
   return targets.reduce((a, b) => (score(b) > score(a) ? b : a), targets[0]);
@@ -462,7 +462,7 @@ function actEnemyStriker(e, ctx) {
       return false;
     }
   }
-  const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? 1.5 : 1;
+  const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? M.BELIER_BOOST : 1;
   if (belierBoost > 1) e.belierUsed = true;
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
   const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost));
@@ -502,7 +502,7 @@ function actEnemyStriker(e, ctx) {
       break;
     }
     ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(e.element, target.element), side: 'enemies' });
-    if (target.gimmick === 'voile' && ctx.state.rng() < 0.25) {
+    if (target.gimmick === 'voile' && ctx.state.rng() < M.VOILE_CHANCE) {
       ctx.events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
     } else {
       const partner = target.linkedTo ? ctx.teamAll().find((a) => a.uid === target.linkedTo) : null;
@@ -520,7 +520,7 @@ function actEnemyStriker(e, ctx) {
         applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() });
       }
       if (target.alive && target.gimmick === 'mirage' && dmg > 0) {
-        const reflet = Math.max(1, Math.round(dmg * 0.2));
+        const reflet = Math.max(1, Math.round(dmg * M.REFLECT_SHARE));
         ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: reflet, kind: 'basic', mana: target.mana, elem: null, side: 'team' });
         applyDamage(e, reflet, ctx.events, 'enemies');
       }
@@ -528,7 +528,7 @@ function actEnemyStriker(e, ctx) {
   }
   if (died && target.gimmick === 'benediction') {
     for (const u of ctx.teamAll()) {
-      const amount = Math.min(Math.round(u.maxHp * 0.2), u.maxHp - u.hp);
+      const amount = Math.min(Math.round(u.maxHp * M.BENEDICTION_HEAL), u.maxHp - u.hp);
       if (amount > 0) {
         u.hp += amount;
         ctx.events.push({ type: 'heal', side: 'team', sourceId: target.uid, targetId: u.uid, amount, kind: 'special' });
@@ -615,7 +615,7 @@ function resolveTurn(state, choices = null) {
   return events;
 }
 
-function playAuto(state, maxTurns = 60) {
+function playAuto(state, maxTurns = M.MAX_TURNS_AUTO) {
   const log = [];
   while (!state.winner && state.turn < maxTurns) {
     log.push(...resolveTurn(state, null));
@@ -645,11 +645,11 @@ function stagesOf(dungeonId) {
 
 function levelAt(stage, rarity = 'C', boss = false) {
   
-  return 1 + Math.floor(0.95 * (stage - 1)) + (RANK[rarity] ?? 0) + (boss ? 2 : 0);
+  return 1 + Math.floor(M.LEVEL_STAGE_RATIO * (stage - 1)) + (RANK[rarity] ?? 0) + (boss ? 2 : 0);
 }
 
 function levelIn(dungeon, stage, rarity = 'C', boss = false) {
-  return levelAt(stage, rarity, boss) + Math.round(dungeon.tier * 1.5);
+  return levelAt(stage, rarity, boss) + Math.round(dungeon.tier * M.DUNGEON_TIER_LEVEL_MULT);
 }
 
 function hashSeed(seed, stage) {
@@ -659,7 +659,7 @@ function hashSeed(seed, stage) {
 function wavePower(wave) {
   let p = 0;
   for (const u of [...wave.attaque, ...wave.support]) {
-    p += (u.atk + u.hp) * (1 + 0.08 * ((u.level ?? 1) - 1));
+    p += (u.atk + u.hp) * (1 + LEVEL_BONUS * ((u.level ?? 1) - 1));
   }
   return p;
 }
@@ -689,7 +689,7 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
   const scaled = (pool, hpMult = 1, atkMult = 1, minR = minRank, maxR = capRank) => {
     const p = poolOf(pool, minR, maxR);
     const c = p[Math.floor(rng() * p.length)];
-    const variance = 0.92 + 0.16 * rng(); 
+    const variance = M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng(); 
     return {
       ...c,
       level: levelFor(c.rarity),
@@ -703,7 +703,7 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
   let wave;
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
-    const [hpMult, atkMult] = isFinal ? [2.3, 1.28] : stage % 5 === 0 ? [1.55, 1.08] : [1.35, 1.03];
+    const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
     const boss = scaled(POOL_ATK, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
     boss.name = dungeon.bossNames?.[stage] ?? boss.name;
     boss.boss = true;
@@ -713,8 +713,8 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
     const supports = isFinal ? [scaled(POOL_SUP), scaled(POOL_SUP)] : [scaled(POOL_SUP)];
     wave = { attaque: [boss, ...minions], support: supports };
   } else {
-  const n = 2 + (rng() > 0.5 ? 1 : 0);
-  const supCount = stage >= 2 && rng() > 0.5 ? 1 : 0;
+  const n = 2 + (rng() > M.WAVE_EXTRA_CHANCE ? 1 : 0);
+  const supCount = stage >= 2 && rng() > M.WAVE_SUP_CHANCE ? 1 : 0;
   wave = {
     attaque: Array.from({ length: n }, () => scaled(POOL_ATK)),
     support: Array.from({ length: supCount }, () => scaled(POOL_SUP)),
@@ -724,12 +724,12 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
   
   let prev = stage - 1;
   if (prev >= 1) {
-    const prevP = wavePower(makeWave(seed, prev, dungeonId, diff)) * 1.02;
+    const prevP = wavePower(makeWave(seed, prev, dungeonId, diff)) * M.WAVE_POWER_GROWTH;
     let guard = 0;
     while (wavePower(wave) <= prevP && guard++ < 200) {
       for (const u of [...wave.attaque, ...wave.support]) {
-        u.atk = Math.max(1, Math.round(u.atk * 1.06));
-        u.hp = Math.max(1, Math.round(u.hp * 1.06));
+        u.atk = Math.max(1, Math.round(u.atk * M.WAVE_ATK_STEP));
+        u.hp = Math.max(1, Math.round(u.hp * M.WAVE_HP_STEP));
       }
     }
   }
@@ -737,14 +737,14 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
   if (runMod === 'horde') {
     wave.attaque.push(scaled(POOL_ATK));
   } else if (runMod === 'muraille') {
-    for (const u of [...wave.attaque, ...wave.support]) u.hp = Math.max(1, Math.round(u.hp * 1.25));
+    for (const u of [...wave.attaque, ...wave.support]) u.hp = Math.max(1, Math.round(u.hp * M.RUNMOD_MURaille_HP));
   } else if (runMod === 'rage') {
-    for (const u of [...wave.attaque, ...wave.support]) u.atk = Math.max(1, Math.round(u.atk * 1.15));
+    for (const u of [...wave.attaque, ...wave.support]) u.atk = Math.max(1, Math.round(u.atk * M.RUNMOD_RAGE_ATK));
   }
   return wave;
 }
 
-function makeDailyWave(seed, lvl = 10) {
+function makeDailyWave(seed, lvl = M.DAILY_LEVEL_DEFAULT) {
   const rng = mulberry32(hashSeed(seed, 5));
   const pool = monstersOf('divin');
   const pickN = (list, n) => {
@@ -754,7 +754,7 @@ function makeDailyWave(seed, lvl = 10) {
     return out;
   };
   const lv = Math.max(5, Math.floor(lvl));
-  const variance = () => 0.9 + 0.2 * rng();
+  const variance = () => M.DAILY_VAR_MIN + M.DAILY_VAR_SPAN * rng();
   const scaled = (c, boss = false) => ({
     ...c,
     level: lv + (boss ? 2 : 0),
@@ -769,7 +769,7 @@ function makeDailyWave(seed, lvl = 10) {
 
 function drawDailyCommon(rng = roll) {
   const r = rng();
-  const race = r < 0.5 ? 'humaine' : r < 0.8 ? 'monstre' : r < 0.95 ? 'mystique' : 'divine';
+  const race = r < M.DAILY_RACE_HUM ? 'humaine' : r < M.DAILY_RACE_MONSTRE ? 'monstre' : r < M.DAILY_RACE_MYSTIQUE ? 'mystique' : 'divine';
   
   let pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === race && cardAvailable(c)); 
   if (!pool.length) pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === 'humaine' && cardAvailable(c));

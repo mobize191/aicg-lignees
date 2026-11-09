@@ -1,0 +1,113 @@
+{
+ "Guerrier": {
+  "1": {
+   "desc": "+10 % ATQ de l’équipe (la stat ⚔ des cartes)",
+   "atkPct": 0.1
+  },
+  "2": {
+   "desc": "+25 % ATQ de l’équipe (la stat ⚔ des cartes)",
+   "atkPct": 0.25
+  }
+ },
+ "Mage": {
+  "1": {
+   "desc": "+10 % dégâts finaux (après l’ATQ, multiplie tout)",
+   "dmgPct": 0.1
+  },
+  "2": {
+   "desc": "1re attaque du tour frappe tous les ennemis à 50 %",
+   "aoe": 0.5
+  }
+ },
+ "Prêtre": {
+  "1": {
+   "desc": "Soins +50 %",
+   "healPct": 0.5
+  },
+  "2": {
+   "desc": "Régén 5 % PV max / tour",
+   "regen": 0.05
+  }
+ },
+ "Assassin": {
+  "1": {
+   "desc": "+15 % dégâts sur la cible la plus faible",
+   "weakBonus": 0.15
+  },
+  "2": {
+   "desc": "20 % de chance de double attaque",
+   "doubleChance": 0.2
+  }
+ },
+ "Occultiste": {
+  "1": {
+   "desc": "Malédictions −10 % d’ATQ en plus",
+   "cursePct": 0.1
+  },
+  "2": {
+   "desc": "Malédictions −25 % d’ATQ en plus",
+   "cursePct": 0.25
+  }
+ },
+ "Invocateur": {
+  "1": {
+   "desc": "Invocations +25 % PV",
+   "summonHp": 0.25
+  },
+  "2": {
+   "desc": "Invocations +50 % PV et +20 % ATQ",
+   "summonHp": 0.5,
+   "summonAtk": 0.2
+  }
+ },
+ "Feu": {
+  "1": {
+   "desc": "+10 % PV équipe",
+   "hpPct": 0.1
+  },
+  "2": {
+   "desc": "Vengeance : attaquants +20 % ATK quand une carte tombe",
+   "vengeance": 0.2
+  }
+ },
+ "Eau": {
+  "1": {
+   "desc": "+10 % ATQ de l’équipe (la stat ⚔ des cartes)",
+   "atkPct": 0.1
+  },
+  "2": {
+   "desc": "Les supports ciblent 2 unités",
+   "dualSupport": true
+  }
+ },
+ "Ombre": {
+  "1": {
+   "desc": "-10 % dégâts subis",
+   "dmgReduction": 0.1
+  },
+  "2": {
+   "desc": "-25 % dégâts subis",
+   "dmgReduction": 0.25
+  }
+ },
+ "Terre": {
+  "1": {
+   "desc": "+15 % ATQ de l’équipe (la stat ⚔ des cartes)",
+   "atkPct": 0.15
+  },
+  "2": {
+   "desc": "Bouclier 10 % PV max au départ",
+   "shieldPct": 0.1
+  }
+ },
+ "Lumière": {
+  "1": {
+   "desc": "+10 % dégâts finaux (après l’ATQ, multiplie tout)",
+   "dmgPct": 0.1
+  },
+  "2": {
+   "desc": "Régén 3 % PV max / tour",
+   "regen": 0.03
+  }
+ }
+}
