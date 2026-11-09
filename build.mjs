@@ -8,6 +8,7 @@ const ENGINE_ORDER = [
   'src/engine/combat.js',
   'src/engine/summon.js',
   'src/engine/progression.js',
+  'src/engine/migrate.js',
 ];
 
 const read = (p) => {
