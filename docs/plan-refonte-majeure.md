@@ -35,7 +35,7 @@ type: text/markdown
 **Fichiers :** Créer `package.json`, `.gitignore`, `tests/allowlist.txt`, `tests/helpers/rng.js`, `tests/smoke.test.js`
 **Interfaces :** Produit `mulberry32(seed)` (function → () => number), utilisé par toutes les tâches de test.
 
-- [ ] **Étape 1 : écrire `package.json`**
+- [x] **Étape 1 : écrire `package.json`**
 
 ```json
 {
@@ -49,7 +49,7 @@ type: text/markdown
 }
 ```
 
-- [ ] **Étape 2 : écrire `.gitignore`**
+- [x] **Étape 2 : écrire `.gitignore`**
 
 ```
 node_modules/
@@ -57,7 +57,7 @@ node_modules/
 *.bak
 ```
 
-- [ ] **Étape 3 : écrire `tests/allowlist.txt`** (les seuls littéraux numériques tolérés dans `src/engine/`, motif puis raison, un par ligne) :
+- [x] **Étape 3 : écrire `tests/allowlist.txt`** (les seuls littéraux numériques tolérés dans `src/engine/`, motif puis raison, un par ligne) :
 
 ```
 # EXI-MOD-1 : nombres autorisés dans le moteur (structure du champ, pas design)
@@ -65,7 +65,7 @@ node_modules/
 3   # largeur de la zone (structure du champ)
 ```
 
-- [ ] **Étape 4 : écrire `tests/helpers/rng.js`**
+- [x] **Étape 4 : écrire `tests/helpers/rng.js`**
 
 ```js
 export function mulberry32(seed) {
@@ -79,7 +79,7 @@ export function mulberry32(seed) {
 }
 ```
 
-- [ ] **Étape 5 : écrire `tests/smoke.test.js`**
+- [x] **Étape 5 : écrire `tests/smoke.test.js`**
 
 ```js
 import { test } from 'node:test';
@@ -87,7 +87,7 @@ import assert from 'node:assert/strict';
 test('le harnais tourne', () => { assert.equal(1 + 1, 2); });
 ```
 
-- [ ] **Étape 6 : vérifier et committer**
+- [x] **Étape 6 : vérifier et committer**
 
 Run: `npm test`
 Expected: `# pass` ≥ 1, `# fail` 0.
@@ -102,9 +102,9 @@ git commit -m "chore : socle de repo (package.json, tests, rng seme)"
 **Fichiers :** Créer `build.mjs`, `src/shell.html`, `src/data.js` (coquille), `src/validate.js` (coquille), `src/engine/*.js` (coquilles vides), `src/ui.js` (coquille vide)
 **Interfaces :** Produit la commande `node build.mjs` (exit 0, écrit `dist.html`) ; consomme `data/*.json` (T0.3 les remplit) et `src/*.js` dans un ordre fixe.
 
-- [ ] **Étape 1 : écrire `src/shell.html`** : copier le `dist.html` actuel, remplacer tout le contenu du bloc `<script>...</script>` par la ligne `<!--SCRIPT-->` exactement, et ajouter en première ligne du fichier le commentaire `<!-- GÉNÉRÉ par build.mjs, ne pas éditer : éditer src/ et data/ -->`.
+- [x] **Étape 1 : écrire `src/shell.html`** : copier le `dist.html` actuel, remplacer tout le contenu du bloc `<script>...</script>` par la ligne `<!--SCRIPT-->` exactement, et ajouter en première ligne du fichier le commentaire `<!-- GÉNÉRÉ par build.mjs, ne pas éditer : éditer src/ et data/ -->`.
 
-- [ ] **Étape 2 : écrire `build.mjs`**
+- [x] **Étape 2 : écrire `build.mjs`**
 
 ```js
 #!/usr/bin/env node
@@ -144,14 +144,14 @@ writeFileSync('dist.html', out);
 console.log(`build ok : dist.html (${out.length} caracteres, ${dataNames.length} fichiers de donnees)`);
 ```
 
-- [ ] **Étape 3 : coquilles vides** : `src/data.js` = `const D = DATA;`, `src/validate.js` = `export function validate() {}`, `src/ui.js` = `/* extrait en T0.5 */`, `src/engine/*.js` vides, `data/` avec au moins un fichier (`engine.json` vide `{}`). À ce stade le build tourne mais le dist n'est pas jouable : c'est le point de départ, pas un livrable.
+- [x] **Étape 3 : coquilles vides** : `src/data.js` = `const D = DATA;`, `src/validate.js` = `export function validate() {}`, `src/ui.js` = `/* extrait en T0.5 */`, `src/engine/*.js` vides, `data/` avec au moins un fichier (`engine.json` vide `{}`). À ce stade le build tourne mais le dist n'est pas jouable : c'est le point de départ, pas un livrable.
 
-- [ ] **Étape 4 : vérifier le déterminisme**
+- [x] **Étape 4 : vérifier le déterminisme**
 
 Run: `node build.mjs && cp dist.html /tmp/d1.html && node build.mjs && cmp /tmp/d1.html dist.html`
 Expected: exit 0, `build ok` deux fois, cmp silencieux (ACC-0-8).
 
-- [ ] **Étape 5 : committer**
+- [x] **Étape 5 : committer**
 
 ```bash
 git add build.mjs src/ data/
@@ -163,7 +163,7 @@ git commit -m "feat : build.mjs deterministe (src/ + data/ -> dist.html)"
 **Fichiers :** Créer `tools/extract-data.mjs`, `data/*.json`, `src/data.js` (final), `src/validate.js` (noyau), `tests/data.test.js`
 **Interfaces :** Produit `getCard(id)`, `getMonster(id)`, `getSpell(id)`, `getSchool(id)`, `getFamily(id)`, `getTree(id)`, `getZone(id)` ; `validate(data, errors)` pousse les violations dans `errors`, format `<message> (<référence EXI>)`.
 
-- [ ] **Étape 1 : écrire `tools/extract-data.mjs`** (une passe, jetable : elle lit le dist d'origine comme référence) :
+- [x] **Étape 1 : écrire `tools/extract-data.mjs`** (une passe, jetable : elle lit le dist d'origine comme référence) :
 
 ```js
 // tools/extract-data.mjs : extrait les donnees inline du dist de reference
@@ -190,9 +190,9 @@ console.log('extraction ok');
 
 Préparation : `git show <commit-de-depart>:dist.html > dist.reference.html` (le dist d'origine au commit où commence la phase 0), puis `node tools/extract-data.mjs`. Vérifier à la main que les fichiers produits contiennent les cartes connues (`e13`, `d18`, `n15`...) et les familles (`eau`, `aube`, `lame`...). Les déclarations qui ne se prêtent pas au grab (chaine interrompue, template) sont copiées à la main, une par une, avec relecture.
 
-- [ ] **Étape 2 : compléter `data/engine.json`** : y ranger les constantes moteur non couvertes par le grab (`CLASSES`, `ELEMENTS`, `BEATS`, `BEATEN_BY`, `RACES`, `RACE_MOD`, `CLASSE_MODS`, `CLASSE_DEFAULT`, `MONSTER_MANA`, `SOLO_MANA`, `FAMILY_MANA`, `EVO_COST`, `GEM_TIERS`, `BOSS_GEM`, `NEXT_RAR`, `RARITY_POWER`, `RANK`, `TEAM_MAX`, `OPP_BONUS`, `LEVEL_BONUS`, `LEVEL_CAP`, `DMG_REDUCTION_MAX`). Règle : une valeur de design va en `engine.json` ; une structure du champ (la largeur 5) reste au code avec le motif autorisé.
+- [x] **Étape 2 : compléter `data/engine.json`** : y ranger les constantes moteur non couvertes par le grab (`CLASSES`, `ELEMENTS`, `BEATS`, `BEATEN_BY`, `RACES`, `RACE_MOD`, `CLASSE_MODS`, `CLASSE_DEFAULT`, `MONSTER_MANA`, `SOLO_MANA`, `FAMILY_MANA`, `EVO_COST`, `GEM_TIERS`, `BOSS_GEM`, `NEXT_RAR`, `RARITY_POWER`, `RANK`, `TEAM_MAX`, `OPP_BONUS`, `LEVEL_BONUS`, `LEVEL_CAP`, `DMG_REDUCTION_MAX`). Règle : une valeur de design va en `engine.json` ; une structure du champ (la largeur 5) reste au code avec le motif autorisé.
 
-- [ ] **Étape 3 : écrire `src/data.js`** (en node, la garde `typeof document !== 'undefined'` protège le bloc d'affichage) :
+- [x] **Étape 3 : écrire `src/data.js`** (en node, la garde `typeof document !== 'undefined'` protège le bloc d'affichage) :
 
 ```js
 // src/data.js : acces unique aux donnees + validation au chargement (EXI-P0-3)
@@ -219,7 +219,7 @@ const getZone = (id) => IDX.zones[id];
 
 (les fichiers `schools`, `grimoire`, `trees`, `zones` naissent vides (`{}` ou `[]`) et se remplissent aux phases 1 et 2 ; le chargement ne doit pas échouer sur leur absence.)
 
-- [ ] **Étape 4 : écrire `src/validate.js`** (le noyau, il grossit à chaque phase) :
+- [x] **Étape 4 : écrire `src/validate.js`** (le noyau, il grossit à chaque phase) :
 
 ```js
 // src/validate.js : le contrat de donnees (spec section 4)
@@ -237,7 +237,7 @@ function validate(data, errors) {
 }
 ```
 
-- [ ] **Étape 5 : écrire `tests/data.test.js`**
+- [x] **Étape 5 : écrire `tests/data.test.js`**
 
 ```js
 import { test } from 'node:test';
@@ -255,7 +255,7 @@ test('les donnees se chargent et passent le validateur (ACC-0-3)', async () => {
 });
 ```
 
-- [ ] **Étape 6 : vérifier et committer**
+- [x] **Étape 6 : vérifier et committer**
 
 Run: `npm test`
 Expected: `# fail` 0.
@@ -272,7 +272,7 @@ git commit -m "data : extraction des donnees inline vers data/*.json + validateu
 **Fichiers :** Créer `src/engine/stats.js`, `src/engine/combat.js`, `src/engine/spells.js`, `src/engine/summon.js`, `src/engine/progression.js`, `src/engine/migrate.js`, `tests/engine.test.js`
 **Interfaces :** Les fonctions extraites gardent leurs noms et signatures actuels (`applyDamage(target, dmg, events, side, reviveCtx, isHit)`, `resolveTurn(state, choices)`...) ; le bundle du dist est une seule portée, les modules ne font ni `import` ni `export` (le build concatène dans l'ordre ENGINE_ORDER) ; en node, les tests chargent les modules par un chargeur maison (`tests/helpers/load.mjs` qui concatène `src/validate.js`, `src/data.js` fictif, `src/engine/*.js` puis `eval` et retourne les fonctions).
 
-- [ ] **Étape 1 : écrire `tests/helpers/load.mjs`**
+- [x] **Étape 1 : écrire `tests/helpers/load.mjs`**
 
 ```js
 // charge les modules du moteur comme le build le fait, pour les tests
@@ -292,10 +292,10 @@ export function loadEngine(dataDir = 'data') {
 
 (le retour exact s'aligne sur les fonctions réellement extraites ; ce chargeur est la pièce qui prouve que le moteur ne dépend ni du DOM ni du build.)
 
-- [ ] **Étape 2 : lister et découper le moteur.** Dans `dist.reference.html`, repérer par motif (`function applyDamage`, `castSummon`, `applySupport`, `resolveTurn`, `applyManifest`, etc.) et leurs appelés en chaîne (grep des appels, une passe itérative). Découpe : dégâts/boucle/ciblage → `combat.js` ; sorts et supports → `spells.js` ; invocations → `summon.js` ; niveaux/stats → `stats.js` ; éveils/acquisition → `progression.js`.
-- [ ] **Étape 3 : la règle de découplage** : le moteur ne touche ni `document`, ni `window`, ni `localStorage` ; le rendu passe par des événements/callbacks consommés par `src/ui.js`. Preuve : `grep -n "document\.\|window\.\|localStorage" src/engine/*.js` → vide.
-- [ ] **Étape 4 : le RNG injecté** : le moteur expose `setRoll(fn)` et une `roll()` interne ; `ui.js` appelle `setRoll(Math.random)` au chargement ; les tests passent `setRoll(mulberry32(graine))`.
-- [ ] **Étape 5 : écrire `tests/engine.test.js`** (invariants du comportement ACTUEL ; les noms s'alignent sur le code extrait) :
+- [x] **Étape 2 : lister et découper le moteur.** Dans `dist.reference.html`, repérer par motif (`function applyDamage`, `castSummon`, `applySupport`, `resolveTurn`, `applyManifest`, etc.) et leurs appelés en chaîne (grep des appels, une passe itérative). Découpe : dégâts/boucle/ciblage → `combat.js` ; sorts et supports → `spells.js` ; invocations → `summon.js` ; niveaux/stats → `stats.js` ; éveils/acquisition → `progression.js`.
+- [x] **Étape 3 : la règle de découplage** : le moteur ne touche ni `document`, ni `window`, ni `localStorage` ; le rendu passe par des événements/callbacks consommés par `src/ui.js`. Preuve : `grep -n "document\.\|window\.\|localStorage" src/engine/*.js` → vide.
+- [x] **Étape 4 : le RNG injecté** : le moteur expose `setRoll(fn)` et une `roll()` interne ; `ui.js` appelle `setRoll(Math.random)` au chargement ; les tests passent `setRoll(mulberry32(graine))`.
+- [x] **Étape 5 : écrire `tests/engine.test.js`** (invariants du comportement ACTUEL ; les noms s'alignent sur le code extrait) :
 
 ```js
 import { test } from 'node:test';
@@ -326,7 +326,7 @@ test('resolveTurn tourne et produit des evenements (ACC-0-6)', () => {
 
 (`fixtureCombat` : un état minimal 5 contre 5 construit dans le test depuis `DATA.monsters`.)
 
-- [ ] **Étape 6 : vérifier et committer**
+- [x] **Étape 6 : vérifier et committer**
 
 Run: `npm test`
 Expected: `# fail` 0, les invariants tiennent en node.
@@ -341,11 +341,11 @@ git commit -m "feat : moteur extrait en modules purs (stats, spells, combat, sum
 **Fichiers :** Créer `src/ui.js` (tout le reste du script), modifier `src/data.js` (les fonctions d'accès restent globales), `build.mjs` (le pied du script : le bloc `load(); if (store...)...` de fin de fichier d'origine recopié à la fin de `src/ui.js`)
 **Interfaces :** Le dist regénéré se comporte comme l'original.
 
-- [ ] **Étape 1 :** déplacer tout le script restant (routes, rendus, sauvegarde, glossaire, HISTORY, FX, le pied `load(); registerRoute(...)`) dans `src/ui.js`, en remplaçant les lectures inline (`CARDS`, `MONSTERS`...) par les accès de `src/data.js`.
-- [ ] **Étape 2 :** `node build.mjs` ; ouvrir `dist.html` en local et dérouler la liste visuelle : les 7 routes rendent, un combat complet se joue (victoire et défaite), une sauvegarde existante se charge, zéro erreur console (ACC-0-7, ACC-0-2).
-- [ ] **Étape 3 :** extraire le bloc script du dist (`sed -n '/<script>/,/<\/script>/p' dist.html | sed '1d;$d' > /tmp/bundle.js`) puis `node --check /tmp/bundle.js` → pas d'erreur de syntaxe (ACC-0-2).
-- [ ] **Étape 4 :** `grep -n "fetch(\|XMLHttpRequest" dist.html` → vide (EXI-MOD-4).
-- [ ] **Étape 5 : committer**
+- [x] **Étape 1 :** déplacer tout le script restant (routes, rendus, sauvegarde, glossaire, HISTORY, FX, le pied `load(); registerRoute(...)`) dans `src/ui.js`, en remplaçant les lectures inline (`CARDS`, `MONSTERS`...) par les accès de `src/data.js`.
+- [x] **Étape 2 :** `node build.mjs` ; ouvrir `dist.html` en local et dérouler la liste visuelle : les 7 routes rendent, un combat complet se joue (victoire et défaite), une sauvegarde existante se charge, zéro erreur console (ACC-0-7, ACC-0-2).
+- [x] **Étape 3 :** extraire le bloc script du dist (`sed -n '/<script>/,/<\/script>/p' dist.html | sed '1d;$d' > /tmp/bundle.js`) puis `node --check /tmp/bundle.js` → pas d'erreur de syntaxe (ACC-0-2).
+- [x] **Étape 4 :** `grep -n "fetch(\|XMLHttpRequest" dist.html` → vide (EXI-MOD-4).
+- [x] **Étape 5 : committer**
 
 ```bash
 git add src/ui.js src/data.js build.mjs dist.html
@@ -357,8 +357,8 @@ git commit -m "feat : UI extraite, dist regenere depuis src/ + data/"
 **Fichiers :** Créer `tests/fixtures/save-v8.json`, `src/engine/migrate.js`, `tests/migration.test.js`
 **Interfaces :** `migrate(save)` enchaîne `v8to9`, `v9to10`, `v10to11`, `v11to12` (des no-ops jusqu'à leur phase) ; `CURRENT_VERSION` vit dans `data/engine.json`.
 
-- [ ] **Étape 1 :** produire `tests/fixtures/save-v8.json` : depuis un navigateur avec une vraie partie, extraire `localStorage['fondations-cards-v1']` et committer (le jeu ne stocke aucune donnée personnelle).
-- [ ] **Étape 2 : écrire `tests/migration.test.js`**
+- [x] **Étape 1 :** produire `tests/fixtures/save-v8.json` : depuis un navigateur avec une vraie partie, extraire `localStorage['fondations-cards-v1']` et committer (le jeu ne stocke aucune donnée personnelle).
+- [x] **Étape 2 : écrire `tests/migration.test.js`**
 
 ```js
 test('v8 traverse la chaine sans perte (ACC-0-5, EXI-SAVE-1)', () => {
@@ -371,14 +371,14 @@ test('v8 traverse la chaine sans perte (ACC-0-5, EXI-SAVE-1)', () => {
 });
 ```
 
-- [ ] **Étape 3 :** `npm test` → vert ; commit `feat : harnais de migration (fixture v8, chaine v8 a v12)`.
+- [x] **Étape 3 :** `npm test` → vert ; commit `feat : harnais de migration (fixture v8, chaine v8 a v12)`.
 
 ### Tâche T0.7 : la preuve de modularité (phase 0)
 
 **Fichiers :** Créer `tests/extensibility.test.js`, `tests/allowlist.test.js`
 **Interfaces :** Prouve EXI-MOD-1 et EXI-MOD-2 au niveau de la phase 0 (l'ajout d'un monstre en données seules).
 
-- [ ] **Étape 1 : écrire `tests/extensibility.test.js`**
+- [x] **Étape 1 : écrire `tests/extensibility.test.js`**
 
 ```js
 import { test } from 'node:test';
@@ -397,9 +397,9 @@ test('un monstre ajoute en donnees seules est jouable (ACC-0-4, EXI-MOD-2)', () 
 
 Le fixture `tests/fixtures/data-temoin/` est une copie de `data/` augmentée du monstre `x-temoin` (écrit en JSON, sans toucher `src/`).
 
-- [ ] **Étape 2 : écrire `tests/allowlist.test.js`** : balaie `src/engine/*.js`, extrait les littéraux numériques hors commentaires (regex `/\b\d+(\.\d+)?\b/`), échoue avec la liste des coupables hors allowlist et la référence EXI-MOD-1.
-- [ ] **Étape 3 :** `npm test` → vert ; commit `test : preuve de modularite (monstre en donnees seules, allowlist EXI-MOD-1)`.
-- [ ] **Étape 4 : rapport de phase 0** : exécuter ACC-0-1 à ACC-0-9, coller les sorties, `VERDICT: PASS`.
+- [x] **Étape 2 : écrire `tests/allowlist.test.js`** : balaie `src/engine/*.js`, extrait les littéraux numériques hors commentaires (regex `/\b\d+(\.\d+)?\b/`), échoue avec la liste des coupables hors allowlist et la référence EXI-MOD-1.
+- [x] **Étape 3 :** `npm test` → vert ; commit `test : preuve de modularite (monstre en donnees seules, allowlist EXI-MOD-1)`.
+- [x] **Étape 4 : rapport de phase 0** : exécuter ACC-0-1 à ACC-0-9, coller les sorties, `VERDICT: PASS`.
 
 ---
 
