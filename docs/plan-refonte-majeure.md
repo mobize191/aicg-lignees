@@ -620,16 +620,16 @@ for (const [biome, b] of Object.entries(fusion)) {
 console.log(out.join('\n'));
 ```
 
-- [ ] **Étape 1 :** coder, régénérer deux fois, diff vide (ACC-5-1) ; commit `feat : audit regenere depuis les donnees`.
+- [x] **Étape 1 :** coder, régénérer deux fois, diff vide (ACC-5-1) ; commit `feat : audit regenere depuis les donnees`.
 
 ### Tâche T5.2 : la publication
 
 **Fichiers :** `src/ui.js` (HISTORY), `data/engine.json` (version), `docs/`
 
-- [ ] **Étape 1 :** l'entrée HISTORY de la mise à jour (style des entrées existantes), version v1.0 en données (EXI-P5-2).
-- [ ] **Étape 2 :** la vérification E2E : toutes les commandes ACC-0-1 à ACC-5-2 passent ; liste visuelle complète (7 routes, un combat, une errance, une sauvegarde v8 migrée jusqu'à la version courante) (ACC-5-2).
-- [ ] **Étape 3 :** deux réglages d'équilibrage en données seules (un taux, un coût), diff de code vide entre les deux (ACC-5-3, EXI-P5-3).
-- [ ] **Étape 4 :** commit final `feat : la refonte majeure v1.0 (arbres, sorts, mode RPG, zones d'errance)` ; rapport de phase 5, `VERDICT: PASS`.
+- [x] **Étape 1 :** l'entrée HISTORY de la mise à jour (style des entrées existantes), version v1.0 en données (EXI-P5-2).
+- [x] **Étape 2 :** la vérification E2E : toutes les commandes ACC-0-1 à ACC-5-2 passent ; liste visuelle complète (7 routes, un combat, une errance, une sauvegarde v8 migrée jusqu'à la version courante) (ACC-5-2).
+- [x] **Étape 3 :** deux réglages d'équilibrage en données seules (un taux, un coût), diff de code vide entre les deux (ACC-5-3, EXI-P5-3).
+- [x] **Étape 4 :** commit final `feat : la refonte majeure v1.0 (arbres, sorts, mode RPG, zones d'errance)` ; rapport de phase 5, `VERDICT: PASS`.
 
 ---
 
