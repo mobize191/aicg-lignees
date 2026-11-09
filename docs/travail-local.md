@@ -1,6 +1,6 @@
 # Travail local — prompts pour l'agent
 
-Deux prompts prêts à copier dans un agent local (Claude Code, Cursor...) équipé de Chromium/Playwright. Le premier corrige les bugs du retour terrain, le second valide par captures d'écran. Le second se lance APRÈS le premier.
+Trois prompts prêts à copier dans un agent local (Claude Code, Cursor, Vibe avec le MCP ComfyUI...). Le premier corrige les bugs du retour terrain, le deuxième valide par captures d'écran (après le premier), le troisième lance la campagne d'illustrations et de vidéos ComfyUI (DreamShaper XL).
 
 ---
 
@@ -69,6 +69,34 @@ HARNAS EN PLUS (rapide) : node combat-digest.mjs dist.html 3000 (attendu : diges
 
 ---
 
+## PROMPT C — Campagne d'illustrations et vidéos ComfyUI (à copier)
+
+```text
+Tu travailles sur AICG : Lignées (repo GitHub mobize191/aicg-lignees, clone-le) et tu disposes de ComfyUI sur ce PC avec une GPU. Ta mission : exécuter le plan de campagne d'illustrations complet docs/plan-comfyui-images-videos.md du repo, tâche par tâche, dans l'ordre, en cochant chaque étape. Tous les scripts sont dans tools/ (déjà prêts et testés), les prompts de la série 1 dans tools/serie1-prompts.json.
+
+MODÈLE : DreamShaper XL (checkpoint dans ComfyUI/models/checkpoints, passe son nom exact par la variable COMFY_MODEL). Prompts en LANGAGE NATUREL (phrases descriptives), sampler dpmpp_2m_sde + karras, 28 steps, CFG 5-7, génération 832×1216 portrait (fonds 1216×832). Chaque prompt positif se termine par la phrase de style : « Painted in a painterly, semi-realistic fantasy card game illustration style, detailed shading, intricate background, epic fantasy trading card game artwork, rim lighting. » Si tu préfères piloter par le MCP ComfyUI connecté, fais-le pour les réglages image par image ; les batches passent par node tools/comfy-batch.mjs (API http://127.0.0.1:8188).
+
+RÈGLES DE QUALITÉ (feuille de conventions : docs/images-conventions.md) :
+- Palettes par univers : Marées bleu profond/turquoise/corail, Forge braise/suie/métal rougi, Bosquet vert mousse/spores dorées, Crypte gris-vert/bougies/brume, Zénith or/lumière chaude/ivoire, Divin ivoire/sabliers/miroirs/fils d'or.
+- Tier bas = calme (C/UC poses sobres, pas d'effet), L/M pleine action et aura ; zéro texte dans l'image ; silhouette lisible en vignette 200×280.
+- Cartes NOMMÉES (Kenji, Méliane, Apolline...) : générer la rareté la plus haute en RÉFÉRENCE, faire valider, verrouiller le seed dans seeds.csv, puis décliner. JAMAIS d'auto-retry en boucle : corriger le prompt.
+- Chaque image retenue va dans seeds.csv (fichier, seed, prompt final).
+
+ORDRE (portes de validation obligatoires) :
+1. Étape test : 6 images, une par univers (node tools/comfy-batch.mjs batch-test.json), planche de contrôle (python3 tools/contact-sheet.py out planche-test.png). STOP tant que le rendu painterly n'est pas validé : ajuster CFG/renforts si un rendu part en anime plat.
+2. Série 1 : les 29 nommées de référence (tools/serie1-prompts.json) dans references/ avec registre des seeds. Elles ne sont PAS intégrées au manifeste (les cartes v3 n'existent pas encore).
+3. Les 5 fonds de donjons → intégration (python3 tools/make-assets.py) → push.
+4. Les 135 monstres par univers (batch-<univers>.json produits par tools/build-prompts.mjs) → planche par univers → intégration → push.
+5. Naissances (15), familiales et solos : les nommées d'abord (référence la plus haute), puis les autres → intégration → push.
+6. Vidéos de sorts signature (WAN 2.2 5B, 20 frames, 25 fps, boucle fermée ffmpeg, WebM) : après validation de la série d'images, stockées dans site-assets/fx/, JAMAIS dans assets.json ni en base64.
+
+INTOUCHABLE : dist.html et le moteur. Après chaque intégration : git status dist.html doit être PROPRE, le digest (node combat-digest.mjs dist.html 3000 = c5ab2af1..., 534 victoires, 0 exception) et le smoke (node smoke-ui.mjs, 121 PASS) restent identiques. Budgets : ≤ 30 Ko par art, ≤ 110 Ko par fond, manifeste cible ≤ 8 Mo, ASCII pur.
+
+À chaque fin de lot : planche de contrôle + rapport (retenues/refusées et pourquoi, seeds, poids) et faire valider par Marc-Olivier AVANT tout push. Termine chaque session par l'état d'avancement (tâches cochées, prochaines).
+```
+
+---
+
 ## Note
 
-Ces deux prompts sont aussi disponibles dans le repo (docs/travail-local.md). La génération d'images par l'outil en ligne est ARRÊTÉE : reprise prévue avec ComfyUI en local, en gardant les briefs existants (docs/images-prompt-serie1.md et docs/images-conventions.md).
+Ces trois prompts sont aussi disponibles dans le repo (docs/travail-local.md). Le modèle d'illustration est DreamShaper XL (décision du 09/11, il remplace WAI-Illustrious v17) ; les briefs et la feuille de conventions sont dans docs/images-conventions.md, le plan de campagne complet dans docs/plan-comfyui-images-videos.md.

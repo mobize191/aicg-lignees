@@ -14,6 +14,7 @@ Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : co
 - `assets.json` : manifeste d'illustrations (data-URI : 33 arts de cartes + 5 fonds de donjons), chargé automatiquement quand le jeu est servi en ligne.
 - `combat-digest.mjs` : harnas d'équilibrage (3000 combats simulés, digest SHA256 de dormance).
 - `smoke-ui.mjs` : suite de fumée UI du dist publié (121 checks).
+- `tools/` : les scripts de la campagne d'illustrations ComfyUI (extraction du catalogue, génération des prompts, batch API, intégration au manifeste, planches de contrôle).
 
 ## Documentation
 
@@ -28,9 +29,11 @@ Le dossier `docs/` contient la documentation de référence du jeu :
 - `docs/audit-sorts.md` : l'audit de cohérence des sorts : contrôles passés, constats et recommandations.
 - `docs/refonte-sorts.md` : les notes de la refonte des sorts.
 - `docs/roadmap.md` : l'état du prototype version par version et ce qui reste à faire.
-- `docs/validation-ihm.md` : le protocole de validation IHM locale (scénarios S1-S10 avec captures d'écran, prompt prêt à copier dans un agent local).
-- `docs/images-prompt-serie1.md` : le brief de génération des illustrations, série 1.
-- `docs/images-conventions.md` : les conventions graphiques des illustrations (formats, palettes, style).
+- `docs/travail-local.md` : les trois prompts de travail local (corrections v0.46, validation IHM par captures, campagne ComfyUI).
+- `docs/validation-ihm.md` : le protocole de validation IHM locale (scénarios S1-S10 avec captures d'écran).
+- `docs/plan-comfyui-images-videos.md` : le plan complet de la campagne d'illustrations et de vidéos (DreamShaper XL + WAN 2.2 5B, 9 tâches avec portes de validation).
+- `docs/images-prompt-serie1.md` : le brief historique de la série 1 (rédigé pour WAI) ; les prompts opérationnels en langage naturel sont dans `tools/serie1-prompts.json`.
+- `docs/images-conventions.md` : la feuille de conventions graphiques du projet (style, palettes, pipelines, règles de retry).
 
 ## Tests
 
