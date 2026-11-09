@@ -11,6 +11,8 @@ Deux niveaux à ne pas confondre :
 
 Règle d'or du design (régression, conversion, convergences) : **100 % des sorts sont conservés** à travers les transformations.
 
+Et depuis la v0.47, **un sort signature ne répète plus le nom de sa carte** : le sort L du Sabre est Tranche-Monde (la carte reste « Kenji, Sabre Céleste »), celui de l’Ombre est Nuit Éternelle (la carte reste « Kira, Nuit Sans Fin ») ; l’Aube garde son exception assumée : Aube Éternelle, le nom de sa carte (Léna).
+
 ## Les 7 familles : un sort de lignée par palier
 
 ### Famille du Sabre
@@ -22,7 +24,7 @@ Règle d'or du design (régression, conversion, convergences) : **100 % des sort
 | R | Épéiste Errant | Lame Éclair | 5✦ | ×1.9 | commun + 3 de lignée (4 sorts) | 14 +3 |
 | SR | Bretteur du Zénith | Millième Taillade (gros sort) | 9✦ | ×2.6 | commun + 4 de lignée (5 sorts) | 22 +5 |
 | UR | Kenji, Lame Éternelle | Kenji : Zénith Tranchant (gros sort) | 14✦ | ×3.4 | commun + 5 de lignée (6 sorts) | 30 +6 |
-| L | Kenji, Sabre Céleste | Kenji : Sabre Céleste (gros sort) | 20✦ | ×4.5 | commun + 6 de lignée (7 sorts) | 40 +8 |
+| L | Kenji, Sabre Céleste | Tranche-Monde (gros sort) | 20✦ | ×4.5 | commun + 6 de lignée (7 sorts) | 40 +8 |
 
 ### Famille de l’Ombre
 
@@ -33,7 +35,7 @@ Règle d'or du design (régression, conversion, convergences) : **100 % des sort
 | R | Faucheur des Ombres | Faux du Croissant | 5✦ | ×1.9 | commun + 3 de lignée (4 sorts) | 14 +3 |
 | SR | Fantôme du Sanctuaire | Danse des Cent Lames (gros sort) | 9✦ | ×2.6 | commun + 4 de lignée (5 sorts) | 22 +5 |
 | UR | Kira, Reine des Ombres | Kira : Voile Déchiré (gros sort) | 14✦ | ×3.4 | commun + 5 de lignée (6 sorts) | 30 +6 |
-| L | Kira, Nuit Sans Fin | Kira : Nuit Sans Fin (gros sort) | 20✦ | ×4.5 | commun + 6 de lignée (7 sorts) | 40 +8 |
+| L | Kira, Nuit Sans Fin | Nuit Éternelle (gros sort) | 20✦ | ×4.5 | commun + 6 de lignée (7 sorts) | 40 +8 |
 
 ### Famille de l’Eau
 
@@ -101,7 +103,7 @@ Un exemplaire de n1 Épéiste Novice qui prend la voie du guerrier et monte tout
 | 3. Épéiste Errant (R) | Épéiste Errant | Frappe Précise, Taillade du Mat, Lame Vive, Lame Éclair | +4 (total 11) | 11 entrées, 7 sorts réels |
 | 4. Bretteur du Zénith (SR) | Bretteur du Zénith | Frappe Précise, Taillade du Mat, Lame Vive, Lame Éclair, Millième Taillade | +5 (total 16) | 16 entrées, 8 sorts réels |
 | 5. Kenji, Lame Éternelle (UR) | Kenji, Lame Éternelle | Frappe Précise, Taillade du Mat, Lame Vive, Lame Éclair, Millième Taillade, Kenji : Zénith Tranchant | +6 (total 22) | 22 entrées, 9 sorts réels |
-| 6. Kenji, Sabre Céleste (L) | Kenji, Sabre Céleste | Frappe Précise, Taillade du Mat, Lame Vive, Lame Éclair, Millième Taillade, Kenji : Zénith Tranchant, Kenji : Sabre Céleste | +7 (total 29) | 29 entrées, 10 sorts réels |
+| 6. Kenji, Sabre Céleste (L) | Kenji, Sabre Céleste | Frappe Précise, Taillade du Mat, Lame Vive, Lame Éclair, Millième Taillade, Kenji : Zénith Tranchant, Tranche-Monde | +7 (total 29) | 29 entrées, 10 sorts réels |
 
 À l'arrivée : l'exemplaire affiche **29 entrées de sorts** en combat, dont **10 sorts réels** (Frappe Précise, les 3 sorts personnels du novice et les 6 sorts de lignée du Sabre) : les 19 entrées dupliquées viennent du commun et des sorts de lignée déjà appris, comptés une fois par forme traversée (voir `audit-sorts.md`, constat n° 1).
 

@@ -19,7 +19,7 @@
 | L'échelle des coûts de lignée | identique pour les 7 familles : 2, 3, 5, 9, 14, 20✦ ; les gros sorts commencent au SR ; les multiplicateurs montent de ×1.4-1.5 (C) à ×4.5-6.0 (L) |
 | Le mana des familiales | progressif par palier : 8, 11, 14, 22, 30 puis 40 de réserve |
 | Les 7 graines archivées | portent exactement les 4 premiers sorts de lignée de leur famille (rang SR), aucune fuite vers une autre famille |
-| Les sorts des nommés | chaque L de famille porte les deux ultimata au nom de son héros (Kenji : Zénith Tranchant puis Kenji : Sabre Céleste, etc.) |
+| Les sorts des nommés | chaque L de famille porte les deux ultimata au nom de son héros (Kenji : Zénith Tranchant puis Tranche-Monde, etc.) |
 
 ## Constat 1 (moteur) : le cumul duplique les sorts déjà appris
 
@@ -41,7 +41,7 @@ Les 18 divines n'ont que 2 sorts au catalogue (commun + signature), même leurs 
 
 ## Constat 4 (spec) : le modèle v3 « 4 sorts classiques » n'est pas celui du jeu embarqué
 
-Le document de référence v3 prévoyait 4 sorts classiques appris en C, UC, R et SR, puis les sorts 5 et 6 de la voie. Le jeu embarqué applique un autre modèle, cohérent en soi : le commun partout, 4 sorts personnels pour les naissances, et **un sort de lignée par palier** pour les familiales (2 sorts au C, 7 à la L). Les sorts des nommés (Kenji : Sabre Céleste) jouent de facto le rôle des sorts signature des L. Le rework des arbres (graphes en racines, sorts de voie) tranchera la réconciliation ; les deux documents doivent citer le même modèle.
+Le document de référence v3 prévoyait 4 sorts classiques appris en C, UC, R et SR, puis les sorts 5 et 6 de la voie. Le jeu embarqué applique un autre modèle, cohérent en soi : le commun partout, 4 sorts personnels pour les naissances, et **un sort de lignée par palier** pour les familiales (2 sorts au C, 7 à la L). Les sorts des nommés (Tranche-Monde) jouent de facto le rôle des sorts signature des L. Le rework des arbres (graphes en racines, sorts de voie) tranchera la réconciliation ; les deux documents doivent citer le même modèle.
 
 ## Constat 5 (jeu vs design) : les graines ne convergent pas
 
@@ -54,3 +54,7 @@ Au catalogue, la convergence élue de la lumière ne cumule pas : la Prêtresse 
 ---
 
 *Inventaires : `inventaire-cartes.md` et `inventaire-sorts.md`. Arbres : `arbres-evolution.md` et `arbres-sorts.md`.*
+
+## Mise à jour v0.47
+
+Le dist applique la règle : **un sort signature ne répète plus le nom de sa carte**. Le sort L du Sabre (« Kenji : Sabre Céleste ») devient **Tranche-Monde** ; le sort L de l’Ombre (« Kira : Nuit Sans Fin ») devient **Nuit Éternelle** ; « Kenji : Zénith Tranchant » reste ; l’Aube garde son exception assumée (Aube Éternelle, le nom de Léna).

@@ -60,7 +60,7 @@ Chaque carte connaît ses sorts par couches, du plus universel au plus personnel
 
 ## Les sorts de lignée (7 familles × 6 paliers)
 
-Un maillon apprend **un sort de lignée par palier franchi** et connaît ceux des paliers inférieurs. L'échelle des coûts est la même pour toutes les familles : 2, 3, 5, 9, 14 puis 20✦ ; les gros sorts (9✦ et plus) portent la marque du nommé aux paliers UR et L. Chez les soigneurs (Aube, Bouclier), plus le sort est cher, plus il soigne.
+Un maillon apprend **un sort de lignée par palier franchi** et connaît ceux des paliers inférieurs. L'échelle des coûts est la même pour toutes les familles : 2, 3, 5, 9, 14 puis 20✦ ; les gros sorts (9✦ et plus) portent la marque du nommé aux paliers UR et L. Chez les soigneurs (Aube, Bouclier), plus le sort est cher, plus il soigne. ; et depuis la v0.47, le sort L ne répète plus le nom de sa carte : Tranche-Monde pour le Sabre, Nuit Éternelle pour l’Ombre (l’Aube garde son exception assumée : Aube Éternelle)
 
 ### Famille du Sabre
 
@@ -71,7 +71,7 @@ Un maillon apprend **un sort de lignée par palier franchi** et connaît ceux de
 | R | Lame Éclair | 5✦ | ×1.9 |  | Un sabre si rapide qu’on ne voit que la traînée. |
 | SR | Millième Taillade | 9✦ | ×2.6 | oui | Mille coupes en un seul geste. |
 | UR | Kenji : Zénith Tranchant | 14✦ | ×3.4 | oui | Le sabre atteint le sommet du ciel et retombe en éclair. |
-| L | Kenji : Sabre Céleste | 20✦ | ×4.5 | oui | Une constellation de lames s’abat sur l’ennemi. |
+| L | Tranche-Monde | 20✦ | ×4.5 | oui | Une constellation de lames s’abat sur l’ennemi. |
 
 ### Famille de l’Ombre
 
@@ -82,7 +82,7 @@ Un maillon apprend **un sort de lignée par palier franchi** et connaît ceux de
 | R | Faux du Croissant | 5✦ | ×1.9 |  | Une faux qui ne luit que les nuits sans lune. |
 | SR | Danse des Cent Lames | 9✦ | ×2.6 | oui | Cent ombres frappent là où une seule semble passer. |
 | UR | Kira : Voile Déchiré | 14✦ | ×3.4 | oui | L’ombre elle-même est une arme entre ses mains. |
-| L | Kira : Nuit Sans Fin | 20✦ | ×4.5 | oui | Le combat continue dans une nuit qui ne se lève plus. |
+| L | Nuit Éternelle | 20✦ | ×4.5 | oui | Le combat continue dans une nuit qui ne se lève plus. |
 
 ### Famille de l’Eau
 

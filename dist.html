@@ -1183,7 +1183,7 @@ const FAMILY_SPELLS = {
     { name: 'Lame Éclair', cost: 5, mult: 1.9, desc: 'Un sabre si rapide qu\u2019on ne voit que la traînée.' },
     { name: 'Millième Taillade', cost: 9, mult: 2.6, big: true, desc: 'Mille coupes en un seul geste.' },
     { name: 'Kenji : Zénith Tranchant', cost: 14, mult: 3.4, big: true, desc: 'Le sabre atteint le sommet du ciel et retombe en éclair.' },
-    { name: 'Kenji : Sabre Céleste', cost: 20, mult: 4.5, big: true, desc: 'Une constellation de lames s\u2019abat sur l\u2019ennemi.' },
+    { name: 'Tranche-Monde', cost: 20, mult: 4.5, big: true, desc: 'Une constellation de lames s\u2019abat sur l\u2019ennemi.' },
   ],
   ombre: [
     { name: 'Poigne du Silence', cost: 2, mult: 1.4, desc: 'Une attaque sournoise sur les points faibles.' },
@@ -1191,7 +1191,7 @@ const FAMILY_SPELLS = {
     { name: 'Faux du Croissant', cost: 5, mult: 1.9, desc: 'Une faux qui ne luit que les nuits sans lune.' },
     { name: 'Danse des Cent Lames', cost: 9, mult: 2.6, big: true, desc: 'Cent ombres frappent là où une seule semble passer.' },
     { name: 'Kira : Voile Déchiré', cost: 14, mult: 3.4, big: true, desc: 'L\u2019ombre elle-même est une arme entre ses mains.' },
-    { name: 'Kira : Nuit Sans Fin', cost: 20, mult: 4.5, big: true, desc: 'Le combat continue dans une nuit qui ne se lève plus.' },
+    { name: 'Nuit Éternelle', cost: 20, mult: 4.5, big: true, desc: 'Le combat continue dans une nuit qui ne se lève plus.' },
   ],
   eau: [
     { name: 'Goutte Percutante', cost: 2, mult: 1.4, desc: 'Une goutte lancée à la vitesse d\u2019une flèche.' },
@@ -6328,6 +6328,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v0.47 : Tranche-Monde et Nuit Éternelle', 'LES SORTS SIGNATURE NE RÉPÈTENT PLUS LE NOM DE LEUR CARTE. Le sort L du Sabre (« Kenji : Sabre Céleste ») devient Tranche-Monde ; le sort L de l’Ombre (« Kira : Nuit Sans Fin ») devient Nuit Éternelle. « Kenji : Zénith Tranchant » reste ; l’Aube garde son exception assumée : Aube Éternelle, le plus fort sort de l’aube porte le nom de sa carte (Léna).'],
   ['v0.46 : Le RPG tour par tour', 'LE CHANTIER PROMIS. Le mode 🧭 Tactique devient un vrai tour de RPG : plus de panneau à remplir en bas de page. Chaque tour, les cartes des deux camps agissent une par une, de la plus forte attaque à la moins forte (la vôtre d’abord à égalité). Quand vient le tour d’une de vos cartes, une fenêtre s’ouvre pour elle : illustration, points de vie, attaque, mana — puis ses choix : ⚔ Attaque, sorts ✦ avec leur coût (atténués si le mana manque), ➕ Souffle Croisé pour les attaquants, ⏸ Attendre pour économiser le mana. Désignez ensuite la cible : ennemie à frapper ou allié à soigner, dans une liste cliquable — et le pion correspondant s’illumine sur le plateau. L’action s’exécute aussitôt, animée, puis la carte suivante joue, et les ennemis agissent de la même façon sous vos yeux. Le ciblage des ennemis, demandé au retour du terrain, est enfin explicite.'],
   ['v0.45 : Rien de caché, des pions à voir', 'SIX RETOURS DU TERRAIN CORRIGÉS. (1) Le code brut à la place de l’emoji disparaît : le bouton 🤖 « Auto ce tour », l’en-tête du panneau Tactique et les récompenses affichent enfin leurs pictogrammes. (2) Le menu ☰ reste joignable EN COMBAT : la navigation s’ouvre par-dessus l’écran, opaque et déroulante. (3) Le panneau Tactique n’est plus jamais coupé : il défile à l’intérieur de sa zone. (4) Les pions de combat grandissent (128 px, boss 162 px) et deviennent plus carrés : l’illustration occupe presque toute la carte, nom et stats en surimpression. (5) L’écran de combat ne coupe PLUS rien : si l’écran est trop petit, le contenu défile à l’intérieur de l’écran. (6) Les sorts spéciaux n’assombrissent plus le plateau : une bande compacte (illustration du lanceur + nom du sort) passe au-dessus sans rien masquer.'],
   ['v0.44 : Le combat plein écran', 'DEUX DEMANDES DE TERRAIN APPLIQUÉES. (1) Le combat tient sur UN SEUL ÉCRAN : en exploration la page ne scrolle plus, ni en bas ni sur les côtés — titre, boutons, plateau, panneau Tactique et journal se partagent la hauteur de l’écran, et les rappels restent compacts. (2) Les cartes s’agrandissent partout où l’image a sa place : collection, familles, équipe et fiche — les futures illustrations s’y liront ; en combat, chaque carte reste un pion lisible et l’image se loge en fond de carte.'],
