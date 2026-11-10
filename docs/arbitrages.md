@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — mise à jour UI du combat v2 (implémentée dans src/, dist régénéré)
+
+Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en **implémenté**, uniquement en présentation (`src/ui.js`, `src/shell.html`) — le moteur, les data et l'équilibrage ne bougent pas (digest 3000 combats inchangé : `7dfab0a2…`, 476 victoires ; smoke 142 checks ; 60 tests).
+
+- **Ciblage interactif v2** : au choix d'une action, les cibles éligibles s'illuminent sur le plateau (contour doré pulsant, pastille, curseur de visée) ; un clic désigne et résout ; la zone de 2 (carte + voisine contiguë) suit le survol ; bouton **Annuler** ramène à la fenêtre d'action ; coût mana et zone restent visibles pendant la désignation ; un clic hors cible ne fait rien.
+- **Pied de stats** sur chaque pion de combat : PV, ATQ, mana en actuel/total, plus icône par état actif (bonus vert, malus rouge, bouclier bleu) ; carte tombée grisée.
+- **Fiche plein cadre** : l'illustration couvre la carte verticale (bord doré arrondi), voile dégradé sombre en bas, nom, sous-titre « classe · élément · rareté », stats en bas (PV rouge, mana violet) ; stats détaillées et sorts dessous.
+- **Hors périmètre (inchangé)** : la Garde du Gardien (PISTE v1.1) et le grimoire élémentaire (PISTE v2) restent des pistes.
+- Accessibilité : `prefers-reduced-motion: reduce` coupe le pulse ; cibles de tap >= 44px.
+
 ## 2026-11-10 : arbitrages de la session design (PUSHÉS dans les data)
 
 ### ACTÉ : la classe Invocateur disparaît

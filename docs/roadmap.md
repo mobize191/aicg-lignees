@@ -11,6 +11,7 @@
   - Fenêtre d'action par carte : illustration, PV/ATQ/mana, ⚔ attaque, sorts ✦ nommés (coût + infobulle, `.off` si mana insuffisant), ➕ Souffle Croisé, ⏸ attendre, puis ciblage explicite (liste cliquable + pion surligné `.targeted` + clic direct).
   - Anti-runs fantômes : `combatGen` incrémenté à chaque rendu, pauses hors vue, timers génération-capturés.
 - **Correctifs terrain v0.46** : limite 3 exemplaires par équipe, pions mobiles `clamp(104px, 26vw, 136px)` (boss 130-172), images de combat éclaircies `brightness(1.12)`, fiche avec illustration `.modal-hero` 176 px, puces d'info ℹ️/🎰/🌱 cliquables en tête d'écran (rappels du bas supprimés), glossaire « Les symboles de l'écran ».
+- **UI combat v2 (10/11/2026)** : ciblage interactif (cibles illuminées sur le plateau, contour doré pulsant + pastille + curseur de visée, clic pour résoudre, zone de 2 au survol, bouton Annuler, coût/zone visibles, clic hors cible sans effet), pied de stats sur chaque pion (PV/ATQ/mana actuel/total + icônes d'état, KO grisé), fiche plein cadre (illustration cover, bord doré, voile dégradé, sous-titre classe·élément·rareté). Moteur et data inchangés : digest `7dfab0a2…` intact, smoke 142 checks, 60 tests.
 - **Validation** : baseline digest 3000 combats `c5ab2af1…` (534 victoires, 0 exceptions, 0 marathons) ; équivalence pas-à-pas/Auto prouvée par le check 46 i du smoke (deux combats identiques, événements JSON strictement égaux) ; smoke **121 checks** tout passant.
 - **Images** : `assets.json` = 33 arts de cartes (300×420 JPEG) + 5 fonds de donjons (960×540) : les 15 naissances, 4 monstres des Marées, 14 monstres C des 4 autres donjons, les 5 fonds. Chargés automatiquement en ligne (http), sondage par fichier en `file://`.
 
@@ -40,7 +41,7 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 
 ## Historique court des versions
 
-- 10/11/2026 : migration d'arbitrages design dans les data (Invocateur retiré, Gardien Guerrier, Entrave Mage + Occultiste, sorts communs renommés) ; documentation réorganisée (sommaire, règles, arbitrages, tables générées).
+- 10/11/2026 : UI du combat v2 implémentée (ciblage interactif, pied de stats, fiche plein cadre), moteur intact (digest inchangé) ; - 10/11/2026 : migration d'arbitrages design dans les data (Invocateur retiré, Gardien Guerrier, Entrave Mage + Occultiste, sorts communs renommés) ; documentation réorganisée (sommaire, règles, arbitrages, tables générées).
 - v0.43.1 : le jeu complet autonome, poussé sur GitHub (Pages).
 - v0.44 : combat plein écran (one-screen), grandes cartes, harnas complet (digest + smoke).
 - v0.44.1 : menu toujours visible, 19 premières illustrations + 2 fonds (assets.json).

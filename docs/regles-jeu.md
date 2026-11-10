@@ -48,9 +48,9 @@
 - **Modificateurs de run** (`data/run-mods.json`) : la Horde, le Mana Stérile, la Muraille... : chaque exploration a son tarif.
 - **Fusion** : les monstres capturés fusionnent en lignées (`data/monster-families.json`) et enseignent des sorts.
 
-## 7. Design cible (maquettes, NON codé)
+## 7. Design cible des maquettes — IMPLÉMENTÉ le 10/11/2026 (UI du combat v2)
 
-Les maquettes Vibe (errance, combat, fiches, DA) sont le **design cible** de la prochaine itération ; rien de cette section n'est dans `dist.html` :
+Les maquettes Vibe (errance, combat, fiches, DA) sont le **design cible** ; la page combat et la page fiches sont **implémentées** dans `dist.html` depuis le 10/11/2026 (voir `docs/arbitrages.md`) :
 
 - **Ciblage v2** : le choix d'une action illumine les cibles éligibles sur le plateau, clic pour résoudre, zone de 2 contiguës suit le clic, bouton d'annulation, coût et zone visibles pendant toute la désignation.
 - **Pied de stats** : PV, ATQ et mana en actuel/total sur chaque carte + icônes d'état (bonus, malus, bouclier), carte grisée quand elle tombe.
