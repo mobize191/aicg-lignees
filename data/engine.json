@@ -4,8 +4,7 @@
   "Mage",
   "Prêtre",
   "Assassin",
-  "Occultiste",
-  "Invocateur"
+  "Occultiste"
  ],
  "ELEMENTS": [
   "Feu",
@@ -146,17 +145,6 @@
    "execBelow": 0,
    "splash": 0,
    "wave": true,
-   "shieldOnHit": 0
-  },
-  "Invocateur": {
-   "atkPct": -0.1,
-   "hpPct": -0.1,
-   "strike": 0.8,
-   "dodge": 0,
-   "exec": 0,
-   "execBelow": 0,
-   "splash": 0,
-   "wave": false,
    "shieldOnHit": 0
   }
  },
@@ -580,9 +568,6 @@
    "stat": "agi"
   },
   "Occultiste": {
-   "stat": "int"
-  },
-  "Invocateur": {
    "stat": "int"
   },
   "gardien": {

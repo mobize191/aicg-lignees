@@ -8,7 +8,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 
 | constante | valeur |
 | --- | --- |
-| CLASSES | ["Guerrier","Mage","Prêtre","Assassin","Occultiste","Invocateur"] |
+| CLASSES | ["Guerrier","Mage","Prêtre","Assassin","Occultiste"] |
 | ELEMENTS | ["Feu","Eau","Terre","Ombre","Lumière"] |
 | RACES | ["humaine","monstre","mystique","divine"] |
 | RACE_LABEL | {"humaine":"Humaine","monstre":"Monstre","mystique":"Mystique","divine":"Divine"} |
@@ -26,7 +26,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | SAVE_VERSION | 12 |
 | VERSION | "1.0" |
 | RACE_MOD | {"humaine":0,"monstre":0.1,"mystique":0.2,"divine":0.3} |
-| CLASSE_MODS | {"Guerrier":{"atkPct":0.1,"hpPct":0.15,"strike":1,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0.05},"Assassin":{"atkPct":0.05,"hpPct":-0.1,"strike":1,"dodge":0.15,"exec":0.25,"execBelow":0.35,"splash":0,"wave":false,"shieldOnHit":0},"Mage":{"atkPct":0.05,"hpPct":-0.05,"strike":0.8,"dodge":0,"exec":0,"execBelow":0,"splash":0.4,"wave":false,"shieldOnHit":0},"Prêtre":{"atkPct":-0.15,"hpPct":0,"strike":0.7,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0},"Occultiste":{"atkPct":-0.2,"hpPct":0,"strike":0.6,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":true,"shieldOnHit":0},"Invocateur":{"atkPct":-0.1,"hpPct":-0.1,"strike":0.8,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0}} |
+| CLASSE_MODS | {"Guerrier":{"atkPct":0.1,"hpPct":0.15,"strike":1,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0.05},"Assassin":{"atkPct":0.05,"hpPct":-0.1,"strike":1,"dodge":0.15,"exec":0.25,"execBelow":0.35,"splash":0,"wave":false,"shieldOnHit":0},"Mage":{"atkPct":0.05,"hpPct":-0.05,"strike":0.8,"dodge":0,"exec":0,"execBelow":0,"splash":0.4,"wave":false,"shieldOnHit":0},"Prêtre":{"atkPct":-0.15,"hpPct":0,"strike":0.7,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0},"Occultiste":{"atkPct":-0.2,"hpPct":0,"strike":0.6,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":true,"shieldOnHit":0}} |
 | SPELL_CAT_LABEL | {"commun":"commun","race":"de race","classe":"de classe","unique":"signature","lignée":"de lignée"} |
 
 ## Donjons (data/dungeons.json)
@@ -144,7 +144,6 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 | Prêtre | Soins +50 % | Régén 5 % PV max / tour |
 | Assassin | +15 % dégâts sur la cible la plus faible | 20 % de chance de double attaque |
 | Occultiste | Malédictions −10 % d’ATQ en plus | Malédictions −25 % d’ATQ en plus |
-| Invocateur | Invocations +25 % PV | Invocations +50 % PV et +20 % ATQ |
 | Feu | +10 % PV équipe | Vengeance : attaquants +20 % ATK quand une carte tombe |
 | Eau | +10 % ATQ de l’équipe (la stat ⚔ des cartes) | Les supports ciblent 2 unités |
 | Ombre | -10 % dégâts subis | -25 % dégâts subis |
