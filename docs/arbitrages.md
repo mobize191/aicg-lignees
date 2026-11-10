@@ -2,6 +2,28 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (nuit) : ACTÉ — économie v2 : l'or, la Boutique, le marchand de créatures, la Guilde, les quêtes quotidiennes (retour de Marc-Olivier)
+
+- **L'or entre en jeu** : monnaie gagnée en errance et en donjon. Les combats d'errance lâchent or, objets, éclats et pierres d'éveil. **L'énergie actuelle (⚡ les points de donjon, `store.points`, 40 par étage modulé par les mods de run) est convertie en or** au chantier économie.
+- **La Boutique** : on y achète des objets contre de l'or (un peu de tout : consommables, éclats, objets d'équipement).
+- **Le marchand de créatures** : vend des créatures contre de l'or ; **il remplace le système de jetons de génération** (les jetons de la Forge et leur table `JETON_RARITY` disparaissent au chantier économie).
+- **La Forge devient la Guilde** : évolutions + recrutement de compagnons contre de l'or.
+- **Quêtes quotidiennes** : le défi du jour est **supprimé**, remplacé par un système de quêtes (ex. vaincre 10 monstres, finir 2 donjons) ; un onglet quêtes vit dans le menu guide. Récompenses et cadence à calibrer au chantier.
+- Cap assumé : l'errance donne XP, or et drops ; le jeu s'oriente vers un vrai RPG.
+
+## 2026-11-10 (nuit) : ACTÉ — errance et Les Terres Sauvages : héros dédié, zones à donjon, déblocage en chaîne (retour de Marc-Olivier)
+
+- **Héros dédié** : le personnage incarné en errance est **créé pour l'errance** (ni une carte de la collection, ni un nommé existant) ; son art passe par la charte v2 (art de référence + cycle de marche WAN i2v).
+- **Entrée par Les Terres Sauvages** : on choisit la zone d'errance où l'on va (Marées, montagne, feu…). **Départ : la zone de l'eau uniquement.**
+- **Contenu d'une zone** : monstres, PNJ, objets à collecter ; on gagne XP et or ; un endroit porte **le donjon** (petit bâtiment), un autre **l'hôtel des crans** (enseignements de sorts, prolongement des enseignements des zones actuelles) ; des quêtes pourront y vivre.
+- **Déblocage en chaîne** : vaincre le donjon d'une zone ouvre les zones suivantes (zone de l'eau → zone du feu + deuxième zone d'eau → …). **Un bâtiment donjon par zone** (l'alternative d'un donjon unique à difficulté croissante est écartée) ; pas d'open world complet, des zones reliées débloquées une à une.
+
+## 2026-11-10 (nuit) : ACTÉ — l'équipement des personnages : le mix (retour de Marc-Olivier)
+
+- Des objets d'équipement façon vrai RPG mais **simplifiés** (le catalogue est appelé à grandir, l'équipement individuel complet risquait de se perdre).
+- **Tranché : le mix** — chaque personnage porte **1 à 2 slots** d'objets (armure, épée, arc, bâton de magie…) **plus des slots d'équipe** qui s'appliquent à tous.
+- L'inventaire de la page Personnage et le rayon équipement de la Boutique en dépendent ; types d'objets, emplacements exacts et prix à calibrer au chantier.
+
 ## 2026-11-10 (soir) : ACTÉ — lignes avant/arrière et fin du rôle attaque/support (retour de Marc-Olivier)
 
 - **La règle de rang existait en doc (`docs/regles-jeu.md`) mais pas dans le moteur** ; elle est reconfirmée et complétée :
