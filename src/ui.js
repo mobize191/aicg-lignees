@@ -2652,9 +2652,11 @@ function actionButtonsHtml(u, kind) {
     'act-attack'));
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
+    // T4.2 : le résultat calculé (mult × stat principale) affiché avec le sort
+    const prevu = sp.mult ? ` \u2192 ~${Math.round(sp.mult * statOf(u))}` : '';
     parts.push(row(
       top('\u2726 ' + sp.name, spellBadgeHtml(sp), '\u2726' + sp.cost)
-      + `<span class="sort-meta">${spellMetaHtml(sp)}</span>`
+      + `<span class="sort-meta">${spellMetaHtml(sp)}${prevu}</span>`
       + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });

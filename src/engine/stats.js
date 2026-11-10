@@ -118,5 +118,6 @@ function statOf(u) {
 function seuilOf(u) {
   const s = DATA.engine.seuils ?? {};
   const palier = RANK[u.rarity] ?? 0;
-  return (s.parPalier?.[palier] ?? 0) + (s.parCamp?.[u.race] ?? 0);
+  // T4.5 : seuil de résistance = palier de la cible + moitié de son intelligence (données)
+  return (s.parPalier?.[palier] ?? 0) + (s.parCamp?.[u.race] ?? 0) + (u.int ?? 0) * M.SEUIL_PER_INT;
 }

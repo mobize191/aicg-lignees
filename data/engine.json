@@ -394,9 +394,9 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 18,
+ "SAVE_VERSION": 19,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 18,
+ "CURRENT_VERSION": 19,
  "CROSS": {
   "yield": 0.6,
   "healThreshold": 0.2,
@@ -604,7 +604,43 @@
   "POWER_SPELL_STEP": 0.03,
   "DEBUT_JEU_N": 2,
   "AGI_RATIO": 0.8,
-  "INT_RATIO": 0.6
+  "INT_RATIO": 0.6,
+  "STAT_RATIOS": {
+   "Guerrier": {
+    "agi": 0.7,
+    "int": 0.4
+   },
+   "Mage": {
+    "agi": 0.5,
+    "int": 0.8
+   },
+   "Prêtre": {
+    "agi": 0.5,
+    "int": 0.8
+   },
+   "Assassin": {
+    "agi": 0.9,
+    "int": 0.4
+   },
+   "Occultiste": {
+    "agi": 0.5,
+    "int": 0.8
+   },
+   "Invocateur": {
+    "agi": 0.5,
+    "int": 0.8
+   },
+   "gardien": {
+    "agi": 0.6,
+    "int": 0.4
+   }
+  },
+  "DODGE_PER_AGI": 0.01,
+  "DODGE_CAP": 0.3,
+  "MANA_PER_INT": 2,
+  "MANA_REGEN_PER_INT": 0.5,
+  "MANA_CAP_RATIO": 0.5,
+  "SEUIL_PER_INT": 0.5
  },
  "profils": {
   "Guerrier": {

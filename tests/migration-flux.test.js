@@ -8,10 +8,10 @@ import { loadEngine } from './helpers/load.mjs';
 const uiSrc = () => readFileSync('src/ui.js', 'utf8');
 const fixtureV8 = () => JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
 
-test('flux réel (a) : la fixture v8 migre en v18 avec voies, sorts re-mappés, agi/int, grimoire et zones initialisés', () => {
+test('flux réel (a) : la fixture v8 migre en v19 avec voies, sorts re-mappés, agi/int, grimoire et zones initialisés', () => {
   const E = loadEngine();
   const out = E.migrate(structuredClone(fixtureV8()));
-  assert.equal(out.version, 18);
+  assert.equal(out.version, 19);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.ok(Array.isArray(out.grimoire));
   assert.ok(Array.isArray(out.zonesVisitees));
@@ -31,22 +31,22 @@ test('flux réel (b) : la source branche la migration dans le chargement (pas de
   assert.ok(/grimoire:/.test(src.match(/function snapshot[\s\S]*?\n}/)[0]), 'snapshot() persiste grimoire');
   assert.ok(/zonesVisitees:/.test(src.match(/function snapshot[\s\S]*?\n}/)[0]), 'snapshot() persiste zonesVisitees');
   const eng = JSON.parse(readFileSync('data/engine.json', 'utf8'));
-  assert.equal(eng.SAVE_VERSION, 18);
+  assert.equal(eng.SAVE_VERSION, 19);
   assert.equal(eng.SAVE_VERSION, eng.CURRENT_VERSION, 'SAVE_VERSION === CURRENT_VERSION');
 });
 
-test('flux réel (c) : une sauvegarde déjà en v18 se recharge sans être rejetée', () => {
+test('flux réel (c) : une sauvegarde déjà en v19 se recharge sans être rejetée', () => {
   const E = loadEngine();
   const v8 = fixtureV8();
   const v17 = E.migrate(structuredClone(v8));
   assert.equal(v17.version, E.DATA.engine.CURRENT_VERSION);
   // rejouer la migration sur une v17 doit être un no-op (idempotence)
   const again = E.migrate(structuredClone(v17));
-  assert.equal(again.version, 18);
+  assert.equal(again.version, 19);
   assert.equal(again.instances.length, v17.instances.length);
-  writeFileSync('tests/fixtures/save-v17.json', JSON.stringify(v17, null, 1) + '\n');
-  const reloaded = JSON.parse(readFileSync('tests/fixtures/save-v17.json', 'utf8'));
-  assert.equal(reloaded.version, 18);
+  writeFileSync('tests/fixtures/save-v18.json', JSON.stringify(v17, null, 1) + '\n');
+  const reloaded = JSON.parse(readFileSync('tests/fixtures/save-v18.json', 'utf8'));
+  assert.equal(reloaded.version, 19);
 });
 
 test('invariant : SAVE_VERSION === CURRENT_VERSION dans data/engine.json', () => {

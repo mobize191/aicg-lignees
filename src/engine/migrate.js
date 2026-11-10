@@ -117,7 +117,23 @@ function v17to18(s) {
   s.version = 18;
   return triRemap(s);
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18 };
+// v18 -> v19 (T4.3/T4.7, lot 4 v0.47) : agi/int recalculées depuis les ratios de profil
+// en données (la stat principale domine toujours), niveau conservé.
+function v18to19(s) {
+  s.version = 19;
+  const R = DATA.engine.moteur?.STAT_RATIOS ?? {};
+  for (const inst of s.instances ?? []) {
+    const c = getCard(inst.id) ?? getMonster(inst.id);
+    if (!c) continue;
+    const m = 1 + LEVEL_BONUS * ((inst.lvl ?? 1) - 1);
+    const r = R[c.classe] ?? R.Guerrier;
+    if (!r) continue;
+    inst.agi = Math.max(1, Math.round(c.atk * r.agi * m));
+    inst.int = Math.max(1, Math.round(c.atk * r.int * m));
+  }
+  return s;
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — lot 4, les stats RPG v0.47 (T4.1-T4.7)
+
+- **T4.3** : répartition agi/int dérivée du profil (`engine.json moteurr.STAT_RATIOS`), la stat principale domine toujours ; 222 cartes/monstres recalculés (le bug relevé — lignées mage plus agiles qu'intelligentes — est clos : test sur toutes les cartes).
+- **T4.4** : esquive = dodge de classe + écart AGI × 0,01, plafonné à 30 % (`DODGE_PER_AGI`/`DODGE_CAP` en données).
+- **T4.5** : mana max = palier + 2×INT, recharge = palier + INT/2, plafonnés à +50 % du palier ; seuil de résistance = palier + INT/2 (toutes les formules en données `moteur`).
+- **T4.2** : la fenêtre d'action affiche le résultat calculé (→ ~N = mult × stat principale) à côté de chaque sort.
+- **T4.6** : la zone en combat (3 contiguës, ligne choisie) câblée en Tactique via la fiche type (T3.1) ; le boss encaisse comme une unité.
+- **T4.7** : migration v19, agi/int recalculées sur les exemplaires existants depuis les ratios de profil.
+- **Nouvelle baseline digest** : `833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24`, **518/3000** (0 exception, 1 marathon), contre `eb701919…` 479/3000. La hausse vient de l'esquive AGI (moins de dégâts subis par les équipes rapides) et du mana INT. Point de calibration avec Marc-Olivier : ce chiffre est la mesure, à affiner sur le terrain. 103 tests, smoke 171 checks.
+
 ## 2026-11-10 : ACTÉ — le tri d'homogénéité du grimoire (T2.7, fin du lot 2)
 
 - **Contrôle automatique** (dans le validateur, donc testé à chaque chargement) : aucun sort strictement dominé au même coût, même école + même rôle, sans particularité (effet/delta), même base de comparaison (mult ou taux). Une seule paire réelle signalée : Décharge Arcanique vs Lame d'Écume III — la Décharge porte désormais son effet propre en données (base : l'intelligence), ce qui l'exclut de la domination stricte.

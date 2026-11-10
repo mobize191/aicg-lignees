@@ -153,3 +153,51 @@ test('le monstre temoin n\u2019est PAS dans les donnees principales (preuve de m
   const E = loadEngine();
   assert.equal(E.getMonster('x-temoin'), undefined);
 });
+
+test('T4.3 : la répartition agi/int dérive du profil (aucune carte mage avec agi > int)', () => {
+  const E = loadEngine();
+  const R = E.DATA.engine.moteur.STAT_RATIOS;
+  for (const c of [...E.DATA.cards, ...E.DATA.monsters]) {
+    const r = R[c.classe] ?? R.Guerrier;
+    assert.equal(c.agi, Math.max(1, Math.round(c.atk * r.agi)), `${c.id} agi`);
+    assert.equal(c.int, Math.max(1, Math.round(c.atk * r.int)), `${c.id} int`);
+    if (['Mage', 'Occultiste', 'Prêtre'].includes(c.classe)) {
+      assert.ok(c.int >= c.agi, `${c.id} (${c.classe}) : int >= agi`);
+    }
+  }
+});
+
+test('T4.4 : l’esquive dérive de l’écart AGI, plafonnée à 30 % (données)', () => {
+  const E = loadEngine();
+  const team = { attaque: [E.getCard('n1')], support: [] };
+  const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 2);
+  // seed 7 : premier jet 0,012 < plafond 0,30 -> esquive avec un écart AGI de 40
+  const st = E.initCombat(team, foes, 7, {});
+  const u = st.team.attaque[0];
+  const tgt = st.enemies.attaque[0];
+  u.agi = tgt.agi + 40;
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'attack', targetUid: tgt.uid });
+  assert.ok(r.events.some((e) => e.type === 'dodge'), 'écart AGI 40 = esquive (plafond 30 %, jet 0,012)');
+  // écart nul + pas de dodge de classe : aucune esquive même avec un jet nul (seed 6 -> 0,526 d'abord, puis 0,002)
+  const st2 = E.initCombat(team, foes, 6, {});
+  const u2 = st2.team.attaque[0];
+  const t2 = st2.enemies.attaque[0];
+  u2.agi = t2.agi;
+  t2.classe = 'Guerrier';
+  E.beginRound(st2);
+  const r2 = E.stepRound(st2, { kind: 'attack', targetUid: t2.uid });
+  assert.equal(r2.events.filter((e) => e.type === 'dodge').length, 0, 'écart nul = pas d’esquive');
+  assert.ok(r2.events.some((e) => e.type === 'attack'), 'la frappe touche');
+});
+
+test('T4.5 : mana max/recharge montent avec l\u2019INT (plafonné +50 % du palier), seuil = palier + INT/2', () => {
+  const E = loadEngine();
+  const c = E.getCard('n2'); // Mage Novice, atk 7 -> int 6
+  const u = E.makeUnit(c);
+  const base = E.DATA.engine.SOLO_MANA.max;
+  assert.equal(u.manaMax, Math.round(base * (1 + Math.min(0.5, (u.int * 2) / base))), 'manaMax = base + 2×INT plafonné');
+  const cible = { rarity: 'R', int: 10, race: 'humaine' };
+  const seuilAttendu = E.DATA.engine.seuils.parPalier[2] + 10 * 0.5;
+  assert.equal(E.seuilOf(cible), seuilAttendu, 'seuil = palier + INT/2');
+});

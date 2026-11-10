@@ -138,7 +138,7 @@ test('lot 3 : un sort tactique à fiche "zone" frappe 3 cibles contiguës autour
   const pre = E.beginRound(st);
   st._events = [...pre];
   const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: 'e.a2' });
-  const hits = r.events.filter((e) => e.type === 'attack' && e.sourceId === u.uid);
+  const hits = r.events.filter((e) => (e.type === 'attack' || e.type === 'dodge') && typeof e.targetId === 'string' && e.targetId.startsWith('e.'));
   assert.equal(hits.length, 3, 'la zone touche 3 cibles contiguës');
   assert.deepEqual(hits.map((h) => h.targetId).sort(), ['e.a2', 'e.a3', 'e.a4']);
   rmSync(dir, { recursive: true, force: true });
@@ -156,6 +156,6 @@ test('lot 3 : un sort à fiche "tous" touche toute la ligne sans désignation (A
   assert.equal(E.largeurOfSpellName('Hurlement'), 5);
   E.beginRound(st);
   const r = E.stepRound(st, { kind: 'spell', idx: 0 }); // aucune cible désignée
-  const hits = r.events.filter((e) => e.type === 'attack' && e.sourceId === u.uid);
+  const hits = r.events.filter((e) => (e.type === 'attack' || e.type === 'dodge') && typeof e.targetId === 'string' && e.targetId.startsWith('e.'));
   assert.equal(hits.length, 4, 'toute la ligne est touchée');
 });

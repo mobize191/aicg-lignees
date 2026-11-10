@@ -274,6 +274,25 @@ async function main() {
     check('50 z 0 exception après fiche type', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 51 : v0.47 — affichage du résultat calculé (T4.2) ----------
+  {
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(60);
+    const st51 = api._state();
+    api._speed(6);
+    if (st51 && !st51.winner) {
+      els.get('fight').click();
+      for (let w = 0; w < 120 && !api._actEl() && !st51.winner; w++) await wait(25);
+      const am = api._actEl();
+      const meta = am ? (am.querySelector('.act-spell')?.textContent ?? '') : '';
+      check('51 a un sort affiche son résultat calculé (→ ~N = mult × stat)', /→ ~\d+/.test(meta), meta.slice(0, 80));
+    } else {
+      check('51 a un sort affiche son résultat calculé (→ ~N = mult × stat)', false, 'pas de fenêtre');
+    }
+    check('51 z 0 exception après v0.47 affichage', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   // ---------- 48 : pied de stats v2 sur les pions ----------
   {
     const st48 = api._state();

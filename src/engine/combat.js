@@ -21,9 +21,8 @@ function makeUnit(card, uid = card.id, level = null) {
     effect: card.effect ? { ...card.effect } : null,
     spells: (card.spells ?? []).map((s) => ({ ...s })),
     crossName: card.soloSpell ?? null,
-    mana: Math.round((card.mana ?? SOLO_MANA.max) * M.MANA_START_RATIO),
-    manaMax: card.mana ?? SOLO_MANA.max,
-    manaRegen: (card.manaRegen ?? 2) + (card.gimmick === 'prestige' ? 2 : 0),
+    manaMax: 0,
+    manaRegen: 0,
     boss: !!card.boss,
     final: !!card.final,
     gimmick: card.gimmick ?? null,
@@ -33,6 +32,12 @@ function makeUnit(card, uid = card.id, level = null) {
     linkTtl: 0,
   };
   if (card.phoenix) u.status.phoenix = { ...card.phoenix };
+  // T4.5 : le mana monte avec l'intelligence (formules en données, plafonnées à +50 % du palier)
+  const manaBase = card.mana ?? SOLO_MANA.max;
+  const regenBase = card.manaRegen ?? SOLO_MANA.regen;
+  u.manaMax = Math.round(manaBase * (1 + Math.min(M.MANA_CAP_RATIO, (u.int * M.MANA_PER_INT) / manaBase)));
+  u.manaRegen = Math.round(regenBase * (1 + Math.min(M.MANA_CAP_RATIO, (u.int * M.MANA_REGEN_PER_INT) / regenBase))) + (card.gimmick === 'prestige' ? 2 : 0);
+  u.mana = Math.min(u.manaMax, Math.round(u.manaMax * M.MANA_START_RATIO));
   return u;
 }
 
@@ -414,9 +419,10 @@ function actTeamStriker(u, i, ctx, step) {
       if (!tgt.alive) continue;
       const elemT = elementTag(u.element, tgt.element);
       const dmgT = Math.max(1, Math.round(dmgBase * elementMult(u.element, tgt.element)));
-      if (classeMods(tgt).dodge && ctx.state.rng() < classeMods(tgt).dodge) {
+      const dodgeT = Math.min(M.DODGE_CAP, (classeMods(tgt).dodge || 0) + Math.max(0, (u.agi - tgt.agi)) * M.DODGE_PER_AGI);
+      if (dodgeT > 0 && ctx.state.rng() < dodgeT) {
         ctx.events.push({ type: 'dodge', side: 'enemies', targetId: tgt.uid });
-        if (tgt === target) { dodged = true; break; }
+        if (tgt === target && hitList.length === 1) { dodged = true; break; }
         continue;
       }
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
@@ -529,7 +535,8 @@ function actEnemyStriker(e, ctx) {
     ctx.events.push({ type: 'status', side: 'team', targetId: target.uid, kind: 'exec', value: cmE.exec });
   }
   for (let h = 0; h < eHits && target.alive; h++) {
-    if (classeMods(target).dodge && ctx.state.rng() < classeMods(target).dodge) {
+    const dodgeT2 = Math.min(M.DODGE_CAP, (classeMods(target).dodge || 0) + Math.max(0, (e.agi - target.agi)) * M.DODGE_PER_AGI);
+    if (dodgeT2 > 0 && ctx.state.rng() < dodgeT2) {
       ctx.events.push({ type: 'dodge', side: 'team', targetId: target.uid });
       break;
     }
