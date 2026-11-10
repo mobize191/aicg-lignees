@@ -222,6 +222,23 @@ background: rgba(16, 21, 33, .75); border: 1px solid rgba(77, 208, 225, .18);
 .unit.casting { z-index: 5; }
 .unit.casting .card { transform: scale(1.08); box-shadow: 0 0 22px rgba(255, 213, 79, .8); }
 .unit.targeted .card { box-shadow: 0 0 0 3px #ffd54f, 0 0 18px rgba(255, 213, 79, .6); }
+/* ciblage v2 : contour doré pulsant, pastille visée, curseur de visée */
+.unit.targeted { cursor: crosshair; }
+.unit.targeted .card { animation: targetPulse 1s ease-in-out infinite; }
+@keyframes targetPulse {
+  0%, 100% { box-shadow: 0 0 0 3px #ffd54f, 0 0 14px rgba(255, 213, 79, .5); }
+  50% { box-shadow: 0 0 0 4px #ffe082, 0 0 26px rgba(255, 213, 79, .85); }
+}
+/* zone de 2 au survol : la voisine contiguë s'allume avec la carte visée */
+.unit.zone2 .card { box-shadow: 0 0 0 2px #ffd54f, 0 0 12px rgba(255, 213, 79, .45); }
+.unit.zone2::after { content: none; }
+/* barre de désignation : libellé (coût/zone) + Annuler, cibles tap >= 44px */
+.act-targetbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.act-targetbar .act-lab { margin: 0; flex: 1 1 200px; }
+.act-cancel { min-height: 44px; }
+@media (prefers-reduced-motion: reduce) {
+  .unit.targeted .card, .unit.targeted::after { animation: none !important; }
+}
 .unit.targeted::after {
 content: "🎯"; position: absolute; top: -8px; left: -6px; z-index: 6;
 font-size: .95rem; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
@@ -12595,7 +12612,78 @@ let combatGen = 0;
 
 function clearActHighlights() {
   if (!combatApp) return;
-  for (const el of combatApp.querySelectorAll('.unit')) el.classList.remove('targeted');
+  for (const el of combatApp.querySelectorAll('.unit')) el.classList.remove('targeted', 'zone2');
+}
+
+// --- ciblage v2 : libellés d'action (coût mana + zone) depuis les données ---
+function spellDefOfName(name) {
+  return (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name) ?? null;
+}
+function zoneLabelOf(sp) {
+  const def = spellDefOfName(sp?.name);
+  const cran = def?.crans?.II ?? def?.crans?.I;
+  const l = cran?.largeur;
+  if (l === 2) return 'zone de 2';
+  if (l === 3) return 'zone de 3';
+  if (l === 5) return 'tous les ennemis';
+  if (l === 'equipe') return "l'équipe";
+  return '';
+}
+function zoneWidthOf(sp) {
+  const def = spellDefOfName(sp?.name);
+  const cran = def?.crans?.II ?? def?.crans?.I;
+  const l = Number(cran?.largeur);
+  return Number.isFinite(l) && l >= 2 ? Math.min(l, 5) : 1;
+}
+function pendingLabel(mode, pending, u) {
+  if (pending.kind === 'attack') return '⚔ Attaque';
+  if (pending.kind === 'basic') return '✚ Soin de base';
+  if (pending.kind === 'pass') return '⏸ Attendre';
+  if (pending.kind === 'cross') return '➕ ' + (CROSS.attaque.name ?? '');
+  if (pending.kind === 'spell' || pending.kind === 'cast') {
+    const sp = (u.spells ?? [])[pending.idx ?? 0];
+    if (!sp) return '✦ Sort';
+    const zone = zoneLabelOf(sp);
+    return `✦ ${sp.name} <span class="muted">— ✦${sp.cost} mana${zone ? ' · ' + zone : ''}</span>`;
+  }
+  return '';
+}
+
+// --- zone de 2 au survol : la carte survolée + sa voisine contiguë s'allument ---
+function clearZonePreview() {
+  if (!combatApp) return;
+  for (const el of combatApp.querySelectorAll('.unit.zone2')) el.classList.remove('zone2');
+}
+function previewZone(el) {
+  clearZonePreview();
+  const ps = promptState;
+  if (!ps || ps.phase !== 'target' || !el) return;
+  const pending = ps.pending ?? {};
+  let largeur = 1;
+  if (pending.kind === 'spell' || pending.kind === 'cast') {
+    const sp = (ps.unit.spells ?? [])[pending.idx ?? 0];
+    if (sp) largeur = zoneWidthOf(sp);
+  }
+  if (largeur < 2) return;
+  const row = el.closest('.row');
+  if (!row) return;
+  const units = [...row.querySelectorAll('.unit')];
+  const i = units.indexOf(el);
+  if (i < 0) return;
+  el.classList.add('zone2');
+  let n = 1;
+  while (n < largeur && i + n < units.length) {
+    const nx = units[i + n];
+    if (nx._unit && nx._unit.alive && nx.classList.contains('targeted')) { nx.classList.add('zone2'); n++; }
+    else break;
+  }
+}
+function bindTargetHover() {
+  if (!combatApp) return;
+  for (const el of combatApp.querySelectorAll('.unit.targeted')) {
+    el.onmouseenter = () => previewZone(el);
+    el.onmouseleave = () => clearZonePreview();
+  }
 }
 
 function closeActModal() {
@@ -12639,11 +12727,16 @@ function askActTarget(mode, pending) {
     const el = elOf(t.uid);
     if (el) el.classList.add('targeted');
   }
+  bindTargetHover();
   if (!actBox) return;
   const zoneEl = actBox.querySelector('.act-zone');
   if (!zoneEl) return;
-  zoneEl.innerHTML = `<p class="act-lab">Choisissez votre cible <span class="muted">(ou touchez un pion du plateau)</span></p>`
-    + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">♥ ${t.hp}/${t.maxHp}</span></button>`).join(' ');
+  const lab = pendingLabel(mode, pending, promptState.unit ?? {});
+  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(ou touchez un pion illumin\u00e9)</span></p>`
+    + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
+    + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}</span></button>`).join(' ');
+  const cancelBtn = zoneEl.querySelector('.act-cancel');
+  if (cancelBtn) cancelBtn.onclick = () => { if (promptState && promptState.showActions) promptState.showActions(); };
   zoneEl.querySelectorAll('.act-target').forEach((b) => {
     b.onclick = () => {
       if (!promptState || promptState.phase !== 'target') return;
@@ -12654,20 +12747,52 @@ function askActTarget(mode, pending) {
   });
 }
 
-function promptUnitAction(u, kind) {
+function actionButtonsHtml(u, kind) {
   const isStrike = kind === 'strike';
-  const parts = [`<button type="button" class="btn tac-btn act-attack">⚔ ${isStrike ? 'Attaque' : 'Soin de base'}</button>`];
+  const parts = [`<button type="button" class="btn tac-btn act-attack">\u2694 ${isStrike ? 'Attaque' : 'Soin de base'}</button>`];
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
-    parts.push(`<button type="button" class="btn tac-btn act-spell${off ? ' off' : ''}" data-k="${k}" title="${sp.desc || 'Puissance ×' + sp.mult + ' — coût ' + sp.cost + ' ✦'}">✦ ${sp.name} <span class="muted">✦${sp.cost}</span></button>`);
+    parts.push(`<button type="button" class="btn tac-btn act-spell${off ? ' off' : ''}" data-k="${k}" title="${sp.desc || 'Puissance \u00d7' + sp.mult + ' \u2014 co\u00fbt ' + sp.cost + ' \u2726'}">\u2726 ${sp.name} <span class="muted">\u2726${sp.cost}</span></button>`);
   });
-  parts.push(`<button type="button" class="btn tac-btn act-pass">⏸ Attendre</button>`);
+  parts.push(`<button type="button" class="btn tac-btn act-pass">\u23f8 Attendre</button>`);
   if (isStrike && u.role === 'attaque') {
     const crossCost = CROSS.attaque.cost;
     const crossOff = u.mana + u.manaRegen < crossCost;
-    parts.push(`<button type="button" class="btn tac-btn act-cross${crossOff ? ' off' : ''}" title="${CROSS.attaque.desc}">➕ ${CROSS.attaque.name} <span class="muted">✦${crossCost}</span></button>`);
+    parts.push(`<button type="button" class="btn tac-btn act-cross${crossOff ? ' off' : ''}" title="${CROSS.attaque.desc}">\u2795 ${CROSS.attaque.name} <span class="muted">\u2726${crossCost}</span></button>`);
   }
-  renderActModal(u, parts.join(' '));
+  return parts.join(' ');
+}
+
+function bindActionButtons(box, u, kind) {
+  const isStrike = kind === 'strike';
+  box.querySelector('.act-pass').onclick = () => { if (promptState) promptState.pick({ kind: 'pass' }); };
+  const bAtk = box.querySelector('.act-attack');
+  if (bAtk) {
+    bAtk.onclick = () => {
+      if (!promptState) return;
+      if (isStrike) askActTarget('enemy', { kind: 'attack' });
+      else promptState.pick({ kind: 'basic' });
+    };
+  }
+  const bCross = box.querySelector('.act-cross');
+  if (bCross) {
+    bCross.onclick = () => {
+      if (!promptState || bCross.classList.contains('off')) return;
+      askActTarget('ally', { kind: 'cross' });
+    };
+  }
+  box.querySelectorAll('.act-spell').forEach((b) => {
+    b.onclick = () => {
+      if (!promptState || b.classList.contains('off')) return;
+      const k = Number(b.dataset.k);
+      if (isStrike) askActTarget('enemy', { kind: 'spell', idx: k });
+      else askActTarget('ally', { kind: 'cast', idx: k });
+    };
+  });
+}
+
+function promptUnitAction(u, kind) {
+  renderActModal(u, actionButtonsHtml(u, kind));
   return new Promise((resolve) => {
     promptState = {
       phase: 'action', unit: u, kind, mode: null, pending: null,
@@ -12678,31 +12803,20 @@ function promptUnitAction(u, kind) {
         resolve(choice);
       },
     };
-    const box = actBox;
-    box.querySelector('.act-pass').onclick = () => { if (promptState) promptState.pick({ kind: 'pass' }); };
-    const bAtk = box.querySelector('.act-attack');
-    if (bAtk) {
-      bAtk.onclick = () => {
-        if (!promptState) return;
-        if (isStrike) askActTarget('enemy', { kind: 'attack' });
-        else promptState.pick({ kind: 'basic' });
-      };
-    }
-    const bCross = box.querySelector('.act-cross');
-    if (bCross) {
-      bCross.onclick = () => {
-        if (!promptState || bCross.classList.contains('off')) return;
-        askActTarget('ally', { kind: 'cross' });
-      };
-    }
-    box.querySelectorAll('.act-spell').forEach((b) => {
-      b.onclick = () => {
-        if (!promptState || b.classList.contains('off')) return;
-        const k = Number(b.dataset.k);
-        if (isStrike) askActTarget('enemy', { kind: 'spell', idx: k });
-        else askActTarget('ally', { kind: 'cast', idx: k });
-      };
-    });
+    // le bouton Annuler ramène à la fenêtre d'action sans rien perdre
+    promptState.showActions = () => {
+      if (!promptState) return;
+      promptState.phase = 'action';
+      promptState.mode = null;
+      promptState.pending = null;
+      clearActHighlights();
+      const zoneEl = actBox ? actBox.querySelector('.act-zone') : null;
+      if (zoneEl && actBox) {
+        zoneEl.innerHTML = actionButtonsHtml(u, kind);
+        bindActionButtons(actBox, u, kind);
+      }
+    };
+    if (actBox) bindActionButtons(actBox, u, kind);
   });
 }
 
@@ -12856,7 +12970,9 @@ function unitEl(u) {
   
   
   el.onclick = () => {
-    if (state && !state.winner && promptState && promptState.phase === 'target' && u.alive) {
+    if (state && !state.winner && promptState && promptState.phase === 'target') {
+      // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
+      if (!u.alive) return;
       const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
       if (promptState.mode === 'enemy' && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
@@ -12900,6 +13016,7 @@ function drawBoard() {
       const el = elOf(t.uid);
       if (el) el.classList.add('targeted');
     }
+    bindTargetHover();
   }
 }
 

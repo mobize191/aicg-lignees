@@ -222,6 +222,23 @@ background: rgba(16, 21, 33, .75); border: 1px solid rgba(77, 208, 225, .18);
 .unit.casting { z-index: 5; }
 .unit.casting .card { transform: scale(1.08); box-shadow: 0 0 22px rgba(255, 213, 79, .8); }
 .unit.targeted .card { box-shadow: 0 0 0 3px #ffd54f, 0 0 18px rgba(255, 213, 79, .6); }
+/* ciblage v2 : contour doré pulsant, pastille visée, curseur de visée */
+.unit.targeted { cursor: crosshair; }
+.unit.targeted .card { animation: targetPulse 1s ease-in-out infinite; }
+@keyframes targetPulse {
+  0%, 100% { box-shadow: 0 0 0 3px #ffd54f, 0 0 14px rgba(255, 213, 79, .5); }
+  50% { box-shadow: 0 0 0 4px #ffe082, 0 0 26px rgba(255, 213, 79, .85); }
+}
+/* zone de 2 au survol : la voisine contiguë s'allume avec la carte visée */
+.unit.zone2 .card { box-shadow: 0 0 0 2px #ffd54f, 0 0 12px rgba(255, 213, 79, .45); }
+.unit.zone2::after { content: none; }
+/* barre de désignation : libellé (coût/zone) + Annuler, cibles tap >= 44px */
+.act-targetbar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.act-targetbar .act-lab { margin: 0; flex: 1 1 200px; }
+.act-cancel { min-height: 44px; }
+@media (prefers-reduced-motion: reduce) {
+  .unit.targeted .card, .unit.targeted::after { animation: none !important; }
+}
 .unit.targeted::after {
 content: "🎯"; position: absolute; top: -8px; left: -6px; z-index: 6;
 font-size: .95rem; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));

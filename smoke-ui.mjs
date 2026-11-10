@@ -154,6 +154,71 @@ async function main() {
   }
   check('43 C 0 exception après fenêtre RPG', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
+  // ---------- 47 : ciblage interactif v2 ----------
+  {
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(60);
+    const st47 = api._state();
+    api._speed(6);
+    if (st47) {
+      for (const u of [...st47.team.attaque, ...st47.team.support]) { u.mana = u.manaMax; }
+      els.get('fight').click();
+      let am = null;
+      for (let w = 0; w < 120 && !am; w++) { await wait(25); am = api._actEl(); }
+      check('47 a fenêtre d’action avec boutons (Attaque/Attendre)', !!am && !!am.querySelector('.act-attack') && !!am.querySelector('.act-pass'), '');
+      const bA = am ? (am.querySelector('.act-spell:not(.off)') ?? am.querySelector('.act-attack')) : null;
+      if (bA) {
+        bA.click(); await wait(40);
+        am = api._actEl();
+        const nEnnemis = st47.enemies.attaque.filter((e) => e.alive).length + st47.enemies.support.filter((e) => e.alive).length;
+        const nTargeted = [...appEl.querySelectorAll('.unit')].filter((el) => el.classList.contains('targeted')).length;
+        check('47 b cibles éligibles illuminées sur le plateau', !!am && nTargeted === nEnnemis && nEnnemis > 0, `targeted=${nTargeted} ennemis=${nEnnemis}`);
+        const zoneTxt = am && am.querySelector('.act-zone') ? am.querySelector('.act-zone')._innerHTML : '';
+        check('47 b libellé d’action visible pendant la désignation (coût/zone)', (zoneTxt.includes('Attaque') || zoneTxt.includes('✦')) && !!am.querySelector('.act-cancel'), zoneTxt.slice(0, 80));
+        check('47 b bouton Annuler présent', !!am && !!am.querySelector('.act-cancel'), '');
+        const cancel = am ? am.querySelector('.act-cancel') : null;
+        if (cancel) {
+          cancel.click(); await wait(40);
+          am = api._actEl();
+          check('47 c Annuler ramène aux actions, aucun pion illuminé', !!am && !!am.querySelector('.act-attack') && ![...appEl.querySelectorAll('.unit')].some((el) => el.classList.contains('targeted')), '');
+          const bA2 = am ? (am.querySelector('.act-spell:not(.off)') ?? am.querySelector('.act-attack')) : null;
+          if (bA2) {
+            bA2.click(); await wait(40);
+            am = api._actEl();
+            const teamUnit = appEl.querySelector('#team-zone .unit');
+            const before = !!am;
+            if (teamUnit) teamUnit.click();
+            await wait(30);
+            check('47 d clic hors cible ne fait rien (fenêtre toujours en désignation)', before && !!api._actEl() && api._prompt().phase === 'target', '');
+            check('47 e donnée zone : Lame d’Écume vaut largeur 2', api._zoneWidthOf('Lame d’Écume') === 2, String(api._zoneWidthOf('Lame d’Écume')));
+            const firstTargeted = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('targeted')) ?? null;
+            if (firstTargeted) {
+              api._clearZone();
+              api._previewZone(firstTargeted.dataset.uid);
+              const zone2 = [...appEl.querySelectorAll('.unit')].filter((el) => el.classList.contains('zone2')).length;
+              check('47 e survol attaque = mono (0 zone2 attendu)', zone2 === 0, 'zone2=' + zone2);
+            }
+            const tg = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('targeted')) ?? null;
+            if (tg) {
+              tg.click();
+              for (let w = 0; w < 120 && !st47.winner && api._busy(); w++) await wait(25);
+              check('47 f clic sur pion illuminé désigne et résout', (st47._events ?? []).some((e) => (e.type === 'attack' || e.type === 'cast') && e.targetId === tg.dataset.uid), '');
+            } else {
+              check('47 f clic sur pion illuminé désigne et résout', false, 'pas de cible');
+            }
+          }
+        }
+      }
+      api._setAuto(true);
+      let guard = 0;
+      while (guard++ < 60 && !st47.winner) { await wait(40); const am2 = api._actEl(); if (am2) { const pb = am2.querySelector('.act-pass'); if (pb) pb.click(); } }
+    } else {
+      check('47 a fenêtre d’action avec boutons (Attaque/Attendre)', false, 'pas de combat');
+    }
+    check('47 z 0 exception après ciblage v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   // ---------- victoire pas-à-pas au moteur (40) + équivalence (46 i) ----------
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n4', 'a29'], 20);

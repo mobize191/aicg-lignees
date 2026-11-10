@@ -202,6 +202,9 @@ const API_PAIRS = {
   _busy: '() => busy',
   _speed: '(v) => { speedIdx = Math.max(0, Math.min(SPEEDS.length - 1, Number(v) || 0)); }',
   _lastTactMult: '() => lastTactMult',
+  _zoneWidthOf: '(name) => zoneWidthOf({ name })',
+  _previewZone: '(uid) => { const el = elOf(uid); if (el) previewZone(el); }',
+  _clearZone: '() => clearZonePreview()',
 };
 
 export function bootDist(file, extraPairs = {}) {
