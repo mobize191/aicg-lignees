@@ -2,6 +2,17 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — sets d'équipement par zone, façon Dofus (retour de Marc-Olivier)
+
+Détail dans `docs/design/economie-v2-catalogues.md` (§2, sets par zone) :
+
+1. **Un set thématique par zone** (ex : la Sirène pour les Marées) : une **armure générique + une arme par classe** à sa saveur (épée, bâton, sceptre, dagues, focus), soit 6 pièces par set.
+2. **Trois niveaux par set** : **base** (C/UC), **supérieure** (R), **royale** (SR) ; les noms suivent (Robe de la sirène → robe supérieure de la sirène → robe royale de la sirène, avec l'arme qui va avec).
+3. **Craft en ville** : la base s'assemble avec les ressources courantes de la zone ; la supérieure et la royale exigent en plus la **matière du boss** du donjon de la zone (elle ne s'achète pas).
+4. **Drops** : les ressources tombent partout (errance et donjons) ; les équipements peuvent tomber partout à **taux très faible** ; le boss garantit sa pièce et sa matière.
+5. **Bonus de set (Dofus)** : arme + armure du même set équipées sur un personnage = **+5 points de pourcentage** sur les effets des deux pièces (calibrage v0, à affiner au digest).
+6. Les sets sont la **ligne noble** de l'équipement ; la Boutique garde les paliers génériques d'entrée.
+
 ## 2026-11-11 : ACTÉ — vague 1 de la campagne v2 livrée : correctifs récurrents + verdict IPAdapter
 
 - **Vague 1 livrée** (commit 7ecfa63, rapport `tools/out-v2/RAPPORT-vague1.md`) : 53 références nommées + 6 fonds + tests IPAdapter, 271 prompts, 0 échec de mapping espèce, budgets v2 appliqués, masters conservés. Genre constaté 30 F / 17 M / 6 bestiaux, conforme à l'arbitrage sans quota. Graines conformes. Aucune intégration dist/site : validation en attente de Marc-Olivier sur la planche.

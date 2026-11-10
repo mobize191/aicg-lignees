@@ -42,6 +42,15 @@ Règle normative : les noms mêlent **zones/donjons** (Marées, Forge Cendrée, 
 | Assassin (dagues) | Dagues émoussées | Crochets de la Ruse | Dagues de la nuit des Marées | Stylets de l'Ombre du Zénith |
 | Occultiste (focus) | Focus de novice | Focus de la Crypte | Talisman de l'Entrave | Iris de Nuit Éternelle |
 
+### Sets par zone, façon Dofus (ACTÉ 11/11/2026)
+
+- Chaque zone porte un **set thématique** (ex : **la Sirène** pour les Marées) : **une armure générique + une arme par classe** à sa saveur (épée, bâton, sceptre, dagues, focus), soit 6 pièces par set.
+- **Trois niveaux par set** : **base** (C/UC), **supérieure** (R), **royale** (SR) : Robe de la sirène → Robe supérieure de la sirène → Robe royale de la sirène, avec l'arme qui va avec à chaque niveau.
+- **Craft en ville** : la base s'assemble avec les ressources courantes de la zone ; la supérieure et la royale exigent en plus la **matière du boss** du donjon de la zone (elle ne s'achète pas).
+- **Drops** : les ressources tombent partout (errance et donjons) ; les équipements peuvent tomber partout à **taux très faible** ; le boss garantit sa pièce et sa matière.
+- **Bonus de set (ACTÉ)** : arme + armure du même set équipées sur un personnage = **+5 points de pourcentage** sur les effets des deux pièces (calibrage v0, à affiner au digest).
+- Les sets sont la **ligne noble** de l'équipement ; la Boutique garde les paliers génériques d'entrée. Prix : paliers actés (C 200 → SR 1 600 or).
+
 ### Armures génériques (une seule ligne)
 
 Tunique de milicien (C), Brigandine de la Forge Cendrée (UC), Haubert des Marées (R), Égide du Zénith Ardent (SR) : +PV % aux mêmes paliers, mêmes prix que les armes.
