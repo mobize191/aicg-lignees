@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — redesign de l'IA de combat programmé après l'errance et le calibrage (Marc-Olivier)
+
+Le couloir 1 enchaînera, après le bloc visuel (économie v2 → hub-ville → errance) et le calibrage digest, un **redesign de l'IA de combat** (les « bots IA ») : choix d'actions, de sorts et de cibles, mode 🤖 Auto du joueur et comportements des ennemis. Le brief détaillé sera écrit et tranché quand le chantier arrive ; il s'appuiera sur le moteur pas-à-pas (`beginRound`/`stepRound`) et sera mesuré au digest. Inscrit en roadmap point 10 (pistes et « plus tard » renumérotés).
+
 ## 2026-11-11 : ACTÉ — ordre de production des maquettes : charte puis menu/hub d'abord (retour de Marc-Olivier)
 
 `docs/design/design-graphisme-v2-plan.md` §1.2 réordonné : (1) charte graphique v2 transverse, (2) **Accueil/hub-ville, le nouveau menu** (colonne vertébrale du redesign), (3) habillage des nouveautés boucle v2 (départ 2 cartes, sélecteur de marche, Récompenses, Objet, Inventaire, toasts — le couloir 1 en a besoin dès les lots 3-4, et la charte évite de relooker deux fois), (4) économie v2, (5) errance Marées. L'ordre de codage du couloir 1 ne change pas (roadmap point 9).
