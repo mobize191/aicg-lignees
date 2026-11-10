@@ -131,7 +131,7 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 
 | de | vers | voie | effet | ecoles ouvertes |
 | --- | --- | --- | --- | --- |
-| n13 | p1 | l’éveil du service — l’Ange Éveillé | remplace | - |
+| n13 | p1 | l’éveil du service — le Jeune Séraphin | remplace | - |
 | n14 | d8 | la voie du Chœur Miroir — la Réflexion | standard | - |
 | n15 | d14 | la voie du Pont — le Liage | standard | - |
 

@@ -207,7 +207,7 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n9 Embryon des Cieux | z3 | la voie dorée — la Légion Solaire |
 | n9 Embryon des Cieux | z16 | la voie du feu céleste — les Phénix |
 | n9 Embryon des Cieux | z23 | la voie du plein jour — le Clergé |
-| n13 Ange | p1 Jeune Séraphin | l’éveil du service — l’Ange Éveillé |
+| n13 Ange | p1 Jeune Séraphin | l’éveil du service — le Jeune Séraphin |
 | n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
 | n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |
 | a34 Braconnier des Quais | e3 | la malédiction des quais |
