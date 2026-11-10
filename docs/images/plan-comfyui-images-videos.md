@@ -19,7 +19,7 @@
 - **Budgets d'intégration** (via `make-assets.py`) : art 300×420 JPEG ≤ 30 Ko ; fond 960×540 JPEG ≤ 110 Ko ; manifeste `assets.json` cible ≤ 8 Mo ; JSON en base64 **ASCII pur**.
 - **Intouchables** : `dist.html` et le moteur ne sont JAMAIS modifiés par cette campagne. Références de non-régression : digest `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa` (476/3000, 0 exception) et smoke 158 PASS.
 - **Périmètre** : 238 cartes moins 7 archives = 231 arts à produire + 5 fonds + 29 références v3 (`tools/serie1-prompts.json`, intégration différée au contenu v3) + vidéos sorts signature. Les 33 arts actuels (générateur en ligne) restent en place jusqu'à leur remplacement lot par lot.
-- **Vidéos** : WAN 2.2 5B, ~0,8 s (20 frames, 25 fps), boucle fermée, fond compatible voile sombre, **jamais en base64 dans le dist** (stockées dans le repo, chargement = chantier code séparé).
+- **Vidéos** : WAN 2.2 5B, ~0,8 s (21 frames, 25 fps — convention WAN/ComfyUI : durée = (frames − 1) / fps, donc pour 0,8 s il faut 0,8 × 25 + 1 = 21 frames ; le webm rendu dure 21/25 = 0,84 s), boucle fermée, fond compatible voile sombre, **jamais en base64 dans le dist** (stockées dans le repo, chargement = chantier code séparé).
 
 ---
 
@@ -265,7 +265,7 @@ Négatif commun : `text, watermark, blurry, low quality, distorted anatomy, jitt
 
 - [ ] **Step 3 : rendre via le template WAN 2.2 5B**
 
-Dans ComfyUI, template « WAN 2.2 Text-to-Video 5B » : 20 frames, 25 fps, 832×480, seed fixe consigné, prompt du `fx-prompts.json`. Exporter les frames et assembler en boucle fermée :
+Dans ComfyUI, template « WAN 2.2 Text-to-Video 5B » : 21 frames, 25 fps, 832×480, seed fixe consigné, prompt du `fx-prompts.json` (21 frames = 0,8 s selon la convention WAN : durée = (frames − 1) / fps ; 20 frames ne donneraient que 0,76 s). Exporter les frames et assembler en boucle fermée :
 
 ```bash
 # boucle : crossfade 5 frames entre la dernière et la première frame
