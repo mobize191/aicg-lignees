@@ -732,7 +732,7 @@
   },
   {
    "id": "fournaise-invoquee",
-   "nom": "Fournaise Invoqu’e",
+   "nom": "Fournaise Invoquée",
    "ecole": "appel",
    "role": "invocation",
    "desc": "L’Appel de la Forge : la fournaise envoie des renforts de cendre, 3 maximum par invocateur.",

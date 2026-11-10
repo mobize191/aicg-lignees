@@ -43,7 +43,7 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
 | colonne-de-feu | Colonne de Feu | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
-| fournaise-invoquee | Fournaise Invoqu’e | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| fournaise-invoquee | Fournaise Invoquée | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 
 ## Sorts de lignee (42)
 
