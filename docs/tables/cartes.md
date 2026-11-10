@@ -134,29 +134,61 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | braise | Famille de la Braise | a19 Allumeur de Braises -> a32 Veilleur de Braise -> a20 Mage de la Fournaise -> a21 Invocateur de Fournaise -> a22 Solen, Archimage de la Braise -> a23 Solen, Roi des Braises | - |
 | bosquet | Famille du Bosquet | a24 Traqueur du Bosquet -> a33 Pisteur du Bosquet -> a25 Chasseur du Bosquet -> a26 Prédateur Sylvestre -> a27 Maïa, Lame du Bosquet -> a28 Maïa, Déesse du Bosquet | - |
 
-## Evolutions (data/evolutions.json + data/solo-steps.json)
+## Evolutions (data/evolutions.json)
 
-Les cartes simples montent d'un cran (n1 -> a30...) ; les colonnes listent chaque carte et sa suivante.
+Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10 et des eclats (EVO_COST).
 
-| carte | evolue vers | suivante |
+| carte | evolue vers | voie |
+| --- | --- | --- |
+| n1 Épéiste Novice | a30 Spadassin Vigilant | voie du guerrier |
+| n1 Épéiste Novice | s14 Garde du Rempart | voie de la protection |
+| n1 Épéiste Novice | a33 Pisteur du Bosquet | voie sylvestre |
+| n2 Mage Novice | a29 Adepte des Rivières | les flots — l’Eau |
+| n2 Mage Novice | a32 Veilleur de Braise | la fournaise — le Feu |
+| n2 Mage Novice | a33 Pisteur du Bosquet | les Sylvains — la Terre |
+| n2 Mage Novice | s13 Servante de l’Aube | la lumière — l’élue de l’Aube |
+| n2 Mage Novice | a31 Guetteur Crépusculaire | l’ombre — l’élue du Crépuscule |
+| n3 Prêtre Novice | s13 Servante de l’Aube | la lumière — la foi |
+| n3 Prêtre Novice | s14 Garde du Rempart | la garde — protéger les vivants |
+| n4 Voleur Novice | a31 Guetteur Crépusculaire | voie de l’assassinat |
+| n4 Voleur Novice | a34 Braconnier des Quais | voie des quais |
+| n4 Voleur Novice | a37 Jongleur de Fête | voie de la fête |
+| a29 Adepte des Rivières | a8 Sorcière des Rivières | fidèle à l’Eau |
+| a29 Adepte des Rivières | s5 Prêtresse de l’Aube | élue de la lumière — rejoint la lignée de Léna |
+| a32 Veilleur de Braise | a20 Mage de la Fournaise | fidèle au Feu |
+| a32 Veilleur de Braise | s5 Prêtresse de l’Aube | élue de la lumière — rejoint la lignée de Léna |
+| n5 Bestiau des Eaux | e3 | voie du pillage — les récifs |
+| n5 Bestiau des Eaux | e11 | voie des berges |
+| n6 Bestiau des Flammes | f3 | voie de la suie |
+| n6 Bestiau des Flammes | f15 | voie de la fournaise |
+| n6 Bestiau des Flammes | f24 | voie du goblin |
+| n7 Bestiau du Vivant | g3 | voie de la mousse |
+| n7 Bestiau du Vivant | g12 | voie des sèves |
+| n8 Bestiau des Ténèbres | k3 | le gouffre |
+| n8 Bestiau des Ténèbres | k12 | le deuil marin |
+| n8 Bestiau des Ténèbres | k24 | le devoir brisé |
+| n10 Enge des Brumes | e24 | la forme — Sirène |
+| n11 Enge des Bois | g12 | la forme — Dryade |
+| n12 Enge des Caveaux | k3 | la forme — le gouffre |
+| n12 Enge des Caveaux | k12 | la forme — le deuil marin |
+| n12 Enge des Caveaux | k24 | la forme — le devoir brisé |
+| n9 Bestiau des Cieux | z3 | la voie dorée — la Légion Solaire |
+| n9 Bestiau des Cieux | z16 | la voie du feu céleste — les Phénix |
+| n9 Bestiau des Cieux | z23 | la voie du plein jour — le Clergé |
+| n13 Ange | p1 Ange Éveillé | l’éveil du service — l’Ange Éveillé |
+| n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
+| n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |
+
+## Soudures solos (data/solo-steps.json)
+
+Les solos sans voie montent d'un cran au palier indique.
+
+| carte | evolue vers | rarete |
 | --- | --- | --- |
 | n1 Épéiste Novice | a30 Spadassin Vigilant | UC |
 | n2 Mage Novice | a29 Adepte des Rivières | UC |
 | n3 Prêtre Novice | s13 Servante de l’Aube | UC |
 | n4 Voleur Novice | a31 Guetteur Crépusculaire | UC |
-| a29 Adepte des Rivières | [object Object],[object Object] | - |
-| a32 Veilleur de Braise | [object Object],[object Object] | - |
-| n5 Bestiau des Eaux | [object Object],[object Object] | - |
-| n6 Bestiau des Flammes | [object Object],[object Object],[object Object] | - |
-| n7 Bestiau du Vivant | [object Object],[object Object] | - |
-| n8 Bestiau des Ténèbres | [object Object],[object Object],[object Object] | - |
-| n10 Enge des Brumes | [object Object] | - |
-| n11 Enge des Bois | [object Object] | - |
-| n12 Enge des Caveaux | [object Object],[object Object],[object Object] | - |
-| n9 Bestiau des Cieux | [object Object],[object Object],[object Object] | - |
-| n13 Ange | [object Object] | - |
-| n14 Démon | [object Object] | - |
-| n15 Éveillé du Seuil | [object Object] | - |
 | a34 Braconnier des Quais | a40 Chasseur des Quais | UC |
 | a40 Chasseur des Quais | a41 Maître des Brumes | R |
 | a35 Palefrenière Errante | a42 Écuyère des Routes | UC |

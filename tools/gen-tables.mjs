@@ -43,11 +43,20 @@ for (const [fid, f] of Object.entries(families)) {
   out.push(row([fid, f.name, f.steps.map((id) => (byId(cards, id) ? id + ' ' + byId(cards, id).name : id)).join(' -> '), (f.future || []).join(', ')]));
 }
 out.push('');
-out.push('## Evolutions (data/evolutions.json + data/solo-steps.json)', '');
-out.push('Les cartes simples montent d\'un cran (n1 -> a30...) ; les colonnes listent chaque carte et sa suivante.', '');
-out.push(head(['carte', 'evolue vers', 'suivante']));
-const evoAll = { ...evolutions, ...soloSteps };
-for (const [from, to] of Object.entries(evoAll)) {
+out.push('## Evolutions (data/evolutions.json)', '');
+out.push('Les cartes a choix listent chaque voie possible ; l\'evolution exige le niveau 10 et des eclats (EVO_COST).', '');
+out.push(head(['carte', 'evolue vers', 'voie']));
+for (const [from, tos] of Object.entries(evolutions)) {
+  const a = byId(cards, from);
+  for (const ch of (Array.isArray(tos) ? tos : [tos])) {
+    const b = byId(cards, ch.to);
+    out.push(row([from + (a ? ' ' + a.name : ''), ch.to + (b ? ' ' + b.name : ''), ch.voie]));
+  }
+}
+out.push('', '## Soudures solos (data/solo-steps.json)', '');
+out.push('Les solos sans voie montent d\'un cran au palier indique.', '');
+out.push(head(['carte', 'evolue vers', 'rarete']));
+for (const [from, to] of Object.entries(soloSteps)) {
   const a = byId(cards, from), b = byId(cards, to);
   out.push(row([from + (a ? ' ' + a.name : ''), to + (b ? ' ' + b.name : ''), T(b ? b.rarity : '')]));
 }
