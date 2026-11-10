@@ -66,7 +66,8 @@ flowchart LR
   n12 -->|"la forme — le deuil marin"| k12["Veilleuse de Bord · UC"]
   n12 -->|"la forme — le devoir brisé"| k24["Porte-Étendard Défunt · UC"]
   n13["Ange · C"]
-  n13 -->|"l’éveil du service — l’Ange Éveillé"| p1["Ange Éveillé · UC"]
+  n13 -->|"l’éveil du service — le Jeune Séraphin"| p1["Jeune Séraphin · UC"]
+  p1 -.->|"l’équilibre (événement : l’Ange ET le Démon possédés)"| d6["Kairos, Arbitre du Seuil · L"]
   n14["Démon · C"]
   n14 -->|"la voie du Chœur Miroir — la Réflexion"| d8["Choriste Miroir · UC"]
   n15["Éveillé du Seuil · C"]
@@ -268,7 +269,7 @@ Chaque famille de monstres a jusqu'à trois lignes d'évolution (une par maillon
 
 ## 5. Les familles divines (Le Seuil)
 
-Deux lignes par famille, reliées par un pont : le sommet d'une ligne devient le pied de la suivante. Le Démon (n14) et l'Éveillé du Seuil (n15) y entrent par leurs voies. L'Ange (n13) est l'exception : il ne rejoint pas un web, il s'éveille en l'Ange Éveillé (p1), qui porte les trois portes (la coloration, la voie céleste, la mauvaise volonté) et remplace l'Ange Gardien (p2, archivé).
+Deux lignes par famille, reliées par un pont : le sommet d'une ligne devient le pied de la suivante. Le Démon (n14) et l'Éveillé du Seuil (n15) y entrent par leurs voies. L'Ange (n13) est l'exception : il ne rejoint pas un web, il s'éveille en le Jeune Séraphin (p1, ex-Ange Éveillé, id inchangé), qui porte les trois portes (la coloration, la voie céleste, la mauvaise volonté) et remplace l'Ange Gardien (p2, archivé). L'événement d'équilibre (posséder l'Ange ET le Démon) le mène à Kairos, Arbitre du Seuil (d6) ; les trois portes attendent leurs maillons.
 
 **Arbitres du Seuil**
 

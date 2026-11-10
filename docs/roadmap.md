@@ -40,7 +40,7 @@ Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi
    - **Variantes gobelins régionales** : une seule famille gobelin (foyer aux Marées), variantes 2-3 cartes en ligne directe rapide dans les autres donjons (premier test : Gobelin des Fumées à la Forge) ; pas de M gobelin.
    - **Clergé du Plein Jour** : Apolline, Prophétesse du Jour, passe en M (fusion Célestin + Justine) ; nouvelle L Justine, Justicière du Jour ; le Zénith porterait 2 M.
    - **10 renommages** actés (affichage seul, courbe inchangée).
-   - **Familles compagnons** (7 UR + 7 L) et **familles divines côté joueur** (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont, déjà posées côté monstres d1-d18) ; les trois portes de l'Ange Éveillé ont leurs maillons à dessiner.
+   - **Familles compagnons** (7 UR + 7 L) et **familles divines côté joueur** (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont, déjà posées côté monstres d1-d18) ; les trois portes du Jeune Séraphin ont leurs maillons à dessiner (l'événement d'équilibre p1 → d6 Kairos est déjà posé, lot 5).
    - **Lignées d'accueil des Enge** : Sirène Nouvelle, Gorgonne Nouvelle, Fée Nouvelle (communes de la Crypte).
    - Les **29 nommées de référence** (`campagne/references/`, seeds dans `tools/seeds.csv`) s'intègrent au manifeste à mesure que ces cartes existent.
 3. **v0.48 — Vidéos de sorts signature** : les webm WAN 2.2 (~0,8 s, 21 frames/25 fps, prompts dans `tools/fx-prompts.json`) sont rendus et stockés dans `site-assets/fx/` (jamais en base64 dans le dist ni dans `assets.json`) ; **l'affichage dans le jeu est le chantier code** : déclenchement au cast, fallback image si absent/lent, toggle de vitesse.
