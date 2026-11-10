@@ -728,6 +728,41 @@ border: 1px solid #ffffff26; background: #ffffff0d; color: #cfd3e1; cursor: poin
 .glo-fx::before { content: "➤"; position: absolute; left: 0; color: #7c4dff; font-size: .75em; }
 @media (min-width: 620px) { .glo-grid { grid-template-columns: 1fr 1fr; } }
 
+/* v0.47.1 : bouton de switch de thème (sombre par défaut, clair au choix) */
+#theme-btn {
+display: inline-flex; align-items: center; justify-content: center;
+width: 40px; height: 34px; border-radius: 10px; font-size: 1.05rem; line-height: 1;
+border: 1px solid rgba(77, 208, 225, .35);
+background: rgba(77, 208, 225, .12); color: #bfe8ff; cursor: pointer;
+}
+#theme-btn:active { background: rgba(77, 208, 225, .28); }
+
+/* v0.47.1 : thème clair */
+body.theme-clair {
+color: #1b2330;
+background:
+radial-gradient(1100px 500px at 80% -10%, rgba(38, 166, 154, .16), transparent 60%),
+radial-gradient(900px 500px at -10% 110%, rgba(124, 77, 255, .12), transparent 55%),
+#edf0f6;
+}
+body.theme-clair header, body.theme-clair nav { background: rgba(255, 255, 255, .92); border-bottom-color: rgba(13, 110, 125, .25); }
+body.theme-clair nav a { color: #45526a; }
+body.theme-clair nav a.on { color: #06131a; }
+body.theme-clair .muted, body.theme-clair #log { color: #4d5c76; }
+body.theme-clair .btn { background: linear-gradient(180deg, #ffffff, #e8eef6); color: #0d3a44; border-color: rgba(13, 110, 125, .4); }
+body.theme-clair .card { background: linear-gradient(180deg, #ffffff, #e9eef7 60%, #dde5f0); color: #1b2330; border-color: #9aa7bd; box-shadow: 0 3px 10px rgba(30, 45, 70, .18), inset 0 0 0 1.5px rgba(13, 60, 80, .08); }
+body.theme-clair .modal-overlay { background: rgba(238, 241, 247, .82); }
+body.theme-clair .modal { background: linear-gradient(180deg, #ffffff, #edf1f8); color: #1b2330; border-color: rgba(13, 110, 125, .3); }
+body.theme-clair .act-modal { background: rgba(255, 255, 255, .97); color: #1b2330; border-top-color: rgba(13, 110, 125, .4); }
+body.theme-clair .chip.st { background: rgba(20, 30, 45, .85); }
+body.theme-clair input, body.theme-clair textarea, body.theme-clair select { background: #fff; color: #1b2330; border-color: rgba(13, 60, 80, .3); }
+body.theme-clair .save-box, body.theme-clair .tac-row, body.theme-clair .defi-card, body.theme-clair .run-mod-card { background: rgba(255, 255, 255, .78); color: #1b2330; }
+body.theme-clair .hero { background: linear-gradient(180deg, rgba(38, 166, 154, .14), rgba(124, 77, 255, .12)), rgba(255, 255, 255, .85); color: #1b2330; border-color: rgba(13, 110, 125, .3); }
+body.theme-clair h4 { color: #0d5a68; }
+body.theme-clair .dungeon-card, body.theme-clair .fam-card, body.theme-clair .gcell .card { color: #1b2330; }
+body.theme-clair .toast { background: rgba(255, 255, 255, .95); color: #14532d; }
+body.theme-clair #theme-btn { background: rgba(124, 77, 255, .12); border-color: rgba(124, 77, 255, .45); color: #4a2fb0; }
+
 #menu-btn { display: none; }
 @media (max-width: 639px) {
 header { gap: 10px; }
@@ -871,6 +906,7 @@ animation: newpulse 1.6s infinite;
 <header>
   <div class="brand">⚔ Fondations Cards</div>
   <span class="pts-badge" id="pts">⚡ 0</span>
+  <button type="button" id="theme-btn" aria-label="Changer de thème">🌙</button>
   <button type="button" id="menu-btn" aria-label="Menu">☰</button>
 </header>
 <nav id="main-nav">
@@ -11248,6 +11284,22 @@ function start() {
       go(a.getAttribute('href'));
     });
   });
+  const themeBtn = document.getElementById('theme-btn');
+  const applyThemeIcon = () => {
+    if (themeBtn) themeBtn.textContent = document.body.classList.contains('theme-clair') ? '☀️' : '🌙';
+  };
+  try {
+    if (storage.getItem('fondations-theme') === 'clair') document.body.classList.add('theme-clair');
+  } catch (e) { }
+  if (themeBtn) {
+    themeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.body.classList.toggle('theme-clair');
+      try { storage.setItem('fondations-theme', document.body.classList.contains('theme-clair') ? 'clair' : 'sombre'); } catch (e2) { }
+      applyThemeIcon();
+    });
+  }
+  applyThemeIcon();
   const menuBtn = document.getElementById('menu-btn');
   if (menuBtn) {
     menuBtn.addEventListener('click', (e) => {
@@ -14007,6 +14059,7 @@ const STATUS_DOC = [
 
 const HISTORY = [
   ['v1.0 : La refonte majeure', 'LE MONOLITHE DEVIENT MODULAIRE. Les donnees vivent desormais dans data/ (cartes, monstres, ecoles, grimoire a crans, arbres de race, zones), le moteur dans src/engine/ en modules purs, et dist.html est regenere par build.mjs. LES ARBRES DE RACE (v17) : crans +10/+20/+30 % en donnees, l\u2019Ange Eveille remplace l\u2019Ange Gardien, communes deleguees (Pousse des Seves, Fidele du Jour). LES SORTS (v2.3) : 8 ecoles, grimoire a crans I-IV, fusion des Marees (30 signatures -> 7 uniques + 23 fondues), fin du verrou de classe. LE MODE RPG : agilite et intelligence, mult sur la stat principale, la zone de 3, l\u2019ordre du tour sur l\u2019agilite, les taux contre les seuils. LES ZONES D\u2019ERRANCE : cadence zone/donjon, recoltes, apprentissage des crans. Sauvegardes migrees de v8 a v12 sans perte.'],
+  ['v0.47.1 : Thème clair', 'Un bouton 🌙/☀️ dans l’en-tête permet de basculer entre le thème sombre (par défaut) et un thème clair, mémorisé entre les visites. Aucun impact sur le moteur.'],
   ['v0.47 : Tranche-Monde et Nuit Éternelle', 'LES SORTS SIGNATURE NE RÉPÈTENT PLUS LE NOM DE LEUR CARTE. Le sort L du Sabre (« Kenji : Sabre Céleste ») devient Tranche-Monde ; le sort L de l’Ombre (« Kira : Nuit Sans Fin ») devient Nuit Éternelle. « Kenji : Zénith Tranchant » reste ; l’Aube garde son exception assumée : Aube Éternelle, le plus fort sort de l’aube porte le nom de sa carte (Léna).'],
   ['v0.46 : Le RPG tour par tour', 'LE CHANTIER PROMIS. Le mode 🧭 Tactique devient un vrai tour de RPG : plus de panneau à remplir en bas de page. Chaque tour, les cartes des deux camps agissent une par une, de la plus forte attaque à la moins forte (la vôtre d’abord à égalité). Quand vient le tour d’une de vos cartes, une fenêtre s’ouvre pour elle : illustration, points de vie, attaque, mana — puis ses choix : ⚔ Attaque, sorts ✦ avec leur coût (atténués si le mana manque), ➕ Souffle Croisé pour les attaquants, ⏸ Attendre pour économiser le mana. Désignez ensuite la cible : ennemie à frapper ou allié à soigner, dans une liste cliquable — et le pion correspondant s’illumine sur le plateau. L’action s’exécute aussitôt, animée, puis la carte suivante joue, et les ennemis agissent de la même façon sous vos yeux. Le ciblage des ennemis, demandé au retour du terrain, est enfin explicite.'],
   ['v0.45 : Rien de caché, des pions à voir', 'SIX RETOURS DU TERRAIN CORRIGÉS. (1) Le code brut à la place de l’emoji disparaît : le bouton 🤖 « Auto ce tour », l’en-tête du panneau Tactique et les récompenses affichent enfin leurs pictogrammes. (2) Le menu ☰ reste joignable EN COMBAT : la navigation s’ouvre par-dessus l’écran, opaque et déroulante. (3) Le panneau Tactique n’est plus jamais coupé : il défile à l’intérieur de sa zone. (4) Les pions de combat grandissent (128 px, boss 162 px) et deviennent plus carrés : l’illustration occupe presque toute la carte, nom et stats en surimpression. (5) L’écran de combat ne coupe PLUS rien : si l’écran est trop petit, le contenu défile à l’intérieur de l’écran. (6) Les sorts spéciaux n’assombrissent plus le plateau : une bande compacte (illustration du lanceur + nom du sort) passe au-dessus sans rien masquer.'],
