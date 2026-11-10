@@ -8,6 +8,17 @@
 - **Mapping proposé** (dérivé des voies/classes des familles et des lignes d'école des biomes ; `bouclier→rempart` et `aube→baume` étaient déjà actés en roadmap) : eau→lame, aube→baume, lame→lame, ombre→lame, bouclier→rempart, braise→mauvais-oeil, bosquet→entrave, crepuscule→mauvais-oeil, vol→ruse, zele→ferveur, appel→appel.
 - **Comportement conservé** : les familles en ligne support (aube, bouclier, zèle) relèvent d'écoles non hostiles (soin/bouclier/boost), donc `foeFacingSpell` ne change pour aucune unité ; digest **inchangé** `833a6d2c…` 518/3000, 115 tests, smoke 171 checks.
 
+## 2026-11-10 (nuit, troisième tour) : ACTÉ — calibrage v0 de l'économie v2 (retour de Marc-Olivier)
+
+Barème de départ acté pour le chantier économie v2 ; il se recalibre au digest après le chantier lignes (toute modification de maths = digest recalibré et documenté) :
+
+1. **Conversion ⚡→or : 1 point = 1 or.** Un run de 10 étages ≈ 400 or (modulé par les mods de run) ; l'énergie actuelle (`store.points`, 40 par étage) est convertie en or au chantier économie.
+2. **Boutique** : potion de soin 50 or, potion de mana 60 or, éclat 150 or, équipement de 200 (C) à 1 600 or (SR). Les gemmes ne s'achètent pas : elles restent des récompenses de boss (`BOSS_GEM`).
+3. **Marchand de créatures, échelle exigeante** : C 200, UC 500, R 1 200, SR 3 500, **UR 10 000 or** (une UR ≈ 25 runs). Il remplace les jetons de génération (`JETON_RARITY` disparaît).
+4. **Guilde (ex-Forge)** : les évolutions restent en gemmes (`EVO_COST` inchangé) ; le recrutement d'un compagnon coûte 500 à 2 000 or selon sa rareté.
+5. **Quêtes quotidiennes** : **3 par jour en rotation**, récompenses 80 à 150 or, parfois une carte N, un éclat ou une pierre d'éveil ; **bonus de complétion totale : 1 pierre d'éveil**. Le défi du jour reste supprimé.
+6. **Équipement** : **arme typée par classe** (épée pour le Guerrier, bâton pour le Mage, sceptre pour le Prêtre, dagues pour l'Assassin, focus pour l'Occultiste) + **armure générique** ; effets en pourcentage (+ATQ, +PV, +AGI, +INT) ; plus 2 slots d'équipe génériques (bannière, talisman de camp).
+
 ## 2026-11-10 (nuit, second tour) : ACTÉ — CROSS retiré, quêtes quotidiennes, équipement par classe, errance après le calibrage (retour de Marc-Olivier)
 
 Dernier tour de tranchage de la session design ; les derniers points ouverts sont clos :
