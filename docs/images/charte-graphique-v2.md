@@ -31,7 +31,7 @@ Problèmes constatés : espèce déduite du nom → dérive au sein d'une famill
 1. **L'espèce vient des data, jamais du nom** : bloc `species` obligatoire par carte, dérivé de `data/` + document Familles et races v3. Mapping famille/espèce → tags danbooru dans `tools/species-map.json` ; `build-prompts.mjs` refuse une carte sans entrée (échec explicite).
 2. **Bestiau = une vraie bête** : tags `beast, monstrous, claws, fangs, fur/scales` + négatif `catgirl, human, girl, elf, cute animal ears`. Objectif : l'espèce se lit en un coup d'œil, pas "effrayant".
 3. **Genre : une seule identité par carte**, `1girl`/`1boy` verrouillé dans l'ADN. Variantes F/M aléatoires ÉCARTÉES (arts ×2, cohérence cassée).
-4. **Équilibre par campagne (~50/50)** : registre dans `seeds.csv`, ratio vérifié sur la planche de contrôle.
+4. **Équilibre sans quota strict** (Marc-Olivier, 10/11 soir) : le registre `seeds.csv` note le genre par carte, la planche de contrôle vérifie qu'aucune campagne ne part totalement d'un côté, SANS case 50/50 à remplir. Les nommées finissent ~30 F / 23 M, la campagne compense naturellement sur les génériques.
 5. **Fées, divines, esprits** : tags explicites par famille + âge apparent cohérent ; divines gardent le traitement digne des conventions v1.
 
 ## 4. Stack technique ComfyUI
@@ -66,11 +66,11 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 ## 8. Points ouverts (bloquants avant génération)
 
 1. **Checkpoint final : TRANCHÉ (10/11/2026)** — WAI v17 retenu, NoobAI-XL écarté (test aveugle 6/0, voir §11).
-2. **Tier de bascule full body** (R ? SR seulement ?).
-3. **Liste des nommées** qui méritent un mini-LoRA ; validation de la méthode IPAdapter.
-4. **Tableau genre + espèce des ~47 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data) : 29 monstres (série 1) + 7 têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa) + 7 graines dormantes (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) + les nouvelles familles v3 (Vesperine, Gadianton, Lémion) et Aurorine (z15, monstre non couvert par la série 1) — voir §10.
-5. **Vidéos FX** : alimentées par les arts v1 ou régénérées en v2 ?
-6. **Sort des 231 arts DreamShaper XL** : repli ou archivage de la campagne v1.
+2. **Tier de bascule full body : TRANCHÉ (10/11 soir)** — full body pour **UR, L et M** ; demi-corps pour C/UC/R/SR.
+3. **Liste des nommées** qui méritent un mini-LoRA ; validation de la méthode IPAdapter. (OUVERT)
+4. **Tableau genre + espèce : TRANCHÉ ET CRÉÉ (10/11 soir)** — `tools/species-map.json` v1 couvre les 53 références nommées (35 monstres + 7 compagnons + 7 graines + 4 sommets v3), les 11 familles (dont Crépuscule/Vol/Zèle/Appel = humaines) et les règles génériques. Genres tranchés pour les 7 cas ambigus, dont **Ember = F** et **Archimage de l'Appel = F** (retours de Marc-Olivier) ; ratio final ~30 F / 23 M sans quota (voir §3.4 et §12). `build-prompts.mjs` doit échouer sans entrée.
+5. **Vidéos FX : TRANCHÉ (10/11 soir)** — **aucune vidéo avant la v2 complète** : pas de mini-vidéos alimentées par les arts v1, la génération WAN démarre après la campagne d'arts v2 validée.
+6. **Sort des 231 arts DreamShaper XL : TRANCHÉ (10/11 soir)** — **archivés en repli** jusqu'à la validation v2, remplacés carte par carte par la campagne v2, pas de suppression avant l'accord explicite.
 7. Déco : vidéo vs parallaxe par écran ; WAN 5B vs 14B ; économie de la Boutique ; intérieur des Terres Sauvages (raccord donjons/errance) ; qui est le héros de l'errance (avatar joueur ou carte de l'équipe).
 
 ## 10. Alignement sur les arbres v3 (comparaison du 10/11/2026)
@@ -111,6 +111,17 @@ Test aveugle local ComfyUI, 6 cartes témoins × 2 checkpoints, paramètres iden
 3. **Yuki en gamine** : OK pour la graine (b1), mais à généraliser en règle : **âge apparent par palier de rareté** dans le `character_dna` (ajouté au §2). La cohérence de lignée inclut la maturation, pas seulement les traits.
 
 Ces corrections sont à écrire dans `tests/checkpoint-2026-11/prompts.json` (registre local du test) puis à reporter dans les prompts de campagne v2.
+
+## 12. Arbitrages de lancement (10/11/2026 soir) — TRANCHÉS, campagne débloquée
+
+Réponses de Marc-Olivier après le test checkpoint (§11), entrées ACTÉ correspondantes dans `docs/arbitrages.md` :
+
+1. **Full body dès UR** : UR, L et M en full body ; C/UC/R/SR en demi-corps.
+2. **`tools/species-map.json` créé (v1)** : 53 nommées (genre + espèce + âge par palier), 11 familles (les 4 nouvelles v3 = humaines), tags anti-dérive par espèce, règles pour les 231 génériques. Genres tranchés : La Mort F, Archiliche M, Fjalar M, Kairos M, **Ember F**, Sylve F, **Archimage de l'Appel F**. Ratio nommées ~30 F / 23 M, **sans quota strict** : l'équilibre se juge sur la planche de contrôle, pas sur un chiffre imposé.
+3. **Vidéos FX** : aucune avant la v2 complète — les mini-vidéos de sorts attendent la campagne d'arts v2 validée, le chantier WAN ne démarre pas avec les arts v1.
+4. **231 arts DreamShaper** : archivés en repli, remplacés carte par carte, suppression seulement sur accord explicite après validation v2.
+
+**Restent ouverts avant le lancement effectif** : la liste mini-LoRA + la validation IPAdapter (§8.3) — non bloquants pour la première vague de génération (test de la méthode IPAdapter sur 2-3 nommées à lignée longue suffit).
 
 ## 9. Impact sur les scripts
 

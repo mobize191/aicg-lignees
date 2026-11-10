@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — arbitrages de lancement de la campagne charte v2 (retour de Marc-Olivier)
+
+- **Full body dès UR** : les raretés UR, L et M passent en full body ; C/UC/R/SR restent en demi-corps (charte v2 §1 et §12).
+- **`tools/species-map.json` créé (v1)** : tableau genre + espèce + âge par palier des 53 références nommées (35 monstres, 7 compagnons, 7 graines, 4 sommets v3 : Vesperine, Gadianton, Lémion, Archimage de l'Appel) + les 11 familles (Crépuscule, Vol, Zèle, École des Invocations = **humaines**) + règles génériques pour les 231 arts. `build-prompts.mjs` doit échouer explicitement pour toute carte sans entrée (espèce depuis les data, jamais depuis le nom).
+- **Genres tranchés sur les cas ambigus** : La Mort F, Archiliche M, Fjalar M, Kairos M, **Ember F** (graine b6), Sylve F, **Archimage de l'Appel F** (v6, vieille sage majestueuse). Les 7 compagnons/graines masculins initialement proposés sont confirmés (Kenji, Argus, Solen, Onyx, Roc).
+- **Équilibre des genres : PAS de quota strict** (Marc-Olivier) : les nommées finissent ~30 F / 23 M ; l'équilibre se vérifie globalement sur la planche de contrôle, aucune case 50/50 à remplir.
+- **Vidéos FX : AUCUNE avant la v2 complète** : pas de mini-vidéos alimentées par les arts v1 ; le chantier WAN (vidéos + cycles de marche errance) démarre après la campagne d'arts v2 validée.
+- **Sort des 231 arts DreamShaper XL : archivés en repli** : remplacés carte par carte par la campagne v2, supprimés seulement sur accord explicite de Marc-Olivier après validation v2.
+- **Conséquence : tous les points bloquants de la charte v2 (§8) sont levés sauf la liste mini-LoRA + validation IPAdapter**, non bloquants pour la première vague (tester IPAdapter sur 2-3 nommées à lignée longue suffit). La campagne de génération v2 est DÉBLOQUÉE.
+
 ## 2026-11-10 : ACTÉ — test aveugle checkpoint (charte v2) : WAI v17 retenu, NoobAI-XL écarté
 
 - **Protocole** : test aveugle local ComfyUI, 6 cartes témoins × 2 checkpoints (WAI-Illustrious v17 vs NoobAI-XL), paramètres identiques, seeds figés 1126001→1126006 (meliane, seigneur-cendres, leviathan, kenji, yuki, bg-marees). Révélation après évaluation de Marc-Olivier.
