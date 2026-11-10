@@ -150,3 +150,18 @@ Les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, compression ag
 - `make-assets.py` prendra ces budgets à la conversion ; les masters sont archivés à part (jamais dans le dist ni dans assets.json).
 - La netteté du visage après ADetailer survit enfin au zoom de fiche (le v1 en q72 la sacrifiait).
 
+
+## 14. Retours de la vague 1 (10-11/11/2026) — livrée, correctifs récurrents ACTÉS
+
+**Vague 1 livrée** (commit 7ecfa63, rapport `tools/out-v2/RAPPORT-vague1.md`) : 63 images (53 références nommées + 6 fonds + 4 tests IPAdapter), 271 prompts générés, **0 échec de mapping espèce**. Stack confirmée : ComfyUI local, WAI v17, 832×1216, CFG 5.5, dpmpp_2m_sde + karras, hires fix ×1.25, ADetailer (masque fixe région tête), ~40 s/img, ~7,4 Go VRAM (RTX 5070). Budgets v2 appliqués (400×560 q80 / fonds 1216×832 q72), masters PNG conservés. Genre constaté : 30 F / 17 M / 6 bestiaux sans genre — conforme. Graines b1-b7 : conformes (jeunes, non sexualisées). Cadrage full body dès UR respecté. Rien n'a touché au dist ni aux 231 DreamShaper.
+
+**Correctifs de prompts récurrents (première passe QA vision sur 8 cartes + rapport agent), à appliquer sur les retries puis au négatif standard de `build-prompts.mjs` :**
+
+1. **Visage noir/encapuchonné** (a16 Kira, d6 Kairos, f18 Ombeline, f13) : ADetailer ne répare pas un visage invisible, correction prompt obligatoire — positif `visible face, detailed eyes, face illuminated by soft glow, front lighting` ; négatif `hooded, shadowed face, covered face, black face, obscured face, dark silhouette`. Univers sombres = tenue sombre, visage TOUJOURS éclairé.
+2. **Quasi-monochrome** (a13 Alix, e22 Pontos) : l'élément colore les effets et l'éclairage, jamais la peau ni tout l'arrière-plan — positif `colorful, vibrant colors` + accent par univers (Marées : `coral accents, warm rim light`) ; négatif `monochrome, greyscale, single color palette, monochromatic background`.
+3. **Peau dénaturée** (a15 Kenji, peau bleue par contamination Feu/flamme ; casque armure bleue en plus selon l'agent) : toute carte humaine porte `fair skin, human skin tone` en positif, `blue skin, colored skin, inhuman skin` en négatif ; Kenji en plus `bareheaded, beard stubble` en positif, `helmet, full helmet` en négatif.
+4. **Signature d'artiste** (e22) : `artist signature, artist name` ajouté au négatif global.
+5. **f13 Seigneur des Cendres** : malgré l'ADN fireLord, sorti en silhouette humanoïde encapuchonnée — renforcer `colossal, bulky, beast-like, no humanoid proportions` + négatif `hood, slim, humanoid`.
+6. **Espèce phénix** (z19/z22) : corrigée dans `species-map.json` (cf. arbitrages « les phénix sont des bêtes ») — z19/z22 à régénérer.
+
+**Verdict IPAdapter (test vague 1)** : validé MÉCANIQUEMENT (identité ancrée : Kenji, Yuki, sirène e27 lisibles comme le même personnage). MAIS poids 0.6 `linear` **brûle les couleurs** (dérive psychédélique magenta/cyan sur les 3 tests). Réglage retenu pour la vague 2 : **poids 0.3-0.45, weight_type `ease in-out`, end_at 0.8-0.9**, à re-valider avant d'étendre aux 53 lignées. La fourchette « 0.5-0.7 » du §2 est révisée en conséquence.

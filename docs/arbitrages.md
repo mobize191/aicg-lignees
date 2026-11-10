@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — vague 1 de la campagne v2 livrée : correctifs récurrents + verdict IPAdapter
+
+- **Vague 1 livrée** (commit 7ecfa63, rapport `tools/out-v2/RAPPORT-vague1.md`) : 53 références nommées + 6 fonds + tests IPAdapter, 271 prompts, 0 échec de mapping espèce, budgets v2 appliqués, masters conservés. Genre constaté 30 F / 17 M / 6 bestiaux, conforme à l'arbitrage sans quota. Graines conformes. Aucune intégration dist/site : validation en attente de Marc-Olivier sur la planche.
+- **Trois correctifs de prompts récurrents** (détail charte v2 §14) : (1) visage noir/encapuchonné — positif `visible face, detailed eyes, face illuminated by soft glow, front lighting`, négatif `hooded, shadowed face, covered face, black face, obscured face, dark silhouette` ; (2) quasi-monochrome — l'élément colore effets/éclairage jamais la peau ni tout le fond, positif `colorful, vibrant colors` + accent par univers, négatif `monochrome, greyscale, single color palette` ; (3) peau dénaturée (Kenji bleu) — `fair skin, human skin tone` en positif, `blue skin, colored skin, inhuman skin` + `helmet, full helmet` en négatif pour Kenji, `bareheaded, beard stubble` en positif.
+- **Signature d'artiste** vue sur e22 : `artist signature, artist name` au négatif global. **f13** renforcé (`colossal, bulky, beast-like, no humanoid proportions`, négatif `hood, slim, humanoid`).
+- **IPAdapter : validé mécaniquement, réglage révisé** — à 0.6 `linear` le rendu brûle les couleurs (dérive magenta/cyan sur 3 tests). Réglage vague 2 : **poids 0.3-0.45, weight_type `ease in-out`, end_at 0.8-0.9**, à re-valider avant d'étendre aux 53 lignées. La fourchette 0.5-0.7 initiale est révisée (charte §2).
+- **Conséquence** : retries de la vague 1 (cartes fautives + z19/z22 avec le nouveau mapping phénix) avec seed fixe, protocole QA, max 2 retries puis human review ; correctifs intégrés au négatif standard de `build-prompts.mjs` avant la campagne des génériques.
+
+
 ## 2026-11-11 : ACTÉ — les phénix sont des bêtes (retour vague 1 de la campagne v2)
 
 - **Pyrrha (z19) et Fjalar (z22) sont des PHÉNIX, de vrais oiseaux de feu, pas des humanoïdes à ailes.** La première vague les avait rendus « hommes/femmes-phénix » : c'était une erreur de tags dans `tools/species-map.json` (`phoenix girl` / `phoenix spirit, humanoid`), corrigée en `phoenixFirebird` (tags : `phoenix, giant firebird, flaming bird, bird, beak, talons, ember feathers, blazing wings, beast-like`).
@@ -321,30 +330,3 @@ Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en *
 - **Ciblage interactif v2** : au choix d'une action, les cibles éligibles s'illuminent sur le plateau (contour doré pulsant, pastille, curseur de visée) ; un clic désigne et résout ; la zone de 2 (carte + voisine contiguë) suit le survol ; bouton **Annuler** ramène à la fenêtre d'action ; coût mana et zone restent visibles pendant la désignation ; un clic hors cible ne fait rien.
 - **Pied de stats** sur chaque pion de combat : PV, ATQ, mana en actuel/total, plus icône par état actif (bonus vert, malus rouge, bouclier bleu) ; carte tombée grisée.
 - **Fiche plein cadre** : l'illustration couvre la carte verticale (bord doré arrondi), voile dégradé sombre en bas, nom, sous-titre « classe · élément · rareté », stats en bas (PV rouge, mana violet) ; stats détaillées et sorts dessous.
-- **Hors périmètre (inchangé)** : la Garde du Gardien (PISTE v1.1) et le grimoire élémentaire (PISTE v2) restent des pistes.
-- Accessibilité : `prefers-reduced-motion: reduce` coupe le pulse ; cibles de tap >= 44px.
-
-## 2026-11-10 : arbitrages de la session design (PUSHÉS dans les data)
-
-### ACTÉ : la classe Invocateur disparaît
-
-- L'`Invocateur de Fournaise` (a21) devient **Mage** : les invocations passent par l'école de l'Appel (déjà ouverte Mage + Occultiste).
-- Les 8 monstres `Invocateur` sont reclassés : `f5` Invocateur des Foyers, `f12` Gardien des Foyers, `f23` Maître des Foyers, `g13` Semeur Sylvestre, `g10` Druidesse des Sèves deviennent **Mage** ; `k7` Archiliche des Caveaux, `k15` Éveillé des Caveaux, `k16` Liche des Caveaux deviennent **Occultiste** (nécromancie).
-- Le registre `engine.CLASSES` garde `Invocateur` en réserve (aucune carte ne la porte ; synergie `Invocateur` dormante). Le retrait complet du registre attend la v3.
-
-### ACTÉ : le Gardien-Mécanique devient Guerrier
-
-- `s4` passe de Prêtre à **Guerrier** ; le Rempart s'ouvre au **profil Guerrier** (`schools.rempart.ouvrePar.profils` : `["Guerrier"]`).
-- La synergie Guerrier s'applique donc à la carte qui protège le mieux : cohérent avec son rôle.
-
-### ACTÉ : l'Entrave s'ouvre au Mage ET à l'Occultiste
-
-- `schools.entrave.ouvrePar.profils` : `["Mage", "Occultiste"]`. Le contrôle devient une affaire de lanceurs, pas une exclusive d'ombre.
-
-### ACTÉ : sorts d'écolage communs renommés (noms de métier, pas de monstre)
-
-- `Morsure d'Écume` → **Lame d'Écume**, `Chant de Sirène` → **Mélodie envoûtante**, `Carapace de Corail` → **Barrière de Corail**, `Guet des Fonds` → **Vigie des Flots**.
-- Appliqué dans `grimoire.json` (4 sorts) et `monsters.json` (soloSpell de e8 et e20). **Les ids restent inchangés** (`morsure-decume`, `chant-de-sirene`...) : les sauvegardes et les fusions (`fusion-map.json`) sont préservées.
-
-### ACTÉ : règles de rang au combat
-
