@@ -2,6 +2,14 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le boost vise son camp (T0.2 du grand chantier)
+
+- Le bug NOTÉ (sort de boost qui ne proposait que des ennemis) est corrigé au plus près : la fenêtre d'action dérive le camp de ciblage du champ `cible` du sort (`soi`, `1 allié`, `l'équipe`, `1 ennemi`, `zone`), pas du rôle de l'unité. Les sorts sans fiche de ciblage gardent le comportement historique (attaquant : ennemis, support : alliés).
+- `Discipline de Ligne` (soi) : aucune liste de cibles, le sort se pose sur son lanceur. `Ferveur Céleste` (1 allié) : la fenêtre propose vos cartes (le Démon n14, attaquant divin, en est le cas réel).
+- Côté moteur, un cast **tactique** de sort à camp allié applique `atkBuff += mult - 1` (le multiplicateur du sort devient le bonus : 1,5 -> +50 % ATK sur la prochaine frappe), au lanceur ou à l'allié désigné. Le coût de mana est bien dépensé, un événement `buff` animé est émis.
+- **Le chemin Auto (IA et digest) ne bouge pas** : sans pas tactique, le sort reste un coup sur l'ennemi. Le lot 3 (fiche type complète) étendra la sémantique à tous les rôles et recâblera l'Auto proprement, avec recalibrage du digest à ce moment-là.
+- Preuve : repro avant (2 tests rouges), 71/71 tests, smoke 162 checks (section 51 neuve), digest `7dfab0a2…` inchangé (476/3000, 0 exception).
+
 ## 2026-11-10 : ACTÉ — l'acquisition du rang N (T1.3 du grand chantier)
 
 EXI-N-4 posé. Trois décisions d'application :

@@ -608,6 +608,45 @@ async function main() {
 
   check('46 j historique et glossaire v0.46', html.includes('v0.46 : Le RPG tour par tour') && html.includes('de la plus forte attaque à la moins forte'), '');
 
+  // ---------- 51 : T0.2, le boost vise son camp (fenêtre d'action + moteur) ----------
+  {
+    mem.clear();
+    setup(['n1'], 12);
+    api._setAuto(false); api.go('#combat'); await wait(60);
+    const st51 = api._state();
+    api._speed(6);
+    if (st51) {
+      const u51 = st51.team.attaque[0] ?? st51.team.support[0];
+      if (u51) u51.mana = u51.manaMax;
+      els.get('fight').click();
+      let am51 = null;
+      for (let w = 0; w < 150 && !am51; w++) { await wait(25); am51 = api._actEl(); }
+      const bDisc = am51 ? [...am51.querySelectorAll('.act-spell')].find((b) => (b.textContent ?? '').includes('Discipline de Ligne')) : null;
+      check('51 a la fenêtre propose Discipline de Ligne (cible : soi)', !!bDisc, am51 ? am51._innerHTML.replace(/\s+/g, ' ').slice(0, 300) : 'pas de fenêtre');
+      if (bDisc) {
+        bDisc.click();
+        await wait(60);
+        const ps51 = api._prompt();
+        const apres = api._actEl();
+        // repro historique : la fenêtre offrait la liste des ennemis pour ce sort de boost
+        check('51 b boost sur soi : aucune liste de cibles ennemies proposée', !ps51 || ps51.phase !== 'target' || !apres || !apres.querySelector('.act-target'), ps51 && ps51.phase === 'target' ? 'encore en désignation' : 'ok');
+        const buffPoses = (st51._events ?? []).filter((e) => e.type === 'buff').length;
+        check('51 c le moteur pose le bonus d\u2019ATQ sur le lanceur', buffPoses > 0 && (u51?.atkBuff ?? 0) >= 0 && (st51._events ?? []).some((e) => e.type === 'buff' && e.targetId === u51?.uid), `buffs=${buffPoses}`);
+      } else {
+        check('51 b boost sur soi : aucune liste de cibles ennemies proposée', false, 'bouton absent');
+        check('51 c le moteur pose le bonus d\u2019ATQ sur le lanceur', false, '');
+      }
+      let g51 = 0;
+      while (g51++ < 60 && !st51.winner) { await wait(40); const amg = api._actEl(); if (amg) { const pb = amg.querySelector('.act-pass'); if (pb) pb.click(); } }
+      check('51 d 0 exception après boost sur soi', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    } else {
+      check('51 a la fenêtre propose Discipline de Ligne (cible : soi)', false, 'pas de combat');
+      check('51 b boost sur soi : aucune liste de cibles ennemies proposée', false, '');
+      check('51 c le moteur pose le bonus d\u2019ATQ sur le lanceur', false, '');
+      check('51 d 0 exception après boost sur soi', false, '');
+    }
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

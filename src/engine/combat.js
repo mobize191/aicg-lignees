@@ -308,8 +308,21 @@ function actTeamStriker(u, i, ctx, step) {
       u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
       const cand = (u.spells ?? [])[tacAct.idx ?? 0];
       if (cand && cand.cost <= u.mana) {
-        spell = cand;
         u.mana -= cand.cost;
+        const side = spellSideOf(cand);
+        // T0.2 : un sort de boost vise son camp (soi / 1 allie), pas l'ennemi ; en auto le chemin historique reste un coup
+        if (side === 'self' || side === 'ally') {
+          const t = side === 'ally' && tacAct.allyUid
+            ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? u)
+            : u;
+          const value = Math.max(0, (cand.mult ?? 1) - 1);
+          t.atkBuff = (t.atkBuff ?? 0) + value;
+          ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+          ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+          ctx.firstAttack = false;
+          return false;
+        }
+        spell = cand;
       } else {
         ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'tactical', value: 'mana' });
       }

@@ -9,7 +9,7 @@ export function loadData(dataDir = 'data') {
 const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell', 'getSchool',
   'getFamily', 'getTree', 'getZone', 'applyDamage', 'resolveTurn', 'applySupport', 'castSummon',
   'setRoll', 'roll', 'migrate', 'statsAt', 'castSpell', 'pickZoneTargets', 'evolve', 'openSchools',
-  'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'playAuto',
+  'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'stepRound', 'playAuto', 'spellSideOf',
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
   'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance', 'jetonRarityFor',

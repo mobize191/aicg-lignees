@@ -94,6 +94,17 @@ const TEAM_MAX = E.TEAM_MAX;
 const FAM_ORDER = E.FAM_ORDER;
 const MONSTER_FAMS = DATA['monster-families'];
 
+// T0.2 : le camp de ciblage d'un sort vient de sa fiche (cible en donnees) ; sans fiche,
+// null = la fenetre garde le comportement historique selon le role de l'unite (fiche type au lot 3)
+function spellSideOf(sp) {
+  const c = (sp && typeof sp.cible === 'string') ? sp.cible : '';
+  if (c === 'soi') return 'self';
+  if (c.includes('alli')) return 'ally';
+  if (c.includes('quipe')) return 'team';
+  if (c.includes('ennemi') || c === 'zone') return 'enemy';
+  return null;
+}
+
 const MONSTERS = RAW.map((m) => ({
   ...m,
   spells: [ { ...COMMON_SPELLS[m.role === 'support' ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],

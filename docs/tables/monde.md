@@ -15,7 +15,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | BEATS | {"Feu":"Terre","Terre":"Eau","Eau":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
 | BEATEN_BY | {"Feu":"Eau","Eau":"Terre","Terre":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
 | PALIERS | [2,4] |
-| RARITY_POWER | {"C":1,"UC":1.08,"R":1.16,"SR":1.26,"UR":1.38,"L":1.52} |
+| RARITY_POWER | {"N":0.9,"C":1,"UC":1.08,"R":1.16,"SR":1.26,"UR":1.38,"L":1.52} |
 | FAMILY_MANA | [{"max":8,"regen":2},{"max":11,"regen":3},{"max":14,"regen":3},{"max":22,"regen":5},{"max":30,"regen":6},{"max":40,"regen":8}] |
 | MONSTER_MANA | {"max":10,"regen":2} |
 | SOLO_MANA | {"max":10,"regen":2} |
