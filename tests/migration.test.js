@@ -56,7 +56,7 @@ test('v8 -> v12 : grimoire appris et zones visitées présents, chaîne complèt
   const E = loadEngine();
   const save = JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
   const out = E.migrate(structuredClone(save));
-  assert.equal(out.version, 15);
+  assert.equal(out.version, 16);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.ok(Array.isArray(out.grimoire));
   assert.ok(Array.isArray(out.zonesVisitees));
@@ -71,14 +71,14 @@ test('v12 -> v13 : les sorts connus d\u2019un biome trie se re-mappent, les autr
     grimoire: [{ sort: 'morsure-decume', cran: 'I' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 15);
+  assert.equal(out.version, 16);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'morsure-decume', cran: 'I' }, 'Poing de Cendre fonde au cran I');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'colonne-de-feu', cran: 'III' }, 'la signature de f20 fond vers son cran');
   assert.deepEqual(out.grimoire[0], { sort: 'morsure-decume', cran: 'I' }, 'le grimoire appris ne bouge pas');
-  const s2 = { version: 12, instances: [{ iid: 'i2', id: 'z1', sorts: [{ name: 'Estoc Brillant' }] }] };
+  const s2 = { version: 12, instances: [{ iid: 'i2', id: 'd1', sorts: [{ name: 'Interdiction' }] }] };
   const out2 = E.migrate(s2);
-  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Estoc Brillant' }, 'le Z\u00e9nith non tri\u00e9 garde sa signature legacy');
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Interdiction' }, 'les divines non tri\u00e9es gardent leur signature legacy');
 });
 
 test('v13 -> v14 : le Bosquet nouvellement tri\u00e9 remappe ses sorts legacy (EXI-T-4, T2.2)', () => {
@@ -89,14 +89,14 @@ test('v13 -> v14 : le Bosquet nouvellement tri\u00e9 remappe ses sorts legacy (E
     grimoire: [{ name: 'Ros\u00e9e Radieuse' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 15);
+  assert.equal(out.version, 16);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'seve-rongeuse', cran: 'I' }, 'Spores Vampires fonde au cran I de la S\u00e8ve Rongeuse');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'fournaise-invoquee', cran: 'II' }, 'S\u00e8ve \u00c9veill\u00e9e (g13) fonde vers 2 renforts');
   assert.deepEqual(out.grimoire[0], { sort: 'onde-consacree', cran: 'III' }, 'Ros\u00e9e Radieuse (g17) greffe le cran III de l\u2019entr\u00e9e de baume');
-  const s2 = { version: 13, instances: [{ iid: 'i2', id: 'z1', sorts: [{ name: 'Estoc Brillant' }] }] };
+  const s2 = { version: 13, instances: [{ iid: 'i2', id: 'd2', sorts: [{ name: 'Sable Glissant' }] }] };
   const out2 = E.migrate(s2);
-  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Estoc Brillant' }, 'le Z\u00e9nith non tri\u00e9 garde sa signature legacy');
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Sable Glissant' }, 'les divines non tri\u00e9es gardent leur signature legacy');
 });
 
 test('v14 -> v15 : la Crypte nouvellement tri\u00e9e remappe ses sorts legacy (EXI-T-4, T2.3)', () => {
@@ -107,12 +107,30 @@ test('v14 -> v15 : la Crypte nouvellement tri\u00e9e remappe ses sorts legacy (E
     grimoire: [{ name: 'Hurlement Froid' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 15);
+  assert.equal(out.version, 16);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'morsure-putride', cran: 'I' }, 'Morsure Putride fonde au cran I de son propre sort d\u2019\u00e9cole');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'seve-rongeuse', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'fournaise-invoquee', cran: 'III' }, 'L\u00e9gion des Caveaux (k16) fonde vers 3 renforts');
   assert.deepEqual(out.grimoire[0], { sort: 'hurlement', cran: 'III' }, 'Hurlement Froid (k6) fonde vers le cran III ne des banshees');
-  const s2 = { version: 14, instances: [{ iid: 'i2', id: 'z4', sorts: [{ name: 'Lance H\u00e9liale' }] }] };
+  const s2 = { version: 14, instances: [{ iid: 'i2', id: 'd1', sorts: [{ name: 'Interdiction' }] }] };
   const out2 = E.migrate(s2);
-  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Lance H\u00e9liale' }, 'le Z\u00e9nith non tri\u00e9 garde sa signature legacy');
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Interdiction' }, 'les divines non tri\u00e9es gardent leur signature legacy');
+});
+
+test('v15 -> v16 : le Z\u00e9nith nouvellement tri\u00e9 remappe ses sorts legacy (EXI-T-4, T2.4)', () => {
+  const E = loadEngine();
+  const s = {
+    version: 15,
+    instances: [{ iid: 'i1', id: 'z18', sorts: [{ name: '\u00c9closion Ardente' }, { sort: 'morsure-putride', cran: 'I' }], acc: [{ name: 'Plumage Miroir' }] }],
+    grimoire: [{ name: 'Hymne du Z\u00e9nith' }],
+  };
+  const out = E.migrate(s);
+  assert.equal(out.version, 16);
+  assert.deepEqual(out.instances[0].sorts[0], { sort: 'colonne-de-feu', cran: 'III' }, '\u00c9closion Ardente fonde au cran III de la Colonne de Feu');
+  assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-putride', cran: 'I' }, 'un sort deja remappe reste intact');
+  assert.deepEqual(out.instances[0].acc[0], { sort: 'renvoi-celeste', cran: 'I' }, 'Plumage Miroir (z20) fonde vers le renvoi a 1 allie');
+  assert.deepEqual(out.grimoire[0], { sort: 'hymne', cran: 'III' }, 'Hymne du Z\u00e9nith (z25) fonde vers le cran III de l\u2019Hymne');
+  const s2 = { version: 15, instances: [{ iid: 'i2', id: 'd2', sorts: [{ name: 'Sable Glissant' }] }] };
+  const out2 = E.migrate(s2);
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Sable Glissant' }, 'les divines non tri\u00e9es gardent leur signature legacy');
 });

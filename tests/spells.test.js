@@ -68,7 +68,7 @@ test('fusion des Marées : 30 signatures sur 30 résolues, 7 uniques + 23 fondue
   // un monstre des Marées caste son cran de fusion ; un biome non trié garde sa signature
   assert.deepEqual(E.resolveSignature('e1'), { sort: 'morsure-decume', cran: 'I' });
   assert.deepEqual(E.resolveSignature('e13'), { unique: 'maree-noire' });
-  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
+  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
 });
 
 test('fin du verrou de classe : deux profils, même école ouverte, même sort, même effet (ACC-2-5)', () => {
@@ -159,7 +159,7 @@ test('tri de la Forge : 24 signatures resolues, 5 uniques + 19 fondues (T2.1, AC
   assert.deepEqual(E.resolveSignature('f20'), { sort: 'colonne-de-feu', cran: 'III' });
   assert.deepEqual(E.resolveSignature('f23'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Gardiens Invoques, 2 renforts');
   assert.deepEqual(E.resolveSignature('f13'), { unique: 'nuit-de-cendres' }, 'le M garde son unique');
-  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
+  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
 });
 
 test('les uniques de la Forge suivent la decision 3 : base d\u2019ecole + cran + delta (T2.1)', () => {
@@ -240,7 +240,7 @@ test('tri du Bosquet : 21 signatures resolues, 5 uniques + 16 fondues (T2.2, ACC
   assert.deepEqual(E.resolveSignature('g17'), { sort: 'onde-consacree', cran: 'III' }, 'Rosee Radieuse greffe l\u2019entree de baume');
   assert.deepEqual(E.resolveSignature('g19'), { sort: 'chant-de-sirene', cran: 'IV' }, 'Ombre Tissee, le controle de masse');
   assert.deepEqual(E.resolveSignature('g16'), { unique: 'nuee-de-spores' }, 'Mycola garde son unique');
-  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
+  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
 });
 
 test('les uniques du Bosquet suivent la decision 3 : base d\u2019ecole ou d\u2019entree + cran + delta (T2.2)', () => {
@@ -300,7 +300,7 @@ test('tri de la Crypte : 30 signatures resolues, 8 uniques + 22 fondues (T2.3, A
   assert.deepEqual(E.resolveSignature('k21'), { sort: 'marque-corrosive', cran: 'II' }, 'Noyade Vengeresse remplit le cran II de la corrosion');
   assert.deepEqual(E.resolveSignature('k29'), { sort: 'guet-des-fonds', cran: 'IV' }, 'Serment Rallie, l\u2019equipe renforcee');
   assert.deepEqual(E.resolveSignature('k17'), { unique: 'fauchade-universelle' }, 'la Mort garde sa Fauchade (acte)');
-  assert.deepEqual(E.resolveSignature('z1'), null, 'le Zenith attend son tri');
+  assert.deepEqual(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
 });
 
 test('les uniques de la Crypte suivent la decision 3 : base + cran + delta (T2.3)', () => {
@@ -340,4 +340,65 @@ test('un monstre de la Crypte caste son cran de fusion : Morsure Putride I, Hurl
   }
   assert.ok(E.cranOf('hurlement', 'IV').vide, 'le cran IV du Hurlement attend un autre biome');
   assert.ok(E.cranOf('morsure-putride', 'II').vide, 'le cran II de la Morsure Putride attend un autre biome');
+});
+
+
+// ---------- T2.4 : le tri du Zenith Ardent (lot 2, gabarit des Marees) ----------
+test('tri du Zenith : 30 signatures resolues, 8 uniques + 22 fondues (T2.4, ACC-T)', () => {
+  const E = loadEngine();
+  const zenith = E.DATA['fusion-map'].zenith;
+  assert.ok(zenith.trie, 'le biome zenith est marque trie');
+  const ids = Object.keys(zenith.signatures);
+  assert.equal(ids.length, 30);
+  const uniques = ids.filter((id) => zenith.signatures[id].unique);
+  const fondues = ids.filter((id) => zenith.signatures[id].fusion);
+  assert.equal(uniques.length, 8, 'les 6 L et les 2 M gardent leur unique');
+  assert.equal(fondues.length, 22);
+  for (const id of ids) assert.ok(E.resolveSignature(id), `signature ${id} resolue`);
+  assert.deepEqual(E.resolveSignature('z18'), { sort: 'colonne-de-feu', cran: 'III' }, 'Eclosion Ardente, la zone de brulure');
+  assert.deepEqual(E.resolveSignature('z20'), { sort: 'renvoi-celeste', cran: 'I' }, 'Plumage Miroir, le renvoi né');
+  assert.deepEqual(E.resolveSignature('z25'), { sort: 'hymne', cran: 'III' }, 'Hymne du Zenith, la Ferveur ne');
+  assert.deepEqual(E.resolveSignature('z6'), { sort: 'morsure-decume', cran: 'IV' }, 'Pluie de Feu, la ligne entiere');
+  assert.deepEqual(E.resolveSignature('z30'), { unique: 'prophetie-du-plein-jour' }, 'le M Apolline garde sa Prophetie (acte)');
+  assert.deepEqual(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+});
+
+test('les uniques du Zenith suivent la decision 3 : base + cran + delta (T2.4)', () => {
+  const E = loadEngine();
+  const basesOk = new Set([
+    ...E.DATA.grimoire.ecole.map((s) => s.id),
+    ...E.DATA.grimoire.entrees.map((s) => s.id),
+  ]);
+  const attends = { z7: 'sentence-solaire', z8: 'couronnement', z15: 'eclipse-montante', z19: 'renaissance-pyrique', z22: 'immolation-retournee', z26: 'cantique-final', z29: 'peine-capitale', z30: 'prophetie-du-plein-jour' };
+  for (const [carte, id] of Object.entries(attends)) {
+    const u = (E.DATA.grimoire.uniques ?? []).find((x) => x.id === id);
+    assert.ok(u, `unique ${id} present`);
+    assert.equal(u.carte, carte, `${id} appartient a ${carte}`);
+    assert.ok(basesOk.has(u.base), `la base ${u.base} de ${id} existe dans le grimoire`);
+    assert.ok(['I', 'II', 'III', 'IV'].includes(u.cran), `le cran de ${id}`);
+    assert.ok(u.delta && typeof u.delta.desc === 'string' && u.delta.desc.length > 0, `le delta de ${id} est ecrit`);
+  }
+});
+
+test('un monstre du Zenith caste son cran de fusion : Renvoi Celeste et Hymne (T2.4, ACC-T)', () => {
+  const E = loadEngine();
+  const cibles = ligne5(E);
+  // z20 Plumage Miroir : Renvoi Celeste I (1 allie, 25 %)
+  let events = [];
+  let res = E.castSpell(E.DATA, 'renvoi-celeste', 'I', { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.cout, 3);
+  assert.equal(res.taux, 0.25, 'le renvoi au taux de reference');
+  assert.equal(res.largeur, 1);
+  // z18 Eclosion Ardente : Colonne de Feu III (la zone, 15 % x 2)
+  events = [];
+  res = E.castSpell(E.DATA, 'colonne-de-feu', 'III', { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.taux, 0.15);
+  assert.equal(res.largeur, 3);
+  // l'Hymne du Zenith : le cran III porte l'equipe (z25), boost et tenue
+  const hymne3 = E.cranOf('hymne', 'III');
+  assert.equal(hymne3.largeur, 'equipe');
+  assert.equal(hymne3.boost, 0.2);
+  assert.equal(hymne3.tenue, 0.15);
+  assert.ok(E.cranOf('hymne', 'IV').vide, 'le cran IV de l\u2019Hymne attend son cantique final');
+  assert.ok(E.cranOf('renvoi-celeste', 'III').vide, 'le cran III du Renvoi Celeste attend un autre biome');
 });

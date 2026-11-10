@@ -13,3 +13,4 @@
 11   # numero de version du format de sauvegarde (structure du champ)
 12   # numero de version du format de sauvegarde (structure du champ)
 13   # numero de version du format de sauvegarde (structure du champ)
+16   # numero de version du format de sauvegarde (structure du champ)

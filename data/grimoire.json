@@ -865,6 +865,82 @@
      "raison": "attend un autre biome ou la zone d’errance"
     }
    }
+  },
+  {
+   "id": "renvoi-celeste",
+   "nom": "Renvoi Céleste",
+   "ecole": "rempart",
+   "role": "renvoi",
+   "desc": "Le renvoi des phénix du Zénith : la lumière renvoie les coups, contre le seuil du lanceur.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "taux": 0.15,
+     "tours": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "taux": 0.2,
+     "tours": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "hymne",
+   "nom": "Hymne",
+   "ecole": "ferveur",
+   "role": "boost",
+   "desc": "Les hymnes du Zénith : le chant porte la ligne alliée, le boost et la tenue montent ensemble.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "boost": 0.15,
+     "tenue": 0.1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "boost": 0.2,
+     "tenue": 0.1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "boost": 0.2,
+     "tenue": 0.15
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "boost": 0.25,
+     "tenue": 0.15,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
   }
  ],
  "uniques": [
@@ -1278,6 +1354,156 @@
     "desc": "le serment brisé empoisonne la ligne entière"
    },
    "desc": "Siegfried brise le serment sur la ligne entière et l’empoisonne (10 % × 2 tours)."
+  },
+  {
+   "id": "sentence-solaire",
+   "nom": "Sentence Solaire",
+   "carte": "z7",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "jugement": true,
+    "desc": "la sentence proclamée pèse : la ligne ennemie frappe moins fort (20 % de moins, 2 tours)"
+   },
+   "desc": "Le Héraut proclame la sentence solaire : la lumière frappe tous les ennemis et les écrase de son jugement."
+  },
+  {
+   "id": "couronnement",
+   "nom": "Couronnement",
+   "carte": "z8",
+   "role": "malus",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "effet": "brulure",
+   "taux": 0.1,
+   "tours": 2,
+   "base": "colonne-de-feu",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.1,
+    "tours": 2,
+    "desc": "la couronne embrase la ligne entière (10 % × 2 tours)"
+   },
+   "desc": "L’Astre Capiteux se couronne : la lumière embrase tous les ennemis (brûlure 10 % × 2 tours)."
+  },
+  {
+   "id": "eclipse-montante",
+   "nom": "Éclipse Montante",
+   "carte": "z15",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "aveugle": true,
+    "desc": "l’éclipse dérobe la lumière : la zone frappée perd 20 % de précision (2 tours)"
+   },
+   "desc": "Aurorine lève l’éclipse montante : la lumière frappe la zone puis la dérobe à ses habitants."
+  },
+  {
+   "id": "renaissance-pyrique",
+   "nom": "Renaissance Pyrique",
+   "carte": "z19",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "effet": "brulure",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "renaissance": true,
+    "desc": "la zone s’embrase (15 % × 2 tours) et la flamme qui renaît rend Pyrrha à la vie une fois par combat (60 % de ses PV)"
+   },
+   "desc": "Pyrrha embrase la zone et renaît de ses cendres une fois par combat."
+  },
+  {
+   "id": "immolation-retournee",
+   "nom": "Immolation Retournée",
+   "carte": "z22",
+   "role": "renvoi",
+   "cible": "l’équipe",
+   "cout": 5,
+   "largeur": "equipe",
+   "taux": 0.35,
+   "tours": 3,
+   "base": "renvoi-celeste",
+   "cran": "III",
+   "delta": {
+    "renvoi": 0.35,
+    "tours": 3,
+    "desc": "le phénix couvre l’équipe entière : 35 % des coups sont renvoyés pendant 3 tours"
+   },
+   "desc": "Fjalar déploie ses ailes : l’équipe renvoie 35 % des coups pendant 3 tours."
+  },
+  {
+   "id": "cantique-final",
+   "nom": "Cantique Final",
+   "carte": "z26",
+   "role": "boost",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe-renforcee",
+   "base": "hymne",
+   "cran": "IV",
+   "delta": {
+    "persiste": true,
+    "desc": "le cantique final ne s’éteint pas : le chant dure tant que Célestin est en vie"
+   },
+   "desc": "Célestin entonne le cantique final : l’équipe se dresse, boostée et affermie, tant que l’apôtre chante."
+  },
+  {
+   "id": "peine-capitale",
+   "nom": "Peine Capitale",
+   "carte": "z29",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "perce": true,
+    "desc": "la lame de la justicière ignore les boucliers"
+   },
+   "desc": "Justine exécute la peine capitale : la lame frappe tous les ennemis et ignore leurs boucliers."
+  },
+  {
+   "id": "prophetie-du-plein-jour",
+   "nom": "Prophétie du Plein Jour",
+   "carte": "z30",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "effet": "brulure",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "amplifie": 0.2,
+    "desc": "la prophétie embrase la ligne (15 % × 2 tours) et dévoile les faiblesses : les dégâts qu’ils prennent sont amplifiés de 20 % pendant 2 tours"
+   },
+   "desc": "Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses."
   }
  ]
 }

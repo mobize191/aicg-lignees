@@ -415,7 +415,121 @@
   }
  },
  "zenith": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "z1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "z2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "z3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "z4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "z5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z6": {
+    "fusion": "morsure-decume",
+    "cran": "IV"
+   },
+   "z13": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z14": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z28": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z16": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "z17": {
+    "fusion": "colonne-de-feu",
+    "cran": "II"
+   },
+   "z18": {
+    "fusion": "colonne-de-feu",
+    "cran": "III"
+   },
+   "z12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "z23": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "z20": {
+    "fusion": "renvoi-celeste",
+    "cran": "I"
+   },
+   "z21": {
+    "fusion": "renvoi-celeste",
+    "cran": "II"
+   },
+   "z9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "z10": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "z11": {
+    "fusion": "onde-consacree",
+    "cran": "III"
+   },
+   "z24": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "z25": {
+    "fusion": "hymne",
+    "cran": "III"
+   },
+   "z27": {
+    "fusion": "oeil-du-malheur",
+    "cran": "II"
+   },
+   "z7": {
+    "unique": "sentence-solaire"
+   },
+   "z8": {
+    "unique": "couronnement"
+   },
+   "z15": {
+    "unique": "eclipse-montante"
+   },
+   "z19": {
+    "unique": "renaissance-pyrique"
+   },
+   "z22": {
+    "unique": "immolation-retournee"
+   },
+   "z26": {
+    "unique": "cantique-final"
+   },
+   "z29": {
+    "unique": "peine-capitale"
+   },
+   "z30": {
+    "unique": "prophetie-du-plein-jour"
+   }
+  }
  },
  "divin": {
   "trie": false

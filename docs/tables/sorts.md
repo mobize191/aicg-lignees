@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (11), `lignee` (42), `uniques` (25).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (13), `lignee` (42), `uniques` (33).
 
 ## Sorts communs (2)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (11)
+## Sorts d'ecolage (13)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -47,6 +47,8 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | seve-rongeuse | Sève Rongeuse | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | hurlement | Hurlement | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
 | morsure-putride | Morsure Putride | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; taux 10%, 2 tour(s) |
+| renvoi-celeste | Renvoi Céleste | rempart | renvoi | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / equipe ; taux 15%, 2 tour(s) ; IV : 6 / equipe-renforcee ; taux 20%, 2 tour(s) |
+| hymne | Hymne | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / equipe ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
 
 ## Sorts de lignee (42)
 
@@ -97,7 +99,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
 
-## Sorts uniques (25)
+## Sorts uniques (33)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -126,6 +128,14 @@ Un sort par palier de famille, appris en montant la lignee.
 | harpon-du-naufrage | Harpon du Naufrage | k22 | degats | la zone | 5 | 2.2 | Ahab harponne la zone et la rouille (corrosion 15 % × 2 tours). |
 | epee-de-laube | Épée de l’Aube | k27 | degats | tous les ennemis | 6 | 2.6 | Jeanne d’Arc lève l’épée de l’aube : la lumière frappe tous les ennemis et purifie la ligne alliée. |
 | lame-du-serment | Lame du Serment | k30 | degats | tous les ennemis | 6 | 2.6 | Siegfried brise le serment sur la ligne entière et l’empoisonne (10 % × 2 tours). |
+| sentence-solaire | Sentence Solaire | z7 | degats | tous les ennemis | 6 | 2.6 | Le Héraut proclame la sentence solaire : la lumière frappe tous les ennemis et les écrase de son jugement. |
+| couronnement | Couronnement | z8 | malus | tous les ennemis | 6 | - | L’Astre Capiteux se couronne : la lumière embrase tous les ennemis (brûlure 10 % × 2 tours). |
+| eclipse-montante | Éclipse Montante | z15 | degats | la zone | 5 | 2.2 | Aurorine lève l’éclipse montante : la lumière frappe la zone puis la dérobe à ses habitants. |
+| renaissance-pyrique | Renaissance Pyrique | z19 | degats | la zone | 5 | 2.2 | Pyrrha embrase la zone et renaît de ses cendres une fois par combat. |
+| immolation-retournee | Immolation Retournée | z22 | renvoi | l’équipe | 5 | - | Fjalar déploie ses ailes : l’équipe renvoie 35 % des coups pendant 3 tours. |
+| cantique-final | Cantique Final | z26 | boost | l’équipe | 6 | - | Célestin entonne le cantique final : l’équipe se dresse, boostée et affermie, tant que l’apôtre chante. |
+| peine-capitale | Peine Capitale | z29 | degats | tous les ennemis | 6 | 2.6 | Justine exécute la peine capitale : la lame frappe tous les ennemis et ignore leurs boucliers. |
+| prophetie-du-plein-jour | Prophétie du Plein Jour | z30 | degats | tous les ennemis | 6 | 2.6 | Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses. |
 
 ## Ecoles (data/schools.json)
 
@@ -282,4 +292,39 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | k22 | - | - |
 | k27 | - | - |
 | k30 | - | - |
+
+### Donjon zenith
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| z1 | morsure-decume | I |
+| z2 | morsure-decume | I |
+| z3 | morsure-decume | II |
+| z4 | morsure-decume | II |
+| z5 | morsure-decume | III |
+| z6 | morsure-decume | IV |
+| z13 | morsure-decume | III |
+| z14 | morsure-decume | III |
+| z28 | morsure-decume | III |
+| z16 | colonne-de-feu | I |
+| z17 | colonne-de-feu | II |
+| z18 | colonne-de-feu | III |
+| z12 | carapace-de-corail | I |
+| z23 | carapace-de-corail | I |
+| z20 | renvoi-celeste | I |
+| z21 | renvoi-celeste | II |
+| z9 | onde-consacree | I |
+| z10 | onde-consacree | II |
+| z11 | onde-consacree | III |
+| z24 | onde-consacree | II |
+| z25 | hymne | III |
+| z27 | oeil-du-malheur | II |
+| z7 | - | - |
+| z8 | - | - |
+| z15 | - | - |
+| z19 | - | - |
+| z22 | - | - |
+| z26 | - | - |
+| z29 | - | - |
+| z30 | - | - |
 

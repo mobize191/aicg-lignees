@@ -31,7 +31,9 @@ test('l\u2019école fictive « l\u2019Éclipse » caste sur les quatre largeurs 
     III: { cout: 5, largeur: 3, mult: 2.2 }, IV: { cout: 6, largeur: 5, mult: 2.6 } } });
   writeFileSync(`${dir}/grimoire.json`, JSON.stringify(grimoire, null, 1) + '\n');
   const monsters = JSON.parse(readFileSync(`${dir}/monsters.json`, 'utf8'));
-  monsters.push({ id: 'x-eclipse', dungeon: 'zenith', name: 'Éclipse du test', rarity: 'C', classe: 'Mage', element: 'Ombre', role: 'attaque', atk: 20, hp: 80, soloSpell: 'Trait d’Éclipse' });
+    // le monstre fictif reste dans un biome non trie (divin) : le validateur exige 100 % de
+  // couverture des signatures d'un biome marque trie (EXI-P2-3). Deplace du zenith au T2.4.
+  monsters.push({ id: 'x-eclipse', dungeon: 'divin', name: 'Éclipse du test', rarity: 'C', classe: 'Mage', element: 'Ombre', role: 'attaque', atk: 20, hp: 80, soloSpell: 'Trait d’Éclipse' });
   writeFileSync(`${dir}/monsters.json`, JSON.stringify(monsters, null, 1) + '\n');
 
   const E = loadEngine(dir);
