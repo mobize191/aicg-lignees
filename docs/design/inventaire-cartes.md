@@ -33,7 +33,7 @@ Les portes des quatre races. Chaque naissance connaît 4 sorts dès son obtentio
 | n10 | Enge des Brumes | Mage | Neutre | attaque | 9 | 56 | Voile de Brume (5✦ ×1.85) | e24 Chanteuse des Récifs |
 | n11 | Enge des Bois | Prêtre | Neutre | support | 6 | 60 | Souffle des Sèves (5✦ ×1.85) | g12 Bergère des Sèves |
 | n12 | Enge des Caveaux | Occultiste | Neutre | attaque | 9 | 53 | Froid du Caveau (5✦ ×1.85) | k3 Fossoyeur Nocturne · k12 Veilleuse de Bord · k24 Porte-Étendard Défunt |
-| n13 | Ange | Prêtre | Lumière | support | 6 | 58 | Éclat d’Aube (5✦ ×1.85) | d3 Huissier de l’Entre-Deux |
+| n13 | Ange | Prêtre | Lumière | support | 6 | 58 | Éclat d’Aube (5✦ ×1.85) | p1 Ange Éveillé |
 | n14 | Démon | Assassin | Ombre | attaque | 10 | 52 | Trait de Vice (5✦ ×1.85) | d8 Choriste Miroir |
 | n15 | Éveillé du Seuil | Occultiste | Neutre | attaque | 8 | 55 | Regard du Seuil (5✦ ×1.85) | d14 Aiguille du Pont |
 
@@ -408,7 +408,7 @@ Mythe : z30 Apolline, Prophétesse du Jour (M), hors chaîne d'évolution.
 
 Trois familles divines, chacune en deux lignes reliées par un pont (d3 → d4, d9 → d10, d15 → d16). Elles n'entrent jamais dans l'opposition des éléments, une seule par famille en équipe, trois maximum. Leur richesse vit dans leurs Pouvoirs (automatiques, sans mana) : étourdissement et lenteur chez les Arbitres, copie et renvoi chez le Chœur, liens entre alliés chez les Tisseuses.
 
-Naissances d’entrée : n13 Ange → d3 Huissier de l’Entre-Deux (les Arbitres) ; n14 Démon → d8 Choriste Miroir (le Chœur) ; n15 Éveillé du Seuil → d14 Aiguille du Pont (les Tisseuses).
+Naissances d’entrée : n14 Démon → d8 Choriste Miroir (le Chœur) ; n15 Éveillé du Seuil → d14 Aiguille du Pont (les Tisseuses). L’Ange (n13) s’éveille en Ange Éveillé (p1, hors web — voir l’arbitrage du 10/11).
 
 | ID | Nom | Palier | Classe | Camp | Signature | Pouvoir |
 | --- | --- | --- | --- | --- | --- | --- |

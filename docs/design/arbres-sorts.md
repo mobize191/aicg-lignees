@@ -126,7 +126,7 @@ Les 6 lignes longues des donjons de 4 maillons (Gobelins des Écumes, Sirènes, 
 
 ## Les divines : Pouvoirs d'abord, sorts ensuite
 
-Les 18 divines ne portent que le commun et une signature au catalogue : leur force vit dans leurs **Pouvoirs** (étourdissement, lenteur, malédiction, copie, renvoi, lien). Le cumul d'exemplaire s'applique pareil : un Ange devenu Kairos garde Ferveur Céleste, Onde Consacrée et sa signature d'origine, et empile les signatures des maillons franchis. L'entrée des naissances divines se fait au palier UC (n13 Ange → d3 Huissier) : les deux communes de la famille (d1, d2) restent des acquisitions d'autel ou de défi.
+Les 18 divines ne portent que le commun et une signature au catalogue : leur force vit dans leurs **Pouvoirs** (étourdissement, lenteur, malédiction, copie, renvoi, lien). Le cumul d'exemplaire s'applique pareil : un Démon devenu Écho garde Ferveur Céleste, Onde Consacrée et sa signature d'origine, et empile les signatures des maillons franchis. L'entrée des naissances divines dans les webs se fait au palier UC (n14 Démon → d8 Choriste, n15 Éveillé du Seuil → d14 Aiguille) : les communes des familles (d1, d2...) restent des acquisitions d'autel ou de défi. L'Ange (n13) est l'exception : il s'éveille en Ange Éveillé (p1, effet remplace — l'Ange Gardien disparaît), hors web, ses portes (coloration, voie céleste, mauvaise volonté) attendent leurs maillons.
 
 ## Les exceptions du graphe
 

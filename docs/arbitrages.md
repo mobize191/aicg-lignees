@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (revue de cohérence) : ACTÉ — l'Ange (n13) s'éveille en Ange Éveillé (p1), pas en Huissier
+
+Décision de Marc-Olivier : à sa première évolution, **l'Ange devient l'Ange Éveillé** (`p1`, effet `remplace` de `trees.json`), conformément au rework des arbres v17 — et non l'Huissier de l'Entre-Deux (`d3`) que portait encore `evolutions.json`.
+
+- `data/evolutions.json` : `n13` → `p1` (voie « l'éveil du service — l'Ange Éveillé ») ; la cible `d3` disparaît des choix de l'Ange. Le Démon (n14 → d8) et l'Éveillé du Seuil (n15 → d14) entrent toujours dans les webs divins au palier UC.
+- `data/engine.json` : `RACE_DIVINE_IDS` reçoit `p1` et `p2` (l'Ange Éveillé et l'Ange Gardien archivé étaient classés « monstre » par `raceOfCard` — cran 10 % au lieu du cran divine 30 %).
+- L'Ange Gardien (`p2`, archivé) reste en données pour les vieilles sauvegardes ; il disparaît de l'équipe à l'éveil (`disparait`).
+- Les trois portes de l'Ange Éveillé (coloration, voie céleste, mauvaise volonté) sont posées dans `trees.json` ; leurs maillons restent à dessiner (futur contenu).
+- Baselines après migration : digest inchangé (`7dfab0a2…`, 476 victoires), smoke 158 checks, 60 tests.
+
 ## 2026-11-10 (retours terrain) : ACTÉ — combat v2.1 : rail d'ordre, auto-run en Tactique, actions détaillées, fiche complète
 
 Quatre retours de Marc-Olivier après la v2, corrigés en présentation uniquement (`src/ui.js`, `src/shell.html`, `src/data.js`, `data/engine.json` pour le vocabulaire d'affichage) — le moteur, l'équilibrage et le digest ne bougent pas (`7dfab0a2…`, 476 victoires ; smoke 158 checks ; 60 tests).
