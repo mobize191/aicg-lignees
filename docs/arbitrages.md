@@ -14,6 +14,14 @@ La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, é
 
 ## 2026-11-11 : ACTÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
 
+## 2026-11-11 : MESURE — chantier lignes avant/arrière terminé (lots A + B), nouvelle baseline digest
+
+- **Lot A (moteur)** : rangs avant/arrière sur toutes les unités (joueur et monstres), Option A actée — l'arrière est ciblable et encaisse -50 % tant que l'avant tient (RANG_BACK_DMG_PCT), Guerrier/Assassin en arrière frappent à moitié (RANG_BACK_ATK_PCT, RANG_BACK_CLASSES), soins jamais affectés, attaques de zone ignorent la protection. Cibles : toutes les unités vivantes (l'ancien « avant d'abord » disparaît).
+- **Lot B (data + UI + saves)** : champ `role` supprimé des 113 cartes et 153 monstres ; CROSS (Souffle/Frappe Croisée) retiré purement, comme acté ; vagues en pool plat (3 avant + 2 arrière côté monstres) ; formation 3+2 ou 2+3 choisie à l'écran d'équipe et figée pendant le combat ; migration v20 (`formation: '3-2'` par défaut) ; plateau rendu en deux rangées étiquetées.
+- **Nouvelle baseline (11/11/2026)** : digest 3000 combats **`aed250f9b36dc3fbe74057fda5b24f5b178f4d7a9504845c966b8faed88631d8`**, **1274 victoires / 3000**, 0 exception, 0 marathon ; 115 tests verts, smoke 171 checks. Ancienne baseline `833a6d2c…` 518/3000 (0 exception, 1 marathon). La hausse vient des maths de rang (arrière protégé, soins intouchés) : c'est une mesure, pas une régression — le calibrage fin est prévu avec Marc-Olivier (session 7 du plan de lancement).
+
+(docs : nouvelle baseline digest post-lignes (aed250f9…, 1274/3000, 0 exception) documentée dans arbitrages + roadmap)
+
 - **Motif** : seules `lame` et `appel` coïncidaient avec une clé d'école ; les 9 autres familles portaient leur propre clé comme école, sans rôle ni fiche type (la fenêtre d'action retombait sur le ciblage par défaut). Le mapping est désormais en data (`FAM_SCHOOL`), câblé dans `src/ui.js` : les sorts de lignée portent la clé d'école réelle + le rôle de l'école.
 - **Mapping proposé** (dérivé des voies/classes des familles et des lignes d'école des biomes ; `bouclier→rempart` et `aube→baume` étaient déjà actés en roadmap) : eau→lame, aube→baume, lame→lame, ombre→lame, bouclier→rempart, braise→mauvais-oeil, bosquet→entrave, crepuscule→mauvais-oeil, vol→ruse, zele→ferveur, appel→appel.
 - **Comportement conservé** : les familles en ligne support (aube, bouclier, zèle) relèvent d'écoles non hostiles (soin/bouclier/boost), donc `foeFacingSpell` ne change pour aucune unité ; digest **inchangé** `833a6d2c…` 518/3000, 115 tests, smoke 171 checks.
