@@ -17,12 +17,107 @@ function pickSpell(u) {
   return best;
 }
 
+// retour terrain (10/11) : un sort hostile (role degats/controle/malus ou cible ennemi/zone/tous)
+// se resout sur les ennemis, meme lance depuis la ligne support : un sort est un sort
+function foeFacingSpell(spell) {
+  const sd = spellSideOf(spell);
+  return sd === 'enemy' || sd === 'zone' || sd === 'all'
+    || spell.role === 'degats' || spell.role === 'controle' || spell.role === 'malus';
+}
+// la frappe simple de la ligne support : stat principale au rendement de la classe,
+// esquive derivee de l'ecart d'agilite et opposition d'element, comme la ligne d'attaque
+function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
+  const vivantes = foes.filter((f) => f.alive);
+  const t = targetUid != null
+    ? (vivantes.find((f) => f.uid === targetUid) ?? vivantes[0])
+    : vivantes.reduce((a, b) => (a.hp <= b.hp ? a : b), vivantes[0]);
+  if (!t) return;
+  const foeSide = side === 'team' ? 'enemies' : 'team';
+  const curse = s.status && s.status.curse ? s.status.curse.value : 0;
+  const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
+  const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
+  if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
+    events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+    return;
+  }
+  const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
+    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage));
+  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
+  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
+  applyDamage(t, dmg, events, foeSide, null, true);
+  s.atkBuff = 0;
+}
+// le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
+// taux, tours) pilote la resolution ; la stat principale du lanceur fait les degats
+function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
+  const foeSide = side === 'team' ? 'enemies' : 'team';
+  const ligne = st ? (side === 'team' ? st.enemies.attaque : st.team.attaque) : [];
+  const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
+  const anchorUid = action && action.targetUid != null ? action.targetUid : null;
+  const vivantes = foes.filter((f) => f.alive);
+  const anchor = anchorUid != null
+    ? (vivantes.find((f) => f.uid === anchorUid) ?? vivantes[0])
+    : vivantes.reduce((a, b) => (a.hp <= b.hp ? a : b), vivantes[0]);
+  if (!anchor) return;
+  let hitList;
+  if (larg >= 5) hitList = [...vivantes];
+  else if (larg === 3) {
+    let choix = null;
+    if (anchorUid != null && st) {
+      const ai = ligne.findIndex((u) => u.uid === anchorUid);
+      if (ai >= 0) choix = ai;
+    }
+    hitList = st ? pickZoneTargets(ligne, choix) : [anchor];
+  } else {
+    hitList = [anchor];
+    if (larg >= 2) hitList.push(...vivantes.filter((f) => f !== anchor).slice(0, larg - 1));
+  }
+  const curse = s.status && s.status.curse ? s.status.curse.value : 0;
+  const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
+  for (const t of hitList) {
+    if (!t.alive) continue;
+    const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
+    if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
+      events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+      continue;
+    }
+    if (spell.mult) {
+      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * elementMult(s.element, t.element)));
+      events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side });
+      applyDamage(t, dmg, events, foeSide, null, true);
+      if (t.alive && t.status && t.status.reflect && dmg > 0) {
+        const back = Math.max(1, Math.round(dmg * t.status.reflect.pct));
+        events.push({ type: 'attack', sourceId: t.uid, targetId: s.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: foeSide });
+        applyDamage(s, back, events, side, null);
+      }
+    }
+    if (spell.taux != null && t.alive && st && st.rng) {
+      const seuil = seuilOf(t);
+      if (st.rng() < spell.taux - seuil) {
+        if (spell.role === 'malus') {
+          const value = (s.effect && s.effect.kind === 'curse' ? (s.effect.value ?? M.CURSE_DEFAULT) : M.CURSE_DEFAULT);
+          t.status.curse = { value, turns: spell.tours ?? 2 };
+          events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'curse', value: Math.round(value * 100) / 100 });
+        } else {
+          t.status.stun = (t.status.stun ?? 0) + (spell.tours ?? 1);
+          events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
+      }
+    }
+  }
+}
+
 function applySupport(s, allies, mods, events, side, foes = [], st = null, action = null) {
   
   let spell = null;
   if (action && action.kind === 'pass') {
     s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
     events.push({ type: 'status', side, targetId: s.uid, kind: 'tactical', value: 'attente' });
+    return;
+  } else if (action && action.kind === 'attack' && foes.length) {
+    // retour terrain : la ligne support frappe aussi (frappe simple, ennemi designe ou plus faible)
+    s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
+    strikeFoe(s, foes, mods, events, side, st, action.targetUid ?? null);
     return;
   } else if (action && action.kind === 'basic') {
     s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
@@ -36,7 +131,13 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   } else {
     spell = pickSpell(s);
   }
-  if (st && spell) st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
+  if (spell && foes.length && foeFacingSpell(spell)) {
+    events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
+    castFoeSpell(s, spell, foes, mods, events, side, st, action);
+    return;
+  }
   const fx = s.effect ? s.effect.kind : 'heal';
   if (spell) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx, mana: s.mana });
@@ -203,7 +304,7 @@ function resolveSpellEntry(sp) {
   const larg = c.largeur ?? def.largeur ?? 1;
   const cible = typeof def.cible === 'string' && def.cible
     ? def.cible
-    : (def.role === 'degats' || def.role === 'controle')
+    : (def.role === 'degats' || def.role === 'controle' || def.role === 'malus')
       ? (Number(larg) === 5 ? 'tous les ennemis' : Number(larg) === 3 ? 'zone' : Number(larg) === 2 ? '2 ennemis' : '1 ennemi')
       : (larg === 'equipe' || larg === 'equipe-renforcee' ? 'l\u2019\u00e9quipe' : '1 alli\u00e9');
   return {

@@ -531,6 +531,14 @@ test('un sort hérité remappé se résout en fiche complète, plus de undefined
   assert.equal(unique.name, 'Marée Noire');
   // un cran vide ne se résout pas (il n'est pas jouable), une entrée inconnue non plus
   assert.equal(E.resolveSpellEntry({ sort: 'sort-inconnu-du-test', cran: 'I' }), null);
+  // retour terrain : les sorts malus ciblent les ennemis (la fiche type pilote le ciblage)
+  const marque = E.resolveSpellEntry({ sort: 'marque-corrosive', cran: 'I' });
+  assert.equal(marque.cible, '1 ennemi', 'un malus dérive une cible ennemie');
+  assert.equal(marque.role, 'malus');
+  assert.equal(marque.taux, 0.25);
+  const zone3 = E.resolveSpellEntry({ sort: 'marque-corrosive', cran: 'III' });
+  assert.equal(zone3.cible, 'zone', 'le cran III élargit la cible');
+
   assert.equal(E.resolveSpellEntry(null), null);
   // les sorts nommés passent tels quels (idempotent)
   const nomme = { name: 'Frappe Précise', cost: 2, mult: 1.3 };

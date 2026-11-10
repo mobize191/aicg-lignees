@@ -2,6 +2,13 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — retours terrain : fin des sorts undefined, la ligne support frappe aussi (v1.11 + v1.12)
+
+- **Sorts undefined (v1.11)** : un sort hérité remappé par le tri vit en sauvegarde comme `école + cran` sans nom ni coût ; il se résout désormais en fiche complète (école + cran, unique, fiche) au moment de l'affichage et du lancer (`resolveSpellEntry`). Sauvegardes inchangées, résolution sans perte.
+- **La frappe simple est universelle (v1.12)** : ⚔ Attaque (gratuite, désignation d'ennemi) est la première action de TOUTE carte, la ligne support comprise. Le support frappe à sa stat principale au rendement de sa classe, avec esquive AGI et opposition d'élément comme la ligne d'attaque.
+- **Un sort est un sort (v1.12)** : un sort hostile (rôle dégâts/contrôle/malus, ou cible ennemi/zone/tous) lancé depuis la ligne support se résout sur les ennemis selon sa fiche (largeur, mult, taux, tours) : dégâts à la stat principale, zone 3 contiguës ancrée, largeur 5 = tous, taux contre le seuil de résistance, malus = malédiction. Les sorts alliés gardent leur chemin historique (soin/bouclier/boost par effet de carte). Les sorts malus dérivent désormais une cible ennemie dans les fiches résolues.
+- **Le chemin Auto ne bouge pas** : le digest reste `833a6d2c…` **518/3000 (0 exception, 1 marathon)** — en auto les supports du digest lancent leur signature ou des sorts alliés, jamais un sort hostile, donc aucune bascule d'équilibrage à recalibrer. Preuve : 114 tests, smoke 171 checks.
+
 ## 2026-11-10 : ACTÉ — clôture du grand chantier arbres + sorts (lots 2 à 7 faits ce jour)
 
 - Lot 2 (tri des 189) terminé : T2.6 divines (23 signatures, 14 crans remplis, 3 uniques décision 3, migration v18) + T2.7 homogénéité (contrôle automatique dans le validateur, communs retirés des familles, uniques Marées resynchronisées). Baseline intermédiaire `eb701919…` 479/3000.

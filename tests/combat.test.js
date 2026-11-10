@@ -159,3 +159,122 @@ test('lot 3 : un sort à fiche "tous" touche toute la ligne sans désignation (A
   const hits = r.events.filter((e) => (e.type === 'attack' || e.type === 'dodge') && typeof e.targetId === 'string' && e.targetId.startsWith('e.'));
   assert.equal(hits.length, 4, 'toute la ligne est touchée');
 });
+
+// ---------- retour terrain (10/11) : la ligne support frappe aussi ----------
+const foeUnit = (E, uid = 'f1') => E.makeUnit(E.getCard('a1'), uid, 1);
+const supportUnit = (E, cardId, spells, uid = 's1') => E.makeUnit({ ...E.getCard(cardId), spells }, uid, 1);
+const supportState = (sup, allies, foes) => ({
+  turn: 0, winner: null, rng: mulberry32(1),
+  team: { attaque: allies, support: [sup] },
+  enemies: { attaque: foes, support: [] },
+  mods: {},
+});
+const raceFiche = (E, nom) => {
+  const s = E.DATA.grimoire.race.find((x) => x.nom === nom);
+  return { name: s.nom, cost: s.cout, mult: s.mult, cat: 'race', role: s.role, cible: s.cible };
+};
+
+test("retour terrain : la frappe simple d'un support désigne et frappe l'ennemi choisi", () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const sup = supportUnit(E, 's2', []);
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50; // le support agit le premier, pas d'esquive possible
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpAvant = foe.hp;
+  const r = E.stepRound(st, { kind: 'attack', targetUid: 'f1' });
+  assert.ok(foe.hp < hpAvant, "l'ennemi désigné encaisse la frappe simple du support");
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === 'f1' && e.kind === 'basic'), 'un événement attaque basique est émis');
+});
+
+test('retour terrain : sans désignation, la frappe simple du support vise le plus faible', () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const sup = supportUnit(E, 's2', []);
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const f1 = foeUnit(E, 'f1');
+  const f2 = foeUnit(E, 'f2');
+  f2.hp = 10; // le plus faible
+  sup.agi = 99; ally.agi = 1; f1.agi = 50; f2.agi = 50;
+  const st = supportState(sup, [ally], [f1, f2]);
+  E.beginRound(st);
+  const hp1 = f1.hp; const hp2 = f2.hp;
+  E.stepRound(st, { kind: 'attack' });
+  assert.ok(f2.hp < hp2, 'le plus faible encaisse la frappe');
+  assert.equal(f1.hp, hp1, "le fort n'est pas touché sans désignation");
+});
+
+test("retour terrain : Instinct Sauvage lancé depuis la ligne support frappe l'ennemi (tactique)", () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const instinct = raceFiche(E, 'Instinct Sauvage');
+  assert.equal(E.spellSideOf(instinct), 'enemy', 'la fiche du sort dit ennemi');
+  assert.ok(E.foeFacingSpell(instinct), 'foeFacingSpell le reconnaît');
+  const sup = supportUnit(E, 's2', [instinct]);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpAvant = foe.hp;
+  const r = E.stepRound(st, { kind: 'cast', idx: 0, targetUid: 'f1' });
+  assert.ok(foe.hp < hpAvant, "le sort de dégâts frappe l'ennemi depuis la ligne support");
+  assert.equal(sup.mana, 10 - instinct.cost, 'le coût du sort est dépensé');
+  assert.ok(r.events.some((e) => e.type === 'cast' && e.name === 'Instinct Sauvage'), 'un événement cast est émis');
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === 'f1' && e.kind === 'special'), 'un événement attaque du sort est émis');
+});
+
+test('retour terrain : en auto, le sort hostile du support frappe aussi (fin des soins fantômes)', () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const sup = supportUnit(E, 's2', [raceFiche(E, 'Instinct Sauvage')]);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpAvant = foe.hp;
+  const hpAlly = ally.hp;
+  E.stepRound(st, null);
+  assert.ok(foe.hp < hpAvant, 'en auto le sort hostile frappe l’ennemi');
+  assert.equal(ally.hp, hpAlly, 'plus de soin fantôme via l’effet de carte');
+});
+
+test('retour terrain : en auto, un sort allié du support soigne toujours (chemin allié intact)', () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const onde = {
+    name: 'Onde Consacrée', cost: 3, mult: 1.3, cat: 'classe',
+    role: 'soin', cible: 'l\u2019\u00e9quipe',
+  };
+  assert.ok(!E.foeFacingSpell(onde), 'un sort de soin reste allié');
+  const sup = supportUnit(E, 's2', [onde]);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  ally.hp = 5;
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpFoe = foe.hp;
+  E.stepRound(st, null);
+  assert.ok(ally.hp > 5, 'l’allié blessé est soigné');
+  assert.equal(foe.hp, hpFoe, 'aucun dégât au sort de soin');
+});
+
+test('retour terrain : castFoeSpell applique les dégâts puis le stun de la fiche (taux contre seuil)', () => {
+  const E = loadEngine();
+  const sup = supportUnit(E, 's2', []);
+  const foe = foeUnit(E);
+  foe.int = 0; foe.agi = 99; foe.rarity = 'C'; // seuil réduit au palier, pas d'esquive
+  const events = [];
+  const st = { turn: 1, winner: null, rng: mulberry32(7), team: { attaque: [], support: [sup] }, enemies: { attaque: [foe], support: [] }, mods: {} };
+  E.castFoeSpell(sup, { name: 'Mélodie envoûtante', cost: 3, mult: 1.2, taux: 0.25, tours: 1, role: 'controle', cible: '1 ennemi', largeur: 1 }, [foe], {}, events, 'team', st, null);
+  assert.ok(foe.hp < foe.maxHp, 'les dégâts de la fiche passent');
+  assert.ok((foe.status.stun ?? 0) >= 1, 'le stun passe quand le taux dépasse le seuil');
+  assert.ok(events.some((e) => e.type === 'status' && e.kind === 'stun'), 'un événement stun est émis');
+});

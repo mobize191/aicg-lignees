@@ -19,6 +19,8 @@
 
 - **Correctif terrain v1.11 — sorts undefined (10/11/2026)** : les sorts hérités d'une carte évoluée étaient remappés en sauvegarde par le tri (école + cran) sans nom ni coût : la fenêtre d'action affichait des lignes « ✦ undefined » et le sort ne se lançait pas. Nouveau `resolveSpellEntry` dans le moteur résout chaque entrée (école + cran, unique, fiche complète) en fiche nommée depuis le grimoire ; crans vides et sorts inconnus filtrés. Sauvegardes inchangées. Moteur et équilibrage inchangés : digest `833a6d2c…` intact, smoke 171 checks, 108 tests.
 
+- **Correctif terrain v1.12 — la ligne support frappe aussi (10/11/2026)** : ⚔ Attaque (gratuite) est la première action de toute carte, support compris (le Garde du Rempart avait juste un bouton de soin) ; un sort hostile (dégâts/contrôle/malus, cible ennemi/zone/tous) lancé depuis la ligne support se résout enfin sur les ennemis selon sa fiche, à la stat principale du lanceur ; les sorts malus ciblent les ennemis dans les fiches résolues. Chemin Auto inchangé : digest `833a6d2c…` intact (518/3000), smoke 171 checks, 114 tests.
+
 ## Migration d'arbitrages design (10/11/2026, poussée dans les data)
 
 Les décisions de la session design sont appliquées aux données du jeu (voir `docs/arbitrages.md` pour le journal complet) :

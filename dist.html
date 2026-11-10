@@ -11324,12 +11324,107 @@ function pickSpell(u) {
   return best;
 }
 
+// retour terrain (10/11) : un sort hostile (role degats/controle/malus ou cible ennemi/zone/tous)
+// se resout sur les ennemis, meme lance depuis la ligne support : un sort est un sort
+function foeFacingSpell(spell) {
+  const sd = spellSideOf(spell);
+  return sd === 'enemy' || sd === 'zone' || sd === 'all'
+    || spell.role === 'degats' || spell.role === 'controle' || spell.role === 'malus';
+}
+// la frappe simple de la ligne support : stat principale au rendement de la classe,
+// esquive derivee de l'ecart d'agilite et opposition d'element, comme la ligne d'attaque
+function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
+  const vivantes = foes.filter((f) => f.alive);
+  const t = targetUid != null
+    ? (vivantes.find((f) => f.uid === targetUid) ?? vivantes[0])
+    : vivantes.reduce((a, b) => (a.hp <= b.hp ? a : b), vivantes[0]);
+  if (!t) return;
+  const foeSide = side === 'team' ? 'enemies' : 'team';
+  const curse = s.status && s.status.curse ? s.status.curse.value : 0;
+  const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
+  const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
+  if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
+    events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+    return;
+  }
+  const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
+    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage));
+  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
+  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
+  applyDamage(t, dmg, events, foeSide, null, true);
+  s.atkBuff = 0;
+}
+// le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
+// taux, tours) pilote la resolution ; la stat principale du lanceur fait les degats
+function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
+  const foeSide = side === 'team' ? 'enemies' : 'team';
+  const ligne = st ? (side === 'team' ? st.enemies.attaque : st.team.attaque) : [];
+  const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
+  const anchorUid = action && action.targetUid != null ? action.targetUid : null;
+  const vivantes = foes.filter((f) => f.alive);
+  const anchor = anchorUid != null
+    ? (vivantes.find((f) => f.uid === anchorUid) ?? vivantes[0])
+    : vivantes.reduce((a, b) => (a.hp <= b.hp ? a : b), vivantes[0]);
+  if (!anchor) return;
+  let hitList;
+  if (larg >= 5) hitList = [...vivantes];
+  else if (larg === 3) {
+    let choix = null;
+    if (anchorUid != null && st) {
+      const ai = ligne.findIndex((u) => u.uid === anchorUid);
+      if (ai >= 0) choix = ai;
+    }
+    hitList = st ? pickZoneTargets(ligne, choix) : [anchor];
+  } else {
+    hitList = [anchor];
+    if (larg >= 2) hitList.push(...vivantes.filter((f) => f !== anchor).slice(0, larg - 1));
+  }
+  const curse = s.status && s.status.curse ? s.status.curse.value : 0;
+  const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
+  for (const t of hitList) {
+    if (!t.alive) continue;
+    const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
+    if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
+      events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+      continue;
+    }
+    if (spell.mult) {
+      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * elementMult(s.element, t.element)));
+      events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side });
+      applyDamage(t, dmg, events, foeSide, null, true);
+      if (t.alive && t.status && t.status.reflect && dmg > 0) {
+        const back = Math.max(1, Math.round(dmg * t.status.reflect.pct));
+        events.push({ type: 'attack', sourceId: t.uid, targetId: s.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: foeSide });
+        applyDamage(s, back, events, side, null);
+      }
+    }
+    if (spell.taux != null && t.alive && st && st.rng) {
+      const seuil = seuilOf(t);
+      if (st.rng() < spell.taux - seuil) {
+        if (spell.role === 'malus') {
+          const value = (s.effect && s.effect.kind === 'curse' ? (s.effect.value ?? M.CURSE_DEFAULT) : M.CURSE_DEFAULT);
+          t.status.curse = { value, turns: spell.tours ?? 2 };
+          events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'curse', value: Math.round(value * 100) / 100 });
+        } else {
+          t.status.stun = (t.status.stun ?? 0) + (spell.tours ?? 1);
+          events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
+      }
+    }
+  }
+}
+
 function applySupport(s, allies, mods, events, side, foes = [], st = null, action = null) {
   
   let spell = null;
   if (action && action.kind === 'pass') {
     s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
     events.push({ type: 'status', side, targetId: s.uid, kind: 'tactical', value: 'attente' });
+    return;
+  } else if (action && action.kind === 'attack' && foes.length) {
+    // retour terrain : la ligne support frappe aussi (frappe simple, ennemi designe ou plus faible)
+    s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
+    strikeFoe(s, foes, mods, events, side, st, action.targetUid ?? null);
     return;
   } else if (action && action.kind === 'basic') {
     s.mana = Math.min(s.manaMax, s.mana + s.manaRegen);
@@ -11343,7 +11438,13 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   } else {
     spell = pickSpell(s);
   }
-  if (st && spell) st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
+  if (spell && foes.length && foeFacingSpell(spell)) {
+    events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
+    castFoeSpell(s, spell, foes, mods, events, side, st, action);
+    return;
+  }
   const fx = s.effect ? s.effect.kind : 'heal';
   if (spell) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx, mana: s.mana });
@@ -11510,7 +11611,7 @@ function resolveSpellEntry(sp) {
   const larg = c.largeur ?? def.largeur ?? 1;
   const cible = typeof def.cible === 'string' && def.cible
     ? def.cible
-    : (def.role === 'degats' || def.role === 'controle')
+    : (def.role === 'degats' || def.role === 'controle' || def.role === 'malus')
       ? (Number(larg) === 5 ? 'tous les ennemis' : Number(larg) === 3 ? 'zone' : Number(larg) === 2 ? '2 ennemis' : '1 ennemi')
       : (larg === 'equipe' || larg === 'equipe-renforcee' ? 'l\u2019\u00e9quipe' : '1 alli\u00e9');
   return {
@@ -12063,7 +12164,8 @@ function actTeamStriker(u, i, ctx, step) {
 function actTeamSupport(s, ctx, step) {
   if (!s.alive) return;
   const supAct = step && step.tacAct ? step.tacAct : null;
-  applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), null, supAct);
+  // retour terrain : l'etat voyage jusqu'au support (esquive, zone, fureur, sorts hostils)
+  applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
 
 function enemyPickTarget(e, targets, dmgBase) {
@@ -12204,7 +12306,8 @@ function stepRound(state, stepChoice = null) {
   let tacAct = null;
   let targetIdx = null;
   if (stepChoice) {
-    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid };
+    // retour terrain : la designation d'ennemi voyage jusqu'a la resolution (frappe et sorts hostils des supports)
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
       const ti = state.enemies.attaque.findIndex((x) => x.uid === stepChoice.targetUid);
@@ -15532,10 +15635,11 @@ function actionButtonsHtml(u, kind) {
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
   const top = (nm, badge, cost) => `<span class="sort-top"><span class="sort-nm">${nm}</span>${badge ?? ''}<span class="sort-cost">${cost}</span></span>`;
   const parts = [];
+  // retour terrain : la frappe simple (gratuite) est la premiere action de TOUTE carte, support compris
   parts.push(row(
-    top(isStrike ? '\u2694 Attaque' : '\u271a Soin de base',
-      `<span class="sort-badge b-${isStrike ? 'degats' : 'soin'}">${isStrike ? 'D\u00e9g\u00e2ts' : 'Soin'}</span>`, 'gratuit')
-    + `<span class="sort-meta">${isStrike ? 'la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana' : 'le soin de base du support, sans mana'}</span>`,
+    top('\u2694 Attaque',
+      `<span class="sort-badge b-degats">D\u00e9g\u00e2ts</span>`, 'gratuit')
+    + `<span class="sort-meta">la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana</span>`,
     'act-attack'));
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
@@ -15569,8 +15673,7 @@ function bindActionButtons(box, u, kind) {
   if (bAtk) {
     bAtk.onclick = () => {
       if (!promptState) return;
-      if (isStrike) askActTarget('enemy', { kind: 'attack' });
-      else promptState.pick({ kind: 'basic' });
+      askActTarget('enemy', { kind: 'attack' });
     };
   }
   const bCross = box.querySelector('.act-cross');
@@ -17054,6 +17157,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.12 : La ligne support frappe aussi', 'RETOUR TERRAIN. Deux manques corrig\u00e9s d\u2019un m\u00eame geste. Un : le Garde du Rempart et tous les supports n\u2019avaient que le bouton de soin \u2014 d\u00e9sormais la frappe simple (\u2694, gratuite) est la premi\u00e8re action de TOUTE carte : on d\u00e9signe l\u2019ennemi, elle frappe. Deux : un sort de d\u00e9g\u00e2ts, de contr\u00f4le ou de malus lanc\u00e9 depuis la ligne support se r\u00e9sout enfin sur les ennemis selon sa fiche (largeur, puissance, taux, tours) \u2014 fini le soin fant\u00e2me quand un Embryon tapait avec Instinct Sauvage. La stat principale du lanceur fait les d\u00e9g\u00e2ts, l\u2019esquive et l\u2019\u00e9l\u00e9ment comptent comme pour la ligne d\u2019attaque, et les sorts alli\u00e9s gardent leur chemin. Les sorts malus ciblent d\u00e9sormais les ennemis dans les fiches r\u00e9solues. Le digest bouge (document\u00e9) : les supports mixtes frappent.'],
   ['v1.11 : Fin des sorts undefined', 'RETOUR TERRAIN. Les sorts h\u00e9rit\u00e9s d\u2019une carte \u00e9volu\u00e9e \u00e9taient stock\u00e9s en sauvegarde sous leur forme remapp\u00e9e par le tri (\u00e9cole + cran), sans nom ni co\u00fbt : la fen\u00eatre d\u2019action et la fiche affichaient des lignes \u00ab \u2726 undefined \u00bb, et le sort ne se lan\u00e7ait pas. D\u00e9sormais chaque entr\u00e9e se r\u00e9sout en fiche compl\u00e8te depuis le grimoire : nom, co\u00fbt, puissance, taux, cible et description. Les uniques remapp\u00e9s se r\u00e9solvent aussi ; les crans vides et les sorts inconnus disparaissent proprement de la liste. Les sauvegardes ne changent pas : la r\u00e9solution se fait \u00e0 l\u2019usage, sans perte.'],
   ['v1.10 : Le tri des recrues', 'LES NAISSANCES ET LES SOLOS RENDENT LEUR GESTE AU GRIMOIRE. Les 33 signatures du lot (les 12 naissances raciales, les 5 solos d\u2019entr\u00e9e, les 16 cartes des quais, de la f\u00eate, des routes, des dunes, des berges et du guet) fondent en crans I-II des \u00e9coles existantes : la prise de garde prot\u00e8ge (le Rempart), le bruissement d\u2019\u00e9ume frappe (la Lame), le froid du caveau fige (l\u2019Entrave), la lanterne du guet \u00e9claire (la Ferveur). Les trois portes divines (l\u2019Ange, le D\u00e9mon, l\u2019\u00c9veill\u00e9 du Seuil) gardent leur geste : les familles divines le dessineront. Les sauvegardes passent en v17 : les sorts h\u00e9rit\u00e9s d\u2019une recrue se re-mapent sur leurs crans. Le combat ne change pas : le digest reste le m\u00eame.'],
   ['v1.9 : Le tri du Z\u00e9nith', 'LE Z\u00c9NITH ARDENT FOND SES 30 SIGNATURES EN 22 CRANS D\u2019\u00c9COLE ET 8 UNIQUES. Le renvoi des ph\u00e9nix devient une ligne du Rempart (25/20 % \u00d7 2 tours, les ailes couvrent 1 puis 2 alli\u00e9s), l\u2019Hymne porte la Ferveur \u00e0 l\u2019\u00e9quipe enti\u00e8re (boost 20 %, tenue 15 %), et les cartes nomm\u00e9es gardent leur geste : Sentence Solaire, Couronnement (l\u2019Astre Capiteux), \u00c9clipse Montante, Renaissance Pyrique, Immolation Retourn\u00e9e, Cantique Final, Peine Capitale, Proph\u00e9tie du Plein Jour. Les sauvegardes passent en v16 : le Z\u00e9nith tri\u00e9 re-mappe ses sorts connus. Le combat ne change pas : le digest reste le m\u00eame.'],

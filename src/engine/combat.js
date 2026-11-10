@@ -465,7 +465,8 @@ function actTeamStriker(u, i, ctx, step) {
 function actTeamSupport(s, ctx, step) {
   if (!s.alive) return;
   const supAct = step && step.tacAct ? step.tacAct : null;
-  applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), null, supAct);
+  // retour terrain : l'etat voyage jusqu'au support (esquive, zone, fureur, sorts hostils)
+  applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
 
 function enemyPickTarget(e, targets, dmgBase) {
@@ -606,7 +607,8 @@ function stepRound(state, stepChoice = null) {
   let tacAct = null;
   let targetIdx = null;
   if (stepChoice) {
-    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid };
+    // retour terrain : la designation d'ennemi voyage jusqu'a la resolution (frappe et sorts hostils des supports)
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
       const ti = state.enemies.attaque.findIndex((x) => x.uid === stepChoice.targetUid);

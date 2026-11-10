@@ -2645,10 +2645,11 @@ function actionButtonsHtml(u, kind) {
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
   const top = (nm, badge, cost) => `<span class="sort-top"><span class="sort-nm">${nm}</span>${badge ?? ''}<span class="sort-cost">${cost}</span></span>`;
   const parts = [];
+  // retour terrain : la frappe simple (gratuite) est la premiere action de TOUTE carte, support compris
   parts.push(row(
-    top(isStrike ? '\u2694 Attaque' : '\u271a Soin de base',
-      `<span class="sort-badge b-${isStrike ? 'degats' : 'soin'}">${isStrike ? 'D\u00e9g\u00e2ts' : 'Soin'}</span>`, 'gratuit')
-    + `<span class="sort-meta">${isStrike ? 'la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana' : 'le soin de base du support, sans mana'}</span>`,
+    top('\u2694 Attaque',
+      `<span class="sort-badge b-degats">D\u00e9g\u00e2ts</span>`, 'gratuit')
+    + `<span class="sort-meta">la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana</span>`,
     'act-attack'));
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
@@ -2682,8 +2683,7 @@ function bindActionButtons(box, u, kind) {
   if (bAtk) {
     bAtk.onclick = () => {
       if (!promptState) return;
-      if (isStrike) askActTarget('enemy', { kind: 'attack' });
-      else promptState.pick({ kind: 'basic' });
+      askActTarget('enemy', { kind: 'attack' });
     };
   }
   const bCross = box.querySelector('.act-cross');
@@ -4167,6 +4167,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.12 : La ligne support frappe aussi', 'RETOUR TERRAIN. Deux manques corrig\u00e9s d\u2019un m\u00eame geste. Un : le Garde du Rempart et tous les supports n\u2019avaient que le bouton de soin \u2014 d\u00e9sormais la frappe simple (\u2694, gratuite) est la premi\u00e8re action de TOUTE carte : on d\u00e9signe l\u2019ennemi, elle frappe. Deux : un sort de d\u00e9g\u00e2ts, de contr\u00f4le ou de malus lanc\u00e9 depuis la ligne support se r\u00e9sout enfin sur les ennemis selon sa fiche (largeur, puissance, taux, tours) \u2014 fini le soin fant\u00e2me quand un Embryon tapait avec Instinct Sauvage. La stat principale du lanceur fait les d\u00e9g\u00e2ts, l\u2019esquive et l\u2019\u00e9l\u00e9ment comptent comme pour la ligne d\u2019attaque, et les sorts alli\u00e9s gardent leur chemin. Les sorts malus ciblent d\u00e9sormais les ennemis dans les fiches r\u00e9solues. Le digest bouge (document\u00e9) : les supports mixtes frappent.'],
   ['v1.11 : Fin des sorts undefined', 'RETOUR TERRAIN. Les sorts h\u00e9rit\u00e9s d\u2019une carte \u00e9volu\u00e9e \u00e9taient stock\u00e9s en sauvegarde sous leur forme remapp\u00e9e par le tri (\u00e9cole + cran), sans nom ni co\u00fbt : la fen\u00eatre d\u2019action et la fiche affichaient des lignes \u00ab \u2726 undefined \u00bb, et le sort ne se lan\u00e7ait pas. D\u00e9sormais chaque entr\u00e9e se r\u00e9sout en fiche compl\u00e8te depuis le grimoire : nom, co\u00fbt, puissance, taux, cible et description. Les uniques remapp\u00e9s se r\u00e9solvent aussi ; les crans vides et les sorts inconnus disparaissent proprement de la liste. Les sauvegardes ne changent pas : la r\u00e9solution se fait \u00e0 l\u2019usage, sans perte.'],
   ['v1.10 : Le tri des recrues', 'LES NAISSANCES ET LES SOLOS RENDENT LEUR GESTE AU GRIMOIRE. Les 33 signatures du lot (les 12 naissances raciales, les 5 solos d\u2019entr\u00e9e, les 16 cartes des quais, de la f\u00eate, des routes, des dunes, des berges et du guet) fondent en crans I-II des \u00e9coles existantes : la prise de garde prot\u00e8ge (le Rempart), le bruissement d\u2019\u00e9ume frappe (la Lame), le froid du caveau fige (l\u2019Entrave), la lanterne du guet \u00e9claire (la Ferveur). Les trois portes divines (l\u2019Ange, le D\u00e9mon, l\u2019\u00c9veill\u00e9 du Seuil) gardent leur geste : les familles divines le dessineront. Les sauvegardes passent en v17 : les sorts h\u00e9rit\u00e9s d\u2019une recrue se re-mapent sur leurs crans. Le combat ne change pas : le digest reste le m\u00eame.'],
   ['v1.9 : Le tri du Z\u00e9nith', 'LE Z\u00c9NITH ARDENT FOND SES 30 SIGNATURES EN 22 CRANS D\u2019\u00c9COLE ET 8 UNIQUES. Le renvoi des ph\u00e9nix devient une ligne du Rempart (25/20 % \u00d7 2 tours, les ailes couvrent 1 puis 2 alli\u00e9s), l\u2019Hymne porte la Ferveur \u00e0 l\u2019\u00e9quipe enti\u00e8re (boost 20 %, tenue 15 %), et les cartes nomm\u00e9es gardent leur geste : Sentence Solaire, Couronnement (l\u2019Astre Capiteux), \u00c9clipse Montante, Renaissance Pyrique, Immolation Retourn\u00e9e, Cantique Final, Peine Capitale, Proph\u00e9tie du Plein Jour. Les sauvegardes passent en v16 : le Z\u00e9nith tri\u00e9 re-mappe ses sorts connus. Le combat ne change pas : le digest reste le m\u00eame.'],
