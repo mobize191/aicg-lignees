@@ -2517,8 +2517,11 @@ function spellMetaHtml(sp) {
   const bits = [];
   const school = sp?.ecole ? (SCHOOLS[sp.ecole] ?? null) : null;
   if (school) bits.push(school.nom);
+  const roleLab = sp?.role ? (DATA.engine.SPELL_ROLE_LABEL?.[sp.role] ?? sp.role) : null;
+  if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
   if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
+  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %');
   const zone = zoneLabelOf(sp);
   if (zone) bits.push(zone);
   else if (sp?.cible) bits.push(sp.cible);
@@ -2604,7 +2607,7 @@ function askActTarget(mode, pending) {
   promptState.phase = 'target';
   promptState.mode = mode;
   promptState.pending = pending;
-  const list = mode === 'enemy'
+  const list = (mode === 'enemy' || mode === 'zone')
     ? state.enemies.attaque.filter((e) => e.alive)
     : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
   if (!list.length) {
@@ -2621,7 +2624,8 @@ function askActTarget(mode, pending) {
   const zoneEl = actBox.querySelector('.act-zone');
   if (!zoneEl) return;
   const lab = pendingLabel(mode, pending, promptState.unit ?? {});
-  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(ou touchez un pion illumin\u00e9)</span></p>`
+  const hint = mode === 'zone' ? 'posez le centre de la zone sur un ennemi' : 'ou touchez un pion illumin\u00e9';
+  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(${hint})</span></p>`
     + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
     + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}</span></button>`).join(' ');
   const cancelBtn = zoneEl.querySelector('.act-cancel');
@@ -2630,7 +2634,7 @@ function askActTarget(mode, pending) {
     b.onclick = () => {
       if (!promptState || promptState.phase !== 'target') return;
       const uid = b.dataset.uid;
-      const choice = mode === 'enemy' ? { ...promptState.pending, targetUid: uid } : { ...promptState.pending, allyUid: uid };
+      const choice = (mode === 'enemy' || mode === 'zone') ? { ...promptState.pending, targetUid: uid } : { ...promptState.pending, allyUid: uid };
       promptState.pick(choice);
     };
   });
@@ -2695,8 +2699,8 @@ function bindActionButtons(box, u, kind) {
       const side = spellSideOf(sp);
       const kind = isStrike ? 'spell' : 'cast';
       // T0.2 : le camp de ciblage vient de la fiche du sort ; sans fiche, le role de l'unite garde l'ancien comportement
-      if (side === 'self' || side === 'team') { promptState.pick({ kind, idx: k }); return; }
-      const mode = side === 'ally' ? 'ally' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
+      if (side === 'self' || side === 'team' || side === 'all') { promptState.pick({ kind, idx: k }); return; }
+      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
       askActTarget(mode, { kind, idx: k });
     };
   });
@@ -2901,7 +2905,7 @@ function unitEl(u) {
       // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
       if (!u.alive) return;
       const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
-      if (promptState.mode === 'enemy' && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
+      if ((promptState.mode === 'enemy' || promptState.mode === 'zone') && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
       return;
     }
@@ -2936,7 +2940,7 @@ function drawBoard() {
   
   
   if (promptState && promptState.phase === 'target') {
-    const list = promptState.mode === 'enemy'
+    const list = (promptState.mode === 'enemy' || promptState.mode === 'zone')
       ? state.enemies.attaque.filter((e) => e.alive)
       : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
     for (const t of list) {

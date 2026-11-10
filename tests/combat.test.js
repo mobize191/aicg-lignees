@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { mulberry32 } from './helpers/rng.js';
 import { loadEngine } from './helpers/load.mjs';
+import { rmSync, cpSync, writeFileSync, readFileSync } from 'node:fs';
 
 const ligne5 = () => [0, 1, 2, 3, 4].map((i) => ({ uid: `e${i}`, hp: 100, maxHp: 100, alive: true, shield: 0, status: {} }));
 
@@ -114,4 +115,47 @@ test('T0.2 : en auto (sans pas tactique) le sort reste un coup sur l\u2019ennemi
   E.stepRound(st, null);
   assert.ok(st.enemies.attaque[0].hp < foeHpBefore, 'en auto le sort frappe l\u2019ennemi (chemin historique intact)');
   assert.equal(u1.atkBuff, 0, 'aucun buff posé en auto');
+});
+
+test('lot 3 : un sort tactique à fiche "zone" frappe 3 cibles contiguës autour de l’ancrage (ACC-C)', () => {
+  // copie des données où la Lame d'Écume n'a que ses crans I et III remplis (max = 3)
+    const dir = 'tests/fixtures/data-zone';
+  rmSync(dir, { recursive: true, force: true });
+  cpSync('data', dir, { recursive: true });
+  const gri = JSON.parse(readFileSync(`${dir}/grimoire.json`, 'utf8'));
+  const lame = gri.ecole.find((s) => s.id === 'morsure-decume');
+  lame.crans.II.vide = true; lame.crans.II.raison = 'test'; lame.crans.IV.vide = true; lame.crans.IV.raison = 'test';
+  writeFileSync(`${dir}/grimoire.json`, JSON.stringify(gri, null, 1) + '\n');
+  const E = loadEngine(dir);
+  E.setRoll(mulberry32(9));
+  const team = { attaque: [E.getCard('n1')], support: [E.getCard('n3')] };
+  const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 5);
+  const st = E.initCombat(team, foes, 777, {});
+  const u = st.team.attaque[0];
+  u.spells = [{ name: 'Lame d\u2019\u00c9cume', cost: 3, mult: 1.5 }];
+  u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
+  assert.equal(E.largeurOfSpellName('Lame d\u2019\u00c9cume'), 3);
+  const pre = E.beginRound(st);
+  st._events = [...pre];
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: 'e.a2' });
+  const hits = r.events.filter((e) => e.type === 'attack' && e.sourceId === u.uid);
+  assert.equal(hits.length, 3, 'la zone touche 3 cibles contiguës');
+  assert.deepEqual(hits.map((h) => h.targetId).sort(), ['e.a2', 'e.a3', 'e.a4']);
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test('lot 3 : un sort à fiche "tous" touche toute la ligne sans désignation (ACC-C)', () => {
+  const E = loadEngine();
+  E.setRoll(mulberry32(9));
+  const team = { attaque: [E.getCard('n1')], support: [] };
+  const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees' && m.classe !== 'Assassin').slice(0, 4);
+  const st = E.initCombat(team, foes, 778, {});
+  const u = st.team.attaque[0];
+  u.spells = [{ name: 'Hurlement', cost: 3, mult: 1.5 }]; // cran IV = tous (5)
+  u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
+  assert.equal(E.largeurOfSpellName('Hurlement'), 5);
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'spell', idx: 0 }); // aucune cible désignée
+  const hits = r.events.filter((e) => e.type === 'attack' && e.sourceId === u.uid);
+  assert.equal(hits.length, 4, 'toute la ligne est touchée');
 });

@@ -220,6 +220,60 @@ async function main() {
     check('47 z 0 exception après ciblage v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 50 : fiche type pilote la fenêtre (zone / tous) ----------
+  {
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(60);
+    const st50 = api._state();
+    api._speed(6);
+    if (st50 && !st50.winner) {
+      els.get('fight').click();
+      for (let w = 0; w < 120 && !api._actEl() && !st50.winner; w++) await wait(25);
+      // Décharge Arcanique (cible "zone" en données) doit passer la fenêtre en mode zone
+      const mage = [...st50.team.attaque, ...st50.team.support].find((u) => (u.spells ?? []).some((s) => s.name === 'D\u00e9charge Arcanique'));
+      check('50 a un sort à fiche zone présent dans l’équipe de test', !!mage, '');
+      if (mage) {
+        mage.mana = mage.manaMax;
+        // force ce sort comme unique sort du mage pour le test
+        const keep = mage.spells.find((s) => s.name === 'D\u00e9charge Arcanique');
+        mage.spells = [keep];
+        // attend que ce soit au tour du mage
+        let am = null, guard = 0;
+        while (guard++ < 200) {
+          const pk = api._prompt();
+          if (pk && pk.unit === mage) break;
+          am = api._actEl();
+          if (am) { const pb = am.querySelector('.act-pass'); if (pb) pb.click(); }
+          await wait(25);
+          if (st50.winner) break;
+        }
+        am = api._actEl();
+        const sp = am ? [...am.querySelectorAll('.act-spell')].find((b) => !b.classList.contains('off')) ?? null : null;
+        check('50 a fenêtre ouverte sur le mage avec son sort zone', !!sp, '');
+        if (sp) {
+          sp.click(); await wait(40);
+          const ps = api._prompt();
+          check('50 b la fiche "zone" passe la désignation en mode zone', !!ps && ps.mode === 'zone' && ps.phase === 'target', ps ? ps.mode : 'null');
+          const tg = [...els.get('app').querySelectorAll('.unit')].find((el) => el.classList.contains('targeted'));
+          if (tg) {
+            tg.click();
+            for (let w = 0; w < 120 && !st50.winner && api._busy(); w++) await wait(25);
+            const hits = (st50._events ?? []).filter((e) => e.type === 'attack' && e.sourceId === mage.uid);
+            const nAlive = [...st50.enemies.attaque, ...st50.enemies.support].filter((e) => e.alive).length;
+            check('50 c la zone touche toute la ligne ennemie vivante', hits.length === nAlive && nAlive >= 2, `hits=${hits.length} alive=${nAlive}`);
+          } else {
+            check('50 c la zone frappe plusieurs cibles contiguës (>= 3)', false, 'pas d’ancre');
+          }
+        }
+      }
+      api._setAuto(true);
+      let g2 = 0;
+      while (g2++ < 60 && !st50.winner) { await wait(40); const a = api._actEl(); if (a) { const pb = a.querySelector('.act-pass'); if (pb) pb.click(); } }
+    }
+    check('50 z 0 exception après fiche type', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   // ---------- 48 : pied de stats v2 sur les pions ----------
   {
     const st48 = api._state();

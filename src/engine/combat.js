@@ -388,6 +388,13 @@ function actTeamStriker(u, i, ctx, step) {
   }
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
   const target = idx !== null && enemies.attaque[idx]?.alive ? enemies.attaque[idx] : foes[0];
+  // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
+  let hitList = [target];
+  if (tacAct && tacAct.kind === 'spell' && spell) {
+    const larg = largeurOfSpellName(spell.name);
+    if (larg === 5) hitList = ctx.enemyAll();
+    else if (larg === 3 && idx !== null) hitList = pickZoneTargets(enemies.attaque, idx);
+  }
   if (mods.weakBonus && target === foes.reduce((a, b) => (a.hp <= b.hp ? a : b))) {
     dmg = Math.round(dmg * (1 + mods.weakBonus));
   }
@@ -397,26 +404,34 @@ function actTeamStriker(u, i, ctx, step) {
     ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'exec', value: cmU.exec });
   }
   const elem = elementTag(u.element, target.element);
+  const dmgBase = dmg;
   dmg = Math.max(1, Math.round(dmg * elementMult(u.element, target.element)));
   const slowed = foes.some((f) => f.status && f.status.slow > 0);
   const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
   for (let h = 0; h < hits; h++) {
-    if (!target.alive) break;
-    if (classeMods(target).dodge && ctx.state.rng() < classeMods(target).dodge) {
-      ctx.events.push({ type: 'dodge', side: 'enemies', targetId: target.uid });
-      break;
+    let dodged = false;
+    for (const tgt of hitList) {
+      if (!tgt.alive) continue;
+      const elemT = elementTag(u.element, tgt.element);
+      const dmgT = Math.max(1, Math.round(dmgBase * elementMult(u.element, tgt.element)));
+      if (classeMods(tgt).dodge && ctx.state.rng() < classeMods(tgt).dodge) {
+        ctx.events.push({ type: 'dodge', side: 'enemies', targetId: tgt.uid });
+        if (tgt === target) { dodged = true; break; }
+        continue;
+      }
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
+      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true);
+      if (tgt.alive && spell && spell.dot) {
+        tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
+        ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
+      }
+      if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
+        const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
+        ctx.events.push({ type: 'attack', sourceId: tgt.uid, targetId: u.uid, amount: back, kind: 'special', mana: tgt.mana, elem: null, side: 'enemies' });
+        applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
+      }
     }
-    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: target.uid, amount: dmg, kind, mana: u.mana, elem, side: 'team' });
-    applyDamage(target, dmg, ctx.events, 'enemies', { allies: foes }, true);
-    if (target.alive && spell && spell.dot) {
-      target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
-      ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'dot', value: target.status.dot.dmg });
-    }
-    if (target.alive && target.status && target.status.reflect && dmg > 0) {
-      const back = Math.max(1, Math.round(dmg * target.status.reflect.pct));
-      ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: u.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'enemies' });
-      applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
-    }
+    if (dodged || !target.alive) break;
   }
   if (!spell && cmU.splash) {
     const ratio = cmU.splash / cmU.strike;

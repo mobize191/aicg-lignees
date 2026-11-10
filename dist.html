@@ -10176,7 +10176,9 @@ function spellSideOf(sp) {
   if (c === 'soi') return 'self';
   if (c.includes('alli')) return 'ally';
   if (c.includes('quipe')) return 'team';
-  if (c.includes('ennemi') || c === 'zone') return 'enemy';
+  if (c === 'zone') return 'zone';       // lot 3 : la zone désigne un ancrage sur la ligne
+  if (c === 'tous' || c.includes('tous')) return 'all'; // lot 3 : aucune désignation
+  if (c.includes('ennemi')) return 'enemy';
   return null;
 }
 
@@ -10727,6 +10729,23 @@ function resolveSignature(ownerId) {
   return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
 }
 
+// lot 3 (fiche type) : la largeur max remplie d'un sort d'école, retrouvée par nom
+function largeurOfSpellName(name) {
+  const entrees = [...(DATA.grimoire?.entrees ?? []), ...(DATA.grimoire?.communs ?? []), ...(DATA.grimoire?.race ?? [])];
+  const entree = entrees.find((s) => s.nom === name);
+  if (entree) {
+    if (entree.cible === 'zone') return 3;
+    if (entree.cible === 'tous' || String(entree.cible).includes('tous')) return 5;
+    if (String(entree.cible).includes('quipe')) return 4;
+    return 1;
+  }
+  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name);
+  if (!def) return 1;
+  const vals = Object.values(def.crans ?? {}).filter((c) => !c.vide).map((c) => c.largeur);
+  if (!vals.length) return 1;
+  return Math.max(...vals.map((l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : Number(l) || 1)));
+}
+
 // src/engine/combat.js : extrait du monolithe (phase 0, comportement inchange)
 
 function makeUnit(card, uid = card.id, level = null) {
@@ -11117,6 +11136,13 @@ function actTeamStriker(u, i, ctx, step) {
   }
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
   const target = idx !== null && enemies.attaque[idx]?.alive ? enemies.attaque[idx] : foes[0];
+  // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
+  let hitList = [target];
+  if (tacAct && tacAct.kind === 'spell' && spell) {
+    const larg = largeurOfSpellName(spell.name);
+    if (larg === 5) hitList = ctx.enemyAll();
+    else if (larg === 3 && idx !== null) hitList = pickZoneTargets(enemies.attaque, idx);
+  }
   if (mods.weakBonus && target === foes.reduce((a, b) => (a.hp <= b.hp ? a : b))) {
     dmg = Math.round(dmg * (1 + mods.weakBonus));
   }
@@ -11126,26 +11152,34 @@ function actTeamStriker(u, i, ctx, step) {
     ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'exec', value: cmU.exec });
   }
   const elem = elementTag(u.element, target.element);
+  const dmgBase = dmg;
   dmg = Math.max(1, Math.round(dmg * elementMult(u.element, target.element)));
   const slowed = foes.some((f) => f.status && f.status.slow > 0);
   const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
   for (let h = 0; h < hits; h++) {
-    if (!target.alive) break;
-    if (classeMods(target).dodge && ctx.state.rng() < classeMods(target).dodge) {
-      ctx.events.push({ type: 'dodge', side: 'enemies', targetId: target.uid });
-      break;
+    let dodged = false;
+    for (const tgt of hitList) {
+      if (!tgt.alive) continue;
+      const elemT = elementTag(u.element, tgt.element);
+      const dmgT = Math.max(1, Math.round(dmgBase * elementMult(u.element, tgt.element)));
+      if (classeMods(tgt).dodge && ctx.state.rng() < classeMods(tgt).dodge) {
+        ctx.events.push({ type: 'dodge', side: 'enemies', targetId: tgt.uid });
+        if (tgt === target) { dodged = true; break; }
+        continue;
+      }
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
+      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true);
+      if (tgt.alive && spell && spell.dot) {
+        tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
+        ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
+      }
+      if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
+        const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
+        ctx.events.push({ type: 'attack', sourceId: tgt.uid, targetId: u.uid, amount: back, kind: 'special', mana: tgt.mana, elem: null, side: 'enemies' });
+        applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
+      }
     }
-    ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: target.uid, amount: dmg, kind, mana: u.mana, elem, side: 'team' });
-    applyDamage(target, dmg, ctx.events, 'enemies', { allies: foes }, true);
-    if (target.alive && spell && spell.dot) {
-      target.status.dot = { dmg: Math.max(1, Math.round(dmg * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
-      ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'dot', value: target.status.dot.dmg });
-    }
-    if (target.alive && target.status && target.status.reflect && dmg > 0) {
-      const back = Math.max(1, Math.round(dmg * target.status.reflect.pct));
-      ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: u.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'enemies' });
-      applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
-    }
+    if (dodged || !target.alive) break;
   }
   if (!spell && cmU.splash) {
     const ratio = cmU.splash / cmU.strike;
@@ -14441,8 +14475,11 @@ function spellMetaHtml(sp) {
   const bits = [];
   const school = sp?.ecole ? (SCHOOLS[sp.ecole] ?? null) : null;
   if (school) bits.push(school.nom);
+  const roleLab = sp?.role ? (DATA.engine.SPELL_ROLE_LABEL?.[sp.role] ?? sp.role) : null;
+  if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
   if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
+  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %');
   const zone = zoneLabelOf(sp);
   if (zone) bits.push(zone);
   else if (sp?.cible) bits.push(sp.cible);
@@ -14528,7 +14565,7 @@ function askActTarget(mode, pending) {
   promptState.phase = 'target';
   promptState.mode = mode;
   promptState.pending = pending;
-  const list = mode === 'enemy'
+  const list = (mode === 'enemy' || mode === 'zone')
     ? state.enemies.attaque.filter((e) => e.alive)
     : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
   if (!list.length) {
@@ -14545,7 +14582,8 @@ function askActTarget(mode, pending) {
   const zoneEl = actBox.querySelector('.act-zone');
   if (!zoneEl) return;
   const lab = pendingLabel(mode, pending, promptState.unit ?? {});
-  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(ou touchez un pion illumin\u00e9)</span></p>`
+  const hint = mode === 'zone' ? 'posez le centre de la zone sur un ennemi' : 'ou touchez un pion illumin\u00e9';
+  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(${hint})</span></p>`
     + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
     + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}</span></button>`).join(' ');
   const cancelBtn = zoneEl.querySelector('.act-cancel');
@@ -14554,7 +14592,7 @@ function askActTarget(mode, pending) {
     b.onclick = () => {
       if (!promptState || promptState.phase !== 'target') return;
       const uid = b.dataset.uid;
-      const choice = mode === 'enemy' ? { ...promptState.pending, targetUid: uid } : { ...promptState.pending, allyUid: uid };
+      const choice = (mode === 'enemy' || mode === 'zone') ? { ...promptState.pending, targetUid: uid } : { ...promptState.pending, allyUid: uid };
       promptState.pick(choice);
     };
   });
@@ -14619,8 +14657,8 @@ function bindActionButtons(box, u, kind) {
       const side = spellSideOf(sp);
       const kind = isStrike ? 'spell' : 'cast';
       // T0.2 : le camp de ciblage vient de la fiche du sort ; sans fiche, le role de l'unite garde l'ancien comportement
-      if (side === 'self' || side === 'team') { promptState.pick({ kind, idx: k }); return; }
-      const mode = side === 'ally' ? 'ally' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
+      if (side === 'self' || side === 'team' || side === 'all') { promptState.pick({ kind, idx: k }); return; }
+      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
       askActTarget(mode, { kind, idx: k });
     };
   });
@@ -14825,7 +14863,7 @@ function unitEl(u) {
       // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
       if (!u.alive) return;
       const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
-      if (promptState.mode === 'enemy' && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
+      if ((promptState.mode === 'enemy' || promptState.mode === 'zone') && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
       return;
     }
@@ -14860,7 +14898,7 @@ function drawBoard() {
   
   
   if (promptState && promptState.phase === 'target') {
-    const list = promptState.mode === 'enemy'
+    const list = (promptState.mode === 'enemy' || promptState.mode === 'zone')
       ? state.enemies.attaque.filter((e) => e.alive)
       : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
     for (const t of list) {

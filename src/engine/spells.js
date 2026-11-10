@@ -236,3 +236,20 @@ function resolveSignature(ownerId) {
   if (!entry) return null;
   return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
 }
+
+// lot 3 (fiche type) : la largeur max remplie d'un sort d'école, retrouvée par nom
+function largeurOfSpellName(name) {
+  const entrees = [...(DATA.grimoire?.entrees ?? []), ...(DATA.grimoire?.communs ?? []), ...(DATA.grimoire?.race ?? [])];
+  const entree = entrees.find((s) => s.nom === name);
+  if (entree) {
+    if (entree.cible === 'zone') return 3;
+    if (entree.cible === 'tous' || String(entree.cible).includes('tous')) return 5;
+    if (String(entree.cible).includes('quipe')) return 4;
+    return 1;
+  }
+  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name);
+  if (!def) return 1;
+  const vals = Object.values(def.crans ?? {}).filter((c) => !c.vide).map((c) => c.largeur);
+  if (!vals.length) return 1;
+  return Math.max(...vals.map((l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : Number(l) || 1)));
+}

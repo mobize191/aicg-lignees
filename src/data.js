@@ -101,7 +101,9 @@ function spellSideOf(sp) {
   if (c === 'soi') return 'self';
   if (c.includes('alli')) return 'ally';
   if (c.includes('quipe')) return 'team';
-  if (c.includes('ennemi') || c === 'zone') return 'enemy';
+  if (c === 'zone') return 'zone';       // lot 3 : la zone désigne un ancrage sur la ligne
+  if (c === 'tous' || c.includes('tous')) return 'all'; // lot 3 : aucune désignation
+  if (c.includes('ennemi')) return 'enemy';
   return null;
 }
 
