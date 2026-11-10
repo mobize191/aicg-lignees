@@ -68,7 +68,7 @@ test('fusion des Marées : 30 signatures sur 30 résolues, 7 uniques + 23 fondue
   // un monstre des Marées caste son cran de fusion ; un biome non trié garde sa signature
   assert.deepEqual(E.resolveSignature('e1'), { sort: 'morsure-decume', cran: 'I' });
   assert.deepEqual(E.resolveSignature('e13'), { unique: 'maree-noire' });
-  assert.equal(E.resolveSignature('f1'), null);
+  assert.equal(E.resolveSignature('g1'), null, 'le Bosquet attend son tri');
 });
 
 test('fin du verrou de classe : deux profils, même école ouverte, même sort, même effet (ACC-2-5)', () => {
@@ -139,4 +139,58 @@ test('seuil : un stun de 25 % contre un seuil donné, fréquence statistique (AC
   }
   const freq = stuns / N;
   assert.ok(Math.abs(freq - taux) <= 0.005, `fréquence ${freq} dans ±0,5 % de ${taux}`);
+});
+
+// ---------- T2.1 : le tri de la Forge Cendree (lot 2, gabarit des Marees) ----------
+test('tri de la Forge : 24 signatures resolues, 5 uniques + 19 fondues (T2.1, ACC-T)', () => {
+  const E = loadEngine();
+  const forge = E.DATA['fusion-map'].forge;
+  assert.ok(forge.trie, 'le biome forge est marque trie');
+  const ids = Object.keys(forge.signatures);
+  assert.equal(ids.length, 24);
+  const uniques = ids.filter((id) => forge.signatures[id].unique);
+  const fondues = ids.filter((id) => forge.signatures[id].fusion);
+  assert.equal(uniques.length, 5);
+  assert.equal(fondues.length, 19);
+  for (const id of ids) assert.ok(E.resolveSignature(id), `signature ${id} resolue`);
+  assert.deepEqual(E.resolveSignature('f1'), { sort: 'morsure-decume', cran: 'I' });
+  assert.deepEqual(E.resolveSignature('f6'), { sort: 'morsure-decume', cran: 'III' }, 'Eruption, la zone native');
+  assert.deepEqual(E.resolveSignature('f16'), { sort: 'etreinte-des-profondeurs', cran: 'II' }, 'Filet de Suie, 2 ennemis');
+  assert.deepEqual(E.resolveSignature('f20'), { sort: 'colonne-de-feu', cran: 'III' });
+  assert.deepEqual(E.resolveSignature('f23'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Gardiens Invoques, 2 renforts');
+  assert.deepEqual(E.resolveSignature('f13'), { unique: 'nuit-de-cendres' }, 'le M garde son unique');
+  assert.equal(E.resolveSignature('g1'), null, 'le Bosquet attend son tri');
+});
+
+test('les uniques de la Forge suivent la decision 3 : base d\u2019ecole + cran + delta (T2.1)', () => {
+  const E = loadEngine();
+  const ecoleIds = new Set(E.DATA.grimoire.ecole.map((s) => s.id));
+  const attends = { f13: 'nuit-de-cendres', f12: 'fournaise-eternelle', f18: 'linceul-de-suie', f21: 'fournaise-de-calcine', f22: 'colere-de-vulcain' };
+  for (const [carte, id] of Object.entries(attends)) {
+    const u = (E.DATA.grimoire.uniques ?? []).find((x) => x.id === id);
+    assert.ok(u, `unique ${id} present`);
+    assert.equal(u.carte, carte, `${id} appartient a ${carte}`);
+    assert.ok(ecoleIds.has(u.base), `la base ${u.base} de ${id} existe dans le grimoire d'ecole`);
+    assert.ok(['I', 'II', 'III', 'IV'].includes(u.cran), `le cran de ${id}`);
+    assert.ok(u.delta && typeof u.delta.desc === 'string' && u.delta.desc.length > 0, `le delta de ${id} est ecrit`);
+  }
+});
+
+test('un monstre de la Forge caste son cran de fusion : Colonne de Feu III (T2.1, ACC-T)', () => {
+  const E = loadEngine();
+  const sig = E.resolveSignature('f20');
+  const cibles = ligne5(E);
+  const events = [];
+  const res = E.castSpell(E.DATA, sig.sort, sig.cran, { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.role, 'malus');
+  assert.equal(res.cout, 5);
+  assert.equal(res.taux, 0.15, 'la brulure normalisee sur l\u2019echelle des crans');
+  assert.equal(res.largeur, 3, 'la colonne frappe la zone de 3');
+  assert.equal(E.largeurCibles(cibles, res.largeur, null).length, 3, '3 contigues de la ligne');
+  assert.equal(E.cranOf('colonne-de-feu', 'I').taux, 0.25, 'le cran I au taux de reference');
+  assert.ok(E.cranOf('colonne-de-feu', 'IV').vide, 'le cran IV attend un autre biome');
+  // l\u2019Appel ne de la Forge : les crans comptent les renforts
+  const appel = E.cranOf('fournaise-invoquee', 'II');
+  assert.equal(appel.cout, 4);
+  assert.equal(appel.largeur, 2, '2 renforts au cran II');
 });

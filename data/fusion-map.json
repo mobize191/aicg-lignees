@@ -118,7 +118,100 @@
   }
  },
  "forge": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "f1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f14": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f24": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f8": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f11": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f6": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "f17": {
+    "fusion": "chant-de-sirene",
+    "cran": "IV"
+   },
+   "f16": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "II"
+   },
+   "f7": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "f9": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "f10": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "f15": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "f19": {
+    "fusion": "colonne-de-feu",
+    "cran": "II"
+   },
+   "f20": {
+    "fusion": "colonne-de-feu",
+    "cran": "III"
+   },
+   "f5": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "f23": {
+    "fusion": "fournaise-invoquee",
+    "cran": "II"
+   },
+   "f12": {
+    "unique": "fournaise-eternelle"
+   },
+   "f13": {
+    "unique": "nuit-de-cendres"
+   },
+   "f18": {
+    "unique": "linceul-de-suie"
+   },
+   "f21": {
+    "unique": "fournaise-de-calcine"
+   },
+   "f22": {
+    "unique": "colere-de-vulcain"
+   }
+  }
  },
  "bosquet": {
   "trie": false

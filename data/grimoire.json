@@ -695,6 +695,69 @@
      "raison": "attend un autre biome ou la zone d’errance"
     }
    }
+  },
+  {
+   "id": "colonne-de-feu",
+   "nom": "Colonne de Feu",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "brulure",
+   "desc": "La brûlure de la Forge : la flamme se pose et ronge, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "fournaise-invoquee",
+   "nom": "Fournaise Invoqu’e",
+   "ecole": "appel",
+   "role": "invocation",
+   "desc": "L’Appel de la Forge : la fournaise envoie des renforts de cendre, 3 maximum par invocateur.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
   }
  ],
  "uniques": [
@@ -773,6 +836,101 @@
    "tours": 2,
    "effet": "corrosion",
    "desc": "La reine qui flagelle."
+  },
+  {
+   "id": "nuit-de-cendres",
+   "nom": "Nuit de Cendres",
+   "carte": "f13",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "brulure",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "desc": "la nuit recouvre la ligne entière et brûle ce qu’elle voile"
+   },
+   "desc": "La nuit de cendres s’abat sur tous les ennemis et les enflamme (15 % × 2 tours)."
+  },
+  {
+   "id": "fournaise-eternelle",
+   "nom": "Fournaise Éternelle",
+   "carte": "f12",
+   "role": "invocation",
+   "cible": "les renforts",
+   "cout": 4,
+   "largeur": 2,
+   "base": "fournaise-invoquee",
+   "cran": "II",
+   "delta": {
+    "renait": true,
+    "desc": "les renforts renaissent tant que leur gardien tient, sans limite de durée"
+   },
+   "desc": "La fournaise ne s’éteint pas : ses renforts renaissent tant que le Gardien des Foyers tient."
+  },
+  {
+   "id": "linceul-de-suie",
+   "nom": "Linceul de Suie",
+   "carte": "f18",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "taux": 0.15,
+   "tours": 1,
+   "base": "etreinte-des-profondeurs",
+   "cran": "IV",
+   "delta": {
+    "taux": 0.15,
+    "tours": 1,
+    "desc": "le voile couvre la ligne entière et fige ceux qu’il recouvre"
+   },
+   "desc": "Le voile de suie descend sur tous les ennemis et les fige sur place."
+  },
+  {
+   "id": "fournaise-de-calcine",
+   "nom": "Fournaise de Calcine",
+   "carte": "f21",
+   "role": "malus",
+   "cible": "la zone",
+   "cout": 5,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 3,
+   "effet": "brulure",
+   "base": "colonne-de-feu",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 3,
+    "desc": "la brûlure de Calcine dure un tour de plus que la colonne ordinaire"
+   },
+   "desc": "La fournaise de la Dame des Cendres embrase la zone et la laisse se consumer (15 % × 3 tours)."
+  },
+  {
+   "id": "colere-de-vulcain",
+   "nom": "Colère de Vulcain",
+   "carte": "f22",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "brulure",
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "desc": "la colère enflamme la zone qu’elle frappe"
+   },
+   "desc": "Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours)."
   }
  ]
 }

@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (6), `lignee` (42), `uniques` (7).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (8), `lignee` (42), `uniques` (12).
 
 ## Sorts communs (2)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (6)
+## Sorts d'ecolage (8)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -42,6 +42,8 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | carapace-de-corail | Barrière de Corail | rempart | bouclier | - | I : 3 / 1 ; x1.7 ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / equipe ; x1.3 ; IV : 6 / equipe-renforcee ; x1.6 |
 | marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
+| colonne-de-feu | Colonne de Feu | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| fournaise-invoquee | Fournaise Invoqu’e | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 
 ## Sorts de lignee (42)
 
@@ -92,7 +94,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
 
-## Sorts uniques (7)
+## Sorts uniques (12)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -103,6 +105,11 @@ Un sort par palier de famille, appris en montant la lignee.
 | benediction-des-berges | Bénédiction des Berges | e22 | soin | l’équipe | 3 | 1.5 | La bénédiction du bord de l’eau. |
 | chant-du-naufrage | Chant du Naufrage | e28 | controle | tous les ennemis | 7 | 2 | Le chant qui couche les équipages. |
 | colere-des-recifs | Colère des Récifs | e30 | degats | tous les ennemis | 3 | 1.6 | La reine qui flagelle. |
+| nuit-de-cendres | Nuit de Cendres | f13 | degats | tous les ennemis | 6 | 2.6 | La nuit de cendres s’abat sur tous les ennemis et les enflamme (15 % × 2 tours). |
+| fournaise-eternelle | Fournaise Éternelle | f12 | invocation | les renforts | 4 | - | La fournaise ne s’éteint pas : ses renforts renaissent tant que le Gardien des Foyers tient. |
+| linceul-de-suie | Linceul de Suie | f18 | controle | tous les ennemis | 6 | - | Le voile de suie descend sur tous les ennemis et les fige sur place. |
+| fournaise-de-calcine | Fournaise de Calcine | f21 | malus | la zone | 5 | - | La fournaise de la Dame des Cendres embrase la zone et la laisse se consumer (15 % × 3 tours). |
+| colere-de-vulcain | Colère de Vulcain | f22 | degats | la zone | 5 | 2.2 | Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours). |
 
 ## Ecoles (data/schools.json)
 
@@ -169,4 +176,33 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | e22 | - | - |
 | e28 | - | - |
 | e30 | - | - |
+
+### Donjon forge
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| f1 | morsure-decume | I |
+| f2 | morsure-decume | I |
+| f14 | morsure-decume | I |
+| f3 | morsure-decume | II |
+| f24 | morsure-decume | II |
+| f4 | morsure-decume | II |
+| f8 | morsure-decume | II |
+| f11 | morsure-decume | II |
+| f6 | morsure-decume | III |
+| f17 | chant-de-sirene | IV |
+| f16 | etreinte-des-profondeurs | II |
+| f7 | onde-consacree | I |
+| f9 | carapace-de-corail | I |
+| f10 | carapace-de-corail | II |
+| f15 | colonne-de-feu | I |
+| f19 | colonne-de-feu | II |
+| f20 | colonne-de-feu | III |
+| f5 | fournaise-invoquee | I |
+| f23 | fournaise-invoquee | II |
+| f12 | - | - |
+| f13 | - | - |
+| f18 | - | - |
+| f21 | - | - |
+| f22 | - | - |
 

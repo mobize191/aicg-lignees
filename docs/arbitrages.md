@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le tri de la Forge Cendrée (T2.1 du grand chantier)
+
+- **24 signatures résolues : 5 uniques + 19 fondues** (gabarit des Marées, 14.5 étape 1). Le biome `forge` est marqué `trie` dans `fusion-map.json`, le validateur couvre 100 % de ses signatures.
+- **Deux lignes d'école naissent de la Forge** : `Colonne de Feu` (le Mauvais Œil, malus, mot-clé brûlure ; taux normalisés sur l'échelle des crans 25/20/15 % × 2 tours, zone au cran III, le IV attend un autre biome) et `Fournaise Invoquée` (l'Appel, invocation ; la largeur compte les renforts : 1 au cran I avec f5, 2 au cran II avec f23).
+- **Les 5 uniques suivent la décision 3** (base d'école + cran + delta) : Nuit de Cendres (f13, le M, base Lame d'Écume IV + brûlure 15 % × 2 tours), Fournaise Éternelle (f12, base Fournaise Invoquée II + renaissance sans limite), Linceul de Suie (f18, base Étreinte des Profondeurs IV + la ligne entière figée), Fournaise de Calcine (f21, base Colonne de Feu III + la brûlure dure 3 tours), Colère de Vulcain (f22, base Lame d'Écume III + brûlure 15 % × 2 tours). Les 7 uniques des Marées (format antérieur) seront resynchronisées sur ce format au T2.7 (contrôle d'homogénéité du grimoire).
+- **Affectation des fondues aux crans** (règle 3) : la largeur native décide, le palier règle les litiges. f1/f2/f14 (C) et f3/f24 (UC) sur la Lame I-II ; f4/f8/f11 (R) au cran II ; f6 Éruption (UR, zone) au cran III ; f17 Tissage Ensorcelé (UR étroit, 6✦ ×2) monte au cran IV de Mélodie envoûtante (précédent e27) ; f16 Filet de Suie au cran II de l'Étreinte (2 ennemis) ; f7 Onguent de Suie greffe le cran I d'Onde Consacrée ; f9 Peau de Lave au cran I de la Barrière (1 allié), f10 Cendre Protectrice au cran II (2 alliés) ; f15/f19/f20 sur les crans I/II/III de Colonne de Feu.
+- **Migration v13** (EXI-T-4) : les sorts connus d'un biome nouvellement trié se re-mappent sur les crans de fusion (mécanisme v10 réutilisé, générique par biome) ; les biomes non triés gardent leur chemin legacy (testé sur le Bosquet).
+- Preuve : 75/75 tests (5 neufs : tri, uniques décision 3, cast du cran, migration v13, allowlist), smoke 164 checks, digest `7dfab0a2…` **inchangé** (couche data et sauvegarde, aucune maths de combat).
+
 ## 2026-11-10 : ACTÉ — le rôle attaque/support sort de l'affichage (T0.3 du grand chantier)
 
 - La grille identité de la fiche passe à **Classe / Élément / Rareté** : le fstat « Rôle » disparaît. Le bloc des sorts croisés change de libellés : titre « Sorts croisés » (plus « (rôle opposé) ») et prose en gestes (panse les blessés, frappe au poing), plus de camps attaquants/supports.

@@ -57,7 +57,30 @@ function v11to12(s) {
   if (!Array.isArray(s.zonesVisitees)) s.zonesVisitees = [];
   return s;
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12 };
+// v12 -> v13 (tri des biomes, EXI-T-4) : a chaque biome marque trie, les sorts connus
+// qui portent encore un nom de signature legacy se re-mappent sur les crans de fusion
+// (le mecanisme de la v10, reutilise biome par biome)
+function v12to13(s) {
+  s.version = 13;
+  const monsters = DATA.monsters ?? [];
+  const bySignature = new Map();
+  for (const m of monsters) if (m.soloSpell) bySignature.set(m.soloSpell, m.id);
+  const remap = (sp) => {
+    if (!sp || typeof sp !== 'object' || sp.sort) return sp;
+    const nom = sp.nom ?? sp.name ?? null;
+    const monstreId = nom ? bySignature.get(nom) : null;
+    const entry = monstreId ? (FUSION_MAP[(monsters.find((m) => m.id === monstreId) ?? {}).dungeon] ?? {}).signatures?.[monstreId] : null;
+    if (!entry) return sp;
+    return entry.unique ? { sort: entry.unique, unique: true } : { sort: entry.fusion, cran: entry.cran };
+  };
+  for (const inst of s.instances ?? []) {
+    if (Array.isArray(inst.sorts)) inst.sorts = inst.sorts.map(remap);
+    if (Array.isArray(inst.acc)) inst.acc = inst.acc.map(remap);
+  }
+  if (Array.isArray(s.grimoire)) s.grimoire = s.grimoire.map(remap);
+  return s;
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;
