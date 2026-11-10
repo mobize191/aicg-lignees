@@ -2,6 +2,13 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — charte des nommées (retour de Marc-Olivier) : doublon Aurorine tranché, règle générique/nommé explicitée
+
+- **Le doublon Aurorine tranché** : deux cartes portaient le même nom complet « Aurorine, Lance de l'Aube » : `z15` (monstre L de la Légion Solaire du Zénith, Assassin) et `u6` (L de la famille du Zèle, Prêtre, créée au lot 6). La charte « une nommée = un même personnage sur toute sa lignée » est intenable sur deux personnages distincts. **`z15` reste Aurorine** : c'est le sommet acté de la Légion Solaire du Zénith (design-arbres v15), son sort Éclipse Montante le raconte. **`u6` devient « Lémion, Chef de la Légion Solaire »**, le nom acté au document de référence v3 pour le sommet du Zèle (parallèle à `t6` Gadianton, Chef des Brigands) : le lot 6 avait réutilisé Aurorine par erreur. Renommage d'affichage seul : id, stats, sorts et sauvegardes inchangés.
+- **La règle des L sans prénom est explicite** : Héraut du Zénith (`z7`), Gardien des Foyers (`f12`), Patriarche du Bosquet (`g7`), Archiliche des Caveaux (`k7`), Grande Prêtresse de l'Ombre (`q5`) et Archimage de l'Appel (`v6`) gardent le statut **futur nommé** (art de référence verrouillé dès la série 1), PAS générique libre : un éventuel prénom sera un renommage d'affichage seul, l'art reste le même personnage.
+- **Garde du validateur (`EXI-DATA-3`)** : deux nommées ne peuvent plus partager le même nom complet « prénom, titre ». Les prénoms répétés à titres différents (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa : deux branches d'une même lignée) restent légaux ; les titres génériques sans prénom (Chapelain du Jour, Arbalétrier Doré : miroir voulu Zèle/Zénith) restent hors règle.
+- Preuve : renommage d'affichage seul, digest `833a6d2c…` inchangé (518/3000, 0 exception), smoke 171 checks, 115 tests.
+
 ## 2026-11-10 : ACTÉ — retours terrain : fin des sorts undefined, la ligne support frappe aussi (v1.11 + v1.12)
 
 - **Sorts undefined (v1.11)** : un sort hérité remappé par le tri vit en sauvegarde comme `école + cran` sans nom ni coût ; il se résout désormais en fiche complète (école + cran, unique, fiche) au moment de l'affichage et du lancer (`resolveSpellEntry`). Sauvegardes inchangées, résolution sans perte.

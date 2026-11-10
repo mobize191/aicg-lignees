@@ -67,7 +67,7 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 1. **Checkpoint final** : WAI v17 vs NoobAI-XL vs autre finetune — test aveugle (5 cartes témoins + 1 fond).
 2. **Tier de bascule full body** (R ? SR seulement ?).
 3. **Liste des nommées** qui méritent un mini-LoRA ; validation de la méthode IPAdapter.
-4. **Tableau genre + espèce des ~46 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data) : 29 monstres (série 1) + 7 têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa) + 7 graines dormantes (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) + les nouvelles familles v3 (Vesperine, Gadianton, Aurorine) — voir §10.
+4. **Tableau genre + espèce des ~47 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data) : 29 monstres (série 1) + 7 têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa) + 7 graines dormantes (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) + les nouvelles familles v3 (Vesperine, Gadianton, Lémion) et Aurorine (z15, monstre non couvert par la série 1) — voir §10.
 5. **Vidéos FX** : alimentées par les arts v1 ou régénérées en v2 ?
 6. **Sort des 231 arts DreamShaper XL** : repli ou archivage de la campagne v1.
 7. Déco : vidéo vs parallaxe par écran ; WAN 5B vs 14B ; économie de la Boutique ; intérieur des Terres Sauvages (raccord donjons/errance) ; qui est le héros de l'errance (avatar joueur ou carte de l'équipe).
@@ -78,22 +78,18 @@ Comparaison entre cette charte, `docs/design/familles-races-v3.md`, `docs/design
 
 ### Ce que les arbres v3 ajoutent
 
-- **4 nouvelles familles humaines actées, déjà dans `data/families.json` et `cards.json`** : Crépuscule (q1→q6, sommet **Vesperine, Reine de la Nuit**), Vol (t1→t6, sommet **Gadianton, Chef des Brigands**), Zèle (u1→u6, sommet **Aurorine, Lance de l'Aube**), École des Invocations (v1→v6, sommet **Archimage de l'Appel**, sans nom propre). Aucune n'a d'art ni de prompt à ce jour.
+- **4 nouvelles familles humaines actées, déjà dans `data/families.json` et `cards.json`** : Crépuscule (q1→q6, sommet **Vesperine, Reine de la Nuit**), Vol (t1→t6, sommet **Gadianton, Chef des Brigands**), Zèle (u1→u6, sommet **Lémion, Chef de la Légion Solaire**, ex-Aurorine, tranché 10/11/2026), École des Invocations (v1→v6, sommet **Archimage de l'Appel**, sans nom propre). Aucune n'a d'art ni de prompt à ce jour.
 - Les **7 graines dormantes** b1-b7 (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) sont des nommées à part entière : une référence d'art chacune (elles sont les graines des 2es voies des familles compagnons, cf. doc v3).
-- La **série 1 (34 prompts) ne couvre que les 29 nommées de monstres + 5 fonds** : ni les têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa), ni Macha, Ysolde, Pontos, Justine, Célestin, Aurorine, ni les nouvelles familles. Le compte réel de références nommées à couvrir ≈ **46** (29 monstres + 7 compagnons + 7 graines + Vesperine, Gadianton, Aurorine).
+- La **série 1 (34 prompts) ne couvre que les 29 nommées de monstres + 5 fonds** : ni les têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa), ni Macha, Ysolde, Pontos, Justine, Célestin, Aurorine, ni les nouvelles familles. Le compte réel de références nommées à couvrir ≈ **47** (29 monstres + 7 compagnons + 7 graines + Vesperine, Gadianton, Lémion, Aurorine).
 
-### Incohérence à trancher : Aurorine en double
+### Incohérence TRANCHÉE (10/11/2026) : Aurorine en double
 
-- `z15` "Aurorine, Lance de l'Aube" (Zénith, Assassin, Légion Solaire) et `u6` "Aurorine, Lance de l'Aube" (famille Zèle, Prêtre) : **même nom, même titre, deux cartes différentes** (classe et donjon distincts).
-- La règle de cohérence "une nommée = un même personnage sur toute sa lignée" ne peut pas s'appliquer à deux personnages différents du même nom : soit fusionner les entrées d'arbre, soit renommer (avis charte : **renommer l'une des deux**, l'identité visuelle serait sinon ambiguë pour le joueur).
-- À consigner dans `docs/arbitrages.md` avant la campagne d'arts compagnons.
+- `z15` "Aurorine, Lance de l'Aube" (Zénith, Assassin, Légion Solaire) et `u6` (famille Zèle, Prêtre) portaient le même nom complet. **Tranché dans `docs/arbitrages.md`** : `z15` reste Aurorine (sommet acté de la Légion Solaire du Zénith), **`u6` devient "Lémion, Chef de la Légion Solaire"** (nom acté v3 pour le sommet du Zèle, parallèle à Gadianton, Chef des Brigands). Renommage d'affichage seul : l'identité visuelle redevient non ambiguë.
+- Garde ajoutée dans le validateur (`EXI-DATA-3`) : deux nommées ne peuvent plus partager le même nom complet.
 
-### L sans prénom : générique ou futur nommé ?
+### L sans prénom : TRANCHÉ (10/11/2026) — futur nommé
 
-Héraut du Zénith (z7), Gardien des Foyers (f12), Patriarche du Bosquet (g7), Archiliche des Caveaux (k7), Grande Prêtresse de l'Ombre (q5), Archimage de l'Appel (v6) portent un titre sans nom propre. Deux traitements possibles, à trancher :
-- **Générique libre** (règle "génériques" : images toutes différentes, aucune cohérence exigée) — recommandé si aucun nom n'est prévu ;
-- **Futur nommé** (art de référence verrouillé dès maintenant, à renommer plus tard) — coûteux, à réserver aux sommets emblématiques.
-En l'état, la série 1 les traite comme des références verrouillées (ex. `heraut-zenith`, `archiliche`) : garder ce statut pour eux, **mais l'arbitrage doit être explicite** dans `arbitrages.md`.
+Héraut du Zénith (z7), Gardien des Foyers (f12), Patriarche du Bosquet (g7), Archiliche des Caveaux (k7), Grande Prêtresse de l'Ombre (q5), Archimage de l'Appel (v6) portent un titre sans nom propre. **Tranché dans `docs/arbitrages.md`** : statut **futur nommé** conservé (art de référence verrouillé dès la série 1, ex. `heraut-zenith`, `archiliche`), PAS générique libre. Un éventuel prénom sera un renommage d'affichage seul, l'art reste le même personnage.
 
 ### Conséquences pour la campagne
 
@@ -107,7 +103,7 @@ En l'état, la série 1 les traite comme des références verrouillées (ex. `he
 |---|---|
 | `tools/build-prompts.mjs` | 231 prompts en tags danbooru + cadrage + anti-texte + `character_dna` + `species` obligatoire (échec sans mapping) |
 | `tools/species-map.json` | NOUVEAU : mapping famille/espèce → tags |
-| `tools/serie1-prompts.json` | 29 références + 5 fonds (monstres) ; à étendre aux ~17 références manquantes (7 compagnons, 7 graines, Vesperine, Gadianton, Aurorine + Macha, Ysolde, Pontos, Justine, Célestin selon priorités), avec ADN et espèce explicités |
+| `tools/serie1-prompts.json` | 29 références + 5 fonds (monstres) ; à étendre aux ~18 références manquantes (7 compagnons, 7 graines, Vesperine, Gadianton, Lémion, Aurorine + Macha, Ysolde, Pontos, Justine, Célestin selon priorités), avec ADN et espèce explicités |
 | `tools/comfy-batch.mjs` | hires fix + ADetailer + IPAdapter, checkpoint configurable |
 | `seeds.csv` | registre v2 (seeds v1 obsolètes au changement de checkpoint) + genre par carte |
 | `docs/images/images-conventions.md` | réécriture après validation (ce document devient la référence) |

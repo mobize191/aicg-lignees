@@ -140,6 +140,18 @@ test('le validateur detecte un doublon d\u2019id (copie modifiee)', () => {
   assert.ok(errors.some((e) => e.includes('meme id')));
 });
 
+test('le validateur detecte deux nommees au meme nom complet (copie modifiee)', () => {
+  const E = loadEngine();
+  const data = loadData();
+  const aurorine = data.monsters.find((m) => m.name === 'Aurorine, Lance de l\u2019Aube');
+  assert.ok(aurorine, 'z15 Aurorine est bien une nommee');
+  data.cards[0].name = 'Aurorine, Lance de l\u2019Aube';
+  const errors = [];
+  E.validate(data, errors);
+  assert.ok(errors.some((e) => e.includes('meme nom de nommee')), 'le doublon de nom complet est refuse');
+  assert.ok(!errors.some((e) => e.includes('meme id')), 'le renommage d\u2019affichage ne touche pas aux ids');
+});
+
 test('le validateur detecte une reference inconnue (copie modifiee)', () => {
   const E = loadEngine();
   const data = loadData();

@@ -142,7 +142,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | u3 | Croisé de l’Aube | R | Lumière | support | 14 | 70 | 7 | 11 | zele | Bénédiction du Jour — geste de palier R | - |
 | u4 | Chapelain du Jour | SR | Lumière | support | 20 | 78 | 10 | 16 | zele | Croisade — geste de palier SR | - |
 | u5 | Arbalétrier Doré | UR | Lumière | support | 27 | 88 | 14 | 22 | zele | Aurore Radieuse — geste de palier UR | - |
-| u6 | Aurorine, Lance de l’Aube | L | Lumière | support | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
+| u6 | Lémion, Chef de la Légion Solaire | L | Lumière | support | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
 
 ## Familles de lignee (data/families.json)
 
@@ -159,7 +159,7 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | bosquet | Famille du Bosquet | a24 Traqueur du Bosquet -> a33 Pisteur du Bosquet -> a25 Chasseur du Bosquet -> a26 Prédateur Sylvestre -> a27 Maïa, Lame du Bosquet -> a28 Maïa, Déesse du Bosquet | - |
 | crepuscule | Famille du Crépuscule | q1 Novice du Crépuscule -> q2 Disciple du Crépuscule -> q3 Prêtre du Crépuscule -> q4 Servante du Crépuscule -> q5 Grande Prêtresse de l’Ombre -> q6 Vesperine, Reine de la Nuit | - |
 | vol | Famille du Vol | t1 Mercenaire -> t2 Pillard -> t3 Brigand -> t4 Grand Brigand -> t5 Fléau des Routes -> t6 Gadianton, Chef des Brigands | - |
-| zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Aurorine, Lance de l’Aube | - |
+| zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Lémion, Chef de la Légion Solaire | - |
 | appel | École des Invocations | v1 Apprenti Invocateur -> v2 Conjurateur -> v3 Évocateur -> v4 Maître des Esprits -> v5 Seigneur des Élémentaires -> v6 Archimage de l’Appel | - |
 
 ## Evolutions (data/evolutions.json)
@@ -228,7 +228,7 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | u2 Écuyer Fervent | u3 Croisé de l’Aube | famille du zèle |
 | u3 Croisé de l’Aube | u4 Chapelain du Jour | famille du zèle |
 | u4 Chapelain du Jour | u5 Arbalétrier Doré | famille du zèle |
-| u5 Arbalétrier Doré | u6 Aurorine, Lance de l’Aube | famille du zèle |
+| u5 Arbalétrier Doré | u6 Lémion, Chef de la Légion Solaire | famille du zèle |
 | v1 Apprenti Invocateur | v2 Conjurateur | école des invocations |
 | v2 Conjurateur | v3 Évocateur | école des invocations |
 | v3 Évocateur | v4 Maître des Esprits | école des invocations |

@@ -4,6 +4,16 @@ function validate(data, errors) {
   const cards = [...(data.cards ?? []), ...(data.monsters ?? [])];
   const ids = new Set(cards.map((c) => c.id));
   if (ids.size !== cards.length) push('des cartes partagent le meme id', 'EXI-DATA-3');
+  // charte des nommees : une nommee (nom complet "prenom, titre") = un meme personnage sur
+  // toute sa lignee. Le nom complet des nommees doit donc etre unique (arbitrage 10/11/2026) ;
+  // les prenoms repetes a titres differents (deux branches d'une meme lignee) et les titres
+  // generiques sans prenom restent hors regle.
+  const nomsComplets = new Map();
+  for (const c of cards) {
+    if (typeof c.name !== 'string' || !c.name.includes(',')) continue;
+    if (nomsComplets.has(c.name)) push(`deux cartes portent le meme nom de nommee : ${c.name} (${nomsComplets.get(c.name)} et ${c.id})`, 'EXI-DATA-3');
+    else nomsComplets.set(c.name, c.id);
+  }
   for (const m of data.monsters ?? []) {
     for (const s of m.spells ?? []) {
       if (!s.nom && !s.name) push(`le monstre ${m.id} porte un sort sans nom`, 'EXI-DATA-1');
