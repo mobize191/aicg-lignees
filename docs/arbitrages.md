@@ -14,6 +14,12 @@ La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, é
 
 ## 2026-11-11 : ACTÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
 
+## 2026-11-11 : PROPOSÉ — sessions 5-7 du plan de lancement : état et questions pour Marc-Olivier
+
+- **Session 5 (contenu v3)** : audit — Sirènes des Récifs (e23-e30 + Méliane/Thalassa), variante Gobelin des Fumées, Clergé du Plein Jour (Apolline M, Justine L), 9/10 renommages verbatim (le Léviathan garde la forme « Nom, Titre » à virgule, conforme à la charte des nommées) sont déjà en data depuis le lot 6 du grand chantier. Restent à créer et à trancher avec toi : familles compagnons (7 UR + 7 L), lignées d'accueil des Enge (Sirène/Gorgonne/Fée Nouvelles, communes de la Crypte), familles divines côté joueur, intégration des 29 nommées de référence au manifeste d'arts (pipeline `campagne/`, hors dépôt).
+- **Session 6 (v0.48 vidéos)** : fait — mapping `FX_SPELLS` en data, lecture des webm `site-assets/fx/` au cast du sort signature, fallback bandeau image si absent/lent, toggle 🎬 FX (persistant), ignoré en vitesse turbo. Digest inchangé (UI seule).
+- **Session 7 (calibrage digest)** : pack de mesure post-lignes, N=10 000 combats, digest `4de4c0dc…`, **4239 victoires (42,4 %), 0 exception, 0 marathon**. Par équipe : novices-niv5 35 %, divines-niv12 46 %, familiales-niv15 36 %, mixte-niv8-20 52 %. Par donjon : Marées 66 %, Forge 57 %, Bosquet 43 %, Crypte 30 %, Zénith 17 % — rampe de difficulté lisible. Baseline 3000 retenue : `aed250f9…` 1274/3000. Questions de calibrage : la protection arrière à -50 % suffit-elle ou faut-il un plafond de dégâts encaissés en arrière ? Faut-il remonter légèrement les boss de Zénith (17 %) ? Le taux de victoire global visé (~42 % à N=10 000) convient-il ?
+
 ## 2026-11-11 : MESURE — chantier lignes avant/arrière terminé (lots A + B), nouvelle baseline digest
 
 - **Lot A (moteur)** : rangs avant/arrière sur toutes les unités (joueur et monstres), Option A actée — l'arrière est ciblable et encaisse -50 % tant que l'avant tient (RANG_BACK_DMG_PCT), Guerrier/Assassin en arrière frappent à moitié (RANG_BACK_ATK_PCT, RANG_BACK_CLASSES), soins jamais affectés, attaques de zone ignorent la protection. Cibles : toutes les unités vivantes (l'ancien « avant d'abord » disparaît).
