@@ -12,13 +12,12 @@
 - **Le rôle `attaque`/`support` est supprimé** : plus de distinction support/attaquant nulle part ; le champ `role` disparaît des data (113 cartes, 153 monstres), du moteur (lignes d'init, vagues ennemies, Souffle/Frappe Croisée) et de l'UI. Toute carte se place librement à l'avant ou à l'arrière ; son comportement suit sa classe et sa position, plus son rôle.
 - Implémentation : chantier dédié « lignes avant/arrière » dans `docs/roadmap.md`, avant le contenu v3 restant (les nouvelles cartes naîtront sans `role`) et avant le calibrage du digest. Le moteur actuel n'a aucune notion d'avant/arrière (`src/engine/combat.js` : lignes par rôle uniquement).
 
-## 2026-11-10 (soir) : PROPOSÉ — révision datée : règle de rang arrière, -50 % (doc) ou non-ciblable (moteur) ?
+## 2026-11-10 (soir) : ACTÉ — révision datée tranchée : règle de rang arrière = Option A, l'arrière est ciblable à -50 % (retour de Marc-Olivier)
 
-- Constat des tests IHM : la doc actée dit que l'arrière **encaisse 50 % des dégâts** tant que l'avant tient ; le moteur actuel rend l'arrière **non ciblable** tant que l'avant tient (`enemyPickTarget` vise l'avant vivant d'abord), puis l'arrière encaisse des dégâts pleins. Les deux lectures ne coexistent pas ; à trancher avant le chantier lignes :
-  - **Option A (doc actée)** : l'arrière est ciblable et encaisse -50 % tant que l'avant tient.
-  - **Option B (moteur actuel)** : l'arrière n'est pas ciblable tant que l'avant tient, puis encaisse des dégâts pleins.
-  - **Option C (hybride)** : l'arrière n'est ciblable que par les sorts et la zone tant que l'avant tient, à -50 %.
-- Statut : **PROPOSÉ, en attente de Marc-Olivier** ; le chantier lignes avant/arrière attend ce tranchage.
+- Le problème soulevé : la doc actée dit que l'arrière **encaisse 50 % des dégâts** tant que l'avant tient, mais le moteur actuel rend l'arrière **non ciblable** tant que l'avant tient (`enemyPickTarget` vise l'avant vivant d'abord), puis dégâts pleins : deux comportements incompatibles.
+- **Tranché par Marc-Olivier : Option A, la règle doc s'applique telle quelle.** L'arrière est **ciblable** et encaisse **-50 %** tant que l'avant tient ; le comportement « non ciblable » du moteur actuel disparaît avec le chantier lignes.
+- Rappels inchangés : les soins ne sont jamais affectés par la position ; la protection de l'arrière ne couvre pas les attaques de zone ; l'avant tombe : la protection saute pour tous.
+- **Le chantier lignes avant/arrière est DÉBLOQUÉ** ; nouvelle baseline digest à documenter après implémentation (les maths changent, c'est une mesure, pas une régression).
 
 ## 2026-11-10 : ACTÉ — maturité par rareté pour toute carte de race humaine (suite des arbitrages de lancement)
 
