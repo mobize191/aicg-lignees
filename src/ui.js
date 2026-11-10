@@ -2963,12 +2963,13 @@ function sleep(ms) {
 
 function elOf(uid) {
   if (!combatApp) return null;
-  const el = combatApp.querySelector(`[data-uid="${uid}"]`);
+  // correctif terrain : le pion (.unit) prime sur les autres éléments data-uid (ex. les jetons du rail d'ordre)
+  const el = combatApp.querySelector(`.unit[data-uid="${uid}"]`);
   if (el) return el;
   for (const u of combatApp.querySelectorAll('.unit')) {
     if (u._unit && u._unit.uid === uid) return u;
   }
-  return null;
+  return combatApp.querySelector(`[data-uid="${uid}"]`);
 }
 
 function findUnit(uid) {
