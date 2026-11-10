@@ -27,9 +27,9 @@ Le dossier `docs/` est organisé par usage : commencer par `docs/00-SOMMAIRE.md`
 - `docs/tables/` : les tableaux de référence (cartes, sorts, monstres, monde), générés depuis `data/*.json` par `node tools/gen-tables.mjs` : à relancer puis commiter après chaque évolution des données.
 - `docs/travail-local.md` : les prompts de travail local (corrections, validation IHM par captures, campagne ComfyUI).
 - `docs/validation-ihm.md` : le protocole de validation IHM locale (scénarios avec captures d'écran).
-- `docs/design/` : les designs normatifs (spec complète, arbres v16, refonte des sorts, inventaires du catalogue v3 : 238 cartes, 653 sorts).
+- `docs/design/` : les designs courants (spec complète, arbres d'évolution et sorts actuels, familles et races v3, guide de l'errance top-down).
 - `docs/images/` : conventions graphiques et plans de campagne d'illustrations.
-- `docs/historique/` : les rapports des chantiers passés (correctifs, phases 0 à 5 de la refonte, vérifications).
+- `docs/historique/` : la mémoire des chantiers clos : rapports (correctifs, phases de la refonte, vérifications), prompts, et specs et plans fusionnés des grands chantiers (refonte majeure, grand chantier arbres + sorts, design des arbres v17, refonte des sorts v2, inventaire du catalogue v0.43).
 
 ## Tests
 

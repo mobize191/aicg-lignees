@@ -23,13 +23,13 @@
 - `docs/validation-ihm.md` : protocole de validation locale avec captures d'écran.
 - `docs/prompt-maj-combat-v2.md` : le prompt de lancement de la mise à jour UI du combat (ciblage interactif, pied de stats, fiche plein cadre).
 - `docs/travail-local.md` : prompts spécialisés prêts à copier (corrections terrain, validation navigateur, campagne d'illustrations).
-- `docs/design/` : les designs normatifs : spec complète, design des arbres, refonte des sorts, inventaires de catalogue (238 cartes et 653 sorts de la spec v3), spec et plan de la refonte majeure, spec et plan du grand chantier arbres + sorts (le rang N, le tri des 189, les stats v0.47, les mécanismes, le v3, les zones).
-- `docs/images/` : conventions graphiques et plans de campagne d'illustrations.
+- `docs/design/` : les designs courants : spec complète (`spec-design.md`), arbres d'évolution et sorts actuels (`arbres-evolution.md`, `arbres-sorts.md`), familles et races v3 (`familles-races-v3.md`), guide de l'errance top-down (`errance-topdown.md`). Les specs et plans des chantiers clos sont archivés dans `docs/historique/`.
+- `docs/images/` : conventions graphiques, charte graphique v2 (proposée) et plans de campagne d'illustrations.
 - `docs/campagne-planches/`, `docs/captures-validation/` : planches de contrôle et captures.
 
 ## Archives
 
-- `docs/historique/` : rapports des chantiers passés (correctifs, phases 0 à 5 de la refonte, vérifications, prompts de chantiers clos). Rien à y lire pour coder : c'est la mémoire des décisions passées.
+- `docs/historique/` : la mémoire des chantiers clos : rapports (correctifs, phases 0 à 5 de la refonte, vérifications), prompts de chantiers clos, et specs et plans fusionnés des grands chantiers (refonte majeure, grand chantier arbres + sorts, design des arbres v17, refonte des sorts v2, inventaire du catalogue v0.43). Rien à y lire pour coder : l'état courant vit dans les sections ci-dessus.
 
 ## Où ranger quoi (le guide)
 
