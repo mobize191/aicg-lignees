@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (9), `lignee` (42), `uniques` (17).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (11), `lignee` (42), `uniques` (25).
 
 ## Sorts communs (2)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (9)
+## Sorts d'ecolage (11)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -40,11 +40,13 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | chant-de-sirene | Mélodie envoûtante | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
 | etreinte-des-profondeurs | Étreinte des Profondeurs | entrave | controle | - | I : 3 / 1 ; taux 30%, 1 tour(s) ; II : 4 / 2 ; taux 25%, 1 tour(s) ; III : 5 / 3 ; taux 20%, 1 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | carapace-de-corail | Barrière de Corail | rempart | bouclier | - | I : 3 / 1 ; x1.7 ; II : 4 / 2 ; x1.5 ; III : 5 / equipe ; x1.3 ; IV : 6 / equipe-renforcee ; x1.6 |
-| marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
-| guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
+| marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; taux 25% ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; taux 15% ; IV : 6 / equipe-renforcee ; taux 20% |
 | colonne-de-feu | Colonne de Feu | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
-| fournaise-invoquee | Fournaise Invoquée | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| fournaise-invoquee | Fournaise Invoquée | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | seve-rongeuse | Sève Rongeuse | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| hurlement | Hurlement | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
+| morsure-putride | Morsure Putride | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; taux 10%, 2 tour(s) |
 
 ## Sorts de lignee (42)
 
@@ -95,7 +97,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
 
-## Sorts uniques (17)
+## Sorts uniques (25)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -116,6 +118,14 @@ Un sort par palier de famille, appris en montant la lignee.
 | nuee-de-spores | Nuée de Spores | g16 | malus | tous les ennemis | 6 | - | Mycola couvre tous les ennemis de sa nuée : la sève ronge la ligne trois tours (10 % × 3 tours). |
 | premiere-clarte | Première Clarté | g18 | soin | l’équipe | 6 | - | Adriel lève la première clarté : l’équipe est pansée et l’âme tombée la plus grande revient à la lumière. |
 | nuit-des-seves | Nuit des Sèves | g21 | degats | la zone | 5 | 2.2 | Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours). |
+| voie-du-tombeau | Voie du Tombeau | k7 | invocation | les renforts | 4 | - | L’Archiliche ouvre la voie du tombeau : les défunts sortent en renforts et se relèvent tant qu’elle règne. |
+| abime-remontant | Abîme Remontant | k8 | degats | tous les ennemis | 6 | 2.6 | L’Ancien Naufragé fait remonter l’abîme : la vague frappe tous les ennemis et les ralentit. |
+| hurlement-fatal | Hurlement Fatal | k14 | controle | la zone | 5 | - | Le hurlement de Macha glace la zone sur place et son souffle l’empoisonne (15 % × 2 tours). |
+| fauchade-universelle | Fauchade Universelle | k17 | degats | tous les ennemis | 6 | 2.6 | La Mort fauche la ligne entière : tous tombent, et les plus affaiblis passent outre le seuil. |
+| deuil-eternel | Deuil Éternel | k19 | controle | tous les ennemis | 6 | - | Ysolde pleure la ligne entière : les ennemis se figent et le deuil les marque. |
+| harpon-du-naufrage | Harpon du Naufrage | k22 | degats | la zone | 5 | 2.2 | Ahab harponne la zone et la rouille (corrosion 15 % × 2 tours). |
+| epee-de-laube | Épée de l’Aube | k27 | degats | tous les ennemis | 6 | 2.6 | Jeanne d’Arc lève l’épée de l’aube : la lumière frappe tous les ennemis et purifie la ligne alliée. |
+| lame-du-serment | Lame du Serment | k30 | degats | tous les ennemis | 6 | 2.6 | Siegfried brise le serment sur la ligne entière et l’empoisonne (10 % × 2 tours). |
 
 ## Ecoles (data/schools.json)
 
@@ -237,4 +247,39 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | g16 | - | - |
 | g18 | - | - |
 | g21 | - | - |
+
+### Donjon crypte
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| k1 | morsure-decume | I |
+| k2 | morsure-decume | I |
+| k23 | morsure-decume | I |
+| k3 | morsure-decume | II |
+| k4 | morsure-decume | II |
+| k5 | morsure-decume | III |
+| k20 | morsure-decume | III |
+| k28 | morsure-decume | III |
+| k13 | morsure-putride | I |
+| k6 | hurlement | III |
+| k9 | onde-consacree | I |
+| k10 | guet-des-fonds | I |
+| k11 | onde-consacree | II |
+| k12 | carapace-de-corail | I |
+| k15 | fournaise-invoquee | I |
+| k16 | fournaise-invoquee | III |
+| k18 | oeil-du-malheur | IV |
+| k21 | marque-corrosive | II |
+| k24 | guet-des-fonds | III |
+| k25 | carapace-de-corail | II |
+| k26 | carapace-de-corail | III |
+| k29 | guet-des-fonds | IV |
+| k7 | - | - |
+| k8 | - | - |
+| k14 | - | - |
+| k17 | - | - |
+| k19 | - | - |
+| k22 | - | - |
+| k27 | - | - |
+| k30 | - | - |
 

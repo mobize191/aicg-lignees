@@ -646,8 +646,8 @@
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2,
+     "tours": 2
     },
     "III": {
      "cout": 5,
@@ -673,8 +673,7 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25
     },
     "II": {
      "cout": 4,
@@ -684,14 +683,12 @@
     "III": {
      "cout": 5,
      "largeur": "equipe",
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.15
     },
     "IV": {
      "cout": 6,
      "largeur": "equipe-renforcee",
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2
     }
    }
   },
@@ -746,9 +743,7 @@
     },
     "III": {
      "cout": 5,
-     "largeur": 3,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "largeur": 3
     },
     "IV": {
      "cout": 6,
@@ -787,6 +782,85 @@
     "IV": {
      "cout": 6,
      "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "hurlement",
+   "nom": "Hurlement",
+   "ecole": "entrave",
+   "role": "controle",
+   "desc": "Le hurlement des banshees de la Crypte : le cri glace sur place, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 1
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "morsure-putride",
+   "nom": "Morsure Putride",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "poison",
+   "desc": "Le poison de la Crypte : la morsure putride infecte, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 2,
      "vide": true,
      "raison": "attend un autre biome ou la zone d’errance"
     }
@@ -1058,6 +1132,152 @@
     "desc": "la nuit sème la sève : la zone frappée se met à ronger"
    },
    "desc": "Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours)."
+  },
+  {
+   "id": "voie-du-tombeau",
+   "nom": "Voie du Tombeau",
+   "carte": "k7",
+   "role": "invocation",
+   "cible": "les renforts",
+   "cout": 4,
+   "largeur": 2,
+   "base": "fournaise-invoquee",
+   "cran": "II",
+   "delta": {
+    "renait": true,
+    "desc": "la légion se relève tant que l’Archiliche règne sur les caveaux"
+   },
+   "desc": "L’Archiliche ouvre la voie du tombeau : les défunts sortent en renforts et se relèvent tant qu’elle règne."
+  },
+  {
+   "id": "abime-remontant",
+   "nom": "Abîme Remontant",
+   "carte": "k8",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "engloutit": true,
+    "desc": "l’abîme refermé ralentit ceux qu’il a frappés (2 tours)"
+   },
+   "desc": "L’Ancien Naufragé fait remonter l’abîme : la vague frappe tous les ennemis et les ralentit."
+  },
+  {
+   "id": "hurlement-fatal",
+   "nom": "Hurlement Fatal",
+   "carte": "k14",
+   "role": "controle",
+   "cible": "la zone",
+   "cout": 5,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "III",
+   "delta": {
+    "poison": 0.15,
+    "tours": 2,
+    "desc": "le souffle du hurlement empoisonne la zone glacée (15 % × 2 tours)"
+   },
+   "desc": "Le hurlement de Macha glace la zone sur place et son souffle l’empoisonne (15 % × 2 tours)."
+  },
+  {
+   "id": "fauchade-universelle",
+   "nom": "Fauchade Universelle",
+   "carte": "k17",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "fauche": 0.2,
+    "desc": "la Mort fauche : les ennemis sous 20 % de leur vie tombent sous la lame"
+   },
+   "desc": "La Mort fauche la ligne entière : tous tombent, et les plus affaiblis passent outre le seuil."
+  },
+  {
+   "id": "deuil-eternel",
+   "nom": "Deuil Éternel",
+   "carte": "k19",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "taux": 0.1,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "IV",
+   "delta": {
+    "malediction": true,
+    "desc": "le deuil marque les survivants : tout dégât qu’ils prennent est amplifié tant que dure le deuil"
+   },
+   "desc": "Ysolde pleure la ligne entière : les ennemis se figent et le deuil les marque."
+  },
+  {
+   "id": "harpon-du-naufrage",
+   "nom": "Harpon du Naufrage",
+   "carte": "k22",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "effet": "corrosion",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "corrosion": 0.15,
+    "tours": 2,
+    "desc": "le harpon rouille la zone qu’il frappe"
+   },
+   "desc": "Ahab harponne la zone et la rouille (corrosion 15 % × 2 tours)."
+  },
+  {
+   "id": "epee-de-laube",
+   "nom": "Épée de l’Aube",
+   "carte": "k27",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "purifie": true,
+    "desc": "l’épée de l’aube dissout la sève, le poison et la brûlure sur le lanceur et ses alliés"
+   },
+   "desc": "Jeanne d’Arc lève l’épée de l’aube : la lumière frappe tous les ennemis et purifie la ligne alliée."
+  },
+  {
+   "id": "lame-du-serment",
+   "nom": "Lame du Serment",
+   "carte": "k30",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "effet": "poison",
+   "taux": 0.1,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "poison": 0.1,
+    "tours": 2,
+    "desc": "le serment brisé empoisonne la ligne entière"
+   },
+   "desc": "Siegfried brise le serment sur la ligne entière et l’empoisonne (10 % × 2 tours)."
   }
  ]
 }

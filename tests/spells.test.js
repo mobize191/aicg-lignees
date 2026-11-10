@@ -68,7 +68,7 @@ test('fusion des Marées : 30 signatures sur 30 résolues, 7 uniques + 23 fondue
   // un monstre des Marées caste son cran de fusion ; un biome non trié garde sa signature
   assert.deepEqual(E.resolveSignature('e1'), { sort: 'morsure-decume', cran: 'I' });
   assert.deepEqual(E.resolveSignature('e13'), { unique: 'maree-noire' });
-  assert.equal(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
+  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
 });
 
 test('fin du verrou de classe : deux profils, même école ouverte, même sort, même effet (ACC-2-5)', () => {
@@ -159,7 +159,7 @@ test('tri de la Forge : 24 signatures resolues, 5 uniques + 19 fondues (T2.1, AC
   assert.deepEqual(E.resolveSignature('f20'), { sort: 'colonne-de-feu', cran: 'III' });
   assert.deepEqual(E.resolveSignature('f23'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Gardiens Invoques, 2 renforts');
   assert.deepEqual(E.resolveSignature('f13'), { unique: 'nuit-de-cendres' }, 'le M garde son unique');
-  assert.equal(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
+  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
 });
 
 test('les uniques de la Forge suivent la decision 3 : base d\u2019ecole + cran + delta (T2.1)', () => {
@@ -240,7 +240,7 @@ test('tri du Bosquet : 21 signatures resolues, 5 uniques + 16 fondues (T2.2, ACC
   assert.deepEqual(E.resolveSignature('g17'), { sort: 'onde-consacree', cran: 'III' }, 'Rosee Radieuse greffe l\u2019entree de baume');
   assert.deepEqual(E.resolveSignature('g19'), { sort: 'chant-de-sirene', cran: 'IV' }, 'Ombre Tissee, le controle de masse');
   assert.deepEqual(E.resolveSignature('g16'), { unique: 'nuee-de-spores' }, 'Mycola garde son unique');
-  assert.deepEqual(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
+  assert.equal(E.resolveSignature('z1'), null, 'le Zénith attend son tri');
 });
 
 test('les uniques du Bosquet suivent la decision 3 : base d\u2019ecole ou d\u2019entree + cran + delta (T2.2)', () => {
@@ -279,4 +279,65 @@ test('un monstre du Bosquet caste son cran de fusion : Seve Rongeuse II et Etrei
   assert.ok(!et1.vide, 'l\u2019Etreinte I est remplie par le Bosquet');
   assert.equal(et1.taux, 0.3);
   assert.ok(E.cranOf('seve-rongeuse', 'III').vide, 'le cran III de la Seve Rongeuse attend un autre biome');
+});
+
+
+// ---------- T2.3 : le tri de la Crypte Oubliee (lot 2, gabarit des Marees) ----------
+test('tri de la Crypte : 30 signatures resolues, 8 uniques + 22 fondues (T2.3, ACC-T)', () => {
+  const E = loadEngine();
+  const crypte = E.DATA['fusion-map'].crypte;
+  assert.ok(crypte.trie, 'le biome crypte est marque trie');
+  const ids = Object.keys(crypte.signatures);
+  assert.equal(ids.length, 30);
+  const uniques = ids.filter((id) => crypte.signatures[id].unique);
+  const fondues = ids.filter((id) => crypte.signatures[id].fusion);
+  assert.equal(uniques.length, 8, 'les 6 L et les 2 M gardent leur unique');
+  assert.equal(fondues.length, 22);
+  for (const id of ids) assert.ok(E.resolveSignature(id), `signature ${id} resolue`);
+  assert.deepEqual(E.resolveSignature('k6'), { sort: 'hurlement', cran: 'III' }, 'Hurlement Froid, le cri ne des banshees');
+  assert.deepEqual(E.resolveSignature('k13'), { sort: 'morsure-putride', cran: 'I' }, 'Morsure Putride, le poison ne de la Crypte');
+  assert.deepEqual(E.resolveSignature('k16'), { sort: 'fournaise-invoquee', cran: 'III' }, 'Legion des Caveaux, 3 renforts');
+  assert.deepEqual(E.resolveSignature('k21'), { sort: 'marque-corrosive', cran: 'II' }, 'Noyade Vengeresse remplit le cran II de la corrosion');
+  assert.deepEqual(E.resolveSignature('k29'), { sort: 'guet-des-fonds', cran: 'IV' }, 'Serment Rallie, l\u2019equipe renforcee');
+  assert.deepEqual(E.resolveSignature('k17'), { unique: 'fauchade-universelle' }, 'la Mort garde sa Fauchade (acte)');
+  assert.deepEqual(E.resolveSignature('z1'), null, 'le Zenith attend son tri');
+});
+
+test('les uniques de la Crypte suivent la decision 3 : base + cran + delta (T2.3)', () => {
+  const E = loadEngine();
+  const basesOk = new Set([
+    ...E.DATA.grimoire.ecole.map((s) => s.id),
+    ...E.DATA.grimoire.entrees.map((s) => s.id),
+  ]);
+  const attends = { k7: 'voie-du-tombeau', k8: 'abime-remontant', k14: 'hurlement-fatal', k17: 'fauchade-universelle', k19: 'deuil-eternel', k22: 'harpon-du-naufrage', k27: 'epee-de-laube', k30: 'lame-du-serment' };
+  for (const [carte, id] of Object.entries(attends)) {
+    const u = (E.DATA.grimoire.uniques ?? []).find((x) => x.id === id);
+    assert.ok(u, `unique ${id} present`);
+    assert.equal(u.carte, carte, `${id} appartient a ${carte}`);
+    assert.ok(basesOk.has(u.base), `la base ${u.base} de ${id} existe dans le grimoire`);
+    assert.ok(['I', 'II', 'III', 'IV'].includes(u.cran), `le cran de ${id}`);
+    assert.ok(u.delta && typeof u.delta.desc === 'string' && u.delta.desc.length > 0, `le delta de ${id} est ecrit`);
+  }
+});
+
+test('un monstre de la Crypte caste son cran de fusion : Morsure Putride I, Hurlement III (T2.3, ACC-T)', () => {
+  const E = loadEngine();
+  const cibles = ligne5(E);
+  let events = [];
+  let res = E.castSpell(E.DATA, 'morsure-putride', 'I', { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.role, 'malus');
+  assert.equal(res.cout, 3);
+  assert.equal(res.taux, 0.25, 'le poison au taux de reference');
+  assert.equal(res.largeur, 1);
+  events = [];
+  res = E.castSpell(E.DATA, 'hurlement', 'III', { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.role, 'controle');
+  assert.equal(res.taux, 0.15);
+  assert.equal(res.largeur, 3, 'le hurlement glace la zone');
+  assert.equal(E.largeurCibles(cibles, res.largeur, null).length, 3);
+  for (const [sort, cran] of [['marque-corrosive', 'II'], ['fournaise-invoquee', 'III'], ['guet-des-fonds', 'I'], ['guet-des-fonds', 'III'], ['guet-des-fonds', 'IV']]) {
+    assert.ok(!E.cranOf(sort, cran).vide, `le cran ${cran} de ${sort} est rempli par la Crypte`);
+  }
+  assert.ok(E.cranOf('hurlement', 'IV').vide, 'le cran IV du Hurlement attend un autre biome');
+  assert.ok(E.cranOf('morsure-putride', 'II').vide, 'le cran II de la Morsure Putride attend un autre biome');
 });

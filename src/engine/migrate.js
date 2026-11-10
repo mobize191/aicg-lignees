@@ -60,7 +60,7 @@ function v11to12(s) {
 // v12 -> v13 (tri des biomes, EXI-T-4) : a chaque biome marque trie, les sorts connus
 // qui portent encore un nom de signature legacy se re-mappent sur les crans de fusion
 // (le mecanisme de la v10, reutilise biome par biome) ; v13 -> v14 rejoue le meme
-// remap quand un nouveau biome passe trie (le Bosquet au T2.2).
+// remap quand un nouveau biome passe trie (le Bosquet au T2.2, la Crypte au T2.3).
 function triRemap(s) {
   const monsters = DATA.monsters ?? [];
   const bySignature = new Map();
@@ -88,7 +88,12 @@ function v13to14(s) {
   s.version = 14;
   return triRemap(s);
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14 };
+// v14 -> v15 (T2.3) : la Crypte passe triee, meme mecanisme.
+function v14to15(s) {
+  s.version = 15;
+  return triRemap(s);
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

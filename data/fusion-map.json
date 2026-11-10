@@ -298,7 +298,121 @@
   }
  },
  "crypte": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "k1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k23": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "k4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "k5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k20": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k28": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k13": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "k6": {
+    "fusion": "hurlement",
+    "cran": "III"
+   },
+   "k9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "k10": {
+    "fusion": "guet-des-fonds",
+    "cran": "I"
+   },
+   "k11": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "k12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "k15": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "k16": {
+    "fusion": "fournaise-invoquee",
+    "cran": "III"
+   },
+   "k18": {
+    "fusion": "oeil-du-malheur",
+    "cran": "IV"
+   },
+   "k21": {
+    "fusion": "marque-corrosive",
+    "cran": "II"
+   },
+   "k24": {
+    "fusion": "guet-des-fonds",
+    "cran": "III"
+   },
+   "k25": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "k26": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "k29": {
+    "fusion": "guet-des-fonds",
+    "cran": "IV"
+   },
+   "k7": {
+    "unique": "voie-du-tombeau"
+   },
+   "k8": {
+    "unique": "abime-remontant"
+   },
+   "k14": {
+    "unique": "hurlement-fatal"
+   },
+   "k17": {
+    "unique": "fauchade-universelle"
+   },
+   "k19": {
+    "unique": "deuil-eternel"
+   },
+   "k22": {
+    "unique": "harpon-du-naufrage"
+   },
+   "k27": {
+    "unique": "epee-de-laube"
+   },
+   "k30": {
+    "unique": "lame-du-serment"
+   }
+  }
  },
  "zenith": {
   "trie": false

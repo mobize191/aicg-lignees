@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le tri de la Crypte Oubliée (T2.3 du grand chantier)
+
+- **30 signatures résolues : 8 uniques + 22 fondues** (gabarit des Marées, 14.5 étape 3). Le biome `crypte` est marqué `trie`, le validateur couvre 100 % de ses signatures.
+- **Deux lignes d'école naissent de la Crypte** : `Hurlement` (l'Entrave, contrôle ; le cri des banshees, 25/20/15/10 % × 1 tour, la zone au cran III remplie par k6, les crans I, II et IV attendent) et `Morsure Putride` (le Mauvais Œil, malus, mot-clé poison déjà présent dans keywords.json ; cran I rempli par k13 la Goule, les autres attendent). Cinq crans vides se remplissent : Marque Corrosive II (k21 Noyade Vengeresse, l'Eau croupie rejoint la corrosion des Marées), Fournaise Invoquée III (k16 Légion des Caveaux, 3 renforts), Vigie des Flots I/III/IV (k10 Deuil Martial, k24 Étendard Funèbre, k29 Serment Rallié : la Ferveur est pleine).
+- **Les 8 uniques suivent la décision 3** : Voie du Tombeau (k7, base Fournaise II + la légion se relève), Abîme Remontant (k8, le M des Naufragés, base Lame d'Écume IV + l'abîme ralentit), Hurlement Fatal (k14, base Hurlement III + poison 15 % × 2 tours, l'inventaire la portait à 35 % recalés), Fauchade Universelle (k17, la Mort, ACTÉ dès le départ : base Lame d'Écume IV + les ennemis sous 20 % de vie tombent), Deuil Éternel (k19, base Hurlement IV + la malédiction du deuil), Harpon du Naufrage (k22, base Lame d'Écume III + corrosion 15 % × 2 tours), Épée de l'Aube (k27, base Lame d'Écume IV + purifie la ligne alliée), Lame du Serment (k30, base Lame d'Écume IV + poison 10 % × 2 tours). Les deltas nouveaux (fauche, purifie, engloutit, malédiction, renait) sont des métadonnées jusqu'au câblage de la Phase 5.
+- **Affectation des fondues** (règle 3) : la Lame prend k1/k2/k23 (I), k3/k4 (II), k5/k20/k28 (III, les frappes lourdes × 1,6 montent à la zone) ; le Baume k9 (I) et k11 (II) ; le Rempart k12 (I), k25 (II), k26 (III) ; l'Appel k15 (I) et k16 (III) ; le Mauvais Œil d'entrée k18 Chagrin Noyé (Œil du Malheur IV, la malédiction porte à toute la ligne).
+- **Migration v15** (EXI-T-4) : `triRemap` rejoué pour la Crypte ; une save v14 avec des sorts de Crypte legacy les re-mappe, le Zénith non trié garde son chemin legacy (testé).
+- Preuve : 84/84 tests (4 neufs : tri de la Crypte, uniques décision 3, cast des crans, migration v14 -> v15), smoke 164 checks, digest `7dfab0a2…` **inchangé** (couche data et sauvegarde, aucune maths de combat).
+
 ## 2026-11-10 : ACTÉ — le tri du Bosquet Profond (T2.2 du grand chantier)
 
 - **21 signatures résolues : 5 uniques + 16 fondues** (gabarit des Marées, 14.5 étape 2). Le biome `bosquet` est marqué `trie` dans `fusion-map.json`, le validateur couvre 100 % de ses signatures, le test T2.1-b interdit toute fusion vers un cran vide.
