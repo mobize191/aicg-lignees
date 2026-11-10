@@ -2,6 +2,22 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (retours du grand chantier arbres + sorts) : ACTÉS et NOTÉS
+
+Retours de Marc-Olivier, consolidés avec l'audit du grand chantier (roadmap). Statuts : deux décisions ACTÉES, trois points NOTÉS à corriger pendant le chantier.
+
+**ACTÉ — le mana total monte avec l'intelligence**, en plus de la montée naturelle par palier (familiales 8/11/14/22/30/40, autres 10). Révision datée du « le mana par palier reste » (design sorts v2.3, section 10) : l'intelligence devient le second levier du mage et du prêtre, au-delà des mults. Formule exacte à calibrer au v0.47 (par tranche d'intelligence et plafonné, pour ne pas gonfler les combats longs) ; le digest sera recalibré.
+
+**ACTÉ — l'affichage des sorts montre le résultat calculé** (dégâts ou soin prévus selon les stats du lanceur) plutôt que le multiplicateur seul ; la décomposition (mult × stat principale) reste accessible en infobulle. Dépend du câblage de la stat principale (v0.47) : câbler la base d'abord, l'affichage suit.
+
+**ACTÉ le principe du tri d'homogénéité** : aucun sort strictement dominé au même coût ne reste au grimoire (cas relevé : Pisteur du Bosquet porte Frappe Précise 2✦ ×1.3 et Trait d'Épine 2✦ ×1.4, le second domine le premier gratuitement). La règle précise (retirer les communs des cartes de famille, ou fondre le commun comme cran I de la ligne d'école) se tranche dans le tri des 189, biome par biome.
+
+**NOTÉ — le rôle attaque/support ne s'affiche plus** : restant d'affichage (fiche, libellés) alors que la distinction a été retirée du vocabulaire joueur il y a plusieurs versions. Le champ moteur reste utilisé pour les lignes d'équipe (attaque/support) et la composition des combats ; à renommer/redéfinir en interne (emplacement), à retirer de la fiche et de l'UI.
+
+**NOTÉ — bug de ciblage** : un sort de boost censé viser son lanceur ne proposait que des ennemis et infligeait des dégâts. Symptôme : la fenêtre d'action ne lit pas la fiche type du sort (rôle, école, ciblage, taux). La fiche type doit piloter la résolution ET l'UI ; à reproduire puis corriger avec le chantier sorts.
+
+**NOTÉ — répartition agi/int des lignées** : une évoluée de lignée mage affiche plus d'agilité que d'intelligence (cas relevé : l'évoluée des Rivières depuis Mage Novice) alors que tout son parcours est celui d'un mage. La répartition doit dériver du profil (la stat principale domine toujours) ; correction de data + règle de dérivation au v0.47.
+
 ## 2026-11-10 (revue de cohérence) : ACTÉ — l'Ange (n13) s'éveille en Ange Éveillé (p1), pas en Huissier
 
 Décision de Marc-Olivier : à sa première évolution, **l'Ange devient l'Ange Éveillé** (`p1`, effet `remplace` de `trees.json`), conformément au rework des arbres v17 — et non l'Huissier de l'Entre-Deux (`d3`) que portait encore `evolutions.json`.

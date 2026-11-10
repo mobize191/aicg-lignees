@@ -1,6 +1,6 @@
 # Roadmap — AICG : Lignées
 
-> Dernière mise à jour : 10/11/2026, après la migration d'arbitrages design (classes, écoles, sorts communs renommés) et la réorganisation de la documentation.
+> Dernière mise à jour : 10/11/2026, après l'audit du grand chantier arbres + sorts (retours de Marc-Olivier consolidés, voir la section dédiée et le journal des arbitrages).
 
 ## État actuel (v0.47.3, en ligne)
 
@@ -40,6 +40,19 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 5. **Vidéos de sorts signature** (WAN 2.2 5B, ~0,8 s, 21 frames/25 fps — convention WAN : durée = (frames − 1)/fps, donc 0,8 s × 25 + 1 = 21 frames, le webm rendu dure 21/25 = 0,84 s ; les plans de campagne sont corrigés en ce sens, WebM) : les 10 premiers prompts sont dans `tools/fx-prompts.json`, rendus WAN 2.2 TI2V 5B (GGUF Q6_K) stockés dans `site-assets/fx/` (jamais en base64 dans le dist, ni dans `assets.json`) ; l'affichage dans le jeu est un chantier code séparé (v0.48+).
 6. **Retours UI notés** : corriger la double bordure de la zone de texte des cartes et son fond flou.
 7. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
+
+## Le grand chantier : finir les arbres d'évolution et les sorts (audit du 10/11/2026)
+
+Périmètre acté avec Marc-Olivier : l'intégralité des nouveaux arbres d'évolution et de sorts, intégrant la migration du rang N, le contenu v3, le rework des races v17 et la refonte des sorts. Ordre proposé, chaque lot livré avec sa chaîne de preuve (tests, regen des tables, digest recalibré documenté, smoke) :
+
+1. **Rang N** : migration des data (rareté N sous C, `RARITY_POWER`, `RANK`), acquisition (drops à taux très bas dans les donjons, nature des zones d'errance, 1 à 2 N offerts en début de jeu, coût de l'éveil), naissances toujours jouables en combat. Le digest bougera : nouvelle baseline à documenter.
+2. **Fin du tri des 189** : les ~159 signatures restantes (Forge, Bosquet, Crypte, Zénith, naissances, solos, divines), lot par lot en data pure, avec re-mappage des sorts connus en sauvegarde à chaque biome trié. Inclut le tri d'homogénéité ACTÉ (aucun sort strictement dominé au même coût, cas Frappe Précise/Trait d'Épine, voir arbitrages du 10/11).
+3. **Ciblage et fiche type** : la fiche type du sort (rôle, école, ciblage, taux) pilote la résolution ET la fenêtre d'action (bug NOTÉ du boost qui ciblait les ennemis) ; le rôle attaque/support sort de l'affichage (champ moteur conservé pour les lignes d'équipe).
+4. **Stats et profils (v0.47)** : stat principale par profil, répartition dérivée du profil (plus de lignée mage plus agile qu'intelligent), ordre du tour par agilité, esquive, zone de 3 cibles contiguës, seuils de résistance ; **affichage du résultat calculé** (mult × stat) à la place du multiplicateur seul ; **le mana total monte avec l'intelligence** (ACTÉ, formule à calibrer). Calibration AVEC Marc-Olivier, recalibrage digest complet.
+5. **Mécanismes spéciaux des arbres** : régression et chute (Éclat de régression, drop cran Difficile), malédiction (transformation), événements (Morzak, mort d'Isaure, équilibre), conversion funèbre, fusion de sommets partagés, évolutions secrètes floutées « ?? », verrou SR en fiche, tirage des naissances borné par les déblocages.
+6. **Contenu v3** : ~100 cartes, 10 renommages, sorts des nouvelles familles (Crépuscule, vol, zèle, invocations, familles divines, anges dévoyés, lignées d'accueil des Enge), campagne d'images des nouvelles cartes, intégration des 29 références au manifeste.
+7. **Zones d'errance** : enseignements (crans supérieurs, sorts d'école neufs), grimoire appris persistant en sauvegarde, cadence zone/donjon vérifiée.
+8. **Décisions ouvertes à trancher avant/pendant** : sort L d'Argus (Assise Éternelle ?), sort L de Maïa, décompte des uniques (toutes les L ou seulement les icônes), stats des invocations de l'Appel, pose de la zone en Tactique et boss seul, maillon d'entrée du paladin dans la Légion, dédoublonnage Ange Éveillé / Éveillé du Seuil, poids des paliers au-dessus de N en donjon, formule du mana d'intelligence.
 
 ## Historique court des versions
 
