@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (nuit, second tour) : ACTÉ — CROSS retiré, quêtes quotidiennes, équipement par classe, errance après le calibrage (retour de Marc-Olivier)
+
+Dernier tour de tranchage de la session design ; les derniers points ouverts sont clos :
+
+1. **CROSS retiré** : le système croisé actuel (Souffle/Frappe Croisée, `CROSS` dans `data/engine.json`) est **retiré**, pas retranché en position : défini par rôle, il disparaît avec la suppression du champ `role` au chantier lignes (lot B = suppression pure). v1.12 couvre déjà l'usage (⚔ Attaque universelle, sorts hostils résolus depuis n'importe quelle ligne).
+2. **PISTE (Marc-Olivier, plus tard)** : des sorts spéciaux déclenchés par des conditions remplies en combat (synergie, position, seuil…) pourront constituer une nouvelle génération de sorts « croisés ». Rien à implémenter avant que les conditions soient designées.
+3. **Quêtes quotidiennes : rotation quotidienne** : les quêtes changent chaque jour ; récompenses possibles : **or, carte N, pierre d'éveil et/ou éclats** (mélange exact et paliers au calibrage du chantier économie).
+4. **Équipement : slots typés par classe** (mix acté) : les 1-2 slots par personnage sont **typés par classe** (épée pour le Guerrier, bâton pour le Mage…) ; les slots d'équipe restent génériques. Types exacts et prix : calibrage au chantier (page Personnage + rayon Boutique).
+5. **Errance : programmée après le calibrage digest** (fin du plan code en cours), à la tête du bloc visuel : économie v2 → Accueil/hub-ville + Les Terres Sauvages → errance top-down (zone témoin : Marées) → généralisation. Le moteur d'errance (canvas procédural, guide `docs/design/errance-topdown.md`) peut être codé en parallèle avec sprites placeholder ; l'art du héros dédié attend la campagne d'arts v2 validée + le cycle de marche WAN.
+
 ## 2026-11-10 (nuit) : ACTÉ — budgets de fichiers v2 (charte images) : fin des budgets faméliques v1
 
 - **Motif** : les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, JPEG très compressé) venaient de la contrainte « dist < 1 Mo tout en base64 », levée depuis le passage à assets.json/fichiers chargés à la demande. La vraie contrainte restante = fluidité (décodage + bande passante mobile), pas la taille du dist.
