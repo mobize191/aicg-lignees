@@ -510,7 +510,7 @@
  "ecole": [
   {
    "id": "morsure-decume",
-   "nom": "Morsure d’Écume",
+   "nom": "Lame d’Écume",
    "ecole": "lame",
    "role": "degats",
    "crans": {
@@ -538,7 +538,7 @@
   },
   {
    "id": "chant-de-sirene",
-   "nom": "Chant de Sirène",
+   "nom": "Mélodie envoûtante",
    "ecole": "entrave",
    "role": "controle",
    "effet": "stun",
@@ -604,7 +604,7 @@
   },
   {
    "id": "carapace-de-corail",
-   "nom": "Carapace de Corail",
+   "nom": "Barrière de Corail",
    "ecole": "rempart",
    "role": "bouclier",
    "crans": {
@@ -666,7 +666,7 @@
   },
   {
    "id": "guet-des-fonds",
-   "nom": "Guet des Fonds",
+   "nom": "Vigie des Flots",
    "ecole": "ferveur",
    "role": "boost",
    "effet": "precision",

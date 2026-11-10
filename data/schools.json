@@ -32,7 +32,7 @@
   "role": "bouclier",
   "ouvrePar": {
    "profils": [
-    "Gardien"
+    "Guerrier"
    ],
    "voies": [
     "voie du rempart",
@@ -60,6 +60,7 @@
   "role": "controle",
   "ouvrePar": {
    "profils": [
+    "Mage",
     "Occultiste"
    ],
    "voies": [
