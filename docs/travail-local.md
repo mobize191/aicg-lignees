@@ -7,7 +7,7 @@ Trois prompts prêts à copier dans un agent local (Claude Code, Cursor, Vibe av
 ## PROMPT A — Corrections des bugs v0.46 (à copier)
 
 ```text
-Tu travailles sur AICG : Lignées, un jeu de cartes solo 100% navigateur. Repo GitHub : mobize191/aicg-lignees (clone-le). Le jeu embarqué est dist.html (bundle HTML+CSS+JS autonome, généré par `node build.mjs` depuis `src/` + `data/` : ne jamais éditer dist à la main). Harnas : combat-digest.mjs (digest de dormance du moteur) et smoke-ui.mjs (158 checks UI simulés). Baseline actuelle : digest 7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa, 476 victoires/3000, 0 exception, smoke 158 PASS. Le mode Tactique v0.46 : moteur pas-à-pas (beginRound/peekRound/stepRound), fenêtre d'action .act-modal en bas de l'écran pour chaque carte à son tour, ciblage explicite (liste cliquable + pion surligné .targeted sur le plateau).
+Tu travailles sur AICG : Lignées, un jeu de cartes solo 100% navigateur. Repo GitHub : mobize191/aicg-lignees (clone-le). Le jeu embarqué est dist.html (bundle HTML+CSS+JS autonome, généré par `node build.mjs` depuis `src/` + `data/` : ne jamais éditer dist à la main). Harnas : combat-digest.mjs (digest de dormance du moteur) et smoke-ui.mjs (171 checks UI simulés). Baseline actuelle : digest 833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24, 518 victoires/3000, 0 exception, 1 marathon, smoke 171 PASS. Le mode Tactique v0.46 : moteur pas-à-pas (beginRound/peekRound/stepRound), fenêtre d'action .act-modal en bas de l'écran pour chaque carte à son tour, ciblage explicite (liste cliquable + pion surligné .targeted sur le plateau).
 
 Un retour terrain sur TÉLÉPHONE rapporte 4 problèmes. Le harnas ne les voit pas : ce sont des bugs d'affichage/tactile réels, à reproduire dans un vrai Chromium en émulation mobile AVANT de corriger.
 
@@ -25,7 +25,7 @@ b) Pour chaque bug, diagnostique AVANT de corriger. Ordre des vérifications :
    - zone de tap trop petite ou décalée : getBoundingClientRect du bouton (< 32 px de haut = trop petit sur mobile) ;
    - pour le bug 4 : le bouton ✕ est probablement en position:absolute DANS le contenu scrollable de la modale : après défilement il sort du stacking context ou passe SOUS le header sticky. Fix attendu : position:fixed + z-index au-dessus de tout, OU re-render du bouton hors de la zone scrollable, et garde le tap-extérieur comme mécanisme de secours ;
    - pour le bug 2/3 : vérifie si la fenêtre .act-modal ou son parent a un pointer-events:none qui se propage, ou si un reste d'état (tacArmed, .special-overlay, overlay de nav) capte les taps ; vérifie aussi que les handlers sont bien posés au moment de l'ouverture de la fenêtre (pas avant la création du DOM).
-c) Contraintes de validation : le MOTEUR ne doit pas bouger → après tes correctifs, node combat-digest.mjs dist.html 3000 DOIT redonner le digest ci-dessus à l'identique (sinon tu as touché le moteur : revert et recommence). node smoke-ui.mjs DOIT rester 158 PASS (tu peux adapter un check si un sélecteur que tu renomme est testé, mais le total doit rester ≥ 158). node --check du bundle extrait : aucune erreur.
+c) Contraintes de validation : le MOTEUR ne doit pas bouger → après tes correctifs, node combat-digest.mjs dist.html 3000 DOIT redonner le digest ci-dessus à l'identique (sinon tu as touché le moteur : revert et recommence). node smoke-ui.mjs DOIT rester 171 PASS (tu peux adapter un check si un sélecteur que tu renomme est testé, mais le total doit rester ≥ 171). node --check du bundle extrait : aucune erreur.
 d) Fixes UI demandés (en plus des bugs) : fenêtre d'action plus haute en mobile (max-height supérieure en dvh), boutons ≥ 44 px de haut avec padding confortable, illustration de la carte en tête de la fenêtre (même mécanique que .modal-hero de la fiche : vignette de l'art avec repli glyphe si pas d'image).
 e) Livraison : commit sur main avec message « v0.46.1 : correctifs terrain (fenêtre d'action, ciblage, fiche) » incluant dist.html et smoke-ui.mjs si adapté. Puis vérifie que le workflow GitHub Pages déploie ( Actions, le run doit être vert ; le site https://mobize191.github.io/aicg-lignees/ doit servir le nouveau dist). Termine par un rapport : cause racine de chaque bug, correctif appliqué, résultat du digest et du smoke.
 
@@ -64,7 +64,7 @@ S10 — Glossaire : section « Les symboles de l'écran » documentée.
 
 RAPPORT FINAL : docs/historique/rapport-validation.md avec, par scénario, statut OK/KO, captures nommées (S7-tactique-fenetre-mobile.png...), liste EXHAUSTIVE des erreurs console avec contexte, toute anomalie visuelle (coupé, chevauchement, mal aligné, tap sans effet) avec capture, verdict global, et les 3 corrections les plus urgentes.
 
-HARNAS EN PLUS (rapide) : node combat-digest.mjs dist.html 3000 (attendu : digest 7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa, 476 victoires, 0 exception) et node smoke-ui.mjs (attendu : TOUT PASSE, ≥ 158 checks). Si le PROMPT A a été appliqué et que le digest/smoke diffèrent de ces valeurs, utilise les valeurs du README du repo à jour.
+HARNAS EN PLUS (rapide) : node combat-digest.mjs dist.html 3000 (attendu : digest 833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24, 518 victoires, 0 exception) et node smoke-ui.mjs (attendu : TOUT PASSE, ≥ 171 checks). Si le PROMPT A a été appliqué et que le digest/smoke diffèrent de ces valeurs, utilise les valeurs du README du repo à jour.
 ```
 
 ---
@@ -90,7 +90,7 @@ ORDRE (portes de validation obligatoires) :
 5. Naissances (15), familiales et solos : les nommées d'abord (référence la plus haute), puis les autres → intégration → push.
 6. Vidéos de sorts signature (WAN 2.2 5B, 20 frames, 25 fps, boucle fermée ffmpeg, WebM) : après validation de la série d'images, stockées dans site-assets/fx/, JAMAIS dans assets.json ni en base64.
 
-INTOUCHABLE : dist.html et le moteur. Après chaque intégration : git status dist.html doit être PROPRE, le digest (node combat-digest.mjs dist.html 3000 = 7dfab0a2..., 476 victoires, 0 exception) et le smoke (node smoke-ui.mjs, 158 PASS) restent identiques. Budgets : ≤ 30 Ko par art, ≤ 110 Ko par fond, manifeste cible ≤ 8 Mo, ASCII pur.
+INTOUCHABLE : dist.html et le moteur. Après chaque intégration : git status dist.html doit être PROPRE, le digest (node combat-digest.mjs dist.html 3000 = 833a6d2c..., 518 victoires, 0 exception) et le smoke (node smoke-ui.mjs, 171 PASS) restent identiques. Budgets : ≤ 30 Ko par art, ≤ 110 Ko par fond, manifeste cible ≤ 8 Mo, ASCII pur.
 
 À chaque fin de lot : planche de contrôle + rapport (retenues/refusées et pourquoi, seeds, poids) et faire valider par Marc-Olivier AVANT tout push. Termine chaque session par l'état d'avancement (tâches cochées, prochaines).
 ```

@@ -8,8 +8,8 @@ Ce document fournit un **prompt prêt à copier** dans un agent local équipé d
 git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
-node combat-digest.mjs dist.html 3000   # baseline attendue : 7dfab0a2…, ~476 victoires, 0 exceptions
-node smoke-ui.mjs dist.html             # baseline attendue : 158 checks TOUT PASSE
+node combat-digest.mjs dist.html 3000   # baseline attendue : 833a6d2c…, ~518 victoires, 0 exception
+node smoke-ui.mjs dist.html             # baseline attendue : 171 checks TOUT PASSE
 # servir le jeu (le chargeur d'assets a besoin de http, pas de file://)
 python3 -m http.server 8080
 # → ouvrir http://localhost:8080/dist.html
