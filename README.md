@@ -11,7 +11,7 @@ Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : co
 ## Structure
 
 - `dist.html` : le jeu complet, autonome (HTML + JS + CSS, aucune dépendance).
-- `assets.json` : manifeste d'illustrations (data-URI : 33 arts de cartes + 5 fonds de donjons), chargé automatiquement quand le jeu est servi en ligne.
+- `assets.json` : manifeste d'illustrations (data-URI : 231 arts de cartes + 5 fonds de donjons, DreamShaper XL, ~7,8 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne.
 - `combat-digest.mjs` : harnas d'équilibrage (3000 combats simulés, digest SHA256 de dormance).
 - `smoke-ui.mjs` : suite de fumée UI du dist publié (121 checks).
 - `tools/` : les scripts de la campagne d'illustrations ComfyUI (extraction du catalogue, génération des prompts, batch API, intégration au manifeste, planches de contrôle).
