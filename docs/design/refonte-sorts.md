@@ -302,7 +302,7 @@ Le gros chantier est lancé. Les Marées servent de biome témoin : leurs trente
 1. **Trier par effet, pas par nom** : chaque signature rejoint un sort d'école défini par son triplet (école, rôle, ciblage) ; le nom de la carte meurt, le geste survit. Et le tri recale : les taux épars du dist (30 % ici, 35 % là) se normalisent sur l'échelle des crans (14.3).
 2. **Le cran élargit le ciblage (v2.3, ton retour)** : une seule ligne par sort, qui s'élargit en montant de cran ; les frappes passent de 1 ennemi (I) à 2 (II), à la zone de 3 (III), à tous les ennemis (IV) ; les soutiens de 1 allié (I) à 2 alliés (II), à l'équipe (III), que le cran IV renforce (la largeur plafonne à l'équipe) ; les sorts sur soi ne s'élargissent pas, leurs crans montent les taux. Le cran ne change jamais le rôle, et les taux baissent quand la largeur monte (l'équilibre acté, section 1).
 3. **Le cran suit la largeur, le palier affine** : la largeur native de la signature choisit son cran (une frappe de zone tombe au cran III, un bouclier d'équipe aussi), le palier règle les litiges (un UR au geste étroit monte d'un cran : Frappe Royale, recalée tous au cran IV) ; un cran qu'un biome ne remplit pas attend un autre biome ou s'apprend en zone d'errance.
-4. **Le nom du sort d'école vient de sa signature la plus évocatrice, débarrassée de sa carte** : Chant de Sirène naît des sirènes des Marées, Hurlement naîtra des banshees de la Crypte ; la saveur du biome d'origine reste, la fiche est la même partout où le sort s'apprend.
+4. **Le nom du sort d'école vient de sa signature la plus évocatrice, débarrassée de sa carte** : Mélodie envoûtante naît des sirènes des Marées, Hurlement naîtra des banshees de la Crypte ; la saveur du biome d'origine reste, la fiche est la même partout où le sort s'apprend.
 5. **Les signatures génériques deviennent des crans des entrées d'école** (section 6) : le Sergent des Brumes nourrit Brise-Garde (sa signature portait déjà le nom), le Prophète des Marées nourrit Œil du Malheur, le Confesseur des Abysses nourrit Onde Consacrée ; pas de nouveau sort pour un geste qui existe déjà.
 6. **Les L et M gardent leurs uniques** (une ou deux par carte), les cartes clés aussi ; tout le reste rend son geste au pot commun.
 
@@ -324,25 +324,25 @@ Le gros chantier est lancé. Les Marées servent de biome témoin : leurs trente
 
 | Le sort d'école | École | Rôle | Cran (la largeur) | Les signatures fondues |
 | --- | --- | --- | --- | --- |
-| Morsure d'Écume | la Lame | dégâts | I (1 ennemi) | Jet d'Écume (e1), Trait de Corail (e2), Larme Salée (e10) |
-| Morsure d'Écume | la Lame | dégâts | II (2 ennemis) | Morsure des Récifs (e3), Pince de Silex (e11) |
-| Morsure d'Écume | la Lame | dégâts | III (la zone) | Colère Sismique (e12), Écume Tranchante (e26) |
-| Morsure d'Écume | la Lame | dégâts | IV (tous) | Frappe Royale (e18, recalée : la frappe du roi s'abat sur la ligne entière) |
-| Chant de Sirène | l'Entrave | contrôle | I (1 ennemi) | Chant de la Marée (e7), Berceuse des Récifs (e23) |
-| Chant de Sirène | l'Entrave | contrôle | II (2 ennemis) | Marée Traîtresse (e24) |
-| Chant de Sirène | l'Entrave | contrôle | III (la zone) | Chant Paralysant (e25) |
-| Chant de Sirène | l'Entrave | contrôle | IV (tous) | Chant Ensorceleur (e27, le chant porte à toute la ligne) |
+| Lame d'Écume | la Lame | dégâts | I (1 ennemi) | Jet d'Écume (e1), Trait de Corail (e2), Larme Salée (e10) |
+| Lame d'Écume | la Lame | dégâts | II (2 ennemis) | Morsure des Récifs (e3), Pince de Silex (e11) |
+| Lame d'Écume | la Lame | dégâts | III (la zone) | Colère Sismique (e12), Écume Tranchante (e26) |
+| Lame d'Écume | la Lame | dégâts | IV (tous) | Frappe Royale (e18, recalée : la frappe du roi s'abat sur la ligne entière) |
+| Mélodie envoûtante | l'Entrave | contrôle | I (1 ennemi) | Chant de la Marée (e7), Berceuse des Récifs (e23) |
+| Mélodie envoûtante | l'Entrave | contrôle | II (2 ennemis) | Marée Traîtresse (e24) |
+| Mélodie envoûtante | l'Entrave | contrôle | III (la zone) | Chant Paralysant (e25) |
+| Mélodie envoûtante | l'Entrave | contrôle | IV (tous) | Chant Ensorceleur (e27, le chant porte à toute la ligne) |
 | Étreinte des Profondeurs | l'Entrave | contrôle (immobilisation) | III (la zone) | Étreinte de l'Abîme (e6) |
-| Carapace de Corail | le Rempart | bouclier | I (1 allié) | Carapace de Corail (e8) |
-| Carapace de Corail | le Rempart | bouclier | III (l'équipe) | Mur de Galet (e15), Écran de Galets (e21) |
-| Carapace de Corail | le Rempart | bouclier | IV (l'équipe renforcée) | Corail Vengeur (e29, +10 % de riposte) |
+| Barrière de Corail | le Rempart | bouclier | I (1 allié) | Barrière de Corail (e8) |
+| Barrière de Corail | le Rempart | bouclier | III (l'équipe) | Mur de Galet (e15), Écran de Galets (e21) |
+| Barrière de Corail | le Rempart | bouclier | IV (l'équipe renforcée) | Corail Vengeur (e29, +10 % de riposte) |
 | Marque Corrosive | le Mauvais Œil | malus (corrosion) | III (la zone) | Rituel des Écumes (e16) |
-| Guet des Fonds | la Ferveur | boost | II (2 alliés) | Guet des Fonds (e20) |
+| Vigie des Flots | la Ferveur | boost | II (2 alliés) | Vigie des Flots (e20) |
 | Brise-Garde (l'entrée, section 6) | la Lame | dégâts | II (2 ennemis) | le Sergent des Brumes (e4), qui portait déjà le nom |
 | Œil du Malheur (l'entrée, section 6) | le Mauvais Œil | malus | II (2 ennemis) | Vision Noyée (e5) |
 | Onde Consacrée (l'entrée, section 6) | le Baume | soin | II (2 alliés) | Bénédiction de l'Abîme (e9) |
 
-Le bilan : **30 signatures fondent en 7 uniques + 6 sorts d'école nés + 3 crans greffés sur les entrées** (Brise-Garde II, Œil du Malheur II, Onde Consacrée II ; les entrées suivent le gabarit d'élargissement, leurs fiches de la section 6 se recâbleront crans par crans à la grosse mise à jour, section 11). **Morsure d'Écume est la première ligne pleine** (I à IV) ; les crans vides (Étreinte des Profondeurs I, II et IV ; Carapace de Corail II ; Marque Corrosive I, II et IV ; Guet des Fonds I, III et IV) attendent les autres biomes ou les zones d'errance.
+Le bilan : **30 signatures fondent en 7 uniques + 6 sorts d'école nés + 3 crans greffés sur les entrées** (Brise-Garde II, Œil du Malheur II, Onde Consacrée II ; les entrées suivent le gabarit d'élargissement, leurs fiches de la section 6 se recâbleront crans par crans à la grosse mise à jour, section 11). **Lame d'Écume est la première ligne pleine** (I à IV) ; les crans vides (Étreinte des Profondeurs I, II et IV ; Barrière de Corail II ; Marque Corrosive I, II et IV ; Vigie des Flots I, III et IV) attendent les autres biomes ou les zones d'errance.
 
 **La corrosion (proposition)** : la brûlure des Marées de l'inventaire (e16, e17, e30) devient la **corrosion**, le DoT d'eau du Mauvais Œil ; la Forge garde la brûlure, l'Ombre le poison, le Bosquet la sève rongeuse : un mot-clé par élément, la même règle (pourcentage par tour, contre le seuil de la cible).
 
@@ -352,12 +352,12 @@ Les sorts d'école se calent entre les communs (2✦) et les lignées hautes (9�
 
 | Le sort (école, rôle) | Cran I | Cran II | Cran III | Cran IV |
 | --- | --- | --- | --- | --- |
-| Morsure d'Écume (la Lame, dégâts) | 3✦, 1 ennemi, ×1.5 | 4✦, 2 ennemis, ×1.8 | 5✦, la zone, ×2.2 | 6✦, tous, ×2.6 |
-| Chant de Sirène (l'Entrave, stun) | 25 % × 1 tour, 1 ennemi | 20 %, 2 ennemis | 15 %, la zone | 10 %, tous |
+| Lame d'Écume (la Lame, dégâts) | 3✦, 1 ennemi, ×1.5 | 4✦, 2 ennemis, ×1.8 | 5✦, la zone, ×2.2 | 6✦, tous, ×2.6 |
+| Mélodie envoûtante (l'Entrave, stun) | 25 % × 1 tour, 1 ennemi | 20 %, 2 ennemis | 15 %, la zone | 10 %, tous |
 | Étreinte des Profondeurs (l'Entrave, immobilisation) | 30 %, 1 ennemi | 25 %, 2 ennemis | 20 %, la zone | 15 %, tous |
-| Carapace de Corail (le Rempart, bouclier) | ×1.7, 1 allié | ×1.5, 2 alliés | ×1.3, l'équipe | ×1.6, l'équipe renforcée |
+| Barrière de Corail (le Rempart, bouclier) | ×1.7, 1 allié | ×1.5, 2 alliés | ×1.3, l'équipe | ×1.6, l'équipe renforcée |
 | Marque Corrosive (le Mauvais Œil, corrosion) | 25 % × 2 tours, 1 ennemi | 20 %, 2 ennemis | 15 %, la zone | 10 %, tous |
-| Guet des Fonds (la Ferveur, précision) | +25 %, 1 allié | +20 %, 2 alliés | +15 %, l'équipe | +20 %, l'équipe renforcée |
+| Vigie des Flots (la Ferveur, précision) | +25 %, 1 allié | +20 %, 2 alliés | +15 %, l'équipe | +20 %, l'équipe renforcée |
 
 ### 14.4 Le décompte global (à trancher en cours de tri)
 
