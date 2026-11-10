@@ -2733,8 +2733,15 @@ function openUnitModal(u) {
   overlay.className = 'modal-overlay';
   const box = document.createElement('div');
   box.className = 'modal end-modal';
-  box.innerHTML = `<div class="modal-hero">${artOf(card)}</div><h3>${card ? card.name : 'Unit\u00e9'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
-    <p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
+    const sub = [card?.classe, card?.element, card?.rarity].filter(Boolean).join(' · ');
+  box.innerHTML = `<div class="modal-hero full">${artOf(card)}<div class="hero-veil"></div>
+    <div class="hero-text">
+      <div class="hero-name">${card ? card.name : 'Unité'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</div>
+      <div class="hero-sub">${sub}</div>
+      <div class="hero-stats"><span class="hp">♥ ${u.hp}/${u.maxHp}</span><span class="atk">⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</span><span class="mana">✦ ${u.mana}/${u.manaMax}</span></div>
+    </div>
+  </div>
+    <p class="statline"><p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
     ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique \u00e0 chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><b>${sp.name}</b>${sp.cat ? ` <span class="spell-cat">${SPELL_CAT_LABEL[sp.cat] ?? s.cat}</span>` : ''} <span class="muted">\u2726 ${sp.cost} mana \u00b7 puissance \u00d7${sp.mult}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}

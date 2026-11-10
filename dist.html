@@ -565,6 +565,25 @@ background: rgba(16, 21, 33, .85); border: 1px solid rgba(105, 240, 174, .3);
 .modal-hero .art-img { width: 100%; height: 100%; object-fit: contain; }
 .modal-hero .glyph { font-size: 4.4rem; }
 
+/* fiche plein cadre v2 : l'illustration couvre toute la carte verticale */
+.modal-hero.full {
+height: 300px; border: 2px solid rgba(255, 213, 79, .55); border-radius: 14px;
+}
+.modal-hero.full .art-img { object-fit: cover; }
+.modal-hero.full .glyph { font-size: 6rem; }
+.hero-veil {
+position: absolute; inset: 0;
+background: linear-gradient(180deg, transparent 40%, rgba(8, 11, 17, .92));
+}
+.hero-text { position: absolute; left: 10px; right: 10px; bottom: 8px; text-align: left; }
+.hero-name { font-size: 1.05rem; font-weight: 800; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.7); }
+.hero-sub { font-size: .74rem; color: #c7cfdd; margin-top: 1px; }
+.hero-stats { display: flex; gap: 10px; margin-top: 4px; font-size: .8rem; font-weight: 700; }
+.hero-stats .hp { color: #ff8a9e; }
+.hero-stats .mana { color: #b39dff; }
+.hero-stats .atk { color: #e8ecf4; }
+@media (max-width: 639px) { .modal-hero.full { height: 240px; } }
+
 .in-team {
 position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 4;
 font-size: .58rem; font-weight: 800; white-space: nowrap;
@@ -12939,8 +12958,15 @@ function openUnitModal(u) {
   overlay.className = 'modal-overlay';
   const box = document.createElement('div');
   box.className = 'modal end-modal';
-  box.innerHTML = `<div class="modal-hero">${artOf(card)}</div><h3>${card ? card.name : 'Unit\u00e9'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
-    <p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
+    const sub = [card?.classe, card?.element, card?.rarity].filter(Boolean).join(' · ');
+  box.innerHTML = `<div class="modal-hero full">${artOf(card)}<div class="hero-veil"></div>
+    <div class="hero-text">
+      <div class="hero-name">${card ? card.name : 'Unité'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</div>
+      <div class="hero-sub">${sub}</div>
+      <div class="hero-stats"><span class="hp">♥ ${u.hp}/${u.maxHp}</span><span class="atk">⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</span><span class="mana">✦ ${u.mana}/${u.manaMax}</span></div>
+    </div>
+  </div>
+    <p class="statline"><p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
     ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique \u00e0 chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><b>${sp.name}</b>${sp.cat ? ` <span class="spell-cat">${SPELL_CAT_LABEL[sp.cat] ?? s.cat}</span>` : ''} <span class="muted">\u2726 ${sp.cost} mana \u00b7 puissance \u00d7${sp.mult}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}

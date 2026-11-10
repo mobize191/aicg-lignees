@@ -254,6 +254,29 @@ async function main() {
     check('48 z 0 exception après pied de stats', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 49 : fiche carte plein cadre v2 ----------
+  {
+    const st49 = api._state();
+    if (st49) {
+      const uid = (st49.team.attaque[0] ?? st49.team.support[0]).uid;
+      api._openUnit(uid);
+      await wait(40);
+      const hero = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
+      check('49 a hero plein cadre (.modal-hero.full)', !!hero, '');
+      check('49 a voile dégradé + nom + sous-titre classe·élément·rareté', !!hero && !!hero.querySelector('.hero-veil') && !!hero.querySelector('.hero-name') && (hero.querySelector('.hero-sub')?.textContent ?? '').includes('·'), hero ? (hero.querySelector('.hero-sub')?.textContent ?? '') : '');
+      const hs = hero ? hero.querySelector('.hero-stats') : null;
+      const hsTxt = hs ? hs.textContent : '';
+      check('49 a stats en bas du hero (PV rouge, mana violet, actuel/total)', !!hs && /♥ \d+\/\d+/.test(hsTxt) && /✦ \d+\/\d+/.test(hsTxt), hsTxt.slice(0, 60));
+      const close = doc.querySelector('#unit-close');
+      if (close) close.click();
+      await wait(20);
+      check('49 b la fiche se ferme', ![...doc.querySelectorAll('.modal-hero')].some((el) => el.classList.contains('full')), '');
+    } else {
+      check('49 a hero plein cadre (.modal-hero.full)', false, 'pas de combat');
+    }
+    check('49 z 0 exception après fiche v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   // ---------- victoire pas-à-pas au moteur (40) + équivalence (46 i) ----------
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n4', 'a29'], 20);
@@ -487,7 +510,7 @@ async function main() {
   check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
   check('46 b pions mobiles 26vw (media 600)', html.includes('clamp(104px, 26vw, 136px)') && html.includes('clamp(130px, 32vw, 172px)'), '');
   check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
-  check('46 b fiche : h\u00e9ro en t\u00eate de fiche', html.includes('.modal-hero') && html.includes('<div class="modal-hero">${artOf(card)}</div>'), '');
+  check('46 b fiche : h\u00e9ro plein cadre en t\u00eate de fiche', html.includes('.modal-hero.full') && html.includes('<div class="modal-hero full">'), '');
   check('46 c pastilles info en t\u00eate, rappels bas supprim\u00e9s', html.includes('.info-chip') && html.includes('openInfoModal') && !html.includes('mode-hint') && !html.includes('tacHintText'), '');
   check('46 c les 3 pastilles cliquables existent', html.includes('data-info="rules"') && html.includes('data-info="mod"') && html.includes('data-info="disc"'), '');
   api.go('#glossaire');

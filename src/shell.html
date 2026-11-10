@@ -565,6 +565,25 @@ background: rgba(16, 21, 33, .85); border: 1px solid rgba(105, 240, 174, .3);
 .modal-hero .art-img { width: 100%; height: 100%; object-fit: contain; }
 .modal-hero .glyph { font-size: 4.4rem; }
 
+/* fiche plein cadre v2 : l'illustration couvre toute la carte verticale */
+.modal-hero.full {
+height: 300px; border: 2px solid rgba(255, 213, 79, .55); border-radius: 14px;
+}
+.modal-hero.full .art-img { object-fit: cover; }
+.modal-hero.full .glyph { font-size: 6rem; }
+.hero-veil {
+position: absolute; inset: 0;
+background: linear-gradient(180deg, transparent 40%, rgba(8, 11, 17, .92));
+}
+.hero-text { position: absolute; left: 10px; right: 10px; bottom: 8px; text-align: left; }
+.hero-name { font-size: 1.05rem; font-weight: 800; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,.7); }
+.hero-sub { font-size: .74rem; color: #c7cfdd; margin-top: 1px; }
+.hero-stats { display: flex; gap: 10px; margin-top: 4px; font-size: .8rem; font-weight: 700; }
+.hero-stats .hp { color: #ff8a9e; }
+.hero-stats .mana { color: #b39dff; }
+.hero-stats .atk { color: #e8ecf4; }
+@media (max-width: 639px) { .modal-hero.full { height: 240px; } }
+
 .in-team {
 position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 4;
 font-size: .58rem; font-weight: 800; white-space: nowrap;

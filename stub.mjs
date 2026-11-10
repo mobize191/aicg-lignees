@@ -206,6 +206,7 @@ const API_PAIRS = {
   _previewZone: '(uid) => { const el = elOf(uid); if (el) previewZone(el); }',
   _clearZone: '() => clearZonePreview()',
   _draw: '() => drawBoard()',
+  _openUnit: '(uid) => { const u = findUnit(uid); if (u) openUnitModal(u); }',
 };
 
 export function bootDist(file, extraPairs = {}) {
