@@ -154,3 +154,42 @@ test('T1.3 : la rarete du jeton suit la table en data, communes au taux de refer
   const rng3 = mulberry32(21);
   for (let i = 0; i < 200; i++) assert.notEqual(E.jetonRarityFor(rng3, 2), 'R', 'deux donjons boucles : pas de Rare au jeton');
 });
+
+// ---------- lot 5 : mécanismes spéciaux des arbres (EXI-M) ----------
+test('lot 5 : régression consomme l\u2019Éclat et spawne une nouvelle carte, l\u2019ancienne reste (EXI-M-1)', () => {
+  const E = loadEngine();
+  const entry = E.evoEntryOf('a17', 'a20');
+  assert.equal(entry.type, 'regression');
+  const inst = { iid: 'i1', id: 'a17', lvl: 10, xp: 0, acc: [{ name: 'Tranche-Monde' }] };
+  const ctx = { items: { 'eclat-regression': 1 }, owned: ['a17'], events: [] };
+  const r = E.applySpecialEvo(inst, entry, ctx);
+  assert.ok(r.ok && r.spawned, 'regression appliquée');
+  assert.equal(r.spawned.id, 'a20');
+  assert.equal(ctx.items['eclat-regression'], 0, 'éclat consommé');
+  assert.equal(inst.id, 'a17', 'l\u2019ancienne carte reste');
+  assert.equal(r.spawned.acc.length, 1, '100 % des sorts conservés');
+  // sans l'éclat : refusé
+  const r2 = E.applySpecialEvo(inst, entry, { items: {}, owned: ['a17'], events: [] });
+  assert.equal(r2.ok, false, 'condition non remplie = refusé');
+});
+
+test('lot 5 : fusion consomme 2 exemplaires, malédiction transforme sans choix, secrète floutée (EXI-M-1/3)', () => {
+  const E = loadEngine();
+  const fusion = E.evoEntryOf('a27', 'a28');
+  assert.equal(fusion.type, 'fusion');
+  const rf = E.applySpecialEvo({ iid: 'i1', id: 'a27' }, fusion, { owned: ['a27', 'a27'] });
+  assert.ok(rf.ok && rf.consumed === 2 && rf.to === 'a28');
+  const mal = E.evoEntryOf('a34', 'e3');
+  assert.equal(mal.type, 'malediction');
+  const inst = { iid: 'i2', id: 'a34' };
+  const rm = E.applySpecialEvo(inst, mal, { events: ['malediction'] });
+  assert.ok(rm.ok && inst.id === 'e3' && inst.locked, 'transformation verrouillée');
+  assert.equal(E.evoLabelOf('n4', 'a37'), '??', 'secrète floutée « ?? »');
+  assert.notEqual(E.evoLabelOf('n4', 'a31'), '??', 'voie standard lisible');
+  const evt = E.evoEntryOf('p1', 'd6');
+  assert.equal(evt.type, 'evenement');
+  const rOff = E.applySpecialEvo({ iid: 'i3', id: 'p1' }, evt, { owned: [] });
+  assert.equal(rOff.ok, false, 'équilibre sans ange+démon = refusé');
+  const rOn = E.applySpecialEvo({ iid: 'i3', id: 'p1' }, evt, { owned: ['n13', 'n14'] });
+  assert.ok(rOn.ok && rOn.spawned.id === 'd6', 'équilibre avec ange+démon = Kairos');
+});

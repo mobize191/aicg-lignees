@@ -161,3 +161,59 @@ function isLearned(grimoire, spellId, cran) {
 function canCastLearned(inst, grimoire, spellId, cran) {
   return isLearned(grimoire, spellId, cran) && canCast(inst, spellId);
 }
+
+// lot 5 : types d'évolution spéciaux, pilotés par les données (evolutions.json / trees.json)
+function evoEntryOf(from, to) {
+  // evolutions.json d'abord : c'est là que vivent les types spéciaux et leurs conditions
+  const c = ((DATA.evolutions ?? {})[from] ?? []).find((x) => x.to === to);
+  if (c) return { type: c.type ?? 'standard', to, voie: c.voie, condition: c.condition ?? null };
+  for (const tree of Object.values(DATA.trees ?? {})) {
+    for (const ev of tree.eveils ?? []) {
+      if (ev.de === from && ev.vers === to) return { ...ev, type: ev.type ?? 'standard', condition: ev.condition ?? null };
+    }
+  }
+  return null;
+}
+function conditionOk(cond, ctx) {
+  if (!cond) return true;
+  const items = ctx?.items ?? {};
+  const owned = ctx?.owned ?? [];
+  const events = ctx?.events ?? [];
+  if (cond.kind === 'item') return (items[cond.id] ?? 0) >= (cond.n ?? 1);
+  if (cond.kind === 'owns') return owned.filter((id) => id === cond.id).length >= (cond.n ?? 1);
+  if (cond.kind === 'event') return events.includes(cond.id);
+  if (cond.kind === 'all') return (cond.of ?? []).every((c) => conditionOk(c, ctx));
+  return true;
+}
+// applique une évolution spéciale ; retourne { ok, spawned?, consumed? } ou null si standard
+function applySpecialEvo(inst, entry, ctx = {}) {
+  if (!entry || entry.type === 'standard') return null;
+  if (!conditionOk(entry.condition, ctx)) return { ok: false, reason: 'condition non remplie' };
+  if (entry.type === 'regression') {
+    if (ctx.items && entry.condition?.kind === 'item') ctx.items[entry.condition.id] -= (entry.condition.n ?? 1);
+    const to = getCard(entry.to) ?? getMonster(entry.to);
+    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, asc: (inst.asc ?? 0) * (1 + M.REG_STATS_BONUS), acc: [...(inst.acc ?? [])] };
+    return { ok: true, spawned, type: 'regression' };
+  }
+  if (entry.type === 'fusion') {
+    return { ok: true, consumed: (entry.condition?.n ?? 2), type: 'fusion', to: entry.to };
+  }
+  if (entry.type === 'malediction') {
+    inst.id = entry.to;
+    inst.locked = true;
+    return { ok: true, type: 'malediction' };
+  }
+  if (entry.type === 'evenement') {
+    return { ok: true, spawned: { ...inst, iid: `${inst.iid}-evt`, id: entry.to }, type: 'evenement' };
+  }
+  if (entry.type === 'secrete' || entry.type === 'chute') {
+    return { ok: true, type: entry.type, to: entry.to };
+  }
+  return { ok: true, type: entry.type };
+}
+
+// lot 5 UI : une évolution secrète s'affiche floutée « ?? » (le moteur garde la vraie cible)
+function evoLabelOf(from, to) {
+  const e = evoEntryOf(from, to);
+  return e && e.type === 'secrete' ? '??' : (e?.voie || to);
+}

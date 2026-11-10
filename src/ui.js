@@ -2328,7 +2328,7 @@ function renderCollection(root) {
       const tg = evoTargetsOf(c.id);
       if (n === 0 && !seenCard(c.id)) return '';
       if (n === 0) return seenCell(c.id);
-      return `<div class="fam-card owned" data-id="${c.id}" title="${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — évolue ${tg.length > 1 ? 'au choix en ' : 'en '}${tg.map((t) => byId(t).name).join(' · ')}` : ''}">${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}</div>`;
+      return `<div class="fam-card owned" data-id="${c.id}" title="${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — évolue ${tg.length > 1 ? 'au choix en ' : 'en '}${tg.map((t) => evoLabelOf(c.id, t) === '??' ? '??' : byId(t).name).join(' · ')}` : ''}">${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}</div>`;
     })
     .join('');
   const raceGrid = (race) => {

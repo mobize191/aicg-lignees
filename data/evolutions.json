@@ -56,7 +56,8 @@
   },
   {
    "to": "a37",
-   "voie": "voie de la fête"
+   "voie": "voie de la fête",
+   "type": "secrete"
   }
  ],
  "a29": [
@@ -183,6 +184,61 @@
   {
    "to": "d14",
    "voie": "la voie du Pont — le Liage"
+  }
+ ],
+ "a34": [
+  {
+   "to": "e3",
+   "voie": "la malédiction des quais",
+   "type": "malediction",
+   "condition": {
+    "kind": "event",
+    "id": "malediction"
+   }
+  }
+ ],
+ "a17": [
+  {
+   "to": "a20",
+   "voie": "la régression",
+   "type": "regression",
+   "condition": {
+    "kind": "item",
+    "id": "eclat-regression",
+    "n": 1
+   }
+  }
+ ],
+ "a27": [
+  {
+   "to": "a28",
+   "voie": "la fusion du Bosquet",
+   "type": "fusion",
+   "condition": {
+    "kind": "owns",
+    "id": "a27",
+    "n": 2
+   }
+  }
+ ],
+ "p1": [
+  {
+   "to": "d6",
+   "voie": "l’équilibre",
+   "type": "evenement",
+   "condition": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "owns",
+      "id": "n13"
+     },
+     {
+      "kind": "owns",
+      "id": "n14"
+     }
+    ]
+   }
   }
  ]
 }

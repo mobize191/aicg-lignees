@@ -640,7 +640,8 @@
   "MANA_PER_INT": 2,
   "MANA_REGEN_PER_INT": 0.5,
   "MANA_CAP_RATIO": 0.5,
-  "SEUIL_PER_INT": 0.5
+  "SEUIL_PER_INT": 0.5,
+  "REG_STATS_BONUS": 0.1
  },
  "profils": {
   "Guerrier": {

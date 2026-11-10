@@ -3218,7 +3218,8 @@ const DATA = {
    "MANA_PER_INT": 2,
    "MANA_REGEN_PER_INT": 0.5,
    "MANA_CAP_RATIO": 0.5,
-   "SEUIL_PER_INT": 0.5
+   "SEUIL_PER_INT": 0.5,
+   "REG_STATS_BONUS": 0.1
   },
   "profils": {
    "Guerrier": {
@@ -3312,7 +3313,8 @@ const DATA = {
    },
    {
     "to": "a37",
-    "voie": "voie de la fête"
+    "voie": "voie de la fête",
+    "type": "secrete"
    }
   ],
   "a29": [
@@ -3439,6 +3441,61 @@ const DATA = {
    {
     "to": "d14",
     "voie": "la voie du Pont — le Liage"
+   }
+  ],
+  "a34": [
+   {
+    "to": "e3",
+    "voie": "la malédiction des quais",
+    "type": "malediction",
+    "condition": {
+     "kind": "event",
+     "id": "malediction"
+    }
+   }
+  ],
+  "a17": [
+   {
+    "to": "a20",
+    "voie": "la régression",
+    "type": "regression",
+    "condition": {
+     "kind": "item",
+     "id": "eclat-regression",
+     "n": 1
+    }
+   }
+  ],
+  "a27": [
+   {
+    "to": "a28",
+    "voie": "la fusion du Bosquet",
+    "type": "fusion",
+    "condition": {
+     "kind": "owns",
+     "id": "a27",
+     "n": 2
+    }
+   }
+  ],
+  "p1": [
+   {
+    "to": "d6",
+    "voie": "l’équilibre",
+    "type": "evenement",
+    "condition": {
+     "kind": "all",
+     "of": [
+      {
+       "kind": "owns",
+       "id": "n13"
+      },
+      {
+       "kind": "owns",
+       "id": "n14"
+      }
+     ]
+    }
    }
   ]
  },
@@ -11869,6 +11926,62 @@ function canCastLearned(inst, grimoire, spellId, cran) {
   return isLearned(grimoire, spellId, cran) && canCast(inst, spellId);
 }
 
+// lot 5 : types d'évolution spéciaux, pilotés par les données (evolutions.json / trees.json)
+function evoEntryOf(from, to) {
+  // evolutions.json d'abord : c'est là que vivent les types spéciaux et leurs conditions
+  const c = ((DATA.evolutions ?? {})[from] ?? []).find((x) => x.to === to);
+  if (c) return { type: c.type ?? 'standard', to, voie: c.voie, condition: c.condition ?? null };
+  for (const tree of Object.values(DATA.trees ?? {})) {
+    for (const ev of tree.eveils ?? []) {
+      if (ev.de === from && ev.vers === to) return { ...ev, type: ev.type ?? 'standard', condition: ev.condition ?? null };
+    }
+  }
+  return null;
+}
+function conditionOk(cond, ctx) {
+  if (!cond) return true;
+  const items = ctx?.items ?? {};
+  const owned = ctx?.owned ?? [];
+  const events = ctx?.events ?? [];
+  if (cond.kind === 'item') return (items[cond.id] ?? 0) >= (cond.n ?? 1);
+  if (cond.kind === 'owns') return owned.filter((id) => id === cond.id).length >= (cond.n ?? 1);
+  if (cond.kind === 'event') return events.includes(cond.id);
+  if (cond.kind === 'all') return (cond.of ?? []).every((c) => conditionOk(c, ctx));
+  return true;
+}
+// applique une évolution spéciale ; retourne { ok, spawned?, consumed? } ou null si standard
+function applySpecialEvo(inst, entry, ctx = {}) {
+  if (!entry || entry.type === 'standard') return null;
+  if (!conditionOk(entry.condition, ctx)) return { ok: false, reason: 'condition non remplie' };
+  if (entry.type === 'regression') {
+    if (ctx.items && entry.condition?.kind === 'item') ctx.items[entry.condition.id] -= (entry.condition.n ?? 1);
+    const to = getCard(entry.to) ?? getMonster(entry.to);
+    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, asc: (inst.asc ?? 0) * (1 + M.REG_STATS_BONUS), acc: [...(inst.acc ?? [])] };
+    return { ok: true, spawned, type: 'regression' };
+  }
+  if (entry.type === 'fusion') {
+    return { ok: true, consumed: (entry.condition?.n ?? 2), type: 'fusion', to: entry.to };
+  }
+  if (entry.type === 'malediction') {
+    inst.id = entry.to;
+    inst.locked = true;
+    return { ok: true, type: 'malediction' };
+  }
+  if (entry.type === 'evenement') {
+    return { ok: true, spawned: { ...inst, iid: `${inst.iid}-evt`, id: entry.to }, type: 'evenement' };
+  }
+  if (entry.type === 'secrete' || entry.type === 'chute') {
+    return { ok: true, type: entry.type, to: entry.to };
+  }
+  return { ok: true, type: entry.type };
+}
+
+// lot 5 UI : une évolution secrète s'affiche floutée « ?? » (le moteur garde la vraie cible)
+function evoLabelOf(from, to) {
+  const e = evoEntryOf(from, to);
+  return e && e.type === 'secrete' ? '??' : (e?.voie || to);
+}
+
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
 // v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
@@ -14346,7 +14459,7 @@ function renderCollection(root) {
       const tg = evoTargetsOf(c.id);
       if (n === 0 && !seenCard(c.id)) return '';
       if (n === 0) return seenCell(c.id);
-      return `<div class="fam-card owned" data-id="${c.id}" title="${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — évolue ${tg.length > 1 ? 'au choix en ' : 'en '}${tg.map((t) => byId(t).name).join(' · ')}` : ''}">${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}</div>`;
+      return `<div class="fam-card owned" data-id="${c.id}" title="${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — évolue ${tg.length > 1 ? 'au choix en ' : 'en '}${tg.map((t) => evoLabelOf(c.id, t) === '??' ? '??' : byId(t).name).join(' · ')}` : ''}">${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}</div>`;
     })
     .join('');
   const raceGrid = (race) => {
