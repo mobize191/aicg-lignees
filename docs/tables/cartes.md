@@ -2,11 +2,11 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**89 cartes jouables** (data/cards.json), reparties : Assassin 26, Guerrier 17, Mage 20, Occultiste 2, Prêtre 24.
+**113 cartes jouables** (data/cards.json), reparties : Assassin 32, Guerrier 17, Mage 26, Occultiste 8, Prêtre 30.
 
 Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + valeur). L'element et la famille sont absents des cartes non-elementaires.
 
-## Classe Assassin (26)
+## Classe Assassin (32)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -36,6 +36,12 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n4 | Voleur Novice | N | - | attaque | 9 | 47 | 8 | 4 | - | Larcin Rapide | - |
 | n8 | Embryon des Ténèbres | N | - | attaque | 10 | 50 | 9 | 4 | - | Griffes Noires | - |
 | s3 | Veilleur d’Acier | C | Ombre | support | 5 | 45 | 5 | 2 | - | Œil du Stratège | atkBuff 0.15 |
+| t1 | Mercenaire | C | Ombre | attaque | 8 | 55 | 7 | 3 | vol | Larcin Agile — geste de palier C | - |
+| t2 | Pillard | UC | Ombre | attaque | 10 | 62 | 9 | 4 | vol | Coup de Jarnac — geste de palier UC | - |
+| t3 | Brigand | R | Ombre | attaque | 14 | 70 | 13 | 6 | vol | Dague dans le Dos — geste de palier R | - |
+| t4 | Grand Brigand | SR | Ombre | attaque | 20 | 78 | 18 | 8 | vol | Fauchage — geste de palier SR | - |
+| t5 | Fléau des Routes | UR | Ombre | attaque | 27 | 88 | 24 | 11 | vol | Embuscade — geste de palier UR | - |
+| t6 | Gadianton, Chef des Brigands | L | Ombre | attaque | 36 | 105 | 32 | 14 | vol | Coup de Grâce — geste de palier L | - |
 
 ## Classe Guerrier (17)
 
@@ -59,7 +65,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | s4 | Gardien-Mécanique | C | Terre | support | 2 | 55 | 1 | 1 | bouclier | - | shield 15 |
 | s6 | Sentinelle d’Acier | R | Terre | support | 4 | 62 | 3 | 2 | bouclier | - | shield 25 |
 
-## Classe Mage (20)
+## Classe Mage (26)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -83,15 +89,27 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n6 | Embryon des Flammes | N | - | attaque | 10 | 52 | 5 | 8 | - | Souffle de Braise | - |
 | n9 | Embryon des Cieux | N | - | attaque | 9 | 54 | 5 | 7 | - | Rafale Céleste | - |
 | s7 | Bastion Arcanique | SR | Terre | support | 6 | 58 | 3 | 5 | bouclier | - | atkBuff 0.25 |
+| v1 | Apprenti Invocateur | C | Lumière | attaque | 8 | 55 | 4 | 6 | appel | Appel Mineur — geste de palier C | - |
+| v2 | Conjurateur | UC | Lumière | attaque | 10 | 62 | 5 | 8 | appel | Élémentaire de Braise — geste de palier UC | - |
+| v3 | Évocateur | R | Lumière | attaque | 14 | 70 | 7 | 11 | appel | Meute Spirituelle — geste de palier R | - |
+| v4 | Maître des Esprits | SR | Lumière | attaque | 20 | 78 | 10 | 16 | appel | Portail — geste de palier SR | - |
+| v5 | Seigneur des Élémentaires | UR | Lumière | attaque | 27 | 88 | 14 | 22 | appel | Légion Céleste — geste de palier UR | - |
+| v6 | Archimage de l’Appel | L | Lumière | attaque | 36 | 105 | 18 | 29 | appel | Appel Suprême — geste de palier L | - |
 
-## Classe Occultiste (2)
+## Classe Occultiste (8)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | n12 | Enge des Caveaux | N | - | attaque | 9 | 53 | 5 | 7 | - | Froid du Caveau | - |
 | n15 | Éveillé du Seuil | C | - | attaque | 8 | 55 | 4 | 6 | - | Regard du Seuil | - |
+| q1 | Novice du Crépuscule | C | Ombre | attaque | 8 | 55 | 4 | 6 | crepuscule | Griffe Nocturne — geste de palier C | - |
+| q2 | Disciple du Crépuscule | UC | Ombre | attaque | 10 | 62 | 5 | 8 | crepuscule | Voile d’Ombre — geste de palier UC | - |
+| q3 | Prêtre du Crépuscule | R | Ombre | attaque | 14 | 70 | 7 | 11 | crepuscule | Malédiction du Soir — geste de palier R | - |
+| q4 | Servante du Crépuscule | SR | Ombre | attaque | 20 | 78 | 10 | 16 | crepuscule | Danse des Ombres — geste de palier SR | - |
+| q5 | Grande Prêtresse de l’Ombre | UR | Ombre | attaque | 27 | 88 | 14 | 22 | crepuscule | Oubli Éternel — geste de palier UR | - |
+| q6 | Vesperine, Reine de la Nuit | L | Ombre | attaque | 36 | 105 | 18 | 29 | crepuscule | Nuit Sans Fin — geste de palier L | - |
 
-## Classe Prêtre (24)
+## Classe Prêtre (30)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -107,7 +125,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n13 | Ange | C | Lumière | support | 6 | 58 | 3 | 5 | - | Éclat d’Aube | heal 20 |
 | n3 | Prêtre Novice | N | - | support | 4 | 52 | 2 | 3 | - | Bénédiction Modeste | heal 18 |
 | n7 | Embryon du Vivant | N | - | support | 7 | 62 | 4 | 6 | - | Sève Voleuse | heal 16 |
-| p1 | Ange Éveillé | UC | Lumière | support | 8 | 66 | 4 | 6 | - | Éclat d’Aube | heal 24 |
+| p1 | Jeune Séraphin | UC | Lumière | support | 8 | 66 | 4 | 6 | - | Éclat d’Aube | heal 24 |
 | p2 | Ange Gardien | C | Lumière | support | 6 | 58 | 3 | 5 | - | Éclat d’Aube | heal 20 |
 | p3 | Pousse des Sèves | C | Terre | support | 5 | 60 | 3 | 4 | - | - | heal 16 |
 | p4 | Fidèle du Jour | C | Lumière | support | 6 | 58 | 3 | 5 | - | - | heal 18 |
@@ -119,6 +137,12 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | s5 | Prêtresse de l’Aube | R | Lumière | support | 3 | 60 | 2 | 2 | aube | - | heal 26 |
 | s8 | Grande Prêtresse de l’Aube | SR | Lumière | support | 4 | 70 | 2 | 3 | aube | - | heal 40 |
 | s9 | Léna, Avatar de l’Aurore | UR | Lumière | support | 5 | 85 | 3 | 4 | aube | - | heal 58 |
+| u1 | Fidèle du Matin | C | Lumière | support | 8 | 55 | 4 | 6 | zele | Étincelle de Foi — geste de palier C | - |
+| u2 | Écuyer Fervent | UC | Lumière | support | 10 | 62 | 5 | 8 | zele | Hymne du Matin — geste de palier UC | - |
+| u3 | Croisé de l’Aube | R | Lumière | support | 14 | 70 | 7 | 11 | zele | Bénédiction du Jour — geste de palier R | - |
+| u4 | Chapelain du Jour | SR | Lumière | support | 20 | 78 | 10 | 16 | zele | Croisade — geste de palier SR | - |
+| u5 | Arbalétrier Doré | UR | Lumière | support | 27 | 88 | 14 | 22 | zele | Aurore Radieuse — geste de palier UR | - |
+| u6 | Aurorine, Lance de l’Aube | L | Lumière | support | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
 
 ## Familles de lignee (data/families.json)
 
@@ -133,6 +157,10 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | bouclier | Famille du Bouclier | s4 Gardien-Mécanique -> s14 Garde du Rempart -> s6 Sentinelle d’Acier -> s7 Bastion Arcanique -> s11 Argus, Rempart Éveillé -> s12 Argus, Forteresse Vivante | - |
 | braise | Famille de la Braise | a19 Allumeur de Braises -> a32 Veilleur de Braise -> a20 Mage de la Fournaise -> a21 Invocateur de Fournaise -> a22 Solen, Archimage de la Braise -> a23 Solen, Roi des Braises | - |
 | bosquet | Famille du Bosquet | a24 Traqueur du Bosquet -> a33 Pisteur du Bosquet -> a25 Chasseur du Bosquet -> a26 Prédateur Sylvestre -> a27 Maïa, Lame du Bosquet -> a28 Maïa, Déesse du Bosquet | - |
+| crepuscule | Famille du Crépuscule | q1 Novice du Crépuscule -> q2 Disciple du Crépuscule -> q3 Prêtre du Crépuscule -> q4 Servante du Crépuscule -> q5 Grande Prêtresse de l’Ombre -> q6 Vesperine, Reine de la Nuit | - |
+| vol | Famille du Vol | t1 Mercenaire -> t2 Pillard -> t3 Brigand -> t4 Grand Brigand -> t5 Fléau des Routes -> t6 Gadianton, Chef des Brigands | - |
+| zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Aurorine, Lance de l’Aube | - |
+| appel | École des Invocations | v1 Apprenti Invocateur -> v2 Conjurateur -> v3 Évocateur -> v4 Maître des Esprits -> v5 Seigneur des Élémentaires -> v6 Archimage de l’Appel | - |
 
 ## Evolutions (data/evolutions.json)
 
@@ -148,11 +176,15 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n2 Mage Novice | a33 Pisteur du Bosquet | les Sylvains — la Terre |
 | n2 Mage Novice | s13 Servante de l’Aube | la lumière — l’élue de l’Aube |
 | n2 Mage Novice | a31 Guetteur Crépusculaire | l’ombre — l’élue du Crépuscule |
+| n2 Mage Novice | v1 Apprenti Invocateur | l’appel — Apprenti Invocateur |
 | n3 Prêtre Novice | s13 Servante de l’Aube | la lumière — la foi |
 | n3 Prêtre Novice | s14 Garde du Rempart | la garde — protéger les vivants |
+| n3 Prêtre Novice | q1 Novice du Crépuscule | l’ombre — Novice du Crépuscule |
+| n3 Prêtre Novice | u1 Fidèle du Matin | voie du zèle — Fidèle du Jour |
 | n4 Voleur Novice | a31 Guetteur Crépusculaire | voie de l’assassinat |
 | n4 Voleur Novice | a34 Braconnier des Quais | voie des quais |
 | n4 Voleur Novice | a37 Jongleur de Fête | voie de la fête |
+| n4 Voleur Novice | t1 Mercenaire | voie du vol — Mercenaire |
 | a29 Adepte des Rivières | a8 Sorcière des Rivières | fidèle à l’Eau |
 | a29 Adepte des Rivières | s5 Prêtresse de l’Aube | élue de la lumière — rejoint la lignée de Léna |
 | a32 Veilleur de Braise | a20 Mage de la Fournaise | fidèle au Feu |
@@ -175,13 +207,33 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n9 Embryon des Cieux | z3 | la voie dorée — la Légion Solaire |
 | n9 Embryon des Cieux | z16 | la voie du feu céleste — les Phénix |
 | n9 Embryon des Cieux | z23 | la voie du plein jour — le Clergé |
-| n13 Ange | p1 Ange Éveillé | l’éveil du service — l’Ange Éveillé |
+| n13 Ange | p1 Jeune Séraphin | l’éveil du service — l’Ange Éveillé |
 | n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
 | n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |
 | a34 Braconnier des Quais | e3 | la malédiction des quais |
 | a17 Kenji, Sabre Céleste | a20 Mage de la Fournaise | la régression |
 | a27 Maïa, Lame du Bosquet | a28 Maïa, Déesse du Bosquet | la fusion du Bosquet |
-| p1 Ange Éveillé | d6 | l’équilibre |
+| p1 Jeune Séraphin | d6 | l’équilibre |
+| q1 Novice du Crépuscule | q2 Disciple du Crépuscule | famille du crépuscule |
+| q2 Disciple du Crépuscule | q3 Prêtre du Crépuscule | famille du crépuscule |
+| q3 Prêtre du Crépuscule | q4 Servante du Crépuscule | famille du crépuscule |
+| q4 Servante du Crépuscule | q5 Grande Prêtresse de l’Ombre | famille du crépuscule |
+| q5 Grande Prêtresse de l’Ombre | q6 Vesperine, Reine de la Nuit | famille du crépuscule |
+| t1 Mercenaire | t2 Pillard | famille du vol |
+| t2 Pillard | t3 Brigand | famille du vol |
+| t3 Brigand | t4 Grand Brigand | famille du vol |
+| t4 Grand Brigand | t5 Fléau des Routes | famille du vol |
+| t5 Fléau des Routes | t6 Gadianton, Chef des Brigands | famille du vol |
+| u1 Fidèle du Matin | u2 Écuyer Fervent | famille du zèle |
+| u2 Écuyer Fervent | u3 Croisé de l’Aube | famille du zèle |
+| u3 Croisé de l’Aube | u4 Chapelain du Jour | famille du zèle |
+| u4 Chapelain du Jour | u5 Arbalétrier Doré | famille du zèle |
+| u5 Arbalétrier Doré | u6 Aurorine, Lance de l’Aube | famille du zèle |
+| v1 Apprenti Invocateur | v2 Conjurateur | école des invocations |
+| v2 Conjurateur | v3 Évocateur | école des invocations |
+| v3 Évocateur | v4 Maître des Esprits | école des invocations |
+| v4 Maître des Esprits | v5 Seigneur des Élémentaires | école des invocations |
+| v5 Seigneur des Élémentaires | v6 Archimage de l’Appel | école des invocations |
 
 ## Soudures solos (data/solo-steps.json)
 

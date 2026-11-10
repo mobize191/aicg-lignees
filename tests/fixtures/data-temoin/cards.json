@@ -2,7 +2,7 @@
  {
   "id": "n1",
   "name": "Épéiste Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Guerrier",
   "role": "attaque",
   "atk": 8,
@@ -10,25 +10,27 @@
   "soloSpell": "Prise de Garde",
   "raciale": true,
   "agi": 6,
-  "int": 5
+  "int": 3,
+  "biome": "recrues"
  },
  {
   "id": "n2",
   "name": "Mage Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 7,
   "hp": 48,
   "soloSpell": "Étincelle d’Étude",
   "raciale": true,
-  "agi": 6,
-  "int": 4
+  "agi": 4,
+  "int": 6,
+  "biome": "recrues"
  },
  {
   "id": "n3",
   "name": "Prêtre Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 4,
@@ -39,52 +41,56 @@
   },
   "soloSpell": "Bénédiction Modeste",
   "raciale": true,
-  "agi": 3,
-  "int": 2
+  "agi": 2,
+  "int": 3,
+  "biome": "recrues"
  },
  {
   "id": "n4",
   "name": "Voleur Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Assassin",
   "role": "attaque",
   "atk": 9,
   "hp": 47,
   "soloSpell": "Larcin Rapide",
   "raciale": true,
-  "agi": 7,
-  "int": 5
+  "agi": 8,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "n5",
-  "name": "Bestiau des Eaux",
-  "rarity": "C",
+  "name": "Embryon des Eaux",
+  "rarity": "N",
   "classe": "Guerrier",
   "role": "attaque",
   "atk": 9,
   "hp": 60,
   "soloSpell": "Bruissement d’Écume",
   "raciale": true,
-  "agi": 7,
-  "int": 5
+  "agi": 6,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "n6",
-  "name": "Bestiau des Flammes",
-  "rarity": "C",
+  "name": "Embryon des Flammes",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 10,
   "hp": 52,
   "soloSpell": "Souffle de Braise",
   "raciale": true,
-  "agi": 8,
-  "int": 6
+  "agi": 5,
+  "int": 8,
+  "biome": "recrues"
  },
  {
   "id": "n7",
-  "name": "Bestiau du Vivant",
-  "rarity": "C",
+  "name": "Embryon du Vivant",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 7,
@@ -95,52 +101,56 @@
   },
   "soloSpell": "Sève Voleuse",
   "raciale": true,
-  "agi": 6,
-  "int": 4
+  "agi": 4,
+  "int": 6,
+  "biome": "recrues"
  },
  {
   "id": "n8",
-  "name": "Bestiau des Ténèbres",
-  "rarity": "C",
+  "name": "Embryon des Ténèbres",
+  "rarity": "N",
   "classe": "Assassin",
   "role": "attaque",
   "atk": 10,
   "hp": 50,
   "soloSpell": "Griffes Noires",
   "raciale": true,
-  "agi": 8,
-  "int": 6
+  "agi": 9,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "n9",
-  "name": "Bestiau des Cieux",
-  "rarity": "C",
+  "name": "Embryon des Cieux",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 9,
   "hp": 54,
   "soloSpell": "Rafale Céleste",
   "raciale": true,
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "n10",
   "name": "Enge des Brumes",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 9,
   "hp": 56,
   "soloSpell": "Voile de Brume",
   "raciale": true,
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "n11",
   "name": "Enge des Bois",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 6,
@@ -151,21 +161,23 @@
   },
   "soloSpell": "Souffle des Sèves",
   "raciale": true,
-  "agi": 5,
-  "int": 4
+  "agi": 3,
+  "int": 5,
+  "biome": "recrues"
  },
  {
   "id": "n12",
   "name": "Enge des Caveaux",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Occultiste",
   "role": "attaque",
   "atk": 9,
   "hp": 53,
   "soloSpell": "Froid du Caveau",
   "raciale": true,
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "n13",
@@ -183,8 +195,9 @@
   },
   "soloSpell": "Éclat d’Aube",
   "raciale": true,
-  "agi": 5,
-  "int": 4
+  "agi": 3,
+  "int": 5,
+  "biome": "divin"
  },
  {
   "id": "n14",
@@ -198,8 +211,9 @@
   "hp": 52,
   "soloSpell": "Trait de Vice",
   "raciale": true,
-  "agi": 8,
-  "int": 6
+  "agi": 9,
+  "int": 4,
+  "biome": "divin"
  },
  {
   "id": "n15",
@@ -212,8 +226,9 @@
   "hp": 55,
   "soloSpell": "Regard du Seuil",
   "raciale": true,
-  "agi": 6,
-  "int": 5
+  "agi": 4,
+  "int": 6,
+  "biome": "divin"
  },
  {
   "id": "a1",
@@ -226,7 +241,7 @@
   "hp": 60,
   "family": "lame",
   "agi": 6,
-  "int": 5
+  "int": 3
  },
  {
   "id": "a30",
@@ -238,8 +253,8 @@
   "atk": 10,
   "hp": 67,
   "family": "lame",
-  "agi": 8,
-  "int": 6
+  "agi": 7,
+  "int": 4
  },
  {
   "id": "a6",
@@ -251,8 +266,8 @@
   "atk": 12,
   "hp": 75,
   "family": "lame",
-  "agi": 10,
-  "int": 7
+  "agi": 8,
+  "int": 5
  },
  {
   "id": "a10",
@@ -264,8 +279,8 @@
   "atk": 18,
   "hp": 90,
   "family": "lame",
-  "agi": 14,
-  "int": 11
+  "agi": 13,
+  "int": 7
  },
  {
   "id": "a15",
@@ -277,8 +292,8 @@
   "atk": 30,
   "hp": 95,
   "family": "lame",
-  "agi": 24,
-  "int": 18
+  "agi": 21,
+  "int": 12
  },
  {
   "id": "a17",
@@ -290,8 +305,8 @@
   "atk": 40,
   "hp": 105,
   "family": "lame",
-  "agi": 32,
-  "int": 24
+  "agi": 28,
+  "int": 16
  },
  {
   "id": "a2",
@@ -303,8 +318,8 @@
   "atk": 10,
   "hp": 45,
   "family": "ombre",
-  "agi": 8,
-  "int": 6
+  "agi": 9,
+  "int": 4
  },
  {
   "id": "a31",
@@ -316,8 +331,8 @@
   "atk": 12,
   "hp": 50,
   "family": "ombre",
-  "agi": 10,
-  "int": 7
+  "agi": 11,
+  "int": 5
  },
  {
   "id": "a7",
@@ -329,8 +344,8 @@
   "atk": 15,
   "hp": 55,
   "family": "ombre",
-  "agi": 12,
-  "int": 9
+  "agi": 14,
+  "int": 6
  },
  {
   "id": "a12",
@@ -342,8 +357,8 @@
   "atk": 22,
   "hp": 60,
   "family": "ombre",
-  "agi": 18,
-  "int": 13
+  "agi": 20,
+  "int": 9
  },
  {
   "id": "a16",
@@ -355,8 +370,8 @@
   "atk": 32,
   "hp": 72,
   "family": "ombre",
-  "agi": 26,
-  "int": 19
+  "agi": 29,
+  "int": 13
  },
  {
   "id": "a18",
@@ -368,8 +383,8 @@
   "atk": 42,
   "hp": 88,
   "family": "ombre",
-  "agi": 34,
-  "int": 25
+  "agi": 38,
+  "int": 17
  },
  {
   "id": "a5",
@@ -381,8 +396,8 @@
   "atk": 9,
   "hp": 42,
   "family": "eau",
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7
  },
  {
   "id": "a29",
@@ -394,8 +409,8 @@
   "atk": 11,
   "hp": 46,
   "family": "eau",
-  "agi": 9,
-  "int": 7
+  "agi": 6,
+  "int": 9
  },
  {
   "id": "a8",
@@ -407,8 +422,8 @@
   "atk": 14,
   "hp": 50,
   "family": "eau",
-  "agi": 11,
-  "int": 8
+  "agi": 7,
+  "int": 11
  },
  {
   "id": "a11",
@@ -420,8 +435,8 @@
   "atk": 20,
   "hp": 65,
   "family": "eau",
-  "agi": 16,
-  "int": 12
+  "agi": 10,
+  "int": 16
  },
  {
   "id": "a13",
@@ -433,8 +448,8 @@
   "atk": 28,
   "hp": 80,
   "family": "eau",
-  "agi": 22,
-  "int": 17
+  "agi": 14,
+  "int": 22
  },
  {
   "id": "a14",
@@ -446,8 +461,8 @@
   "atk": 38,
   "hp": 100,
   "family": "eau",
-  "agi": 30,
-  "int": 23
+  "agi": 19,
+  "int": 30
  },
  {
   "id": "a3",
@@ -460,8 +475,9 @@
   "hp": 65,
   "effect": null,
   "soloSpell": "Serment Protecteur",
-  "agi": 6,
-  "int": 4
+  "agi": 4,
+  "int": 6,
+  "biome": "recrues"
  },
  {
   "id": "a4",
@@ -473,8 +489,9 @@
   "atk": 9,
   "hp": 40,
   "soloSpell": "Trait Incandescent",
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "a9",
@@ -486,8 +503,9 @@
   "atk": 11,
   "hp": 80,
   "soloSpell": "Charge Hydraulique",
-  "agi": 9,
-  "int": 7
+  "agi": 8,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "s1",
@@ -554,8 +572,8 @@
    "kind": "heal",
    "value": 40
   },
-  "agi": 3,
-  "int": 2
+  "agi": 2,
+  "int": 3
  },
  {
   "id": "s9",
@@ -571,8 +589,8 @@
    "kind": "heal",
    "value": 58
   },
-  "agi": 4,
-  "int": 3
+  "agi": 3,
+  "int": 4
  },
  {
   "id": "s10",
@@ -588,14 +606,14 @@
    "kind": "heal",
    "value": 80
   },
-  "agi": 5,
-  "int": 4
+  "agi": 3,
+  "int": 5
  },
  {
   "id": "s4",
   "name": "Gardien-Mécanique",
   "rarity": "C",
-  "classe": "Prêtre",
+  "classe": "Guerrier",
   "element": "Terre",
   "role": "support",
   "atk": 2,
@@ -605,7 +623,7 @@
    "kind": "shield",
    "value": 15
   },
-  "agi": 2,
+  "agi": 1,
   "int": 1
  },
  {
@@ -656,8 +674,8 @@
    "kind": "atkBuff",
    "value": 0.25
   },
-  "agi": 5,
-  "int": 4
+  "agi": 3,
+  "int": 5
  },
  {
   "id": "s11",
@@ -673,8 +691,8 @@
    "kind": "shield",
    "value": 55
   },
-  "agi": 5,
-  "int": 4
+  "agi": 4,
+  "int": 2
  },
  {
   "id": "s12",
@@ -690,8 +708,8 @@
    "kind": "shield",
    "value": 75
   },
-  "agi": 6,
-  "int": 4
+  "agi": 5,
+  "int": 3
  },
  {
   "id": "a19",
@@ -703,8 +721,8 @@
   "atk": 9,
   "hp": 43,
   "family": "braise",
-  "agi": 7,
-  "int": 5
+  "agi": 5,
+  "int": 7
  },
  {
   "id": "a32",
@@ -716,8 +734,8 @@
   "atk": 11,
   "hp": 47,
   "family": "braise",
-  "agi": 9,
-  "int": 7
+  "agi": 6,
+  "int": 9
  },
  {
   "id": "a20",
@@ -729,14 +747,14 @@
   "atk": 14,
   "hp": 51,
   "family": "braise",
-  "agi": 11,
-  "int": 8
+  "agi": 7,
+  "int": 11
  },
  {
   "id": "a21",
   "name": "Invocateur de Fournaise",
   "rarity": "SR",
-  "classe": "Invocateur",
+  "classe": "Mage",
   "element": "Feu",
   "role": "attaque",
   "atk": 21,
@@ -749,8 +767,8 @@
    "summonName": "Golem de Fournaise"
   },
   "family": "braise",
-  "agi": 17,
-  "int": 13
+  "agi": 11,
+  "int": 17
  },
  {
   "id": "a22",
@@ -762,8 +780,8 @@
   "atk": 29,
   "hp": 80,
   "family": "braise",
-  "agi": 23,
-  "int": 17
+  "agi": 15,
+  "int": 23
  },
  {
   "id": "a23",
@@ -775,8 +793,8 @@
   "atk": 39,
   "hp": 100,
   "family": "braise",
-  "agi": 31,
-  "int": 23
+  "agi": 20,
+  "int": 31
  },
  {
   "id": "a24",
@@ -788,8 +806,8 @@
   "atk": 10,
   "hp": 46,
   "family": "bosquet",
-  "agi": 8,
-  "int": 6
+  "agi": 9,
+  "int": 4
  },
  {
   "id": "a33",
@@ -801,8 +819,8 @@
   "atk": 12,
   "hp": 51,
   "family": "bosquet",
-  "agi": 10,
-  "int": 7
+  "agi": 11,
+  "int": 5
  },
  {
   "id": "a25",
@@ -814,8 +832,8 @@
   "atk": 15,
   "hp": 56,
   "family": "bosquet",
-  "agi": 12,
-  "int": 9
+  "agi": 14,
+  "int": 6
  },
  {
   "id": "a26",
@@ -827,8 +845,8 @@
   "atk": 22,
   "hp": 61,
   "family": "bosquet",
-  "agi": 18,
-  "int": 13
+  "agi": 20,
+  "int": 9
  },
  {
   "id": "a27",
@@ -840,8 +858,8 @@
   "atk": 32,
   "hp": 72,
   "family": "bosquet",
-  "agi": 26,
-  "int": 19
+  "agi": 29,
+  "int": 13
  },
  {
   "id": "a28",
@@ -853,8 +871,8 @@
   "atk": 42,
   "hp": 88,
   "family": "bosquet",
-  "agi": 34,
-  "int": 25
+  "agi": 38,
+  "int": 17
  },
  {
   "id": "s2",
@@ -870,8 +888,9 @@
    "value": 16
   },
   "soloSpell": "Baume Apaisant",
-  "agi": 2,
-  "int": 1
+  "agi": 1,
+  "int": 2,
+  "biome": "recrues"
  },
  {
   "id": "s3",
@@ -887,8 +906,9 @@
    "value": 0.15
   },
   "soloSpell": "Œil du Stratège",
-  "agi": 4,
-  "int": 3
+  "agi": 5,
+  "int": 2,
+  "biome": "recrues"
  },
  {
   "id": "a34",
@@ -900,8 +920,9 @@
   "atk": 9,
   "hp": 47,
   "soloSpell": "Flèche de Brume",
-  "agi": 7,
-  "int": 5
+  "agi": 8,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "a35",
@@ -917,8 +938,9 @@
    "value": 14
   },
   "soloSpell": "Litière Douce",
-  "agi": 2,
-  "int": 1
+  "agi": 1,
+  "int": 2,
+  "biome": "recrues"
  },
  {
   "id": "a36",
@@ -930,8 +952,9 @@
   "atk": 12,
   "hp": 49,
   "soloSpell": "Pas de Sable",
-  "agi": 10,
-  "int": 7
+  "agi": 11,
+  "int": 5,
+  "biome": "recrues"
  },
  {
   "id": "a37",
@@ -943,8 +966,9 @@
   "atk": 8,
   "hp": 44,
   "soloSpell": "Bottes Cachées",
-  "agi": 6,
-  "int": 5
+  "agi": 7,
+  "int": 3,
+  "biome": "recrues"
  },
  {
   "id": "a38",
@@ -956,8 +980,9 @@
   "atk": 10,
   "hp": 62,
   "soloSpell": "Coup de Rame",
-  "agi": 8,
-  "int": 6
+  "agi": 7,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "a39",
@@ -974,7 +999,8 @@
   },
   "soloSpell": "Lanterne du Guet",
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "biome": "recrues"
  },
  {
   "id": "a40",
@@ -992,8 +1018,9 @@
   "gimmick": "volee",
   "gimmickName": "Marque du Chasseur",
   "gimmickDesc": "Sa cible touchée, sa volée frappe aussi un second ennemi à 50 % des dégâts.",
-  "agi": 10,
-  "int": 8
+  "agi": 12,
+  "int": 5,
+  "biome": "recrues"
  },
  {
   "id": "a41",
@@ -1011,8 +1038,9 @@
   "gimmick": "voile",
   "gimmickName": "Voile de Brume",
   "gimmickDesc": "25 % de chance d’annuler complètement un coup reçu.",
-  "agi": 14,
-  "int": 10
+  "agi": 15,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "a42",
@@ -1035,7 +1063,8 @@
   "gimmickName": "Litière de Camp",
   "gimmickDesc": "Au départ du combat : bouclier de 15 % PV max pour toute l’équipe.",
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "biome": "recrues"
  },
  {
   "id": "a43",
@@ -1057,8 +1086,9 @@
   "gimmick": "benediction",
   "gimmickName": "Dernière Bénédiction",
   "gimmickDesc": "En tombant : soigne toute l’équipe de 20 % des PV max de chacun.",
-  "agi": 3,
-  "int": 2
+  "agi": 2,
+  "int": 3,
+  "biome": "recrues"
  },
  {
   "id": "a44",
@@ -1076,8 +1106,9 @@
   "gimmick": "mirage",
   "gimmickName": "Mirage du Désert",
   "gimmickDesc": "Renvoie 20 % des dégâts subis à l’attaquant.",
-  "agi": 13,
-  "int": 10
+  "agi": 14,
+  "int": 6,
+  "biome": "recrues"
  },
  {
   "id": "a45",
@@ -1095,8 +1126,9 @@
   "gimmick": "prestige",
   "gimmickName": "Numéro Étoilé",
   "gimmickDesc": "+2 de régénération de mana : ses sorts croisés reviennent plus vite.",
-  "agi": 9,
-  "int": 7
+  "agi": 10,
+  "int": 4,
+  "biome": "recrues"
  },
  {
   "id": "a46",
@@ -1114,8 +1146,9 @@
   "gimmick": "carrousel",
   "gimmickName": "Carrousel de Lames",
   "gimmickDesc": "15 % de chance que son attaque touche tous les ennemis à 40 %.",
-  "agi": 12,
-  "int": 9
+  "agi": 14,
+  "int": 6,
+  "biome": "recrues"
  },
  {
   "id": "a47",
@@ -1133,8 +1166,9 @@
   "gimmick": "cale",
   "gimmickName": "Cale Sèche",
   "gimmickDesc": "Bouclier personnel de 25 % PV max au départ du combat.",
-  "agi": 10,
-  "int": 8
+  "agi": 9,
+  "int": 5,
+  "biome": "recrues"
  },
  {
   "id": "a48",
@@ -1152,8 +1186,9 @@
   "gimmick": "belier",
   "gimmickName": "Bélier d’Étrave",
   "gimmickDesc": "Sa première attaque du combat inflige +50 % de dégâts.",
-  "agi": 14,
-  "int": 10
+  "agi": 12,
+  "int": 7,
+  "biome": "recrues"
  },
  {
   "id": "a49",
@@ -1175,8 +1210,9 @@
   "gimmick": "ronde",
   "gimmickName": "Ronde Éclairée",
   "gimmickDesc": "Chaque tour : +3 % d’ATQ cumulée pour toute l’équipe (plafond +90 %).",
-  "agi": 3,
-  "int": 2
+  "agi": 2,
+  "int": 3,
+  "biome": "recrues"
  },
  {
   "id": "b1",
@@ -1190,8 +1226,8 @@
   "family": "lame",
   "branch": true,
   "archived": true,
-  "agi": 19,
-  "int": 14
+  "agi": 17,
+  "int": 10
  },
  {
   "id": "b2",
@@ -1205,8 +1241,8 @@
   "family": "ombre",
   "branch": true,
   "archived": true,
-  "agi": 21,
-  "int": 16
+  "agi": 23,
+  "int": 10
  },
  {
   "id": "b3",
@@ -1220,8 +1256,8 @@
   "family": "eau",
   "branch": true,
   "archived": true,
-  "agi": 18,
-  "int": 13
+  "agi": 11,
+  "int": 18
  },
  {
   "id": "b4",
@@ -1239,8 +1275,8 @@
    "kind": "heal",
    "value": 46
   },
-  "agi": 3,
-  "int": 2
+  "agi": 2,
+  "int": 3
  },
  {
   "id": "b5",
@@ -1258,8 +1294,8 @@
    "kind": "shield",
    "value": 44
   },
-  "agi": 4,
-  "int": 3
+  "agi": 3,
+  "int": 4
  },
  {
   "id": "b6",
@@ -1273,8 +1309,8 @@
   "family": "braise",
   "branch": true,
   "archived": true,
-  "agi": 18,
-  "int": 14
+  "agi": 12,
+  "int": 18
  },
  {
   "id": "b7",
@@ -1288,13 +1324,13 @@
   "family": "bosquet",
   "branch": true,
   "archived": true,
-  "agi": 20,
-  "int": 15
+  "agi": 23,
+  "int": 10
  },
  {
   "id": "p1",
   "dungeon": "divin",
-  "name": "Ange Éveillé",
+  "name": "Jeune Séraphin",
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Lumière",
@@ -1308,8 +1344,10 @@
   "soloSpell": "Éclat d’Aube",
   "raciale": true,
   "voie": "l’éveil du service — l’Ange Éveillé",
-  "agi": 6,
-  "int": 5
+  "agi": 4,
+  "int": 6,
+  "biome": "divin",
+  "note": " renommé Jeune Séraphin (ACTÉ 10/11, id inchangé)"
  },
  {
   "id": "p2",
@@ -1329,8 +1367,9 @@
   "raciale": true,
   "archived": true,
   "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)",
-  "agi": 5,
-  "int": 4
+  "agi": 3,
+  "int": 5,
+  "biome": "divin"
  },
  {
   "id": "p3",
@@ -1346,8 +1385,8 @@
    "value": 16
   },
   "voie": "voie sylvestre — les Gens des Sèves",
-  "agi": 4,
-  "int": 3
+  "agi": 3,
+  "int": 4
  },
  {
   "id": "p4",
@@ -1363,7 +1402,367 @@
    "value": 18
   },
   "voie": "voie du zèle — la commune du zèle",
+  "agi": 3,
+  "int": 5
+ },
+ {
+  "id": "q1",
+  "name": "Novice du Crépuscule",
+  "rarity": "C",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 8,
+  "hp": 55,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Griffe Nocturne — geste de palier C",
+  "agi": 4,
+  "int": 6
+ },
+ {
+  "id": "q2",
+  "name": "Disciple du Crépuscule",
+  "rarity": "UC",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 10,
+  "hp": 62,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Voile d’Ombre — geste de palier UC",
   "agi": 5,
+  "int": 8
+ },
+ {
+  "id": "q3",
+  "name": "Prêtre du Crépuscule",
+  "rarity": "R",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 14,
+  "hp": 70,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Malédiction du Soir — geste de palier R",
+  "agi": 7,
+  "int": 11
+ },
+ {
+  "id": "q4",
+  "name": "Servante du Crépuscule",
+  "rarity": "SR",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 20,
+  "hp": 78,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Danse des Ombres — geste de palier SR",
+  "agi": 10,
+  "int": 16
+ },
+ {
+  "id": "q5",
+  "name": "Grande Prêtresse de l’Ombre",
+  "rarity": "UR",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 27,
+  "hp": 88,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Oubli Éternel — geste de palier UR",
+  "agi": 14,
+  "int": 22
+ },
+ {
+  "id": "q6",
+  "name": "Vesperine, Reine de la Nuit",
+  "rarity": "L",
+  "classe": "Occultiste",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 36,
+  "hp": 105,
+  "family": "crepuscule",
+  "voie": "famille du crépuscule",
+  "soloSpell": "Nuit Sans Fin — geste de palier L",
+  "agi": 18,
+  "int": 29
+ },
+ {
+  "id": "t1",
+  "name": "Mercenaire",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 8,
+  "hp": 55,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Larcin Agile — geste de palier C",
+  "agi": 7,
+  "int": 3
+ },
+ {
+  "id": "t2",
+  "name": "Pillard",
+  "rarity": "UC",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 10,
+  "hp": 62,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Coup de Jarnac — geste de palier UC",
+  "agi": 9,
   "int": 4
+ },
+ {
+  "id": "t3",
+  "name": "Brigand",
+  "rarity": "R",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 14,
+  "hp": 70,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Dague dans le Dos — geste de palier R",
+  "agi": 13,
+  "int": 6
+ },
+ {
+  "id": "t4",
+  "name": "Grand Brigand",
+  "rarity": "SR",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 20,
+  "hp": 78,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Fauchage — geste de palier SR",
+  "agi": 18,
+  "int": 8
+ },
+ {
+  "id": "t5",
+  "name": "Fléau des Routes",
+  "rarity": "UR",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 27,
+  "hp": 88,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Embuscade — geste de palier UR",
+  "agi": 24,
+  "int": 11
+ },
+ {
+  "id": "t6",
+  "name": "Gadianton, Chef des Brigands",
+  "rarity": "L",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "role": "attaque",
+  "atk": 36,
+  "hp": 105,
+  "family": "vol",
+  "voie": "famille du vol",
+  "soloSpell": "Coup de Grâce — geste de palier L",
+  "agi": 32,
+  "int": 14
+ },
+ {
+  "id": "u1",
+  "name": "Fidèle du Matin",
+  "rarity": "C",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 8,
+  "hp": 55,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Étincelle de Foi — geste de palier C",
+  "agi": 4,
+  "int": 6
+ },
+ {
+  "id": "u2",
+  "name": "Écuyer Fervent",
+  "rarity": "UC",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 10,
+  "hp": 62,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Hymne du Matin — geste de palier UC",
+  "agi": 5,
+  "int": 8
+ },
+ {
+  "id": "u3",
+  "name": "Croisé de l’Aube",
+  "rarity": "R",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 14,
+  "hp": 70,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Bénédiction du Jour — geste de palier R",
+  "agi": 7,
+  "int": 11
+ },
+ {
+  "id": "u4",
+  "name": "Chapelain du Jour",
+  "rarity": "SR",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 20,
+  "hp": 78,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Croisade — geste de palier SR",
+  "agi": 10,
+  "int": 16
+ },
+ {
+  "id": "u5",
+  "name": "Arbalétrier Doré",
+  "rarity": "UR",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 27,
+  "hp": 88,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Aurore Radieuse — geste de palier UR",
+  "agi": 14,
+  "int": 22
+ },
+ {
+  "id": "u6",
+  "name": "Aurorine, Lance de l’Aube",
+  "rarity": "L",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "role": "support",
+  "atk": 36,
+  "hp": 105,
+  "family": "zele",
+  "voie": "famille du zèle",
+  "soloSpell": "Lumière Éternelle — geste de palier L",
+  "agi": 18,
+  "int": 29
+ },
+ {
+  "id": "v1",
+  "name": "Apprenti Invocateur",
+  "rarity": "C",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 8,
+  "hp": 55,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Appel Mineur — geste de palier C",
+  "agi": 4,
+  "int": 6
+ },
+ {
+  "id": "v2",
+  "name": "Conjurateur",
+  "rarity": "UC",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 10,
+  "hp": 62,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Élémentaire de Braise — geste de palier UC",
+  "agi": 5,
+  "int": 8
+ },
+ {
+  "id": "v3",
+  "name": "Évocateur",
+  "rarity": "R",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 14,
+  "hp": 70,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Meute Spirituelle — geste de palier R",
+  "agi": 7,
+  "int": 11
+ },
+ {
+  "id": "v4",
+  "name": "Maître des Esprits",
+  "rarity": "SR",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 20,
+  "hp": 78,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Portail — geste de palier SR",
+  "agi": 10,
+  "int": 16
+ },
+ {
+  "id": "v5",
+  "name": "Seigneur des Élémentaires",
+  "rarity": "UR",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 27,
+  "hp": 88,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Légion Céleste — geste de palier UR",
+  "agi": 14,
+  "int": 22
+ },
+ {
+  "id": "v6",
+  "name": "Archimage de l’Appel",
+  "rarity": "L",
+  "classe": "Mage",
+  "element": "Lumière",
+  "role": "attaque",
+  "atk": 36,
+  "hp": 105,
+  "family": "appel",
+  "voie": "école des invocations",
+  "soloSpell": "Appel Suprême — geste de palier L",
+  "agi": 18,
+  "int": 29
  }
 ]

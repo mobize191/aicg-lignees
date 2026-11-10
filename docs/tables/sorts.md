@@ -166,6 +166,10 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | bouclier | Carapace Réactive / Égide Renforcée / Mur Inflexible / Barrière Runique / Argus : Rempart Éveillé / Argus : Forteresse Vivante |
 | braise | Étincelle Filante / Flèche de Feu / Jet de Braise / Fournaise / Solen : Couronne de Feu / Solen : Braise Éternelle |
 | bosquet | Trait d’Épine / Lance d’Aubier / Épine Vengeresse / Rafale d’Épines / Maïa : Danse des Feuilles / Maïa : Cœur du Bosquet |
+| crepuscule | Griffe Nocturne / Voile d’Ombre / Malédiction du Soir / Danse des Ombres / Oubli Éternel / Nuit Sans Fin |
+| vol | Larcin Agile / Coup de Jarnac / Dague dans le Dos / Fauchage / Embuscade / Coup de Grâce |
+| zele | Étincelle de Foi / Hymne du Matin / Bénédiction du Jour / Croisade / Aurore Radieuse / Lumière Éternelle |
+| appel | Appel Mineur / Élémentaire de Braise / Meute Spirituelle / Portail / Légion Céleste / Appel Suprême |
 
 ## Fusions de monstres (data/fusion-map.json)
 

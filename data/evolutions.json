@@ -33,6 +33,10 @@
   {
    "to": "a31",
    "voie": "l’ombre — l’élue du Crépuscule"
+  },
+  {
+   "to": "v1",
+   "voie": "l’appel — Apprenti Invocateur"
   }
  ],
  "n3": [
@@ -43,6 +47,14 @@
   {
    "to": "s14",
    "voie": "la garde — protéger les vivants"
+  },
+  {
+   "to": "q1",
+   "voie": "l’ombre — Novice du Crépuscule"
+  },
+  {
+   "to": "u1",
+   "voie": "voie du zèle — Fidèle du Jour"
   }
  ],
  "n4": [
@@ -58,6 +70,10 @@
    "to": "a37",
    "voie": "voie de la fête",
    "type": "secrete"
+  },
+  {
+   "to": "t1",
+   "voie": "voie du vol — Mercenaire"
   }
  ],
  "a29": [
@@ -239,6 +255,126 @@
      }
     ]
    }
+  }
+ ],
+ "q1": [
+  {
+   "to": "q2",
+   "voie": "famille du crépuscule"
+  }
+ ],
+ "q2": [
+  {
+   "to": "q3",
+   "voie": "famille du crépuscule"
+  }
+ ],
+ "q3": [
+  {
+   "to": "q4",
+   "voie": "famille du crépuscule"
+  }
+ ],
+ "q4": [
+  {
+   "to": "q5",
+   "voie": "famille du crépuscule"
+  }
+ ],
+ "q5": [
+  {
+   "to": "q6",
+   "voie": "famille du crépuscule"
+  }
+ ],
+ "t1": [
+  {
+   "to": "t2",
+   "voie": "famille du vol"
+  }
+ ],
+ "t2": [
+  {
+   "to": "t3",
+   "voie": "famille du vol"
+  }
+ ],
+ "t3": [
+  {
+   "to": "t4",
+   "voie": "famille du vol"
+  }
+ ],
+ "t4": [
+  {
+   "to": "t5",
+   "voie": "famille du vol"
+  }
+ ],
+ "t5": [
+  {
+   "to": "t6",
+   "voie": "famille du vol"
+  }
+ ],
+ "u1": [
+  {
+   "to": "u2",
+   "voie": "famille du zèle"
+  }
+ ],
+ "u2": [
+  {
+   "to": "u3",
+   "voie": "famille du zèle"
+  }
+ ],
+ "u3": [
+  {
+   "to": "u4",
+   "voie": "famille du zèle"
+  }
+ ],
+ "u4": [
+  {
+   "to": "u5",
+   "voie": "famille du zèle"
+  }
+ ],
+ "u5": [
+  {
+   "to": "u6",
+   "voie": "famille du zèle"
+  }
+ ],
+ "v1": [
+  {
+   "to": "v2",
+   "voie": "école des invocations"
+  }
+ ],
+ "v2": [
+  {
+   "to": "v3",
+   "voie": "école des invocations"
+  }
+ ],
+ "v3": [
+  {
+   "to": "v4",
+   "voie": "école des invocations"
+  }
+ ],
+ "v4": [
+  {
+   "to": "v5",
+   "voie": "école des invocations"
+  }
+ ],
+ "v5": [
+  {
+   "to": "v6",
+   "voie": "école des invocations"
   }
  ]
 }

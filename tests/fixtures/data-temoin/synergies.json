@@ -49,17 +49,6 @@
    "cursePct": 0.25
   }
  },
- "Invocateur": {
-  "1": {
-   "desc": "Invocations +25 % PV",
-   "summonHp": 0.25
-  },
-  "2": {
-   "desc": "Invocations +50 % PV et +20 % ATQ",
-   "summonHp": 0.5,
-   "summonAtk": 0.2
-  }
- },
  "Feu": {
   "1": {
    "desc": "+10 % PV équipe",

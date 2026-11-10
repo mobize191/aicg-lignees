@@ -86,10 +86,11 @@
    "ecole": "lame",
    "role": "degats",
    "cible": "zone",
-   "cout": 4,
+   "cout": 5,
    "mult": 1.65,
    "classe": "Mage",
-   "desc": "Le mage vide un fragment de mana en un trait brut."
+   "desc": "Le mage vide un fragment de mana en un trait brut.",
+   "effet": "base : l'intelligence (le trait brut du mage)"
   },
   {
    "id": "onde-consacree",
@@ -510,7 +511,7 @@
  "ecole": [
   {
    "id": "morsure-decume",
-   "nom": "Morsure d’Écume",
+   "nom": "Lame d’Écume",
    "ecole": "lame",
    "role": "degats",
    "crans": {
@@ -538,7 +539,7 @@
   },
   {
    "id": "chant-de-sirene",
-   "nom": "Chant de Sirène",
+   "nom": "Mélodie envoûtante",
    "ecole": "entrave",
    "role": "controle",
    "effet": "stun",
@@ -579,14 +580,14 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.3,
+     "tours": 1
     },
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25,
+     "tours": 1
     },
     "III": {
      "cout": 5,
@@ -597,14 +598,14 @@
     "IV": {
      "cout": 6,
      "largeur": 5,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.15,
+     "tours": 1
     }
    }
   },
   {
    "id": "carapace-de-corail",
-   "nom": "Carapace de Corail",
+   "nom": "Barrière de Corail",
    "ecole": "rempart",
    "role": "bouclier",
    "crans": {
@@ -616,8 +617,7 @@
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "mult": 1.5
     },
     "III": {
      "cout": 5,
@@ -641,14 +641,77 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25,
+     "tours": 2
     },
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 2
+    }
+   }
+  },
+  {
+   "id": "guet-des-fonds",
+   "nom": "Vigie des Flots",
+   "ecole": "ferveur",
+   "role": "boost",
+   "effet": "precision",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "taux": 0.15
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "taux": 0.2
+    }
+   }
+  },
+  {
+   "id": "colonne-de-feu",
+   "nom": "Colonne de Feu",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "brulure",
+   "desc": "La brûlure de la Forge : la flamme se pose et ronge, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
     },
     "III": {
      "cout": 5,
@@ -665,17 +728,177 @@
    }
   },
   {
-   "id": "guet-des-fonds",
-   "nom": "Guet des Fonds",
-   "ecole": "ferveur",
-   "role": "boost",
-   "effet": "precision",
+   "id": "fournaise-invoquee",
+   "nom": "Fournaise Invoquée",
+   "ecole": "appel",
+   "role": "invocation",
+   "desc": "L’Appel de la Forge : la fournaise envoie des renforts de cendre, 3 maximum par invocateur.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "seve-rongeuse",
+   "nom": "Sève Rongeuse",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "seve",
+   "desc": "La sève rongeuse du Bosquet : la sève se pose et ronge, contre le seuil de la cible.",
    "crans": {
     "I": {
      "cout": 3,
      "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
      "vide": true,
      "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "hurlement",
+   "nom": "Hurlement",
+   "ecole": "entrave",
+   "role": "controle",
+   "desc": "Le hurlement des banshees de la Crypte : le cri glace sur place, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 1
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 1
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 1
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 1
+    }
+   }
+  },
+  {
+   "id": "morsure-putride",
+   "nom": "Morsure Putride",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "poison",
+   "desc": "Le poison de la Crypte : la morsure putride infecte, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 2
+    }
+   }
+  },
+  {
+   "id": "renvoi-celeste",
+   "nom": "Renvoi Céleste",
+   "ecole": "rempart",
+   "role": "renvoi",
+   "desc": "Le renvoi des phénix du Zénith : la lumière renvoie les coups, contre le seuil du lanceur.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "taux": 0.15,
+     "tours": 2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "taux": 0.2,
+     "tours": 2
+    }
+   }
+  },
+  {
+   "id": "hymne",
+   "nom": "Hymne",
+   "ecole": "ferveur",
+   "role": "boost",
+   "desc": "Les hymnes du Zénith : le chant porte la ligne alliée, le boost et la tenue montent ensemble.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25
     },
     "II": {
      "cout": 4,
@@ -685,14 +908,13 @@
     "III": {
      "cout": 5,
      "largeur": "equipe",
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "boost": 0.2,
+     "tenue": 0.15
     },
     "IV": {
      "cout": 6,
      "largeur": "equipe-renforcee",
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2
     }
    }
   }
@@ -706,7 +928,12 @@
    "cible": "tous les ennemis",
    "cout": 3,
    "mult": 1.5,
-   "desc": "Le flot noir qui submerge tous les ennemis."
+   "desc": "Le flot noir qui submerge tous les ennemis.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "desc": "le flot noir submerge toute la ligne"
+   }
   },
   {
    "id": "abime-absolu",
@@ -716,7 +943,13 @@
    "cible": "tous les ennemis",
    "cout": 3,
    "mult": 1.5,
-   "desc": "Le gouffre s’ouvre et referme."
+   "desc": "Le gouffre s’ouvre et referme.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "abime": true,
+    "desc": "le gouffre s'ouvre sous la ligne"
+   }
   },
   {
    "id": "songe-des-profondeurs",
@@ -729,7 +962,14 @@
    "taux": 0.35,
    "tours": 3,
    "effet": "corrosion",
-   "desc": "Le rêve qui noie."
+   "desc": "Le rêve qui noie.",
+   "base": "etreinte-des-profondeurs",
+   "cran": "III",
+   "delta": {
+    "corrosion": 0.35,
+    "tours": 3,
+    "desc": "le rêve noie et corrode (35 % × 3 tours)"
+   }
   },
   {
    "id": "couronne-des-ecumes",
@@ -739,7 +979,13 @@
    "cible": "l’équipe",
    "cout": 3,
    "mult": 1.5,
-   "desc": "L’onction royale."
+   "desc": "L’onction royale.",
+   "base": "guet-des-fonds",
+   "cran": "IV",
+   "delta": {
+    "royal": true,
+    "desc": "l'onction royale dresse toute l'équipe"
+   }
   },
   {
    "id": "benediction-des-berges",
@@ -749,7 +995,12 @@
    "cible": "l’équipe",
    "cout": 3,
    "mult": 1.5,
-   "desc": "La bénédiction du bord de l’eau."
+   "desc": "La bénédiction du bord de l’eau.",
+   "base": "onde-consacree",
+   "cran": "III",
+   "delta": {
+    "desc": "la bénédiction du bord de l'eau soigne toute l'équipe"
+   }
   },
   {
    "id": "chant-du-naufrage",
@@ -759,7 +1010,13 @@
    "cible": "tous les ennemis",
    "cout": 7,
    "mult": 2,
-   "desc": "Le chant qui couche les équipages."
+   "desc": "Le chant qui couche les équipages.",
+   "base": "chant-de-sirene",
+   "cran": "IV",
+   "delta": {
+    "masse": true,
+    "desc": "le chant couche toute la ligne ennemie"
+   }
   },
   {
    "id": "colere-des-recifs",
@@ -772,7 +1029,550 @@
    "taux": 0.3,
    "tours": 2,
    "effet": "corrosion",
-   "desc": "La reine qui flagelle."
+   "desc": "La reine qui flagelle.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "corrosion": 0.3,
+    "tours": 2,
+    "desc": "la reine flagelle et corrode (30 % × 2 tours)"
+   }
+  },
+  {
+   "id": "nuit-de-cendres",
+   "nom": "Nuit de Cendres",
+   "carte": "f13",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "brulure",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "desc": "la nuit recouvre la ligne entière et brûle ce qu’elle voile"
+   },
+   "desc": "La nuit de cendres s’abat sur tous les ennemis et les enflamme (15 % × 2 tours)."
+  },
+  {
+   "id": "fournaise-eternelle",
+   "nom": "Fournaise Éternelle",
+   "carte": "f12",
+   "role": "invocation",
+   "cible": "les renforts",
+   "cout": 4,
+   "largeur": 2,
+   "base": "fournaise-invoquee",
+   "cran": "II",
+   "delta": {
+    "renait": true,
+    "desc": "les renforts renaissent tant que leur gardien tient, sans limite de durée"
+   },
+   "desc": "La fournaise ne s’éteint pas : ses renforts renaissent tant que le Gardien des Foyers tient."
+  },
+  {
+   "id": "linceul-de-suie",
+   "nom": "Linceul de Suie",
+   "carte": "f18",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "taux": 0.15,
+   "tours": 1,
+   "base": "etreinte-des-profondeurs",
+   "cran": "IV",
+   "delta": {
+    "taux": 0.15,
+    "tours": 1,
+    "desc": "le voile couvre la ligne entière et fige ceux qu’il recouvre"
+   },
+   "desc": "Le voile de suie descend sur tous les ennemis et les fige sur place."
+  },
+  {
+   "id": "fournaise-de-calcine",
+   "nom": "Fournaise de Calcine",
+   "carte": "f21",
+   "role": "malus",
+   "cible": "la zone",
+   "cout": 5,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 3,
+   "effet": "brulure",
+   "base": "colonne-de-feu",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 3,
+    "desc": "la brûlure de Calcine dure un tour de plus que la colonne ordinaire"
+   },
+   "desc": "La fournaise de la Dame des Cendres embrase la zone et la laisse se consumer (15 % × 3 tours)."
+  },
+  {
+   "id": "colere-de-vulcain",
+   "nom": "Colère de Vulcain",
+   "carte": "f22",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "brulure",
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "desc": "la colère enflamme la zone qu’elle frappe"
+   },
+   "desc": "Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours)."
+  },
+  {
+   "id": "aube-foliaire",
+   "nom": "Aube Foliaire",
+   "carte": "g7",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "soin": 0.15,
+    "desc": "l’aube traverse la canopée : la lumière rend au lanceur 15 % des dégâts"
+   },
+   "desc": "Le Patriarche du Bosquet lève l’aube foliaire : la lumière frappe tous les ennemis et nourrit son lanceur."
+  },
+  {
+   "id": "racine-monde",
+   "nom": "Racine-Monde",
+   "carte": "g8",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "seve",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "seve": 0.15,
+    "tours": 2,
+    "desc": "la racine s’ancre : la sève ronge la ligne entière (15 % × 2 tours)"
+   },
+   "desc": "La racine du monde traverse le champ, frappe tous les ennemis et la sève s’y installe (15 % × 2 tours)."
+  },
+  {
+   "id": "nuee-de-spores",
+   "nom": "Nuée de Spores",
+   "carte": "g16",
+   "role": "malus",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "taux": 0.1,
+   "tours": 3,
+   "effet": "seve",
+   "base": "seve-rongeuse",
+   "cran": "IV",
+   "delta": {
+    "seve": 0.1,
+    "tours": 3,
+    "desc": "la nuée couvre la ligne entière et la sève ronge trois tours"
+   },
+   "desc": "Mycola couvre tous les ennemis de sa nuée : la sève ronge la ligne trois tours (10 % × 3 tours)."
+  },
+  {
+   "id": "premiere-clarte",
+   "nom": "Première Clarté",
+   "carte": "g18",
+   "role": "soin",
+   "cible": "l’équipe",
+   "cout": 6,
+   "base": "onde-consacree",
+   "cran": "III",
+   "delta": {
+    "revive": 0.6,
+    "desc": "la première clarté rend à la lumière l’âme tombée la plus grande (60 % de ses PV)"
+   },
+   "desc": "Adriel lève la première clarté : l’équipe est pansée et l’âme tombée la plus grande revient à la lumière."
+  },
+  {
+   "id": "nuit-des-seves",
+   "nom": "Nuit des Sèves",
+   "carte": "g21",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "seve",
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "seve": 0.15,
+    "tours": 2,
+    "desc": "la nuit sème la sève : la zone frappée se met à ronger"
+   },
+   "desc": "Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours)."
+  },
+  {
+   "id": "voie-du-tombeau",
+   "nom": "Voie du Tombeau",
+   "carte": "k7",
+   "role": "invocation",
+   "cible": "les renforts",
+   "cout": 4,
+   "largeur": 2,
+   "base": "fournaise-invoquee",
+   "cran": "II",
+   "delta": {
+    "renait": true,
+    "desc": "la légion se relève tant que l’Archiliche règne sur les caveaux"
+   },
+   "desc": "L’Archiliche ouvre la voie du tombeau : les défunts sortent en renforts et se relèvent tant qu’elle règne."
+  },
+  {
+   "id": "abime-remontant",
+   "nom": "Abîme Remontant",
+   "carte": "k8",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "engloutit": true,
+    "desc": "l’abîme refermé ralentit ceux qu’il a frappés (2 tours)"
+   },
+   "desc": "L’Ancien Naufragé fait remonter l’abîme : la vague frappe tous les ennemis et les ralentit."
+  },
+  {
+   "id": "hurlement-fatal",
+   "nom": "Hurlement Fatal",
+   "carte": "k14",
+   "role": "controle",
+   "cible": "la zone",
+   "cout": 5,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "III",
+   "delta": {
+    "poison": 0.15,
+    "tours": 2,
+    "desc": "le souffle du hurlement empoisonne la zone glacée (15 % × 2 tours)"
+   },
+   "desc": "Le hurlement de Macha glace la zone sur place et son souffle l’empoisonne (15 % × 2 tours)."
+  },
+  {
+   "id": "fauchade-universelle",
+   "nom": "Fauchade Universelle",
+   "carte": "k17",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "fauche": 0.2,
+    "desc": "la Mort fauche : les ennemis sous 20 % de leur vie tombent sous la lame"
+   },
+   "desc": "La Mort fauche la ligne entière : tous tombent, et les plus affaiblis passent outre le seuil."
+  },
+  {
+   "id": "deuil-eternel",
+   "nom": "Deuil Éternel",
+   "carte": "k19",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "taux": 0.1,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "IV",
+   "delta": {
+    "malediction": true,
+    "desc": "le deuil marque les survivants : tout dégât qu’ils prennent est amplifié tant que dure le deuil"
+   },
+   "desc": "Ysolde pleure la ligne entière : les ennemis se figent et le deuil les marque."
+  },
+  {
+   "id": "harpon-du-naufrage",
+   "nom": "Harpon du Naufrage",
+   "carte": "k22",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "effet": "corrosion",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "corrosion": 0.15,
+    "tours": 2,
+    "desc": "le harpon rouille la zone qu’il frappe"
+   },
+   "desc": "Ahab harponne la zone et la rouille (corrosion 15 % × 2 tours)."
+  },
+  {
+   "id": "epee-de-laube",
+   "nom": "Épée de l’Aube",
+   "carte": "k27",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "purifie": true,
+    "desc": "l’épée de l’aube dissout la sève, le poison et la brûlure sur le lanceur et ses alliés"
+   },
+   "desc": "Jeanne d’Arc lève l’épée de l’aube : la lumière frappe tous les ennemis et purifie la ligne alliée."
+  },
+  {
+   "id": "lame-du-serment",
+   "nom": "Lame du Serment",
+   "carte": "k30",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "effet": "poison",
+   "taux": 0.1,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "poison": 0.1,
+    "tours": 2,
+    "desc": "le serment brisé empoisonne la ligne entière"
+   },
+   "desc": "Siegfried brise le serment sur la ligne entière et l’empoisonne (10 % × 2 tours)."
+  },
+  {
+   "id": "sentence-solaire",
+   "nom": "Sentence Solaire",
+   "carte": "z7",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "jugement": true,
+    "desc": "la sentence proclamée pèse : la ligne ennemie frappe moins fort (20 % de moins, 2 tours)"
+   },
+   "desc": "Le Héraut proclame la sentence solaire : la lumière frappe tous les ennemis et les écrase de son jugement."
+  },
+  {
+   "id": "couronnement",
+   "nom": "Couronnement",
+   "carte": "z8",
+   "role": "malus",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "effet": "brulure",
+   "taux": 0.1,
+   "tours": 2,
+   "base": "colonne-de-feu",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.1,
+    "tours": 2,
+    "desc": "la couronne embrase la ligne entière (10 % × 2 tours)"
+   },
+   "desc": "L’Astre Capiteux se couronne : la lumière embrase tous les ennemis (brûlure 10 % × 2 tours)."
+  },
+  {
+   "id": "eclipse-montante",
+   "nom": "Éclipse Montante",
+   "carte": "z15",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "aveugle": true,
+    "desc": "l’éclipse dérobe la lumière : la zone frappée perd 20 % de précision (2 tours)"
+   },
+   "desc": "Aurorine lève l’éclipse montante : la lumière frappe la zone puis la dérobe à ses habitants."
+  },
+  {
+   "id": "renaissance-pyrique",
+   "nom": "Renaissance Pyrique",
+   "carte": "z19",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "effet": "brulure",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "renaissance": true,
+    "desc": "la zone s’embrase (15 % × 2 tours) et la flamme qui renaît rend Pyrrha à la vie une fois par combat (60 % de ses PV)"
+   },
+   "desc": "Pyrrha embrase la zone et renaît de ses cendres une fois par combat."
+  },
+  {
+   "id": "immolation-retournee",
+   "nom": "Immolation Retournée",
+   "carte": "z22",
+   "role": "renvoi",
+   "cible": "l’équipe",
+   "cout": 5,
+   "largeur": "equipe",
+   "taux": 0.35,
+   "tours": 3,
+   "base": "renvoi-celeste",
+   "cran": "III",
+   "delta": {
+    "renvoi": 0.35,
+    "tours": 3,
+    "desc": "le phénix couvre l’équipe entière : 35 % des coups sont renvoyés pendant 3 tours"
+   },
+   "desc": "Fjalar déploie ses ailes : l’équipe renvoie 35 % des coups pendant 3 tours."
+  },
+  {
+   "id": "cantique-final",
+   "nom": "Cantique Final",
+   "carte": "z26",
+   "role": "boost",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe-renforcee",
+   "base": "hymne",
+   "cran": "IV",
+   "delta": {
+    "persiste": true,
+    "desc": "le cantique final ne s’éteint pas : le chant dure tant que Célestin est en vie"
+   },
+   "desc": "Célestin entonne le cantique final : l’équipe se dresse, boostée et affermie, tant que l’apôtre chante."
+  },
+  {
+   "id": "peine-capitale",
+   "nom": "Peine Capitale",
+   "carte": "z29",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "perce": true,
+    "desc": "la lame de la justicière ignore les boucliers"
+   },
+   "desc": "Justine exécute la peine capitale : la lame frappe tous les ennemis et ignore leurs boucliers."
+  },
+  {
+   "id": "prophetie-du-plein-jour",
+   "nom": "Prophétie du Plein Jour",
+   "carte": "z30",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "effet": "brulure",
+   "taux": 0.15,
+   "tours": 2,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "brulure": 0.15,
+    "tours": 2,
+    "amplifie": 0.2,
+    "desc": "la prophétie embrase la ligne (15 % × 2 tours) et dévoile les faiblesses : les dégâts qu’ils prennent sont amplifiés de 20 % pendant 2 tours"
+   },
+   "desc": "Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses."
+  },
+  {
+   "id": "arret-du-temps",
+   "nom": "Arrêt du Temps",
+   "carte": "d6",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 7,
+   "largeur": 5,
+   "effet": "stun",
+   "taux": 1,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "IV",
+   "delta": {
+    "stun": 1,
+    "desc": "le temps s’arrête : toute la ligne ennemie est figée 1 tour"
+   },
+   "desc": "Kairos, Arbitre du Seuil : le temps s’arrête sur toute la ligne ennemie."
+  },
+  {
+   "id": "refrain-eternel",
+   "nom": "Refrain Éternel",
+   "carte": "d12",
+   "role": "boost",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe",
+   "base": "hymne",
+   "cran": "IV",
+   "delta": {
+    "persiste": true,
+    "desc": "le chant ne s’éteint pas tant qu’Écho vit"
+   },
+   "desc": "Écho, Voix Miroir : le refrain du chœur ne s’éteint pas."
+  },
+  {
+   "id": "destin-tisse",
+   "nom": "Destin Tissé",
+   "carte": "d18",
+   "role": "manip",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe",
+   "base": "renvoi-celeste",
+   "cran": "IV",
+   "delta": {
+    "lien": 0.5,
+    "desc": "tous les alliés sont liés à 50 %"
+   },
+   "desc": "Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %)."
   }
  ]
 }

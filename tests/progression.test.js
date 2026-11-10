@@ -11,13 +11,13 @@ test('arbres : 100 % des références résolues, aucun doublon de nom (ACC-1-1)'
   assert.equal(new Set(names).size, names.length);
 });
 
-test('éveil de l\u2019Ange Éveillé : l\u2019Ange Gardien disparaît, la mauvaise volonté est portée par l\u2019Éveillé (ACC-1-2)', () => {
+test('éveil de l\u2019Jeune Séraphin : l\u2019Ange Gardien disparaît, la mauvaise volonté est portée par l\u2019Éveillé (ACC-1-2)', () => {
   const E = loadEngine();
   const eveil = E.eveilOf('n13', 'p1');
-  assert.ok(eveil, 'l\u2019éveil n13 -> Ange Éveillé existe dans trees.json');
+  assert.ok(eveil, 'l\u2019éveil n13 -> Jeune Séraphin existe dans trees.json');
   assert.equal(eveil.effet, 'remplace');
   assert.equal(eveil.disparait, 'p2');
-  assert.ok(eveil.portes.some((p) => p.id === 'mauvaise-volonte'), 'la mauvaise volonté part de l\u2019Ange Éveillé');
+  assert.ok(eveil.portes.some((p) => p.id === 'mauvaise-volonte'), 'la mauvaise volonté part de l\u2019Jeune Séraphin');
   const instances = [
     { iid: 'i1', id: 'n13', lvl: 10, xp: 0 },
     { iid: 'i2', id: 'p2', lvl: 5, xp: 0, acc: [{ name: 'Garde céleste', cost: 4, mult: 1.6 }] },
@@ -28,7 +28,7 @@ test('éveil de l\u2019Ange Éveillé : l\u2019Ange Gardien disparaît, la mauva
   assert.equal(instances[0].id, 'p1');
   assert.ok(instances[0].acc.some((s) => s.name === 'Garde céleste'), 'les pouvoirs de l\u2019Ange Gardien passent à l\u2019Éveillé');
   const noms = new Set(E.DATA.cards.map((c) => c.name));
-  assert.ok(noms.has('Ange Éveillé') && noms.has('Éveillé du Seuil'), 'les deux noms coexistent sans collision');
+  assert.ok(noms.has('Jeune Séraphin') && noms.has('Éveillé du Seuil'), 'les deux noms coexistent sans collision');
 });
 
 test('les crans de race +10/+20/+30 s\u2019appliquent aux stats, par données uniquement (ACC-1-3)', () => {
@@ -192,4 +192,29 @@ test('lot 5 : fusion consomme 2 exemplaires, malédiction transforme sans choix,
   assert.equal(rOff.ok, false, 'équilibre sans ange+démon = refusé');
   const rOn = E.applySpecialEvo({ iid: 'i3', id: 'p1' }, evt, { owned: ['n13', 'n14'] });
   assert.ok(rOn.ok && rOn.spawned.id === 'd6', 'équilibre avec ange+démon = Kairos');
+});
+
+// ---------- lot 6 : contenu v3 (EXI-V) ----------
+test('lot 6 : les 4 nouvelles familles v3 ont leur échelle complète C→L et leurs références résolvent (EXI-V-1)', () => {
+  const E = loadEngine();
+  assert.deepEqual(E.errors, []);
+  for (const fam of ['crepuscule', 'vol', 'zele', 'appel']) {
+    const f = E.getFamily(fam);
+    assert.ok(f, `famille ${fam} posée`);
+    assert.equal(f.steps.length, 6, `${fam} : 6 paliers`);
+    const rars = f.steps.map((id) => E.getCard(id)?.rarity);
+    assert.deepEqual(rars, ['C', 'UC', 'R', 'SR', 'UR', 'L'], `${fam} : C→L sans saut`);
+    const sorts = E.DATA['lineage-spells'][fam];
+    assert.equal(sorts.length, 6);
+    assert.deepEqual(sorts.map((s) => s.cost), [2, 3, 5, 9, 14, 20], `${fam} : échelle de coûts 2/3/5/9/14/20`);
+    for (let i = 1; i < 6; i++) assert.ok(E.evoTargetsOf(f.steps[i - 1]).includes(f.steps[i]), `${fam} : ${f.steps[i - 1]} → ${f.steps[i]}`);
+  }
+});
+
+test('lot 6 : renommages actés (EXI-V-2) : p1 = Jeune Séraphin (id inchangé), Écuyer Fervent présent', () => {
+  const E = loadEngine();
+  assert.equal(E.getCard('p1').name, 'Jeune Séraphin');
+  const ecuyer = E.DATA.cards.find((c) => c.name === 'Écuyer Fervent');
+  assert.ok(ecuyer, 'Écuyer Fervent existe (entrée paladin → Légion Solaire)');
+  assert.ok(E.getFamily('zele').steps.includes(ecuyer.id));
 });

@@ -285,5 +285,181 @@
    "big": true,
    "desc": "Le bosquet entier se lève et marche au combat."
   }
+ ],
+ "crepuscule": [
+  {
+   "name": "Griffe Nocturne",
+   "cost": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Sort de lignage Famille du Crépuscule, palier C."
+  },
+  {
+   "name": "Voile d’Ombre",
+   "cost": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Sort de lignage Famille du Crépuscule, palier UC."
+  },
+  {
+   "name": "Malédiction du Soir",
+   "cost": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Sort de lignage Famille du Crépuscule, palier R."
+  },
+  {
+   "name": "Danse des Ombres",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Sort de lignage Famille du Crépuscule, palier SR."
+  },
+  {
+   "name": "Oubli Éternel",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Sort de lignage Famille du Crépuscule, palier UR."
+  },
+  {
+   "name": "Nuit Sans Fin",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Sort de lignage Famille du Crépuscule, palier L."
+  }
+ ],
+ "vol": [
+  {
+   "name": "Larcin Agile",
+   "cost": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Sort de lignage Famille du Vol, palier C."
+  },
+  {
+   "name": "Coup de Jarnac",
+   "cost": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Sort de lignage Famille du Vol, palier UC."
+  },
+  {
+   "name": "Dague dans le Dos",
+   "cost": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Sort de lignage Famille du Vol, palier R."
+  },
+  {
+   "name": "Fauchage",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Sort de lignage Famille du Vol, palier SR."
+  },
+  {
+   "name": "Embuscade",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Sort de lignage Famille du Vol, palier UR."
+  },
+  {
+   "name": "Coup de Grâce",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Sort de lignage Famille du Vol, palier L."
+  }
+ ],
+ "zele": [
+  {
+   "name": "Étincelle de Foi",
+   "cost": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Sort de lignage Famille du Zèle, palier C."
+  },
+  {
+   "name": "Hymne du Matin",
+   "cost": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Sort de lignage Famille du Zèle, palier UC."
+  },
+  {
+   "name": "Bénédiction du Jour",
+   "cost": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Sort de lignage Famille du Zèle, palier R."
+  },
+  {
+   "name": "Croisade",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Sort de lignage Famille du Zèle, palier SR."
+  },
+  {
+   "name": "Aurore Radieuse",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Sort de lignage Famille du Zèle, palier UR."
+  },
+  {
+   "name": "Lumière Éternelle",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Sort de lignage Famille du Zèle, palier L."
+  }
+ ],
+ "appel": [
+  {
+   "name": "Appel Mineur",
+   "cost": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Sort de lignage École des Invocations, palier C."
+  },
+  {
+   "name": "Élémentaire de Braise",
+   "cost": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Sort de lignage École des Invocations, palier UC."
+  },
+  {
+   "name": "Meute Spirituelle",
+   "cost": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Sort de lignage École des Invocations, palier R."
+  },
+  {
+   "name": "Portail",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Sort de lignage École des Invocations, palier SR."
+  },
+  {
+   "name": "Légion Céleste",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Sort de lignage École des Invocations, palier UR."
+  },
+  {
+   "name": "Appel Suprême",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Sort de lignage École des Invocations, palier L."
+  }
  ]
 }

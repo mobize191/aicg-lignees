@@ -118,18 +118,648 @@
   }
  },
  "forge": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "f1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f14": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "f3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f24": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f8": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f11": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "f6": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "f17": {
+    "fusion": "chant-de-sirene",
+    "cran": "IV"
+   },
+   "f16": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "II"
+   },
+   "f7": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "f9": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "f10": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "f15": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "f19": {
+    "fusion": "colonne-de-feu",
+    "cran": "II"
+   },
+   "f20": {
+    "fusion": "colonne-de-feu",
+    "cran": "III"
+   },
+   "f5": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "f23": {
+    "fusion": "fournaise-invoquee",
+    "cran": "II"
+   },
+   "f12": {
+    "unique": "fournaise-eternelle"
+   },
+   "f13": {
+    "unique": "nuit-de-cendres"
+   },
+   "f18": {
+    "unique": "linceul-de-suie"
+   },
+   "f21": {
+    "unique": "fournaise-de-calcine"
+   },
+   "f22": {
+    "unique": "colere-de-vulcain"
+   }
+  }
  },
  "bosquet": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "g1": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "g2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "g3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "g4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "g5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g6": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "g10": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "g11": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "g12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "g13": {
+    "fusion": "fournaise-invoquee",
+    "cran": "II"
+   },
+   "g14": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g15": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "g17": {
+    "fusion": "onde-consacree",
+    "cran": "III"
+   },
+   "g19": {
+    "fusion": "chant-de-sirene",
+    "cran": "IV"
+   },
+   "g20": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g7": {
+    "unique": "aube-foliaire"
+   },
+   "g8": {
+    "unique": "racine-monde"
+   },
+   "g16": {
+    "unique": "nuee-de-spores"
+   },
+   "g18": {
+    "unique": "premiere-clarte"
+   },
+   "g21": {
+    "unique": "nuit-des-seves"
+   }
+  }
  },
  "crypte": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "k1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k23": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "k3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "k4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "k5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k20": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k28": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "k13": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "k6": {
+    "fusion": "hurlement",
+    "cran": "III"
+   },
+   "k9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "k10": {
+    "fusion": "guet-des-fonds",
+    "cran": "I"
+   },
+   "k11": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "k12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "k15": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "k16": {
+    "fusion": "fournaise-invoquee",
+    "cran": "III"
+   },
+   "k18": {
+    "fusion": "oeil-du-malheur",
+    "cran": "IV"
+   },
+   "k21": {
+    "fusion": "marque-corrosive",
+    "cran": "II"
+   },
+   "k24": {
+    "fusion": "guet-des-fonds",
+    "cran": "III"
+   },
+   "k25": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "k26": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "k29": {
+    "fusion": "guet-des-fonds",
+    "cran": "IV"
+   },
+   "k7": {
+    "unique": "voie-du-tombeau"
+   },
+   "k8": {
+    "unique": "abime-remontant"
+   },
+   "k14": {
+    "unique": "hurlement-fatal"
+   },
+   "k17": {
+    "unique": "fauchade-universelle"
+   },
+   "k19": {
+    "unique": "deuil-eternel"
+   },
+   "k22": {
+    "unique": "harpon-du-naufrage"
+   },
+   "k27": {
+    "unique": "epee-de-laube"
+   },
+   "k30": {
+    "unique": "lame-du-serment"
+   }
+  }
  },
  "zenith": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "z1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "z2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "z3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "z4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "z5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z6": {
+    "fusion": "morsure-decume",
+    "cran": "IV"
+   },
+   "z13": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z14": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z28": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "z16": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "z17": {
+    "fusion": "colonne-de-feu",
+    "cran": "II"
+   },
+   "z18": {
+    "fusion": "colonne-de-feu",
+    "cran": "III"
+   },
+   "z12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "z23": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "z20": {
+    "fusion": "renvoi-celeste",
+    "cran": "I"
+   },
+   "z21": {
+    "fusion": "renvoi-celeste",
+    "cran": "II"
+   },
+   "z9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "z10": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "z11": {
+    "fusion": "onde-consacree",
+    "cran": "III"
+   },
+   "z24": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "z25": {
+    "fusion": "hymne",
+    "cran": "III"
+   },
+   "z27": {
+    "fusion": "oeil-du-malheur",
+    "cran": "II"
+   },
+   "z7": {
+    "unique": "sentence-solaire"
+   },
+   "z8": {
+    "unique": "couronnement"
+   },
+   "z15": {
+    "unique": "eclipse-montante"
+   },
+   "z19": {
+    "unique": "renaissance-pyrique"
+   },
+   "z22": {
+    "unique": "immolation-retournee"
+   },
+   "z26": {
+    "unique": "cantique-final"
+   },
+   "z29": {
+    "unique": "peine-capitale"
+   },
+   "z30": {
+    "unique": "prophetie-du-plein-jour"
+   }
+  }
  },
  "divin": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "d1": {
+    "fusion": "hurlement",
+    "cran": "I"
+   },
+   "d2": {
+    "fusion": "hurlement",
+    "cran": "II"
+   },
+   "d3": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "IV"
+   },
+   "d4": {
+    "fusion": "hurlement",
+    "cran": "IV"
+   },
+   "d5": {
+    "fusion": "hymne",
+    "cran": "IV"
+   },
+   "d6": {
+    "unique": "arret-du-temps"
+   },
+   "d7": {
+    "fusion": "renvoi-celeste",
+    "cran": "I"
+   },
+   "d8": {
+    "fusion": "hymne",
+    "cran": "I"
+   },
+   "d9": {
+    "fusion": "renvoi-celeste",
+    "cran": "III"
+   },
+   "d10": {
+    "fusion": "hymne",
+    "cran": "II"
+   },
+   "d11": {
+    "fusion": "renvoi-celeste",
+    "cran": "IV"
+   },
+   "d12": {
+    "unique": "refrain-eternel"
+   },
+   "d13": {
+    "fusion": "marque-corrosive",
+    "cran": "I"
+   },
+   "d14": {
+    "fusion": "morsure-putride",
+    "cran": "II"
+   },
+   "d15": {
+    "fusion": "marque-corrosive",
+    "cran": "IV"
+   },
+   "d16": {
+    "fusion": "morsure-putride",
+    "cran": "III"
+   },
+   "d17": {
+    "fusion": "morsure-putride",
+    "cran": "IV"
+   },
+   "d18": {
+    "unique": "destin-tisse"
+   },
+   "n13": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "n14": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "n15": {
+    "fusion": "oeil-du-malheur",
+    "cran": "II"
+   },
+   "p1": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "p2": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   }
+  }
+ },
+ "recrues": {
+  "trie": true,
+  "signatures": {
+   "n1": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "n2": {
+    "fusion": "decharge-arcanique",
+    "cran": "I"
+   },
+   "n3": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "n4": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "n5": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "n6": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "n7": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "n8": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "n9": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "n10": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "n11": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "n12": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "a3": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "a4": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "a9": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "s2": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "s3": {
+    "fusion": "oeil-du-malheur",
+    "cran": "I"
+   },
+   "a34": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a35": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "a36": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "a37": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "a38": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a39": {
+    "fusion": "guet-des-fonds",
+    "cran": "I"
+   },
+   "a40": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "a41": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "a42": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "a43": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "a44": {
+    "fusion": "chant-de-sirene",
+    "cran": "II"
+   },
+   "a45": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "II"
+   },
+   "a46": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "a47": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a48": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "a49": {
+    "fusion": "guet-des-fonds",
+    "cran": "II"
+   }
+  }
  }
 }

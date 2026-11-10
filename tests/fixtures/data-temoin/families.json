@@ -82,5 +82,53 @@
    "a28"
   ],
   "future": []
+ },
+ "crepuscule": {
+  "name": "Famille du Crépuscule",
+  "steps": [
+   "q1",
+   "q2",
+   "q3",
+   "q4",
+   "q5",
+   "q6"
+  ],
+  "future": []
+ },
+ "vol": {
+  "name": "Famille du Vol",
+  "steps": [
+   "t1",
+   "t2",
+   "t3",
+   "t4",
+   "t5",
+   "t6"
+  ],
+  "future": []
+ },
+ "zele": {
+  "name": "Famille du Zèle",
+  "steps": [
+   "u1",
+   "u2",
+   "u3",
+   "u4",
+   "u5",
+   "u6"
+  ],
+  "future": []
+ },
+ "appel": {
+  "name": "École des Invocations",
+  "steps": [
+   "v1",
+   "v2",
+   "v3",
+   "v4",
+   "v5",
+   "v6"
+  ],
+  "future": []
  }
 }
