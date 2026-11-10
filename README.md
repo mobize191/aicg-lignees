@@ -20,6 +20,8 @@ Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : co
 
 Le dossier `docs/` est organisé par usage : commencer par `docs/00-SOMMAIRE.md` (la carte complète : où trouver quoi, où ranger quoi).
 
+- `AGENT.md` : le guide d'entrée pour agents (règles d'or, chaîne de preuve, discipline) ; `CHANGELOG.md` : l'historique des versions.
+
 - `docs/prompt-lancement.md` : le prompt à copier au début de chaque session agent (contexte, règles d'or, chaîne de preuve).
 - `docs/roadmap.md` : l'état du prototype version par version et ce qui reste à faire.
 - `docs/regles-jeu.md` : les règles actées du jeu, du combat aux donjons.

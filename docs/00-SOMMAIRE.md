@@ -4,6 +4,8 @@
 
 ## Pour commencer
 
+- `AGENT.md` (à la racine du repo) : le guide d'entrée pour agents — règles d'or, chaîne de preuve, discipline.
+- `CHANGELOG.md` (à la racine du repo) : l'historique des versions du jeu.
 - `docs/prompt-lancement.md` : le prompt à copier au début de chaque session agent (contexte, règles d'or, discipline).
 - `docs/roadmap.md` : état du jeu, historique des versions, reste à faire dans l'ordre.
 - `docs/00-SOMMAIRE.md` : cette carte (où trouver quoi, où ranger quoi).

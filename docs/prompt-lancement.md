@@ -1,6 +1,6 @@
 # Prompt de lancement : AICG, Lignées
 
-> À copier tel quel au début d'une session agent (Vibe, Claude Code, Cursor, OpenCode...). Il installe le contexte, les règles d'or et la discipline du projet.
+> À copier tel quel au début d'une session agent (Vibe, Claude Code, Cursor, OpenCode...). Il installe le contexte, les règles d'or et la discipline du projet. Ce prompt reprend `AGENT.md` (la racine du repo), qui reste le point d'entrée de référence pour les agents.
 
 ---
 
