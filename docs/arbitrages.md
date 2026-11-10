@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — spec et plan d'exécution de la boucle de jeu v2 (brief du couloir 1)
+
+`docs/design/boucle-v2-spec-plan.md` : exigences moteur/data/UI et plan en 6 lots — (1) action Objet + achat minimal de potions + suppression de la régén/persistance + hook autel + migration ; (2) niveaux de donjon 1→25 et bandes de rareté ; (3) départ à 2 cartes + recrutement naturel ; (4) drops v2 (matériaux, pièces et matière de boss, gemmes brutes vendables) ; (5) XP longue échelle + sans perte nette + solos archivés + rang N des naissances ; (6) baseline finale documentée. Le moteur d'errance avec sprites placeholder reste possible en parallèle (roadmap point 9), hors périmètre de fermeture du chantier. Références : regles-jeu §2/§5/§6, economie-v2-catalogues §1/§6, errance-topdown §7/§8.
+
 ## 2026-11-11 : ACTÉ — calibrage post-lignes et précisions boucle v2 (retour de Marc-Olivier)
 
 Réponses aux questions du couloir 1 (entrée « PROPOSÉ — sessions 5-7 » ci-dessous) et à l'ordonnancement de la boucle v2 :
