@@ -103,6 +103,7 @@ Bonus de complétion totale (les 3 faites) : **1 pierre d'éveil** (acté). Le p
 - Fiche personnage : 2 slots (arme, armure) ; stats affichées **base + bonus %** recalculées.
 - Page équipe : 2 slots d'équipe partagés par toute l'équipe.
 - Vue équipement du rayon Boutique reliée au même inventaire.
+- Version minimale (page groupée : potions, matériaux, gemmes, pièces) livrée dès le **lot 4 de la boucle de jeu v2** (`boucle-v2-spec-plan.md`, ACTÉ 11/11) ; la maquette complète arrive avec le bloc visuel.
 
 ## 6. Impact moteur et migration
 

@@ -2,6 +2,14 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — écran de Récompenses après chaque combat, inventaire minimal au lot 4, errance après la boucle v2 (retour de Marc-Olivier)
+
+1. **Écran « Récompenses » après chaque combat** : or gagné, XP, drops (matériaux, pièces) aux couleurs de rareté, carte recrue le cas échéant ; chaque élément est cliquable, bouton « Tout ramasser » pour reprendre le donjon. Aucun drop invisible.
+2. **Inventaire minimal dès le lot 4 de la boucle v2** (révision d'ordonnancement datée) : page Inventaire groupée (potions, matériaux par zone, gemmes, pièces possédées) + équipement posé sur la fiche (2 slots personnage arme/armure + 2 slots d'équipe, pièces éligibles au clic, stats base + bonus % et bonus de set appliqués au moteur). La maquette complète, le craft et le rayon équipement de la Boutique restent au bloc visuel.
+3. **Errance après la boucle v2** : confirmé. Le chantier errance (selon `docs/design/errance-topdown.md`, hub-ville en porte d'entrée) démarre à la fermeture du lot 6 ; sprites placeholder tant que l'art du héros attend la validation de la planche vague 1.
+
+Spec mise à jour : `docs/design/boucle-v2-spec-plan.md` (§1.6, §2, §3) ; renvoi ajouté dans `docs/design/economie-v2-catalogues.md` (§5).
+
 ## 2026-11-11 : ACTÉ — brief du couloir design/graphisme : maquettes du bloc visuel en parallèle
 
 `docs/design/design-graphisme-v2-plan.md` : la production design/graphisme démarre en parallèle du couloir 1 (parallélisation actée). Livrables : charte graphique v2 transverse ; maquettes dans l'ordre du code (économie v2 → Accueil/hub-ville → errance, zone témoin Marées) ; habillage des nouveautés boucle v2 (départ 2 cartes, sélecteur de marche, action Objet, toasts de recrue) ; DA (héros dédié après validation de la planche vague 1 et cycle de marche WAN, série 2 prioritaire). Une maquette validée par Marc-Olivier avant codage ; le couloir ne touche ni `src/` ni `data/`. PROPOSÉ en son sein : icônes d'équipement par type et niveau (pas un art par objet).

@@ -46,6 +46,9 @@
 - **Matériaux de la saveur de chaque zone** sur les monstres ; **pièce d'équipement et matière garanties sur les boss** ; équipement à **taux très faible** partout ailleurs (sets par zone : `economie-v2-catalogues.md` §2).
 - **Gemmes brutes vendables** (révision datée du 11/11) ; les polies, gravées et éternelles restent aux boss.
 - Structure data : tables de drops par zone/matériau, référencées par le futur craft (bloc visuel). Le craft en ville n'est **pas** dans ce chantier.
+- **Écran « Récompenses » après chaque combat (ACTÉ 11/11)** : or gagné, XP, liste des drops aux couleurs de rareté, carte recrue le cas échéant ; chaque élément est cliquable, un bouton « Tout ramasser » referme et rend la main. Aucun drop invisible.
+- **Inventaire minimal (ACTÉ 11/11)** : page Inventaire groupée (potions, matériaux par zone, gemmes, pièces possédées) livrée avec ce lot ; la maquette complète, le craft et le rayon Boutique restent au bloc visuel (`economie-v2-catalogues.md` §5).
+- **Équipement posé sur la fiche (ACTÉ 11/11)** : 2 slots personnage (arme typée + armure générique) et 2 slots d'équipe ; taper un slot ouvre la liste des pièces éligibles ; stats base + bonus % et bonus de set appliqués au moteur (`economie-v2-catalogues.md` §2).
 
 ### 1.7 Progression (Lot 5)
 
@@ -61,6 +64,8 @@
 - Sélecteur de marche : niveau de donjon et bande de rareté affichés en toutes lettres.
 - Écran de départ : les 4 propositions côte à côte, la choisie s'anime, l'aléatoire se révèle.
 - Mobile : boutons ≥ 32 px (correctif terrain acté), aucun panneau plein écran sans bouton de fermeture.
+- Panneau « Récompenses » en fin de combat : chaque gain cliquable (couleurs de rareté), « Tout ramasser » reprend le donjon ; jamais de drop invisible.
+- Page Inventaire accessible depuis le menu ☰ (groupes : potions, matériaux, gemmes, pièces) ; équipement visible sur la fiche de chaque personnage.
 - Non-régression : FX vidéos v0.48 (toggle 🎬) et ciblage v2 intacts.
 
 ## 3. Plan d'exécution
@@ -70,7 +75,7 @@
 | 1 | Action Objet + achat minimal + régén/persistance + hook autel + migration | recalibré |
 | 2 | Niveaux de donjon 1 → 25, bandes de rareté, bestiaires par mode | recalibré |
 | 3 | Départ à 2 cartes + recrutement naturel | recalibré |
-| 4 | Drops v2 (matériaux, pièces et matière de boss, gemmes brutes) | recalibré |
+| 4 | Drops v2 (matériaux, pièces et matière de boss, gemmes brutes) + écran Récompenses + inventaire minimal + équipement sur fiche | recalibré |
 | 5 | XP longue échelle + sans perte nette + solos archivés + rang N | recalibré |
 | 6 | Baseline finale : digest documenté (N = 10 000, 0 exception, 0 marathon), build/tests/smoke, arbitrages | nouvelle baseline |
 
