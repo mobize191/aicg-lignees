@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le tri du Bosquet Profond (T2.2 du grand chantier)
+
+- **21 signatures résolues : 5 uniques + 16 fondues** (gabarit des Marées, 14.5 étape 2). Le biome `bosquet` est marqué `trie` dans `fusion-map.json`, le validateur couvre 100 % de ses signatures, le test T2.1-b interdit toute fusion vers un cran vide.
+- **Une ligne d'école naît du Bosquet** : `Sève Rongeuse` (le Mauvais Œil, malus, mot-clé sève déjà présent dans keywords.json ; taux normalisés sur l'échelle des crans 25/20 % × 2 tours, crans I-II ; la zone et le rang tous attendent un autre biome ou la zone d'errance). L'Étreinte des Profondeurs I n'est plus vide (30 %, 1 ennemi : Étreinte de Racines g1).
+- **Les 5 uniques suivent la décision 3** (base d'école + cran + delta) : Aube Foliaire (g7, base Lame d'Écume IV + la lumière rend au lanceur 15 % des dégâts ; le vol de vie se câble en Phase 5), Racine-Monde (g8, le M, base Lame d'Écume IV + sève 15 % × 2 tours), Nuée de Spores (g16, base Sève Rongeuse IV + la sève ronge 3 tours), Première Clarté (g18, base Onde Consacrée III + rend à la lumière l'âme tombée la plus grande, 60 % de ses PV), Nuit des Sèves (g21, base Lame d'Écume III + sève 15 % × 2 tours). Première unique à base d'entrée d'école (Onde Consacrée, le geste le plus évocateur des dryades) : le test T2.2 admet école et entrées comme bases.
+- **Affectation des fondues** (règle 3, la largeur native décide) : la Lame prend g2 (I), g3/g4 (II), g5/g6/g20 (III, le prisme divise le rayon, le poing du colosse et les lames de branchage fauchent la zone) ; l'Étreinte g1 (I) ; la Barrière g12 (I, 1 allié) et g11 (III, la voûte couvre l'équipe) ; le Baume d'entrée g9 (I) et g17 (III) ; l'Appel g10 (I, 1 renfort) et g13 (II, 2 renforts sylvestres) ; la Sève Rongeuse g14 (I) et g15 (II) ; le Chant g19 (IV, le slow d'Ombre Tissée porte à toute la ligne, contrôle de masse, précédents e27/f17).
+- **Migration v14** (EXI-T-4) : le mécanisme de re-mappage est factorisé (`triRemap` dans migrate.js) et rejoué à chaque biome qui passe trié ; une save v13 avec des sorts Bosquet legacy les re-mappe sur les crans, la Crypte non triée garde son chemin legacy (testé).
+- Preuve : 80/80 tests (4 neufs : tri du Bosquet, uniques décision 3, cast des crans, migration v13 -> v14 ; le test anti cran vide couvre le nouveau biome), smoke 164 checks, digest `7dfab0a2…` **inchangé** (couche data et sauvegarde, aucune maths de combat).
+
 ## 2026-11-10 : ACTÉ — le tri de la Forge Cendrée (T2.1 du grand chantier)
 
 - **24 signatures résolues : 5 uniques + 19 fondues** (gabarit des Marées, 14.5 étape 1). Le biome `forge` est marqué `trie` dans `fusion-map.json`, le validateur couvre 100 % de ses signatures.

@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (8), `lignee` (42), `uniques` (12).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (9), `lignee` (42), `uniques` (17).
 
 ## Sorts communs (2)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (8)
+## Sorts d'ecolage (9)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -38,12 +38,13 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | --- | --- | --- | --- | --- | --- |
 | morsure-decume | Lame d’Écume | lame | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 | chant-de-sirene | Mélodie envoûtante | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
-| etreinte-des-profondeurs | Étreinte des Profondeurs | entrave | controle | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 25%, 1 tour(s) ; III : 5 / 3 ; taux 20%, 1 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| etreinte-des-profondeurs | Étreinte des Profondeurs | entrave | controle | - | I : 3 / 1 ; taux 30%, 1 tour(s) ; II : 4 / 2 ; taux 25%, 1 tour(s) ; III : 5 / 3 ; taux 20%, 1 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | carapace-de-corail | Barrière de Corail | rempart | bouclier | - | I : 3 / 1 ; x1.7 ; II : 4 / 2 ; x1.5 ; III : 5 / equipe ; x1.3 ; IV : 6 / equipe-renforcee ; x1.6 |
 | marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
 | colonne-de-feu | Colonne de Feu | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | fournaise-invoquee | Fournaise Invoquée | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| seve-rongeuse | Sève Rongeuse | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; VIDE : attend un autre biome ou la zone d’errance ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 
 ## Sorts de lignee (42)
 
@@ -94,7 +95,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
 
-## Sorts uniques (12)
+## Sorts uniques (17)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -110,6 +111,11 @@ Un sort par palier de famille, appris en montant la lignee.
 | linceul-de-suie | Linceul de Suie | f18 | controle | tous les ennemis | 6 | - | Le voile de suie descend sur tous les ennemis et les fige sur place. |
 | fournaise-de-calcine | Fournaise de Calcine | f21 | malus | la zone | 5 | - | La fournaise de la Dame des Cendres embrase la zone et la laisse se consumer (15 % × 3 tours). |
 | colere-de-vulcain | Colère de Vulcain | f22 | degats | la zone | 5 | 2.2 | Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours). |
+| aube-foliaire | Aube Foliaire | g7 | degats | tous les ennemis | 6 | 2.6 | Le Patriarche du Bosquet lève l’aube foliaire : la lumière frappe tous les ennemis et nourrit son lanceur. |
+| racine-monde | Racine-Monde | g8 | degats | tous les ennemis | 6 | 2.6 | La racine du monde traverse le champ, frappe tous les ennemis et la sève s’y installe (15 % × 2 tours). |
+| nuee-de-spores | Nuée de Spores | g16 | malus | tous les ennemis | 6 | - | Mycola couvre tous les ennemis de sa nuée : la sève ronge la ligne trois tours (10 % × 3 tours). |
+| premiere-clarte | Première Clarté | g18 | soin | l’équipe | 6 | - | Adriel lève la première clarté : l’équipe est pansée et l’âme tombée la plus grande revient à la lumière. |
+| nuit-des-seves | Nuit des Sèves | g21 | degats | la zone | 5 | 2.2 | Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours). |
 
 ## Ecoles (data/schools.json)
 
@@ -205,4 +211,30 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | f18 | - | - |
 | f21 | - | - |
 | f22 | - | - |
+
+### Donjon bosquet
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| g1 | etreinte-des-profondeurs | I |
+| g2 | morsure-decume | I |
+| g3 | morsure-decume | II |
+| g4 | morsure-decume | II |
+| g5 | morsure-decume | III |
+| g6 | morsure-decume | III |
+| g9 | onde-consacree | I |
+| g10 | fournaise-invoquee | I |
+| g11 | carapace-de-corail | III |
+| g12 | carapace-de-corail | I |
+| g13 | fournaise-invoquee | II |
+| g14 | seve-rongeuse | I |
+| g15 | seve-rongeuse | II |
+| g17 | onde-consacree | III |
+| g19 | chant-de-sirene | IV |
+| g20 | morsure-decume | III |
+| g7 | - | - |
+| g8 | - | - |
+| g16 | - | - |
+| g18 | - | - |
+| g21 | - | - |
 

@@ -68,7 +68,7 @@ test('fusion des Marées : 30 signatures sur 30 résolues, 7 uniques + 23 fondue
   // un monstre des Marées caste son cran de fusion ; un biome non trié garde sa signature
   assert.deepEqual(E.resolveSignature('e1'), { sort: 'morsure-decume', cran: 'I' });
   assert.deepEqual(E.resolveSignature('e13'), { unique: 'maree-noire' });
-  assert.equal(E.resolveSignature('g1'), null, 'le Bosquet attend son tri');
+  assert.equal(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
 });
 
 test('fin du verrou de classe : deux profils, même école ouverte, même sort, même effet (ACC-2-5)', () => {
@@ -159,7 +159,7 @@ test('tri de la Forge : 24 signatures resolues, 5 uniques + 19 fondues (T2.1, AC
   assert.deepEqual(E.resolveSignature('f20'), { sort: 'colonne-de-feu', cran: 'III' });
   assert.deepEqual(E.resolveSignature('f23'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Gardiens Invoques, 2 renforts');
   assert.deepEqual(E.resolveSignature('f13'), { unique: 'nuit-de-cendres' }, 'le M garde son unique');
-  assert.equal(E.resolveSignature('g1'), null, 'le Bosquet attend son tri');
+  assert.equal(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
 });
 
 test('les uniques de la Forge suivent la decision 3 : base d\u2019ecole + cran + delta (T2.1)', () => {
@@ -219,4 +219,64 @@ test('une fusion ne pointe jamais vers un cran vide ou absent (T2.1-b, EXI-P2-3)
   // les crans remplis par la Forge reprennent l'échelle des taux (14.3)
   assert.equal(E.cranOf('etreinte-des-profondeurs', 'II').taux, 0.25, 'Filet de Suie remplit l\u2019Étreinte II');
   assert.equal(E.cranOf('carapace-de-corail', 'II').mult, 1.5, 'Cendre Protectrice remplit la Barrière II');
+});
+
+
+// ---------- T2.2 : le tri du Bosquet Profond (lot 2, gabarit des Marees) ----------
+test('tri du Bosquet : 21 signatures resolues, 5 uniques + 16 fondues (T2.2, ACC-T)', () => {
+  const E = loadEngine();
+  const bosquet = E.DATA['fusion-map'].bosquet;
+  assert.ok(bosquet.trie, 'le biome bosquet est marque trie');
+  const ids = Object.keys(bosquet.signatures);
+  assert.equal(ids.length, 21);
+  const uniques = ids.filter((id) => bosquet.signatures[id].unique);
+  const fondues = ids.filter((id) => bosquet.signatures[id].fusion);
+  assert.equal(uniques.length, 5);
+  assert.equal(fondues.length, 16);
+  for (const id of ids) assert.ok(E.resolveSignature(id), `signature ${id} resolue`);
+  assert.deepEqual(E.resolveSignature('g1'), { sort: 'etreinte-des-profondeurs', cran: 'I' }, 'Etreinte de Racines remplit l\u2019Etreinte I');
+  assert.deepEqual(E.resolveSignature('g14'), { sort: 'seve-rongeuse', cran: 'I' }, 'Spores Vampires, la seve rongeuse native');
+  assert.deepEqual(E.resolveSignature('g13'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Seve Eveillee, 2 renforts sylvestres');
+  assert.deepEqual(E.resolveSignature('g17'), { sort: 'onde-consacree', cran: 'III' }, 'Rosee Radieuse greffe l\u2019entree de baume');
+  assert.deepEqual(E.resolveSignature('g19'), { sort: 'chant-de-sirene', cran: 'IV' }, 'Ombre Tissee, le controle de masse');
+  assert.deepEqual(E.resolveSignature('g16'), { unique: 'nuee-de-spores' }, 'Mycola garde son unique');
+  assert.deepEqual(E.resolveSignature('k1'), null, 'la Crypte attend son tri');
+});
+
+test('les uniques du Bosquet suivent la decision 3 : base d\u2019ecole ou d\u2019entree + cran + delta (T2.2)', () => {
+  const E = loadEngine();
+  const basesOk = new Set([
+    ...E.DATA.grimoire.ecole.map((s) => s.id),
+    ...E.DATA.grimoire.entrees.map((s) => s.id),
+  ]);
+  const attends = { g7: 'aube-foliaire', g8: 'racine-monde', g16: 'nuee-de-spores', g18: 'premiere-clarte', g21: 'nuit-des-seves' };
+  for (const [carte, id] of Object.entries(attends)) {
+    const u = (E.DATA.grimoire.uniques ?? []).find((x) => x.id === id);
+    assert.ok(u, `unique ${id} present`);
+    assert.equal(u.carte, carte, `${id} appartient a ${carte}`);
+    assert.ok(basesOk.has(u.base), `la base ${u.base} de ${id} existe dans le grimoire`);
+    assert.ok(['I', 'II', 'III', 'IV'].includes(u.cran), `le cran de ${id}`);
+    assert.ok(u.delta && typeof u.delta.desc === 'string' && u.delta.desc.length > 0, `le delta de ${id} est ecrit`);
+  }
+  const morsure = E.cranOf('morsure-decume', 'IV');
+  const aube = E.DATA.grimoire.uniques.find((x) => x.id === 'aube-foliaire');
+  assert.equal(aube.cout, morsure.cout, 'Aube Foliaire coute comme son cran de base');
+  assert.equal(aube.mult, morsure.mult, 'Aube Foliaire frappe comme son cran de base');
+});
+
+test('un monstre du Bosquet caste son cran de fusion : Seve Rongeuse II et Etreinte I (T2.2, ACC-T)', () => {
+  const E = loadEngine();
+  const cibles = ligne5(E);
+  const events = [];
+  const sig = E.resolveSignature('g15');
+  const res = E.castSpell(E.DATA, sig.sort, sig.cran, { lanceur: lanceur(E), cibles, events, rng: () => 0.99 });
+  assert.equal(res.role, 'malus');
+  assert.equal(res.cout, 4);
+  assert.equal(res.taux, 0.2, 'la seve normalisee sur l\u2019echelle des crans');
+  assert.equal(res.largeur, 2);
+  assert.equal(E.largeurCibles(cibles, res.largeur, null).length, 2, '2 cibles contigues');
+  const et1 = E.cranOf('etreinte-des-profondeurs', 'I');
+  assert.ok(!et1.vide, 'l\u2019Etreinte I est remplie par le Bosquet');
+  assert.equal(et1.taux, 0.3);
+  assert.ok(E.cranOf('seve-rongeuse', 'III').vide, 'le cran III de la Seve Rongeuse attend un autre biome');
 });

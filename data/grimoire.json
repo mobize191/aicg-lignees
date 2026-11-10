@@ -579,8 +579,8 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.3,
+     "tours": 1
     },
     "II": {
      "cout": 4,
@@ -743,6 +743,40 @@
     "II": {
      "cout": 4,
      "largeur": 2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "seve-rongeuse",
+   "nom": "Sève Rongeuse",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "seve",
+   "desc": "La sève rongeuse du Bosquet : la sève se pose et ronge, contre le seuil de la cible.",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 2
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 2
     },
     "III": {
      "cout": 5,
@@ -930,6 +964,100 @@
     "desc": "la colère enflamme la zone qu’elle frappe"
    },
    "desc": "Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours)."
+  },
+  {
+   "id": "aube-foliaire",
+   "nom": "Aube Foliaire",
+   "carte": "g7",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "soin": 0.15,
+    "desc": "l’aube traverse la canopée : la lumière rend au lanceur 15 % des dégâts"
+   },
+   "desc": "Le Patriarche du Bosquet lève l’aube foliaire : la lumière frappe tous les ennemis et nourrit son lanceur."
+  },
+  {
+   "id": "racine-monde",
+   "nom": "Racine-Monde",
+   "carte": "g8",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 5,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "seve",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "seve": 0.15,
+    "tours": 2,
+    "desc": "la racine s’ancre : la sève ronge la ligne entière (15 % × 2 tours)"
+   },
+   "desc": "La racine du monde traverse le champ, frappe tous les ennemis et la sève s’y installe (15 % × 2 tours)."
+  },
+  {
+   "id": "nuee-de-spores",
+   "nom": "Nuée de Spores",
+   "carte": "g16",
+   "role": "malus",
+   "cible": "tous les ennemis",
+   "cout": 6,
+   "largeur": 5,
+   "taux": 0.1,
+   "tours": 3,
+   "effet": "seve",
+   "base": "seve-rongeuse",
+   "cran": "IV",
+   "delta": {
+    "seve": 0.1,
+    "tours": 3,
+    "desc": "la nuée couvre la ligne entière et la sève ronge trois tours"
+   },
+   "desc": "Mycola couvre tous les ennemis de sa nuée : la sève ronge la ligne trois tours (10 % × 3 tours)."
+  },
+  {
+   "id": "premiere-clarte",
+   "nom": "Première Clarté",
+   "carte": "g18",
+   "role": "soin",
+   "cible": "l’équipe",
+   "cout": 6,
+   "base": "onde-consacree",
+   "cran": "III",
+   "delta": {
+    "revive": 0.6,
+    "desc": "la première clarté rend à la lumière l’âme tombée la plus grande (60 % de ses PV)"
+   },
+   "desc": "Adriel lève la première clarté : l’équipe est pansée et l’âme tombée la plus grande revient à la lumière."
+  },
+  {
+   "id": "nuit-des-seves",
+   "nom": "Nuit des Sèves",
+   "carte": "g21",
+   "role": "degats",
+   "cible": "la zone",
+   "cout": 5,
+   "mult": 2.2,
+   "largeur": 3,
+   "taux": 0.15,
+   "tours": 2,
+   "effet": "seve",
+   "base": "morsure-decume",
+   "cran": "III",
+   "delta": {
+    "seve": 0.15,
+    "tours": 2,
+    "desc": "la nuit sème la sève : la zone frappée se met à ronger"
+   },
+   "desc": "Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours)."
   }
  ]
 }

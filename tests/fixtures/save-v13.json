@@ -1,0 +1,352 @@
+{
+ "version": 14,
+ "teams": [
+  {
+   "slots": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  {
+   "slots": []
+  },
+  {
+   "slots": []
+  }
+ ],
+ "activeTeam": 0,
+ "dungeon": "marees",
+ "progress": {
+  "marees": {
+   "diff": 1,
+   "diffs": {
+    "1": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "2": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "3": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "4": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "5": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    }
+   }
+  },
+  "forge": {
+   "diff": 1,
+   "diffs": {
+    "1": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "2": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "3": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "4": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "5": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    }
+   }
+  },
+  "bosquet": {
+   "diff": 1,
+   "diffs": {
+    "1": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "2": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "3": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "4": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "5": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    }
+   }
+  },
+  "crypte": {
+   "diff": 1,
+   "diffs": {
+    "1": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "2": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "3": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "4": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "5": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    }
+   }
+  },
+  "zenith": {
+   "diff": 1,
+   "diffs": {
+    "1": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "2": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "3": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "4": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    },
+    "5": {
+     "stage": 1,
+     "record": 0,
+     "pity": {}
+    }
+   }
+  }
+ },
+ "seed": 42,
+ "points": 137,
+ "collection": [
+  [
+   "n1",
+   1
+  ],
+  [
+   "n2",
+   1
+  ],
+  [
+   "n3",
+   1
+  ],
+  [
+   "a30",
+   1
+  ],
+  [
+   "s13",
+   1
+  ],
+  [
+   "e13",
+   1
+  ]
+ ],
+ "instances": [
+  {
+   "iid": 1,
+   "id": "n1",
+   "lvl": 15,
+   "xp": 4,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "voie": "voie du guerrier",
+   "sorts": [],
+   "agi": 13,
+   "int": 11
+  },
+  {
+   "iid": 2,
+   "id": "n2",
+   "lvl": 8,
+   "xp": 1,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "voie": "les flots — l’Eau",
+   "sorts": [],
+   "agi": 9,
+   "int": 6
+  },
+  {
+   "iid": 3,
+   "id": "n3",
+   "lvl": 5,
+   "xp": 0,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "voie": "la lumière — la foi",
+   "sorts": [],
+   "agi": 4,
+   "int": 3
+  },
+  {
+   "iid": 4,
+   "id": "a30",
+   "lvl": 4,
+   "xp": 2,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "sorts": [],
+   "agi": 10,
+   "int": 7
+  },
+  {
+   "iid": 5,
+   "id": "s13",
+   "lvl": 3,
+   "xp": 1,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "sorts": [],
+   "agi": 2,
+   "int": 2
+  },
+  {
+   "iid": 6,
+   "id": "e13",
+   "lvl": 1,
+   "xp": 0,
+   "asc": 0,
+   "name": "",
+   "acc": [],
+   "isNew": true,
+   "sorts": [],
+   "agi": 30,
+   "int": 23
+  }
+ ],
+ "instanceSeq": 7,
+ "gems": {
+  "brut": {
+   "Feu": 5
+  },
+  "poli": {
+   "Eau": 2
+  },
+  "grave": {},
+  "eternel": {}
+ },
+ "tokens": [
+  {
+   "rar": "C",
+   "kind": "humain"
+  },
+  {
+   "rar": "C",
+   "kind": "humain"
+  },
+  {
+   "rar": "C",
+   "kind": "humain-riche"
+  },
+  {
+   "rar": "C",
+   "kind": "race"
+  },
+  {
+   "rar": "C",
+   "kind": "race"
+  },
+  {
+   "kind": "race",
+   "rar": "C",
+   "cat": "race"
+  },
+  {
+   "kind": "gem",
+   "tier": "brut",
+   "element": "Feu",
+   "rar": "UC"
+  }
+ ],
+ "regEclats": 0,
+ "fatigue": {
+  "day": "",
+  "runs": {}
+ },
+ "dropFat": {
+  "day": "",
+  "dg": {}
+ },
+ "milestones": {
+  "clear1": false,
+  "boss5": false,
+  "diff3": false
+ },
+ "tokenDays": {},
+ "firstClearTokens": {},
+ "seen": [],
+ "shards": {},
+ "dailyDone": "",
+ "dailyLevel": null,
+ "runMod": null,
+ "grimoire": [],
+ "zonesVisitees": []
+}

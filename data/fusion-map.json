@@ -214,7 +214,88 @@
   }
  },
  "bosquet": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "g1": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "g2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "g3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "g4": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "g5": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g6": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g9": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "g10": {
+    "fusion": "fournaise-invoquee",
+    "cran": "I"
+   },
+   "g11": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "g12": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "g13": {
+    "fusion": "fournaise-invoquee",
+    "cran": "II"
+   },
+   "g14": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g15": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "g17": {
+    "fusion": "onde-consacree",
+    "cran": "III"
+   },
+   "g19": {
+    "fusion": "chant-de-sirene",
+    "cran": "IV"
+   },
+   "g20": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "g7": {
+    "unique": "aube-foliaire"
+   },
+   "g8": {
+    "unique": "racine-monde"
+   },
+   "g16": {
+    "unique": "nuee-de-spores"
+   },
+   "g18": {
+    "unique": "premiere-clarte"
+   },
+   "g21": {
+    "unique": "nuit-des-seves"
+   }
+  }
  },
  "crypte": {
   "trie": false

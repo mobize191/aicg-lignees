@@ -56,7 +56,7 @@ test('v8 -> v12 : grimoire appris et zones visitées présents, chaîne complèt
   const E = loadEngine();
   const save = JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
   const out = E.migrate(structuredClone(save));
-  assert.equal(out.version, 13);
+  assert.equal(out.version, 14);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.ok(Array.isArray(out.grimoire));
   assert.ok(Array.isArray(out.zonesVisitees));
@@ -71,12 +71,30 @@ test('v12 -> v13 : les sorts connus d\u2019un biome trie se re-mappent, les autr
     grimoire: [{ sort: 'morsure-decume', cran: 'I' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 13);
+  assert.equal(out.version, 14);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'morsure-decume', cran: 'I' }, 'Poing de Cendre fonde au cran I');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'colonne-de-feu', cran: 'III' }, 'la signature de f20 fond vers son cran');
   assert.deepEqual(out.grimoire[0], { sort: 'morsure-decume', cran: 'I' }, 'le grimoire appris ne bouge pas');
-  const s2 = { version: 12, instances: [{ iid: 'i2', id: 'g1', sorts: [{ name: '\u00c9treinte de Racines' }] }] };
+  const s2 = { version: 12, instances: [{ iid: 'i2', id: 'k1', sorts: [{ name: 'Griffe T\u00e9n\u00e9breuse' }] }] };
   const out2 = E.migrate(s2);
-  assert.deepEqual(out2.instances[0].sorts[0], { name: '\u00c9treinte de Racines' }, 'le Bosquet non trie garde sa signature legacy');
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Griffe T\u00e9n\u00e9breuse' }, 'la Crypte non tri\u00e9e garde sa signature legacy');
+});
+
+test('v13 -> v14 : le Bosquet nouvellement tri\u00e9 remappe ses sorts legacy (EXI-T-4, T2.2)', () => {
+  const E = loadEngine();
+  const s = {
+    version: 13,
+    instances: [{ iid: 'i1', id: 'g14', sorts: [{ name: 'Spores Vampires' }, { sort: 'morsure-decume', cran: 'I' }], acc: [{ name: 'S\u00e8ve \u00c9veill\u00e9e' }] }],
+    grimoire: [{ name: 'Ros\u00e9e Radieuse' }],
+  };
+  const out = E.migrate(s);
+  assert.equal(out.version, 14);
+  assert.deepEqual(out.instances[0].sorts[0], { sort: 'seve-rongeuse', cran: 'I' }, 'Spores Vampires fonde au cran I de la S\u00e8ve Rongeuse');
+  assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
+  assert.deepEqual(out.instances[0].acc[0], { sort: 'fournaise-invoquee', cran: 'II' }, 'S\u00e8ve \u00c9veill\u00e9e (g13) fonde vers 2 renforts');
+  assert.deepEqual(out.grimoire[0], { sort: 'onde-consacree', cran: 'III' }, 'Ros\u00e9e Radieuse (g17) greffe le cran III de l\u2019entr\u00e9e de baume');
+  const s2 = { version: 13, instances: [{ iid: 'i2', id: 'k5', sorts: [{ name: 'Brume Mordante' }] }] };
+  const out2 = E.migrate(s2);
+  assert.deepEqual(out2.instances[0].sorts[0], { name: 'Brume Mordante' }, 'la Crypte non tri\u00e9e garde sa signature legacy');
 });
