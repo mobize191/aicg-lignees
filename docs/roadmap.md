@@ -1,24 +1,23 @@
 # Roadmap — AICG : Lignées
 
-> Dernière mise à jour : 10/11/2026, après la migration du rang N (T1.1 du grand chantier : 12 naissances en N, 5 Embryons, acquisition et affichage recâblés ; voir la section dédiée et le journal des arbitrages).
+> Dernière mise à jour : 10/11/2026, après les correctifs terrain v1.11-v1.12 : le grand chantier arbres + sorts est TERMINÉ (voir la section dédiée et le journal des arbitrages), la section « Ce qui reste à faire » a été réorganisée en conséquence.
 
-## État actuel (v0.47.3, en ligne)
+## État actuel (v1.12, en ligne)
 
-- **Jeu** : `dist.html` autonome (HTML+JS+CSS, ~473 Ko), jouable en local (double-clic) ou en ligne (GitHub Pages).
+- **Jeu** : `dist.html` autonome (HTML+JS+CSS, ~550 Ko), jouable en local (double-clic) ou en ligne (GitHub Pages).
 - **Combat** : mode 🤖 Auto par défaut ; mode 🧭 Tactique = vrai tour de RPG :
-  - Moteur pas-à-pas : `beginRound` (file d'actions triée par ATQ décroissante, équipe devant à égalité) / `peekRound` / `stepRound(state, choice)`.
+  - Moteur pas-à-pas : `beginRound` (file d'actions triée par AGI décroissante depuis la v0.47, équipe devant à égalité) / `peekRound` / `stepRound(state, choice)`.
   - `resolveTurn(state, choices)` conservé : composition des mêmes pièces, chemin Auto et digest intacts.
-  - Fenêtre d'action par carte : illustration, PV/ATQ/mana, ⚔ attaque, sorts ✦ nommés (coût + infobulle, `.off` si mana insuffisant), ➕ Souffle Croisé, ⏸ attendre, puis ciblage explicite (liste cliquable + pion surligné `.targeted` + clic direct).
+  - Fenêtre d'action par carte : illustration, PV/ATQ/mana, ⚔ frappe simple universelle (v1.12 : support compris, désignation d'ennemi), sorts ✦ nommés guidés par la fiche type (coût, `.off` si mana insuffisant, résultat calculé → ~N depuis la v0.47), ➕ Souffle Croisé, ⏸ attendre, puis ciblage explicite (liste cliquable + pion surligné `.targeted` + clic direct). Les sorts hostils se résolvent sur les ennemis depuis n'importe quelle ligne (v1.12).
   - Anti-runs fantômes : `combatGen` incrémenté à chaque rendu, pauses hors vue, timers génération-capturés.
 - **Correctifs terrain v0.46** : limite 3 exemplaires par équipe, pions mobiles `clamp(104px, 26vw, 136px)` (boss 130-172), images de combat éclaircies `brightness(1.12)`, fiche avec illustration `.modal-hero` 176 px, puces d'info ℹ️/🎰/🌱 cliquables en tête d'écran (rappels du bas supprimés), glossaire « Les symboles de l'écran ».
 - **UI combat v2 (10/11/2026)** : ciblage interactif (cibles illuminées sur le plateau, contour doré pulsant + pastille + curseur de visée, clic pour résoudre, zone de 2 au survol, bouton Annuler, coût/zone visibles, clic hors cible sans effet), pied de stats sur chaque pion (PV/ATQ/mana actuel/total + icônes d'état, KO grisé), fiche plein cadre (illustration cover, bord doré, voile dégradé, sous-titre classe·élément·rareté). Moteur et data inchangés : digest `7dfab0a2…` intact, smoke 142 checks, 60 tests.
 - **UI combat v2.1 — retours terrain (10/11/2026)** : rail d'ordre du tour (tout le monde dans l'ordre d'agilité, acteur doré, lueur sur vos cartes, KO grisés), combat **auto en mode Tactique** (démarre seul, fenêtre d'action au tour de vos cartes, bouton ⏸ Pause / ▶ Lancer le tour), actions détaillées au tour du joueur (badge de type d'école, coût, méta école · ×puissance · zone, texte du sort), fiche complète (statline doublon corrigé, grille identité classe/élément/rareté/rôle, oppositions, Neutre affiché pour les naissances, rareté en toutes lettres, sorts détaillés). Vocabulaire d'affichage ajouté dans `data/engine.json` (`SPELL_ROLE_LABEL`, `RARITY_LABEL`) ; le grimoire porte désormais école/rôle/cible jusqu'à l'UI. Moteur et équilibrage inchangés : digest `7dfab0a2…` intact, smoke 158 checks, 60 tests.
-- **Rang N des naissances (migration à faire)** : ACTÉ au rework (`docs/design/` / maquette rework-arbres) : rareté **N sous C, hors lignée, hors drops** pour les naissances (4 Novices, 5 Embryons/Bestiaux, 3 Enge, Esprit Divin) ; elles s'éveillent en la commune C de la famille choisie. Les naissances restent **jouables en combat** (équipe de départ). La migration des data (`rarity: "C"→"N"`, `RARITY_POWER`, `RANK`, éveil N→C) est un chantier data à part : elle fera bouger le digest (documenté).
-- **Validation** : baseline digest 3000 combats `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa` (476 victoires, 0 exceptions, 0 marathons ; la baseline précédente `c5ab2af1…` à 534 victoires datait d'avant les reclassifications de classe) ; équivalence pas-à-pas/Auto prouvée par le check 46 i du smoke (deux combats identiques, événements JSON strictement égaux) ; smoke **158 checks** tout passant, 60 tests verts.
-- **Images** : `assets.json` = 231 arts de cartes (300×420 JPEG, campagne DreamShaper XL du 10/11) + 5 fonds de donjons (960×540), ~7,8 Mo ; `assets-wai.json` = le manifeste comparatif WAI-Illustrious (bouton 🖼️ v0.47.2). Chargés automatiquement en ligne (http), sondage par fichier en `file://`.
-
+- **Rang N des naissances (en place, T1.1-T1.3 FAITS)** : rareté **N sous C, hors lignée, hors drops** (12 naissances, 5 Embryons renommés) ; la pierre d'éveil (coût typé, drop des boss, défi du jour) fonde le N vers la commune C de la voie choisie ; naissances sauvages 2 % par étage vaincu, 2 N offerts au départ. Les naissances restent **jouables en combat** (équipe de départ).
+- **Validation** : baseline digest 3000 combats `833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24` (**518 victoires**, 0 exception, 1 marathon ; baselines précédentes documentées dans arbitrages : `eb701919…` 479, `7dfab0a2…` 476) ; équivalence pas-à-pas/Auto prouvée par le check 46 i du smoke (deux combats identiques, événements JSON strictement égaux) ; smoke **171 checks** tout passant, **114 tests** verts.
+- **Images** : `assets.json` = 231 arts de cartes (300×420 JPEG, campagne DreamShaper XL du 10/11) + 5 fonds de donjons (960×540), ~7,8 Mo ; `assets-wai.json` = le manifeste comparatif WAI-Illustrious (bouton 🖼️ v0.47.2). Chargés automatiquement en ligne (http), sondage par fichier en `file://`. Les 29 nommées de référence (seeds verrouillés dans `tools/seeds.csv`) attendent le contenu v3 pour rejoindre le manifeste.
+- **Grand chantier arbres + sorts TERMINÉ (10/11/2026)** : les 8 lots livrés avec leur preuve (tri des 189 signatures en 7 biomes, fiche type pour tous les ciblages, stats RPG v0.47 agi/int + esquive + mana/seuils, mécanismes spéciaux en data, 4 nouvelles familles C→L avec leurs sorts de lignée, 5 zones d'errance, grimoire appris persisté) ; 113 cartes au catalogue, validateur vert. Détail dans la section dédiée et `docs/arbitrages.md`.
 - **Correctif terrain v1.11 — sorts undefined (10/11/2026)** : les sorts hérités d'une carte évoluée étaient remappés en sauvegarde par le tri (école + cran) sans nom ni coût : la fenêtre d'action affichait des lignes « ✦ undefined » et le sort ne se lançait pas. Nouveau `resolveSpellEntry` dans le moteur résout chaque entrée (école + cran, unique, fiche complète) en fiche nommée depuis le grimoire ; crans vides et sorts inconnus filtrés. Sauvegardes inchangées. Moteur et équilibrage inchangés : digest `833a6d2c…` intact, smoke 171 checks, 108 tests.
-
 - **Correctif terrain v1.12 — la ligne support frappe aussi (10/11/2026)** : ⚔ Attaque (gratuite) est la première action de toute carte, support compris (le Garde du Rempart avait juste un bouton de soin) ; un sort hostile (dégâts/contrôle/malus, cible ennemi/zone/tous) lancé depuis la ligne support se résout enfin sur les ennemis selon sa fiche, à la stat principale du lanceur ; les sorts malus ciblent les ennemis dans les fiches résolues. Chemin Auto inchangé : digest `833a6d2c…` intact (518/3000), smoke 171 checks, 114 tests.
 
 ## Migration d'arbitrages design (10/11/2026, poussée dans les data)
@@ -31,21 +30,27 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 - **Nouvelle baseline** : digest `7dfab0a2…`, 476 victoires / 3000 (0 exception, 0 marathon), smoke 158 verts, 60 tests verts. La baisse de victoires (534 avant) vient des reclassifications : à surveiller au recalibrage v0.47 caractéristiques.
 - **Documentation réorganisée** : `docs/00-SOMMAIRE.md` (la carte), `docs/regles-jeu.md`, `docs/arbitrages.md`, `docs/prompt-lancement.md`, tableaux générés dans `docs/tables/` (`node tools/gen-tables.mjs`), designs dans `docs/design/`, images dans `docs/images/`, rapports dans `docs/historique/`.
 
-## Ce qui reste à faire (ordre acté)
+## Ce qui reste à faire (travaux futurs, mis à jour du 10/11/2026)
 
-1. **Validation terrain v0.46** (à faire sur téléphone ET PC) : fenêtre d'action confortable ? ciblage lisible ? ordre de tour compréhensible ? tailles de pions avec images, images claires, fiche avec grande illustration, puces d'info. `docs/validation-ihm.md` fournit un protocole de test local automatisé (captures d'écran incluses).
-2. **v0.47 — Caractéristiques (ACTÉ)** : Force / Vie / Agilité / Intelligence, principe de DÉRIVATION plutôt que d'empilement :
-   - Force = l'ATQ existante (étiquette) ; Vie = les PV existants (le bouclier peut en dériver).
-   - Agilité = (a) initiative : qui agit en premier dans le tour entrelacé (remplace le tri ATQ du moteur v0.46) et (b) esquive dérivée de l'écart AGI attaquant/défenseur, plafonnée (~25-30 %), fusionnée avec le dodge de classe existant.
-   - Intelligence = (a) puissance des sorts et (b) résistance aux affections/malédictions (durée ET probabilité, tranché).
-   - Formules : à calibrer AVEC Marc-Olivier (il travaille en parallèle) ; validation = recalibrage digest complet + vigilance lisibilité (4 badges de plus sur les pions téléphone).
-3. **Familles et races v3** (document de référence VALIDÉ, ~100 cartes à créer, 10 renommages) : Sirènes des Récifs (L Méliane/Thalassa, naufrage d'Ahab), lignes gobelins rapides, M Clergé (Apolline + nouvelle L Justine), noms d'uniques verrouillés (Jeanne d'Arc, Siegfried, Zikka, Griknir, Pontos, Ombeline, Calcine, Vulcain, Mycola, Adriel, Vesna, Macha, Ysolde, Aurorine, Pyrrha, Fjalar, Célestin, Kairos, Écho, Ananké). La section 16 du document sert de brief à la génération d'images.
-4. **Campagne d'illustrations ComfyUI** (ACTÉE 09/11, FAITE 10/11 : **DreamShaper XL** remplace WAI-Illustrious v17, prompts en langage naturel) : plan exécuté dans `docs/images/plan-comfyui-images-videos.md` — étape test 6 univers validée, 29 nommées de référence rendues (`campagne/references/`, seeds verrouillés dans `tools/seeds.csv`, NON intégrées au manifeste en attendant le contenu v3), 5 fonds + 231 arts rendus et intégrés à `assets.json` (7,8 Mo, ASCII pur, ≤ 30 Ko/art), planches de contrôle dans `docs/campagne-planches/`. Non-régression : `dist.html` intact, digest et smoke inchangés par la campagne (vérifiés alors : `c5ab2af1…`/121 ; baseline courante : `7dfab0a2…`/158, voir Validation).
-5. **Vidéos de sorts signature** (WAN 2.2 5B, ~0,8 s, 21 frames/25 fps — convention WAN : durée = (frames − 1)/fps, donc 0,8 s × 25 + 1 = 21 frames, le webm rendu dure 21/25 = 0,84 s ; les plans de campagne sont corrigés en ce sens, WebM) : les 10 premiers prompts sont dans `tools/fx-prompts.json`, rendus WAN 2.2 TI2V 5B (GGUF Q6_K) stockés dans `site-assets/fx/` (jamais en base64 dans le dist, ni dans `assets.json`) ; l'affichage dans le jeu est un chantier code séparé (v0.48+).
-6. **Retours UI notés** : corriger la double bordure de la zone de texte des cartes et son fond flou.
-7. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
+Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi/int, esquive, mana, seuils) et la campagne d'illustrations sont faites. Restent, dans l'ordre acté :
 
-## Le grand chantier : finir les arbres d'évolution et les sorts (audit du 10/11/2026)
+1. **Validation terrain (téléphone ET PC)** : fenêtre d'action confortable ? ciblage lisible ? ordre de tour compréhensible ? pions et images, fiche, puces d'info. `docs/validation-ihm.md` fournit un protocole de test local automatisé (captures d'écran incluses). À vérifier en priorité sur les correctifs du jour : plus aucune ligne « ✦ undefined » dans la fenêtre d'action (v1.11), bouton ⚔ Attaque et sorts hostils depuis les supports (v1.12).
+2. **Contenu v3 restant (data + cartes + images)**, brief complet dans `docs/design/familles-races-v3.md` et les sections v3 de `docs/design/spec-design.md` :
+   - **Sirènes des Récifs** : 13e famille de monstres, entièrement à créer (8 cartes, voies Chant/contrôle et Récifs/dégâts, L Méliane et Thalassa, pas de M).
+   - **Variantes gobelins régionales** : une seule famille gobelin (foyer aux Marées), variantes 2-3 cartes en ligne directe rapide dans les autres donjons (premier test : Gobelin des Fumées à la Forge) ; pas de M gobelin.
+   - **Clergé du Plein Jour** : Apolline, Prophétesse du Jour, passe en M (fusion Célestin + Justine) ; nouvelle L Justine, Justicière du Jour ; le Zénith porterait 2 M.
+   - **10 renommages** actés (affichage seul, courbe inchangée).
+   - **Familles compagnons** (7 UR + 7 L) et **familles divines côté joueur** (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont, déjà posées côté monstres d1-d18) ; les trois portes de l'Ange Éveillé ont leurs maillons à dessiner.
+   - **Lignées d'accueil des Enge** : Sirène Nouvelle, Gorgonne Nouvelle, Fée Nouvelle (communes de la Crypte).
+   - Les **29 nommées de référence** (`campagne/references/`, seeds dans `tools/seeds.csv`) s'intègrent au manifeste à mesure que ces cartes existent.
+3. **v0.48 — Vidéos de sorts signature** : les webm WAN 2.2 (~0,8 s, 21 frames/25 fps, prompts dans `tools/fx-prompts.json`) sont rendus et stockés dans `site-assets/fx/` (jamais en base64 dans le dist ni dans `assets.json`) ; **l'affichage dans le jeu est le chantier code** : déclenchement au cast, fallback image si absent/lent, toggle de vitesse.
+4. **Recâblage famille → école (data)** : les sorts de lignée portent rarement leur rôle/cible, car la clé d'école diffère du nom de famille pour 9 des 11 familles (seules lame et appel coïncident ; le Bouclier relève du Rempart, l'Aube du Baume…) ; la fenêtre d'action retombe donc sur le ciblage par défaut de la carte. Recâbler le mapping pour que la fiche type pilote aussi les sorts de lignée (comportement par défaut conservé sinon).
+5. **Retours UI notés** : corriger la double bordure de la zone de texte des cartes et son fond flou.
+6. **Calibrage digest avec Marc-Olivier** : la baseline `833a6d2c…` **518/3000** (0 exception, 1 marathon) est la mesure de référence, à affiner sur le terrain ; le coût de l'éveil et le rythme d'apprentissage des crans se calibrent au fil des lots de contenu (chaque changement de maths = digest recalibré et documenté dans arbitrages).
+7. **Pistes design ouvertes** (voir `docs/arbitrages.md`) : la zone triangle qui toucherait la ligne avant ET la ligne arrière (PISTE), les entrées d'école sans crans (tolérées, recâblage noté).
+8. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
+
+## Le grand chantier : finir les arbres d'évolution et les sorts (audit du 10/11/2026, TERMINÉ)
 
 Périmètre acté avec Marc-Olivier : l'intégralité des nouveaux arbres d'évolution et de sorts, intégrant la migration du rang N, le contenu v3, le rework des races v17 et la refonte des sorts. Ordre proposé, chaque lot livré avec sa chaîne de preuve (tests, regen des tables, digest recalibré documenté, smoke) :
 
@@ -62,6 +67,8 @@ La spec et le plan d'exécution du grand chantier : `docs/design/spec-arbres-sor
 
 ## Historique court des versions
 
+- 10/11/2026 : correctifs terrain v1.11 (fin des sorts undefined) et v1.12 (frappe simple universelle + sorts hostils résolus depuis la ligne support) ; digest `833a6d2c…` inchangé, 114 tests, smoke 171 checks.
+- 10/11/2026 : grand chantier arbres + sorts TERMINÉ : tri des 189 signatures, rang N, fiche type, stats RPG v0.47 (agi/int, esquive, mana, seuils), mécanismes spéciaux, 4 familles v3 (113 cartes), 5 zones d'errance ; digest `833a6d2c…` 518/3000.
 - 10/11/2026 : UI du combat v2 implémentée (ciblage interactif, pied de stats, fiche plein cadre), moteur intact (digest inchangé).
 - 10/11/2026 : refonte majeure v1.0 — le monolithe devient modulaire (`data/`, `src/engine/`, `build.mjs`, 60 tests, sauvegardes migrées v8 → v12).
 - 10/11/2026 : migration d'arbitrages design dans les data (Invocateur retiré, Gardien Guerrier, Entrave Mage + Occultiste, sorts communs renommés) ; documentation réorganisée (sommaire, règles, arbitrages, tables générées).
