@@ -318,6 +318,27 @@ Ouvrir https://mobize191.github.io/aicg-lignees/ sur téléphone ET PC : collect
 
 ---
 
+## Série 2 — complément v3 (27 arts, À FAIRE, ajouté le 10/11/2026)
+
+La campagne série 1 (231 arts + 5 fonds) a été calibrée sur le catalogue d'avant le contenu v3 : **27 cartes jouables n'ont pas d'illustration** (le jeu affiche le fallback). Périmètre de la série 2 :
+
+- **Crépuscule** : q1 Novice du Crépuscule, q2 Disciple du Crépuscule, q3 Prêtre du Crépuscule, q4 Servante du Crépuscule, q5 Grande Prêtresse de l’Ombre, q6 Vesperine, Reine de la Nuit.
+- **Vol** : t1 Mercenaire, t2 Pillard, t3 Brigand, t4 Grand Brigand, t5 Fléau des Routes, t6 Gadianton, Chef des Brigands.
+- **Zèle** : u1 Fidèle du Matin, u2 Écuyer Fervent, u3 Croisé de l’Aube, u4 Chapelain du Jour, u5 Arbalétrier Doré, u6 Aurorine, Lance de l’Aube.
+- **École des Invocations** : v1 Apprenti Invocateur, v2 Conjurateur, v3 Évocateur, v4 Maître des Esprits, v5 Seigneur des Élémentaires, v6 Archimage de l’Appel.
+- **Communes v17** : p1 Jeune Séraphin, p3 Pousse des Sèves, p4 Fidèle du Jour.
+
+Hors périmètre (assumé) : les archives restent sans art (p2 Ange Gardien, b1-b7). 
+
+Méthode : pipeline série 1 inchangé (`tools/extract-cards.mjs` → `tools/build-prompts.mjs` → `tools/comfy-batch.mjs` → `tools/make-assets.py`), conventions v1 (`docs/images/images-conventions.md`) — la charte v2 est PROPOSÉE et n’a pas encore remplacé la v1 ; les 29 nommées de référence (`tools/seeds.csv`) servent de repère quand la carte existe. Budgets série 1 conservés : ≤ 30 Ko par art, ASCII pur ; le manifeste passe à ~8,6 Mo (231 + 27 = **258 arts** attendus).
+
+- [ ] **Étape 1** : générer les prompts des 27 cartes (même phrase de style finale), seed fixe consigné dans `tools/seeds.csv`.
+- [ ] **Étape 2** : rendu ComfyUI par batch, planche de contrôle (`tools/contact-sheet.py`) à valider par Marc-Olivier avant intégration.
+- [ ] **Étape 3** : intégration : ajouter les 27 arts au manifeste existant `assets.json` (vérifier le mode d’ajout de `tools/make-assets.py` ; les ids nouveaux s’ajoutent aux 231 existants, aucun id écrasé) ; si la comparaison WAI est maintenue, idem `assets-wai.json`.
+- [ ] **Étape 4** : mise à jour des docs (README section assets, roadmap série 2 → FAIT) ; non-régression inchangée : `dist.html` et le moteur non modifiés (digest `833a6d2c…` 518/3000, smoke 171 PASS).
+
+---
+
 ## Auto-revue du plan (faite)
 
 - Couverture : 231 arts existants (Tasks 6-7) + 29 références v3 (Task 4, non intégrées) + 5 fonds (Task 5) + vidéos (Task 8) + intégration/budgets/non-régression (Tasks 5-7, 9). Les 7 cartes archivées et les 2 documents de brief WAI restent hors périmètre (le brief `docs/images/images-prompt-serie1.md` est historique ; les prompts opérationnels sont `tools/serie1-prompts.json` et `prompts-draft.json`).
