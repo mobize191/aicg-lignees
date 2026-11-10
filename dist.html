@@ -845,6 +845,9 @@ body.in-combat .act-modal { max-height: 78dvh; }
 .act-title { font-size: .92rem; line-height: 1.3; }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
+.act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
+.act-modal.reduced { padding-bottom: 10px; }
+.act-modal.reduced .act-zone { display: none; }
 .act-lab { width: 100%; margin: 0 0 2px; font-size: .82rem; }
 .act-target { max-width: 46vw; }
 .tac-btn.off { opacity: .45; }
@@ -15613,9 +15616,15 @@ function renderActModal(u, zoneHtml) {
       <div class="act-art">${artOf(card)}</div>
       <div class="act-title"><b>${u.name}</b> <span class="muted">— à vous d’agir</span><br>
       <span class="act-stats">♥ ${u.hp}/${u.maxHp} · ⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))} · ✦ ${u.mana}/${u.manaMax}</span></div>
+      <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
   document.body.appendChild(actBox);
+  const redBtn = actBox.querySelector('.act-reduce');
+  if (redBtn) redBtn.onclick = () => {
+    actBox.classList.toggle('reduced');
+    redBtn.textContent = actBox.classList.contains('reduced') ? '▴ ouvrir' : '▾ réduire';
+  };
 }
 
 function askActTarget(mode, pending) {
@@ -15745,6 +15754,9 @@ function promptUnitAction(u, kind) {
       clearActHighlights();
       const zoneEl = actBox ? actBox.querySelector('.act-zone') : null;
       if (zoneEl && actBox) {
+        actBox.classList.remove('reduced');
+        const redBtn = actBox.querySelector('.act-reduce');
+        if (redBtn) redBtn.textContent = '▾ réduire';
         zoneEl.innerHTML = actionButtonsHtml(u, kind);
         bindActionButtons(actBox, u, kind);
       }

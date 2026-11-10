@@ -2597,9 +2597,15 @@ function renderActModal(u, zoneHtml) {
       <div class="act-art">${artOf(card)}</div>
       <div class="act-title"><b>${u.name}</b> <span class="muted">— à vous d’agir</span><br>
       <span class="act-stats">♥ ${u.hp}/${u.maxHp} · ⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))} · ✦ ${u.mana}/${u.manaMax}</span></div>
+      <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
   document.body.appendChild(actBox);
+  const redBtn = actBox.querySelector('.act-reduce');
+  if (redBtn) redBtn.onclick = () => {
+    actBox.classList.toggle('reduced');
+    redBtn.textContent = actBox.classList.contains('reduced') ? '▴ ouvrir' : '▾ réduire';
+  };
 }
 
 function askActTarget(mode, pending) {
@@ -2729,6 +2735,9 @@ function promptUnitAction(u, kind) {
       clearActHighlights();
       const zoneEl = actBox ? actBox.querySelector('.act-zone') : null;
       if (zoneEl && actBox) {
+        actBox.classList.remove('reduced');
+        const redBtn = actBox.querySelector('.act-reduce');
+        if (redBtn) redBtn.textContent = '▾ réduire';
         zoneEl.innerHTML = actionButtonsHtml(u, kind);
         bindActionButtons(actBox, u, kind);
       }
