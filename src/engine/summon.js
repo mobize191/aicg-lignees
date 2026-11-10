@@ -2,7 +2,7 @@
 
 function castSummon(s, allies, mods, events, side) {
   if ((s.summonBudget ?? 3) <= 0) return null;
-  const pool = allies.attaque;
+  const pool = allies.avant;
   if (pool.filter((u) => u.uid.includes('-inv') && u.alive).length >= 2) return null;
   s.summonBudget = (s.summonBudget ?? 3) - 1;
   const nb = pool.filter((u) => u.uid.includes('-inv')).length + 1;
@@ -10,7 +10,7 @@ function castSummon(s, allies, mods, events, side) {
   const atkBonus = side === 'team' ? (mods && mods.summonAtk) || 0 : 0;
   const inv = makeUnit({
     id: `${s.cardId}-inv`, name: s.effect.summonName ?? 'Invocation',
-    rarity: 'C', classe: s.classe, element: s.element, role: 'attaque',
+    rarity: 'C', classe: s.classe, element: s.element,
     atk: Math.max(1, Math.round(s.atk * (s.effect.value ?? M.SUMMON_ATK_DEFAULT) * (1 + atkBonus))),
     hp: Math.max(1, Math.round(s.maxHp * (s.effect.hpPct ?? M.SUMMON_HP_DEFAULT) * (1 + hpBonus))),
   }, `${s.uid}-inv${nb}`);

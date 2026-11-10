@@ -110,7 +110,7 @@ test('T1.2 éveil : le routage N -> C passe par trees.json, la naissance reste j
   assert.ok(E.eveilOf('n1', 'a30') && E.eveilOf('n1', 's14') && E.eveilOf('n1', 'a33'), 'les trois voies du Novice sont câblées');
   // une naissance non éveillée reste une unité de combat complète
   E.setRoll(mulberry32(7));
-  const team = { attaque: [E.getCard('n1'), E.getCard('n4')], support: [E.getCard('n3')] };
+  const team = { avant: [E.getCard('n1'), E.getCard('n4')], arriere: [E.getCard('n3')] };
   const mob = [E.getMonster('e1')];
   const st = E.initCombat(team, mob, 5, {});
   const log = E.playAuto(st, 60);

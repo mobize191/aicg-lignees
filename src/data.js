@@ -62,7 +62,6 @@ const RACE_MYSTIQUE_IDS = new Set(E.RACE_MYSTIQUE_IDS);
 const RACE_HUMAINE_DUNGEON_IDS = new Set(E.RACE_HUMAINE_DUNGEON_IDS);
 const RACE_MONSTRE_IDS = new Set(E.RACE_MONSTRE_IDS);
 const OPP_BONUS = E.OPP_BONUS;
-const CROSS = E.CROSS;
 const DIFFICULTIES = DATA.difficulties;
 const RUN_MODS = DATA['run-mods'];
 const DUNGEONS = DATA.dungeons;
@@ -113,7 +112,7 @@ function spellSideOf(sp) {
 
 const MONSTERS = RAW.map((m) => ({
   ...m,
-  spells: [ { ...COMMON_SPELLS[m.role === 'support' ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
+  spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
   mana: MONSTER_MANA.max,
   manaRegen: MONSTER_MANA.regen,
 }));

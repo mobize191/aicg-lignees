@@ -74,11 +74,7 @@ function statsAt(card, lvl, asc = 0) {
 }
 
 function monstersOf(dungeonId) {
-  const pool = MONSTERS.filter((m) => m.dungeon === dungeonId);
-  return {
-    attaque: pool.filter((m) => m.role === 'attaque'),
-    support: pool.filter((m) => m.role === 'support'),
-  };
+  return MONSTERS.filter((m) => m.dungeon === dungeonId);
 }
 
 function allMonsters() {

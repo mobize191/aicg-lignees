@@ -38,16 +38,16 @@ test('l\u2019ordre du tour suit l\u2019agilité, stable à égalité (ACC-3-4)',
   const mk = (uid, agi) => ({ uid, agi, atk: 999 - agi, alive: true, hp: 10, maxHp: 10, status: {}, spells: [] });
   const st = {
     turn: 0, winner: null, rng: mulberry32(1),
-    team: { attaque: [mk('a', 10), mk('b', 20)], support: [] },
-    enemies: { attaque: [mk('c', 15)], support: [] },
+    team: { avant: [mk('a', 10), mk('b', 20)], arriere: [] },
+    enemies: { avant: [mk('c', 15)], arriere: [] },
     mods: {},
   };
   E.beginRound(st);
   assert.deepEqual(st.round.items.map((i) => i.u.uid), ['b', 'c', 'a'], 'le plus agile agit avant, l\u2019attaque ne compte plus');
   const st2 = {
     turn: 0, winner: null, rng: mulberry32(1),
-    team: { attaque: [mk('a', 10), mk('b', 10)], support: [] },
-    enemies: { attaque: [], support: [] }, mods: {},
+    team: { avant: [mk('a', 10), mk('b', 10)], arriere: [] },
+    enemies: { avant: [], arriere: [] }, mods: {},
   };
   E.beginRound(st2);
   assert.deepEqual(st2.round.items.map((i) => i.u.uid), ['a', 'b'], 'à égalité l\u2019ordre reste stable');
@@ -62,8 +62,8 @@ const boostUnit = (E, cardId, nom, uid) => E.makeUnit({ ...E.getCard(cardId), sp
 const boostFoe = (E) => E.makeUnit(E.getCard('a1'), 'f1', 1);
 const boostState = (team) => ({
   turn: 0, winner: null, rng: mulberry32(1),
-  team: { attaque: team, support: [] },
-  enemies: { attaque: [boostFoe(globalThis.__E)], support: [] },
+  team: { avant: team, arriere: [] },
+  enemies: { avant: [boostFoe(globalThis.__E)], arriere: [] },
   mods: {},
 });
 
@@ -76,11 +76,11 @@ test('T0.2 repro : Discipline de Ligne (soi) aiguille le lanceur, pas un ennemi'
   const st = boostState([u1]);
   u1.mana = u1.manaMax = 10;
   E.beginRound(st);
-  const foeHpBefore = st.enemies.attaque[0].hp;
+  const foeHpBefore = st.enemies.avant[0].hp;
   const manaBefore = u1.mana;
   const r = E.stepRound(st, { kind: 'spell', idx: 0 });
   assert.ok((u1.atkBuff ?? 0) > 0, 'le lanceur reçoit le bonus');
-  assert.equal(st.enemies.attaque[0].hp, foeHpBefore, 'aucun dégât porté à l\u2019ennemi');
+  assert.equal(st.enemies.avant[0].hp, foeHpBefore, 'aucun dégât porté à l\u2019ennemi');
   assert.ok(u1.mana < manaBefore, 'le coût du sort est bien dépensé');
   assert.ok(r.events.some((e) => e.type === 'buff' && e.targetId === 'u1'), 'un événement buff est émis');
 });
@@ -96,11 +96,11 @@ test('T0.2 : Ferveur Céleste (1 allié) aiguille l\u2019allié désigné par la
   u1.mana = u1.manaMax = 10; u2.mana = u2.manaMax = 10;
   u1.agi = 20; u2.agi = 10; // l'ordre du tour est maîtrisé : le Démon agit le premier
   E.beginRound(st);
-  const foeHpBefore = st.enemies.attaque[0].hp;
+  const foeHpBefore = st.enemies.avant[0].hp;
   const r = E.stepRound(st, { kind: 'spell', idx: 0, allyUid: 'u2' });
   assert.ok((u2.atkBuff ?? 0) > 0, 'l\u2019allié désigné reçoit le bonus');
   assert.equal(u1.atkBuff ?? 0, 0, 'le lanceur ne se buffe pas si l\u2019allié est désigné');
-  assert.equal(st.enemies.attaque[0].hp, foeHpBefore, 'aucun dégât en sneak');
+  assert.equal(st.enemies.avant[0].hp, foeHpBefore, 'aucun dégât en sneak');
   assert.ok(r.events.some((e) => e.type === 'buff' && e.targetId === 'u2'), 'un événement buff vers l\u2019allié');
 });
 
@@ -111,9 +111,9 @@ test('T0.2 : en auto (sans pas tactique) le sort reste un coup sur l\u2019ennemi
   const st = boostState([u1]);
   u1.mana = 3; // juste assez pour le sort (3), pas pour une signature (5)
   E.beginRound(st);
-  const foeHpBefore = st.enemies.attaque[0].hp;
+  const foeHpBefore = st.enemies.avant[0].hp;
   E.stepRound(st, null);
-  assert.ok(st.enemies.attaque[0].hp < foeHpBefore, 'en auto le sort frappe l\u2019ennemi (chemin historique intact)');
+  assert.ok(st.enemies.avant[0].hp < foeHpBefore, 'en auto le sort frappe l\u2019ennemi (chemin historique intact)');
   assert.equal(u1.atkBuff, 0, 'aucun buff posé en auto');
 });
 
@@ -128,10 +128,10 @@ test('lot 3 : un sort tactique à fiche "zone" frappe 3 cibles contiguës autour
   writeFileSync(`${dir}/grimoire.json`, JSON.stringify(gri, null, 1) + '\n');
   const E = loadEngine(dir);
   E.setRoll(mulberry32(9));
-  const team = { attaque: [E.getCard('n1')], support: [E.getCard('n3')] };
+  const team = { avant: [E.getCard('n1')], arriere: [E.getCard('n3')] };
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 5);
   const st = E.initCombat(team, foes, 777, {});
-  const u = st.team.attaque[0];
+  const u = st.team.avant[0];
   u.spells = [{ name: 'Lame d\u2019\u00c9cume', cost: 3, mult: 1.5 }];
   u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
   assert.equal(E.largeurOfSpellName('Lame d\u2019\u00c9cume'), 3);
@@ -140,17 +140,17 @@ test('lot 3 : un sort tactique à fiche "zone" frappe 3 cibles contiguës autour
   const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: 'e.a2' });
   const hits = r.events.filter((e) => (e.type === 'attack' || e.type === 'dodge') && typeof e.targetId === 'string' && e.targetId.startsWith('e.'));
   assert.equal(hits.length, 3, 'la zone touche 3 cibles contiguës');
-  assert.deepEqual(hits.map((h) => h.targetId).sort(), ['e.a2', 'e.a3', 'e.a4']);
+  assert.deepEqual(hits.map((h) => h.targetId).sort(), ['e.a0', 'e.a1', 'e.a2'], 'zone de 3 dans la ligne avant (ancre e.a2)');
   rmSync(dir, { recursive: true, force: true });
 });
 
 test('lot 3 : un sort à fiche "tous" touche toute la ligne sans désignation (ACC-C)', () => {
   const E = loadEngine();
   E.setRoll(mulberry32(9));
-  const team = { attaque: [E.getCard('n1')], support: [] };
+  const team = { avant: [E.getCard('n1')], arriere: [] };
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees' && m.classe !== 'Assassin').slice(0, 4);
   const st = E.initCombat(team, foes, 778, {});
-  const u = st.team.attaque[0];
+  const u = st.team.avant[0];
   u.spells = [{ name: 'Hurlement', cost: 3, mult: 1.5 }]; // cran IV = tous (5)
   u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
   assert.equal(E.largeurOfSpellName('Hurlement'), 5);
@@ -165,8 +165,8 @@ const foeUnit = (E, uid = 'f1') => E.makeUnit(E.getCard('a1'), uid, 1);
 const supportUnit = (E, cardId, spells, uid = 's1') => E.makeUnit({ ...E.getCard(cardId), spells }, uid, 1);
 const supportState = (sup, allies, foes) => ({
   turn: 0, winner: null, rng: mulberry32(1),
-  team: { attaque: allies, support: [sup] },
-  enemies: { attaque: foes, support: [] },
+  team: { avant: allies, arriere: [sup] },
+  enemies: { avant: foes, arriere: [] },
   mods: {},
 });
 const raceFiche = (E, nom) => {
@@ -272,7 +272,7 @@ test('retour terrain : castFoeSpell applique les dégâts puis le stun de la fic
   const foe = foeUnit(E);
   foe.int = 0; foe.agi = 99; foe.rarity = 'C'; // seuil réduit au palier, pas d'esquive
   const events = [];
-  const st = { turn: 1, winner: null, rng: mulberry32(7), team: { attaque: [], support: [sup] }, enemies: { attaque: [foe], support: [] }, mods: {} };
+  const st = { turn: 1, winner: null, rng: mulberry32(7), team: { avant: [], arriere: [sup] }, enemies: { avant: [foe], arriere: [] }, mods: {} };
   E.castFoeSpell(sup, { name: 'Mélodie envoûtante', cost: 3, mult: 1.2, taux: 0.25, tours: 1, role: 'controle', cible: '1 ennemi', largeur: 1 }, [foe], {}, events, 'team', st, null);
   assert.ok(foe.hp < foe.maxHp, 'les dégâts de la fiche passent');
   assert.ok((foe.status.stun ?? 0) >= 1, 'le stun passe quand le taux dépasse le seuil');

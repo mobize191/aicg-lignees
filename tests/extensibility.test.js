@@ -8,8 +8,8 @@ test('un monstre ajoute en donnees seules est jouable (ACC-0-4, EXI-MOD-2)', () 
   const E = loadEngine('tests/fixtures/data-temoin');
   E.setRoll(mulberry32(1));
   const team = {
-    attaque: [E.getCard('n1'), E.getCard('n4')],
-    support: [E.getCard('n3')],
+    avant: [E.getCard('n1'), E.getCard('n4')],
+    arriere: [E.getCard('n3')],
   };
   const temoin = E.getMonster('x-temoin');
   assert.ok(temoin, 'le monstre temoin existe dans les donnees du fixture');

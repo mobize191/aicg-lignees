@@ -6,8 +6,8 @@ import { loadEngine } from './helpers/load.mjs';
 function fixtureCombat(E) {
   const cards = DATA_cards(E);
   const team = {
-    attaque: [cards.find((c) => c.id === 'n1'), cards.find((c) => c.id === 'n4')],
-    support: [cards.find((c) => c.id === 'n3')],
+    avant: [cards.find((c) => c.id === 'n1'), cards.find((c) => c.id === 'n4')],
+    arriere: [cards.find((c) => c.id === 'n3')],
   };
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 3);
   return E.initCombat(team, foes, 12345, {});
@@ -33,7 +33,7 @@ test('un soin plafonne a la vie max de la cible (ACC-0-6)', () => {
   const soigneur = E.makeUnit(E.DATA.monsters.find((m) => m.id === 'e7'));
   const t = { uid: 't1', hp: 95, maxHp: 100, alive: true, shield: 0 };
   const events = [];
-  E.applySupport(soigneur, { attaque: [t], support: [] }, {}, events, 'team', []);
+  E.applySupport(soigneur, { avant: [t], arriere: [] }, {}, events, 'team', []);
   assert.ok(t.hp <= t.maxHp);
   assert.equal(t.hp, 100);
 });

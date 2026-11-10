@@ -124,7 +124,7 @@ function raceOfNaissance(c) {
 function sortsDeDepart(cardId) {
   const c = getCard(cardId);
   if (!c) return [];
-  const commun = (DATA.grimoire.communs ?? []).find((s) => (c.role === 'support') === (s.role === 'soin'));
+  const commun = (DATA.grimoire.communs ?? []).find((s) => !!(c.effect && c.effect.kind === 'heal') === (s.role === 'soin'));
   const out = commun ? [commun.id] : [];
   const race = raceOfNaissance(c);
   const raceSpell = race ? (DATA.grimoire.race ?? []).find((s) => s.race === race) : null;

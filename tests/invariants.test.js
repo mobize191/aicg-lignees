@@ -16,7 +16,7 @@ test('makeWave varie avec le seed et respecte le biome', () => {
   const b = E.makeWave(43, 1, 'marees', 1, null);
   assert.notDeepEqual(a, b);
   const ids = new Set(E.DATA.monsters.filter((m) => m.dungeon === 'marees').map((m) => m.id));
-  for (const u of [...a.attaque, ...a.support]) assert.ok(ids.has(u.id) || ids.has(u.cardId) || u.id);
+  for (const u of [...a.avant, ...a.arriere]) assert.ok(ids.has(u.id) || ids.has(u.cardId) || u.id);
 });
 
 test('stageRewards retourne une structure coherente', () => {
@@ -43,7 +43,7 @@ test('pickCard retourne un id du catalogue jouable', () => {
 test('tickStatuses applique un dot et reduit sa duree', () => {
   const E = loadEngine();
   const u = { uid: 'u1', hp: 50, maxHp: 50, alive: true, shield: 0, status: { dot: { dmg: 10, turns: 2 } } };
-  const st = { team: { attaque: [u], support: [] }, enemies: { attaque: [], support: [] } };
+  const st = { team: { avant: [u], arriere: [] }, enemies: { avant: [], arriere: [] } };
   const events = [];
   E.tickStatuses(st, events);
   assert.equal(u.hp, 40);
@@ -54,7 +54,7 @@ test('castSummon invoque un allie avec un sort (ACC-0-6)', () => {
   const E = loadEngine();
   const s = E.makeUnit(E.getMonster('e1'));
   s.effect = { kind: 'summon', value: 0.5, hpPct: 0.5, ttl: 3 };
-  const allies = { attaque: [s], support: [] };
+  const allies = { avant: [s], arriere: [] };
   const events = [];
   const inv = E.castSummon(s, allies, {}, events, 'team');
   assert.ok(inv && inv.uid.includes('-inv'));
@@ -103,9 +103,9 @@ test('applyDamage met la cible hors combat a 0 PV', () => {
 test('initCombat construit 2 camps avec mana initial reduit', () => {
   const E = loadEngine();
   const st = E.initCombat(
-    { attaque: [E.getCard('n1')], support: [E.getCard('n3')] },
+    { avant: [E.getCard('n1')], arriere: [E.getCard('n3')] },
     [E.getMonster('e1')], 5, {});
-  assert.ok(st.team.attaque[0].mana < st.team.attaque[0].manaMax);
+  assert.ok(st.team.avant[0].mana < st.team.avant[0].manaMax);
   assert.equal(st.winner, null);
 });
 
@@ -181,20 +181,20 @@ test('T4.3 : la répartition agi/int dérive du profil (aucune carte mage avec a
 
 test('T4.4 : l’esquive dérive de l’écart AGI, plafonnée à 30 % (données)', () => {
   const E = loadEngine();
-  const team = { attaque: [E.getCard('n1')], support: [] };
+  const team = { avant: [E.getCard('n1')], arriere: [] };
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 2);
   // seed 7 : premier jet 0,012 < plafond 0,30 -> esquive avec un écart AGI de 40
   const st = E.initCombat(team, foes, 7, {});
-  const u = st.team.attaque[0];
-  const tgt = st.enemies.attaque[0];
+  const u = st.team.avant[0];
+  const tgt = st.enemies.avant[0];
   u.agi = tgt.agi + 40;
   E.beginRound(st);
   const r = E.stepRound(st, { kind: 'attack', targetUid: tgt.uid });
   assert.ok(r.events.some((e) => e.type === 'dodge'), 'écart AGI 40 = esquive (plafond 30 %, jet 0,012)');
   // écart nul + pas de dodge de classe : aucune esquive même avec un jet nul (seed 6 -> 0,526 d'abord, puis 0,002)
   const st2 = E.initCombat(team, foes, 6, {});
-  const u2 = st2.team.attaque[0];
-  const t2 = st2.enemies.attaque[0];
+  const u2 = st2.team.avant[0];
+  const t2 = st2.enemies.avant[0];
   u2.agi = t2.agi;
   t2.classe = 'Guerrier';
   E.beginRound(st2);

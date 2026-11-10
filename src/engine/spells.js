@@ -64,11 +64,11 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   else if (larg === 3) {
     let choix = null;
     if (anchorUid != null && st) {
-      const ligne = foeLines ? (anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque) : [];
+      const ligne = foeLines ? (anchor && anchor.rang === 'arriere' ? foeLines.arriere : foeLines.avant) : [];
       const ai = ligne.findIndex((u) => u.uid === anchorUid);
       if (ai >= 0) choix = ai;
     }
-    hitList = st && foeLines ? pickZoneTargets(anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque, choix) : [anchor];
+    hitList = st && foeLines ? pickZoneTargets(anchor && anchor.rang === 'arriere' ? foeLines.arriere : foeLines.avant, choix) : [anchor];
   } else {
     hitList = [anchor];
     if (larg >= 2) hitList.push(...vivantes.filter((f) => f !== anchor).slice(0, larg - 1));
@@ -145,23 +145,13 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   }
   const mult = spell ? spell.mult : 1;
   const kind = spell ? 'special' : 'basic';
-  const aliveAllies = [...allies.attaque, ...allies.support].filter((u) => u.alive);
+  const aliveAllies = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
   const hurt = aliveAllies.filter((u) => u.hp < u.maxHp).sort((a, b) => a.hp - b.hp);
   if (action && action.allyUid) {
     const k = hurt.findIndex((u) => u.uid === action.allyUid);
     if (k > 0) hurt.unshift(hurt.splice(k, 1)[0]);
   }
   const n = side === 'team' && mods.dualSupport ? 2 : 1;
-  if (side === 'team' && s.effect.kind === 'heal' && hurt.length === 0
-      && s.mana >= CROSS.support.cost && foes.length) {
-    const t = foes.reduce((a, b) => (a.hp <= b.hp ? a : b));
-    s.mana -= CROSS.support.cost;
-    events.push({ type: 'cast', side, sourceId: s.uid, name: s.crossName ?? CROSS.support.name, fx: 'atk', mana: s.mana });
-    const dmg = Math.max(1, Math.round(s.atk * CROSS.support.base * CROSS.yield * classeMods(s).strike * elementMult(s.element, t.element)));
-    events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side: 'team' });
-    applyDamage(t, dmg, events, 'enemies', null, false, { state: st });
-    return;
-  }
   
   
   
@@ -169,7 +159,8 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   
   
   const cap = (t) => Math.round(t.maxHp * M.HEAL_CAP_RATIO);
-  if (s.effect.kind === 'heal') {
+  const effKind = s.effect ? s.effect.kind : null;
+  if (effKind === 'heal') {
     const value = Math.round(s.effect.value * (1 + (side === 'team' ? mods.healPct || 0 : 0)) * mult);
     for (const t of hurt.slice(0, n)) {
       const amount = Math.min(value, t.maxHp - t.hp);
@@ -186,9 +177,9 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
         }
       }
     }
-  } else if (s.effect.kind === 'atkBuff') {
+  } else if (effKind === 'atkBuff') {
     const value = s.effect.value * mult;
-    for (const t of allies.attaque.filter((u) => u.alive).slice(0, n)) {
+    for (const t of allies.avant.filter((u) => u.alive).slice(0, n)) {
       t.atkBuff += value;
       events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: kind });
       const p = t.linkedTo ? aliveAllies.find((a) => a.uid === t.linkedTo) : null;
@@ -197,27 +188,27 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
         events.push({ type: 'buff', side, sourceId: s.uid, targetId: p.uid, kind: 'atk', value: value * M.LINK_BUFF_SHARE, kindTag: 'link' });
       }
     }
-  } else if (s.effect.kind === 'shield') {
+  } else if (effKind === 'shield') {
     const value = Math.round(s.effect.value * mult);
-    for (const t of allies.attaque.filter((u) => u.alive).slice(0, n)) {
+    for (const t of allies.avant.filter((u) => u.alive).slice(0, n)) {
       const amount = Math.min(value, cap(t));
       t.shield += amount;
       events.push({ type: 'shield', side, sourceId: s.uid, targetId: t.uid, amount, kind });
     }
-  } else if (s.effect.kind === 'stun') {
+  } else if (effKind === 'stun') {
     if (!spell) return;
     const count = s.effect.count ?? 1;
     for (const t of [...foes].sort((a, b) => b.atk - a.atk).slice(0, count)) {
       t.status.stun = (t.status.stun ?? 0) + 1;
       events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'stun', value: 1 });
     }
-  } else if (s.effect.kind === 'slow') {
+  } else if (effKind === 'slow') {
     if (!spell) return;
     for (const f of foes) {
       f.status.slow = Math.max(f.status.slow ?? 0, 2);
       events.push({ type: 'status', side, sourceId: s.uid, targetId: f.uid, kind: 'slow', value: 2 });
     }
-  } else if (s.effect.kind === 'dot') {
+  } else if (effKind === 'dot') {
     if (!spell) return;
     for (const f of foes) {
       f.status.dot = {
@@ -226,43 +217,43 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
       };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: f.uid, kind: 'dot', value: f.status.dot.dmg });
     }
-  } else if (s.effect.kind === 'reflect') {
+  } else if (effKind === 'reflect') {
     if (!spell) return;
     for (const t of aliveAllies) {
       t.status.reflect = { pct: s.effect.value ?? M.REFLECT_DEFAULT_PCT, turns: s.effect.turns ?? 2 };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: t.uid, kind: 'reflect', value: t.status.reflect.pct });
     }
-  } else if (s.effect.kind === 'warcry') {
+  } else if (effKind === 'warcry') {
     if (!spell) return;
     const value = s.effect.value ?? M.WARCRY_DEFAULT;
-    for (const t of allies.attaque.filter((u) => u.alive)) {
+    for (const t of allies.avant.filter((u) => u.alive)) {
       t.atkBuff += value;
       t.status.dmgRed = { pct: s.effect.red ?? M.DMGRED_DEFAULT, turns: 1 };
       events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: kind });
     }
-  } else if (s.effect.kind === 'summon') {
+  } else if (effKind === 'summon') {
     if (!spell) return;
     castSummon(s, allies, mods, events, side);
-  } else if (s.effect.kind === 'curse') {
+  } else if (effKind === 'curse') {
     if (!spell) return;
     for (const f of foes) {
       const value = (s.effect.value ?? M.CURSE_DEFAULT) * (1 + (side === 'team' ? mods.cursePct || 0 : 0)) * (f.boss ? M.CURSE_BOSS_FACTOR : 1);
       f.status.curse = { value, turns: s.effect.turns ?? 2 };
       events.push({ type: 'status', side, sourceId: s.uid, targetId: f.uid, kind: 'curse', value: Math.round(value * 100) / 100 });
     }
-  } else if (s.effect.kind === 'revive') {
+  } else if (effKind === 'revive') {
     if (!spell) return;
-    const dead = [...allies.attaque, ...allies.support].filter((u) => !u.alive && !(u.status && u.status.reviving));
+    const dead = [...allies.avant, ...allies.arriere].filter((u) => !u.alive && !(u.status && u.status.reviving));
     if (dead.length) {
       const t = dead.sort((a, b) => b.maxHp - a.maxHp)[0];
       t.hp = Math.max(1, Math.round(t.maxHp * (s.effect.value ?? M.REVIVE_DEFAULT)));
       t.alive = true;
       events.push({ type: 'revive', side, sourceId: s.uid, targetId: t.uid, amount: t.hp });
     }
-  } else if (s.effect.kind === 'link') {
+  } else if (effKind === 'link') {
     if (!spell) return;
-    for (const u of allies.attaque.filter((u) => u.alive && u.linkedTo)) u.linkTtl = 2;
-    const cands = allies.attaque.filter((u) => u.alive && !u.linkedTo);
+    for (const u of allies.avant.filter((u) => u.alive && u.linkedTo)) u.linkTtl = 2;
+    const cands = allies.avant.filter((u) => u.alive && !u.linkedTo);
     if (cands.length >= 2) {
       const [a, b] = cands;
       a.linkedTo = b.uid; a.linkTtl = 2;

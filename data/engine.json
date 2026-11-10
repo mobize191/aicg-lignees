@@ -394,24 +394,9 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 19,
+ "SAVE_VERSION": 20,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 19,
- "CROSS": {
-  "yield": 0.6,
-  "healThreshold": 0.2,
-  "attaque": {
-   "name": "Souffle Croisé",
-   "cost": 5,
-   "desc": "Quand un allié passe sous 20 % de ses PV : lui rend 60 % de l’ATQ du lanceur, au lieu d’attaquer ce tour-ci."
-  },
-  "support": {
-   "name": "Frappe Croisée",
-   "cost": 4,
-   "base": 6,
-   "desc": "Si aucun allié n’est blessé : frappe l’ennemi le plus faible (rendement réduit, 60 % d’un sort de guerre)."
-  }
- },
+ "CURRENT_VERSION": 20,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",
@@ -565,7 +550,10 @@
   "RAGE_RATE": 0.08,
   "RANG_BACK_DMG_PCT": 0.5,
   "RANG_BACK_ATK_PCT": 0.5,
-  "RANG_BACK_CLASSES": ["Guerrier", "Assassin"],
+  "RANG_BACK_CLASSES": [
+   "Guerrier",
+   "Assassin"
+  ],
   "RONDE_RATE": 0.03,
   "RONDE_CAP": 30,
   "BELIER_BOOST": 1.5,

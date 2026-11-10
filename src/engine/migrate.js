@@ -133,7 +133,16 @@ function v18to19(s) {
   }
   return s;
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19 };
+// v19 -> v20 (chantier lignes) : le champ role disparaît ; chaque équipe reçoit sa formation
+// (3 devant + 2 derrière par défaut) — les emplacements restent dans l'ordre, figés avant combat.
+function v19to20(s) {
+  s.version = 20;
+  for (const t of s.teams ?? []) t.formation = t.formation ?? '3-2';
+  if (s.team) s.team.formation = s.team.formation ?? '3-2';
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

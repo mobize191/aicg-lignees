@@ -43,7 +43,7 @@ function recommendedPower(d, diff) {
   let sum = 0;
   for (let k = 0; k < 8; k++) {
     const wave = makeWave(1000 + k * 77, d.floors, d.id, diff);
-    const units = [...wave.attaque, ...wave.support];
+    const units = [...wave.avant, ...wave.arriere];
     sum += units.reduce((a, m) => a + cardPower(m, m.lvl ?? 1), 0);
   }
   return Math.round((sum / 8) * 1.15);
@@ -90,7 +90,7 @@ for (const c of CATALOG) {
     const raceSpell = c.raciale ? RACE_SPELLS[racialRaceOf(c)] : null;
     const classSpell = c.classe && CLASS_SPELLS[c.classe] ? CLASS_SPELLS[c.classe] : null;
     c.spells = [
-      { ...COMMON_SPELLS[c.role === 'support' ? 'support' : 'attaque'] },
+      { ...COMMON_SPELLS[!!(c.effect && c.effect.kind === 'heal') ? 'support' : 'attaque'] },
       ...(raceSpell ? [{ ...raceSpell }] : []),
       ...(classSpell ? [{ ...classSpell }] : []),
       { name: c.soloSpell, cost: c.soloCost ?? 5, mult: c.soloMult ?? 1.85, ...(c.soloDot ? { dot: c.soloDot } : {}), cat: 'unique', desc: 'La signature de cette carte — son geste à elle.' },
@@ -455,9 +455,9 @@ const freshProg = () => ({ diff: 1, diffs: { 1: freshDiff(), 2: freshDiff(), 3: 
 
 const store = {
   teams: [
-    { slots: [] }, 
-    { slots: [] },
-    { slots: [] },
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
   ],
   activeTeam: 0,
   grimoire: [],
@@ -601,8 +601,8 @@ function restore(data) {
   store.teams = data.teams.map((t) => ({
     slots: Array.isArray(t?.slots)
       ? t.slots.filter((x) => typeof x === 'string' || Number.isInteger(x))
-      : Array.isArray(t?.attaque) && Array.isArray(t?.support)
-        ? [...t.attaque, ...t.support].filter((x) => typeof x === 'string')
+      : Array.isArray(t?.avant) && Array.isArray(t?.arriere)
+        ? [...t.avant, ...t.arriere].filter((x) => typeof x === 'string')
         : [],
   }));
   if (!Array.isArray(data.collection)) return false;
@@ -1511,22 +1511,16 @@ function spellList(card) {
   const level = levelOf(card.id);
   const xp = xpOf(card.id);
   if (!card.spells?.length) {
-    const cross = card.role === 'support' ? CROSS.support : CROSS.attaque;
-    const crossName = card.role === 'support' ? (card.soloSpell ?? cross.name) : cross.name;
-    const crossRows = [
-      `<li class="spell"><b>${crossName}</b>
-        <span class="muted">\u2726 ${cross.cost} mana \u00b7 rendement ${Math.round(CROSS.yield * 100)} %</span>
-        <span class="muted spell-desc">${cross.desc}</span></li>`,
-    ];
+    const rows = [];
+    if (card.soloSpell) rows.push(`<li class="spell"><b>✦ ${card.soloSpell}</b> <span class="muted">sort signature</span></li>`);
     if (card.gimmickName) {
-      crossRows.push(`<li class="spell"><b>\u2726 ${card.gimmickName}</b>
+      rows.push(`<li class="spell"><b>✦ ${card.gimmickName}</b>
         <span class="muted">mécanisme exclusif</span>
         <span class="muted spell-desc">${card.gimmickDesc}</span></li>`);
     }
-    return `<h4>Sorts croisés</h4>
-    <ul class="spells">${crossRows.join('')}</ul>
-    <p class="muted">À rendement réduit, ce geste croisé panse les blessés ou frappe au poing selon ce que le combat demande. Les compagnons supérieurs ajoutent un mécanisme exclusif.</p>
-    <p class="statline">Niveau ${level} : +${(level - 1) * 8} % ATK et PV \u00b7 prochain niveau : <span class="xpbar"><span style="width: ${Math.round(xp * 100)}%"></span></span> ${Math.round(xp * 100)} %</p>`;
+    return `<h4>Sorts et pouvoir</h4>
+    <ul class="spells">${rows.join('')}</ul>
+    <p class="statline">Niveau ${level} : +${(level - 1) * 8} % ATK et PV · prochain niveau : <span class="xpbar"><span style="width: ${Math.round(xp * 100)}%"></span></span> ${Math.round(xp * 100)} %</p>`;
   }
 
   
@@ -1538,7 +1532,7 @@ function spellList(card) {
     .concat(card.spells
     .map(
       (s) => {
-        const powerLine = card.role === 'support' && card.effect
+        const powerLine = card.effect && card.effect.kind === 'heal'
           ? spellPowerLine(card.effect, s.mult)
           : `frappe \u00e0 ${Math.round(s.mult * 100)} % de l\u2019ATQ (\u2248 ${Math.max(1, Math.round(stq.atk * s.mult))} d\u00e9g\u00e2ts \u00e0 ce niveau)`;
         return `<li class="spell"><b>${s.name}</b>${s.cat ? ` <span class="spell-cat">${SPELL_CAT_LABEL[s.cat] ?? s.cat}</span>` : ''}
@@ -2007,18 +2001,20 @@ function switchTeam(dir) {
 
 function slotsHtml() {
   const ids = store.team.slots;
-  const cells = [];
-  for (let i = 0; i < TEAM_MAX; i++) {
+  const nAvant = (store.team.formation === '2-3') ? 2 : 3;
+  const cell = (i) => {
     const iid = ids[i];
     const inst = iid ? byIid(iid) : null;
     if (inst) {
       const c = byId(inst.id);
-      cells.push(`<div class="slot" data-idx="${i}" title="Appui court : retirer \u00b7 Appui long : fiche">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}</div>`);
-    } else {
-      cells.push(`<div class="slot empty" data-idx="${i}"></div>`);
+      return `<div class="slot" data-idx="${i}" title="Appui court : retirer \u00b7 Appui long : fiche">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}</div>`;
     }
-  }
-  return `<div class="line team"><h3>\u00c9quipe (${ids.length}/${TEAM_MAX})</h3><div class="row">${cells.join('')}</div></div>`;
+    return `<div class="slot empty" data-idx="${i}"></div>`;
+  };
+  const rowCells = (from, to) => Array.from({ length: Math.max(0, to - from) }, (_, k) => cell(from + k)).join('');
+  return `<div class="line team"><h3>\u00c9quipe (${ids.length}/${TEAM_MAX}) \u2014 formation ${store.team.formation === '2-3' ? '2 avant \u00b7 3 arri\u00e8re' : '3 avant \u00b7 2 arri\u00e8re'}</h3>
+    <div class="row-lab">avant</div><div class="row">${rowCells(0, nAvant)}</div>
+    <div class="row-lab">arri\u00e8re</div><div class="row back">${rowCells(nAvant, TEAM_MAX)}</div></div>`;
 }
 
 function synPanel() {
@@ -2136,6 +2132,7 @@ function renderEquipe(root) {
   root.innerHTML = `
     <h2>Mon équipe <span class="team-switch"><button type="button" class="btn" id="team-prev" title="Équipe précédente">◀</button><span class="muted">(Équipe ${store.activeTeam + 1}/3)</span><button type="button" class="btn" id="team-next" title="Équipe suivante">▶</button></span></h2>
     <p class="muted"><b>Appui court</b> : ajouter une carte de votre collection, ou retirer une carte placée. <b>Appui long</b> : la fiche (sorts, évolution, autel). 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
+    <p class="muted">Formation (figée pendant le combat) : <button type="button" class="btn small${store.team.formation === '2-3' ? '' : ' gold'}" id="form-3-2">3 avant \u00b7 2 arri\u00e8re</button> <button type="button" class="btn small${store.team.formation === '2-3' ? ' gold' : ''}" id="form-2-3">2 avant \u00b7 3 arri\u00e8re</button></p>
     ${slotsHtml()}
     ${synPanel()}
     ${owned.length === 0
@@ -2147,6 +2144,8 @@ function renderEquipe(root) {
   root.querySelector('#syn-help')?.addEventListener('click', openSynergyModal);
   root.querySelector('#team-prev')?.addEventListener('click', () => switchTeam(-1));
   root.querySelector('#team-next')?.addEventListener('click', () => switchTeam(1));
+  root.querySelector('#form-3-2')?.addEventListener('click', () => { store.team.formation = '3-2'; save(); renderEquipe(root); });
+  root.querySelector('#form-2-3')?.addEventListener('click', () => { store.team.formation = '2-3'; save(); renderEquipe(root); });
   root.querySelector('#reset-filters')?.addEventListener('click', () => {
     filters = { classe: null, element: null, niv: null, rar: null };
     renderEquipe(root);
@@ -2455,8 +2454,8 @@ function railItems() {
   if (!state) return [];
   if (state.round && state.round.items) return state.round.items;
   const items = [];
-  [...(state.team.attaque ?? []), ...(state.team.support ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'team' }); });
-  [...(state.enemies.attaque ?? []), ...(state.enemies.support ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'enemies' }); });
+  [...(state.team.avant ?? []), ...(state.team.arriere ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'team' }); });
+  [...(state.enemies.avant ?? []), ...(state.enemies.arriere ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'enemies' }); });
   items.sort((a, b) => (b.u.agi - a.u.agi) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
   return items;
 }
@@ -2533,7 +2532,6 @@ function pendingLabel(mode, pending, u) {
   if (pending.kind === 'attack') return '⚔ Attaque';
   if (pending.kind === 'basic') return '✚ Soin de base';
   if (pending.kind === 'pass') return '⏸ Attendre';
-  if (pending.kind === 'cross') return '➕ ' + (CROSS.attaque.name ?? '');
   if (pending.kind === 'spell' || pending.kind === 'cast') {
     const sp = (u.spells ?? [])[pending.idx ?? 0];
     if (!sp) return '✦ Sort';
@@ -2616,8 +2614,8 @@ function askActTarget(mode, pending) {
   promptState.mode = mode;
   promptState.pending = pending;
   const list = (mode === 'enemy' || mode === 'zone')
-    ? state.enemies.attaque.filter((e) => e.alive)
-    : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
+    ? [...state.enemies.avant, ...state.enemies.arriere].filter((e) => e.alive)
+    : [...state.team.avant, ...state.team.arriere].filter((a) => a.alive);
   if (!list.length) {
     if (mode === 'enemy') promptState.pick({ ...promptState.pending });
     return;
@@ -2673,14 +2671,6 @@ function actionButtonsHtml(u, kind) {
     top('\u23f8 Attendre', '', 'gratuit')
     + `<span class="sort-meta">la carte passe son tour et garde son mana</span>`,
     'act-pass'));
-  if (isStrike && u.role === 'attaque') {
-    const crossCost = CROSS.attaque.cost;
-    const crossOff = u.mana + u.manaRegen < crossCost;
-    parts.push(row(
-      top('\u2795 ' + CROSS.attaque.name, `<span class="sort-badge b-soin">Soin</span>`, '\u2726' + crossCost)
-      + (CROSS.attaque.desc ? `<span class="sort-desc">${CROSS.attaque.desc}</span>` : ''),
-      'act-cross' + (crossOff ? ' off' : '')));
-  }
   return parts.join(' ');
 }
 
@@ -2692,13 +2682,6 @@ function bindActionButtons(box, u, kind) {
     bAtk.onclick = () => {
       if (!promptState) return;
       askActTarget('enemy', { kind: 'attack' });
-    };
-  }
-  const bCross = box.querySelector('.act-cross');
-  if (bCross) {
-    bCross.onclick = () => {
-      if (!promptState || bCross.classList.contains('off')) return;
-      askActTarget('ally', { kind: 'cross' });
     };
   }
   box.querySelectorAll('.act-spell').forEach((b) => {
@@ -2917,7 +2900,7 @@ function unitEl(u) {
     if (state && !state.winner && promptState && promptState.phase === 'target') {
       // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
       if (!u.alive) return;
-      const isEnemy = state.enemies.attaque.includes(u) || state.enemies.support.includes(u);
+      const isEnemy = state.enemies.avant.includes(u) || state.enemies.arriere.includes(u);
       if ((promptState.mode === 'enemy' || promptState.mode === 'zone') && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
       return;
@@ -2934,9 +2917,15 @@ function drawBoard() {
   teamZone.innerHTML = '';
   hpShown.clear();
   
-  const line = (el, units) => {
+  const line = (el, units, lab) => {
     const row = document.createElement('div');
-    row.className = 'row';
+    row.className = 'row' + (lab === 'arrière' ? ' back' : '');
+    if (lab) {
+      const labEl = document.createElement('div');
+      labEl.className = 'row-lab';
+      labEl.textContent = lab;
+      row.appendChild(labEl);
+    }
     for (const u of units) {
       const c = unitEl(u);
       if (!u.alive) c.classList.add('ko');
@@ -2948,14 +2937,16 @@ function drawBoard() {
   
   
   
-  line(teamZone, [...state.team.attaque, ...state.team.support]);
-  line(enemyZone, [...state.enemies.attaque, ...state.enemies.support]);
+  line(enemyZone, [...state.enemies.avant], 'avant');
+  line(enemyZone, [...state.enemies.arriere], 'arrière');
+  line(teamZone, [...state.team.avant], 'avant');
+  line(teamZone, [...state.team.arriere], 'arrière');
   
   
   if (promptState && promptState.phase === 'target') {
     const list = (promptState.mode === 'enemy' || promptState.mode === 'zone')
-      ? state.enemies.attaque.filter((e) => e.alive)
-      : [...state.team.attaque, ...state.team.support].filter((a) => a.alive);
+      ? [...state.enemies.avant, ...state.enemies.arriere].filter((e) => e.alive)
+      : [...state.team.avant, ...state.team.arriere].filter((a) => a.alive);
     for (const t of list) {
       const el = elOf(t.uid);
       if (el) el.classList.add('targeted');
@@ -2984,7 +2975,7 @@ function elOf(uid) {
 }
 
 function findUnit(uid) {
-  for (const u of [...state.team.attaque, ...state.team.support, ...state.enemies.attaque, ...state.enemies.support]) {
+  for (const u of [...state.team.avant, ...state.team.arriere, ...state.enemies.avant, ...state.enemies.arriere]) {
     if (u.uid === uid) return u;
   }
   return null;
@@ -3250,8 +3241,8 @@ async function castInline(ev, ms) {
 }
 
 function pickTargets() {
-  const foes = [...state.enemies.attaque, ...state.enemies.support].filter((e) => e.alive);
-  const attacker = state.team.attaque.find((u) => u.alive);
+  const foes = [...state.enemies.avant, ...state.enemies.arriere].filter((e) => e.alive);
+  const attacker = state.team.avant.find((u) => u.alive);
   if (!foes.length || !attacker) return [];
   return foes.map((f) => ({ uid: f.uid }));
 }
@@ -3287,7 +3278,7 @@ async function animate(events, ms, gen = null) {
         const srcEl = elOf(ev.sourceId);
         let dstEl = elOf(ev.targetId);
         if (ev.targetId === 'all') {
-          const foes = [...state.enemies.attaque, ...state.enemies.support];
+          const foes = [...state.enemies.avant, ...state.enemies.arriere];
           const first = shownAlive(foes)[0] ?? foes[0];
           dstEl = first ? elOf(first.uid) : null;
         }
@@ -3427,7 +3418,7 @@ async function animate(events, ms, gen = null) {
           const rollGem = (tier) => {
             if (uiRand() < dropChance(dg.id) * tactMult * loot.drop) {
               const best = monstersOf(dg.id);
-              const pool = [...(best?.attaque ?? []), ...(best?.support ?? [])];
+              const pool = [...(best?.avant ?? []), ...(best?.arriere ?? [])];
               const elt = pool.length ? pool[Math.floor(uiRand() * pool.length)].element : 'Eau';
               addGem(tier, elt);
               registerDrop(dg.id);
@@ -3436,7 +3427,7 @@ async function animate(events, ms, gen = null) {
           };
           if (stage !== 5 && stage !== dg.floors && uiRand() < dropChance(dg.id + ':stg') * 0.35 * tactMult * loot.drop) {
             const best = monstersOf(dg.id);
-            const pool = [...(best?.attaque ?? []), ...(best?.support ?? [])];
+            const pool = [...(best?.avant ?? []), ...(best?.arriere ?? [])];
             const elt = pool.length ? pool[Math.floor(uiRand() * pool.length)].element : 'Eau';
             addGem('brut', elt);
             registerDrop(dg.id + ':stg');
@@ -3445,7 +3436,7 @@ async function animate(events, ms, gen = null) {
           }
           
           const bossElt = () => {
-            const pool = dg.types?.length ? dg.types : [monstersOf(dg.id).attaque[0]?.element ?? 'Eau'];
+            const pool = dg.types?.length ? dg.types : [monstersOf(dg.id).avant[0]?.element ?? 'Eau'];
             return pool[Math.floor(uiRand() * pool.length)];
           };
           const grantBrut = (nB) => {
@@ -3736,14 +3727,14 @@ function renderCombat(root, opts = {}) {
       && (store.progress[store.dungeon]?.diffs?.[1]?.record ?? 0) < 10) {
     const soften = store.stage <= 4 ? 0.7 : store.stage === 5 ? 0.7 : store.stage <= 9 ? 0.8 : store.stage === 10 ? 0.45 : 1; 
     if (soften < 1) {
-      for (const u of [...wave.attaque, ...wave.support]) {
+      for (const u of [...wave.avant, ...wave.arriere]) {
         u.atk = Math.max(1, Math.round(u.atk * soften));
         u.hp = Math.max(1, Math.round(u.hp * soften));
       }
       discovery = `🌱 Bonus de découverte (premier donjon, Facile, jusqu'au premier donjon complet) : ennemis affaiblis de ${Math.round((1 - soften) * 100)} % — le temps de former votre première équipe.`;
     }
   }
-  const newSeen = [...wave.attaque, ...wave.support].filter((c) => c.dungeon && !seenCard(c.id));
+  const newSeen = [...wave.avant, ...wave.arriere].filter((c) => c.dungeon && !seenCard(c.id));
   if (newSeen.length) {
     for (const c of newSeen) markSeen(c.id);
     save();
@@ -3779,19 +3770,20 @@ function renderCombat(root, opts = {}) {
       ...(instSpells.length ? { spells: instSpells } : {}),
     };
   }).filter(Boolean);
+  const nAvant = (store.team.formation === '2-3') ? 2 : 3;
   state = initCombat(
     {
-      attaque: cards.filter((c) => c.role !== 'support'),
-      support: cards.filter((c) => c.role === 'support'),
+      avant: cards.slice(0, nAvant),
+      arriere: cards.slice(nAvant),
     },
     wave,
     wseed ^ (store.stage * 2654435761),
     {},
   );
-  const teamEmpty = state.team.attaque.length === 0 && state.team.support.length === 0;
+  const teamEmpty = state.team.avant.length === 0 && state.team.arriere.length === 0;
   
   if (!defi && store.runMod === 'sterile') {
-    for (const u of [...state.team.attaque, ...state.team.support]) u.manaRegen = Math.max(1, u.manaRegen - 1);
+    for (const u of [...state.team.avant, ...state.team.arriere]) u.manaRegen = Math.max(1, u.manaRegen - 1);
   }
   const isBossFloor = store.stage % 5 === 0;
   const runModDef = (!defi && runModById(store.runMod)) || null;
@@ -4316,7 +4308,7 @@ function renderGlossaire(root) {
         <li><b>Frappe sans sort</b> : sans mana pour son sort, chaque classe frappe à son rendement (voir le tableau des classes). Tant qu’un sort part, il frappe au multiplicateur du sort.</li>
         <li><b>Fureur</b> : passé le tour 15, tous les dégâts montent de 8 % par tour supplémentaire, des deux côtés : les combats ne s’éternisent jamais.</li>
         <li><b>Vitesse</b> : de \u00d70,5 \u00e0 \u00d732 \u2014 \u00e0 \u00d716 les animations sont coup\u00e9es mais le rythme reste visible ; \u00e0 \u00d732 le combat est quasi instantan\u00e9 (seul le plateau se redessine tour par tour). Le combat se lance tout seul \u00e0 l\u2019entr\u00e9e du donjon et \u00e0 chaque \u00e9tage, sauf en mode manuel.</li>
-        <li><b>Soins croisés</b> : un attaquant dont un allié passe sous ${Math.round(CROSS.healThreshold * 100)} % des PV le soigne (${Math.round(CROSS.yield * 100)} % de son ATQ, coût ${CROSS.attaque.cost}) au lieu de frapper. Un support dont personne n’est blessé frappe l’ennemi le plus faible (coût ${CROSS.support.cost}).</li>
+        <li><b>Rangs avant/arrière</b> : 3 cartes devant + 2 derrière (ou 2 + 3), choisi avant le combat et figé. L’arrière est ciblable et encaisse -50 % de dégâts tant qu’un allié tient à l’avant ; un Guerrier ou un Assassin en arrière frappe à moitié ; les soins ne sont jamais affectés ; les attaques de zone ignorent la protection de l’arrière.</li>
         <li><b>Éléments</b> : ${Object.entries(BEATS).map(([a, b]) => `${EL_GLYPH[a] ?? ''} ${a} bat ${b}`).join(', ')} ; domination = +25 % de dégâts ; ⚪ Neutre = hors oppositions (ni bonus ni malus : les naissances raciales avant leur voie).</li>
         <li><b>Races</b> : chaque carte porte une race — Humaine (la référence), Monstre (+10 % de stats de base), Mystique (+20 %), Divine (+30 %) ; la régression comble l’écart en entrant dans la race plus forte. L’élément Divin n’existe plus : les divines ont un vrai élément, et leur bonus d’équipe (+10 % dégâts et +10 % soins dès 2 en équipe) est porté par la race.</li>
         <li><b>Régression</b> : depuis un point de blocage (l’UR d’une lignée scellée), un Éclat de régression ouvre une NOUVELLE carte au palier R d’une race supérieure — 100 % des sorts, 10 % des stats gagnées, l’ancienne reste. L’Éclat tombe dans tous les donjons, de 0,3 % (Facile) à 5 % (Enfer) par victoire. Les monstres n’y ont pas accès.</li>

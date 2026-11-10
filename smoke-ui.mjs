@@ -72,7 +72,7 @@ async function main() {
   const a1c = api.byId('a1');
   check('43 A a1 : sort de lignée seul (commun retiré des familles, T2.7)', a1c.spells.length === 1 && a1c.spells[0].name === 'Taillade du Mat' && a1c.spells[0].cat === 'lignée', a1c.spells.map((s) => s.name).join(' | '));
   const mw = api.makeWave(77, 2, 'marees', 1);
-  const monsterSpells = [...mw.attaque, ...mw.support].map((u) => (u.spells ?? []).length);
+  const monsterSpells = [...mw.avant, ...mw.arriere].map((u) => (u.spells ?? []).length);
   check('43 A monstre : commun + signature', monsterSpells.every((n) => n === 2), monsterSpells.join(','));
 
   // ---------- plateau une ligne (43 B) ----------
@@ -86,10 +86,13 @@ async function main() {
   const ez = appEl.querySelector('#enemy-zone');
   check('43 B zones team/enemy rendues', !!tz && !!ez, '');
   if (tz && ez) {
-    check('43 B une seule rangée par camp', tz.querySelectorAll('.row').length === 1 && ez.querySelectorAll('.row').length >= 1, tz.querySelectorAll('.row').length + '/' + ez.querySelectorAll('.row').length);
+    check('43 B deux rangées par camp (avant + arrière)', tz.querySelectorAll('.row').length === 2 && ez.querySelectorAll('.row').length === 2, tz.querySelectorAll('.row').length + '/' + ez.querySelectorAll('.row').length);
     check('43 B 5 cartes posées', tz.querySelectorAll('.unit').length === 5, String(tz.querySelectorAll('.unit').length));
   }
-  check('43 B plus de shift/back', !appEl._innerHTML.includes('row back'), '');
+  const rowsT = tz ? [...tz.querySelectorAll('.row')] : [];
+  const rowsE = ez ? [...ez.querySelectorAll('.row')] : [];
+  const labOf = (r) => (r.children ?? []).some((c) => c.classList?.contains('row-lab'));
+  check('43 B la rangée arrière est marquée .back et étiquetée', rowsT.some((r) => r.classList.contains('back') && labOf(r)) && rowsE.some((r) => r.classList.contains('back')), '');
 
   // ---------- fenêtre RPG tour par tour (43 C, 46 f/g/h) ----------
   api._setAuto(false);
@@ -99,7 +102,7 @@ async function main() {
   check('43 C combat tactique lancé (fenêtre RPG)', !!stC, '');
   if (stC) {
     api._speed(6);
-    stC.team.attaque[0].hp = Math.max(1, Math.round(stC.team.attaque[0].maxHp * 0.05));
+    stC.team.avant[0].hp = Math.max(1, Math.round(stC.team.avant[0].maxHp * 0.05));
     els.get('fight').click();
     let am = null;
     for (let w = 0; w < 120 && !am; w++) { await wait(25); am = api._actEl(); }
@@ -163,7 +166,7 @@ async function main() {
     const st47 = api._state();
     api._speed(6);
     if (st47) {
-      for (const u of [...st47.team.attaque, ...st47.team.support]) { u.mana = u.manaMax; }
+      for (const u of [...st47.team.avant, ...st47.team.arriere]) { u.mana = u.manaMax; }
       els.get('fight').click();
       let am = null;
       for (let w = 0; w < 120 && !am; w++) { await wait(25); am = api._actEl(); }
@@ -172,7 +175,7 @@ async function main() {
       if (bA) {
         bA.click(); await wait(40);
         am = api._actEl();
-        const nEnnemis = st47.enemies.attaque.filter((e) => e.alive).length + st47.enemies.support.filter((e) => e.alive).length;
+        const nEnnemis = st47.enemies.avant.filter((e) => e.alive).length + st47.enemies.arriere.filter((e) => e.alive).length;
         const nTargeted = [...appEl.querySelectorAll('.unit')].filter((el) => el.classList.contains('targeted')).length;
         check('47 b cibles éligibles illuminées sur le plateau', !!am && nTargeted === nEnnemis && nEnnemis > 0, `targeted=${nTargeted} ennemis=${nEnnemis}`);
         const zoneTxt = am && am.querySelector('.act-zone') ? am.querySelector('.act-zone')._innerHTML : '';
@@ -231,7 +234,7 @@ async function main() {
       els.get('fight').click();
       for (let w = 0; w < 120 && !api._actEl() && !st50.winner; w++) await wait(25);
       // Décharge Arcanique (cible "zone" en données) doit passer la fenêtre en mode zone
-      const mage = [...st50.team.attaque, ...st50.team.support].find((u) => (u.spells ?? []).some((s) => s.name === 'D\u00e9charge Arcanique'));
+      const mage = [...st50.team.avant, ...st50.team.arriere].find((u) => (u.spells ?? []).some((s) => s.name === 'D\u00e9charge Arcanique'));
       check('50 a un sort à fiche zone présent dans l’équipe de test', !!mage, '');
       if (mage) {
         mage.mana = mage.manaMax;
@@ -260,7 +263,7 @@ async function main() {
             tg.click();
             for (let w = 0; w < 120 && !st50.winner && api._busy(); w++) await wait(25);
             const hits = (st50._events ?? []).filter((e) => e.type === 'attack' && e.sourceId === mage.uid);
-            const nAlive = [...st50.enemies.attaque, ...st50.enemies.support].filter((e) => e.alive).length;
+            const nAlive = [...st50.enemies.avant, ...st50.enemies.arriere].filter((e) => e.alive).length;
             check('50 c la zone touche toute la ligne ennemie vivante', hits.length === nAlive && nAlive >= 2, `hits=${hits.length} alive=${nAlive}`);
           } else {
             check('50 c la zone frappe plusieurs cibles contiguës (>= 3)', false, 'pas d’ancre');
@@ -304,9 +307,9 @@ async function main() {
       const piedTxt = withPied[0] && withPied[0].querySelector('.pied') ? withPied[0].querySelector('.pied').textContent : '';
       check('48 a pied en actuel/total (PV, mana)', /♥ \d+\/\d+/.test(piedTxt) && /✦ \d+\/\d+/.test(piedTxt) && piedTxt.includes('⚔'), piedTxt.slice(0, 80));
       // icônes d'état : on force bonus/malus/bouclier puis re-rendu
-      const u0 = st48.team.attaque[0];
+      const u0 = st48.team.avant[0];
       u0.atkBuff = 0.2; u0.shield = 12;
-      const e0 = st48.enemies.attaque.find((e) => e.alive) ?? st48.enemies.support[0];
+      const e0 = st48.enemies.avant.find((e) => e.alive) ?? st48.enemies.arriere[0];
       if (e0) { e0.status = { ...(e0.status ?? {}), curse: { value: 0.2, turns: 2 } }; }
       api._draw(); await wait(30);
       const units2 = [...appEl.querySelectorAll('.unit')];
@@ -317,7 +320,7 @@ async function main() {
       const icE = pE && pE.querySelector('.pied') ? [...pE.querySelector('.pied').querySelectorAll('.st-ic')] : [];
       check('48 b icône ⬇ malus (rouge) sur le pion maudit', icE.some((c) => c.classList.contains('down')), '');
       // KO grisé
-      const tgt = st48.team.support[0] ?? st48.team.attaque[1];
+      const tgt = st48.team.arriere[0] ?? st48.team.avant[1];
       if (tgt) { tgt.alive = false; tgt.hp = 0; api._draw(); await wait(30);
         const koEl = [...appEl.querySelectorAll('.unit')].find((el) => el.dataset.uid === tgt.uid);
         check('48 c carte tombée grisée (.ko)', !!koEl && koEl.classList.contains('ko'), '');
@@ -332,7 +335,7 @@ async function main() {
   {
     const st49 = api._state();
     if (st49) {
-      const uid = (st49.team.attaque[0] ?? st49.team.support[0]).uid;
+      const uid = (st49.team.avant[0] ?? st49.team.arriere[0]).uid;
       api._openUnit(uid);
       await wait(40);
       const hero = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
@@ -364,7 +367,7 @@ async function main() {
     if (st50) {
       const chips = [...appEl.querySelectorAll('.rail-chip')];
       const agiOf = (c) => Number((c.textContent.match(/\u26a1(\d+)/) ?? [])[1] ?? 0);
-      const total50 = [...st50.team.attaque, ...st50.team.support, ...st50.enemies.attaque, ...st50.enemies.support].length;
+      const total50 = [...st50.team.avant, ...st50.team.arriere, ...st50.enemies.avant, ...st50.enemies.arriere].length;
       check('50 a le rail montre tout le monde, vos cartes en lueur, ennemis distincts',
         chips.length === total50 && total50 > 0 && chips.some((c) => c.classList.contains('mine')) && chips.some((c) => c.classList.contains('foe')),
         `${chips.length}/${total50}`);
@@ -404,7 +407,7 @@ async function main() {
         check("50 d le bouton propose de reprendre", ftxt.includes('\u25b6') || ftxt.includes('Lancer le tour'), ftxt);
         // fiche complète sur une naissance (Novice : Neutre, rareté en toutes lettres)
         const st50b = api._state();
-        const uid50 = st50b ? (st50b.team.attaque[0] ?? st50b.team.support[0]).uid : null;
+        const uid50 = st50b ? (st50b.team.avant[0] ?? st50b.team.arriere[0]).uid : null;
         if (uid50) {
           api._openUnit(uid50);
           await wait(40);
@@ -478,8 +481,8 @@ async function main() {
   const mkSt46 = () => {
     const wave = api.makeWave(77, 2, 'marees', 1);
     const teamCards = {
-      attaque: [{ ...api.byId('a1'), level: 15 }, { ...api.byId('g9'), level: 15 }],
-      support: [{ ...api.byId('d2'), level: 15 }],
+      avant: [{ ...api.byId('a1'), level: 15 }, { ...api.byId('g9'), level: 15 }],
+      arriere: [{ ...api.byId('d2'), level: 15 }],
     };
     return api.initCombat(teamCards, wave, 1234);
   };
@@ -511,11 +514,11 @@ async function main() {
   const plainNull = api.makeWave(31, 3, 'marees', 1, null);
   check('42 B dormance : mod null = pas de mod', JSON.stringify(plain) === JSON.stringify(plainNull), '');
   const horde = api.makeWave(31, 3, 'marees', 1, 'horde');
-  check('42 B Horde : +1 ennemi', horde.attaque.length + horde.support.length === plain.attaque.length + plain.support.length + 1, `${plain.attaque.length}+${plain.support.length} vs ${horde.attaque.length}+${horde.support.length}`);
+  check('42 B Horde : +1 ennemi', horde.avant.length + horde.arriere.length === plain.avant.length + plain.arriere.length + 1, `${plain.avant.length}+${plain.arriere.length} vs ${horde.avant.length}+${horde.arriere.length}`);
   const mur = api.makeWave(31, 3, 'marees', 1, 'muraille');
-  check('42 B Muraille : PV majorés', mur.attaque.every((u, k) => u.hp >= plain.attaque[k].hp), '');
+  check('42 B Muraille : PV majorés', mur.avant.every((u, k) => u.hp >= plain.avant[k].hp), '');
   const rage = api.makeWave(31, 3, 'marees', 1, 'rage');
-  check('42 B Rage : ATQ majorée', rage.attaque.every((u, k) => u.atk >= plain.attaque[k].atk), '');
+  check('42 B Rage : ATQ majorée', rage.avant.every((u, k) => u.atk >= plain.avant[k].atk), '');
 
   // modale : accepter
   mem.clear();
@@ -592,7 +595,7 @@ async function main() {
   api.go('#combat');
   await wait(60);
   const st0 = api._state();
-  const reg0 = st0 ? [...st0.team.attaque, ...st0.team.support].map((u) => u.manaRegen) : [];
+  const reg0 = st0 ? [...st0.team.avant, ...st0.team.arriere].map((u) => u.manaRegen) : [];
   mem.clear();
   setup(['a1', 'g9', 'd2'], 15);
   api._setAuto(true);
@@ -600,9 +603,9 @@ async function main() {
   api.go('#combat');
   await wait(60);
   const st1 = api._state();
-  const reg1 = st1 ? [...st1.team.attaque, ...st1.team.support].map((u) => u.manaRegen) : [];
+  const reg1 = st1 ? [...st1.team.avant, ...st1.team.arriere].map((u) => u.manaRegen) : [];
   check('42 F Mana Stérile : régén −1 (min 1)', reg1.length === reg0.length && reg1.length > 0 && reg1.every((v, k) => v === Math.max(1, reg0[k] - 1)), `stérile=${reg1.join(',')} base=${reg0.join(',')}`);
-  const proj = (en) => JSON.stringify([...(en?.attaque ?? []), ...(en?.support ?? [])].map((u) => [u.name, u.hp, u.atk, u.lvl]));
+  const proj = (en) => JSON.stringify([...(en?.avant ?? []), ...(en?.arriere ?? [])].map((u) => [u.name, u.hp, u.atk, u.lvl]));
   check('42 F vague ennemie identique avec Stérile', st0 && st1 && proj(st1.enemies) === proj(st0.enemies), '');
   store.runMod = null;
 
@@ -623,7 +626,7 @@ async function main() {
   check('43 D l\'écran donjons annonce le modificateur de run', /modificateur de run est tiré/.test(els.get('app')?._innerHTML ?? ''), '');
 
   // ---------- correctifs terrain (43.1) ----------
-  check('43.1 a plateau : largeur fixe et uniforme pour .unit', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)') && html.includes('.unit.boss { flex: 0 0 auto; width: clamp(112px, 22vw, 148px)') && !html.includes('.row.back'), '');
+  check('43.1 a plateau : largeur fixe et uniforme pour .unit', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)') && html.includes('.unit.boss { flex: 0 0 auto; width: clamp(112px, 22vw, 148px)') && html.includes('.row.back { opacity: .92; }'), '');
   check('43.1 a les anciennes surcharges de taille ont disparu', !html.includes('min-width: 104px; max-width: 172px') && !html.includes('flex: 1.8 1 0'), '');
   check('43.1 b modificateur réellement optionnel dans les textes', html.includes('entrez librement sans lui, ou relancez le tirage contre 1 éclat brut') && html.includes('Le refuser est gratuit'), '');
   check('43.1 c b1-b7 marquées archived', ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7'].every((id) => api.byId(id).archived === true), '');
@@ -698,7 +701,7 @@ async function main() {
     const st51 = api._state();
     api._speed(6);
     if (st51) {
-      const u51 = st51.team.attaque[0] ?? st51.team.support[0];
+      const u51 = st51.team.avant[0] ?? st51.team.arriere[0];
       if (u51) u51.mana = u51.manaMax;
       els.get('fight').click();
       let am51 = null;

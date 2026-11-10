@@ -118,7 +118,7 @@ test('le soin plafonne à la vie max de la cible, au cran comme à l\u2019unique
   const soigneur = E.makeUnit(E.getMonster('e22'));
   const t = { uid: 't', hp: 95, maxHp: 100, alive: true, shield: 0, status: {} };
   const events = [];
-  E.applySupport(soigneur, { attaque: [t], support: [] }, {}, events, 'team', []);
+  E.applySupport(soigneur, { avant: [t], arriere: [] }, {}, events, 'team', []);
   assert.equal(t.hp, 100);
 });
 

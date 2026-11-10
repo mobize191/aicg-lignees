@@ -1,5 +1,5 @@
 {
- "version": 19,
+ "version": 20,
  "teams": [
   {
    "slots": [
@@ -8,13 +8,16 @@
     3,
     4,
     5
-   ]
+   ],
+   "formation": "3-2"
   },
   {
-   "slots": []
+   "slots": [],
+   "formation": "3-2"
   },
   {
-   "slots": []
+   "slots": [],
+   "formation": "3-2"
   }
  ],
  "activeTeam": 0,

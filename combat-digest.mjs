@@ -13,10 +13,10 @@ if (!api) { console.error('BOOT KO : __api absent'); process.exit(1); }
 console.log('BOOT OK');
 
 const TEAMS = [
-  { name: 'novices-niv5', attaque: [['n1', 5], ['n2', 5]], support: [['n3', 5]] },
-  { name: 'divines-niv12', attaque: [['n14', 12], ['n15', 12]], support: [['n13', 12]] },
-  { name: 'familiales-niv15', attaque: [['a1', 15], ['g9', 15]], support: [['d2', 15]] },
-  { name: 'mixte-niv8-20', attaque: [['n9', 8], ['a30', 20], ['n4', 8]], support: [['n7', 8]] },
+  { name: 'novices-niv5', avant: [['n1', 5], ['n2', 5]], arriere: [['n3', 5]] },
+  { name: 'divines-niv12', avant: [['n14', 12], ['n15', 12]], arriere: [['n13', 12]] },
+  { name: 'familiales-niv15', avant: [['a1', 15], ['g9', 15]], arriere: [['d2', 15]] },
+  { name: 'mixte-niv8-20', avant: [['n9', 8], ['a30', 20], ['n4', 8]], arriere: [['n7', 8]] },
 ];
 const DGS = ['marees', 'forge', 'bosquet', 'crypte', 'zenith'];
 const GARDE = 150;
@@ -34,8 +34,8 @@ for (let n = 0; n < N; n++) {
     seed = n + 1;
     const wave = api.makeWave(seed, stage, dg, diff);
     const teamCards = {
-      attaque: team.attaque.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
-      support: team.support.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
+      avant: team.avant.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
+      arriere: team.arriere.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
     };
     const state = api.initCombat(teamCards, wave, seed);
     while (!state.winner && tours < GARDE) { api.resolveTurn(state); tours++; }
