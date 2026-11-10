@@ -8,7 +8,9 @@
 - **Éléments (5)** : Feu, Eau, Terre, Ombre, Lumière. Roue des forces (`engine.BEATS`) : Feu bat Terre, Terre bat Eau, Eau bat Feu, Lumière bat Ombre, Ombre bat Lumière.
 - **Races (4)** : humaine, monstre, mystique, divine (rangs d'éveil croissants dans `trees.json`).
 - **Raretés** : C < UC < R < SR < UR < L, multiplicateur de puissance dans `engine.RARITY_POWER` (1 → 1.52).
-- **Mana** : par palier de famille (`engine.FAMILY_MANA` : max 8/11/14/22/30/40, régén 2/3/3/5/6/8) ; monstres 10 max, régén 2 (`MONSTER_MANA`).
+- **Caractéristiques (v0.47)** : chaque carte porte ATQ (la stat principale de combat), PV, **AGI** (agilité) et **INT** (intelligence), réparties par profil (`engine.moteur.STAT_RATIOS` : la stat principale domine toujours, le Guerrier est agile, le Mage et le Prêtre sont intelligents, l'Assassin le plus agile).
+- **Mana** : par palier de famille (`engine.FAMILY_MANA` : max 8/11/14/22/30/40, régén 2/3/3/5/6/8) ; **depuis la v0.47, l'intelligence enrichit le mana** : max = palier + 2×INT, recharge = palier + INT/2, bonus plafonnés à +50 % du palier (`MANA_PER_INT`, `MANA_REGEN_PER_INT`, `MANA_CAP_RATIO`) ; monstres 10 max, régén 2 (`MONSTER_MANA`).
+- **Seuils de résistance** : palier de la cible + INT/2 (`SEUIL_PER_INT`) — les effets (poison, brûlure, contrôle...) passent contre ce seuil.
 
 ## 2. Lignées et familles
 
@@ -29,12 +31,16 @@
 
 - Les **éveils** font passer une carte vers une autre par une **voie** (`data/trees.json`, 4 races) ; la voie choisie ouvre des écoles supplémentaires.
 - Coût d'éveil dans `engine.EVO_COST` ; max 5 cartes dans l'équipe (`TEAM_MAX`).
+- **Mécanismes spéciaux d'évolution** (lot 5, `data/evolutions.json`) : la **régression** (a17 Kenji, Sabre Céleste → a20 Mage de la Fournaise : par un Éclat de régression, nouvelle carte au rang inférieur qui garde 100 % des sorts et 10 % des stats, `REG_STATS_BONUS`), la **fusion** (a27 → a28 : deux exemplaires de Maïa, Lame du Bosquet fusionnent en Maïa, Déesse du Bosquet), la **malédiction des quais** (a34 le Braconnier des Quais → e3 le Pillard des Récifs, par l'événement du même nom), l'**événement d'équilibre** (p1 le Jeune Séraphin → d6 Kairos, Arbitre du Seuil : posséder l'Ange ET le Démon), et les **évolutions secrètes** (n4 le Voleur Novice → a37 le Jongleur de Fête : la voie de la fête, affichée « ?? » tant qu'elle n'est pas découverte).
 
 ## 5. Le combat
 
 - Deux modes : 🤖 **Auto** (le moteur enchaîne tout seul) et 🧭 **Tactique** (vrai tour de RPG). En Tactique, le combat démarre et s'enchaîne **tout seul** : seul le tour d'une de vos cartes ouvre la fenêtre d'action, et un bouton ⏸ Pause fige le flux entre les tours.
 - **Rail d'ordre du tour (v2.1)** : au-dessus du plateau, tout le monde dans l'ordre d'action (agilité décroissante, équipe d'abord à égalité) ; lueur sur vos cartes, acteur en cours doré, tombés grisés.
-- **Moteur pas-à-pas v0.46** : file d'actions triée par agilité décroissante (équipe devant à égalité), `beginRound` / `peekRound` / `stepRound(state, choice)` ; le mode Auto compose les mêmes pièces (`resolveTurn`).
+- **Moteur pas-à-pas (v0.46, ordre par AGI v0.47)** : file d'actions triée par agilité décroissante (équipe devant à égalité), `beginRound` / `peekRound` / `stepRound(state, choice)` ; le mode Auto compose les mêmes pièces (`resolveTurn`).
+- **Esquive (v0.47)** : esquive = esquive de classe + écart d'AGI (attaquant − défenseur) × 0,01, plafonnée à 30 % (`engine.moteur.DODGE_PER_AGI`, `DODGE_CAP`).
+- **Frappe simple universelle (v1.12)** : ⚔ Attaque (gratuite, désignation d'ennemi) est la première action de TOUTE carte, la ligne support comprise ; le support frappe à sa stat principale au rendement de sa classe, avec esquive et opposition d'élément. Les sorts hostils (dégâts, contrôle, malus) se résolvent sur les ennemis depuis n'importe quelle ligne, selon la fiche du sort.
+- **Résolution des sorts hérités (v1.11)** : un sort hérité remappé par le tri (école + cran) se résout en fiche nommée au moment de l'affichage et du lancer (`resolveSpellEntry`) ; crans vides et sorts inconnus filtrés, sauvegardes inchangées.
 - **Fenêtre d'action** : à chaque tour d'une carte, illustration, PV/ATQ/mana, puis des actions **détaillées** (v2.1) : badge de type (Dégâts, Soin, Bouclier… venant du rôle d'école dans `data/schools.json`), coût en mana, ligne méta école · puissance · zone, et le texte du sort ; actions éteintes si mana insuffisant ; puis **ciblage explicite** : liste cliquable + pion surligné sur le plateau + clic direct.
 - **Formation** : 5 cartes max, 3 devant + 2 derrière ou 2 + 3, choisie avant le combat, **figée** pendant le combat (ACTÉ 10/11/2026).
 - **Règles de rang** (ACTÉES) : une carte de l'arrière encaisse 50 % des dégâts tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié tant que l'avant tient (les autres profils frappent à plein). L'avant tombe : la protection saute pour tous. La protection de l'arrière ne couvre **pas** les attaques de zone.
