@@ -1,6 +1,6 @@
 # Roadmap — AICG : Lignées
 
-> Dernière mise à jour : 10/11/2026, après les correctifs terrain v1.11-v1.12 : le grand chantier arbres + sorts est TERMINÉ (voir la section dédiée et le journal des arbitrages), la section « Ce qui reste à faire » a été réorganisée en conséquence. Ajout des chantiers visuels proposés (charte graphique v2, déco/hub-ville, errance top-down).
+> Dernière mise à jour : 10/11/2026, soir : retours des tests IHM terrain consignés (correctifs prioritaires), diagnostic du bug des sorts en doublon (héritage `inst.acc`), ajout du chantier « lignes avant/arrière et suppression du rôle attaque/support » (règles ACTÉES, moteur pas encore en conformité) et réorganisation de la section « Ce qui reste à faire ». Les chantiers visuels proposés (charte graphique v2, déco/hub-ville, errance top-down) restent en l'état.
 
 ## État actuel (v1.12, en ligne)
 
@@ -33,10 +33,20 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 
 ## Ce qui reste à faire (travaux futurs, mis à jour du 10/11/2026)
 
-Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi/int, esquive, mana, seuils) et la campagne d'illustrations sont faites. Restent, dans l'ordre acté :
+Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi/int, esquive, mana, seuils) et la campagne d'illustrations sont faites. Les tests IHM du 10/11 soir ont rapporté cinq corrections prioritaires, un bug de sorts en doublon (diagnostiqué) et un écart doc/moteur sur la règle de rang. Restent, dans l'ordre acté :
 
-1. **Validation terrain (téléphone ET PC)** : fenêtre d'action confortable ? ciblage lisible ? ordre de tour compréhensible ? pions et images, fiche, puces d'info. `docs/validation-ihm.md` fournit un protocole de test local automatisé (captures d'écran incluses). À vérifier en priorité sur les correctifs du jour : plus aucune ligne « ✦ undefined » dans la fenêtre d'action (v1.11), bouton ⚔ Attaque et sorts hostils depuis les supports (v1.12).
-2. **Contenu v3 restant (data + cartes + images)**, brief complet dans `docs/design/familles-races-v3.md` et les sections v3 de `docs/design/spec-design.md` :
+1. **Correctifs terrain (tests IHM du 10/11 soir)** :
+   - **Bug des sorts en doublon (diagnostic fait, correctif à écrire)** : à chaque évolution, tous les sorts courants de la carte sont recopiés dans `inst.acc` (ui.js, `oldSpells`) ; au combat, les sorts de l'unité = `inst.acc` + sorts de la nouvelle forme (ui.js, `instSpells`) ; or les sorts de lignée de la nouvelle forme incluent déjà ceux de l'ancienne (liste croissante par palier) → chaque évolution duplique le préfixe, et les premiers sorts d'une carte montée C → L au sein d'une famille s'affichent 5 à 6 fois. Correctif : dédoublonner par identité de sort à la fusion (répare aussi les sauvegardes déjà polluées) et ne cumuler dans `inst.acc` que les sorts que la nouvelle forme ne connaît pas déjà.
+   - `elOf()` doit surligner les pions du plateau, pas les rail-chips (ui.js:2966).
+   - Bouton réduire/masquer sur la fenêtre d'action tactique (elle masque toute la ligne équipe, jusqu'à 78 dvh, sans aucun bouton pour la refermer).
+   - Ajouter les 4 familles v3 à `FAM_ORDER` (crepuscule, vol, zele, appel).
+   - Tailles de boutons mobile ≥ 32 px.
+   - Corriger la double bordure de la zone de texte des cartes et son fond flou (retour UI noté précédemment).
+   - La règle de rang arrière est renvoyée aux arbitrages (révision PROPOSÉE) : doc -50 % vs moteur non-ciblable tant que l'avant tient.
+2. **Validation terrain (téléphone ET PC)** : fenêtre d'action confortable ? ciblage lisible ? ordre de tour compréhensible ? pions et images, fiche, puces d'info. `docs/validation-ihm.md` fournit un protocole de test local automatisé (captures d'écran incluses). À vérifier en priorité sur les correctifs du jour : plus aucune ligne « ✦ undefined » dans la fenêtre d'action (v1.11), bouton ⚔ Attaque et sorts hostils depuis les supports (v1.12).
+3. **Recâblage famille → école (data)** : les sorts de lignée portent rarement leur rôle/cible, car la clé d'école diffère du nom de famille pour 9 des 11 familles (seules lame et appel coïncident ; le Bouclier relève du Rempart, l'Aube du Baume…) ; la fenêtre d'action retombe donc sur le ciblage par défaut de la carte. Recâbler le mapping pour que la fiche type pilote aussi les sorts de lignée (comportement par défaut conservé sinon).
+4. **Lignes avant/arrière + suppression du rôle attaque/support (moteur + data + UI)** : les règles de rang sont ACTÉES (arbitrages du 10/11 soir) : formation 5 max, 3 devant + 2 derrière ou 2 + 3, figée pendant le combat ; l'arrière encaisse 50 % des dégâts tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié, les autres profils à plein ; les soins ne sont jamais affectés par la position ; l'avant tombe : la protection saute ; la protection de l'arrière ne couvre pas les attaques de zone. Le moteur actuel ne l'applique pas : lignes `attaque`/`support` par rôle, aucun modificateur de position (`src/engine/combat.js`). Chantier : implémenter les rangs dans le moteur, supprimer le champ `role` partout (113 cartes, 153 monstres, vagues ennemies, Souffle/Frappe Croisée, écran d'équipe, sauvegardes), l'écran d'équipe choisit la formation avant le combat. À faire avant le contenu v3 restant (les nouvelles cartes naîtront sans `role`) et avant le calibrage du digest. Pré-requis : trancher la révision PROPOSÉE sur la règle de rang arrière (doc -50 % vs moteur non-ciblable).
+5. **Contenu v3 restant (data + cartes + images)**, brief complet dans `docs/design/familles-races-v3.md` et les sections v3 de `docs/design/spec-design.md` :
    - **Sirènes des Récifs** : 13e famille de monstres, entièrement à créer (8 cartes, voies Chant/contrôle et Récifs/dégâts, L Méliane et Thalassa, pas de M).
    - **Variantes gobelins régionales** : une seule famille gobelin (foyer aux Marées), variantes 2-3 cartes en ligne directe rapide dans les autres donjons (premier test : Gobelin des Fumées à la Forge) ; pas de M gobelin.
    - **Clergé du Plein Jour** : Apolline, Prophétesse du Jour, passe en M (fusion Célestin + Justine) ; nouvelle L Justine, Justicière du Jour ; le Zénith porterait 2 M.
@@ -45,12 +55,10 @@ Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi
    - **Lignées d'accueil des Enge** : Sirène Nouvelle, Gorgonne Nouvelle, Fée Nouvelle (communes de la Crypte).
    - Les **29 nommées de référence** (`campagne/references/`, seeds dans `tools/seeds.csv`) s'intègrent au manifeste à mesure que ces cartes existent.
    - **Campagne d'arts série 2 (27 arts, À FAIRE)** : les 24 cartes des 4 nouvelles familles v3 (Crépuscule q1-q6, Vol t1-t6, Zèle u1-u6, École des Invocations v1-v6) + p1 Jeune Séraphin, p3 Pousse des Sèves, p4 Fidèle du Jour n'ont pas d'illustration (fallback actuel) ; plan série 2 dans `docs/images/plan-comfyui-images-videos.md` (pipeline, budgets et non-régression série 1 conservés, manifeste attendu à 258 arts). Les archives (p2, b1-b7) restent sans art.
-3. **v0.48 — Vidéos de sorts signature** : les webm WAN 2.2 (~0,8 s, 21 frames/25 fps, prompts dans `tools/fx-prompts.json`) sont rendus et stockés dans `site-assets/fx/` (jamais en base64 dans le dist ni dans `assets.json`) ; **l'affichage dans le jeu est le chantier code** : déclenchement au cast, fallback image si absent/lent, toggle de vitesse.
-4. **Recâblage famille → école (data)** : les sorts de lignée portent rarement leur rôle/cible, car la clé d'école diffère du nom de famille pour 9 des 11 familles (seules lame et appel coïncident ; le Bouclier relève du Rempart, l'Aube du Baume…) ; la fenêtre d'action retombe donc sur le ciblage par défaut de la carte. Recâbler le mapping pour que la fiche type pilote aussi les sorts de lignée (comportement par défaut conservé sinon).
-5. **Retours UI notés** : corriger la double bordure de la zone de texte des cartes et son fond flou.
-6. **Calibrage digest avec Marc-Olivier** : la baseline `833a6d2c…` **518/3000** (0 exception, 1 marathon) est la mesure de référence, à affiner sur le terrain ; le coût de l'éveil et le rythme d'apprentissage des crans se calibrent au fil des lots de contenu (chaque changement de maths = digest recalibré et documenté dans arbitrages).
-7. **Pistes design ouvertes** (voir `docs/arbitrages.md`) : la zone triangle qui toucherait la ligne avant ET la ligne arrière (PISTE), les entrées d'école sans crans (tolérées, recâblage noté).
-8. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
+6. **v0.48 — Vidéos de sorts signature** : les webm WAN 2.2 (~0,8 s, 21 frames/25 fps, prompts dans `tools/fx-prompts.json`) sont rendus et stockés dans `site-assets/fx/` (jamais en base64 dans le dist ni dans `assets.json`) ; **l'affichage dans le jeu est le chantier code** : déclenchement au cast, fallback image si absent/lent, toggle de vitesse.
+7. **Calibrage digest avec Marc-Olivier** : la baseline `833a6d2c…` **518/3000** (0 exception, 1 marathon) est la mesure de référence, à affiner sur le terrain ; le coût de l'éveil et le rythme d'apprentissage des crans se calibrent au fil des lots de contenu (chaque changement de maths = digest recalibré et documenté dans arbitrages). À faire après le chantier lignes avant/arrière : les maths de combat changent, on n'équilibre qu'une fois.
+8. **Pistes design ouvertes** (voir `docs/arbitrages.md`) : la zone triangle qui toucherait la ligne avant ET la ligne arrière (PISTE), les entrées d'école sans crans (tolérées, recâblage noté).
+9. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
 
 ## Chantiers visuels — charte v2, déco et errance top-down (PROPOSÉS, 10/11/2026)
 
@@ -92,3 +100,4 @@ La spec et le plan d'exécution du grand chantier, archivés à la clôture : `d
 - v0.47 : Tranche-Monde et Nuit Éternelle — les sorts signature L ne répètent plus le nom de leur carte.
 - v0.47.2 : source d'images au choix (bouton 🖼️, DreamShaper XL / WAI-Illustrious).
 - v0.47.3 : combat v2.1 (rail d'ordre du tour, auto-run en Tactique, actions détaillées, fiche complète) — baptême rétroactif du chantier de présentation du 10/11.
+

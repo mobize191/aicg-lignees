@@ -2,6 +2,24 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (soir) : ACTÉ — lignes avant/arrière et fin du rôle attaque/support (retour de Marc-Olivier)
+
+- **La règle de rang existait en doc (`docs/regles-jeu.md`) mais pas dans le moteur** ; elle est reconfirmée et complétée :
+  - Formation : 5 cartes max, 3 devant + 2 derrière ou 2 + 3, choisie avant le combat, **figée** pendant le combat.
+  - L'arrière encaisse **50 % des dégâts** tant qu'un allié tient à l'avant ; l'avant tombe : la protection saute pour tous ; la protection de l'arrière ne couvre **pas** les attaques de zone.
+  - Un **Guerrier ou un Assassin** en arrière frappe à moitié tant que l'avant tient ; les autres profils (Mage, Prêtre, Occultiste) frappent à plein.
+  - **Complément acté ce jour : les soins ne sont JAMAIS affectés par la position** (seuls les dégâts).
+- **Le rôle `attaque`/`support` est supprimé** : plus de distinction support/attaquant nulle part ; le champ `role` disparaît des data (113 cartes, 153 monstres), du moteur (lignes d'init, vagues ennemies, Souffle/Frappe Croisée) et de l'UI. Toute carte se place librement à l'avant ou à l'arrière ; son comportement suit sa classe et sa position, plus son rôle.
+- Implémentation : chantier dédié « lignes avant/arrière » dans `docs/roadmap.md`, avant le contenu v3 restant (les nouvelles cartes naîtront sans `role`) et avant le calibrage du digest. Le moteur actuel n'a aucune notion d'avant/arrière (`src/engine/combat.js` : lignes par rôle uniquement).
+
+## 2026-11-10 (soir) : PROPOSÉ — révision datée : règle de rang arrière, -50 % (doc) ou non-ciblable (moteur) ?
+
+- Constat des tests IHM : la doc actée dit que l'arrière **encaisse 50 % des dégâts** tant que l'avant tient ; le moteur actuel rend l'arrière **non ciblable** tant que l'avant tient (`enemyPickTarget` vise l'avant vivant d'abord), puis l'arrière encaisse des dégâts pleins. Les deux lectures ne coexistent pas ; à trancher avant le chantier lignes :
+  - **Option A (doc actée)** : l'arrière est ciblable et encaisse -50 % tant que l'avant tient.
+  - **Option B (moteur actuel)** : l'arrière n'est pas ciblable tant que l'avant tient, puis encaisse des dégâts pleins.
+  - **Option C (hybride)** : l'arrière n'est ciblable que par les sorts et la zone tant que l'avant tient, à -50 %.
+- Statut : **PROPOSÉ, en attente de Marc-Olivier** ; le chantier lignes avant/arrière attend ce tranchage.
+
 ## 2026-11-10 : ACTÉ — arbitrages de lancement de la campagne charte v2 (retour de Marc-Olivier)
 
 - **Full body dès UR** : les raretés UR, L et M passent en full body ; C/UC/R/SR restent en demi-corps (charte v2 §1 et §12).
@@ -262,4 +280,5 @@ Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en *
 ## Décisions antérieures
 
 Voir `docs/historique/` (rapports des phases de la refonte) et `docs/design/` (specs normatives). En bref : moteur pas-à-pas v0.46, refonte majeure exécutée (phases 0 à 5), campagne d'illustrations DreamShaper XL livrée (231 arts + 5 fonds), caractéristiques (FOR/VIE/AGI/INT) actées pour la v0.47 avec formules à calibrer avec Marc-Olivier.
+
 
