@@ -95,6 +95,9 @@ const FAM_ORDER = E.FAM_ORDER;
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;
+
+// v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
+const FX_SPELLS = E.FX_SPELLS;
 const MONSTER_FAMS = DATA['monster-families'];
 
 // T0.2 : le camp de ciblage d'un sort vient de sa fiche (cible en donnees) ; sans fiche,

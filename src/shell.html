@@ -998,3 +998,6 @@ animation: newpulse 1.6s infinite;
 .row-lab { width: 100%; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #93a0b5; margin-top: 6px; }
 .row.back { opacity: .92; }
 .line.team .row { justify-content: flex-start; }
+.fx-video-overlay { position: fixed; inset: 0; z-index: 75; display: flex; align-items: center; justify-content: center; pointer-events: none; background: rgba(5, 7, 12, .55); animation: fadein .15s ease; }
+.fx-video { width: min(420px, 86vw); aspect-ratio: 1; object-fit: cover; border-radius: 18px; box-shadow: 0 0 60px rgba(124, 77, 255, .5); }
+@media (prefers-reduced-motion: reduce) { .fx-video-overlay { display: none; } }

@@ -1425,6 +1425,38 @@ async function probeFx(name) {
   }
   return null;
 }
+
+// v0.48 : sonde par id de fx (fx-*.webm rendus dans site-assets/fx/) ; mise en cache
+async function probeFxId(fxId) {
+  if (fxFound[fxId]) return fxFound[fxId];
+  const url = await probeVideo(`fx/${fxId}.webm`);
+  if (url) fxFound[fxId] = url;
+  return url;
+}
+
+function fxOn() {
+  try { return storage.getItem('aicg-fx') !== 'off'; } catch (e) { return true; }
+}
+
+// v0.48 : joue la vidéo du sort signature au-dessus du plateau ; fallback = le bandeau image existant
+async function playFxVideo(ev) {
+  if (!fxOn() || speedIdx >= 5 || !combatApp) return;
+  const fxId = FX_SPELLS[ev.name];
+  if (!fxId) return;
+  const url = await probeFxId(fxId);
+  if (!url || !combatApp) return;
+  const ov = document.createElement('div');
+  ov.className = 'fx-video-overlay';
+  const v = document.createElement('video');
+  v.src = url; v.muted = true; v.autoplay = true; v.playsInline = true;
+  v.className = 'fx-video';
+  ov.appendChild(v);
+  combatApp.appendChild(ov);
+  const kill = () => ov.remove();
+  v.onended = kill;
+  v.onerror = kill;
+  setTimeout(kill, 2500);
+}
 ;
 
 
@@ -3219,6 +3251,7 @@ async function castSpecial(ev, ms) {
     </div>`;
   combatApp.appendChild(ov);
   if (el) el.classList.add('casting');
+  playFxVideo(ev);
   await sleep(Math.max(700, ms * 1.1));
   ov.classList.add('out');
   if (el) el.classList.remove('casting');
@@ -3799,6 +3832,7 @@ function renderCombat(root, opts = {}) {
       <button class="btn ctrl" id="mode">${autoMode ? 'Mode : Auto' : 'Mode : Tactique'}</button>
       <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
+      <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
@@ -3834,6 +3868,12 @@ function renderCombat(root, opts = {}) {
   combatApp.querySelector('#flash').onclick = (e) => {
     reduceFlashes = !reduceFlashes;
     e.target.textContent = reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets';
+  };
+  const fxBtn = combatApp.querySelector('#fx-toggle');
+  if (fxBtn) fxBtn.onclick = (e) => {
+    const on = !fxOn();
+    try { storage.setItem('aicg-fx', on ? 'on' : 'off'); } catch (err) { }
+    e.target.textContent = `🎬 FX : ${on ? 'on' : 'off'}`;
   };
   combatApp.querySelector('#fight').onclick = () => {
     if (!autoMode) {

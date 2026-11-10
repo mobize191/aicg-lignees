@@ -3509,7 +3509,19 @@ const DATA = {
    ],
    "parCamp": {}
   },
-  "VERSION": "1.0"
+  "VERSION": "1.0",
+  "FX_SPELLS": {
+   "Marée Noire": "fx-leviathan-laser",
+   "Couronne des Écumes": "fx-griknir-cry",
+   "Fauchade Universelle": "fx-la-mort-faux",
+   "Renaissance Pyrique": "fx-pyrrha-renaissance",
+   "Arrêt du Temps": "fx-kairos-sablier",
+   "Chant du Naufrage": "fx-meliane-chant",
+   "Voie du Tombeau": "fx-archiliche-flammes",
+   "Épée de l'Aube": "fx-jeanne-halo",
+   "Couronnement": "fx-astre-solaire",
+   "Destin Tissé": "fx-ananke-fils"
+  }
  },
  "evolutions": {
   "n1": [
@@ -10726,6 +10738,9 @@ const FAM_ORDER = E.FAM_ORDER;
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;
+
+// v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
+const FX_SPELLS = E.FX_SPELLS;
 const MONSTER_FAMS = DATA['monster-families'];
 
 // T0.2 : le camp de ciblage d'un sort vient de sa fiche (cible en donnees) ; sans fiche,
@@ -14173,6 +14188,38 @@ async function probeFx(name) {
   }
   return null;
 }
+
+// v0.48 : sonde par id de fx (fx-*.webm rendus dans site-assets/fx/) ; mise en cache
+async function probeFxId(fxId) {
+  if (fxFound[fxId]) return fxFound[fxId];
+  const url = await probeVideo(`fx/${fxId}.webm`);
+  if (url) fxFound[fxId] = url;
+  return url;
+}
+
+function fxOn() {
+  try { return storage.getItem('aicg-fx') !== 'off'; } catch (e) { return true; }
+}
+
+// v0.48 : joue la vidéo du sort signature au-dessus du plateau ; fallback = le bandeau image existant
+async function playFxVideo(ev) {
+  if (!fxOn() || speedIdx >= 5 || !combatApp) return;
+  const fxId = FX_SPELLS[ev.name];
+  if (!fxId) return;
+  const url = await probeFxId(fxId);
+  if (!url || !combatApp) return;
+  const ov = document.createElement('div');
+  ov.className = 'fx-video-overlay';
+  const v = document.createElement('video');
+  v.src = url; v.muted = true; v.autoplay = true; v.playsInline = true;
+  v.className = 'fx-video';
+  ov.appendChild(v);
+  combatApp.appendChild(ov);
+  const kill = () => ov.remove();
+  v.onended = kill;
+  v.onerror = kill;
+  setTimeout(kill, 2500);
+}
 ;
 
 
@@ -15967,6 +16014,7 @@ async function castSpecial(ev, ms) {
     </div>`;
   combatApp.appendChild(ov);
   if (el) el.classList.add('casting');
+  playFxVideo(ev);
   await sleep(Math.max(700, ms * 1.1));
   ov.classList.add('out');
   if (el) el.classList.remove('casting');
@@ -16547,6 +16595,7 @@ function renderCombat(root, opts = {}) {
       <button class="btn ctrl" id="mode">${autoMode ? 'Mode : Auto' : 'Mode : Tactique'}</button>
       <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
+      <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
@@ -16582,6 +16631,12 @@ function renderCombat(root, opts = {}) {
   combatApp.querySelector('#flash').onclick = (e) => {
     reduceFlashes = !reduceFlashes;
     e.target.textContent = reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets';
+  };
+  const fxBtn = combatApp.querySelector('#fx-toggle');
+  if (fxBtn) fxBtn.onclick = (e) => {
+    const on = !fxOn();
+    try { storage.setItem('aicg-fx', on ? 'on' : 'off'); } catch (err) { }
+    e.target.textContent = `🎬 FX : ${on ? 'on' : 'off'}`;
   };
   combatApp.querySelector('#fight').onclick = () => {
     if (!autoMode) {
@@ -17218,3 +17273,6 @@ initAssets().then(() => start());
 .row-lab { width: 100%; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #93a0b5; margin-top: 6px; }
 .row.back { opacity: .92; }
 .line.team .row { justify-content: flex-start; }
+.fx-video-overlay { position: fixed; inset: 0; z-index: 75; display: flex; align-items: center; justify-content: center; pointer-events: none; background: rgba(5, 7, 12, .55); animation: fadein .15s ease; }
+.fx-video { width: min(420px, 86vw); aspect-ratio: 1; object-fit: cover; border-radius: 18px; box-shadow: 0 0 60px rgba(124, 77, 255, .5); }
+@media (prefers-reduced-motion: reduce) { .fx-video-overlay { display: none; } }
