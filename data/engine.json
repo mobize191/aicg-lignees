@@ -336,7 +336,7 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 8,
+ "SAVE_VERSION": 12,
  "SAVE_KEY": "fondations-cards-v1",
  "CURRENT_VERSION": 12,
  "CROSS": {

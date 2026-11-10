@@ -454,6 +454,8 @@ const store = {
     { slots: [] },
   ],
   activeTeam: 0,
+  grimoire: [],
+  zonesVisitees: [],
   get team() {
     return this.teams[this.activeTeam];
   },
@@ -580,11 +582,13 @@ function snapshot() {
     dailyDone: store.dailyDone,
     dailyLevel: store.dailyLevel,
     runMod: store.runMod ?? null,
+    grimoire: [...(store.grimoire ?? [])],
+    zonesVisitees: [...(store.zonesVisitees ?? [])],
   };
 }
 
 function restore(data) {
-  if (!data || typeof data !== 'object' || ![1, 2, 3, 4, 5, 6, 7, 8].includes(data.version)) return false;
+  if (!data || typeof data !== 'object' || !Number.isInteger(data.version) || data.version < 1 || data.version > CURRENT_VERSION) return false;
   if (!Array.isArray(data.teams) || data.teams.length !== 3) return false;
   store.teams = data.teams.map((t) => ({
     slots: Array.isArray(t?.slots)
@@ -653,6 +657,8 @@ function restore(data) {
   store.dropFat = { day: '', dg: {} };
   store.milestones = { clear1: false, boss5: false, diff3: false };
   store.runMod = typeof data.runMod === 'string' && runModById(data.runMod) ? data.runMod : null;
+  store.grimoire = Array.isArray(data.grimoire) ? data.grimoire.filter((g) => g && typeof g.sort === 'string') : [];
+  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
       if (!raw || typeof raw.id !== 'string' || !byId(raw.id)) continue;
@@ -663,7 +669,10 @@ function restore(data) {
         xp: Number.isFinite(raw.xp) ? Math.max(0, raw.xp) : 0,
         asc: Number.isFinite(raw.asc) ? Math.max(0, raw.asc) : 0,
         name: typeof raw.name === 'string' ? raw.name.slice(0, 24) : '',
-        acc: Array.isArray(raw.acc) ? raw.acc.filter((sp) => sp && typeof sp.name === 'string') : [],
+        acc: Array.isArray(raw.acc) ? raw.acc.filter((sp) => sp && (typeof sp.name === 'string' || typeof sp.sort === 'string')) : [],
+        voie: typeof raw.voie === 'string' ? raw.voie : undefined,
+        agi: Number.isFinite(raw.agi) ? raw.agi : undefined,
+        int: Number.isFinite(raw.int) ? raw.int : undefined,
         isNew: raw.isNew === true,
       };
       store.instanceSeq = Math.max(store.instanceSeq, inst.iid + 1);
@@ -820,7 +829,8 @@ function load() {
     try {
       const raw = storage.getItem(key);
       if (!raw) continue;
-      if (restore(JSON.parse(raw))) return true;
+      // flux reel : une sauvegarde v8 traverse les migrations v9 -> v12 avant restauration (EXI-SAVE-1)
+      if (restore(migrate(JSON.parse(raw)))) return true;
     } catch (e) {
       
     }
