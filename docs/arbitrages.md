@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — la pierre d'éveil (T1.2 du grand chantier)
+
+L'éveil d'une naissance (rang N) consomme des **pierres d'éveil**, plus des éclats. Le coût interim `EVO_COST.N` (éclats bruts) est retiré : `evoCostOf` retourne un coût TYPÉ `['pierre', EVEIL_COST]` pour le rang N, les autres rangs gardent leurs éclats.
+
+1. **Coût** : `EVEIL_COST = 1` pierre par éveil (le défaut proposé de la spec, calibrable). Hors éléments : la naissance neutre paie sans élément.
+2. **Sources** : chaque boss d'étage (étages 5, 10, final) lâche une pierre à `PIERRE_DROP_RATE = 0.15` (donjons, rare) ; le défi du jour en donne **une par victoire**. La Forge affiche la réserve.
+3. **Portée** : la voie choisie, l'Ascendance et les sorts accumulés ne changent pas ; le routage N → C passe par `trees.json` (inchangé) ; les communes divines (Ange, Démon, Éveillé du Seuil, rang C) continuent de payer en éclats.
+4. **Preuve** : 66 tests (dont éveil : coût typé, routage par les arbres, la naissance reste jouable sans être éveillée), smoke 158, digest `7dfab0a2…` inchangé (aucune maths de combat touchée).
+
 ## 2026-11-10 : ACTÉ — le rang N migré (T1.1 du grand chantier)
 
 Lot 1 du grand chantier, appliqué aux data et au dist. Les 12 naissances humaines, monstres et mystiques passent au rang **N** (sous C) ; les 5 Bestiau deviennent les 5 **Embryons** (renommage acté v15, ids inchangés n5-n9).

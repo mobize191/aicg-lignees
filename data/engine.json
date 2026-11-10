@@ -197,10 +197,6 @@
   "regen": 2
  },
  "EVO_COST": {
-  "N": [
-   "brut",
-   3
-  ],
   "C": [
    "brut",
    3
@@ -226,6 +222,8 @@
    10
   ]
  },
+ "EVEIL_COST": 1,
+ "PIERRE_DROP_RATE": 0.15,
  "GEM_TIERS": [
   "brut",
   "poli",

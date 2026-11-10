@@ -93,3 +93,26 @@ test('apprentissage : un cran II appris en zone est persisté, castable, et surv
   E.applyTreeEveil(inst, eveil);
   assert.ok(E.isLearned(grimoire, 'morsure-decume', 'II'), 'le cran appris survit à l\u2019évolution');
 });
+
+test('T1.2 éveil : le coût d\'éveil d\'une naissance est typé pierre, les autres rangs gardent les éclats', () => {
+  const E = loadEngine();
+  const data = loadData();
+  assert.deepEqual(E.evoCostOf('n1'), ['pierre', data.engine.EVEIL_COST], 'la naissance paie des pierres d\'éveil');
+  assert.deepEqual(E.evoCostOf('a30'), data.engine.EVO_COST.UC, 'un maillon UC garde ses éclats');
+  assert.deepEqual(E.evoCostOf('n13'), data.engine.EVO_COST.C, 'la porte divine (C) garde ses éclats');
+});
+
+test('T1.2 éveil : le routage N -> C passe par trees.json, la naissance reste jouable avant l\'éveil', () => {
+  const E = loadEngine();
+  const eveil = E.eveilOf('n1', 'a30');
+  assert.ok(eveil, 'l\'éveil n1 -> a30 existe dans trees.json');
+  assert.equal(eveil.voie, 'voie du guerrier');
+  assert.ok(E.eveilOf('n1', 'a30') && E.eveilOf('n1', 's14') && E.eveilOf('n1', 'a33'), 'les trois voies du Novice sont câblées');
+  // une naissance non éveillée reste une unité de combat complète
+  E.setRoll(mulberry32(7));
+  const team = { attaque: [E.getCard('n1'), E.getCard('n4')], support: [E.getCard('n3')] };
+  const mob = [E.getMonster('e1')];
+  const st = E.initCombat(team, mob, 5, {});
+  const log = E.playAuto(st, 60);
+  assert.ok(log.length > 0, 'la naissance agit au combat sans être éveillée');
+});

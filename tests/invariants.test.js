@@ -117,7 +117,8 @@ test('evoTargetsOf suit EVO_CHOICES en donnees', () => {
 
 test('evoCostOf lit EVO_COST en donnees', () => {
   const E = loadEngine();
-  assert.deepEqual(E.evoCostOf('n1'), ['brut', 3]);
+  // n1 est une naissance (rang N) : son eveil paie en pierres (T1.2), pas en eclats
+  assert.deepEqual(E.evoCostOf('a30'), ['poli', 2]);
 });
 
 test('nextFormOf suit SOLO_STEPS en donnees', () => {

@@ -36,7 +36,8 @@ test('le rang N : le moteur le connait, moins fort que la commune, avec un cout 
   assert.equal(E.RARITY_LABEL.N, 'Naissance');
   assert.ok(E.RARITY_POWER.N < E.RARITY_POWER.C, 'la naissance est moins puissante que la commune');
   assert.ok(E.RANK.N < E.RANK.C, 'la naissance est un rang sous la commune');
-  assert.ok(E.EVO_COST.N, 'le cout d eveil du rang N existe');
+  assert.ok(E.EVEIL_COST >= 1, 'le cout en pierres d eveil existe (EVEIL_COST)');
+  assert.ok(!E.EVO_COST.N, 'le rang N ne paie plus en eclats : son eveil consomme des pierres');
 });
 test('le rang N : les 5 Embryons (ex-Bestiau) portent leurs nouveaux noms (renommage v15)', () => {
   const data = loadData();

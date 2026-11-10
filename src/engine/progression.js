@@ -28,7 +28,11 @@ function evoVoieOf(id, to) {
 }
 
 function evoCostOf(id) {
-  return EVO_COST[byId(id).rarity] ?? null;
+  const c = byId(id);
+  if (!c) return null;
+  // T1.2 : l'eveil d'une naissance (rang N) consomme des pierres d'eveil, pas des eclats
+  if (c.rarity === 'N') return ['pierre', DATA.engine.EVEIL_COST ?? 1];
+  return EVO_COST[c.rarity] ?? null;
 }
 
 // arbres de race (phase 1) : le moteur parcourt trees.json, il ne le connaît pas
