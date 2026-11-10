@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — catalogues de l'économie v2 : variantes d'armes, potions en combat, Guilde en rotation, noms aux trois saveurs (retour de Marc-Olivier)
+
+La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, équipement, quêtes, Guilde, inventaire). Les tranchages :
+
+1. **Armes à variantes (choix de build)** : chaque classe a deux lignes d'armes par palier, frappe (+ATQ %) et finesse (+stat secondaire : +AGI Guerrier/Assassin, +INT Mage/Prêtre/Occultiste).
+2. **Potions libres en combat** : autant de gorgées qu'on veut, chaque gorgée coûte le tour (nouvelle action « Objet » de la fenêtre d'action) ; utilisables aussi hors combat. Le prix des potions est le levier de calibrage du digest.
+3. **Compagnons de la Guilde en rotation quotidienne** : 3 offres par jour (seed de la date) ; prix C 500 → UR 2 000 (calibrage v0 acté), le L jamais recrutable.
+4. **Noms d'équipement aux trois saveurs** : zones/donjons, écoles et métiers mêlés (règle normative dans la spec).
+5. **Pool de quêtes quotidiennes** : 12 quêtes proposées dans la spec (1 petite + 1 moyenne + 1 grande par jour, grande à carte N ou éclat un jour sur trois) ; la liste s'ajuste librement au chantier sans nouvel arbitrage tant que le format tient (3 par jour, bonus pierre d'éveil).
+
 ## 2026-11-11 : ACTÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
 
 - **Motif** : seules `lame` et `appel` coïncidaient avec une clé d'école ; les 9 autres familles portaient leur propre clé comme école, sans rôle ni fiche type (la fenêtre d'action retombait sur le ciblage par défaut). Le mapping est désormais en data (`FAM_SCHOOL`), câblé dans `src/ui.js` : les sorts de lignée portent la clé d'école réelle + le rôle de l'école.
