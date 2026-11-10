@@ -21,6 +21,7 @@
 ## Chantiers et protocoles
 
 - `docs/validation-ihm.md` : protocole de validation locale avec captures d'écran.
+- `docs/prompt-maj-combat-v2.md` : le prompt de lancement de la mise à jour UI du combat (ciblage interactif, pied de stats, fiche plein cadre).
 - `docs/travail-local.md` : prompts spécialisés prêts à copier (corrections terrain, validation navigateur, campagne d'illustrations).
 - `docs/design/` : les designs normatifs : spec complète, design des arbres, refonte des sorts, inventaires de catalogue (238 cartes et 653 sorts de la spec v3), spec et plan de la refonte majeure.
 - `docs/images/` : conventions graphiques et plans de campagne d'illustrations.
