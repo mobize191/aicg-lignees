@@ -23,7 +23,7 @@
 - `docs/validation-ihm.md` : protocole de validation locale avec captures d'écran.
 - `docs/prompt-maj-combat-v2.md` : le prompt de lancement de la mise à jour UI du combat (ciblage interactif, pied de stats, fiche plein cadre).
 - `docs/travail-local.md` : prompts spécialisés prêts à copier (corrections terrain, validation navigateur, campagne d'illustrations).
-- `docs/design/` : les designs normatifs : spec complète, design des arbres, refonte des sorts, inventaires de catalogue (238 cartes et 653 sorts de la spec v3), spec et plan de la refonte majeure.
+- `docs/design/` : les designs normatifs : spec complète, design des arbres, refonte des sorts, inventaires de catalogue (238 cartes et 653 sorts de la spec v3), spec et plan de la refonte majeure, spec et plan du grand chantier arbres + sorts (le rang N, le tri des 189, les stats v0.47, les mécanismes, le v3, les zones).
 - `docs/images/` : conventions graphiques et plans de campagne d'illustrations.
 - `docs/campagne-planches/`, `docs/captures-validation/` : planches de contrôle et captures.
 
