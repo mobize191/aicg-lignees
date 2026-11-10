@@ -187,6 +187,41 @@ function cranOf(spellId, cran) {
   const s = getSchoolSpell(spellId);
   return s?.crans?.[cran] ?? null;
 }
+// retour terrain (10/11) : un sort h\u00e9rit\u00e9 remapp\u00e9 par le tri vit en sauvegarde comme {sort, cran}
+// ou {sort, unique} ; il se r\u00e9sout ici en fiche compl\u00e8te (nom, co\u00fbt, mult, taux, cible) pour l'affichage
+// et le moteur. L'entr\u00e9e brute reste en sauvegarde : la r\u00e9solution est sans perte et idempotente.
+function resolveSpellEntry(sp) {
+  if (!sp) return null;
+  if (typeof sp.name === 'string') return sp;
+  if (typeof sp.sort !== 'string') return null;
+  const def = getSpellDef(sp.sort);
+  if (!def) return null;
+  const c = def.crans
+    ? (sp.cran != null ? (def.crans[sp.cran] ?? null) : (Object.values(def.crans).find((x) => !x.vide) ?? null))
+    : def;
+  if (!c || c.vide) return null;
+  const larg = c.largeur ?? def.largeur ?? 1;
+  const cible = typeof def.cible === 'string' && def.cible
+    ? def.cible
+    : (def.role === 'degats' || def.role === 'controle')
+      ? (Number(larg) === 5 ? 'tous les ennemis' : Number(larg) === 3 ? 'zone' : Number(larg) === 2 ? '2 ennemis' : '1 ennemi')
+      : (larg === 'equipe' || larg === 'equipe-renforcee' ? 'l\u2019\u00e9quipe' : '1 alli\u00e9');
+  return {
+    name: def.nom,
+    cost: c.cout ?? def.cout ?? 1,
+    mult: c.mult ?? def.mult ?? null,
+    taux: c.taux ?? def.taux ?? null,
+    tours: c.tours ?? def.tours ?? null,
+    role: def.role,
+    ecole: def.ecole,
+    cible,
+    desc: c.desc ?? def.desc ?? '',
+    cat: sp.unique ? 'unique' : 'ecole',
+    sort: sp.sort,
+    ...(sp.cran != null ? { cran: sp.cran } : {}),
+    ...(larg != null ? { largeur: larg } : {}),
+  };
+}
 function largeurCibles(ligne, largeur, choix = null) {
   const n = (largeur === 'equipe' || largeur === 'equipe-renforcee') ? ligne.length : Number(largeur) || 1;
   const vivantes = ligne.filter((u) => u.hp > 0);

@@ -11494,6 +11494,41 @@ function cranOf(spellId, cran) {
   const s = getSchoolSpell(spellId);
   return s?.crans?.[cran] ?? null;
 }
+// retour terrain (10/11) : un sort h\u00e9rit\u00e9 remapp\u00e9 par le tri vit en sauvegarde comme {sort, cran}
+// ou {sort, unique} ; il se r\u00e9sout ici en fiche compl\u00e8te (nom, co\u00fbt, mult, taux, cible) pour l'affichage
+// et le moteur. L'entr\u00e9e brute reste en sauvegarde : la r\u00e9solution est sans perte et idempotente.
+function resolveSpellEntry(sp) {
+  if (!sp) return null;
+  if (typeof sp.name === 'string') return sp;
+  if (typeof sp.sort !== 'string') return null;
+  const def = getSpellDef(sp.sort);
+  if (!def) return null;
+  const c = def.crans
+    ? (sp.cran != null ? (def.crans[sp.cran] ?? null) : (Object.values(def.crans).find((x) => !x.vide) ?? null))
+    : def;
+  if (!c || c.vide) return null;
+  const larg = c.largeur ?? def.largeur ?? 1;
+  const cible = typeof def.cible === 'string' && def.cible
+    ? def.cible
+    : (def.role === 'degats' || def.role === 'controle')
+      ? (Number(larg) === 5 ? 'tous les ennemis' : Number(larg) === 3 ? 'zone' : Number(larg) === 2 ? '2 ennemis' : '1 ennemi')
+      : (larg === 'equipe' || larg === 'equipe-renforcee' ? 'l\u2019\u00e9quipe' : '1 alli\u00e9');
+  return {
+    name: def.nom,
+    cost: c.cout ?? def.cout ?? 1,
+    mult: c.mult ?? def.mult ?? null,
+    taux: c.taux ?? def.taux ?? null,
+    tours: c.tours ?? def.tours ?? null,
+    role: def.role,
+    ecole: def.ecole,
+    cible,
+    desc: c.desc ?? def.desc ?? '',
+    cat: sp.unique ? 'unique' : 'ecole',
+    sort: sp.sort,
+    ...(sp.cran != null ? { cran: sp.cran } : {}),
+    ...(larg != null ? { largeur: larg } : {}),
+  };
+}
 function largeurCibles(ligne, largeur, choix = null) {
   const n = (largeur === 'equipe' || largeur === 'equipe-renforcee') ? ligne.length : Number(largeur) || 1;
   const vivantes = ligne.filter((u) => u.hp > 0);
@@ -16602,7 +16637,8 @@ function renderCombat(root, opts = {}) {
     if (!inst) return null;
     const base = withShards(byId(inst.id));
     const ascM = 1 + (inst.asc ?? 0) / 100;
-    const instSpells = [...(inst.acc ?? []), ...(base.spells ?? [])];
+    // retour terrain : les sorts h\u00e9rit\u00e9s remapp\u00e9s ({sort, cran}) se r\u00e9solvent en fiches compl\u00e8tes
+    const instSpells = [...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean);
     return {
       ...base,
       level: inst.lvl,
@@ -17018,6 +17054,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.11 : Fin des sorts undefined', 'RETOUR TERRAIN. Les sorts h\u00e9rit\u00e9s d\u2019une carte \u00e9volu\u00e9e \u00e9taient stock\u00e9s en sauvegarde sous leur forme remapp\u00e9e par le tri (\u00e9cole + cran), sans nom ni co\u00fbt : la fen\u00eatre d\u2019action et la fiche affichaient des lignes \u00ab \u2726 undefined \u00bb, et le sort ne se lan\u00e7ait pas. D\u00e9sormais chaque entr\u00e9e se r\u00e9sout en fiche compl\u00e8te depuis le grimoire : nom, co\u00fbt, puissance, taux, cible et description. Les uniques remapp\u00e9s se r\u00e9solvent aussi ; les crans vides et les sorts inconnus disparaissent proprement de la liste. Les sauvegardes ne changent pas : la r\u00e9solution se fait \u00e0 l\u2019usage, sans perte.'],
   ['v1.10 : Le tri des recrues', 'LES NAISSANCES ET LES SOLOS RENDENT LEUR GESTE AU GRIMOIRE. Les 33 signatures du lot (les 12 naissances raciales, les 5 solos d\u2019entr\u00e9e, les 16 cartes des quais, de la f\u00eate, des routes, des dunes, des berges et du guet) fondent en crans I-II des \u00e9coles existantes : la prise de garde prot\u00e8ge (le Rempart), le bruissement d\u2019\u00e9ume frappe (la Lame), le froid du caveau fige (l\u2019Entrave), la lanterne du guet \u00e9claire (la Ferveur). Les trois portes divines (l\u2019Ange, le D\u00e9mon, l\u2019\u00c9veill\u00e9 du Seuil) gardent leur geste : les familles divines le dessineront. Les sauvegardes passent en v17 : les sorts h\u00e9rit\u00e9s d\u2019une recrue se re-mapent sur leurs crans. Le combat ne change pas : le digest reste le m\u00eame.'],
   ['v1.9 : Le tri du Z\u00e9nith', 'LE Z\u00c9NITH ARDENT FOND SES 30 SIGNATURES EN 22 CRANS D\u2019\u00c9COLE ET 8 UNIQUES. Le renvoi des ph\u00e9nix devient une ligne du Rempart (25/20 % \u00d7 2 tours, les ailes couvrent 1 puis 2 alli\u00e9s), l\u2019Hymne porte la Ferveur \u00e0 l\u2019\u00e9quipe enti\u00e8re (boost 20 %, tenue 15 %), et les cartes nomm\u00e9es gardent leur geste : Sentence Solaire, Couronnement (l\u2019Astre Capiteux), \u00c9clipse Montante, Renaissance Pyrique, Immolation Retourn\u00e9e, Cantique Final, Peine Capitale, Proph\u00e9tie du Plein Jour. Les sauvegardes passent en v16 : le Z\u00e9nith tri\u00e9 re-mappe ses sorts connus. Le combat ne change pas : le digest reste le m\u00eame.'],
   ['v1.8 : Le tri de la Crypte', 'LA CRYPTE OUBLIÉE FOND SES 30 SIGNATURES EN 22 CRANS D\u2019ÉCOLE ET 8 UNIQUES. Le hurlement des banshees devient un sort de l\u2019Entrée (la zone au cran III), la morsure putride ouvre le poison du Mauvais Œil, la légion des caveaux rejoint l\u2019Appel (3 renforts) et la Ferveur se remplit (deuil martial, étendard funèbre, serment rallié). Les cartes nommées gardent leur geste : Voie du Tombeau, Abîme Remontant, Hurlement Fatal, Fauchade Universelle (la Mort), Deuil Éternel, Harpon du Naufrage, Épée de l\u2019Aube, Lame du Serment. Les sauvegardes passent en v15 : la Crypte triée re-mappe ses sorts connus. Le combat ne change pas : le digest reste le même.'],

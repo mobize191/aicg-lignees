@@ -17,6 +17,8 @@
 - **Validation** : baseline digest 3000 combats `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa` (476 victoires, 0 exceptions, 0 marathons ; la baseline précédente `c5ab2af1…` à 534 victoires datait d'avant les reclassifications de classe) ; équivalence pas-à-pas/Auto prouvée par le check 46 i du smoke (deux combats identiques, événements JSON strictement égaux) ; smoke **158 checks** tout passant, 60 tests verts.
 - **Images** : `assets.json` = 231 arts de cartes (300×420 JPEG, campagne DreamShaper XL du 10/11) + 5 fonds de donjons (960×540), ~7,8 Mo ; `assets-wai.json` = le manifeste comparatif WAI-Illustrious (bouton 🖼️ v0.47.2). Chargés automatiquement en ligne (http), sondage par fichier en `file://`.
 
+- **Correctif terrain v1.11 — sorts undefined (10/11/2026)** : les sorts hérités d'une carte évoluée étaient remappés en sauvegarde par le tri (école + cran) sans nom ni coût : la fenêtre d'action affichait des lignes « ✦ undefined » et le sort ne se lançait pas. Nouveau `resolveSpellEntry` dans le moteur résout chaque entrée (école + cran, unique, fiche complète) en fiche nommée depuis le grimoire ; crans vides et sorts inconnus filtrés. Sauvegardes inchangées. Moteur et équilibrage inchangés : digest `833a6d2c…` intact, smoke 171 checks, 108 tests.
+
 ## Migration d'arbitrages design (10/11/2026, poussée dans les data)
 
 Les décisions de la session design sont appliquées aux données du jeu (voir `docs/arbitrages.md` pour le journal complet) :

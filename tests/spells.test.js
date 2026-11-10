@@ -515,3 +515,24 @@ test('les 7 uniques des Marées sont au format décision 3 (base + cran + delta)
     assert.ok(E.getSpellDef(u.base), `base ${u.base} existe`);
   }
 });
+test('un sort hérité remappé se résout en fiche complète, plus de undefined (retour terrain 10/11)', () => {
+  const E = loadEngine();
+  // cran II de la Lame d'Écume : nom, coût, mult et cible viennent des données
+  const lame = E.resolveSpellEntry({ sort: 'morsure-decume', cran: 'II' });
+  assert.ok(lame && typeof lame.name === 'string', 'le sort résolu a un nom');
+  assert.equal(lame.name, 'Lame d’Écume');
+  assert.equal(lame.cost, 4);
+  assert.equal(lame.mult, 1.8);
+  assert.equal(lame.cible, '2 ennemis');
+  assert.equal(lame.role, 'degats');
+  // un unique remappé se résout aussi
+  const unique = E.resolveSpellEntry({ sort: 'maree-noire', unique: true });
+  assert.ok(unique && typeof unique.name === 'string' && unique.cat === 'unique');
+  assert.equal(unique.name, 'Marée Noire');
+  // un cran vide ne se résout pas (il n'est pas jouable), une entrée inconnue non plus
+  assert.equal(E.resolveSpellEntry({ sort: 'sort-inconnu-du-test', cran: 'I' }), null);
+  assert.equal(E.resolveSpellEntry(null), null);
+  // les sorts nommés passent tels quels (idempotent)
+  const nomme = { name: 'Frappe Précise', cost: 2, mult: 1.3 };
+  assert.equal(E.resolveSpellEntry(nomme), nomme);
+});
