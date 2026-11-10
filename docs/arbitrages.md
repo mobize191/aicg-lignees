@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — calibrage post-lignes et précisions boucle v2 (retour de Marc-Olivier)
+
+Réponses aux questions du couloau 1 (entrée « PROPOSÉ — sessions 5-7 » ci-dessous) et à l'ordonnancement de la boucle v2 :
+
+1. **Protection arrière : aucun plafond supplémentaire.** L'Option A est conservée telle quelle (l'arrière encaisse 50 % des dégâts tant que l'avant tient) ; pas de plafond de dégâts encaissés. Si la re-mesure post-boucle v2 révèle un problème, une révision datée sera proposée.
+2. **Zénith et taux global : tranchage différé.** Les 17 % de victoires du Zénith et les 42,4 % globaux de la baseline `aed250f9…` sont des mesures, pas l'équilibre final : la suppression de la régén, le départ à 2 cartes, le recrutement naturel et l'XP recalibrée changent les maths. On re-mesure après la boucle v2 et l'économie v2, on ne tranche qu'une fois.
+3. **Soins complets entre deux runs distincts (précision à la boucle v2).** L'état de l'équipe (PV, mana, états) persiste au sein d'un run (étages d'un donjon ; plus tard au fil de l'errance, avec ses autels) ; au démarrage d'un nouveau run, l'équipe revient à plein.
+4. **Potions en combat avancées au premier lot de la boucle v2 (révision datée d'ordonnancement).** La suppression de la régén ne peut pas atterrir sans moyen de se soigner en combat : l'action Objet (potions de soin et de mana, prix Boutique actés 50 et 60 or, `docs/design/economie-v2-catalogues.md`) quitte le bloc visuel et ouvre le chantier. Le reste de l'économie v2 (Boutique complète, marchand, Guilde, quêtes, craft) reste au bloc visuel.
+5. **Parallélisation design/graphisme.** Le couloir design et le graphisme peuvent produire en parallèle les maquettes de l'errance, du menu et de la Boutique sans attendre le calibrage ; l'ordre de codage du couloir 1 reste : boucle v2 → économie v2 → hub-ville → errance.
+
 ## 2026-11-11 : ACTÉ — sets d'équipement par zone, façon Dofus (retour de Marc-Olivier)
 
 Détail dans `docs/design/economie-v2-catalogues.md` (§2, sets par zone) :
@@ -57,6 +67,8 @@ La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, é
 ## 2026-11-11 : ACTÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
 
 ## 2026-11-11 : PROPOSÉ — sessions 5-7 du plan de lancement : état et questions pour Marc-Olivier
+
+> Questions de calibrage tranchées le 11/11 : voir l'entrée « ACTÉ — calibrage post-lignes et précisions boucle v2 » en tête du journal.
 
 - **Session 5 (contenu v3)** : audit — Sirènes des Récifs (e23-e30 + Méliane/Thalassa), variante Gobelin des Fumées, Clergé du Plein Jour (Apolline M, Justine L), 9/10 renommages verbatim (le Léviathan garde la forme « Nom, Titre » à virgule, conforme à la charte des nommées) sont déjà en data depuis le lot 6 du grand chantier. Restent à créer et à trancher avec toi : familles compagnons (7 UR + 7 L), lignées d'accueil des Enge (Sirène/Gorgonne/Fée Nouvelles, communes de la Crypte), familles divines côté joueur, intégration des 29 nommées de référence au manifeste d'arts (pipeline `campagne/`, hors dépôt).
 - **Session 6 (v0.48 vidéos)** : fait — mapping `FX_SPELLS` en data, lecture des webm `site-assets/fx/` au cast du sort signature, fallback bandeau image si absent/lent, toggle 🎬 FX (persistant), ignoré en vitesse turbo. Digest inchangé (UI seule).
