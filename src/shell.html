@@ -728,6 +728,15 @@ border: 1px solid #ffffff26; background: #ffffff0d; color: #cfd3e1; cursor: poin
 .glo-fx::before { content: "➤"; position: absolute; left: 0; color: #7c4dff; font-size: .75em; }
 @media (min-width: 620px) { .glo-grid { grid-template-columns: 1fr 1fr; } }
 
+/* v0.47.2 : bouton de switch de source d'images (DreamShaper XL ↔ WAI-Illustrious) */
+#art-src-btn {
+display: inline-flex; align-items: center; justify-content: center;
+width: 40px; height: 34px; border-radius: 10px; font-size: 1.05rem; line-height: 1;
+border: 1px solid rgba(77, 208, 225, .35);
+background: rgba(77, 208, 225, .12); color: #bfe8ff; cursor: pointer;
+}
+#art-src-btn:active { background: rgba(77, 208, 225, .28); }
+
 #menu-btn { display: none; }
 @media (max-width: 639px) {
 header { gap: 10px; }
@@ -871,6 +880,7 @@ animation: newpulse 1.6s infinite;
 <header>
   <div class="brand">⚔ Fondations Cards</div>
   <span class="pts-badge" id="pts">⚡ 0</span>
+  <button type="button" id="art-src-btn" aria-label="Changer la source des images" title="Source des images : DreamShaper XL">🖼️</button>
   <button type="button" id="menu-btn" aria-label="Menu">☰</button>
 </header>
 <nav id="main-nav">

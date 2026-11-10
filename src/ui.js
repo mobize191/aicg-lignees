@@ -1088,6 +1088,14 @@ function start() {
       go(a.getAttribute('href'));
     });
   });
+  const artSrcBtn = document.getElementById('art-src-btn');
+  if (artSrcBtn) {
+    artSrcBtn.title = 'Source des images : ' + ART_SRC_LABEL[artSrcKey()];
+    artSrcBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchArtSrc();
+    });
+  }
   const menuBtn = document.getElementById('menu-btn');
   if (menuBtn) {
     menuBtn.addEventListener('click', (e) => {
@@ -1218,6 +1226,16 @@ function updatePtsBadge() {
 
 const ART = {};
 
+// v0.47.2 : deux sources d'illustrations au choix (manifeste DreamShaper XL ou WAI)
+const ART_MANIFESTS = { dreamshaper: 'assets.json', wai: 'assets-wai.json' };
+const ART_SRC_LABEL = { dreamshaper: 'DreamShaper XL', wai: 'WAI-Illustrious v17' };
+function artSrcKey() {
+  try {
+    const k = storage.getItem('fondations-art-src');
+    return ART_MANIFESTS[k] ? k : 'dreamshaper';
+  } catch (e) { return 'dreamshaper'; }
+}
+
 
 
 
@@ -1332,7 +1350,7 @@ async function probeDungeonBg(d) {
 
 async function initAssets() {
   try {
-    const res = await fetch("assets.json");
+    const res = await fetch(ART_MANIFESTS[artSrcKey()]);
     if (res.ok) {
       applyManifest(await res.json());
       return;
@@ -1341,6 +1359,23 @@ async function initAssets() {
     
   }
   await Promise.all([...CATALOG.map(probeCardArt), ...DUNGEONS.map(probeDungeonBg)]);
+}
+
+// v0.47.2 : bascule la source d'images et re-rend la page courante
+async function switchArtSrc() {
+  const next = artSrcKey() === 'dreamshaper' ? 'wai' : 'dreamshaper';
+  try { storage.setItem('fondations-art-src', next); } catch (e) { }
+  for (const k of Object.keys(ART)) delete ART[k];
+  for (const d of DUNGEONS) d.art = null;
+  for (const k of Object.keys(fxFound)) delete fxFound[k];
+  await initAssets();
+  const b = document.getElementById('art-src-btn');
+  if (b) {
+    b.title = 'Source des images : ' + ART_SRC_LABEL[artSrcKey()];
+    b.textContent = '🖼️';
+  }
+  go(location.hash || '#accueil');
+  toast('🖼️ Illustrations : ' + ART_SRC_LABEL[artSrcKey()]);
 }
 
 async function probeFx(name) {
@@ -3846,6 +3881,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v0.47.2 : Source d’images au choix', 'Un bouton 🖼️ dans l’en-tête bascule les illustrations des cartes entre DreamShaper XL (assets.json, par défaut) et WAI-Illustrious v17 (assets-wai.json, campagne comparative), mémorisé entre les visites. Aucun impact sur le moteur.'],
   ['v1.0 : La refonte majeure', 'LE MONOLITHE DEVIENT MODULAIRE. Les donnees vivent desormais dans data/ (cartes, monstres, ecoles, grimoire a crans, arbres de race, zones), le moteur dans src/engine/ en modules purs, et dist.html est regenere par build.mjs. LES ARBRES DE RACE (v17) : crans +10/+20/+30 % en donnees, l\u2019Ange Eveille remplace l\u2019Ange Gardien, communes deleguees (Pousse des Seves, Fidele du Jour). LES SORTS (v2.3) : 8 ecoles, grimoire a crans I-IV, fusion des Marees (30 signatures -> 7 uniques + 23 fondues), fin du verrou de classe. LE MODE RPG : agilite et intelligence, mult sur la stat principale, la zone de 3, l\u2019ordre du tour sur l\u2019agilite, les taux contre les seuils. LES ZONES D\u2019ERRANCE : cadence zone/donjon, recoltes, apprentissage des crans. Sauvegardes migrees de v8 a v12 sans perte.'],
   ['v0.47 : Tranche-Monde et Nuit Éternelle', 'LES SORTS SIGNATURE NE RÉPÈTENT PLUS LE NOM DE LEUR CARTE. Le sort L du Sabre (« Kenji : Sabre Céleste ») devient Tranche-Monde ; le sort L de l’Ombre (« Kira : Nuit Sans Fin ») devient Nuit Éternelle. « Kenji : Zénith Tranchant » reste ; l’Aube garde son exception assumée : Aube Éternelle, le plus fort sort de l’aube porte le nom de sa carte (Léna).'],
   ['v0.46 : Le RPG tour par tour', 'LE CHANTIER PROMIS. Le mode 🧭 Tactique devient un vrai tour de RPG : plus de panneau à remplir en bas de page. Chaque tour, les cartes des deux camps agissent une par une, de la plus forte attaque à la moins forte (la vôtre d’abord à égalité). Quand vient le tour d’une de vos cartes, une fenêtre s’ouvre pour elle : illustration, points de vie, attaque, mana — puis ses choix : ⚔ Attaque, sorts ✦ avec leur coût (atténués si le mana manque), ➕ Souffle Croisé pour les attaquants, ⏸ Attendre pour économiser le mana. Désignez ensuite la cible : ennemie à frapper ou allié à soigner, dans une liste cliquable — et le pion correspondant s’illumine sur le plateau. L’action s’exécute aussitôt, animée, puis la carte suivante joue, et les ennemis agissent de la même façon sous vos yeux. Le ciblage des ennemis, demandé au retour du terrain, est enfin explicite.'],
