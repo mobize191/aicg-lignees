@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — l'acquisition du rang N (T1.3 du grand chantier)
+
+EXI-N-4 posé. Trois décisions d'application :
+
+1. **Naissances sauvages (défaut proposé, calibrable)** : chaque étage de donjon vaincu offre `N_DROP_RATE = 0.02` (2 %) de chance qu'une naissance se joigne directement au joueur ; le tirage (`drawNaissance` moteur, filtre `cardAvailable` côté UI) reste borné par les déblocages et n'exclut jamais la porte divine (n13-n15 en C). Multiplié par le facteur tactique et le butin comme les autres drops.
+2. **La table du jeton de génération passe en data et devient CONFORME à la décision 8** (`JETON_RARITY`) : à chaque palier de donjons bouclés, la commune garde le taux de référence (50 %) et le taux décroît avec la rareté. **Changement assumé** : les anciens taux codés en dur favorisaient la peu commune aux paliers hauts (palier 3 : 45/50/5, palier 5 : 30/60/10 en C/UC/R) ; ils deviennent 50/45/5 et 50/40/10. L'économie des jetons sera revue plus tard (décision 8, caveat acté).
+3. **Départ : 2 N offerts (défaut proposé)** : l'Épéiste Novice (n1) et le Prêtre Novice (n3) rejoignent la collection au premier lancement, jouables immédiatement, en plus des 5 jetons.
+4. **Preuve** : 68 tests (tirage semé : pool de naissances, bornes de la table du jeton sur 1000 tirages, décroissance par palier, `N_DROP_RATE` < 5 %), smoke 158, digest `7dfab0a2…` **inchangé** : les équipes du digest sont fixes et les maths du combat ne bougent pas ; la nouvelle baseline attendue au plan T1.3 ne s'applique pas (aucune équipe de départ simulée par le digest).
+
 ## 2026-11-10 : ACTÉ — la pierre d'éveil (T1.2 du grand chantier)
 
 L'éveil d'une naissance (rang N) consomme des **pierres d'éveil**, plus des éclats. Le coût interim `EVO_COST.N` (éclats bruts) est retiré : `evoCostOf` retourne un coût TYPÉ `['pierre', EVEIL_COST]` pour le rang N, les autres rangs gardent leurs éclats.

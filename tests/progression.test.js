@@ -116,3 +116,41 @@ test('T1.2 éveil : le routage N -> C passe par trees.json, la naissance reste j
   const log = E.playAuto(st, 60);
   assert.ok(log.length > 0, 'la naissance agit au combat sans être éveillée');
 });
+
+test('T1.3 : le tirage de naissance ne sort que des naissances disponibles, jamais une archive (EXI-N-4)', () => {
+  const E = loadEngine();
+  E.setRoll(mulberry32(42));
+  for (let i = 0; i < 60; i++) {
+    const c = E.drawNaissance();
+    assert.ok(c, 'le pool de naissances est non vide');
+    assert.ok(c.raciale, 'seules des naissances sortent');
+    assert.ok(c.rarity === 'N' || (c.rarity === 'C' && E.raceOfCard(c) === 'divine'), 'rang N, porte divine en C');
+    assert.ok(!c.archived, 'jamais une carte archivee (Ange Gardien)');
+  }
+  assert.equal(E.drawNaissance(mulberry32(1), () => false), null, 'pool filtre vide : null, pas de crash');
+});
+
+test('T1.3 : la rarete du jeton suit la table en data, communes au taux de reference puis decroissant (decision 8)', () => {
+  const E = loadEngine();
+  const data = loadData();
+  const tiers = data.engine.JETON_RARITY;
+  for (const [palier, table] of Object.entries(tiers)) {
+    const total = table.reduce((a, [, p]) => a + p, 0);
+    assert.ok(Math.abs(total - 1) < 1e-9, `le palier ${palier} somme a 1`);
+    const byRar = Object.fromEntries(table);
+    assert.ok((byRar.C ?? 0) >= (byRar.UC ?? 0) && (byRar.UC ?? 0) >= (byRar.R ?? 0), `palier ${palier} : taux decroissant avec la rarete`);
+  }
+  assert.ok(data.engine.N_DROP_RATE > 0 && data.engine.N_DROP_RATE < 0.05, 'le drop de naissance en donjon reste tres bas');
+  // tirage seme : bornes attendues
+  const rng = mulberry32(7);
+  assert.equal(E.jetonRarityFor(rng, 0), 'C', 'aucun donjon boucle : jeton commune');
+  const tirages = [];
+  const rng2 = mulberry32(99);
+  for (let i = 0; i < 1000; i++) tirages.push(E.jetonRarityFor(rng2, 5));
+  const pct = (r) => tirages.filter((x) => x === r).length / tirages.length;
+  assert.ok(pct('R') > 0.07 && pct('R') < 0.13, `R autour de 10 % (obtenu ${pct('R')})`);
+  assert.ok(pct('UC') > 0.35 && pct('UC') < 0.45, `UC autour de 40 % (obtenu ${pct('UC')})`);
+  assert.ok(pct('C') > 0.45 && pct('C') < 0.55, `C autour de 50 % (obtenu ${pct('C')})`);
+  const rng3 = mulberry32(21);
+  for (let i = 0; i < 200; i++) assert.notEqual(E.jetonRarityFor(rng3, 2), 'R', 'deux donjons boucles : pas de Rare au jeton');
+});
