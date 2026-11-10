@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : PROPOSÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
+
+- **Motif** : seules `lame` et `appel` coïncidaient avec une clé d'école ; les 9 autres familles portaient leur propre clé comme école, sans rôle ni fiche type (la fenêtre d'action retombait sur le ciblage par défaut). Le mapping est désormais en data (`FAM_SCHOOL`), câblé dans `src/ui.js` : les sorts de lignée portent la clé d'école réelle + le rôle de l'école.
+- **Mapping proposé** (dérivé des voies/classes des familles et des lignes d'école des biomes ; `bouclier→rempart` et `aube→baume` étaient déjà actés en roadmap) : eau→lame, aube→baume, lame→lame, ombre→lame, bouclier→rempart, braise→mauvais-oeil, bosquet→entrave, crepuscule→mauvais-oeil, vol→ruse, zele→ferveur, appel→appel.
+- **Comportement conservé** : les familles en ligne support (aube, bouclier, zèle) relèvent d'écoles non hostiles (soin/bouclier/boost), donc `foeFacingSpell` ne change pour aucune unité ; digest **inchangé** `833a6d2c…` 518/3000, 115 tests, smoke 171 checks.
+
 ## 2026-11-10 (nuit, second tour) : ACTÉ — CROSS retiré, quêtes quotidiennes, équipement par classe, errance après le calibrage (retour de Marc-Olivier)
 
 Dernier tour de tranchage de la session design ; les derniers points ouverts sont clos :
@@ -11,7 +17,6 @@ Dernier tour de tranchage de la session design ; les derniers points ouverts son
 3. **Quêtes quotidiennes : rotation quotidienne** : les quêtes changent chaque jour ; récompenses possibles : **or, carte N, pierre d'éveil et/ou éclats** (mélange exact et paliers au calibrage du chantier économie).
 4. **Équipement : slots typés par classe** (mix acté) : les 1-2 slots par personnage sont **typés par classe** (épée pour le Guerrier, bâton pour le Mage…) ; les slots d'équipe restent génériques. Types exacts et prix : calibrage au chantier (page Personnage + rayon Boutique).
 5. **Errance : programmée après le calibrage digest** (fin du plan code en cours), à la tête du bloc visuel : économie v2 → Accueil/hub-ville + Les Terres Sauvages → errance top-down (zone témoin : Marées) → généralisation. Le moteur d'errance (canvas procédural, guide `docs/design/errance-topdown.md`) peut être codé en parallèle avec sprites placeholder ; l'art du héros dédié attend la campagne d'arts v2 validée + le cycle de marche WAN.
-
 ## 2026-11-10 (nuit) : ACTÉ — budgets de fichiers v2 (charte images) : fin des budgets faméliques v1
 
 - **Motif** : les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, JPEG très compressé) venaient de la contrainte « dist < 1 Mo tout en base64 », levée depuis le passage à assets.json/fichiers chargés à la demande. La vraie contrainte restante = fluidité (décodage + bande passante mobile), pas la taille du dist.

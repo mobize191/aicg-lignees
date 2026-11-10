@@ -92,6 +92,10 @@ const EVO_TYPES = E.EVO_TYPES;
 const EVO_CHOICES = DATA.evolutions;
 const TEAM_MAX = E.TEAM_MAX;
 const FAM_ORDER = E.FAM_ORDER;
+
+// recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
+
+const FAM_SCHOOL = E.FAM_SCHOOL;
 const MONSTER_FAMS = DATA['monster-families'];
 
 // T0.2 : le camp de ciblage d'un sort vient de sa fiche (cible en donnees) ; sans fiche,
