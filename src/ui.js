@@ -1279,11 +1279,18 @@ function roleChip(role) {
 
 function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = false } = {}) {
   const mana = c.manaMax !== undefined ? `<span class="mana">✦ ${c.mana}/${c.manaMax}</span>` : '';
-  
-  
-  
   const maxHp = c.maxHp !== undefined ? `/${c.maxHp}` : '';
   const shield = c.shield > 0 ? `<span class="sh">🛡 ${c.shield}</span>` : '';
+  const battle = extraClass.includes('battle');
+  // pied de stats v2 (pions de combat) : PV, ATQ, mana en actuel/total + icônes d'état
+  const st = c.status || {};
+  const icons = [];
+  if ((c.atkBuff ?? 0) > 0) icons.push('<span class="st-ic up">⬆</span>');
+  if (st.curse || st.stun > 0 || st.slow > 0 || st.dmgRed) icons.push('<span class="st-ic down">⬇</span>');
+  if (c.shield > 0) icons.push('<span class="st-ic sh">🛡</span>');
+  const foot = battle
+    ? `<div class="pied"><span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
+    : `<div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>`;
   return `<div class="card r-${c.rarity} t-${c.classe} ${c.element ? 'o-' + c.element : 'o-nul'} ${extraClass}${locked ? ' locked' : ''}">
     <div class="art">${artOf(c)}</div>
     <div class="rar-chip">${c.rarity}</div>
@@ -1293,7 +1300,7 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
       <div class="name">${c.name}</div>
       <div class="meta"><span>${GLYPH[c.classe] ?? ''} ${c.classe}</span>${c.element ? `<span>${EL_GLYPH[c.element] ?? ''} ${c.element}</span>` : '<span>⚪ Neutre</span>'}</div>
     </div>
-    <div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>
+    ${foot}
   </div>`;
 }
 ;
@@ -2862,7 +2869,7 @@ function updateHp(uid, delta) {
   const shown = Math.max(0, Math.min(u.maxHp, (hpShown.get(uid) ?? u.hp) + delta));
   hpShown.set(uid, shown);
   const el = elOf(uid);
-  const hpEl = el?.querySelector('.cardfoot .hp');
+  const hpEl = el?.querySelector('.pied .hp') ?? el?.querySelector('.cardfoot .hp');
   if (hpEl) hpEl.textContent = `♥ ${shown}/${u.maxHp}`;
 }
 

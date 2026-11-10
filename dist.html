@@ -179,6 +179,22 @@ padding: 4px 6px 6px; font-size: .66rem; font-weight: 700;
 .cardfoot .sh { color: #40c4ff; }
 .cardfoot .mana { color: #b39dff; }
 
+/* pied de stats v2 (pions de combat) : PV, ATQ, mana actuel/total + icônes d'état */
+.pied {
+position: relative; z-index: 2; margin-top: 0;
+display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 5px;
+padding: 2px 4px 4px; font-size: .62rem; font-weight: 700;
+background: linear-gradient(180deg, rgba(8, 11, 17, .55), rgba(8, 11, 17, .95));
+}
+.pied .hp { color: #ff8a9e; }
+.pied .mana { color: #b39dff; }
+.pied .atk { color: #e8ecf4; }
+.pied .st-ic { font-size: .58rem; }
+.pied .st-ic.up { color: #69f0ae; }
+.pied .st-ic.down { color: #ff5c6c; }
+.pied .st-ic.sh { color: #40c4ff; }
+.card.battle.unit-art .pied { margin-top: 0; }
+
 .card.unit-art .art { position: absolute; inset: 0; height: 100%; z-index: 0; }
 body.in-combat .card.unit-art .art { filter: brightness(1.12) contrast(1.04); }
 .card.unit-art .cardbody {
@@ -836,6 +852,7 @@ body.in-combat .card.battle { aspect-ratio: 5 / 6; }
 body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
 body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
+body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap: 1px 4px; }
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
 body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
@@ -11468,11 +11485,18 @@ function roleChip(role) {
 
 function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = false } = {}) {
   const mana = c.manaMax !== undefined ? `<span class="mana">✦ ${c.mana}/${c.manaMax}</span>` : '';
-  
-  
-  
   const maxHp = c.maxHp !== undefined ? `/${c.maxHp}` : '';
   const shield = c.shield > 0 ? `<span class="sh">🛡 ${c.shield}</span>` : '';
+  const battle = extraClass.includes('battle');
+  // pied de stats v2 (pions de combat) : PV, ATQ, mana en actuel/total + icônes d'état
+  const st = c.status || {};
+  const icons = [];
+  if ((c.atkBuff ?? 0) > 0) icons.push('<span class="st-ic up">⬆</span>');
+  if (st.curse || st.stun > 0 || st.slow > 0 || st.dmgRed) icons.push('<span class="st-ic down">⬇</span>');
+  if (c.shield > 0) icons.push('<span class="st-ic sh">🛡</span>');
+  const foot = battle
+    ? `<div class="pied"><span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
+    : `<div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>`;
   return `<div class="card r-${c.rarity} t-${c.classe} ${c.element ? 'o-' + c.element : 'o-nul'} ${extraClass}${locked ? ' locked' : ''}">
     <div class="art">${artOf(c)}</div>
     <div class="rar-chip">${c.rarity}</div>
@@ -11482,7 +11506,7 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
       <div class="name">${c.name}</div>
       <div class="meta"><span>${GLYPH[c.classe] ?? ''} ${c.classe}</span>${c.element ? `<span>${EL_GLYPH[c.element] ?? ''} ${c.element}</span>` : '<span>⚪ Neutre</span>'}</div>
     </div>
-    <div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>
+    ${foot}
   </div>`;
 }
 ;
@@ -13051,7 +13075,7 @@ function updateHp(uid, delta) {
   const shown = Math.max(0, Math.min(u.maxHp, (hpShown.get(uid) ?? u.hp) + delta));
   hpShown.set(uid, shown);
   const el = elOf(uid);
-  const hpEl = el?.querySelector('.cardfoot .hp');
+  const hpEl = el?.querySelector('.pied .hp') ?? el?.querySelector('.cardfoot .hp');
   if (hpEl) hpEl.textContent = `♥ ${shown}/${u.maxHp}`;
 }
 

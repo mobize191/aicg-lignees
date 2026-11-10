@@ -205,6 +205,7 @@ const API_PAIRS = {
   _zoneWidthOf: '(name) => zoneWidthOf({ name })',
   _previewZone: '(uid) => { const el = elOf(uid); if (el) previewZone(el); }',
   _clearZone: '() => clearZonePreview()',
+  _draw: '() => drawBoard()',
 };
 
 export function bootDist(file, extraPairs = {}) {

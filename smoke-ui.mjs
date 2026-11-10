@@ -219,6 +219,41 @@ async function main() {
     check('47 z 0 exception après ciblage v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 48 : pied de stats v2 sur les pions ----------
+  {
+    const st48 = api._state();
+    if (st48 && !st48.winner) {
+      const appEl = els.get('app');
+      const units = [...appEl.querySelectorAll('.unit')];
+      const withPied = units.filter((el) => el.querySelector('.pied'));
+      check('48 a chaque pion a un pied de stats', units.length > 0 && withPied.length === units.length, `${withPied.length}/${units.length}`);
+      const piedTxt = withPied[0] && withPied[0].querySelector('.pied') ? withPied[0].querySelector('.pied').textContent : '';
+      check('48 a pied en actuel/total (PV, mana)', /♥ \d+\/\d+/.test(piedTxt) && /✦ \d+\/\d+/.test(piedTxt) && piedTxt.includes('⚔'), piedTxt.slice(0, 80));
+      // icônes d'état : on force bonus/malus/bouclier puis re-rendu
+      const u0 = st48.team.attaque[0];
+      u0.atkBuff = 0.2; u0.shield = 12;
+      const e0 = st48.enemies.attaque.find((e) => e.alive) ?? st48.enemies.support[0];
+      if (e0) { e0.status = { ...(e0.status ?? {}), curse: { value: 0.2, turns: 2 } }; }
+      api._draw(); await wait(30);
+      const units2 = [...appEl.querySelectorAll('.unit')];
+      const p0 = units2.find((el) => el.dataset.uid === u0.uid);
+      const pE = e0 ? units2.find((el) => el.dataset.uid === e0.uid) : null;
+      const ic0 = p0 && p0.querySelector('.pied') ? [...p0.querySelector('.pied').querySelectorAll('.st-ic')] : [];
+      check('48 b icônes ⬆ bonus (vert) et 🛡 bouclier (bleu) sur le pion buffé', ic0.some((c) => c.classList.contains('up')) && ic0.some((c) => c.classList.contains('sh')), '');
+      const icE = pE && pE.querySelector('.pied') ? [...pE.querySelector('.pied').querySelectorAll('.st-ic')] : [];
+      check('48 b icône ⬇ malus (rouge) sur le pion maudit', icE.some((c) => c.classList.contains('down')), '');
+      // KO grisé
+      const tgt = st48.team.support[0] ?? st48.team.attaque[1];
+      if (tgt) { tgt.alive = false; tgt.hp = 0; api._draw(); await wait(30);
+        const koEl = [...appEl.querySelectorAll('.unit')].find((el) => el.dataset.uid === tgt.uid);
+        check('48 c carte tombée grisée (.ko)', !!koEl && koEl.classList.contains('ko'), '');
+      }
+    } else {
+      check('48 a chaque pion a un pied de stats', false, 'pas de combat actif');
+    }
+    check('48 z 0 exception après pied de stats', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   // ---------- victoire pas-à-pas au moteur (40) + équivalence (46 i) ----------
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n4', 'a29'], 20);

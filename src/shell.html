@@ -179,6 +179,22 @@ padding: 4px 6px 6px; font-size: .66rem; font-weight: 700;
 .cardfoot .sh { color: #40c4ff; }
 .cardfoot .mana { color: #b39dff; }
 
+/* pied de stats v2 (pions de combat) : PV, ATQ, mana actuel/total + icônes d'état */
+.pied {
+position: relative; z-index: 2; margin-top: 0;
+display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 5px;
+padding: 2px 4px 4px; font-size: .62rem; font-weight: 700;
+background: linear-gradient(180deg, rgba(8, 11, 17, .55), rgba(8, 11, 17, .95));
+}
+.pied .hp { color: #ff8a9e; }
+.pied .mana { color: #b39dff; }
+.pied .atk { color: #e8ecf4; }
+.pied .st-ic { font-size: .58rem; }
+.pied .st-ic.up { color: #69f0ae; }
+.pied .st-ic.down { color: #ff5c6c; }
+.pied .st-ic.sh { color: #40c4ff; }
+.card.battle.unit-art .pied { margin-top: 0; }
+
 .card.unit-art .art { position: absolute; inset: 0; height: 100%; z-index: 0; }
 body.in-combat .card.unit-art .art { filter: brightness(1.12) contrast(1.04); }
 .card.unit-art .cardbody {
@@ -836,6 +852,7 @@ body.in-combat .card.battle { aspect-ratio: 5 / 6; }
 body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
 body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
+body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap: 1px 4px; }
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
 body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
