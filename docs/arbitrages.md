@@ -2,6 +2,16 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — clôture du grand chantier arbres + sorts (lots 2 à 7 faits ce jour)
+
+- Lot 2 (tri des 189) terminé : T2.6 divines (23 signatures, 14 crans remplis, 3 uniques décision 3, migration v18) + T2.7 homogénéité (contrôle automatique dans le validateur, communs retirés des familles, uniques Marées resynchronisées). Baseline intermédiaire `eb701919…` 479/3000.
+- Lot 3 (fiche type) : la fenêtre d'action pilote tous les ciblages depuis les données (soi/1 allié/équipe/1 ennemi/zone/tous) ; zone = 3 contiguës autour de l'ancrage en Tactique, tous = ligne entière. Chemin Auto inchangé.
+- Lot 4 (v0.47) : répartition agi/int par profil, esquive AGI plafonnée 30 %, mana +2/INT (recharge +INT/2, plafond +50 %), seuils palier + INT/2, affichage du résultat calculé, migration v19. **Baseline finale : `833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24`, 518/3000 (0 exception, 1 marathon).** Point de calibration avec Marc-Olivier : ce chiffre est la mesure de référence, à affiner sur le terrain.
+- Lot 5 : mécanismes spéciaux en données (régression/Éclat, fusion, malédiction, événement équilibre, secrètes « ?? »), testés un par un.
+- Lot 6 (v3) : doc familles v3 reconstruit (`docs/design/familles-races-v3.md`), renommages actés (Jeune Séraphin, Écuyer Fervent), 4 nouvelles familles C→L + sorts de lignée.
+- Lot 7 : zones complètes, cadence validée, grimoire appris persisté.
+- Preuve finale : 107 tests, smoke 171 checks, audit régénérable à l'identique, build déterministe, digest `833a6d2c…` 518/3000.
+
 ## 2026-11-10 : ACTÉ — lot 4, les stats RPG v0.47 (T4.1-T4.7)
 
 - **T4.3** : répartition agi/int dérivée du profil (`engine.json moteurr.STAT_RATIOS`), la stat principale domine toujours ; 222 cartes/monstres recalculés (le bug relevé — lignées mage plus agiles qu'intelligentes — est clos : test sur toutes les cartes).
