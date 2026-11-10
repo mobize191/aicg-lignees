@@ -2,11 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
-## 2026-11-11 : PROPOSÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
+## 2026-11-11 : ACTÉ — recâblage famille → école (`FAM_SCHOOL` dans data/engine.json)
 
 - **Motif** : seules `lame` et `appel` coïncidaient avec une clé d'école ; les 9 autres familles portaient leur propre clé comme école, sans rôle ni fiche type (la fenêtre d'action retombait sur le ciblage par défaut). Le mapping est désormais en data (`FAM_SCHOOL`), câblé dans `src/ui.js` : les sorts de lignée portent la clé d'école réelle + le rôle de l'école.
 - **Mapping proposé** (dérivé des voies/classes des familles et des lignes d'école des biomes ; `bouclier→rempart` et `aube→baume` étaient déjà actés en roadmap) : eau→lame, aube→baume, lame→lame, ombre→lame, bouclier→rempart, braise→mauvais-oeil, bosquet→entrave, crepuscule→mauvais-oeil, vol→ruse, zele→ferveur, appel→appel.
 - **Comportement conservé** : les familles en ligne support (aube, bouclier, zèle) relèvent d'écoles non hostiles (soin/bouclier/boost), donc `foeFacingSpell` ne change pour aucune unité ; digest **inchangé** `833a6d2c…` 518/3000, 115 tests, smoke 171 checks.
+- **Validé tel quel par Marc-Olivier** (retour du 10-11/11/2026, nuit) : le mapping est **ACTÉ**.
 
 ## 2026-11-10 (nuit, troisième tour) : ACTÉ — calibrage v0 de l'économie v2 (retour de Marc-Olivier)
 
