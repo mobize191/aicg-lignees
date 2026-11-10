@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — brief du couloir design/graphisme : maquettes du bloc visuel en parallèle
+
+`docs/design/design-graphisme-v2-plan.md` : la production design/graphisme démarre en parallèle du couloir 1 (parallélisation actée). Livrables : charte graphique v2 transverse ; maquettes dans l'ordre du code (économie v2 → Accueil/hub-ville → errance, zone témoin Marées) ; habillage des nouveautés boucle v2 (départ 2 cartes, sélecteur de marche, action Objet, toasts de recrue) ; DA (héros dédié après validation de la planche vague 1 et cycle de marche WAN, série 2 prioritaire). Une maquette validée par Marc-Olivier avant codage ; le couloir ne touche ni `src/` ni `data/`. PROPOSÉ en son sein : icônes d'équipement par type et niveau (pas un art par objet).
+
 ## 2026-11-11 : ACTÉ — spec et plan d'exécution de la boucle de jeu v2 (brief du couloir 1)
 
 `docs/design/boucle-v2-spec-plan.md` : exigences moteur/data/UI et plan en 6 lots — (1) action Objet + achat minimal de potions + suppression de la régén/persistance + hook autel + migration ; (2) niveaux de donjon 1→25 et bandes de rareté ; (3) départ à 2 cartes + recrutement naturel ; (4) drops v2 (matériaux, pièces et matière de boss, gemmes brutes vendables) ; (5) XP longue échelle + sans perte nette + solos archivés + rang N des naissances ; (6) baseline finale documentée. Le moteur d'errance avec sprites placeholder reste possible en parallèle (roadmap point 9), hors périmètre de fermeture du chantier. Références : regles-jeu §2/§5/§6, economie-v2-catalogues §1/§6, errance-topdown §7/§8.
