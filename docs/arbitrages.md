@@ -4,7 +4,7 @@
 
 ## 2026-11-11 : ACTÉ — calibrage post-lignes et précisions boucle v2 (retour de Marc-Olivier)
 
-Réponses aux questions du couloau 1 (entrée « PROPOSÉ — sessions 5-7 » ci-dessous) et à l'ordonnancement de la boucle v2 :
+Réponses aux questions du couloir 1 (entrée « PROPOSÉ — sessions 5-7 » ci-dessous) et à l'ordonnancement de la boucle v2 :
 
 1. **Protection arrière : aucun plafond supplémentaire.** L'Option A est conservée telle quelle (l'arrière encaisse 50 % des dégâts tant que l'avant tient) ; pas de plafond de dégâts encaissés. Si la re-mesure post-boucle v2 révèle un problème, une révision datée sera proposée.
 2. **Zénith et taux global : tranchage différé.** Les 17 % de victoires du Zénith et les 42,4 % globaux de la baseline `aed250f9…` sont des mesures, pas l'équilibre final : la suppression de la régén, le départ à 2 cartes, le recrutement naturel et l'XP recalibrée changent les maths. On re-mesure après la boucle v2 et l'économie v2, on ne tranche qu'une fois.
