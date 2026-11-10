@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — les phénix sont des bêtes (retour vague 1 de la campagne v2)
+
+- **Pyrrha (z19) et Fjalar (z22) sont des PHÉNIX, de vrais oiseaux de feu, pas des humanoïdes à ailes.** La première vague les avait rendus « hommes/femmes-phénix » : c'était une erreur de tags dans `tools/species-map.json` (`phoenix girl` / `phoenix spirit, humanoid`), corrigée en `phoenixFirebird` (tags : `phoenix, giant firebird, flaming bird, bird, beak, talons, ember feathers, blazing wings, beast-like`).
+- **Nouvelle règle `beast: true` dans species-map** : pour une espèce bestiale, le genre est enregistré pour la fiche et le registre, mais **jamais injecté dans le prompt** (pas de `1girl`/`1boy` sur une bête) ; les antiTags de l'espèce sont obligatoires (ici : `human, humanoid, anthropomorphic, human face…`).
+- Conséquence : z19/z22 à régénérer avec le nouveau mapping (seed fixe, protocole retry du pipeline QA).
+
 ## 2026-11-11 : ACTÉ — catalogues de l'économie v2 : variantes d'armes, potions en combat, Guilde en rotation, noms aux trois saveurs (retour de Marc-Olivier)
 
 La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, équipement, quêtes, Guilde, inventaire). Les tranchages :
@@ -341,28 +347,4 @@ Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en *
 - Appliqué dans `grimoire.json` (4 sorts) et `monsters.json` (soloSpell de e8 et e20). **Les ids restent inchangés** (`morsure-decume`, `chant-de-sirene`...) : les sauvegardes et les fusions (`fusion-map.json`) sont préservées.
 
 ### ACTÉ : règles de rang au combat
-
-- La protection de l'arrière ne couvre **pas** les attaques de zone (attaques et sorts ciblés seulement).
-- La formation (3 devant + 2 derrière ou 2 + 3) est **figée au départ** du combat ; l'action de repli reste une piste v1.1.
-- Les monstres suivent les mêmes règles de rang (leurs classes existent dans les données).
-
-### PISTE v1.1 : la Garde du Gardien
-
-- Tant que le Gardien tient à l'avant, l'adversaire ne peut pas viser la ligne arrière. À calibrer avant actage (risque : verrouillage de partie).
-
-### PISTE v2 : le grimoire élémentaire (l'élément porte le sort, pas la carte)
-
-- Idée : `Barrière de Corail` resterait un sort **Eau** même joué par une carte Feu ; choisir une voie débloquerait les sorts de l'élément de cette voie ; la carte garderait son élément de naissance comme **affinité** (bonus léger quand le sort joué partage son élément).
-- Pour : cohérence du lore, liberté de build, le grimoire devient le pivot de progression, l'interaction élémentaire se calcule sur le sort.
-- Contre : l'identité de carte s'amenuise, équilibrage par élément × rôle à refaire (chaque voie doit couvrir dégâts, soin, contrôle, bouclier).
-- Statut : piste ouverte, notée dans les maquettes de la page fiches et du combat. **Pas de décision actée.**
-
-### Impact d'équilibrage constaté
-
-- Baseline digest **3000 combats : `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa`** (476 victoires, 0 exception, 0 marathon), à comparer à la précédente `c5ab2af1…` (534 victoires). La baisse vient des reclassifications (esquives et frappes de l'arrière par classe). À surveiller au recalibrage des caractéristiques v0.47 : c'est une mesure, pas une régression de conformité (tests et smoke verts).
-
-## Décisions antérieures
-
-Voir `docs/historique/` (rapports des phases de la refonte) et `docs/design/` (specs normatives). En bref : moteur pas-à-pas v0.46, refonte majeure exécutée (phases 0 à 5), campagne d'illustrations DreamShaper XL livrée (231 arts + 5 fonds), caractéristiques (FOR/VIE/AGI/INT) actées pour la v0.47 avec formules à calibrer avec Marc-Olivier.
-
 

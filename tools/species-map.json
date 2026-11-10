@@ -3,7 +3,7 @@
     "version": 1,
     "date": "2026-11-10",
     "source": "charte-graphique-v2.md §3 et §12 + arbitrages 10/11/2026",
-    "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy).",
+    "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy). Règle `beast: true` : le genre est enregistré pour la fiche/registre mais JAMAIS injecté dans le prompt (une bête n'a pas de 1girl/1boy), et les antiTags de l'espèce sont obligatoires.",
     "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age.",
     "humanMaturityRule": "RÈGLE GÉNÉRALE (Marc-Olivier, 10/11 soir) : pour TOUTE carte de race humaine (nommée OU générique), plus la rareté est haute, plus le personnage est mature : build-prompts.mjs dérive l'âge apparent de la rareté via humanMaturityByRarity. Le champ age d'une entrée nommée reste prioritaire (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes)."
   },
@@ -40,8 +40,7 @@
     "widowGhost": ["ghost", "widow", "veil", "tattered dress", "spectral"],
     "solarDeity": ["solar deity", "radiant halo", "sun crown", "divine being"],
     "oracle": ["oracle", "prophetess", "sun motif", "divine robes"],
-    "phoenixF": ["phoenix girl", "fire wings", "ashen skin", "ember feathers"],
-    "phoenixM": ["phoenix spirit", "male", "fire wings", "ember feathers", "humanoid"],
+    "phoenixFirebird": ["phoenix", "giant firebird", "flaming bird", "bird, beak, talons", "ember feathers", "blazing wings", "beast-like"],
     "justiceKnight": ["human", "knight-errant", "golden scale emblem"],
     "assassinLight": ["human", "assassin", "dawnlight blade"],
     "herald": ["human", "herald", "banner", "radiant pauldrons"],
@@ -61,6 +60,7 @@
   },
   "antiTags": {
     "beast": ["catgirl", "human", "girl", "elf", "cute animal ears"],
+    "phoenixFirebird": ["human", "humanoid", "girl", "boy", "woman", "man", "human face", "anthropomorphic", "girl with fire wings", "feathered arms"],
     "fireLord": ["knight", "human", "armor", "humanoid"]
   },
   "families": {
@@ -104,8 +104,8 @@
     "z8": { "name": "Astre Capiteux", "gender": "1boy", "species": "solarDeity", "age": "éternel" },
     "z30": { "name": "Apolline, Prophétesse du Jour", "gender": "1girl", "species": "oracle", "age": "adulte", "note": "M du Clergé du Zénith (acté v3)" },
     "z29": { "name": "Justine, Justicière du Jour", "gender": "1girl", "species": "justiceKnight", "age": "adulte" },
-    "z19": { "name": "Pyrrha", "gender": "1girl", "species": "phoenixF", "age": "adulte" },
-    "z22": { "name": "Fjalar", "gender": "1boy", "species": "phoenixM", "age": "adulte" },
+    "z19": { "name": "Pyrrha", "gender": "F", "species": "phoenixFirebird", "age": "adulte", "beast": true, "note": "PHÉNIX = vrai oiseau de feu, PAS une femme-oiseau (retour vague 1, 10/11) : gender enregistré pour la fiche mais JAMAIS injecté dans le prompt ; antiTags phoenixFirebird obligatoires" },
+    "z22": { "name": "Fjalar", "gender": "M", "species": "phoenixFirebird", "age": "adulte", "beast": true, "note": "PHÉNIX = vrai oiseau de feu, PAS un homme-oiseau (retour vague 1, 10/11) : idem z19" },
     "z15": { "name": "Aurorine, Lance de l'Aube", "gender": "1girl", "species": "assassinLight", "age": "adulte", "note": "z15 reste Aurorine (arbitrages 10/11)" },
     "z7": { "name": "Héraut du Zénith", "gender": "1boy", "species": "herald", "age": "adulte", "note": "futur nommé (arbitrages 10/11)" },
     "z26": { "name": "Célestin", "gender": "1boy", "species": "apostle", "age": "adulte" },
