@@ -2764,6 +2764,53 @@ const DATA = {
   },
   "EVEIL_COST": 1,
   "PIERRE_DROP_RATE": 0.15,
+  "N_DROP_RATE": 0.02,
+  "JETON_RARITY": {
+   "0": [
+    [
+     "C",
+     1
+    ]
+   ],
+   "2": [
+    [
+     "UC",
+     0.3
+    ],
+    [
+     "C",
+     0.7
+    ]
+   ],
+   "3": [
+    [
+     "R",
+     0.05
+    ],
+    [
+     "UC",
+     0.45
+    ],
+    [
+     "C",
+     0.5
+    ]
+   ],
+   "5": [
+    [
+     "R",
+     0.1
+    ],
+    [
+     "UC",
+     0.4
+    ],
+    [
+     "C",
+     0.5
+    ]
+   ]
+  },
   "GEM_TIERS": [
    "brut",
    "poli",
@@ -8640,6 +8687,7 @@ const SAVE_KEY = E.SAVE_KEY;
 const EVO_COST = E.EVO_COST;
 const EVEIL_COST = E.EVEIL_COST;
 const PIERRE_DROP_RATE = E.PIERRE_DROP_RATE;
+const N_DROP_RATE = E.N_DROP_RATE;
 const GEM_TIERS = E.GEM_TIERS;
 const GEM_LABEL = E.GEM_LABEL;
 const BOSS_GEM = E.BOSS_GEM;
@@ -9953,6 +10001,19 @@ function drawDailyCommon(rng = roll) {
   return fallback[Math.floor(rng() * fallback.length)];
 }
 
+// T1.3 : tirage pur d'une naissance (rang N, porte divine en C tant que l'Esprit Divin n'existe pas)
+function drawNaissance(rng = roll, keep = () => true) {
+  const pool = CATALOG.filter((c) => c.raciale && !c.archived && c.rarity === (raceOfCard(c) === 'divine' ? 'C' : 'N') && keep(c));
+  return pool.length ? pool[Math.floor(rng() * pool.length)] : null;
+}
+
+// T1.3 : la rarete du jeton de generation, table en data, communes au taux de reference puis decroissant (decision 8)
+function jetonRarityFor(rng = roll, cleared = 0) {
+  const tiers = DATA.engine.JETON_RARITY ?? {};
+  const keys = Object.keys(tiers).map(Number).filter((k) => cleared >= k).sort((x, y) => y - x);
+  return rollRarity(rng, keys.length ? tiers[keys[0]] : [['C', 1]]);
+}
+
 function rollRewardRarity(rng) {
   const x = rng();
   let acc = 0;
@@ -10699,13 +10760,9 @@ function tokenTypeKey(t) {
 
 
 function bossTokenFor(dungeonId) {
+  // T1.3 : la table de rarete du jeton vit dans les data (decision 8 : communes au taux de reference, decroissant avec la rarete)
   const cleared = DUNGEONS.filter((d) => bestRecord(d.id) >= d.floors).length;
-  const r = uiRand();
-  let rar = 'C';
-  if (cleared >= 5) rar = r < 0.10 ? 'R' : r < 0.70 ? 'UC' : 'C';
-  else if (cleared >= 3) rar = r < 0.05 ? 'R' : r < 0.50 ? 'UC' : 'C';
-  else if (cleared >= 2) rar = r < 0.30 ? 'UC' : 'C';
-  return { kind: 'biome', cat: dungeonId, rar };
+  return { kind: 'biome', cat: dungeonId, rar: jetonRarityFor(uiRand, cleared) };
 }
 
 function tokenLabel(t) {
@@ -12089,7 +12146,7 @@ function renderHome(root) {
           <h2>Bienvenue à AICG : Lignées !</h2>
           <p>Collectionnez des cartes, forgez des lignées, explorez le donjon des Marées. Voici comment démarrer :</p>
           <ol class="steps">
-            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 vos 5 jetons offerts (2 humains, 1 humain raffin\u00e9, 2 races au tirage \u2014 toutes des naissances), \u00e0 la Forge.</li>
+            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 deux naissances vous sont offertes (l\u2019\u00c9p\u00e9iste Novice et le Pr\u00eatre Novice), jouables imm\u00e9diatement, et vos 5 jetons offerts (2 humains, 1 humain raffin\u00e9, 2 races au tirage \u2014 toutes des naissances) attendent la Forge.</li>
             <li><b>Composez votre \u00e9quipe</b> : 5 emplacements libres, des synergies de classe et d\u2019\u00e9l\u00e9ment.</li>
             <li><b>Explorez le donjon</b> : chaque \u00e9tage vaincu rapporte des points et de l\u2019XP ; le boss final l\u00e2che un jeton de g\u00e9n\u00e9ration (1 par jour et par donjon).</li>
             <li><b>Montez vos cartes</b> : au niveau 10, chacune \u00e9volue avec des \u00e9clats \u2014 et garde son identit\u00e9.</li>
@@ -13720,6 +13777,14 @@ async function animate(events, ms, gen = null) {
             addPierres(1);
             rewardLine += ` · 💎 Pierre d’éveil !`;
           }
+          if (uiRand() < N_DROP_RATE * tactMult * loot.drop) {
+            const oeuf = drawNaissance(uiRand, cardAvailable);
+            if (oeuf) {
+              grantCards([oeuf.id]);
+              if (runLog) runLog.cards.push(oeuf.name);
+              rewardLine += ` · 🐥 ${oeuf.name} (naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}) se joint à vous !`;
+            }
+          }
           if (stage === 5) {
             rollGem(BOSS_GEM[store.diff][0]);
             grantBrut(1);
@@ -14230,7 +14295,7 @@ function renderDonjons(root) {
             <p class="muted">Conseil : les créatures ${d.types.join(' / ')} sont dominées par ${[...new Set(d.types.map((t) => BEATEN_BY[t]))].join(' / ')} (+25 % de dégâts pour qui les frappe).</p>
             <p class="rec-line">Force conseillée : indice d'équipe <b>≥ ${rec}</b> pour finir — ATQ, PV, rareté et sorts pondérés · votre équipe : <b>indice ${Math.round(teamPower())}</b>${teamPower() >= rec ? ' ✅' : ' ⚠️'}</p>
             <p class="muted">Record (${DIFF.name}) : étage ${prog.record || 0}/${d.floors} vaincu${prog.record > 1 ? 's' : ''} · meilleur : ${bestRecord(d.id)}/${d.floors}</p>
-            <p class="muted">Boss final : un jeton de génération (${tokenLabel(dayTok)}), 1 par jour et par donjon · première victoire finale : jeton bonus du biome. Éclat de régression : uniquement à partir de la difficulté Difficile (${Math.round(REG_ECLAT_RATE[2] * 100)} %), puis ${Math.round(REG_ECLAT_RATE[3] * 100)} % en Cauchemar et ${Math.round(REG_ECLAT_RATE[4] * 100)} % en Enfer. Éclats bruts : chaque boss d\u2019\u00e9tage en garantit 1, le boss final 2 (\u00e9l\u00e9ments du donjon : ${(d.types ?? []).join('/') || 'variable'}).</p>
+            <p class="muted">Boss final : un jeton de génération (${tokenLabel(dayTok)}), 1 par jour et par donjon · première victoire finale : jeton bonus du biome. Éclat de régression : uniquement à partir de la difficulté Difficile (${Math.round(REG_ECLAT_RATE[2] * 100)} %), puis ${Math.round(REG_ECLAT_RATE[3] * 100)} % en Cauchemar et ${Math.round(REG_ECLAT_RATE[4] * 100)} % en Enfer. Éclats bruts : chaque boss d\u2019\u00e9tage en garantit 1, le boss final 2 (\u00e9l\u00e9ments du donjon : ${(d.types ?? []).join('/') || 'variable'}). Pierre d\u2019\u00e9veil : ${Math.round(PIERRE_DROP_RATE * 100)} % par boss d\u2019\u00e9tage. Naissance sauvage : ${Math.round(N_DROP_RATE * 100)} % par \u00e9tage vaincu, une naissance born\u00e9e par vos d\u00e9blocages se joint \u00e0 vous.</p>
             <div class="dungeon-actions">
               ${open
                 ? `<span class="btn big enter-btn" data-dungeon="${d.id}">Entrer — étage 1</span>
@@ -14430,6 +14495,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.3 : Les naissances dans la nature', 'TOUT CE QUI ENTRE AU ROYAUME DES NAISSANCES. (1) DEUX NAISSANCES OFFERTES au d\u00e9part : l\u2019\u00c9p\u00e9iste Novice et le Pr\u00eatre Novice rejoignent la collection, jouables imm\u00e9diatement. (2) NAISSANCES SAUVAGES : chaque \u00e9tage de donjon vaincu offre 2 % de chance qu\u2019une naissance se joigne \u00e0 vous, toujours born\u00e9e par vos d\u00e9blocages. (3) LA TABLE DES JETONS PASSE EN DONN\u00c9ES ET DEVIENT CONFORME \u00e0 la d\u00e9cision 8 : \u00e0 chaque palier de donjons boucl\u00e9s, la commune reste au taux de r\u00e9f\u00e9rence (50 %) et le taux d\u00e9cro\u00ee avec la raret\u00e9 (palier 3 : 50/45/5, palier 5 : 50/40/10) \u2014 les paliers pr\u00e9c\u00e9dents favorisaient la peu commune, corrig\u00e9. Le moteur gagne les tirages purs : une naissance, une raret\u00e9 de jeton.'],
   ['v1.2 : La pierre d’éveil', 'L’ÉVEIL TROUVE SA MONNAIE. Une naissance (rang N) ne paie plus ses éclats pour s’ouvrir : son éveil consomme une PIERRE D’ÉVEIL, hors éléments. Les boss des donjons en lâchent rarement, le défi du jour en offre une chaque victoire, et la Forge affiche la réserve. Les autres rangs gardent leurs éclats ; la voie choisie, l’Ascendance et les sorts accumulés ne changent pas.'],
   ['v1.1 : Le rang Naissance', 'LES NAISSANCES QUITTENT LA COMMUNE. Les 12 naissances raciales (les 4 Novices, les 5 Embryons \u2014 ex-Bestiaux \u2014 et les 3 Enge) passent au rang N, un cran sous la commune : elles n\u2019ont encore rien choisi, on les am\u00e8ne o\u00f9 l\u2019on veut. Le jeton et le d\u00e9fi du jour tirent d\u00e9sormais des naissances, jamais d\u2019autres communes ; les cartes divines (Ange, D\u00e9mon, \u00c9veill\u00e9 du Seuil) restent la porte du camp divin jusqu\u2019\u00e0 l\u2019Esprit Divin. La puissance du rang N est calibr\u00e9e 10 % sous la commune, et le glossaire s\u2019ouvre sur le nouveau rang.'],
   ['v0.47.2 : Source d’images au choix', 'Un bouton 🖼️ dans l’en-tête bascule les illustrations des cartes entre DreamShaper XL (assets.json, par défaut) et WAI-Illustrious v17 (assets-wai.json, campagne comparative), mémorisé entre les visites. Aucun impact sur le moteur.'],
@@ -14583,6 +14649,7 @@ function renderGlossaire(root) {
       <ul class="glo-list">
         <li><b>Un début quasi uniquement en communes</b> : le rythme est volontairement lent ; les raretés montent avec les donjons débloqués et les difficultés.</li>
         <li><b>Pierres d’éveil</b> : l’éveil d’une naissance (rang N) exige 1 pierre d’éveil ; les boss des donjons en lâchent rarement, le défi du jour en donne une. Les autres rangs paient leurs évolutions en éclats.</li>
+        <li><b>Naissances sauvages</b> : chaque étage de donjon vaincu offre une très faible chance (${Math.round(N_DROP_RATE * 100)} %) qu’une naissance se joigne directement à vous ; le tirage reste borné par vos déblocages, et la rareté des jetons suit la table des data (communes au taux de référence, décroissant avec la rareté).</li>
         <li><b>Jetons de génération</b> : le boss final de chaque donjon en lâche un, 1 par jour et par donjon (rareté selon les donjons bouclés) ; la première victoire finale d’un donjon offre un jeton bonus de son biome.</li>
         <li><b>Naissances raciales</b> : un jeton ne donne QUE la naissance, au hasard — les 4 Novices (humaine), les 5 Embryons (monstre), les 3 Enge (mystique), Ange / Démon / Éveillé du Seuil (divine). Le jeton humain raffiné entre au maillon d’une voie (UC, 15 % R) ; le jeton d’évolution, au palier indiqué. Jamais les vieilles cartes hors architecture ; le tirage reste borné par les déblocages.</li>
         <li><b>Autel 5-pour-1</b> : la chaîne mène à la Légendaire (5 UR = 1 L) ; la M ne passe jamais par l’autel.</li>
@@ -14688,6 +14755,8 @@ if (store.instances.length === 0 && store.tokens.length === 0) {
   grantKindToken('humain-riche');
   grantKindToken('race');
   grantKindToken('race');
+  // T1.3 : deux naissances offertes des le depart, jouables immediatement (EXI-N-4)
+  grantCards(['n1', 'n3']);
   save();
 }
 updatePtsBadge();
