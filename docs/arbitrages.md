@@ -2,6 +2,22 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (grand chantier, les neuf ouvertes) : ACTÉ — les décisions ouvertes du lot 8 sont tranchées
+
+Réponses de Marc-Olivier aux neuf points ouverts ; la spec et le plan du grand chantier les intègrent (`docs/design/spec-arbres-sorts.md` et `plan-arbres-sorts.md`).
+
+1. **Sort L d'Argus : « Mur Éternel »** (remplace la proposition « Assise Éternelle » ; la règle v0.47 s'applique : le sort L ne répète plus le nom de sa carte).
+2. **Sort L de Maïa : le clin d'oeil reste** (« Maïa : Cœur du Bosquet » garde son nom malgré la M du Vivant).
+3. **Les uniques des L et M : une base d'école + une particularité** — chaque L/M garde un sort unique, mais il dérive d'une base commune d'école (un cran de largeur et de puissance) enrichi d'un delta (taux, effet additionnel, cible particulière). Le geste se reconnaît d'une carte à l'autre, la particularité est la récompense du nom.
+4. **Les invocations de l'Appel (ACTÉ)** : 3 invocations maximum par invocateur ; les PV du renfort sont plafonnés à 20 % des PV max de l'invocateur ; pas de durée maximale ; si l'invocateur tombe, ses invocations tombent avec lui ; les renforts apparaissent en mini-cartes sur le plateau de jeu.
+5. **La zone : la ligne au choix (ACTÉ), le triangle en piste** — la zone frappe 3 cibles contiguës de la ligne choisie (attaque par défaut, support en Tactique) ; le triangle qui touche la ligne avant et la ligne arrière est une PISTE pour plus tard. Le boss encaisse la zone comme une seule unité (pas de multi-slot pour l'instant) : pas de multiplication des dégâts.
+6. **Le maillon du paladin dans la Légion Solaire : « l'Écuyer Fervent »** (proposition de Marc-Olivier, avis favorable de l'agent : l'échelle Écuyer → Croisée de l'Aube → Aurorine, Lance de l'Aube est régulière, la ferveur porte le zèle). Palier exact à poser au lot contenu.
+7. **Le dédoublonnage divin : « le Jeune Séraphin »** — la carte p1 « Ange Éveillé » est renommée « Jeune Séraphin » (voie de l'éveil du service) ; l'Éveillé du Seuil (n15) garde son nom.
+8. **Les drops au-dessus du rang N (ACTÉ)** : les communes tombent à un taux de référence, le taux décroît à mesure que la rareté monte (UC, R, SR, UR de plus en plus rares) ; cette économie sera revue plus tard à mesure que le jeu évolue.
+9. **Le mana de l'intelligence (ACTÉ)** : +2 points de mana max par point d'intelligence ; +1 point de mana rechargé par tour tous les 2 points d'intelligence. Plafonds à calibrer au lot v0.47 (défaut proposé : bonus plafonnés à +50 % du palier, pour éviter que les L cumulent le mana de palier et le bonus d'intelligence sans limite).
+
+**Défauts proposés dans la spec, à confirmer au fil des lots (pas bloquants)** : le coût de l'éveil N → C (1 pierre d'éveil) ; le seuil de résistance (palier de la cible + moitié de son intelligence) ; la stat principale du gardien (la vie, proposition maintenue) ; les noms des sorts de race (Instinct Sauvage, Ferveur Céleste conservés) ; la condition de l'événement d'équilibre (posséder un ange L et un démon L) ; les communs retirés des cartes de famille (le cas Pisteur du Bosquet).
+
 ## 2026-11-10 (retours du grand chantier arbres + sorts) : ACTÉS et NOTÉS
 
 Retours de Marc-Olivier, consolidés avec l'audit du grand chantier (roadmap). Statuts : deux décisions ACTÉES, trois points NOTÉS à corriger pendant le chantier.
