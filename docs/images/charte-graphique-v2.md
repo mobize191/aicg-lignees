@@ -169,3 +169,22 @@ Les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, compression ag
 **Règle QA ajoutée (leçon du cas)** : les tests IPAdapter (et tout artefact intermédiaire) passent la **MÊME checklist complète** que les arts — sujet, anatomie, artefacts, cadrage, contamination + **style de la charte** (anime premium, contours nets, rendu éclairci, couleurs saines). Dérive de style = échec, même si « c'est classe » : une image hors thème n'entre jamais dans le jeu.
 
 **Alerte style sur la référence a17** : la QA vision juge la référence Kenji a17 elle-même « concept art semi-réaliste, contours flous » — pas de l'anime premium. À vérifier sur la planche GLOBAL : si WAI dérive en painterly sur une partie des 53, renforcer les tags de style dans le prompt master (`anime style, anime illustration, sharp lineart, clean lineart` en positif, `painterly, brush strokes, concept art, semi-realistic` en négatif) et re-passér les fautives. À arbitrer après validation de la planche par Marc-Olivier.
+
+## 15. Réglages WAI-Illustrious v17 canoniques (recherche du 11/11/2026) — source : page officielle du modèle + test indépendant lilting.ch
+
+Sources : page WAI-illustrious-SDXL v17 (CivArchive/CivitAI.red) et test v17 de lilting.ch (seed fixé, v16 vs v17).
+
+**Points où notre pipeline déviait du canon WAI :**
+
+1. **Sampler** : officiel = **Euler a** (nous : dpmpp_2m_sde + karras). Le test indépendant utilise euler_ancestral + scheduler normal avec de très bons résultats.
+2. **Tags de qualité OBLIGATOIRES, en FIN de prompt** : `, masterpiece, best quality, amazing quality` (la virgule initiale de la page officielle = à ajouter en fin de prompt, convention IL/danbooru : sujet → apparence → pose → fond → méta). L'ordre compte : qualité en premier = compositions encombrées.
+3. **Négatif canonique COURT** : `bad quality, worst quality, worst detail, sketch, censor` — l'auteur du modèle prévient explicitement : « n'ajoutez pas trop de tags de qualité/esthétique ni de négatif trop long, ça RÉDUIT la qualité et rend l'image floue ». Notre négatif actuel (20+ tags) est suspect dans les rendus mous/painterly.
+4. **VAE : intégré au checkpoint** — ne PAS charger de VAE externe par-dessus (le vérifier dans le workflow).
+5. **Filtrage rating** : tags à 4 niveaux baked (general/sensitive/nsfw/explicit) — mettre **`nsfw` dans le négatif** pour filtrer ; `general` en positif pousse le SFW strict.
+6. **Âge** : `(aged up:1.0-2.0)` ou `(mature female:1.0-2.0)` en tête de prompt = le mécanisme natif de la v17 pour vieillir un personnage — à utiliser pour l'échelle `humanMaturityByRarity` (et non des tags d'âge libres).
+7. **Hires fix** : 0.35-0.5 de denoise, upscaler officiel **R-ESRGAN 4x+ Anime6B** (vs latent upscale) ; la v17 **auto-corrige les membres pendant le hires fix** — moins besoin d'ADetailer sur les membres.
+8. **Résolution** : ≥ 1024×1024 recommandé côté officiel (nos 832×1216 ≈ 1 Mpx restent dans les clous du test indépendant ; 1024×1344 possible si rendu trop mou).
+
+**Dérive semi-réaliste de la v17 : connue et documentée** (retours utilisateurs de la page modèle : « rendu des personnages plus réaliste », « trop proche des checkpoints 2.5D », conseil de repasser en v16/v15 pour certains personnages). Ce n'est pas une erreur de nos prompts : c'est un trait de la version. Options si le style v17 sort trop 2.5D : (a) tags de style anime renforcés + négatif épuré (canon), (b) test aveugle local v16 sur 3-4 cartes, (c) vivre avec et assumer le 2.5D premium. À arbitrer avec Marc-Olivier après la vague 1-bis.
+
+**LoRA** : les LoRA entraînées v16 passent sur v17 « mais pas parfaitement » (test lilting) — si on entraîne des mini-LoRA de héros, le faire SUR v17 directement.
