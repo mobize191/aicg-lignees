@@ -11,7 +11,7 @@ Deux niveaux à ne pas confondre :
 
 Règle d'or du design (régression, conversion, convergences) : **100 % des sorts sont conservés** à travers les transformations.
 
-Et depuis la v0.47, **un sort signature ne répète plus le nom de sa carte** : le sort L du Sabre est Tranche-Monde (la carte reste « Kenji, Sabre Céleste »), celui de l’Ombre est Nuit Éternelle (la carte reste « Kira, Nuit Sans Fin ») ; l’Aube garde son exception assumée : Aube Éternelle, le nom de sa carte (Léna).
+Et depuis la v0.47, **le sort L d'une lignée ne répète plus le nom de sa carte** : le sort L du Sabre est Tranche-Monde (la carte reste « Kenji, Sabre Céleste »), celui de l’Ombre est Nuit Éternelle (la carte reste « Kira, Nuit Sans Fin ») ; l’Aube garde son exception assumée : Aube Éternelle, le nom de sa carte (Léna). Les sorts UR gardent leur marque « porteur : » (Kenji : Zénith Tranchant, Kira : Voile Déchiré, Solen : Couronne de Feu, Maïa : Danse des Feuilles, Argus : Rempart Éveillé) : la règle v0.47 ne s’applique qu’aux sorts L.
 
 ## Les 7 familles : un sort de lignée par palier
 
