@@ -35,6 +35,7 @@
   "manip": "Manip"
  },
  "RARITY_LABEL": {
+  "N": "Naissance",
   "C": "Commune",
   "UC": "Peu commune",
   "R": "Rare",
@@ -43,6 +44,7 @@
   "L": "Légendaire"
  },
  "RARITY_POWER": {
+  "N": 0.9,
   "C": 1,
   "UC": 1.08,
   "R": 1.16,
@@ -51,6 +53,7 @@
   "L": 1.52
  },
  "RANK": {
+  "N": -1,
   "C": 0,
   "UC": 1,
   "R": 2,
@@ -194,6 +197,10 @@
   "regen": 2
  },
  "EVO_COST": {
+  "N": [
+   "brut",
+   3
+  ],
   "C": [
    "brut",
    3

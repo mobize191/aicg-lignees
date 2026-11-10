@@ -2,6 +2,17 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le rang N migré (T1.1 du grand chantier)
+
+Lot 1 du grand chantier, appliqué aux data et au dist. Les 12 naissances humaines, monstres et mystiques passent au rang **N** (sous C) ; les 5 Bestiau deviennent les 5 **Embryons** (renommage acté v15, ids inchangés n5-n9).
+
+1. **Périmètre N** : n1-n12 passent `rarity: "N"` ; **n13-n15 restent C** (Ange, Démon, Éveillé du Seuil : communes divines, cibles d'éveil du futur Esprit Divin N du lot contenu).
+2. **Tables moteur** : `RARITY_LABEL.N = "Naissance"`, `RARITY_POWER.N = 0.9` (calibrable), `RANK.N = -1`, `EVO_COST.N = ["brut", 3]` (interim identique à C ; la pierre d'éveil remplace ce coût en T1.2).
+3. **Portée de `RARITY_POWER` confirmée** : elle nourrit l'INDICE de force (recommandé vs équipe), pas les mathématiques du combat. Les stats brutes des naissances ne changent pas : le rang N est une étiquette de progression et un poids d'indice, pas un nerf. Le **digest reste `7dfab0a2…`** (476/3000, 0 exception) : les combats sont identiques au bit près.
+4. **Acquisition** : les jetons de naissance (humain, race, monstre, mystique, divine) et le défi du jour tirent la naissance de la race (N ; C pour la porte divine tant que l'Esprit Divin n'existe pas), jamais d'autres communes. Les cartes archivées (Ange Gardien, ex-p2) sont exclues des tirages du défi et de la Forge (correctif au passage).
+5. **Affichage** : chip et carte `r-N` (gris bleuté), glossaire des raretés ouvert sur le rang N, textes courants passés de « tous communs » à « naissances », changelog v1.1.
+6. **Preuve** : build OK, 64 tests (4 nouveaux rang N), smoke 158 checks, digest inchangé, tables regénérées.
+
 ## 2026-11-10 (grand chantier, les neuf ouvertes) : ACTÉ — les décisions ouvertes du lot 8 sont tranchées
 
 Réponses de Marc-Olivier aux neuf points ouverts ; la spec et le plan du grand chantier les intègrent (`docs/design/spec-arbres-sorts.md` et `plan-arbres-sorts.md`).

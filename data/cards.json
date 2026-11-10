@@ -2,7 +2,7 @@
  {
   "id": "n1",
   "name": "Épéiste Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Guerrier",
   "role": "attaque",
   "atk": 8,
@@ -15,7 +15,7 @@
  {
   "id": "n2",
   "name": "Mage Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 7,
@@ -28,7 +28,7 @@
  {
   "id": "n3",
   "name": "Prêtre Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 4,
@@ -45,7 +45,7 @@
  {
   "id": "n4",
   "name": "Voleur Novice",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Assassin",
   "role": "attaque",
   "atk": 9,
@@ -57,8 +57,8 @@
  },
  {
   "id": "n5",
-  "name": "Bestiau des Eaux",
-  "rarity": "C",
+  "name": "Embryon des Eaux",
+  "rarity": "N",
   "classe": "Guerrier",
   "role": "attaque",
   "atk": 9,
@@ -70,8 +70,8 @@
  },
  {
   "id": "n6",
-  "name": "Bestiau des Flammes",
-  "rarity": "C",
+  "name": "Embryon des Flammes",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 10,
@@ -83,8 +83,8 @@
  },
  {
   "id": "n7",
-  "name": "Bestiau du Vivant",
-  "rarity": "C",
+  "name": "Embryon du Vivant",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 7,
@@ -100,8 +100,8 @@
  },
  {
   "id": "n8",
-  "name": "Bestiau des Ténèbres",
-  "rarity": "C",
+  "name": "Embryon des Ténèbres",
+  "rarity": "N",
   "classe": "Assassin",
   "role": "attaque",
   "atk": 10,
@@ -113,8 +113,8 @@
  },
  {
   "id": "n9",
-  "name": "Bestiau des Cieux",
-  "rarity": "C",
+  "name": "Embryon des Cieux",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 9,
@@ -127,7 +127,7 @@
  {
   "id": "n10",
   "name": "Enge des Brumes",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Mage",
   "role": "attaque",
   "atk": 9,
@@ -140,7 +140,7 @@
  {
   "id": "n11",
   "name": "Enge des Bois",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Prêtre",
   "role": "support",
   "atk": 6,
@@ -157,7 +157,7 @@
  {
   "id": "n12",
   "name": "Enge des Caveaux",
-  "rarity": "C",
+  "rarity": "N",
   "classe": "Occultiste",
   "role": "attaque",
   "atk": 9,

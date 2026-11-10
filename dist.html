@@ -110,6 +110,7 @@ transition: transform .15s ease, box-shadow .15s ease, filter .2s ease;
 .card.t-Assassin { box-shadow: 0 3px 10px rgba(0,0,0,.5), inset 0 0 0 3px rgba(206, 147, 216, .35); }
 
 .card.r-C { filter: saturate(.92); }
+.card.r-N { filter: saturate(.88); }
 
 .card.r-UC { box-shadow: 0 3px 12px rgba(97, 214, 145, .28), inset 0 0 0 1.5px rgba(140, 240, 180, .08); }
 .card.r-R { box-shadow: 0 3px 12px rgba(63, 140, 255, .30), inset 0 0 0 1.5px rgba(255,255,255,.06); border-width: 2px; }
@@ -138,6 +139,7 @@ padding: 2px 7px; border-radius: 999px;
 background: rgba(8, 11, 17, .82); border: 1px solid rgba(255, 255, 255, .14);
 }
 .r-C .rar-chip { color: #9aa5b5; }
+.r-N .rar-chip { color: #8d99ad; }
 .r-UC .rar-chip { color: #61d691; }
 .r-R .rar-chip { color: #45a3ff; }
 .r-SR .rar-chip { color: #b06bff; }
@@ -696,6 +698,7 @@ font-size: .82rem; font-weight: 700;
 
 .chip.rar { font-weight: 800; }
 .chip.rar.r-C { color: #9aa5b5; border-color: rgba(154, 165, 181, .4); }
+.chip.rar.r-N { color: #8d99ad; border-color: rgba(141, 153, 173, .45); }
 .chip.rar.r-UC { color: #61d691; border-color: rgba(97, 214, 145, .4); }
 .chip.rar.r-R { color: #45a3ff; border-color: rgba(69, 163, 255, .4); }
 .chip.rar.r-SR { color: #b06bff; border-color: rgba(176, 107, 255, .4); }
@@ -919,6 +922,7 @@ animation: newpulse 1.6s infinite;
 .reveal-front { transform: rotateY(180deg); }
 .reveal-front .card { width: 100%; height: 100%; }
 .reveal-card.r-C.flipped { box-shadow: 0 0 26px rgba(160,160,160,.5); }
+.reveal-card.r-N.flipped { box-shadow: 0 0 26px rgba(150,158,172,.5); }
 .reveal-card.r-UC.flipped { box-shadow: 0 0 26px rgba(80,200,120,.5); }
 .reveal-card.r-R.flipped { box-shadow: 0 0 26px rgba(80,150,255,.6); }
 .reveal-card.r-SR.flipped { box-shadow: 0 0 30px rgba(200,120,255,.65); }
@@ -993,7 +997,7 @@ const DATA = {
   {
    "id": "n1",
    "name": "Épéiste Novice",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Guerrier",
    "role": "attaque",
    "atk": 8,
@@ -1006,7 +1010,7 @@ const DATA = {
   {
    "id": "n2",
    "name": "Mage Novice",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Mage",
    "role": "attaque",
    "atk": 7,
@@ -1019,7 +1023,7 @@ const DATA = {
   {
    "id": "n3",
    "name": "Prêtre Novice",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Prêtre",
    "role": "support",
    "atk": 4,
@@ -1036,7 +1040,7 @@ const DATA = {
   {
    "id": "n4",
    "name": "Voleur Novice",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Assassin",
    "role": "attaque",
    "atk": 9,
@@ -1048,8 +1052,8 @@ const DATA = {
   },
   {
    "id": "n5",
-   "name": "Bestiau des Eaux",
-   "rarity": "C",
+   "name": "Embryon des Eaux",
+   "rarity": "N",
    "classe": "Guerrier",
    "role": "attaque",
    "atk": 9,
@@ -1061,8 +1065,8 @@ const DATA = {
   },
   {
    "id": "n6",
-   "name": "Bestiau des Flammes",
-   "rarity": "C",
+   "name": "Embryon des Flammes",
+   "rarity": "N",
    "classe": "Mage",
    "role": "attaque",
    "atk": 10,
@@ -1074,8 +1078,8 @@ const DATA = {
   },
   {
    "id": "n7",
-   "name": "Bestiau du Vivant",
-   "rarity": "C",
+   "name": "Embryon du Vivant",
+   "rarity": "N",
    "classe": "Prêtre",
    "role": "support",
    "atk": 7,
@@ -1091,8 +1095,8 @@ const DATA = {
   },
   {
    "id": "n8",
-   "name": "Bestiau des Ténèbres",
-   "rarity": "C",
+   "name": "Embryon des Ténèbres",
+   "rarity": "N",
    "classe": "Assassin",
    "role": "attaque",
    "atk": 10,
@@ -1104,8 +1108,8 @@ const DATA = {
   },
   {
    "id": "n9",
-   "name": "Bestiau des Cieux",
-   "rarity": "C",
+   "name": "Embryon des Cieux",
+   "rarity": "N",
    "classe": "Mage",
    "role": "attaque",
    "atk": 9,
@@ -1118,7 +1122,7 @@ const DATA = {
   {
    "id": "n10",
    "name": "Enge des Brumes",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Mage",
    "role": "attaque",
    "atk": 9,
@@ -1131,7 +1135,7 @@ const DATA = {
   {
    "id": "n11",
    "name": "Enge des Bois",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Prêtre",
    "role": "support",
    "atk": 6,
@@ -1148,7 +1152,7 @@ const DATA = {
   {
    "id": "n12",
    "name": "Enge des Caveaux",
-   "rarity": "C",
+   "rarity": "N",
    "classe": "Occultiste",
    "role": "attaque",
    "atk": 9,
@@ -2571,6 +2575,7 @@ const DATA = {
    "manip": "Manip"
   },
   "RARITY_LABEL": {
+   "N": "Naissance",
    "C": "Commune",
    "UC": "Peu commune",
    "R": "Rare",
@@ -2579,6 +2584,7 @@ const DATA = {
    "L": "Légendaire"
   },
   "RARITY_POWER": {
+   "N": 0.9,
    "C": 1,
    "UC": 1.08,
    "R": 1.16,
@@ -2587,6 +2593,7 @@ const DATA = {
    "L": 1.52
   },
   "RANK": {
+   "N": -1,
    "C": 0,
    "UC": 1,
    "R": 2,
@@ -2730,6 +2737,10 @@ const DATA = {
    "regen": 2
   },
   "EVO_COST": {
+   "N": [
+    "brut",
+    3
+   ],
    "C": [
     "brut",
     3
@@ -9933,10 +9944,12 @@ function makeDailyWave(seed, lvl = M.DAILY_LEVEL_DEFAULT) {
 function drawDailyCommon(rng = roll) {
   const r = rng();
   const race = r < M.DAILY_RACE_HUM ? 'humaine' : r < M.DAILY_RACE_MONSTRE ? 'monstre' : r < M.DAILY_RACE_MYSTIQUE ? 'mystique' : 'divine';
-  
-  let pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === race && cardAvailable(c)); 
-  if (!pool.length) pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === 'humaine' && cardAvailable(c));
-  const fallback = pool.length ? pool : CATALOG.filter((c) => c.rarity === 'C' && c.raciale && cardAvailable(c));
+  // rang N (phase 1) : le tirage donne la naissance de la race ; les communes divines restent la porte divine
+  const naissRar = (rc) => (rc === 'divine' ? 'C' : 'N');
+  const poolFor = (rc) => CATALOG.filter((c) => c.raciale && c.rarity === naissRar(raceOfCard(c)) && raceOfCard(c) === rc && cardAvailable(c) && !c.archived);
+  let pool = poolFor(race);
+  if (!pool.length) pool = poolFor('humaine');
+  const fallback = pool.length ? pool : CATALOG.filter((c) => c.raciale && c.rarity === naissRar(raceOfCard(c)) && cardAvailable(c) && !c.archived);
   return fallback[Math.floor(rng() * fallback.length)];
 }
 
@@ -10688,13 +10701,13 @@ function bossTokenFor(dungeonId) {
 function tokenLabel(t) {
   if (!t) return 'jeton';
   const rar = t.rar ?? 'C';
-  if (t.kind === 'humain') return `naissance humaine au hasard (${rar})`;
+  if (t.kind === 'humain') return 'naissance humaine au hasard (rang N)';
   if (t.kind === 'humain-riche') return 'humain raffin\u00e9 (maillon d\u2019une voie, 15 % R)';
-  if (t.kind === 'race') return `les 4 races au tirage (${rar})`;
-  if (t.kind === 'monstre' || t.kind === 'mystique' || t.kind === 'divine') return `race ${t.kind} au tirage (${rar})`;
+  if (t.kind === 'race') return 'les 4 races au tirage (naissance)';
+  if (t.kind === 'monstre' || t.kind === 'mystique' || t.kind === 'divine') return `race ${t.kind} au tirage (naissance)`;
   if (t.kind === 'evolution') return `raccourci : palier ${rar} d\u2019une voie raciale`;
   if (t.kind === 'biome') return `biome ${dungeonById(t.cat)?.name ?? t.cat} (${rar})`;
-  if (t.kind === 'non-humain') return 'race non humaine au tirage (commune)';
+  if (t.kind === 'non-humain') return 'race non humaine au tirage (naissance)';
   return t.cat === 'pers' ? `personnages humains (${rar})` : `biome ${dungeonById(t.cat)?.name ?? t.cat} (${rar})`;
 }
 
@@ -11202,7 +11215,10 @@ function useToken(idx) {
   const rar = t.rar ?? 'C';
   const inKind = (c) => cardAvailable(c) && !forgeOnly(c);
   
-  const racialePool = (race, r) => CATALOG.filter((c) => c.raciale && c.rarity === r && raceOfCard(c) === race && inKind(c));
+  const racialePool = (race, r) => CATALOG.filter((c) => c.raciale && c.rarity === r && raceOfCard(c) === race && inKind(c) && !c.archived);
+  // rang N (phase 1) : un jeton de naissance tire le rang de la naissance de la race ;
+  // les communes divines (Ange, Démon, Éveillé du Seuil) restent la porte divine jusqu'à l'Esprit Divin
+  const naissRar = (race) => (race === 'divine' ? 'C' : 'N');
   
   const raccourciPool = (race, r) => {
     const set = new Set();
@@ -11215,22 +11231,22 @@ function useToken(idx) {
   };
   let pool = [];
   if (t.kind === 'humain' || (!t.kind && t.cat === 'pers')) {
-    pool = racialePool('humaine', rar);
+    pool = racialePool('humaine', naissRar('humaine'));
   } else if (t.kind === 'humain-riche') {
     const drawRar = uiRand() < 0.15 ? 'R' : 'UC';
     pool = raccourciPool('humaine', drawRar);
   } else if (t.kind === 'race' || t.kind === 'non-humain') {
     const races = t.kind === 'race' ? RACES : ['monstre', 'mystique', 'divine'];
     const race = races[Math.floor(uiRand() * races.length)];
-    pool = racialePool(race, rar);
-    if (!pool.length) pool = raccourciPool(race, rar);
-    if (!pool.length) pool = races.flatMap((r2) => racialePool(r2, rar));
+    pool = racialePool(race, naissRar(race));
+    if (!pool.length) pool = raccourciPool(race, naissRar(race));
+    if (!pool.length) pool = races.flatMap((r2) => racialePool(r2, naissRar(r2)));
   } else if (t.kind === 'monstre' || t.kind === 'mystique' || t.kind === 'divine') {
-    pool = racialePool(t.kind, rar);
-    if (!pool.length) pool = raccourciPool(t.kind, rar);
+    pool = racialePool(t.kind, naissRar(t.kind));
+    if (!pool.length) pool = raccourciPool(t.kind, naissRar(t.kind));
   } else if (t.kind === 'evolution') {
     pool = RACES.flatMap((r2) => raccourciPool(r2, rar));
-    if (!pool.length) pool = RACES.flatMap((r2) => racialePool(r2, rar));
+    if (!pool.length) pool = RACES.flatMap((r2) => racialePool(r2, naissRar(r2)));
   } else {
     const dg = t.cat;
     pool = CATALOG.filter((c) => c.rarity === rar && c.dungeon === dg && inKind(c));
@@ -11928,7 +11944,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
           : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
-        ${card.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Bestiau, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
+        ${card.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Embryons, Enge, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
         ${exemplairesBlock}
         ${spellList(card)}`}
         ${evo}
@@ -12052,7 +12068,7 @@ function renderHome(root) {
           <h2>Bienvenue à AICG : Lignées !</h2>
           <p>Collectionnez des cartes, forgez des lignées, explorez le donjon des Marées. Voici comment démarrer :</p>
           <ol class="steps">
-            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 vos 5 jetons offerts (2 humains, 1 humain raffin\u00e9, 2 races au tirage \u2014 tous communs), \u00e0 la Forge.</li>
+            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 vos 5 jetons offerts (2 humains, 1 humain raffin\u00e9, 2 races au tirage \u2014 toutes des naissances), \u00e0 la Forge.</li>
             <li><b>Composez votre \u00e9quipe</b> : 5 emplacements libres, des synergies de classe et d\u2019\u00e9l\u00e9ment.</li>
             <li><b>Explorez le donjon</b> : chaque \u00e9tage vaincu rapporte des points et de l\u2019XP ; le boss final l\u00e2che un jeton de g\u00e9n\u00e9ration (1 par jour et par donjon).</li>
             <li><b>Montez vos cartes</b> : au niveau 10, chacune \u00e9volue avec des \u00e9clats \u2014 et garde son identit\u00e9.</li>
@@ -12628,7 +12644,7 @@ function renderCollection(root) {
     ${dungeonFamsOfRace('humaine').length ? `<h3 class="race-band">— formes humaines du Z\u00e9nith —</h3>${dungeonFamsOfRace('humaine').map(monsterFamSection).join('')}` : ''}
     <h3 class="race-band">${RACE_GLYPH.monstre} Race monstre — le bestial <span class="muted">stats de base +10 %</span></h3>
     <div class="fam">
-      <h4>Les 5 Bestiau — les affinit\u00e9s</h4>
+      <h4>Les 5 Embryons — les affinit\u00e9s</h4>
       <p class="muted fam-hint">Eaux, Flammes, Vivant, T\u00e9n\u00e8bres, Cieux : l\u2019affinit\u00e9 est tir\u00e9e \u00e0 la naissance, sans \u00e9l\u00e9ment. Leurs webs de biome s\u2019ouvriront avec les choix multi-voies (prochain patch).</p>
       ${raceGrid('monstre')}
     </div>
@@ -13625,7 +13641,7 @@ async function animate(events, ms, gen = null) {
           grantCards([drawn.id]);
           save();
           updatePtsBadge();
-          rewardLine = `+${pts} ⚡ pts · 📠 +1 éclat brut ${drawn.element} · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (commune ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
+          rewardLine = `+${pts} ⚡ pts · 📠 +1 éclat brut ${drawn.element} · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
         } else if (won) {
           
           
@@ -13997,7 +14013,7 @@ function renderCombat(root, opts = {}) {
   }
   const isBossFloor = store.stage % 5 === 0;
   const runModDef = (!defi && runModById(store.runMod)) || null;
-  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, toujours une naissance raciale) et 1 éclat brut de son élément.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
+  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
   const infoChips = [`<button type="button" class="info-chip" data-info="rules" title="Comment joue une carte ?">ℹ️</button>`]
     .concat(runModDef ? [`<button type="button" class="info-chip" data-info="mod" title="Modificateur du run">🎰 ${runModDef.name}</button>`] : [])
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
@@ -14151,7 +14167,7 @@ function renderDonjons(root) {
       <h3>🌟 Défi du jour</h3>
       ${store.dailyDone === todayKey()
         ? `<p class="muted">Déjà relevé aujourd’hui — le prochain défi arrive demain.</p>`
-        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 ⚡, 1 commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, toujours une naissance raciale) et 1 éclat brut de son élément.</p>
+        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément.</p>
       <div class="dungeon-actions"><span class="btn big enter-btn-defi">Combattre le défi du jour</span></div>`}
     </div>
     <div class="dungeon-grid">
@@ -14354,6 +14370,7 @@ const gloOwned = (id) => store.collection.get(id) ?? 0;
 const isKnown = (id) => gloOwned(id) > 0 || seenCard(id);
 
 const RARITIES = [
+  ['N', 'Naissance', 'Le rang des d\u00e9buts, sous la commune : une carte qui n\u2019a encore rien choisi, \u00e0 amener o\u00f9 l\u2019on veut.'],
   ['C', 'Commune', 'Le quotidien des donjons : discret mais fiable.'],
   ['UC', 'Peu commune', 'Un cran au-dessus, souvent le premier vrai compagnon.'],
   ['R', 'Rare', 'Le socle des familles, chaque lignée s’appuie dessus.'],
@@ -14384,6 +14401,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.1 : Le rang Naissance', 'LES NAISSANCES QUITTENT LA COMMUNE. Les 12 naissances raciales (les 4 Novices, les 5 Embryons \u2014 ex-Bestiaux \u2014 et les 3 Enge) passent au rang N, un cran sous la commune : elles n\u2019ont encore rien choisi, on les am\u00e8ne o\u00f9 l\u2019on veut. Le jeton et le d\u00e9fi du jour tirent d\u00e9sormais des naissances, jamais d\u2019autres communes ; les cartes divines (Ange, D\u00e9mon, \u00c9veill\u00e9 du Seuil) restent la porte du camp divin jusqu\u2019\u00e0 l\u2019Esprit Divin. La puissance du rang N est calibr\u00e9e 10 % sous la commune, et le glossaire s\u2019ouvre sur le nouveau rang.'],
   ['v0.47.2 : Source d’images au choix', 'Un bouton 🖼️ dans l’en-tête bascule les illustrations des cartes entre DreamShaper XL (assets.json, par défaut) et WAI-Illustrious v17 (assets-wai.json, campagne comparative), mémorisé entre les visites. Aucun impact sur le moteur.'],
   ['v1.0 : La refonte majeure', 'LE MONOLITHE DEVIENT MODULAIRE. Les donnees vivent desormais dans data/ (cartes, monstres, ecoles, grimoire a crans, arbres de race, zones), le moteur dans src/engine/ en modules purs, et dist.html est regenere par build.mjs. LES ARBRES DE RACE (v17) : crans +10/+20/+30 % en donnees, l\u2019Ange Eveille remplace l\u2019Ange Gardien, communes deleguees (Pousse des Seves, Fidele du Jour). LES SORTS (v2.3) : 8 ecoles, grimoire a crans I-IV, fusion des Marees (30 signatures -> 7 uniques + 23 fondues), fin du verrou de classe. LE MODE RPG : agilite et intelligence, mult sur la stat principale, la zone de 3, l\u2019ordre du tour sur l\u2019agilite, les taux contre les seuils. LES ZONES D\u2019ERRANCE : cadence zone/donjon, recoltes, apprentissage des crans. Sauvegardes migrees de v8 a v12 sans perte.'],
   ['v0.47 : Tranche-Monde et Nuit Éternelle', 'LES SORTS SIGNATURE NE RÉPÈTENT PLUS LE NOM DE LEUR CARTE. Le sort L du Sabre (« Kenji : Sabre Céleste ») devient Tranche-Monde ; le sort L de l’Ombre (« Kira : Nuit Sans Fin ») devient Nuit Éternelle. « Kenji : Zénith Tranchant » reste ; l’Aube garde son exception assumée : Aube Éternelle, le plus fort sort de l’aube porte le nom de sa carte (Léna).'],
@@ -14535,7 +14553,7 @@ function renderGlossaire(root) {
       <ul class="glo-list">
         <li><b>Un début quasi uniquement en communes</b> : le rythme est volontairement lent ; les raretés montent avec les donjons débloqués et les difficultés.</li>
         <li><b>Jetons de génération</b> : le boss final de chaque donjon en lâche un, 1 par jour et par donjon (rareté selon les donjons bouclés) ; la première victoire finale d’un donjon offre un jeton bonus de son biome.</li>
-        <li><b>Naissances raciales</b> : un jeton ne donne QUE la naissance, au hasard — les 4 Novices (humaine), les 5 Bestiau (monstre), les 3 Enge (mystique), Ange / Démon / Éveillé du Seuil (divine). Le jeton humain raffiné entre au maillon d’une voie (UC, 15 % R) ; le jeton d’évolution, au palier indiqué. Jamais les vieilles cartes hors architecture ; le tirage reste borné par les déblocages.</li>
+        <li><b>Naissances raciales</b> : un jeton ne donne QUE la naissance, au hasard — les 4 Novices (humaine), les 5 Embryons (monstre), les 3 Enge (mystique), Ange / Démon / Éveillé du Seuil (divine). Le jeton humain raffiné entre au maillon d’une voie (UC, 15 % R) ; le jeton d’évolution, au palier indiqué. Jamais les vieilles cartes hors architecture ; le tirage reste borné par les déblocages.</li>
         <li><b>Autel 5-pour-1</b> : la chaîne mène à la Légendaire (5 UR = 1 L) ; la M ne passe jamais par l’autel.</li>
         <li><b>Jalons</b> : premier donjon terminé = jeton humain raffiné + jeton de race ; premier boss d’étage 5 = jeton humain raffiné ; première Difficile = jeton d’évolution (Super Rare).</li>
         <li><b>Jetons de départ</b> : 5 jetons communs offerts au premier lancement — 2 humains, 1 humain raffiné (Peu commune garantie), et 2 races au tirage.</li>
@@ -14613,7 +14631,7 @@ function renderGlossaire(root) {
       <h3>Défi du jour 🌟</h3>
       <ul class="glo-list">
         <li><b>Une équipe divine par jour</b> : cinq cartes tirées des familles divines, au niveau de votre équipe au premier lancement du jour (figé ensuite, +2 pour leur chef, marqué boss). Pas d’étage, pas de difficulté — un combat, autant de tentatives que vous voulez.</li>
-        <li><b>Récompense</b> : +40 ⚡, 1 commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément.</li>
+        <li><b>Récompense</b> : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément.</li>
         <li><b>Règles divines</b> : le camp remplace l’élément (ange = Lumière, démon = Ombre) ; une seule carte par famille divine en équipe, trois au maximum ; dès deux cartes divines posées, vos dégâts ET vos soins gagnent +10 %.</li>
         <li><b>Sommets</b> : Kairos, Arbitre du Seuil (étourdissement double), Écho, Voix Miroir (copie des sorts adverses) et Ananké, Tisseuse du Pont (liens chaînés) — les L des trois familles ne tombent qu’ici.</li>
       </ul>

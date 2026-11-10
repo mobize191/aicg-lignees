@@ -1,6 +1,6 @@
 # Roadmap — AICG : Lignées
 
-> Dernière mise à jour : 10/11/2026, après l'audit du grand chantier arbres + sorts (retours de Marc-Olivier consolidés, voir la section dédiée et le journal des arbitrages).
+> Dernière mise à jour : 10/11/2026, après la migration du rang N (T1.1 du grand chantier : 12 naissances en N, 5 Embryons, acquisition et affichage recâblés ; voir la section dédiée et le journal des arbitrages).
 
 ## État actuel (v0.47.3, en ligne)
 
@@ -45,7 +45,7 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 
 Périmètre acté avec Marc-Olivier : l'intégralité des nouveaux arbres d'évolution et de sorts, intégrant la migration du rang N, le contenu v3, le rework des races v17 et la refonte des sorts. Ordre proposé, chaque lot livré avec sa chaîne de preuve (tests, regen des tables, digest recalibré documenté, smoke) :
 
-1. **Rang N** : migration des data (rareté N sous C, `RARITY_POWER`, `RANK`), acquisition (drops à taux très bas dans les donjons, nature des zones d'errance, 1 à 2 N offerts en début de jeu, coût de l'éveil), naissances toujours jouables en combat. Le digest bougera : nouvelle baseline à documenter.
+1. **Rang N** : **T1.1 FAIT (10/11/2026)** — 12 naissances en N (5 Embryons renommés), tables moteur N, jetons et défi du jour recâblés sur les naissances, chips et glossaire, 4 tests neufs. Digest **inchangé** (`7dfab0a2…`, 476/3000) : `RARITY_POWER` nourrit l'indice de force, pas le combat (baselines documentées dans arbitrages). Restent : **T1.2** la pierre d'éveil (objet droppé donjon + défi du jour, remplace les éclats pour N → C) et **T1.3** les drops à taux très bas, les 1 à 2 N offerts en début de jeu, le tirage borné par les déblocages.
 2. **Fin du tri des 189** : les ~159 signatures restantes (Forge, Bosquet, Crypte, Zénith, naissances, solos, divines), lot par lot en data pure, avec re-mappage des sorts connus en sauvegarde à chaque biome trié. Inclut le tri d'homogénéité ACTÉ (aucun sort strictement dominé au même coût, cas Frappe Précise/Trait d'Épine, voir arbitrages du 10/11).
 3. **Ciblage et fiche type** : la fiche type du sort (rôle, école, ciblage, taux) pilote la résolution ET la fenêtre d'action (bug NOTÉ du boost qui ciblait les ennemis) ; le rôle attaque/support sort de l'affichage (champ moteur conservé pour les lignes d'équipe).
 4. **Stats et profils (v0.47)** : stat principale par profil, répartition dérivée du profil (plus de lignée mage plus agile qu'intelligent), ordre du tour par agilité, esquive, zone de 3 cibles contiguës, seuils de résistance ; **affichage du résultat calculé** (mult × stat) à la place du multiplicateur seul ; **le mana total monte avec l'intelligence** (ACTÉ, formule à calibrer). Calibration AVEC Marc-Olivier, recalibrage digest complet.

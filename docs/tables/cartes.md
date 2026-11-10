@@ -33,8 +33,8 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | b2 | Onyx, Fil de Nuit | SR | Ombre | attaque | 26 | 66 | 21 | 16 | ombre | - | - |
 | b7 | Sylve, Écorce Vive | SR | Terre | attaque | 25 | 72 | 20 | 15 | bosquet | - | - |
 | n14 | Démon | C | Ombre | attaque | 10 | 52 | 8 | 6 | - | Trait de Vice | - |
-| n4 | Voleur Novice | C | - | attaque | 9 | 47 | 7 | 5 | - | Larcin Rapide | - |
-| n8 | Bestiau des Ténèbres | C | - | attaque | 10 | 50 | 8 | 6 | - | Griffes Noires | - |
+| n4 | Voleur Novice | N | - | attaque | 9 | 47 | 7 | 5 | - | Larcin Rapide | - |
+| n8 | Embryon des Ténèbres | N | - | attaque | 10 | 50 | 8 | 6 | - | Griffes Noires | - |
 | s3 | Veilleur d’Acier | C | Ombre | support | 5 | 45 | 4 | 3 | - | Œil du Stratège | atkBuff 0.15 |
 
 ## Classe Guerrier (17)
@@ -52,8 +52,8 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | a6 | Épéiste Errant | R | Feu | attaque | 12 | 75 | 10 | 7 | lame | - | - |
 | a9 | Pilier Mécanique | R | Terre | attaque | 11 | 80 | 9 | 7 | - | Charge Hydraulique | - |
 | b1 | Yuki, Brise-Lame | SR | Feu | attaque | 24 | 82 | 19 | 14 | lame | - | - |
-| n1 | Épéiste Novice | C | - | attaque | 8 | 55 | 6 | 5 | - | Prise de Garde | - |
-| n5 | Bestiau des Eaux | C | - | attaque | 9 | 60 | 7 | 5 | - | Bruissement d’Écume | - |
+| n1 | Épéiste Novice | N | - | attaque | 8 | 55 | 6 | 5 | - | Prise de Garde | - |
+| n5 | Embryon des Eaux | N | - | attaque | 9 | 60 | 7 | 5 | - | Bruissement d’Écume | - |
 | s11 | Argus, Rempart Éveillé | UR | Terre | support | 6 | 92 | 5 | 4 | bouclier | - | shield 55 |
 | s12 | Argus, Forteresse Vivante | L | Terre | support | 7 | 115 | 6 | 4 | bouclier | - | shield 75 |
 | s4 | Gardien-Mécanique | C | Terre | support | 2 | 55 | 2 | 1 | bouclier | - | shield 15 |
@@ -78,17 +78,17 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | a8 | Sorcière des Rivières | R | Eau | attaque | 14 | 50 | 11 | 8 | eau | - | - |
 | b3 | Naïa, Sourcéleine | SR | Eau | attaque | 22 | 76 | 18 | 13 | eau | - | - |
 | b6 | Ember, Cœur de Fournaise | SR | Feu | attaque | 23 | 74 | 18 | 14 | braise | - | - |
-| n10 | Enge des Brumes | C | - | attaque | 9 | 56 | 7 | 5 | - | Voile de Brume | - |
-| n2 | Mage Novice | C | - | attaque | 7 | 48 | 6 | 4 | - | Étincelle d’Étude | - |
-| n6 | Bestiau des Flammes | C | - | attaque | 10 | 52 | 8 | 6 | - | Souffle de Braise | - |
-| n9 | Bestiau des Cieux | C | - | attaque | 9 | 54 | 7 | 5 | - | Rafale Céleste | - |
+| n10 | Enge des Brumes | N | - | attaque | 9 | 56 | 7 | 5 | - | Voile de Brume | - |
+| n2 | Mage Novice | N | - | attaque | 7 | 48 | 6 | 4 | - | Étincelle d’Étude | - |
+| n6 | Embryon des Flammes | N | - | attaque | 10 | 52 | 8 | 6 | - | Souffle de Braise | - |
+| n9 | Embryon des Cieux | N | - | attaque | 9 | 54 | 7 | 5 | - | Rafale Céleste | - |
 | s7 | Bastion Arcanique | SR | Terre | support | 6 | 58 | 5 | 4 | bouclier | - | atkBuff 0.25 |
 
 ## Classe Occultiste (2)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| n12 | Enge des Caveaux | C | - | attaque | 9 | 53 | 7 | 5 | - | Froid du Caveau | - |
+| n12 | Enge des Caveaux | N | - | attaque | 9 | 53 | 7 | 5 | - | Froid du Caveau | - |
 | n15 | Éveillé du Seuil | C | - | attaque | 8 | 55 | 6 | 5 | - | Regard du Seuil | - |
 
 ## Classe Prêtre (24)
@@ -103,10 +103,10 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | a49 | Capitaine du Guet | R | Lumière | support | 4 | 66 | 3 | 2 | - | Ronde Éclairée | heal 30 |
 | b4 | Aïna, Voix du Matin | SR | Lumière | support | 4 | 78 | 3 | 2 | aube | - | heal 46 |
 | b5 | Roc, Épaule du Monde | SR | Terre | support | 5 | 96 | 4 | 3 | bouclier | - | shield 44 |
-| n11 | Enge des Bois | C | - | support | 6 | 60 | 5 | 4 | - | Souffle des Sèves | heal 18 |
+| n11 | Enge des Bois | N | - | support | 6 | 60 | 5 | 4 | - | Souffle des Sèves | heal 18 |
 | n13 | Ange | C | Lumière | support | 6 | 58 | 5 | 4 | - | Éclat d’Aube | heal 20 |
-| n3 | Prêtre Novice | C | - | support | 4 | 52 | 3 | 2 | - | Bénédiction Modeste | heal 18 |
-| n7 | Bestiau du Vivant | C | - | support | 7 | 62 | 6 | 4 | - | Sève Voleuse | heal 16 |
+| n3 | Prêtre Novice | N | - | support | 4 | 52 | 3 | 2 | - | Bénédiction Modeste | heal 18 |
+| n7 | Embryon du Vivant | N | - | support | 7 | 62 | 6 | 4 | - | Sève Voleuse | heal 16 |
 | p1 | Ange Éveillé | UC | Lumière | support | 8 | 66 | 6 | 5 | - | Éclat d’Aube | heal 24 |
 | p2 | Ange Gardien | C | Lumière | support | 6 | 58 | 5 | 4 | - | Éclat d’Aube | heal 20 |
 | p3 | Pousse des Sèves | C | Terre | support | 5 | 60 | 4 | 3 | - | - | heal 16 |
@@ -157,24 +157,24 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | a29 Adepte des Rivières | s5 Prêtresse de l’Aube | élue de la lumière — rejoint la lignée de Léna |
 | a32 Veilleur de Braise | a20 Mage de la Fournaise | fidèle au Feu |
 | a32 Veilleur de Braise | s5 Prêtresse de l’Aube | élue de la lumière — rejoint la lignée de Léna |
-| n5 Bestiau des Eaux | e3 | voie du pillage — les récifs |
-| n5 Bestiau des Eaux | e11 | voie des berges |
-| n6 Bestiau des Flammes | f3 | voie de la suie |
-| n6 Bestiau des Flammes | f15 | voie de la fournaise |
-| n6 Bestiau des Flammes | f24 | voie du goblin |
-| n7 Bestiau du Vivant | g3 | voie de la mousse |
-| n7 Bestiau du Vivant | g12 | voie des sèves |
-| n8 Bestiau des Ténèbres | k3 | le gouffre |
-| n8 Bestiau des Ténèbres | k12 | le deuil marin |
-| n8 Bestiau des Ténèbres | k24 | le devoir brisé |
+| n5 Embryon des Eaux | e3 | voie du pillage — les récifs |
+| n5 Embryon des Eaux | e11 | voie des berges |
+| n6 Embryon des Flammes | f3 | voie de la suie |
+| n6 Embryon des Flammes | f15 | voie de la fournaise |
+| n6 Embryon des Flammes | f24 | voie du goblin |
+| n7 Embryon du Vivant | g3 | voie de la mousse |
+| n7 Embryon du Vivant | g12 | voie des sèves |
+| n8 Embryon des Ténèbres | k3 | le gouffre |
+| n8 Embryon des Ténèbres | k12 | le deuil marin |
+| n8 Embryon des Ténèbres | k24 | le devoir brisé |
 | n10 Enge des Brumes | e24 | la forme — Sirène |
 | n11 Enge des Bois | g12 | la forme — Dryade |
 | n12 Enge des Caveaux | k3 | la forme — le gouffre |
 | n12 Enge des Caveaux | k12 | la forme — le deuil marin |
 | n12 Enge des Caveaux | k24 | la forme — le devoir brisé |
-| n9 Bestiau des Cieux | z3 | la voie dorée — la Légion Solaire |
-| n9 Bestiau des Cieux | z16 | la voie du feu céleste — les Phénix |
-| n9 Bestiau des Cieux | z23 | la voie du plein jour — le Clergé |
+| n9 Embryon des Cieux | z3 | la voie dorée — la Légion Solaire |
+| n9 Embryon des Cieux | z16 | la voie du feu céleste — les Phénix |
+| n9 Embryon des Cieux | z23 | la voie du plein jour — le Clergé |
 | n13 Ange | p1 Ange Éveillé | l’éveil du service — l’Ange Éveillé |
 | n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
 | n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |

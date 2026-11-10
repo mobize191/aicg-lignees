@@ -774,10 +774,12 @@ function makeDailyWave(seed, lvl = M.DAILY_LEVEL_DEFAULT) {
 function drawDailyCommon(rng = roll) {
   const r = rng();
   const race = r < M.DAILY_RACE_HUM ? 'humaine' : r < M.DAILY_RACE_MONSTRE ? 'monstre' : r < M.DAILY_RACE_MYSTIQUE ? 'mystique' : 'divine';
-  
-  let pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === race && cardAvailable(c)); 
-  if (!pool.length) pool = CATALOG.filter((c) => c.rarity === 'C' && c.raciale && raceOfCard(c) === 'humaine' && cardAvailable(c));
-  const fallback = pool.length ? pool : CATALOG.filter((c) => c.rarity === 'C' && c.raciale && cardAvailable(c));
+  // rang N (phase 1) : le tirage donne la naissance de la race ; les communes divines restent la porte divine
+  const naissRar = (rc) => (rc === 'divine' ? 'C' : 'N');
+  const poolFor = (rc) => CATALOG.filter((c) => c.raciale && c.rarity === naissRar(raceOfCard(c)) && raceOfCard(c) === rc && cardAvailable(c) && !c.archived);
+  let pool = poolFor(race);
+  if (!pool.length) pool = poolFor('humaine');
+  const fallback = pool.length ? pool : CATALOG.filter((c) => c.raciale && c.rarity === naissRar(raceOfCard(c)) && cardAvailable(c) && !c.archived);
   return fallback[Math.floor(rng() * fallback.length)];
 }
 

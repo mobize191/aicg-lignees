@@ -338,7 +338,7 @@ async function main() {
           const hero50 = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
           const sub50 = hero50 ? (hero50.querySelector('.hero-sub')?.textContent ?? '') : '';
           check('50 e fiche : Neutre affiché pour une naissance, rareté en toutes lettres',
-            sub50.includes('Neutre') && /Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
+            sub50.includes('Neutre') && /Naissance|Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
           check('50 e fiche : statline corrigée (stats + oppositions, plus de doublon)',
             [...doc.querySelectorAll('.statline')].length === 2, String([...doc.querySelectorAll('.statline')].length));
           check('50 e fiche : grille identité (classe, élément, rareté, rôle)', [...doc.querySelectorAll('.fstat')].length >= 4, '');
