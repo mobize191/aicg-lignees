@@ -11,7 +11,7 @@ Tu es un agent autonome de développement (session Vibe CLI ou OpenCode). Tu tra
 
 - `dist.html` est un artefact généré par `node build.mjs`. Tu ne l'édites JAMAIS à la main : toute feature vit dans `src/shell.html`, `src/ui.js` ou `data/*.json`, puis tu rebuilds.
 - Le bouton 🖼️ de switch d'images (DreamShaper XL / WAI-Illustrious, localStorage `fondations-art-src`) est en production : son comportement ne change pas, et chaque ticket finit par prouver qu'il survit au rebuild.
-- Le bouton de thème clair/sombre de v0.47.1, aujourd'hui perdu, se récupère intégralement depuis l'historique git : `git show 605f3d14:dist.html` (blocs `#theme-btn`, `body.theme-clair`, markup du header, JS de bascule, entrée HISTORY v0.47.1).
+- Le bouton de thème clair/sombre de v0.47.1 n'est PAS restauré (décision du designer) : tu n'y touches pas, même si tu croises ses traces dans l'historique git.
 - Aucune valeur de design ne quitte `data/` ; aucune dépendance n'entre dans le repo ; Node 18+, `node --test`.
 - Tu ne réécris pas les migrations existantes : elles sont bonnes, c'est leur branchement qui manque.
 
@@ -26,8 +26,8 @@ Tu es un agent autonome de développement (session Vibe CLI ou OpenCode). Tu tra
 
 ## Premier geste
 
-Commence par T-FIX-1 : récupérer le thème depuis `git show 605f3d14:dist.html`, rapatrier les deux features d'en-tête dans `src/shell.html` et `src/ui.js`, puis `node build.mjs`. Prouve par les quatre commandes du ticket, committe, puis T-FIX-2.
+Commence par T-FIX-1 : rapatrier le switch d'images 🖼️ (markup du bouton dans `src/shell.html`, CSS, `ART_MANIFESTS` / `artSrcKey` / `switchArtSrc` et le listener dans `src/ui.js`, entrée HISTORY v0.47.2), puis `node build.mjs`. Prouve par les quatre commandes du ticket, committe, puis T-FIX-2.
 
 ## Ce que tu rends à la fin
 
-Un dépôt où `node build.mjs && node --test` passe de bout en bout, un dist committé identique au dist régénéré (plus jamais d'écart), le bouton 🖼️ intact et le bouton 🌙/☀️ restauré, la migration v8 -> v12 réellement appliquée au chargement d'une sauvegarde, le glossaire aligné sur le moteur, et trois mini-rapports clos par leur VERDICT. Rien d'autre ne change.
+Un dépôt où `node build.mjs && node --test` passe de bout en bout, un dist committé identique au dist régénéré (plus jamais d'écart), le bouton 🖼️ présent dans `src/` et survivant à chaque build, la migration v8 -> v12 réellement appliquée au chargement d'une sauvegarde, le glossaire aligné sur le moteur, et trois mini-rapports clos par leur VERDICT. Rien d'autre ne change.

@@ -25,6 +25,8 @@ Preuve : `node build.mjs` produit 458 930 caractères ; le `dist.html` committé
 
 De plus, le bouton de thème clair/sombre de v0.47.1 (commit 605f3d14) vit `grep -c "theme-btn" dist.html` = 5 dans ce commit, mais = 0 sur main : v0.47.2 a regénéré le dist depuis src/ et a silencieusement effacé la feature de thème.
 
+Décision du designer (10/11/2026) : le bouton de thème n'est PAS restauré. Sa disparition reste documentée ici pour l'historique ; seul le switch d'images 🖼️ est rapatrié dans la source.
+
 Cause racine : v0.47.1 et v0.47.2 ont été édités directement dans `dist.html`. Depuis la refonte, `dist.html` est un artefact généré : toute édition manuelle sera perdue au prochain build.
 
 ### C2. La migration des sauvegardes n'est pas branchée dans le flux réel
@@ -49,22 +51,21 @@ Preuve : la section mécanique de l'écran décrit encore « les cartes des deux
 
 Ordre d'exécution : T-FIX-1, T-FIX-2, T-FIX-3. T-ZONES-1 reste en draft : bloqué sur un design d'écran à écrire avec le designer. Un ticket = une préoccupation = un commit. Chaque ticket se prouve par ses commandes.
 
-### T-FIX-1. Les features d'en-tête vivent dans src/, le bouton de switch d'images reste intact
+### T-FIX-1. Le switch d'images vit dans src/, chaque build le régénère
 
-Problème : C1. Les boutons 🖼️ (switch d'images v0.47.2) et 🌙/☀️ (thème v0.47.1, actuellement perdu) ne vivent pas dans la source.
+Problème : C1. Le bouton 🖼️ (switch d'images v0.47.2) et tout son code (`ART_MANIFESTS`, `artSrcKey`, `switchArtSrc`) n'existent que dans `dist.html` : le prochain rebuild les effacera.
 
 Action :
-- Récupérer le thème complet depuis l'historique git : `git show 605f3d14:dist.html` contient les blocs `#theme-btn`, `body.theme-clair`, le bouton dans le header, le JS de bascule et l'entrée HISTORY v0.47.1.
-- Rapatrier les DEUX features côté source : le markup des boutons dans `src/shell.html` (header), le CSS et le JS (`ART_MANIFESTS`, `artSrcKey`, `switchArtSrc`, le listener, les entrées HISTORY v0.47.1 et v0.47.2) dans `src/ui.js`, en conservant le comportement à l'identique (clé localStorage `fondations-art-src`, fichiers `assets.json` / `assets-wai.json`, aucune valeur de design ne quitte les données).
+- Rapatrier la feature côté source : le markup du bouton dans `src/shell.html` (header), le CSS (`#art-src-btn`), le JS (`ART_MANIFESTS`, `ART_SRC_LABEL`, `artSrcKey`, `switchArtSrc`, le listener) et l'entrée HISTORY v0.47.2 dans `src/ui.js`, en conservant le comportement à l'identique (clé localStorage `fondations-art-src`, fichiers `assets.json` / `assets-wai.json`, aucune valeur de design ne quitte les données).
 - Regénérer : `node build.mjs`.
 
 Critères (commandes qui prouvent) :
-1. `node build.mjs && grep -c "art-src-btn" dist.html` > 0 et `grep -c "theme-btn" dist.html` > 0
+1. `node build.mjs && grep -c "art-src-btn" dist.html` > 0 (le bouton survit au rebuild)
 2. `node build.mjs && md5sum dist.html && node build.mjs && md5sum dist.html` : deux builds identiques
 3. `node --test` : 56 passes + aucune régression
 4. Le dist committé après le ticket est le dist régénéré : plus jamais d'écart entre rebuild et commit.
 
-Interdits : ne pas modifier le comportement du switch d'images (localStorage, manifestes, re-render) ; ne pas éditer `dist.html` à la main.
+Interdits : ne pas modifier le comportement du switch d'images (localStorage, manifestes, re-render) ; ne pas éditer `dist.html` à la main ; ne pas restaurer le bouton de thème (décision du designer).
 
 ### T-FIX-2. La migration v8 -> v12 branchée dans le flux réel
 
@@ -95,6 +96,6 @@ ACC-4-4 initial non tenu : l'écran n'existe pas. Blocage : le design de l'écra
 ## 4. Règles réaffirmées
 
 1. `dist.html` est un artefact généré par `node build.mjs`. Il ne s'édite jamais à la main ; une feature qui n'existe que dans le dist n'existe pas.
-2. Le bouton 🖼️ (switch d'images DreamShaper XL / WAI-Illustrious) est une feature en production : chaque ticket qui rebuild le dist doit prouver qu'il survit (`grep -c "art-src-btn" dist.html` > 0), et le bouton de thème de v0.47.1 sera restauré par T-FIX-1 avec la même garantie.
+2. Le bouton 🖼️ (switch d'images DreamShaper XL / WAI-Illustrious) est une feature en production : chaque ticket qui rebuild le dist doit prouver qu'il survit (`grep -c "art-src-btn" dist.html` > 0). Le bouton de thème de v0.47.1 n'est pas restauré (décision du designer, voir C1).
 3. Un VERDICT de phase ne se rend que si tous les ACC de la phase sont tenus, y compris les vérifications visuelles ; une question ouverte sur un ACC non tenu vaut FAIL, pas PASS.
 4. Une preuve qui teste la fonction isolée ne prouve pas le branchement : le critère doit exercer le flux réel (chargement de sauvegarde, appel depuis l'UI), sinon le vert des tests cache du code mort.
