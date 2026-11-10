@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (nuit) : ACTÉ — budgets de fichiers v2 (charte images) : fin des budgets faméliques v1
+
+- **Motif** : les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, JPEG très compressé) venaient de la contrainte « dist < 1 Mo tout en base64 », levée depuis le passage à assets.json/fichiers chargés à la demande. La vraie contrainte restante = fluidité (décodage + bande passante mobile), pas la taille du dist.
+- **Nouveaux budgets (charte v2 §13)** : art de carte **400×560, JPEG q78-82, ~40-70 Ko** (affichage réel 200×280 ×2 DPR) ; fonds de donjon **1216×832, q70-75, ~150-250 Ko** ; fond-monde/key art accueil **1920×1080** ; **masters ComfyUI conservés en 1040×1520** pour upscale/print futur, archivés à part (jamais dans le dist).
+- La règle de design « lisibilité 200×280, silhouette claire » est conservée : elle est indépendante du budget de fichier. `make-assets.py` appliquera les nouveaux budgets à la conversion.
+
 ## 2026-11-10 (nuit) : ACTÉ — économie v2 : l'or, la Boutique, le marchand de créatures, la Guilde, les quêtes quotidiennes (retour de Marc-Olivier)
 
 - **L'or entre en jeu** : monnaie gagnée en errance et en donjon. Les combats d'errance lâchent or, objets, éclats et pierres d'éveil. **L'énergie actuelle (⚡ les points de donjon, `store.points`, 40 par étage modulé par les mods de run) est convertie en or** au chantier économie.

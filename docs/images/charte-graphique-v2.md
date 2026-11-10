@@ -135,3 +135,18 @@ Réponses de Marc-Olivier après le test checkpoint (§11), entrées ACTÉ corre
 | `seeds.csv` | registre v2 (seeds v1 obsolètes au changement de checkpoint) + genre par carte |
 | `docs/images/images-conventions.md` | réécriture après validation (ce document devient la référence) |
 
+## 13. Budgets de fichiers v2 (ACTÉ 10/11 nuit) — remplace les budgets v1
+
+Les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, compression agressive) venaient de la contrainte « dist < 1 Mo tout en base64 », qui est levée. La vraie contrainte restante = décodage et bande passante mobile, pas la taille du dist. Nouveaux budgets :
+
+| Artefact | v1 | **v2** |
+|---|---|---|
+| Art de carte | 300×420, ≤ 30 Ko | **400×560, JPEG q78-82, ~40-70 Ko** (affichage réel 200×280 ×2 DPR) |
+| Fond de donjon | 960×540, ≤ 110 Ko | **1216×832 (sortie naturelle hires fix), q70-75, ~150-250 Ko** |
+| Fond-monde / key art accueil | n/a | **1920×1080**, libre (1 exemplaire, image pas vidéo) |
+| Masters ComfyUI | non conservés | **conservés en 1040×1520** (hire fix ×1.25) pour upscale/print futur |
+
+- La lisibilité 200×280 (§1) reste la règle de DESIGN : silhouette claire, 2-3 plages de contraste — elle est indépendante du budget de fichier.
+- `make-assets.py` prendra ces budgets à la conversion ; les masters sont archivés à part (jamais dans le dist ni dans assets.json).
+- La netteté du visage après ADetailer survit enfin au zoom de fiche (le v1 en q72 la sacrifiait).
+
