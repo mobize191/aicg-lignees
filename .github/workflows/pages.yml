@@ -22,6 +22,7 @@ jobs:
           mkdir -p site
           cp dist.html site/index.html
           cp assets.json site/assets.json
+          cp assets-wai.json site/assets-wai.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
