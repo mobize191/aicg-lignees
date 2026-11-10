@@ -70,7 +70,7 @@ async function main() {
   const sig = api.byId('n1').spells.at(-1);
   check('43 A signature 5 mana / 1.85', sig.cost === 5 && Math.abs(sig.mult - 1.85) < 1e-9, sig.cost + '/' + sig.mult);
   const a1c = api.byId('a1');
-  check('43 A a1 : commun + sort de lignée', a1c.spells.length === 2 && a1c.spells[1].name === 'Taillade du Mat' && a1c.spells[1].cat === 'lignée', a1c.spells.map((s) => s.name).join(' | '));
+  check('43 A a1 : sort de lignée seul (commun retiré des familles, T2.7)', a1c.spells.length === 1 && a1c.spells[0].name === 'Taillade du Mat' && a1c.spells[0].cat === 'lignée', a1c.spells.map((s) => s.name).join(' | '));
   const mw = api.makeWave(77, 2, 'marees', 1);
   const monsterSpells = [...mw.attaque, ...mw.support].map((u) => (u.spells ?? []).length);
   check('43 A monstre : commun + signature', monsterSpells.every((n) => n === 2), monsterSpells.join(','));

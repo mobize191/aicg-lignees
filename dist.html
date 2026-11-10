@@ -4348,7 +4348,8 @@ const DATA = {
     "cout": 5,
     "mult": 1.65,
     "classe": "Mage",
-    "desc": "Le mage vide un fragment de mana en un trait brut."
+    "desc": "Le mage vide un fragment de mana en un trait brut.",
+    "effet": "base : l'intelligence (le trait brut du mage)"
    },
    {
     "id": "onde-consacree",
@@ -5186,7 +5187,12 @@ const DATA = {
     "cible": "tous les ennemis",
     "cout": 3,
     "mult": 1.5,
-    "desc": "Le flot noir qui submerge tous les ennemis."
+    "desc": "Le flot noir qui submerge tous les ennemis.",
+    "base": "morsure-decume",
+    "cran": "IV",
+    "delta": {
+     "desc": "le flot noir submerge toute la ligne"
+    }
    },
    {
     "id": "abime-absolu",
@@ -5196,7 +5202,13 @@ const DATA = {
     "cible": "tous les ennemis",
     "cout": 3,
     "mult": 1.5,
-    "desc": "Le gouffre s’ouvre et referme."
+    "desc": "Le gouffre s’ouvre et referme.",
+    "base": "morsure-decume",
+    "cran": "IV",
+    "delta": {
+     "abime": true,
+     "desc": "le gouffre s'ouvre sous la ligne"
+    }
    },
    {
     "id": "songe-des-profondeurs",
@@ -5209,7 +5221,14 @@ const DATA = {
     "taux": 0.35,
     "tours": 3,
     "effet": "corrosion",
-    "desc": "Le rêve qui noie."
+    "desc": "Le rêve qui noie.",
+    "base": "etreinte-des-profondeurs",
+    "cran": "III",
+    "delta": {
+     "corrosion": 0.35,
+     "tours": 3,
+     "desc": "le rêve noie et corrode (35 % × 3 tours)"
+    }
    },
    {
     "id": "couronne-des-ecumes",
@@ -5219,7 +5238,13 @@ const DATA = {
     "cible": "l’équipe",
     "cout": 3,
     "mult": 1.5,
-    "desc": "L’onction royale."
+    "desc": "L’onction royale.",
+    "base": "guet-des-fonds",
+    "cran": "IV",
+    "delta": {
+     "royal": true,
+     "desc": "l'onction royale dresse toute l'équipe"
+    }
    },
    {
     "id": "benediction-des-berges",
@@ -5229,7 +5254,12 @@ const DATA = {
     "cible": "l’équipe",
     "cout": 3,
     "mult": 1.5,
-    "desc": "La bénédiction du bord de l’eau."
+    "desc": "La bénédiction du bord de l’eau.",
+    "base": "onde-consacree",
+    "cran": "III",
+    "delta": {
+     "desc": "la bénédiction du bord de l'eau soigne toute l'équipe"
+    }
    },
    {
     "id": "chant-du-naufrage",
@@ -5239,7 +5269,13 @@ const DATA = {
     "cible": "tous les ennemis",
     "cout": 7,
     "mult": 2,
-    "desc": "Le chant qui couche les équipages."
+    "desc": "Le chant qui couche les équipages.",
+    "base": "chant-de-sirene",
+    "cran": "IV",
+    "delta": {
+     "masse": true,
+     "desc": "le chant couche toute la ligne ennemie"
+    }
    },
    {
     "id": "colere-des-recifs",
@@ -5252,7 +5288,14 @@ const DATA = {
     "taux": 0.3,
     "tours": 2,
     "effet": "corrosion",
-    "desc": "La reine qui flagelle."
+    "desc": "La reine qui flagelle.",
+    "base": "morsure-decume",
+    "cran": "IV",
+    "delta": {
+     "corrosion": 0.3,
+     "tours": 2,
+     "desc": "la reine flagelle et corrode (30 % × 2 tours)"
+    }
    },
    {
     "id": "nuit-de-cendres",
@@ -10291,6 +10334,34 @@ function validate(data, errors) {
       }
     }
   }
+  // tri d'homogénéité (T2.7, ACTÉ) : aucun sort strictement dominé au même coût,
+  // même école + même rôle, sans particularité (effet/delta), même base de comparaison
+  const largRang2 = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
+  const plat = [];
+  for (const s of data.grimoire?.ecole ?? []) {
+    for (const [cran, c] of Object.entries(s.crans ?? {})) {
+      if (c.vide) continue;
+      plat.push({ id: s.id + ' ' + cran, ecole: s.ecole, role: s.role, cout: c.cout, mult: c.mult ?? 0, taux: c.taux ?? 0, larg: largRang2(c.largeur), fx: s.effet ?? null });
+    }
+  }
+  for (const e of [...(data.grimoire?.entrees ?? []), ...(data.grimoire?.communs ?? []), ...(data.grimoire?.race ?? [])]) {
+    plat.push({ id: e.id, ecole: e.ecole, role: e.role, cout: e.cout, mult: e.mult ?? 0, taux: 0, larg: largRang2(e.cible), fx: e.effet ?? null });
+  }
+  const byKey = new Map();
+  for (const s of plat) {
+    const k = s.ecole + '|' + s.role + '|' + s.cout;
+    if (!byKey.has(k)) byKey.set(k, []);
+    byKey.get(k).push(s);
+  }
+  for (const [k, arr] of byKey) {
+    for (const a of arr) for (const b of arr) {
+      if (a === b || a.fx || b.fx) continue;
+      const aT = a.taux > 0, bT = b.taux > 0;
+      if (aT !== bT) continue;
+      const pa = aT ? a.taux : a.mult, pb = aT ? b.taux : b.mult;
+      if (pa > pb && a.larg >= b.larg) push(`le sort ${b.id} est strictement dominé par ${a.id} au même coût (${k})`, 'EXI-T-3');
+    }
+  }
   return errors;
 }
 
@@ -11933,7 +12004,8 @@ for (const c of CATALOG) {
     
     const tier = c.branch ? 3 : t;
     const famSchool = SCHOOLS[c.family] ?? {};
-    c.spells = [ { ...COMMON_SPELLS[c.role === 'support' ? 'support' : 'attaque'] }, ...FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée', ecole: c.family, ...(famSchool.role ? { role: famSchool.role } : {}) })) ];
+    // T2.7 (défaut acté) : une carte de famille connaît ses sorts de lignée, pas les communs
+    c.spells = FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée', ecole: c.family, ...(famSchool.role ? { role: famSchool.role } : {}) }));
     c.mana = FAMILY_MANA[tier].max;
     c.manaRegen = FAMILY_MANA[tier].regen;
   } else {

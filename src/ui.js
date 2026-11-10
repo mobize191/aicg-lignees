@@ -80,7 +80,8 @@ for (const c of CATALOG) {
     
     const tier = c.branch ? 3 : t;
     const famSchool = SCHOOLS[c.family] ?? {};
-    c.spells = [ { ...COMMON_SPELLS[c.role === 'support' ? 'support' : 'attaque'] }, ...FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée', ecole: c.family, ...(famSchool.role ? { role: famSchool.role } : {}) })) ];
+    // T2.7 (défaut acté) : une carte de famille connaît ses sorts de lignée, pas les communs
+    c.spells = FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée', ecole: c.family, ...(famSchool.role ? { role: famSchool.role } : {}) }));
     c.mana = FAMILY_MANA[tier].max;
     c.manaRegen = FAMILY_MANA[tier].regen;
   } else {

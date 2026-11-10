@@ -487,3 +487,31 @@ test('tri des divines : 23 signatures résolues, biome divin marqué trié (T2.6
     assert.ok(E.getSpellDef(u.base), `base ${u.base} existe`);
   }
 });
+
+// ---------- T2.7 : le tri d'homogénéité du grimoire (lot 2, ACTÉ 10/11) ----------
+test('homogénéité : aucun sort strictement dominé au même coût (T2.7, EXI-T-3)', () => {
+  const E = loadEngine();
+  assert.deepEqual(E.errors, [], 'le validateur inclut le contrôle d’homogénéité');
+});
+
+test('les communs sont retirés des cartes de famille (T2.7, défaut acté)', () => {
+  const E = loadEngine();
+  const famCard = E.getCard('a1'); // Épée en Herbe, famille lame
+  const prepare = (c) => {
+    const fam = E.getFamily(c.family);
+    const tier = fam.steps.indexOf(c.id);
+    return E.DATA['lineage-spells'][c.family].slice(0, tier + 1).map((s) => s.name);
+  };
+  assert.ok(!prepare(famCard).includes('Frappe Précise'), 'la carte de famille ne porte plus le commun');
+  assert.ok(E.sortsDeDepart('n1').includes('frappe-precise'), 'la naissance garde son commun');
+});
+
+test('les 7 uniques des Marées sont au format décision 3 (base + cran + delta) (T2.7)', () => {
+  const E = loadEngine();
+  const marees = ['e13', 'e14', 'e17', 'e19', 'e22', 'e28', 'e30'];
+  for (const carte of marees) {
+    const u = E.DATA.grimoire.uniques.find((x) => x.carte === carte);
+    assert.ok(u && u.base && u.cran && u.delta, `unique ${u?.id} (${carte}) au format base+cran+delta`);
+    assert.ok(E.getSpellDef(u.base), `base ${u.base} existe`);
+  }
+});

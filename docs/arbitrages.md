@@ -2,6 +2,13 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le tri d'homogénéité du grimoire (T2.7, fin du lot 2)
+
+- **Contrôle automatique** (dans le validateur, donc testé à chaque chargement) : aucun sort strictement dominé au même coût, même école + même rôle, sans particularité (effet/delta), même base de comparaison (mult ou taux). Une seule paire réelle signalée : Décharge Arcanique vs Lame d'Écume III — la Décharge porte désormais son effet propre en données (base : l'intelligence), ce qui l'exclut de la domination stricte.
+- **Communs retirés des cartes de famille** (défaut confirmé) : une carte de famille ne porte que ses sorts de lignée (le cas Pisteur du Bosquet / Frappe Précise vs Trait d'Épine est clos). Les naissances et solos gardent leur commun.
+- **Les 7 uniques des Marées sont resynchronisées au format décision 3** (base d'école + cran + delta), comme celles de la Forge, du Bosquet, de la Crypte, du Zénith et des divines.
+- **Nouvelle baseline digest** : `eb701919d4cb8a1ce4b7c31f5585fbcd4d40ae373e5a513167520f6b6f5e588d`, **479/3000** (0 exception, 0 marathon), contre `7dfab0a2…` 476/3000. +3 victoires : les cartes de famille n'ont plus de commun à dépenser en fin de mana. 97 tests, smoke 164 checks.
+
 ## 2026-11-10 : ACTÉ — le tri des recrues, naissances et solos (T2.5 du grand chantier)
 
 - **33 signatures résolues, toutes fondues** (14.5 étape 5). Le lot : les 12 naissances raciales (n1-n12), les 5 solos d’entrée (Garde-Promesse, Étincelle Vive, Pilier Mécanique, Médecin de Camp, Veilleur d’Acier) et les 16 cartes des mini-lignées (quais, fête, routes, dunes, berges, guet). Ni L ni M dans le lot : aucune unique, tout le monde rend son geste au pot commun. Le biome `recrues` est marqué `trie` dans fusion-map.json ; les 33 cartes portent le champ `biome` (le validateur exige 100 % de couverture, comme les biomes à monstres).

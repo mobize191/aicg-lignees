@@ -89,7 +89,8 @@
    "cout": 5,
    "mult": 1.65,
    "classe": "Mage",
-   "desc": "Le mage vide un fragment de mana en un trait brut."
+   "desc": "Le mage vide un fragment de mana en un trait brut.",
+   "effet": "base : l'intelligence (le trait brut du mage)"
   },
   {
    "id": "onde-consacree",
@@ -927,7 +928,12 @@
    "cible": "tous les ennemis",
    "cout": 3,
    "mult": 1.5,
-   "desc": "Le flot noir qui submerge tous les ennemis."
+   "desc": "Le flot noir qui submerge tous les ennemis.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "desc": "le flot noir submerge toute la ligne"
+   }
   },
   {
    "id": "abime-absolu",
@@ -937,7 +943,13 @@
    "cible": "tous les ennemis",
    "cout": 3,
    "mult": 1.5,
-   "desc": "Le gouffre s’ouvre et referme."
+   "desc": "Le gouffre s’ouvre et referme.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "abime": true,
+    "desc": "le gouffre s'ouvre sous la ligne"
+   }
   },
   {
    "id": "songe-des-profondeurs",
@@ -950,7 +962,14 @@
    "taux": 0.35,
    "tours": 3,
    "effet": "corrosion",
-   "desc": "Le rêve qui noie."
+   "desc": "Le rêve qui noie.",
+   "base": "etreinte-des-profondeurs",
+   "cran": "III",
+   "delta": {
+    "corrosion": 0.35,
+    "tours": 3,
+    "desc": "le rêve noie et corrode (35 % × 3 tours)"
+   }
   },
   {
    "id": "couronne-des-ecumes",
@@ -960,7 +979,13 @@
    "cible": "l’équipe",
    "cout": 3,
    "mult": 1.5,
-   "desc": "L’onction royale."
+   "desc": "L’onction royale.",
+   "base": "guet-des-fonds",
+   "cran": "IV",
+   "delta": {
+    "royal": true,
+    "desc": "l'onction royale dresse toute l'équipe"
+   }
   },
   {
    "id": "benediction-des-berges",
@@ -970,7 +995,12 @@
    "cible": "l’équipe",
    "cout": 3,
    "mult": 1.5,
-   "desc": "La bénédiction du bord de l’eau."
+   "desc": "La bénédiction du bord de l’eau.",
+   "base": "onde-consacree",
+   "cran": "III",
+   "delta": {
+    "desc": "la bénédiction du bord de l'eau soigne toute l'équipe"
+   }
   },
   {
    "id": "chant-du-naufrage",
@@ -980,7 +1010,13 @@
    "cible": "tous les ennemis",
    "cout": 7,
    "mult": 2,
-   "desc": "Le chant qui couche les équipages."
+   "desc": "Le chant qui couche les équipages.",
+   "base": "chant-de-sirene",
+   "cran": "IV",
+   "delta": {
+    "masse": true,
+    "desc": "le chant couche toute la ligne ennemie"
+   }
   },
   {
    "id": "colere-des-recifs",
@@ -993,7 +1029,14 @@
    "taux": 0.3,
    "tours": 2,
    "effet": "corrosion",
-   "desc": "La reine qui flagelle."
+   "desc": "La reine qui flagelle.",
+   "base": "morsure-decume",
+   "cran": "IV",
+   "delta": {
+    "corrosion": 0.3,
+    "tours": 2,
+    "desc": "la reine flagelle et corrode (30 % × 2 tours)"
+   }
   },
   {
    "id": "nuit-de-cendres",

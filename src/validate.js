@@ -145,5 +145,33 @@ function validate(data, errors) {
       }
     }
   }
+  // tri d'homogénéité (T2.7, ACTÉ) : aucun sort strictement dominé au même coût,
+  // même école + même rôle, sans particularité (effet/delta), même base de comparaison
+  const largRang2 = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
+  const plat = [];
+  for (const s of data.grimoire?.ecole ?? []) {
+    for (const [cran, c] of Object.entries(s.crans ?? {})) {
+      if (c.vide) continue;
+      plat.push({ id: s.id + ' ' + cran, ecole: s.ecole, role: s.role, cout: c.cout, mult: c.mult ?? 0, taux: c.taux ?? 0, larg: largRang2(c.largeur), fx: s.effet ?? null });
+    }
+  }
+  for (const e of [...(data.grimoire?.entrees ?? []), ...(data.grimoire?.communs ?? []), ...(data.grimoire?.race ?? [])]) {
+    plat.push({ id: e.id, ecole: e.ecole, role: e.role, cout: e.cout, mult: e.mult ?? 0, taux: 0, larg: largRang2(e.cible), fx: e.effet ?? null });
+  }
+  const byKey = new Map();
+  for (const s of plat) {
+    const k = s.ecole + '|' + s.role + '|' + s.cout;
+    if (!byKey.has(k)) byKey.set(k, []);
+    byKey.get(k).push(s);
+  }
+  for (const [k, arr] of byKey) {
+    for (const a of arr) for (const b of arr) {
+      if (a === b || a.fx || b.fx) continue;
+      const aT = a.taux > 0, bT = b.taux > 0;
+      if (aT !== bT) continue;
+      const pa = aT ? a.taux : a.mult, pb = aT ? b.taux : b.mult;
+      if (pa > pb && a.larg >= b.larg) push(`le sort ${b.id} est strictement dominé par ${a.id} au même coût (${k})`, 'EXI-T-3');
+    }
+  }
   return errors;
 }
