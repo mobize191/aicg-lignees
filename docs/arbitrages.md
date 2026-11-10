@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — test aveugle checkpoint (charte v2) : WAI v17 retenu, NoobAI-XL écarté
+
+- **Protocole** : test aveugle local ComfyUI, 6 cartes témoins × 2 checkpoints (WAI-Illustrious v17 vs NoobAI-XL), paramètres identiques, seeds figés 1126001→1126006 (meliane, seigneur-cendres, leviathan, kenji, yuki, bg-marees). Révélation après évaluation de Marc-Olivier.
+- **Verdict : WAI v17 6 — NoobAI-XL 0**, appréciation d'ensemble « de très très loin ». **WAI-Illustrious v17 est le checkpoint de référence de la charte v2 ; NoobAI-XL écarté.** Premier point bloquant de la charte v2 levé (§4 et §11 de `docs/images/charte-graphique-v2.md`).
+- **Correction 1 — âge verrouillé dans l'ADN** : Kenji rendu en gamin parce que l'ADN data ne portait pas d'âge. Désormais le bloc `character_dna` fixe l'âge attendu (ex. Kenji : `1boy, adult man, mature face, veteran warrior`, négatif `young, teen, boy`) : plus d'invention du modèle sur l'âge.
+- **Correction 2 — Seigneur des Cendres (`f13`) rendu en chevalier** : c'est la dérive que le §3 de la charte v2 dénonce. ADN monstrueux requis (`colossal fire lord, beast-like, molten slag body, crown of embers, glowing ember eyes`, négatif `knight, human, armor, humanoid`).
+- **Correction 3 — âge apparent par palier de rareté** : pour toute nommée évolutive, le `character_dna` inclut un âge par palier (graine = jeune → évolutions plus matures/grandes). La cohérence de lignée inclut la maturation. Valide le rendu « gamine » de Yuki pour la graine b1.
+- **Conséquence seeds** : les seeds v1 restent obsolètes (changement de checkpoint) ; le registre v2 (`seeds.csv`) peut s'ouvrir avec les seeds témoins 1126001→1126006.
+
 ## 2026-11-10 : ACTÉ — charte des nommées (retour de Marc-Olivier) : doublon Aurorine tranché, règle générique/nommé explicitée
 
 - **Le doublon Aurorine tranché** : deux cartes portaient le même nom complet « Aurorine, Lance de l'Aube » : `z15` (monstre L de la Légion Solaire du Zénith, Assassin) et `u6` (L de la famille du Zèle, Prêtre, créée au lot 6). La charte « une nommée = un même personnage sur toute sa lignée » est intenable sur deux personnages distincts. **`z15` reste Aurorine** : c'est le sommet acté de la Légion Solaire du Zénith (design-arbres v15), son sort Éclipse Montante le raconte. **`u6` devient « Lémion, Chef de la Légion Solaire »**, le nom acté au document de référence v3 pour le sommet du Zèle (parallèle à `t6` Gadianton, Chef des Brigands) : le lot 6 avait réutilisé Aurorine par erreur. Renommage d'affichage seul : id, stats, sorts et sauvegardes inchangés.
@@ -243,3 +252,4 @@ Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en *
 ## Décisions antérieures
 
 Voir `docs/historique/` (rapports des phases de la refonte) et `docs/design/` (specs normatives). En bref : moteur pas-à-pas v0.46, refonte majeure exécutée (phases 0 à 5), campagne d'illustrations DreamShaper XL livrée (231 arts + 5 fonds), caractéristiques (FOR/VIE/AGI/INT) actées pour la v0.47 avec formules à calibrer avec Marc-Olivier.
+

@@ -21,6 +21,7 @@ Une carte nommée reste **le même personnage** sur toute sa lignée d'évolutio
 - **Image de référence obligatoire** : rareté la plus haute générée d'abord (règle v1), puis réinjection via **IPAdapter Plus (SDXL)** poids 0.5-0.7 pour chaque rareté basse.
 - **Mini-LoRA par personnage** (8-15 images, entraînement local rapide) : réservé aux héros majeurs à lignes longue. Liste à établir.
 - **Monstres évoluants** : même règle ; ADN (crâne, yeux, silhouette, motif de peau) figé, seuls taille/membres/aura évoluent.
+- **Âge apparent par palier de rareté** (retour du test checkpoint 10/11) : pour toute nommée évolutive, le bloc `character_dna` fixe un âge apparent **par palier** (graine = jeune → chaque évolution = plus mature/plus grande), pour que la maturation fasse partie de la cohérence de lignée. Sans âge explicite, WAI tire vers le jeune.
 - **Contrôle qualité** : planche de contrôle par colonne de personnage ; rejet de toute itération où l'identité dérive.
 
 ## 3. Espèces et genres — verrous de génération (retour terrain 10/11, PRIORITAIRE)
@@ -35,7 +36,7 @@ Problèmes constatés : espèce déduite du nom → dérive au sein d'une famill
 
 ## 4. Stack technique ComfyUI
 
-- **Checkpoint** : famille Illustrious-XL (WAI-Illustrious v17 en main) ; alternatives au test aveugle : NoobAI-XL ou finetune "clean".
+- **Checkpoint : WAI-Illustrious v17, TRANCHÉ le 10/11/2026** par test aveugle contre NoobAI-XL (6 cartes témoins, seeds 1126001→1126006, verdict de Marc-Olivier 6/0 « de très très loin »). **NoobAI-XL ÉCARTÉ.** Détails et corrections : §11.
 - **Prompting en tags danbooru** (les Illustrious n'aiment pas le langage naturel de DreamShaper) → re-générer les 231 prompts de `tools/build-prompts.mjs`.
 - Samplers conservés : dpmpp_2m_sde + karras, 28 steps, CFG 5-6 (tester 4-5 si le rendu "brûle").
 - Génération 832×1216 portrait (fonds 1216×832), hires fix, ADetailer, IPAdapter pour les nommées.
@@ -64,7 +65,7 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 
 ## 8. Points ouverts (bloquants avant génération)
 
-1. **Checkpoint final** : WAI v17 vs NoobAI-XL vs autre finetune — test aveugle (5 cartes témoins + 1 fond).
+1. **Checkpoint final : TRANCHÉ (10/11/2026)** — WAI v17 retenu, NoobAI-XL écarté (test aveugle 6/0, voir §11).
 2. **Tier de bascule full body** (R ? SR seulement ?).
 3. **Liste des nommées** qui méritent un mini-LoRA ; validation de la méthode IPAdapter.
 4. **Tableau genre + espèce des ~47 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data) : 29 monstres (série 1) + 7 têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa) + 7 graines dormantes (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) + les nouvelles familles v3 (Vesperine, Gadianton, Lémion) et Aurorine (z15, monstre non couvert par la série 1) — voir §10.
@@ -97,6 +98,20 @@ Héraut du Zénith (z7), Gardien des Foyers (f12), Patriarche du Bosquet (g7), A
 2. `tools/species-map.json` doit couvrir les nouvelles familles dès sa création : Crépuscule/Vol/Zèle/Appel = **humaines** (tags `human` + tenue par univers), sauf décision contraire ; Vesperine et Gadianton reçoivent un ADN complet comme les autres nommées.
 3. Le genre des nouvelles nommées (Vesperine, Gadianton) et des têtes de familles compagnons entre dans le tableau genre/espèce (~46 entrées) : viser ~50/50 sur l'ensemble, en comptant la série 1 existante (déjà plutôt féminine : Méliane, Thalassa, Zikka, Calcine, Ombeline, La Mort, Ysolde, Jeanne, Apolline, Pyrrha, Écho, Ananké, Kairos, Mycola, Adriel, Vesna vs Léviathan, Titan, Griknir, Seigneur des Cendres, Vulcain, Archiliche, Ahab, Astre Capiteux, Héraut, Fjalar, Célestin, Patriarche, Gardien des Foyers, Pontos) — **compagnons et graines doivent pencher masculin pour rééquilibrer** (ex. Kenji, Argus, Solen, Roc, Onyx ; à trancher dans le tableau).
 
+## 11. Test checkpoint du 10/11/2026 (TRANCHÉ) — protocole, résultat, corrections
+
+Test aveugle local ComfyUI, 6 cartes témoins × 2 checkpoints, paramètres identiques (832×1216, 28 steps, CFG ~5.5-6, hires fix ×1.25 denoise 0.4, ADetailer visage, seeds figés 1126001→1126006) : WAI v17 vs NoobAI-XL sur meliane, seigneur-cendres, leviathan, kenji, yuki, bg-marees.
+
+**Résultat : WAI v17 6 — NoobAI-XL 0** (verdict global de Marc-Olivier : « de très très loin »). WAI v17 reste le checkpoint de référence de la charte v2 ; NoobAI-XL écarté.
+
+### Enseignements → corrections de prompts
+
+1. **Kenji rendu en gamin** : l'ADN data ne portait pas d'âge, le modèle a tiré jeune. Correction : verrouiller dans le bloc `character_dna` `1boy, adult man, mature face, veteran warrior`, avec `young, teen, boy` en négatif. L'âge attendu est fixé par les data, plus d'invention du modèle.
+2. **Seigneur des Cendres rendu en chevalier en armure** (dérive dénoncée par le §3) : correction — ADN monstrueux `colossal fire lord, beast-like, molten slag body, crown of embers, glowing ember eyes`, négatif `knight, human, armor, humanoid`. La tête de héros aguerri obtenue par dérive revient à Kenji : les deux cartes se corrigent d'un coup.
+3. **Yuki en gamine** : OK pour la graine (b1), mais à généraliser en règle : **âge apparent par palier de rareté** dans le `character_dna` (ajouté au §2). La cohérence de lignée inclut la maturation, pas seulement les traits.
+
+Ces corrections sont à écrire dans `tests/checkpoint-2026-11/prompts.json` (registre local du test) puis à reporter dans les prompts de campagne v2.
+
 ## 9. Impact sur les scripts
 
 | Fichier | Changement |
@@ -107,3 +122,4 @@ Héraut du Zénith (z7), Gardien des Foyers (f12), Patriarche du Bosquet (g7), A
 | `tools/comfy-batch.mjs` | hires fix + ADetailer + IPAdapter, checkpoint configurable |
 | `seeds.csv` | registre v2 (seeds v1 obsolètes au changement de checkpoint) + genre par carte |
 | `docs/images/images-conventions.md` | réécriture après validation (ce document devient la référence) |
+
