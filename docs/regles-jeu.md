@@ -32,9 +32,10 @@
 
 ## 5. Le combat
 
-- Deux modes : 🤖 **Auto** (le moteur enchaîne tout seul) et 🧭 **Tactique** (vrai tour de RPG).
-- **Moteur pas-à-pas v0.46** : file d'actions triée par ATQ décroissante (équipe devant à égalité), `beginRound` / `peekRound` / `stepRound(state, choice)` ; le mode Auto compose les mêmes pièces (`resolveTurn`).
-- **Fenêtre d'action** : à chaque tour d'une carte, illustration, PV/ATQ/mana, attaque, sorts nommés (coût + infobulle, éteints si mana insuffisant), attendre (le mana remonte), puis **ciblage explicite** : liste cliquable + pion surligné sur le plateau + clic direct.
+- Deux modes : 🤖 **Auto** (le moteur enchaîne tout seul) et 🧭 **Tactique** (vrai tour de RPG). En Tactique, le combat démarre et s'enchaîne **tout seul** : seul le tour d'une de vos cartes ouvre la fenêtre d'action, et un bouton ⏸ Pause fige le flux entre les tours.
+- **Rail d'ordre du tour (v2.1)** : au-dessus du plateau, tout le monde dans l'ordre d'action (agilité décroissante, équipe d'abord à égalité) ; lueur sur vos cartes, acteur en cours doré, tombés grisés.
+- **Moteur pas-à-pas v0.46** : file d'actions triée par agilité décroissante (équipe devant à égalité), `beginRound` / `peekRound` / `stepRound(state, choice)` ; le mode Auto compose les mêmes pièces (`resolveTurn`).
+- **Fenêtre d'action** : à chaque tour d'une carte, illustration, PV/ATQ/mana, puis des actions **détaillées** (v2.1) : badge de type (Dégâts, Soin, Bouclier… venant du rôle d'école dans `data/schools.json`), coût en mana, ligne méta école · puissance · zone, et le texte du sort ; actions éteintes si mana insuffisant ; puis **ciblage explicite** : liste cliquable + pion surligné sur le plateau + clic direct.
 - **Formation** : 5 cartes max, 3 devant + 2 derrière ou 2 + 3, choisie avant le combat, **figée** pendant le combat (ACTÉ 10/11/2026).
 - **Règles de rang** (ACTÉES) : une carte de l'arrière encaisse 50 % des dégâts tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié tant que l'avant tient (les autres profils frappent à plein). L'avant tombe : la protection saute pour tous. La protection de l'arrière ne couvre **pas** les attaques de zone.
 - **Synergies d'équipe** (`data/synergies.json`) : par classe, paliers à 1 et 2 exemplaires (ex : Guerrier → +10 % puis +25 % ATQ d'équipe).
@@ -54,6 +55,7 @@ Les maquettes Vibe (errance, combat, fiches, DA) sont le **design cible** ; la p
 
 - **Ciblage v2** : le choix d'une action illumine les cibles éligibles sur le plateau, clic pour résoudre, zone de 2 contiguës suit le clic, bouton d'annulation, coût et zone visibles pendant toute la désignation.
 - **Pied de stats** : PV, ATQ et mana en actuel/total sur chaque carte + icônes d'état (bonus, malus, bouclier), carte grisée quand elle tombe.
+- **Combat v2.1 (retours terrain, 10/11/2026)** : rail d'ordre du tour au-dessus du plateau, combat auto en Tactique avec pause (plus de « Lancer le tour » obligatoire), actions détaillées au tour du joueur (badge de type, coût, école · puissance · zone, texte), fiche complète (statline corrigée, grille identité classe/élément/rareté/rôle, oppositions, Neutre affiché pour les naissances, sorts détaillés).
 - **PISTE v1.1, la Garde du Gardien** : tant que le Gardien tient à l'avant, la ligne arrière ne peut pas être visée.
 - **PISTE v2, grimoire élémentaire** : l'élément porterait le sort, la carte garderait une affinité ; voir `docs/arbitrages.md`.
 - Le détail visuel des maquettes ne se duplique pas ici : les arbitrages OUI (dans `docs/arbitrages.md`), le visuel reste dans les maquettes.

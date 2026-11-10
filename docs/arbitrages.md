@@ -2,6 +2,19 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 (retours terrain) : ACTÉ — combat v2.1 : rail d'ordre, auto-run en Tactique, actions détaillées, fiche complète
+
+Quatre retours de Marc-Olivier après la v2, corrigés en présentation uniquement (`src/ui.js`, `src/shell.html`, `src/data.js`, `data/engine.json` pour le vocabulaire d'affichage) — le moteur, l'équilibrage et le digest ne bougent pas (`7dfab0a2…`, 476 victoires ; smoke 158 checks ; 60 tests).
+
+- **Rail d'ordre du tour** : au-dessus du plateau, tout le monde dans l'ordre d'action du moteur (agilité décroissante, équipe d'abord à égalité) ; lueur sur vos cartes, acteur en cours doré, tombés grisés. En Auto comme en Tactique, le rail suit chaque acteur (le mode Auto passe par le même pas-à-pas `beginRound`/`stepRound` que `resolveTurn`, événements identiques).
+- **Combat auto en Tactique** : le combat démarre seul, la fenêtre d'action surgit au tour de vos cartes, le tour se joue, le suivant repart seul ; bouton ⏸ Pause (fige entre les tours) / ▶ Lancer le tour. Les tours tactiques comptent toujours au prorata intégral (`combatTally.manual`). Anti-runs fantômes conservés : chaque chaîne est capturée par `combatGen` et coupée au re-rendu.
+- **Actions détaillées au tour du joueur** : chaque action porte son badge de type (Dégâts, Soin, Bouclier, Invocation, Contrôle, Malus, Boost, Manip — libellés dans `data/engine.json` `SPELL_ROLE_LABEL`, rôle venant de `data/schools.json`), son coût, sa ligne méta « école · ×puissance · zone/cible » et le texte du sort. Le grimoire (`data/grimoire.json`) porte désormais école/rôle/cible jusqu'à l'UI (`src/data.js` `legacySpell`).
+- **Fiche complète** : le doublon de statline est corrigé ; la fiche montre la statline vivante (ATQ, PV, bouclier, mana, AGI, INT), la grille identité (classe, élément, rareté en toutes lettres `RARITY_LABEL`, rôle), les oppositions (ou « ⚪ Neutre » pour les naissances), et le grimoire complet en sort détaillés.
+
+### ACTÉ : les naissances restent jouables en combat ; le rang N est une migration data à part
+
+Précision demandée par Marc-Olivier : les Novices s'affichent « C » alors que le rework a acté un **rang N des naissances (sous C, hors lignée, hors drops, s'éveille en la commune C)**. Décision : (1) le rang N est confirmé ACTÉ (il est dans le design du rework, jamais migré dans les data — les naissances ont encore `rarity: "C"`) ; (2) les naissances restent **jouables en combat** — ce sont les cartes de départ du jeu, les interdire casserait le premier donjon ; « hors lignée, hors drops » ne veut pas dire « hors combat » ; (3) la migration (rareté `N`, `RARITY_POWER`/`RANK`, éveil N→C, exclusions des drops) est un chantier data à part qui fera bouger le digest — documenté dans `docs/roadmap.md`.
+
 ## 2026-11-10 : ACTÉ — mise à jour UI du combat v2 (implémentée dans src/, dist régénéré)
 
 Le design cible de `docs/regles-jeu.md` §7 (maquettes combat/fiches) passe en **implémenté**, uniquement en présentation (`src/ui.js`, `src/shell.html`) — le moteur, les data et l'équilibrage ne bougent pas (digest 3000 combats inchangé : `7dfab0a2…`, 476 victoires ; smoke 142 checks ; 60 tests).

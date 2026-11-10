@@ -207,6 +207,9 @@ const API_PAIRS = {
   _clearZone: '() => clearZonePreview()',
   _draw: '() => drawBoard()',
   _openUnit: '(uid) => { const u = findUnit(uid); if (u) openUnitModal(u); }',
+  _tacPause: '(v) => { tacPaused = !!v; syncFightBtn(); }',
+  _tacPaused: '() => tacPaused',
+  _rail: '() => (combatApp ? combatApp.querySelector("#rail") : null)',
 };
 
 export function bootDist(file, extraPairs = {}) {

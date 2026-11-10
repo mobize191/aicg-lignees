@@ -29,7 +29,7 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc });
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}) });
 const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
   .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
@@ -38,6 +38,8 @@ const SCHOOLS = DATA.schools ?? {};
 const KEYWORDS = DATA.keywords ?? {};
 const FUSION_MAP = DATA['fusion-map'] ?? {};
 const SPELL_CAT_LABEL = E.SPELL_CAT_LABEL;
+const SPELL_ROLE_LABEL = E.SPELL_ROLE_LABEL;
+const RARITY_LABEL = E.RARITY_LABEL;
 const RARITY_POWER = E.RARITY_POWER;
 const FAMILY_SPELLS = DATA['lineage-spells'];
 const FAMILY_MANA = E.FAMILY_MANA;

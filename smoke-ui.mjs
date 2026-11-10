@@ -136,6 +136,7 @@ async function main() {
         pb.click();
         await wait(25);
       }
+      api._tacPause(true); // pas de chaine auto : on fige le flux avant la verification
       await wait(80);
       check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', !api._actEl() && !api._busy(), `act=${!!api._actEl()} busy=${api._busy()} winner=${stC.winner}`);
     } else {
@@ -275,6 +276,94 @@ async function main() {
       check('49 a hero plein cadre (.modal-hero.full)', false, 'pas de combat');
     }
     check('49 z 0 exception après fiche v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
+  // ---------- 50 : combat v2.1 (rail d'ordre, auto-run tactique, sorts détaillés, fiche complète) ----------
+  {
+    setup(['n1', 'n2', 'n3', 'n5'], 14);
+    api._setAuto(false);
+    api._tacPause(true);
+    api.go('#combat');
+    await wait(80);
+    const st50 = api._state();
+    api._speed(6);
+    check("50 a rail d'ordre présent dans l'écran combat", !!(st50 && appEl.querySelector('#rail')), '');
+    if (st50) {
+      const chips = [...appEl.querySelectorAll('.rail-chip')];
+      const agiOf = (c) => Number((c.textContent.match(/\u26a1(\d+)/) ?? [])[1] ?? 0);
+      const total50 = [...st50.team.attaque, ...st50.team.support, ...st50.enemies.attaque, ...st50.enemies.support].length;
+      check('50 a le rail montre tout le monde, vos cartes en lueur, ennemis distincts',
+        chips.length === total50 && total50 > 0 && chips.some((c) => c.classList.contains('mine')) && chips.some((c) => c.classList.contains('foe')),
+        `${chips.length}/${total50}`);
+      const agis50 = chips.map(agiOf);
+      check('50 a ordre du rail = agilité décroissante (le moteur : agi, équipe d\'abord à égalité)',
+        agis50.every((v, i) => i === 0 || agis50[i - 1] >= v), agis50.join(','));
+      // auto-run : sans aucun clic, le combat part seul en Tactique
+      api._tacPause(false);
+      api.go('#combat');
+      await wait(700);
+      check('50 b le combat démarre seul en mode Tactique (plus de Lancer le tour obligatoire)',
+        api._busy() || !!api._actEl(), `busy=${api._busy()} act=${!!api._actEl()}`);
+      let am50 = api._actEl();
+      for (let w = 0; w < 140 && !am50; w++) { await wait(25); am50 = api._actEl(); }
+      check("50 b la fenêtre d'action surgit au tour de la carte, sans clic", !!am50, '');
+      const acting50 = [...appEl.querySelectorAll('.rail-chip')].filter((c) => c.classList.contains('acting'));
+      check('50 b l\'acteur en cours est doré dans le rail', acting50.length === 1, String(acting50.length));
+      if (am50) {
+        check('50 c sorts détaillés : badge de type + ligne méta (école · puissance · zone) + coût',
+          !!am50.querySelector('.sort-badge') && !!am50.querySelector('.sort-meta') && !!am50.querySelector('.sort-cost'),
+          (am50._innerHTML ?? '').slice(0, 90));
+        const spellBtns = [...am50.querySelectorAll('.act-spell')];
+        check('50 c chaque sort porte son coût en mana', spellBtns.length > 0 && spellBtns.every((b) => /\u2726\d+/.test(b.textContent)), `${spellBtns.length} sorts`);
+        // pause : le tour en cours finit, puis le flux attend
+        els.get('fight').click();
+        let g50 = 0;
+        while (g50++ < 90) {
+          await wait(25);
+          const m = api._actEl();
+          if (m) { const pb = m.querySelector('.act-pass'); if (pb) pb.click(); }
+          if (!api._busy() && !api._actEl()) break;
+        }
+        await wait(900);
+        check("50 d pause : le flux attend entre les tours, rien ne repart seul",
+          api._tacPaused() && !api._busy() && !api._actEl(), `busy=${api._busy()}`);
+        const ftxt = els.get('fight').textContent ?? '';
+        check("50 d le bouton propose de reprendre", ftxt.includes('\u25b6') || ftxt.includes('Lancer le tour'), ftxt);
+        // fiche complète sur une naissance (Novice : Neutre, rareté en toutes lettres)
+        const st50b = api._state();
+        const uid50 = st50b ? (st50b.team.attaque[0] ?? st50b.team.support[0]).uid : null;
+        if (uid50) {
+          api._openUnit(uid50);
+          await wait(40);
+          const hero50 = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
+          const sub50 = hero50 ? (hero50.querySelector('.hero-sub')?.textContent ?? '') : '';
+          check('50 e fiche : Neutre affiché pour une naissance, rareté en toutes lettres',
+            sub50.includes('Neutre') && /Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
+          check('50 e fiche : statline corrigée (stats + oppositions, plus de doublon)',
+            [...doc.querySelectorAll('.statline')].length === 2, String([...doc.querySelectorAll('.statline')].length));
+          check('50 e fiche : grille identité (classe, élément, rareté, rôle)', [...doc.querySelectorAll('.fstat')].length >= 4, '');
+          const ul50 = doc.querySelector('.spells');
+          const fSpells = ul50 ? [...ul50.querySelectorAll('.spell')].length : 0;
+          const fBadges = ul50 ? [...ul50.querySelectorAll('.sort-badge')].length : 0;
+          const fMetas = ul50 ? [...ul50.querySelectorAll('.sort-meta')].length : 0;
+          check('50 e fiche : sorts avec badge, méta et coût (grimoire complet)',
+            fBadges >= 3 && fMetas >= 3 && fSpells >= 3,
+            `${fSpells} sorts, ${fBadges} badges, ${fMetas} metas`);
+          const close50 = doc.querySelector('#unit-close');
+          if (close50) close50.click();
+          await wait(20);
+        }
+        // reprise : le flux repart tout seul
+        els.get('fight').click();
+        await wait(700);
+        check('50 f reprise : le combat repart tout seul', api._busy() || !!api._actEl(), `busy=${api._busy()}`);
+      }
+    } else {
+      check("50 a rail d'ordre présent dans l'écran combat", false, 'pas de combat');
+    }
+    // on rend la main : les sections suivantes pilotent leurs propres combats
+    api._tacPause(true);
+    check('50 z 0 exception après combat v2.1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
   // ---------- victoire pas-à-pas au moteur (40) + équivalence (46 i) ----------

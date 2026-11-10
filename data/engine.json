@@ -25,6 +25,24 @@
   "unique": "signature",
   "lignée": "de lignée"
  },
+ "SPELL_ROLE_LABEL": {
+  "degats": "Dégâts",
+  "soin": "Soin",
+  "bouclier": "Bouclier",
+  "invocation": "Invocation",
+  "controle": "Contrôle",
+  "malus": "Malus",
+  "boost": "Boost",
+  "manip": "Manip"
+ },
+ "RARITY_LABEL": {
+  "C": "Commune",
+  "UC": "Peu commune",
+  "R": "Rare",
+  "SR": "Super Rare",
+  "UR": "Ultra Rare",
+  "L": "Légendaire"
+ },
  "RARITY_POWER": {
   "C": 1,
   "UC": 1.08,

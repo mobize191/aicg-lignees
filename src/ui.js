@@ -79,7 +79,8 @@ for (const c of CATALOG) {
     
     
     const tier = c.branch ? 3 : t;
-    c.spells = [ { ...COMMON_SPELLS[c.role === 'support' ? 'support' : 'attaque'] }, ...FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée' })) ];
+    const famSchool = SCHOOLS[c.family] ?? {};
+    c.spells = [ { ...COMMON_SPELLS[c.role === 'support' ? 'support' : 'attaque'] }, ...FAMILY_SPELLS[c.family].slice(0, tier + 1).map((sp) => ({ ...sp, cat: 'lignée', ecole: c.family, ...(famSchool.role ? { role: famSchool.role } : {}) })) ];
     c.mana = FAMILY_MANA[tier].max;
     c.manaRegen = FAMILY_MANA[tier].regen;
   } else {
@@ -2427,6 +2428,39 @@ let actBox = null;
 let promptState = null;
 const ACT_ABORT = Symbol('act-abort');
 let combatGen = 0;
+let tacPaused = false;
+let tacChainTimer = null;
+
+// rail d'ordre du tour : tout le monde dans l'ordre d'action (moteur : agilite decroissante, equipe d'abord a egalite)
+function railItems() {
+  if (!state) return [];
+  if (state.round && state.round.items) return state.round.items;
+  const items = [];
+  [...(state.team.attaque ?? []), ...(state.team.support ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'team' }); });
+  [...(state.enemies.attaque ?? []), ...(state.enemies.support ?? [])].forEach((u) => { if (u.alive) items.push({ u, side: 'enemies' }); });
+  items.sort((a, b) => (b.u.agi - a.u.agi) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
+  return items;
+}
+function renderRail(actorUid = null) {
+  if (!combatApp) return;
+  const railEl = combatApp.querySelector('#rail');
+  if (!railEl) return;
+  railEl.innerHTML = railItems().map((it) => {
+    const u = it.u;
+    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', actorUid && u.uid === actorUid ? 'acting' : '', u.alive ? '' : 'ko']
+      .filter(Boolean).join(' ');
+    return `<div class="${cls}" data-uid="${u.uid}"><span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
+  }).join('');
+}
+
+function fightLabel() {
+  if (autoMode) return 'Combattre';
+  return tacPaused ? '\u25b6 Lancer le tour' : '\u23f8 Pause';
+}
+function syncFightBtn() {
+  const fb = combatApp ? combatApp.querySelector('#fight') : null;
+  if (fb) fb.textContent = fightLabel();
+}
 
 function clearActHighlights() {
   if (!combatApp) return;
@@ -2452,6 +2486,26 @@ function zoneWidthOf(sp) {
   const cran = def?.crans?.II ?? def?.crans?.I;
   const l = Number(cran?.largeur);
   return Number.isFinite(l) && l >= 2 ? Math.min(l, 5) : 1;
+}
+
+// detail d'un sort : badge de type (le libelle vient du role d'ecole, data/engine.json)
+function spellBadgeHtml(sp) {
+  const role = sp?.role ?? null;
+  if (role) return `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
+  if (sp?.cat) return `<span class="sort-badge b-cat">sort ${SPELL_CAT_LABEL[sp.cat] ?? sp.cat}</span>`;
+  return '';
+}
+// meta d'un sort : ecole · categorie · puissance · cible/zone (tout vient des data)
+function spellMetaHtml(sp) {
+  const bits = [];
+  const school = sp?.ecole ? (SCHOOLS[sp.ecole] ?? null) : null;
+  if (school) bits.push(school.nom);
+  if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
+  if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
+  const zone = zoneLabelOf(sp);
+  if (zone) bits.push(zone);
+  else if (sp?.cible) bits.push(sp.cible);
+  return bits.join(' \u00b7 ');
 }
 function pendingLabel(mode, pending, u) {
   if (pending.kind === 'attack') return '⚔ Attaque';
@@ -2567,16 +2621,33 @@ function askActTarget(mode, pending) {
 
 function actionButtonsHtml(u, kind) {
   const isStrike = kind === 'strike';
-  const parts = [`<button type="button" class="btn tac-btn act-attack">\u2694 ${isStrike ? 'Attaque' : 'Soin de base'}</button>`];
+  const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
+  const top = (nm, badge, cost) => `<span class="sort-top"><span class="sort-nm">${nm}</span>${badge ?? ''}<span class="sort-cost">${cost}</span></span>`;
+  const parts = [];
+  parts.push(row(
+    top(isStrike ? '\u2694 Attaque' : '\u271a Soin de base',
+      `<span class="sort-badge b-${isStrike ? 'degats' : 'soin'}">${isStrike ? 'D\u00e9g\u00e2ts' : 'Soin'}</span>`, 'gratuit')
+    + `<span class="sort-meta">${isStrike ? 'la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana' : 'le soin de base du support, sans mana'}</span>`,
+    'act-attack'));
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
-    parts.push(`<button type="button" class="btn tac-btn act-spell${off ? ' off' : ''}" data-k="${k}" title="${sp.desc || 'Puissance \u00d7' + sp.mult + ' \u2014 co\u00fbt ' + sp.cost + ' \u2726'}">\u2726 ${sp.name} <span class="muted">\u2726${sp.cost}</span></button>`);
+    parts.push(row(
+      top('\u2726 ' + sp.name, spellBadgeHtml(sp), '\u2726' + sp.cost)
+      + `<span class="sort-meta">${spellMetaHtml(sp)}</span>`
+      + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
+      'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
-  parts.push(`<button type="button" class="btn tac-btn act-pass">\u23f8 Attendre</button>`);
+  parts.push(row(
+    top('\u23f8 Attendre', '', 'gratuit')
+    + `<span class="sort-meta">la carte passe son tour et garde son mana</span>`,
+    'act-pass'));
   if (isStrike && u.role === 'attaque') {
     const crossCost = CROSS.attaque.cost;
     const crossOff = u.mana + u.manaRegen < crossCost;
-    parts.push(`<button type="button" class="btn tac-btn act-cross${crossOff ? ' off' : ''}" title="${CROSS.attaque.desc}">\u2795 ${CROSS.attaque.name} <span class="muted">\u2726${crossCost}</span></button>`);
+    parts.push(row(
+      top('\u2795 ' + CROSS.attaque.name, `<span class="sort-badge b-soin">Soin</span>`, '\u2726' + crossCost)
+      + (CROSS.attaque.desc ? `<span class="sort-desc">${CROSS.attaque.desc}</span>` : ''),
+      'act-cross' + (crossOff ? ' off' : '')));
   }
   return parts.join(' ');
 }
@@ -2644,13 +2715,15 @@ async function runTacTurn() {
   const pre = beginRound(state);
   state._events = [...(state._events ?? []), ...pre];
   await animate(pre, SPEEDS[speedIdx], myGen);
+  renderRail();
   while (true) {
     if (state !== myState || myGen !== combatGen || !document.body.classList.contains('in-combat')) { closeActModal(); return; }
     const next = peekRound(state);
     if (!next || state.winner) break;
+    renderRail(next.u.uid);
     let choice = null;
     if (next.side === 'team') choice = await promptUnitAction(next.u, next.kind);
-    if (choice === ACT_ABORT) return;
+    if (choice === ACT_ABORT) { tacPaused = true; syncFightBtn(); renderRail(); return; }
     if (state !== myState || myGen !== combatGen) { closeActModal(); return; }
     const r = stepRound(state, choice);
     state._events = [...(state._events ?? []), ...r.events];
@@ -2658,6 +2731,7 @@ async function runTacTurn() {
     if (r.done) break;
   }
   closeActModal();
+  renderRail();
 }
 
 
@@ -2733,7 +2807,7 @@ function openUnitModal(u) {
   overlay.className = 'modal-overlay';
   const box = document.createElement('div');
   box.className = 'modal end-modal';
-    const sub = [card?.classe, card?.element, card?.rarity].filter(Boolean).join(' · ');
+    const sub = [card?.classe, card?.element ?? 'Neutre', card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : null].filter(Boolean).join(' · ');
   box.innerHTML = `<div class="modal-hero full">${artOf(card)}<div class="hero-veil"></div>
     <div class="hero-text">
       <div class="hero-name">${card ? card.name : 'Unité'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</div>
@@ -2741,10 +2815,17 @@ function openUnitModal(u) {
       <div class="hero-stats"><span class="hp">♥ ${u.hp}/${u.maxHp}</span><span class="atk">⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</span><span class="mana">✦ ${u.mana}/${u.manaMax}</span></div>
     </div>
   </div>
-    <p class="statline"><p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b></p>
+    <p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b> \u00b7 \u26a1 AGI <b>${u.agi ?? '—'}</b> \u00b7 \ud83e\udde0 INT <b>${u.int ?? '—'}</b></p>
+    <div class="fstats">
+      <span class="fstat"><b>Classe</b>${card?.classe ?? '—'}</span>
+      <span class="fstat"><b>Élément</b>${card?.element ?? 'Neutre'}</span>
+      <span class="fstat"><b>Rareté</b>${card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : '—'}</span>
+      <span class="fstat"><b>Rôle</b>${card?.role ?? '—'}</span>
+    </div>
+    ${card?.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
-    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique \u00e0 chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><b>${sp.name}</b>${sp.cat ? ` <span class="spell-cat">${SPELL_CAT_LABEL[sp.cat] ?? s.cat}</span>` : ''} <span class="muted">\u2726 ${sp.cost} mana \u00b7 puissance \u00d7${sp.mult}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(sp)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}
     <div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
   overlay.appendChild(box);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
@@ -3514,24 +3595,38 @@ async function run(autoTurn = false) {
   if (busy || !state || state.winner) return;
   busy = true;
   const myGen = combatGen;
+  // un tour de jeu, pas a pas : le rail d'ordre suit chaque acteur (chemin evenementiel identique a resolveTurn)
+  const runOneTurn = async () => {
+    const myState = state;
+    const pre = beginRound(state);
+    state._events = [...(state._events ?? []), ...pre];
+    await animate(pre, SPEEDS[speedIdx], myGen);
+    renderRail();
+    let guard = 0;
+    while (guard++ < 200) {
+      if (state !== myState || myGen !== combatGen || !document.body.classList.contains('in-combat')) return false;
+      const nxt = peekRound(state);
+      renderRail(nxt ? nxt.u.uid : null);
+      const r = stepRound(state, null);
+      state._events = [...(state._events ?? []), ...r.events];
+      await animate(r.events, SPEEDS[speedIdx], myGen);
+      if (r.done) break;
+    }
+    if (state === myState && state.round) state.round = null;
+    renderRail();
+    return true;
+  };
   if (autoMode) {
-    
-    
-    
     while (!state.winner && state.turn < 60 && autoMode && myGen === combatGen && document.body.classList.contains('in-combat')) {
       combatTally.auto += 1;
-      const events = resolveTurn(state);
-      await animate(events, SPEEDS[speedIdx], myGen);
+      const ok = await runOneTurn();
+      if (!ok) break;
     }
   } else {
-    
     if (autoTurn) {
-      
       combatTally.auto += 1;
-      const events = resolveTurn(state);
-      await animate(events, SPEEDS[speedIdx], myGen);
+      await runOneTurn();
     } else {
-      
       combatTally.manual += 1;
       await runTacTurn();
     }
@@ -3549,6 +3644,16 @@ async function run(autoTurn = false) {
     setTimeout(() => banner.remove(), 3400);
   }
   busy = false;
+  // en mode Tactique le flux repart tout seul : le prochain tour se lance apres une courte pause (sauf pause demandee)
+  if (myGen === combatGen && !autoMode && !tacPaused && state && !state.winner && state.turn < 60
+      && document.body.classList.contains('in-combat') && !actBox) {
+    if (tacChainTimer) clearTimeout(tacChainTimer);
+    const tg = combatGen;
+    tacChainTimer = setTimeout(() => {
+      tacChainTimer = null;
+      if (tg === combatGen && !autoMode && !tacPaused && !busy) run();
+    }, instant() ? 120 : 450);
+  }
 }
 
 function renderCombat(root, opts = {}) {
@@ -3556,6 +3661,10 @@ function renderCombat(root, opts = {}) {
   if (chainTimer) {
     clearTimeout(chainTimer);
     chainTimer = null;
+  }
+  if (tacChainTimer) {
+    clearTimeout(tacChainTimer);
+    tacChainTimer = null;
   }
   busy = false;
   combatGen += 1;
@@ -3639,8 +3748,9 @@ function renderCombat(root, opts = {}) {
       <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
-      <button class="btn big" id="fight">${autoMode ? 'Combattre' : '\u2694 Lancer le tour'}</button>
+      <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
+    <div class="rail-wrap"><div class="rail" id="rail"></div></div>
     <div class="enemy-zone" id="enemy-zone"></div>
     <div class="team-zone" id="team-zone"></div>
     <div id="log"></div>
@@ -3661,8 +3771,8 @@ function renderCombat(root, opts = {}) {
     autoMode = !autoMode;
     e.target.textContent = autoMode ? 'Mode : Auto' : 'Mode : Tactique';
     if (autoMode) closeActModal();
-    const fb = combatApp.querySelector('#fight');
-    if (fb) fb.textContent = autoMode ? 'Combattre' : '\u2694 Lancer le tour';
+    else tacPaused = false; // retour en Tactique : le flux repart tout seul
+    syncFightBtn();
     if (autoMode && !busy && state && !state.winner) { const tg = combatGen; setTimeout(() => { if (tg === combatGen) run(); }, 120); }
   };
   combatApp.querySelector('#speed').onclick = (e) => {
@@ -3673,10 +3783,17 @@ function renderCombat(root, opts = {}) {
     reduceFlashes = !reduceFlashes;
     e.target.textContent = reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets';
   };
-  combatApp.querySelector('#fight').onclick = () => run();
+  combatApp.querySelector('#fight').onclick = () => {
+    if (!autoMode) {
+      if (!tacPaused && busy) { tacPaused = true; syncFightBtn(); return; } // pause : le tour en cours finit, le suivant attend
+      tacPaused = false;
+    }
+    run();
+  };
   combatApp.querySelector('#auto-turn').onclick = () => run(true);
   drawBoard();
-  if (autoMode && !teamEmpty && state && !state.winner) {
+  renderRail();
+  if (!teamEmpty && state && !state.winner && (autoMode || !tacPaused)) {
     const tg = combatGen;
     setTimeout(() => { if (tg === combatGen) run(); }, instant() ? 120 : 450);
   }
@@ -4160,7 +4277,7 @@ function renderGlossaire(root) {
         <li><b>Autel 5-pour-1</b> : la chaîne mène à la Légendaire (5 UR = 1 L) ; la M ne passe jamais par l’autel.</li>
         <li><b>Jalons</b> : premier donjon terminé = jeton humain raffiné + jeton de race ; premier boss d’étage 5 = jeton humain raffiné ; première Difficile = jeton d’évolution (Super Rare).</li>
         <li><b>Jetons de départ</b> : 5 jetons communs offerts au premier lancement — 2 humains, 1 humain raffiné (Peu commune garantie), et 2 races au tirage.</li>
-        <li><b>Mode Tactique</b> : en combat, basculez en Tactique et choisissez l'action de CHAQUE carte à chaque tour — ⚔ attaque simple (gratuite), ✦ un de ses sorts (le mana décide, soins et invocations compris : un sort est un sort), ➕ le soin croisé des attaquants, ou ⏸ attendre pour économiser le mana. Touchez la rangée d'une carte puis un ennemi (ou l'allié à soigner) pour viser, puis « Lancer le tour ». « Auto ce tour » laisse l'IA jouer un tour. Les récompenses suivent le prorata : tout en Tactique = intégrales, tout en auto = ÷ 2 (pts, éclats et XP), au fil des tours entre les deux.</li>
+        <li><b>Mode Tactique</b> : en combat, basculez en Tactique — le combat démarre et s'enchaîne tout seul, et quand vient le tour d'une de vos cartes, sa fenêtre d'action surgit : ⚔ attaque simple (gratuite), ✦ un de ses sorts avec son type, son coût et sa zone (le mana décide, soins et invocations compris : un sort est un sort), ➕ le soin croisé des attaquants, ou ⏸ attendre pour économiser le mana. Désignez la cible sur le plateau (les cibles s'illuminent, le bouton Annuler ramène à la fenêtre). Le rail au-dessus du plateau montre l'ordre du tour (agilité) ; ⏸ Pause fige le flux, ▶ Lancer le tour le relance. « Auto ce tour » laisse l'IA jouer un tour. Les récompenses suivent le prorata : tout en Tactique = intégrales, tout en auto = ÷ 2 (pts, éclats et XP), au fil des tours entre les deux.</li>
         <li><b>Modificateurs de run (v0.42)</b> : chaque exploration tire un modificateur, montré AVANT d'entrer — 🐗 la Horde (+1 ennemi par vague, butin +20 %), 🕯 le Mana Stérile (régénération de mana −1 pendant chaque combat, points +25 %), 🛡 la Muraille (ennemis +25 % PV, chances d'éclats +50 %), ⚔ la Rage Partagée (ennemis +15 % ATQ, points +40 %). La face rude paie la face compense : accepter le modificateur majore le butin du run. Le refuser est gratuit — le run se joue alors sans modificateur ; seul le relancement du tirage coûte 1 éclat brut. Il tient du premier étage jusqu'à la fin du run (défaite ou donjon bouclé).</li>
         <li><b>La grammaire des sorts (v0.43)</b> : chaque carte connaît ses sorts par couches, du plus universel au plus personnel — un sort COMMUN (Frappe Précise / Premiers Soins, 2✦), un sort DE RACE (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), un sort DE CLASSE (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur) et sa SIGNATURE (le geste unique de la carte, 5✦). Les maillons des familles empilent le commun et les sorts de leur LIGNÉE, tier après tier. Côté soigneurs, le rang du sort décide du soin : plus le sort est cher, plus il soigne. Le Souffle Croisé, lui, n'est pas un sort : c'est l'action d'équipe des attaquants (voir Soins croisés).</li>
         <li><b>L'indice de force (v0.43)</b> : le niveau moyen ne dit pas si une équipe est faite de légendaires ou de communes. L'indice pondère l'ATQ et les PV au niveau courant (le cœur), la rareté (multiplicateur : elle capte la qualité des stats et la profondeur du grimoire) et le nombre de sorts (versatilité). Le seuil conseillé d'un donjon est calculé sur le boss final RÉEL de la difficulté courante : l'indice compare votre équipe à ce qu'elle affrontera.</li>
