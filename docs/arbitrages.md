@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-10 : ACTÉ — le rôle attaque/support sort de l'affichage (T0.3 du grand chantier)
+
+- La grille identité de la fiche passe à **Classe / Élément / Rareté** : le fstat « Rôle » disparaît. Le bloc des sorts croisés change de libellés : titre « Sorts croisés » (plus « (rôle opposé) ») et prose en gestes (panse les blessés, frappe au poing), plus de camps attaquants/supports.
+- Le champ moteur `role` **reste** : il trie les lignes d'équipe (`team.attaque` / `team.support`), alimente le Souffle Croisé et le soin croisé. Il est désormais purement interne : aucune interface ne l'affiche. Le renommage du champ en base a été jugé inutile (churn data + moteur sans aucun gain visible, risque digest) ; le vocabulaire d'affichage est le seul concerné.
+- Aucune mécanique ne change : preuve par le digest **inchangé** (`7dfab0a2…`, 476/3000, 0 exception), 71 tests, smoke 164 checks (grille à 3 fstats, aucun « Attaquant »/« Soutien » affiché).
+
 ## 2026-11-10 : ACTÉ — le boost vise son camp (T0.2 du grand chantier)
 
 - Le bug NOTÉ (sort de boost qui ne proposait que des ennemis) est corrigé au plus près : la fenêtre d'action dérive le camp de ciblage du champ `cible` du sort (`soi`, `1 allié`, `l'équipe`, `1 ennemi`, `zone`), pas du rôle de l'unité. Les sorts sans fiche de ciblage gardent le comportement historique (attaquant : ennemis, support : alliés).

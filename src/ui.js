@@ -1520,9 +1520,9 @@ function spellList(card) {
         <span class="muted">mécanisme exclusif</span>
         <span class="muted spell-desc">${card.gimmickDesc}</span></li>`);
     }
-    return `<h4>Sorts croisés (rôle opposé)</h4>
+    return `<h4>Sorts croisés</h4>
     <ul class="spells">${crossRows.join('')}</ul>
-    <p class="muted">Chaque compagnon porte aussi des sorts du rôle opposé, à rendement réduit : les attaquants veillent sur les blessés, les supports frappent quand personne n’a besoin de soins. Les compagnons supérieurs ajoutent un mécanisme exclusif.</p>
+    <p class="muted">À rendement réduit, ce geste croisé panse les blessés ou frappe au poing selon ce que le combat demande. Les compagnons supérieurs ajoutent un mécanisme exclusif.</p>
     <p class="statline">Niveau ${level} : +${(level - 1) * 8} % ATK et PV \u00b7 prochain niveau : <span class="xpbar"><span style="width: ${Math.round(xp * 100)}%"></span></span> ${Math.round(xp * 100)} %</p>`;
   }
 
@@ -1770,3 +1770,7 @@ function openSynergyModal() {
         <p>Chaque carte porte une <b>classe</b> et un <b>\u00e9l\u00e9ment</b>. Pour chaque type, on compte les cartes <b>uniques</b> de l\u2019\u00e9quipe : ${PALIERS[0]} cartes \u2192 palier 1, ${PALIERS[1]} cartes \u2192 palier 2. Deux exemplaires d\u2019une m\u00eame carte ne comptent qu\u2019une fois, mais les deux b\u00e9n\u00e9ficient des bonus.</p>
         <h4>Classes</h4>
         ${list(CLASSES)}
+        <h4>\u00c9l\u00e9ments</h4>
+        ${list(ELEMENTS)}
+      </div>
+    </div>`;

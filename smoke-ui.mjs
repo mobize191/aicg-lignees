@@ -341,7 +341,16 @@ async function main() {
             sub50.includes('Neutre') && /Naissance|Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
           check('50 e fiche : statline corrigée (stats + oppositions, plus de doublon)',
             [...doc.querySelectorAll('.statline')].length === 2, String([...doc.querySelectorAll('.statline')].length));
-          check('50 e fiche : grille identité (classe, élément, rareté, rôle)', [...doc.querySelectorAll('.fstat')].length >= 4, '');
+          const fstats50 = [...doc.querySelectorAll('.fstat')].map((el) => el.textContent ?? '');
+          check('50 e fiche : grille identité (classe, élément, rareté), le rôle attaque/support retiré (T0.3)',
+            fstats50.length === 3 && fstats50.some((t) => t.includes('Classe')) && fstats50.some((t) => t.includes('Élément')) && fstats50.some((t) => t.includes('Rareté'))
+            && !fstats50.some((t) => t.includes('Rôle')), fstats50.join(' | '));
+          {
+            const fiche50 = [...doc.querySelectorAll('.modal-hero, .fstats, .spells')].map((el) => el.textContent ?? '').join(' ');
+            check('50 e fiche : aucun « Attaquant »/« Soutien » affiché (T0.3)',
+              !fiche50.includes('Attaquant') && !fiche50.includes('Soutien') && !fiche50.includes('attaque') && !fiche50.includes('support'), fiche50.slice(0, 90));
+            check('50 e dist : le libellé « (rôle opposé) » a disparu des sorts croisés (T0.3)', !html.includes('rôle opposé'), '');
+          }
           const ul50 = doc.querySelector('.spells');
           const fSpells = ul50 ? [...ul50.querySelectorAll('.spell')].length : 0;
           const fBadges = ul50 ? [...ul50.querySelectorAll('.sort-badge')].length : 0;
