@@ -17,6 +17,22 @@
 - **Nouvelle règle `beast: true` dans species-map** : pour une espèce bestiale, le genre est enregistré pour la fiche et le registre, mais **jamais injecté dans le prompt** (pas de `1girl`/`1boy` sur une bête) ; les antiTags de l'espèce sont obligatoires (ici : `human, humanoid, anthropomorphic, human face…`).
 - Conséquence : z19/z22 à régénérer avec le nouveau mapping (seed fixe, protocole retry du pipeline QA).
 
+## 2026-11-11 : ACTÉ — boucle de jeu v2 : régén, niveaux de donjon, départ, recrutement, équipement, XP, évolution, solos (retour de Marc-Olivier)
+
+1. **Aucune régénération naturelle entre les combats** : des **autels de soin** dans les zones d'errance ; en donjon, une régén **après le premier boss**. Potions, équipement +PV % et soins deviennent le cœur de la survie. Changement de maths majeur : recalibrage digest obligatoire.
+2. **Niveaux de donjon 1→25 (5 donjons × 5 modes conservés)** : chaque marche fixe la puissance attendue de l'équipe et la bande de rareté : **Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M** (boss final en haut de bande, boss intermédiaire un cran sous) ; bestiaire thématique croissant par mode (Zénith : fanatiques → fanatiques endurcis → anges → archanges → l'Astre Capiteux) ; courbe simulée au digest (fin des blocages et des enchaînements imprévisibles) ; un nouveau biome rallonge la chaîne d'un donjon. La variété vient des modes, pas d'une explosion du nombre de donjons (les 25 donjons distincts sont écartés pour l'instant).
+3. **Départ de partie à 2 cartes** : une **choisie parmi 4 propositions** (un novice humain, un bestial, un mystique, un divin) et une **aléatoire parmi les trois restantes** ; plus d'équipe complète de départ ; l'équipe se remplit par recrutement naturel, quêtes et Guilde.
+4. **Recrutement naturel** : pas de capture (système Pokémon écarté) ; ~1 % de chance qu'un vaincu demande à rejoindre la collection (hors nommés et boss), taux calibré par zone.
+5. **Acquisition de l'équipement en mix** : matériaux de la saveur de chaque zone sur les monstres, pièce garantie sur les boss, **craft en ville** (matériaux + or) pour les paliers hauts ; la Boutique couvre le bas du catalogue.
+6. **Gemmes brutes vendables** (révision datée de « gemmes jamais vendues » du 10/11) : à prix élevé à la Boutique ; les polies, gravées et éternelles restent aux boss.
+7. **XP classique, pas de gel à paliers** : l'idée d'une échelle 1→100 avec stats gelées aux paliers et libération à l'évolution est **refusée** ; l'XP reste continue. La croissance par niveau (cumulative aujourd'hui) sera recalibrée sur l'échelle longue au digest.
+8. **Palier d'évolution : jamais de perte nette** : la forme suivante au niveau 1 reste au moins aussi forte que la forme précédente au niveau 10 (stats principales) ; le palier exact se simule au digest, il ne se devine pas.
+9. **Cartes solos archivées** : retrait du jeu actif, **greffe ultérieure à des familles** inscrite en roadmap.
+
+### PISTE : affronter les mythiques en version diminuée
+
+- Des créatures M rencontrées tôt en version diminuée (malus spécifique appliqué au boss) : on affronte l'ombre de l'Astre avant l'Astre ; la forme pleine arrive dans les marches hautes.
+
 ## 2026-11-11 : ACTÉ — catalogues de l'économie v2 : variantes d'armes, potions en combat, Guilde en rotation, noms aux trois saveurs (retour de Marc-Olivier)
 
 La spec complète vit dans `docs/design/economie-v2-catalogues.md` (Boutique, équipement, quêtes, Guilde, inventaire). Les tranchages :
@@ -68,6 +84,7 @@ Dernier tour de tranchage de la session design ; les derniers points ouverts son
 3. **Quêtes quotidiennes : rotation quotidienne** : les quêtes changent chaque jour ; récompenses possibles : **or, carte N, pierre d'éveil et/ou éclats** (mélange exact et paliers au calibrage du chantier économie).
 4. **Équipement : slots typés par classe** (mix acté) : les 1-2 slots par personnage sont **typés par classe** (épée pour le Guerrier, bâton pour le Mage…) ; les slots d'équipe restent génériques. Types exacts et prix : calibrage au chantier (page Personnage + rayon Boutique).
 5. **Errance : programmée après le calibrage digest** (fin du plan code en cours), à la tête du bloc visuel : économie v2 → Accueil/hub-ville + Les Terres Sauvages → errance top-down (zone témoin : Marées) → généralisation. Le moteur d'errance (canvas procédural, guide `docs/design/errance-topdown.md`) peut être codé en parallèle avec sprites placeholder ; l'art du héros dédié attend la campagne d'arts v2 validée + le cycle de marche WAN.
+
 ## 2026-11-10 (nuit) : ACTÉ — budgets de fichiers v2 (charte images) : fin des budgets faméliques v1
 
 - **Motif** : les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, JPEG très compressé) venaient de la contrainte « dist < 1 Mo tout en base64 », levée depuis le passage à assets.json/fichiers chargés à la demande. La vraie contrainte restante = fluidité (décodage + bande passante mobile), pas la taille du dist.

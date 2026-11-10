@@ -14,9 +14,10 @@ Catalogue fixe, toujours visible. Monnaie : l'or (1 point ⚡ = 1 or, un run ≈
 | Potion de mana supérieure | Recharge 80 % | 140 or |
 | Éclat | Collection (bonus d'éclat) | 150 or |
 
-- **Gemmes jamais vendues** : elles restent des récompenses de boss (`BOSS_GEM`).
+- **Gemmes brutes vendables** (révision du 11/11/2026, retour de Marc-Olivier) : à prix élevé ; les polies, gravées et éternelles restent des récompenses de boss (`BOSS_GEM`).
 - **Potions libres en combat (ACTÉ)** : une carte peut en boire autant qu'elle veut, chaque gorgée **coûte son tour** via une nouvelle action « Objet » de la fenêtre d'action ; utilisables aussi hors combat (entre les étages). Le prix des potions est le levier de calibrage du digest.
 - L'équipement occupe le rayon dédié (voir §2).
+- **Acquisition de l'équipement (ACTÉ 11/11/2026)** : matériaux de la saveur de chaque zone sur les monstres, pièce garantie sur les boss, **craft en ville** (matériaux + or) pour les paliers hauts ; la Boutique couvre le bas du catalogue ; le L reste le fruit des évolutions, le M le boss d'Enfer.
 
 ## 2. Équipement (mix : arme typée + armure générique + slots d'équipe)
 

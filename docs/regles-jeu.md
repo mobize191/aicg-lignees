@@ -17,7 +17,8 @@
 
 - **7 familles** : aube, bosquet, bouclier, braise, eau, lame, ombre (`data/families.json`). Une famille = un chemin de cartes (`steps`) qui monte en rareté, une carte par palier.
 - Chaque palier franchi apprend le **sort de lignée** du palier (`grimoire.lignee`, 42 sorts).
-- Les cartes simples évoluent en crans (`data/evolutions.json`, `data/solo-steps.json`) : n1 → a30, etc.
+- Les cartes simples évoluent en crans (`data/evolutions.json`, `data/solo-steps.json`) : n1 → a30, etc. **ACTÉ 11/11/2026 : les cartes solos sont archivées** (retrait du jeu actif) ; greffe ultérieure à des familles en roadmap.
+- **Évolution sans perte nette (ACTÉ 11/11/2026)** : la forme suivante au niveau 1 reste au moins aussi forte que la forme précédente au niveau 10 (stats principales) ; l'XP reste continue (pas de gel à paliers), croissance par niveau recalibrée sur l'échelle longue au digest.
 
 ## 3. Écoles et sorts
 
@@ -47,15 +48,18 @@
 - **Formation** : 5 cartes max, 3 devant + 2 derrière ou 2 + 3, choisie avant le combat, **figée** pendant le combat (ACTÉ 10/11/2026).
 - **Règles de rang (ACTÉES, Option A, 10/11/2026)** : l'arrière est **ciblable** et encaisse **-50 %** tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié tant que l'avant tient (les autres profils frappent à plein) ; **les soins ne sont jamais affectés par la position** (seuls les dégâts). L'avant tombe : la protection saute pour tous. La protection de l'arrière ne couvre **pas** les attaques de zone. Les monstres suivent les mêmes règles de rang.
 - **Sorts croisés retirés (ACTÉ 10/11/2026, second tour)** : le système Souffle/Frappe Croisée (`CROSS` dans `data/engine.json`), défini par rôle, disparaît avec le rôle (lot B du chantier lignes, suppression pure) ; la frappe universelle ⚔ et la résolution des sorts hostils depuis n'importe quelle ligne (v1.12) couvrent l'usage. **PISTE** : des sorts spéciaux déclenchés par des conditions remplies en combat (synergie, position, seuil…) pourront plus tard constituer une nouvelle génération de sorts « croisés ».
+- **Régénération (ACTÉE 11/11/2026)** : **aucune régénération naturelle entre les combats** ; des **autels de soin** dans les zones d'errance ; en donjon, une régén **après le premier boss**. Potions, équipement +PV % et soins : cœur de la survie (recalibrage digest).
 - **Synergies d'équipe** (`data/synergies.json`) : par classe, paliers à 1 et 2 exemplaires (ex : Guerrier → +10 % puis +25 % ATQ d'équipe).
 - **Mots-clés d'élément** (`data/keywords.json`) : brûlure, corrosion, poison, etc. : pourcentage de vie max par tour, contre le seuil de la cible.
 
 ## 6. Donjons, zones et progression
 
 - **5 donjons** (`data/dungeons.json`) : Marées, Forge, Bosquet, Crypte, Zénith : 10 étages, boss aux étages 5 et 10, éclats (`shards`) à collectionner.
-- **Zones d'errance** (`data/zones.json`) : rencontres hors donjon, cadence zone.
+- **Difficultés et niveaux de donjon (ACTÉ 11/11/2026)** : chaque marche (donjon × mode) porte un **niveau de donjon** (1 → 25) qui fixe la puissance attendue de l'équipe et la bande de rareté : **Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M** (boss final en haut de bande, boss intermédiaire un cran sous) ; bestiaire thématique croissant par mode (Zénith : fanatiques → anges → archanges → l'Astre) ; un nouveau biome rallonge la chaîne d'un donjon ; drops et points suivent (`data/difficulties.json` à recâbler).
 - **Errance v2 (ACTÉE 10/11/2026, bloc visuel après le calibrage)** : un **héros dédié** créé pour l'errance (ni une carte de la collection, ni un nommé existant) ; on entre par **Les Terres Sauvages** et l'on choisit sa zone (**départ : la zone de l'eau uniquement**). Une zone porte monstres, PNJ, objets à collecter, un endroit **donjon** (petit bâtiment) et un **hôtel des crans** (enseignements de sorts, prolongement des enseignements de zones actuelles) ; des quêtes pourront y vivre ; on y gagne XP et or. **Un bâtiment donjon par zone** : le vaincre débloque les zones suivantes (eau → feu + deuxième zone d'eau → …) ; pas d'open world complet, des zones reliées débloquées une à une. Moteur top-down : `docs/design/errance-topdown.md` (zone témoin : Marées, puis généralisation).
 - **Difficultés** (`data/difficulties.json`) : Facile/Normal/Difficile... plafonnent les raretés mob/boss et règlent drops et points.
+- **Recrutement naturel (ACTÉ 11/11/2026)** : pas de capture ; ~1 % de chance qu'un vaincu demande à rejoindre la collection (hors nommés et boss), taux calibré par zone.
+- **Départ de partie (ACTÉ 11/11/2026)** : on commence avec 2 cartes : une choisie parmi 4 propositions (un novice humain, un bestial, un mystique, un divin) et une aléatoire parmi les trois restantes ; l'équipe se remplit ensuite par recrutement, quêtes et Guilde.
 - **Modificateurs de run** (`data/run-mods.json`) : la Horde, le Mana Stérile, la Muraille... : chaque exploration a son tarif.
 - **Fusion** : les monstres capturés fusionnent en lignées (`data/monster-families.json`) et enseignent des sorts.
 
