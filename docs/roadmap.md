@@ -74,7 +74,7 @@ Périmètre acté avec Marc-Olivier : l'intégralité des nouveaux arbres d'évo
 7. **Zones d'errance : LOT 7 FAIT (10/11/2026)** — 5 zones complètes (rencontres, récoltes, enseignements en crans II/III), cadence zone→donjon validée, grimoire appris persisté en sauvegarde (v12+, testé au flux réel) et survivant à l'évolution (ACC-4-2, ACC-4-3 verts).
 8. **Décisions ouvertes : TRANCHÉES le 10/11** (les neuf points, voir arbitrages : Mur Éternel, sort L de Maïa gardé, uniques = base d'école + particularité, invocations 3 max / PV 20 % / mini-cartes, zone = ligne au choix et boss unité simple, Écuyer Fervent, Jeune Séraphin, drops à taux décroissant, mana +2 par INT et +1 recharge par 2 INT). Restent au fil des lots, en calibrage : les plafonds du mana d'intelligence, le coût de l'éveil, le seuil de résistance exact, le rythme d'apprentissage des crans.
 
-La spec et le plan d'exécution du grand chantier : `docs/design/spec-arbres-sorts.md` et `docs/design/plan-arbres-sorts.md`.
+La spec et le plan d'exécution du grand chantier, archivés à la clôture : `docs/historique/grand-chantier-arbres-sorts.md` (fusion de la spec et du plan).
 
 ## Historique court des versions
 

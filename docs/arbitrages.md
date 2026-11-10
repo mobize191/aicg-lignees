@@ -127,7 +127,7 @@ Lot 1 du grand chantier, appliqué aux data et au dist. Les 12 naissances humain
 
 ## 2026-11-10 (grand chantier, les neuf ouvertes) : ACTÉ — les décisions ouvertes du lot 8 sont tranchées
 
-Réponses de Marc-Olivier aux neuf points ouverts ; la spec et le plan du grand chantier les intègrent (`docs/design/spec-arbres-sorts.md` et `plan-arbres-sorts.md`).
+Réponses de Marc-Olivier aux neuf points ouverts ; la spec et le plan du grand chantier les intègrent (archivées dans `docs/historique/grand-chantier-arbres-sorts.md`).
 
 1. **Sort L d'Argus : « Mur Éternel »** (remplace la proposition « Assise Éternelle » ; la règle v0.47 s'applique : le sort L ne répète plus le nom de sa carte).
 2. **Sort L de Maïa : le clin d'oeil reste** (« Maïa : Cœur du Bosquet » garde son nom malgré la M du Vivant).
