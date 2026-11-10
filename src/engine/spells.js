@@ -41,17 +41,17 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
     return;
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
-    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage));
+    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage * rangAtkMult(st, side, s)));
   const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
   events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
-  applyDamage(t, dmg, events, foeSide, null, true);
+  applyDamage(t, dmg, events, foeSide, null, true, { state: st });
   s.atkBuff = 0;
 }
 // le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
 // taux, tours) pilote la resolution ; la stat principale du lanceur fait les degats
 function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   const foeSide = side === 'team' ? 'enemies' : 'team';
-  const ligne = st ? (side === 'team' ? st.enemies.attaque : st.team.attaque) : [];
+  const foeLines = st ? (side === 'team' ? st.enemies : st.team) : null;
   const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
   const anchorUid = action && action.targetUid != null ? action.targetUid : null;
   const vivantes = foes.filter((f) => f.alive);
@@ -64,10 +64,11 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   else if (larg === 3) {
     let choix = null;
     if (anchorUid != null && st) {
+      const ligne = foeLines ? (anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque) : [];
       const ai = ligne.findIndex((u) => u.uid === anchorUid);
       if (ai >= 0) choix = ai;
     }
-    hitList = st ? pickZoneTargets(ligne, choix) : [anchor];
+    hitList = st && foeLines ? pickZoneTargets(anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque, choix) : [anchor];
   } else {
     hitList = [anchor];
     if (larg >= 2) hitList.push(...vivantes.filter((f) => f !== anchor).slice(0, larg - 1));
@@ -82,13 +83,13 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
       continue;
     }
     if (spell.mult) {
-      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * elementMult(s.element, t.element)));
+      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * rangAtkMult(st, side, s) * elementMult(s.element, t.element)));
       events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side });
-      applyDamage(t, dmg, events, foeSide, null, true);
+      applyDamage(t, dmg, events, foeSide, null, true, { state: st, zone: larg >= 3 });
       if (t.alive && t.status && t.status.reflect && dmg > 0) {
         const back = Math.max(1, Math.round(dmg * t.status.reflect.pct));
         events.push({ type: 'attack', sourceId: t.uid, targetId: s.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: foeSide });
-        applyDamage(s, back, events, side, null);
+        applyDamage(s, back, events, side, null, false, { state: st });
       }
     }
     if (spell.taux != null && t.alive && st && st.rng) {
@@ -158,7 +159,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     events.push({ type: 'cast', side, sourceId: s.uid, name: s.crossName ?? CROSS.support.name, fx: 'atk', mana: s.mana });
     const dmg = Math.max(1, Math.round(s.atk * CROSS.support.base * CROSS.yield * classeMods(s).strike * elementMult(s.element, t.element)));
     events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side: 'team' });
-    applyDamage(t, dmg, events, 'enemies');
+    applyDamage(t, dmg, events, 'enemies', null, false, { state: st });
     return;
   }
   

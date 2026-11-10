@@ -3502,6 +3502,12 @@ const DATA = {
    "PHOENIX_REVIVE_RATIO": 0.5,
    "RAGE_TURN": 15,
    "RAGE_RATE": 0.08,
+   "RANG_BACK_DMG_PCT": 0.5,
+   "RANG_BACK_ATK_PCT": 0.5,
+   "RANG_BACK_CLASSES": [
+    "Guerrier",
+    "Assassin"
+   ],
    "RONDE_RATE": 0.03,
    "RONDE_CAP": 30,
    "BELIER_BOOST": 1.5,
@@ -11379,17 +11385,17 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
     return;
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
-    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage));
+    * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage * rangAtkMult(st, side, s)));
   const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
   events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
-  applyDamage(t, dmg, events, foeSide, null, true);
+  applyDamage(t, dmg, events, foeSide, null, true, { state: st });
   s.atkBuff = 0;
 }
 // le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
 // taux, tours) pilote la resolution ; la stat principale du lanceur fait les degats
 function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   const foeSide = side === 'team' ? 'enemies' : 'team';
-  const ligne = st ? (side === 'team' ? st.enemies.attaque : st.team.attaque) : [];
+  const foeLines = st ? (side === 'team' ? st.enemies : st.team) : null;
   const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
   const anchorUid = action && action.targetUid != null ? action.targetUid : null;
   const vivantes = foes.filter((f) => f.alive);
@@ -11402,10 +11408,11 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   else if (larg === 3) {
     let choix = null;
     if (anchorUid != null && st) {
+      const ligne = foeLines ? (anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque) : [];
       const ai = ligne.findIndex((u) => u.uid === anchorUid);
       if (ai >= 0) choix = ai;
     }
-    hitList = st ? pickZoneTargets(ligne, choix) : [anchor];
+    hitList = st && foeLines ? pickZoneTargets(anchor && anchor.rang === 'arriere' ? foeLines.support : foeLines.attaque, choix) : [anchor];
   } else {
     hitList = [anchor];
     if (larg >= 2) hitList.push(...vivantes.filter((f) => f !== anchor).slice(0, larg - 1));
@@ -11420,13 +11427,13 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
       continue;
     }
     if (spell.mult) {
-      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * elementMult(s.element, t.element)));
+      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * rangAtkMult(st, side, s) * elementMult(s.element, t.element)));
       events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side });
-      applyDamage(t, dmg, events, foeSide, null, true);
+      applyDamage(t, dmg, events, foeSide, null, true, { state: st, zone: larg >= 3 });
       if (t.alive && t.status && t.status.reflect && dmg > 0) {
         const back = Math.max(1, Math.round(dmg * t.status.reflect.pct));
         events.push({ type: 'attack', sourceId: t.uid, targetId: s.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: foeSide });
-        applyDamage(s, back, events, side, null);
+        applyDamage(s, back, events, side, null, false, { state: st });
       }
     }
     if (spell.taux != null && t.alive && st && st.rng) {
@@ -11496,7 +11503,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     events.push({ type: 'cast', side, sourceId: s.uid, name: s.crossName ?? CROSS.support.name, fx: 'atk', mana: s.mana });
     const dmg = Math.max(1, Math.round(s.atk * CROSS.support.base * CROSS.yield * classeMods(s).strike * elementMult(s.element, t.element)));
     events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side: 'team' });
-    applyDamage(t, dmg, events, 'enemies');
+    applyDamage(t, dmg, events, 'enemies', null, false, { state: st });
     return;
   }
   
@@ -11824,6 +11831,12 @@ function initCombat(teamCards, enemyCards, seed, levels = {}) {
     attaque: flat.filter((c) => c.role !== 'support').map((c, i) => makeUnit({ ...c }, `e.a${i}`)),
     support: flat.filter((c) => c.role === 'support').map((c, i) => makeUnit({ ...c }, `e.s${i}`)),
   };
+  // chantier lignes (Option A) : chaque unité porte son rang — avant = ligne attaque, arrière = ligne support
+  // tant que le champ role existe (supprimé au lot B) ; les monstres suivent les mêmes règles
+  for (const u of team.attaque) u.rang = 'avant';
+  for (const u of team.support) u.rang = 'arriere';
+  for (const u of enemies.attaque) u.rang = 'avant';
+  for (const u of enemies.support) u.rang = 'arriere';
   const all = [...team.attaque, ...team.support];
   const mods = teamModifiers(all);
   if (mods.hpPct) {
@@ -11841,7 +11854,26 @@ function initCombat(teamCards, enemyCards, seed, levels = {}) {
   return { rng: mulberry32(seed), turn: 0, team, enemies, mods, winner: null };
 }
 
-function applyDamage(target, dmg, events, side, reviveCtx = null, isHit = false) {
+// chantier lignes (Option A) : l'avant tient = au moins un vivant dans la ligne avant du camp
+function frontHolds(state, side) {
+  return ((state[side] ?? {}).attaque ?? []).some((u) => u.alive);
+}
+// l'arrière est ciblable mais encaisse -50 % tant que l'avant tient ; les attaques de zone ignorent cette protection
+function backProtected(state, side, target, zone) {
+  return !!state && !zone && target.rang === 'arriere' && frontHolds(state, side);
+}
+// Guerrier/Assassin en arrière frappent à moitié tant que l'avant tient ; les autres profils frappent à plein
+function rangAtkMult(state, side, u) {
+  if (!state) return 1;
+  return (u.rang === 'arriere' && frontHolds(state, side) && (M.RANG_BACK_CLASSES ?? []).includes(u.classe))
+    ? M.RANG_BACK_ATK_PCT
+    : 1;
+}
+
+function applyDamage(target, dmg, events, side, reviveCtx = null, isHit = false, opts = null) {
+  if (opts && opts.state && backProtected(opts.state, side, target, !!opts.zone)) {
+    dmg = Math.max(1, Math.round(dmg * M.RANG_BACK_DMG_PCT));
+  }
   let rest = dmg;
   if (target.shield > 0) {
     const absorbed = Math.min(target.shield, rest);
@@ -11904,7 +11936,7 @@ function tickStatuses(state, events) {
         const d = st.dot;
         const amount = Math.max(1, Math.round(d.dmg));
         events.push({ type: 'dot', side, targetId: u.uid, amount });
-        applyDamage(u, amount, events, side, { allies: others() });
+        applyDamage(u, amount, events, side, { allies: others() }, false, { state });
         d.turns -= 1;
         if (d.turns <= 0) delete st.dot;
       }
@@ -12104,7 +12136,7 @@ function actTeamStriker(u, i, ctx, step) {
     }
   }
   const cSelf = u.status && u.status.curse ? u.status.curse.value : 0;
-  let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage));
+  let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage * rangAtkMult(ctx.state, 'team', u)));
   u.atkBuff = 0;
   if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + M.RONDE_RATE * Math.min(u.ronde, M.RONDE_CAP))));
   if (u.gimmick === 'belier' && !u.belierUsed) {
@@ -12115,7 +12147,7 @@ function actTeamStriker(u, i, ctx, step) {
   if (mods.aoe && ctx.firstAttack) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(u.element, f.element))), ctx.events, 'enemies');
+      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(u.element, f.element))), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
     }
     ctx.firstAttack = false;
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -12123,7 +12155,7 @@ function actTeamStriker(u, i, ctx, step) {
   }
   if (u.gimmick === 'carrousel' && ctx.state.rng() < M.CARROUSEL_CHANCE) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
-    for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * M.CARROUSEL_SPLASH)), ctx.events, 'enemies');
+    for (const f of [...foes]) applyDamage(f, Math.max(1, Math.round(dmg * M.CARROUSEL_SPLASH)), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
     return false;
@@ -12131,20 +12163,21 @@ function actTeamStriker(u, i, ctx, step) {
   if (!spell && classeMods(u).wave) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true);
+      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state, zone: true });
     }
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
     return false;
   }
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
-  const target = idx !== null && enemies.attaque[idx]?.alive ? enemies.attaque[idx] : foes[0];
+  const foeLineOf = (t) => (t && t.rang === 'arriere' ? enemies.support : enemies.attaque);
+  const target = idx !== null && [...enemies.attaque, ...enemies.support][idx]?.alive ? [...enemies.attaque, ...enemies.support][idx] : foes[0];
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
     const larg = largeurOfSpellName(spell.name);
     if (larg === 5) hitList = ctx.enemyAll();
-    else if (larg === 3 && idx !== null) hitList = pickZoneTargets(enemies.attaque, idx);
+    else if (larg === 3 && idx !== null) { const fl = foeLineOf(target); hitList = pickZoneTargets(fl, Math.max(0, fl.findIndex((x) => x.uid === target.uid))); }
   }
   if (mods.weakBonus && target === foes.reduce((a, b) => (a.hp <= b.hp ? a : b))) {
     dmg = Math.round(dmg * (1 + mods.weakBonus));
@@ -12172,7 +12205,7 @@ function actTeamStriker(u, i, ctx, step) {
         continue;
       }
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
-      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true);
+      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1 });
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
@@ -12180,7 +12213,7 @@ function actTeamStriker(u, i, ctx, step) {
       if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
         const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: tgt.uid, targetId: u.uid, amount: back, kind: 'special', mana: tgt.mana, elem: null, side: 'enemies' });
-        applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() });
+        applyDamage(u, back, ctx.events, 'team', { allies: ctx.teamAll() }, false, { state: ctx.state });
       }
     }
     if (dodged || !target.alive) break;
@@ -12191,7 +12224,7 @@ function actTeamStriker(u, i, ctx, step) {
     for (const f of others) {
       const half = Math.max(1, Math.round(dmg * ratio));
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, f.element), side: 'team' });
-      applyDamage(f, Math.max(1, Math.round(half * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true);
+      applyDamage(f, Math.max(1, Math.round(half * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state });
     }
   }
   if (u.gimmick === 'volee') {
@@ -12200,7 +12233,7 @@ function actTeamStriker(u, i, ctx, step) {
       const t2 = others[0];
       const half = Math.max(1, Math.round(dmg * M.BELIER_SPLASH));
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, t2.element), side: 'team' });
-      applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), ctx.events, 'enemies');
+      applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), ctx.events, 'enemies', null, false, { state: ctx.state });
     }
   }
   if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -12234,7 +12267,7 @@ function actEnemyStriker(e, ctx) {
     if (e.status.stun <= 0) delete e.status.stun;
     return false;
   }
-  const targets = ctx.alive(team.attaque).length ? ctx.alive(team.attaque) : ctx.alive(team.support);
+  const targets = ctx.teamAll(); // Option A : l'arrière est ciblable tant que des cibles vivent
   if (!targets.length) return false;
   const spell = pickSpell(e);
   if (spell) {
@@ -12250,7 +12283,7 @@ function actEnemyStriker(e, ctx) {
   const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? M.BELIER_BOOST : 1;
   if (belierBoost > 1) e.belierUsed = true;
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
-  const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost));
+  const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
   const target = enemyPickTarget(e, targets, dmgBase);
   const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
@@ -12269,11 +12302,11 @@ function actEnemyStriker(e, ctx) {
         : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
       const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(e.element, t.element)));
       ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(e.element, t.element), side: 'enemies' });
-      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
+      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
-        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() });
+        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() }, false, { state: ctx.state });
       }
     }
   }
@@ -12295,20 +12328,20 @@ function actEnemyStriker(e, ctx) {
       if (partner) {
         const half = Math.max(1, Math.round(dmgFinal / 2));
         ctx.events.push({ type: 'link', side: 'team', sourceId: target.uid, targetId: partner.uid, amount: half });
-        died = applyDamage(target, dmgFinal - half, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
-        applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true);
+        died = applyDamage(target, dmgFinal - half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
+        applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state });
       } else {
-        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true) || died;
+        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
       }
       if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
         const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: back, kind: 'special', mana: target.mana, elem: null, side: 'team' });
-        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() });
+        applyDamage(e, back, ctx.events, 'enemies', { allies: ctx.enemyAll() }, false, { state: ctx.state });
       }
       if (target.alive && target.gimmick === 'mirage' && dmg > 0) {
         const reflet = Math.max(1, Math.round(dmg * M.REFLECT_SHARE));
         ctx.events.push({ type: 'attack', sourceId: target.uid, targetId: e.uid, amount: reflet, kind: 'basic', mana: target.mana, elem: null, side: 'team' });
-        applyDamage(e, reflet, ctx.events, 'enemies');
+        applyDamage(e, reflet, ctx.events, 'enemies', null, false, { state: ctx.state });
       }
     }
   }
@@ -12357,7 +12390,7 @@ function stepRound(state, stepChoice = null) {
     tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
-      const ti = state.enemies.attaque.findIndex((x) => x.uid === stepChoice.targetUid);
+      const ti = [...state.enemies.attaque, ...state.enemies.support].findIndex((x) => x.uid === stepChoice.targetUid);
       if (ti >= 0) targetIdx = ti;
     }
   }
