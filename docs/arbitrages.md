@@ -20,6 +20,12 @@
   - **Option C (hybride)** : l'arrière n'est ciblable que par les sorts et la zone tant que l'avant tient, à -50 %.
 - Statut : **PROPOSÉ, en attente de Marc-Olivier** ; le chantier lignes avant/arrière attend ce tranchage.
 
+## 2026-11-10 : ACTÉ — maturité par rareté pour toute carte de race humaine (suite des arbitrages de lancement)
+
+- **Généralisation de la règle Yuki** (Marc-Olivier, 10/11 soir) : plus une carte de **race humaine** est rare, plus le personnage est mature — c'est général, pas réservé aux nommées évolutives. Échelle actée dans `tools/species-map.json` (`humanMaturityByRarity`) : **C = adolescent·e (14-17) ; UC = jeune adulte (18-22) ; R = adulte (23-30) ; SR = adulte confirmé·e (30-38) ; UR = mature·aguerri·e (40-50) ; L = force de l'âge légendaire, aura de vétéran (50+) ; M = figure mythique d'âge indéterminé**.
+- **Priorités** : le champ `age` d'une nommée (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes) reste prioritaire sur l'échelle ; pour les génériques humaines, `build-prompts.mjs` dérive l'âge apparent de la rareté via cette échelle.
+- Lecture de progression : la collection raconte la montée en puissance visuellement — un novice C est un adolescent, une L est un vétéran légendaire.
+
 ## 2026-11-10 : ACTÉ — arbitrages de lancement de la campagne charte v2 (retour de Marc-Olivier)
 
 - **Full body dès UR** : les raretés UR, L et M passent en full body ; C/UC/R/SR restent en demi-corps (charte v2 §1 et §12).

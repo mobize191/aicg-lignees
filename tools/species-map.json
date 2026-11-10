@@ -4,7 +4,17 @@
     "date": "2026-11-10",
     "source": "charte-graphique-v2.md §3 et §12 + arbitrages 10/11/2026",
     "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy).",
-    "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age."
+    "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age.",
+    "humanMaturityRule": "RÈGLE GÉNÉRALE (Marc-Olivier, 10/11 soir) : pour TOUTE carte de race humaine (nommée OU générique), plus la rareté est haute, plus le personnage est mature : build-prompts.mjs dérive l'âge apparent de la rareté via humanMaturityByRarity. Le champ age d'une entrée nommée reste prioritaire (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes)."
+  },
+  "humanMaturityByRarity": {
+    "C": "adolescent, e (14-17 ans apparents)",
+    "UC": "jeune adulte (18-22 ans apparents)",
+    "R": "adulte (23-30 ans apparents)",
+    "SR": "adulte confirmé, e (30-38 ans apparents)",
+    "UR": "mature, aguerri, e (40-50 ans apparents)",
+    "L": "force de l'âge légendaire, aura de vétéran (50+)",
+    "M": "figure mythique d'âge indéterminé (vénérable ou éternel)"
   },
   "speciesTags": {
     "human": ["human"],
