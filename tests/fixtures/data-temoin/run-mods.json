@@ -1,0 +1,26 @@
+[
+ {
+  "id": "horde",
+  "glyph": "🐗",
+  "name": "La Horde",
+  "desc": "+1 ennemi dans chaque vague · butin +20 % (points et chances d'éclats)."
+ },
+ {
+  "id": "sterile",
+  "glyph": "🕯",
+  "name": "Le Mana Stérile",
+  "desc": "La régénération de mana de l'équipe perd 1 point pendant chaque combat · points +25 %."
+ },
+ {
+  "id": "muraille",
+  "glyph": "🛡",
+  "name": "La Muraille",
+  "desc": "Les ennemis gagnent +25 % PV · chances d'éclats +50 %."
+ },
+ {
+  "id": "rage",
+  "glyph": "⚔",
+  "name": "La Rage Partagée",
+  "desc": "Les ennemis frappent +15 % fort · points +40 %."
+ }
+]

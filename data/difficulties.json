@@ -1,0 +1,62 @@
+[
+ {
+  "id": 1,
+  "name": "Facile",
+  "minR": "C",
+  "mobCap": "R",
+  "boss5": "R",
+  "boss10": "SR",
+  "allBoss": false,
+  "pts": 1,
+  "monsterDrop": 0.25,
+  "shardDrop": 0.3
+ },
+ {
+  "id": 2,
+  "name": "Normal",
+  "minR": "UC",
+  "mobCap": "UR",
+  "boss5": "SR",
+  "boss10": "UR",
+  "allBoss": false,
+  "pts": 1.5,
+  "monsterDrop": 0.4,
+  "shardDrop": 0.45
+ },
+ {
+  "id": 3,
+  "name": "Difficile",
+  "minR": "R",
+  "mobCap": "UR",
+  "boss5": "UR",
+  "boss10": "L",
+  "allBoss": false,
+  "pts": 2,
+  "monsterDrop": 0.55,
+  "shardDrop": 0.6
+ },
+ {
+  "id": 4,
+  "name": "Très difficile",
+  "minR": "SR",
+  "mobCap": "L",
+  "boss5": "L",
+  "boss10": "M",
+  "allBoss": false,
+  "pts": 3,
+  "monsterDrop": 0.7,
+  "shardDrop": 0.75
+ },
+ {
+  "id": 5,
+  "name": "Enfer",
+  "minR": "SR",
+  "mobCap": "L",
+  "boss5": "L",
+  "boss10": "M",
+  "allBoss": true,
+  "pts": 5,
+  "monsterDrop": 0.9,
+  "shardDrop": 1
+ }
+]

@@ -1,0 +1,778 @@
+{
+ "communs": [
+  {
+   "id": "frappe-precise",
+   "nom": "Frappe Précise",
+   "ecole": "lame",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 2,
+   "mult": 1.3,
+   "desc": "Le geste que toute carte de combat connaît : un coup net, sans gaspillage."
+  },
+  {
+   "id": "premiers-soins",
+   "nom": "Premiers Soins",
+   "ecole": "baume",
+   "role": "soin",
+   "cible": "1 allié",
+   "cout": 2,
+   "mult": 1.15,
+   "desc": "Le soin élémentaire que tout soigneur connaît : un pansement rapide sur la pire plaie."
+  }
+ ],
+ "race": [
+  {
+   "id": "discipline-de-ligne",
+   "nom": "Discipline de Ligne",
+   "race": "humaine",
+   "ecole": "ferveur",
+   "role": "boost",
+   "cible": "soi",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "Le geste des lignes humaines : appris au drill, exécuté sans penser."
+  },
+  {
+   "id": "instinct-sauvage",
+   "nom": "Instinct Sauvage",
+   "race": "bestiau",
+   "ecole": "ferveur",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "Le bestiau agit comme il respire : par instinct, vite et fort."
+  },
+  {
+   "id": "vol-en-rase-mottes",
+   "nom": "Vol en Rase-Mottes",
+   "race": "enge",
+   "ecole": "ruse",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "L’enge plonge du ciel et remonte avant la riposte."
+  },
+  {
+   "id": "ferveur-celeste",
+   "nom": "Ferveur Céleste",
+   "race": "divine",
+   "ecole": "ferveur",
+   "role": "boost",
+   "cible": "1 allié",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "Une onction des camps divins qui aiguise le geste."
+  }
+ ],
+ "entrees": [
+  {
+   "id": "brise-garde",
+   "nom": "Brise-Garde",
+   "ecole": "lame",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 4,
+   "mult": 1.6,
+   "classe": "Guerrier",
+   "desc": "Le coup du guerrier : chercher la jointure de la garde.",
+   "effet": "+25 % contre un bouclier"
+  },
+  {
+   "id": "decharge-arcanique",
+   "nom": "Décharge Arcanique",
+   "ecole": "lame",
+   "role": "degats",
+   "cible": "zone",
+   "cout": 4,
+   "mult": 1.65,
+   "classe": "Mage",
+   "desc": "Le mage vide un fragment de mana en un trait brut."
+  },
+  {
+   "id": "onde-consacree",
+   "nom": "Onde Consacrée",
+   "ecole": "baume",
+   "role": "soin",
+   "cible": "l’équipe",
+   "cout": 3,
+   "mult": 1.3,
+   "classe": "Prêtre",
+   "desc": "Le soin du prêtre : une onde qui referme les plaies."
+  },
+  {
+   "id": "frappe-dans-le-dos",
+   "nom": "Frappe dans le Dos",
+   "ecole": "lame",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 4,
+   "mult": 1.7,
+   "classe": "Assassin",
+   "desc": "L’assassin frappe là où l’on ne regarde pas.",
+   "effet": "20 % de critique"
+  },
+  {
+   "id": "oeil-du-malheur",
+   "nom": "Œil du Malheur",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "cible": "1 ennemi",
+   "cout": 4,
+   "mult": 1.6,
+   "classe": "Occultiste",
+   "desc": "L’occultiste marque sa proie d’un mauvais présage.",
+   "effet": "−20 % de précision × 2 tours"
+  }
+ ],
+ "lignee": [
+  {
+   "famille": "lame",
+   "palier": "C",
+   "sort": "Taillade du Mat",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Une frappe rapide portée au lever du jour."
+  },
+  {
+   "famille": "lame",
+   "palier": "UC",
+   "sort": "Lame Vive",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Une coupe sèche qui cherche la jointure de l’armure."
+  },
+  {
+   "famille": "lame",
+   "palier": "R",
+   "sort": "Lame Éclair",
+   "cout": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Un sabre si rapide qu’on ne voit que la traînée."
+  },
+  {
+   "famille": "lame",
+   "palier": "SR",
+   "sort": "Millième Taillade",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Mille coupes en un seul geste."
+  },
+  {
+   "famille": "lame",
+   "palier": "UR",
+   "sort": "Kenji : Zénith Tranchant",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Le sabre atteint le sommet du ciel et retombe en éclair."
+  },
+  {
+   "famille": "lame",
+   "palier": "L",
+   "sort": "Tranche-Monde",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Une constellation de lames s’abat sur l’ennemi."
+  },
+  {
+   "famille": "ombre",
+   "palier": "C",
+   "sort": "Poigne du Silence",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Une attaque sournoise sur les points faibles."
+  },
+  {
+   "famille": "ombre",
+   "palier": "UC",
+   "sort": "Pas de l’Ombre",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Un déplacement imperceptible, puis la morsure."
+  },
+  {
+   "famille": "ombre",
+   "palier": "R",
+   "sort": "Faux du Croissant",
+   "cout": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Une faux qui ne luit que les nuits sans lune."
+  },
+  {
+   "famille": "ombre",
+   "palier": "SR",
+   "sort": "Danse des Cent Lames",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Cent ombres frappent là où une seule semble passer."
+  },
+  {
+   "famille": "ombre",
+   "palier": "UR",
+   "sort": "Kira : Voile Déchiré",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "L’ombre elle-même est une arme entre ses mains."
+  },
+  {
+   "famille": "ombre",
+   "palier": "L",
+   "sort": "Nuit Éternelle",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Le combat continue dans une nuit qui ne se lève plus."
+  },
+  {
+   "famille": "eau",
+   "palier": "C",
+   "sort": "Goutte Percutante",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Une goutte lancée à la vitesse d’une flèche."
+  },
+  {
+   "famille": "eau",
+   "palier": "UC",
+   "sort": "Brume Mordante",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Un brouillard salé qui ronge armor et peau."
+  },
+  {
+   "famille": "eau",
+   "palier": "R",
+   "sort": "Courant Battant",
+   "cout": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Le fleuve répond à son appel et charge l’ennemi."
+  },
+  {
+   "famille": "eau",
+   "palier": "SR",
+   "sort": "Marée Ascendante",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Une vague montante qui emporte tout sur son passage."
+  },
+  {
+   "famille": "eau",
+   "palier": "UR",
+   "sort": "Raz-de-Marée",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "L’océan entier se soulève d’un seul geste d’Alix."
+  },
+  {
+   "famille": "eau",
+   "palier": "L",
+   "sort": "Colère de l’Océan",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "La déesse de l’eau réveille le gouffre des abysses."
+  },
+  {
+   "famille": "aube",
+   "palier": "C",
+   "sort": "Étreinte Matinale",
+   "cout": 2,
+   "mult": 1.5,
+   "big": false,
+   "desc": "La première lumière du jour referme les plaies."
+  },
+  {
+   "famille": "aube",
+   "palier": "UC",
+   "sort": "Rayon Matinal",
+   "cout": 3,
+   "mult": 1.7,
+   "big": false,
+   "desc": "Un rayon oblique qui caresse la blessure."
+  },
+  {
+   "famille": "aube",
+   "palier": "R",
+   "sort": "Lumière Réconfortante",
+   "cout": 5,
+   "mult": 2.2,
+   "big": false,
+   "desc": "Un rayon chaud qui chasse fatigue et blessures."
+  },
+  {
+   "famille": "aube",
+   "palier": "SR",
+   "sort": "Bénédiction de l’Aurore",
+   "cout": 9,
+   "mult": 3.2,
+   "big": true,
+   "desc": "Le soleil levant bénit l’équipe d’un souffle doré."
+  },
+  {
+   "famille": "aube",
+   "palier": "UR",
+   "sort": "Aurore Radieuse",
+   "cout": 14,
+   "mult": 4.4,
+   "big": true,
+   "desc": "La lumière de Léna coule comme une marée dorée."
+  },
+  {
+   "famille": "aube",
+   "palier": "L",
+   "sort": "Aube Éternelle",
+   "cout": 20,
+   "mult": 6,
+   "big": true,
+   "desc": "Un nouveau matin se lève et efface la nuit."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "C",
+   "sort": "Carapace Réactive",
+   "cout": 2,
+   "mult": 1.5,
+   "big": false,
+   "desc": "Son blindage se raffermit au moment de l’impact."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "UC",
+   "sort": "Égide Renforcée",
+   "cout": 3,
+   "mult": 1.7,
+   "big": false,
+   "desc": "Une plaque de plus entre le coup et la ligne."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "R",
+   "sort": "Mur Inflexible",
+   "cout": 5,
+   "mult": 2.2,
+   "big": false,
+   "desc": "Là où elle se tient, la ligne ne cède jamais."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "SR",
+   "sort": "Barrière Runique",
+   "cout": 9,
+   "mult": 3.2,
+   "big": true,
+   "desc": "Des runes gravées dans l’acier dévient les coups."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "UR",
+   "sort": "Argus : Rempart Éveillé",
+   "cout": 14,
+   "mult": 4.4,
+   "big": true,
+   "desc": "La forteresse s’éveille et couvre toute l’équipe."
+  },
+  {
+   "famille": "bouclier",
+   "palier": "L",
+   "sort": "Argus : Forteresse Vivante",
+   "cout": 20,
+   "mult": 6,
+   "big": true,
+   "desc": "Le mur devient montagne, la montagne devient garde."
+  },
+  {
+   "famille": "braise",
+   "palier": "C",
+   "sort": "Étincelle Filante",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Une étincelle qui court plus vite que la flamme."
+  },
+  {
+   "famille": "braise",
+   "palier": "UC",
+   "sort": "Flèche de Feu",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Une flèche enflammée qui accroche l’air."
+  },
+  {
+   "famille": "braise",
+   "palier": "R",
+   "sort": "Jet de Braise",
+   "cout": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "Un souffle de braises brûlantes arraché au foyer."
+  },
+  {
+   "famille": "braise",
+   "palier": "SR",
+   "sort": "Fournaise",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le sol s’ouvre et crache un cercle de feu."
+  },
+  {
+   "famille": "braise",
+   "palier": "UR",
+   "sort": "Solen : Couronne de Feu",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Une couronne de flammes consume les rangs adverses."
+  },
+  {
+   "famille": "braise",
+   "palier": "L",
+   "sort": "Solen : Braise Éternelle",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "C",
+   "sort": "Trait d’Épine",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Une épine sèche lancée du creux d’un fourré."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "UC",
+   "sort": "Lance d’Aubier",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Un éclat de bois vert durci par la sève."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "R",
+   "sort": "Épine Vengeresse",
+   "cout": 5,
+   "mult": 1.9,
+   "big": false,
+   "desc": "La forêt rend coup pour coup à qui la blesse."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "SR",
+   "sort": "Rafale d’Épines",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Une tempête de ronces ferme l’horizon."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "UR",
+   "sort": "Maïa : Danse des Feuilles",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Ses feuilles dansent autour de la proie, puis tombent."
+  },
+  {
+   "famille": "bosquet",
+   "palier": "L",
+   "sort": "Maïa : Cœur du Bosquet",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Le bosquet entier se lève et marche au combat."
+  }
+ ],
+ "ecole": [
+  {
+   "id": "morsure-decume",
+   "nom": "Morsure d’Écume",
+   "ecole": "lame",
+   "role": "degats",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "mult": 1.5
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "mult": 1.8
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "mult": 2.2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "mult": 2.6
+    }
+   }
+  },
+  {
+   "id": "chant-de-sirene",
+   "nom": "Chant de Sirène",
+   "ecole": "entrave",
+   "role": "controle",
+   "effet": "stun",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "taux": 0.25,
+     "tours": 1
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2,
+     "tours": 1
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 1
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "taux": 0.1,
+     "tours": 1
+    }
+   }
+  },
+  {
+   "id": "etreinte-des-profondeurs",
+   "nom": "Étreinte des Profondeurs",
+   "ecole": "entrave",
+   "role": "controle",
+   "effet": "immobilisation",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.2,
+     "tours": 1
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "carapace-de-corail",
+   "nom": "Carapace de Corail",
+   "ecole": "rempart",
+   "role": "bouclier",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "mult": 1.7
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "mult": 1.3
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "mult": 1.6
+    }
+   }
+  },
+  {
+   "id": "marque-corrosive",
+   "nom": "Marque Corrosive",
+   "ecole": "mauvais-oeil",
+   "role": "malus",
+   "effet": "corrosion",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "taux": 0.15,
+     "tours": 2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  },
+  {
+   "id": "guet-des-fonds",
+   "nom": "Guet des Fonds",
+   "ecole": "ferveur",
+   "role": "boost",
+   "effet": "precision",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "taux": 0.2
+    },
+    "III": {
+     "cout": 5,
+     "largeur": "equipe",
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": "equipe-renforcee",
+     "vide": true,
+     "raison": "attend un autre biome ou la zone d’errance"
+    }
+   }
+  }
+ ],
+ "uniques": [
+  {
+   "id": "maree-noire",
+   "nom": "Marée Noire",
+   "carte": "e13",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "Le flot noir qui submerge tous les ennemis."
+  },
+  {
+   "id": "abime-absolu",
+   "nom": "Abîme Absolu",
+   "carte": "e14",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "Le gouffre s’ouvre et referme."
+  },
+  {
+   "id": "songe-des-profondeurs",
+   "nom": "Songe des Profondeurs",
+   "carte": "e17",
+   "role": "controle",
+   "cible": "1 ennemi",
+   "cout": 3,
+   "mult": 1.6,
+   "taux": 0.35,
+   "tours": 3,
+   "effet": "corrosion",
+   "desc": "Le rêve qui noie."
+  },
+  {
+   "id": "couronne-des-ecumes",
+   "nom": "Couronne des Écumes",
+   "carte": "e19",
+   "role": "boost",
+   "cible": "l’équipe",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "L’onction royale."
+  },
+  {
+   "id": "benediction-des-berges",
+   "nom": "Bénédiction des Berges",
+   "carte": "e22",
+   "role": "soin",
+   "cible": "l’équipe",
+   "cout": 3,
+   "mult": 1.5,
+   "desc": "La bénédiction du bord de l’eau."
+  },
+  {
+   "id": "chant-du-naufrage",
+   "nom": "Chant du Naufrage",
+   "carte": "e28",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 7,
+   "mult": 2,
+   "desc": "Le chant qui couche les équipages."
+  },
+  {
+   "id": "colere-des-recifs",
+   "nom": "Colère des Récifs",
+   "carte": "e30",
+   "role": "degats",
+   "cible": "tous les ennemis",
+   "cout": 3,
+   "mult": 1.6,
+   "taux": 0.3,
+   "tours": 2,
+   "effet": "corrosion",
+   "desc": "La reine qui flagelle."
+  }
+ ]
+}

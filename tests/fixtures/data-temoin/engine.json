@@ -1,0 +1,584 @@
+{
+ "CLASSES": [
+  "Guerrier",
+  "Mage",
+  "Prêtre",
+  "Assassin",
+  "Occultiste",
+  "Invocateur"
+ ],
+ "ELEMENTS": [
+  "Feu",
+  "Eau",
+  "Terre",
+  "Ombre",
+  "Lumière"
+ ],
+ "PALIERS": [
+  2,
+  4
+ ],
+ "SPELL_CAT_LABEL": {
+  "commun": "commun",
+  "race": "de race",
+  "classe": "de classe",
+  "unique": "signature",
+  "lignée": "de lignée"
+ },
+ "RARITY_POWER": {
+  "C": 1,
+  "UC": 1.08,
+  "R": 1.16,
+  "SR": 1.26,
+  "UR": 1.38,
+  "L": 1.52
+ },
+ "RANK": {
+  "C": 0,
+  "UC": 1,
+  "R": 2,
+  "SR": 3,
+  "UR": 4,
+  "L": 5,
+  "M": 6
+ },
+ "BEATS": {
+  "Feu": "Terre",
+  "Terre": "Eau",
+  "Eau": "Feu",
+  "Lumière": "Ombre",
+  "Ombre": "Lumière"
+ },
+ "BEATEN_BY": {
+  "Feu": "Eau",
+  "Eau": "Terre",
+  "Terre": "Feu",
+  "Lumière": "Ombre",
+  "Ombre": "Lumière"
+ },
+ "RACES": [
+  "humaine",
+  "monstre",
+  "mystique",
+  "divine"
+ ],
+ "RACE_LABEL": {
+  "humaine": "Humaine",
+  "monstre": "Monstre",
+  "mystique": "Mystique",
+  "divine": "Divine"
+ },
+ "RACE_MOD": {
+  "humaine": 0,
+  "monstre": 0.1,
+  "mystique": 0.2,
+  "divine": 0.3
+ },
+ "CLASSE_MODS": {
+  "Guerrier": {
+   "atkPct": 0.1,
+   "hpPct": 0.15,
+   "strike": 1,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0.05
+  },
+  "Assassin": {
+   "atkPct": 0.05,
+   "hpPct": -0.1,
+   "strike": 1,
+   "dodge": 0.15,
+   "exec": 0.25,
+   "execBelow": 0.35,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Mage": {
+   "atkPct": 0.05,
+   "hpPct": -0.05,
+   "strike": 0.8,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0.4,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Prêtre": {
+   "atkPct": -0.15,
+   "hpPct": 0,
+   "strike": 0.7,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  },
+  "Occultiste": {
+   "atkPct": -0.2,
+   "hpPct": 0,
+   "strike": 0.6,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": true,
+   "shieldOnHit": 0
+  },
+  "Invocateur": {
+   "atkPct": -0.1,
+   "hpPct": -0.1,
+   "strike": 0.8,
+   "dodge": 0,
+   "exec": 0,
+   "execBelow": 0,
+   "splash": 0,
+   "wave": false,
+   "shieldOnHit": 0
+  }
+ },
+ "CLASSE_DEFAULT": {
+  "atkPct": 0,
+  "hpPct": 0,
+  "strike": 1,
+  "dodge": 0,
+  "exec": 0,
+  "execBelow": 0,
+  "splash": 0,
+  "wave": false,
+  "shieldOnHit": 0
+ },
+ "MONSTER_MANA": {
+  "max": 10,
+  "regen": 2
+ },
+ "FAMILY_MANA": [
+  {
+   "max": 8,
+   "regen": 2
+  },
+  {
+   "max": 11,
+   "regen": 3
+  },
+  {
+   "max": 14,
+   "regen": 3
+  },
+  {
+   "max": 22,
+   "regen": 5
+  },
+  {
+   "max": 30,
+   "regen": 6
+  },
+  {
+   "max": 40,
+   "regen": 8
+  }
+ ],
+ "SOLO_MANA": {
+  "max": 10,
+  "regen": 2
+ },
+ "EVO_COST": {
+  "C": [
+   "brut",
+   3
+  ],
+  "UC": [
+   "poli",
+   2
+  ],
+  "R": [
+   "poli",
+   4
+  ],
+  "SR": [
+   "grave",
+   2
+  ],
+  "UR": [
+   "grave",
+   4
+  ],
+  "L": [
+   "eternel",
+   10
+  ]
+ },
+ "GEM_TIERS": [
+  "brut",
+  "poli",
+  "grave",
+  "eternel"
+ ],
+ "GEM_LABEL": {
+  "brut": "bruts",
+  "poli": "polis",
+  "grave": "gravés",
+  "eternel": "éternels"
+ },
+ "BOSS_GEM": {
+  "1": [
+   "brut",
+   "brut"
+  ],
+  "2": [
+   "brut",
+   "poli"
+  ],
+  "3": [
+   "poli",
+   "grave"
+  ],
+  "4": [
+   "grave",
+   "grave"
+  ],
+  "5": [
+   "grave",
+   "eternel"
+  ]
+ },
+ "TOKEN_RAR": [
+  "C",
+  "UC",
+  "R",
+  "SR",
+  "UR"
+ ],
+ "NEXT_RAR": {
+  "C": "UC",
+  "UC": "R",
+  "R": "SR",
+  "SR": "UR",
+  "UR": "L"
+ },
+ "SHARD_MAX": 3,
+ "SHARD_BONUS": 0.03,
+ "PITY_MAX": 3,
+ "ALL_SHARDS": [
+  "a34",
+  "a35",
+  "a36",
+  "a37",
+  "a38",
+  "a39"
+ ],
+ "REWARD_TABLE": [
+  [
+   "C",
+   0.38
+  ],
+  [
+   "UC",
+   0.22
+  ],
+  [
+   "R",
+   0.26
+  ],
+  [
+   "SR",
+   0.12
+  ],
+  [
+   "UR",
+   0.02
+  ]
+ ],
+ "DIVINE_LOW_SLOT": [
+  [
+   "C",
+   0.5
+  ],
+  [
+   "UC",
+   0.5
+  ]
+ ],
+ "DIVINE_MID_SLOT": [
+  [
+   "R",
+   0.65
+  ],
+  [
+   "SR",
+   0.35
+  ]
+ ],
+ "DIVINE_TOP_SLOT": [
+  [
+   "SR",
+   0.75
+  ],
+  [
+   "UR",
+   0.25
+  ]
+ ],
+ "REG_ECLAT_RATE": [
+  0,
+  0,
+  0.012,
+  0.025,
+  0.05
+ ],
+ "TEAM_MAX": 5,
+ "OPP_BONUS": 0.25,
+ "LEVEL_BONUS": 0.08,
+ "LEVEL_CAP": 20,
+ "DMG_REDUCTION_MAX": 0.8,
+ "SAVE_VERSION": 8,
+ "SAVE_KEY": "fondations-cards-v1",
+ "CURRENT_VERSION": 11,
+ "CROSS": {
+  "yield": 0.6,
+  "healThreshold": 0.2,
+  "attaque": {
+   "name": "Souffle Croisé",
+   "cost": 5,
+   "desc": "Quand un allié passe sous 20 % de ses PV : lui rend 60 % de l’ATQ du lanceur, au lieu d’attaquer ce tour-ci."
+  },
+  "support": {
+   "name": "Frappe Croisée",
+   "cost": 4,
+   "base": 6,
+   "desc": "Si aucun allié n’est blessé : frappe l’ennemi le plus faible (rendement réduit, 60 % d’un sort de guerre)."
+  }
+ },
+ "RACE_DIVINE_IDS": [
+  "d1",
+  "d2",
+  "d3",
+  "d4",
+  "d5",
+  "d6",
+  "d7",
+  "d8",
+  "d9",
+  "d10",
+  "d11",
+  "d12",
+  "d13",
+  "d14",
+  "d15",
+  "d16",
+  "d17",
+  "d18",
+  "z8",
+  "n13",
+  "n14",
+  "n15"
+ ],
+ "RACE_MYSTIQUE_IDS": [
+  "n10",
+  "n11",
+  "n12",
+  "e23",
+  "e24",
+  "e25",
+  "e26",
+  "e27",
+  "e28",
+  "e29",
+  "e30",
+  "g9",
+  "g10",
+  "g11",
+  "g12",
+  "g17",
+  "g18",
+  "g19",
+  "g20",
+  "g21",
+  "k1",
+  "k3",
+  "k13",
+  "k5",
+  "k6",
+  "k14",
+  "k15",
+  "k16",
+  "k7",
+  "k17",
+  "k2",
+  "k12",
+  "k10",
+  "k11",
+  "k18",
+  "k19",
+  "k20",
+  "k21",
+  "k22",
+  "k9",
+  "k8",
+  "k23",
+  "k24",
+  "k4",
+  "k25",
+  "k26",
+  "k27",
+  "k28",
+  "k29",
+  "k30"
+ ],
+ "RACE_HUMAINE_DUNGEON_IDS": [
+  "z1",
+  "z3",
+  "z4",
+  "z5",
+  "z13",
+  "z7",
+  "z14",
+  "z15",
+  "z12",
+  "z10",
+  "z9",
+  "z23",
+  "z24",
+  "z11",
+  "z25",
+  "z26",
+  "z27",
+  "z28",
+  "z29",
+  "z30"
+ ],
+ "RACE_MONSTRE_IDS": [
+  "n5",
+  "n6",
+  "n7",
+  "n8",
+  "n9"
+ ],
+ "EVO_TYPES": [
+  "standard",
+  "partage",
+  "convergence",
+  "regression",
+  "chute",
+  "malediction",
+  "evenement",
+  "secrete"
+ ],
+ "FAM_ORDER": [
+  "eau",
+  "aube",
+  "lame",
+  "ombre",
+  "bouclier",
+  "braise",
+  "bosquet"
+ ],
+ "moteur": {
+  "MANA_START_RATIO": 0.6,
+  "DIVINE_PAIR_BONUS": 0.1,
+  "GIMMICK_CALE_SHIELD": 0.25,
+  "GIMMICK_LITIERE_SHIELD": 0.15,
+  "PHOENIX_REVIVE_RATIO": 0.5,
+  "RAGE_TURN": 15,
+  "RAGE_RATE": 0.08,
+  "RONDE_RATE": 0.03,
+  "RONDE_CAP": 30,
+  "BELIER_BOOST": 1.5,
+  "BELIER_SPLASH": 0.5,
+  "CARROUSEL_CHANCE": 0.15,
+  "CARROUSEL_SPLASH": 0.4,
+  "DOT_DEFAULT_PCT": 0.3,
+  "TARGET_KILL_BONUS": 1000,
+  "ELEMENT_ADVANTAGE_BONUS": 100,
+  "VOILE_CHANCE": 0.25,
+  "REFLECT_SHARE": 0.2,
+  "BENEDICTION_HEAL": 0.2,
+  "MAX_TURNS_AUTO": 60,
+  "LEVEL_STAGE_RATIO": 0.95,
+  "DUNGEON_TIER_LEVEL_MULT": 1.5,
+  "WAVE_VAR_MIN": 0.92,
+  "WAVE_VAR_SPAN": 0.16,
+  "FINAL_HP_MULT": 2.3,
+  "FINAL_ATK_MULT": 1.28,
+  "BOSS_HP_MULT": 1.55,
+  "BOSS_ATK_MULT": 1.08,
+  "ELITE_HP_MULT": 1.35,
+  "ELITE_ATK_MULT": 1.03,
+  "WAVE_EXTRA_CHANCE": 0.5,
+  "WAVE_SUP_CHANCE": 0.5,
+  "WAVE_POWER_GROWTH": 1.02,
+  "WAVE_ATK_STEP": 1.06,
+  "WAVE_HP_STEP": 1.06,
+  "RUNMOD_MURaille_HP": 1.25,
+  "RUNMOD_RAGE_ATK": 1.15,
+  "DAILY_LEVEL_DEFAULT": 10,
+  "DAILY_VAR_MIN": 0.9,
+  "DAILY_VAR_SPAN": 0.2,
+  "DAILY_RACE_HUM": 0.5,
+  "DAILY_RACE_MONSTRE": 0.8,
+  "DAILY_RACE_MYSTIQUE": 0.95,
+  "HEAL_CAP_RATIO": 0.35,
+  "LINK_SHARE": 0.5,
+  "LINK_BUFF_SHARE": 0.5,
+  "DOT_EFFECT_DEFAULT": 0.4,
+  "REFLECT_DEFAULT_PCT": 0.25,
+  "WARCRY_DEFAULT": 0.25,
+  "DMGRED_DEFAULT": 0.2,
+  "CURSE_DEFAULT": 0.2,
+  "CURSE_BOSS_FACTOR": 0.5,
+  "REVIVE_DEFAULT": 0.5,
+  "SUMMON_ATK_DEFAULT": 0.6,
+  "SUMMON_HP_DEFAULT": 0.5,
+  "SUMMON_SPELL": {
+   "name": "Frappe",
+   "cost": 3,
+   "mult": 1.2
+  },
+  "POWER_ATK_WEIGHT": 2.5,
+  "POWER_HP_WEIGHT": 0.6,
+  "POWER_SPELL_STEP": 0.03,
+  "DEBUT_JEU_N": 2,
+  "AGI_RATIO": 0.8,
+  "INT_RATIO": 0.6
+ },
+ "profils": {
+  "Guerrier": {
+   "stat": "atk"
+  },
+  "Mage": {
+   "stat": "int"
+  },
+  "Prêtre": {
+   "stat": "int"
+  },
+  "Assassin": {
+   "stat": "agi"
+  },
+  "Occultiste": {
+   "stat": "int"
+  },
+  "Invocateur": {
+   "stat": "int"
+  },
+  "gardien": {
+   "stat": "hp"
+  }
+ },
+ "seuils": {
+  "parPalier": [
+   0,
+   0.05,
+   0.1,
+   0.15,
+   0.2,
+   0.25,
+   0.3
+  ],
+  "parCamp": {}
+ }
+}

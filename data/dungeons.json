@@ -1,0 +1,114 @@
+[
+ {
+  "id": "marees",
+  "name": "L’Antre des Marées",
+  "desc": "Une grotte où la marée monte sans prévenir et réveille les gouffres.",
+  "floors": 10,
+  "tier": 0,
+  "accent": "#4fc3f7",
+  "types": [
+   "Eau",
+   "Terre"
+  ],
+  "icon": "🌊",
+  "art": "",
+  "req": null,
+  "shards": [
+   "a34",
+   "a38",
+   "a35",
+   "a36"
+  ],
+  "bossNames": {
+   "5": "Hydre des Marées",
+   "10": "Souverain des Marées"
+  }
+ },
+ {
+  "id": "forge",
+  "name": "La Forge Cendrée",
+  "desc": "Une forge éteinte où les braises ont pris vie et recrutent les ombres.",
+  "floors": 10,
+  "tier": 1,
+  "accent": "#ff8a50",
+  "types": [
+   "Feu",
+   "Ombre"
+  ],
+  "icon": "🔥",
+  "req": "marees",
+  "shards": [],
+  "bossNames": {
+   "5": "Maître des Fours",
+   "10": "Seigneur des Cendres"
+  }
+ },
+ {
+  "id": "bosquet",
+  "name": "Le Bosquet Vermeil",
+  "desc": "Une clairière ancienne où la lumière traverse la mousse et arme les racines.",
+  "floors": 10,
+  "tier": 2,
+  "accent": "#8bd47c",
+  "types": [
+   "Terre",
+   "Lumière"
+  ],
+  "icon": "🌿",
+  "req": "forge",
+  "shards": [
+   "a35",
+   "a36",
+   "a37",
+   "a39"
+  ],
+  "bossNames": {
+   "5": "Mycola, Reine des Spores",
+   "10": "Cœur du Bosquet"
+  }
+ },
+ {
+  "id": "crypte",
+  "name": "La Crypte Noyée",
+  "desc": "Des caveaux inondés où les noyés veillent et l’eau ne reflète rien.",
+  "floors": 10,
+  "tier": 3,
+  "accent": "#9b8cff",
+  "types": [
+   "Ombre",
+   "Eau"
+  ],
+  "icon": "💀",
+  "req": "bosquet",
+  "shards": [
+   "a34",
+   "a38"
+  ],
+  "bossNames": {
+   "5": "Goule des Caveaux",
+   "10": "La Mort, Faucheuse des Tombes"
+  }
+ },
+ {
+  "id": "zenith",
+  "name": "Le Zénith Ardent",
+  "desc": "Un sommet suspendu où le soleil de midi forge la lumière en flammes.",
+  "floors": 10,
+  "tier": 4,
+  "accent": "#ffd76e",
+  "types": [
+   "Lumière",
+   "Feu"
+  ],
+  "icon": "☀️",
+  "req": "crypte",
+  "shards": [
+   "a37",
+   "a39"
+  ],
+  "bossNames": {
+   "5": "Phénix du Zénith",
+   "10": "Astre Capiteux"
+  }
+ }
+]

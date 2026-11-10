@@ -1,0 +1,135 @@
+{
+ "marees": {
+  "trie": true,
+  "signatures": {
+   "e1": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "e2": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "e10": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "e3": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "e11": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "e12": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "e26": {
+    "fusion": "morsure-decume",
+    "cran": "III"
+   },
+   "e18": {
+    "fusion": "morsure-decume",
+    "cran": "IV"
+   },
+   "e7": {
+    "fusion": "chant-de-sirene",
+    "cran": "I"
+   },
+   "e23": {
+    "fusion": "chant-de-sirene",
+    "cran": "I"
+   },
+   "e24": {
+    "fusion": "chant-de-sirene",
+    "cran": "II"
+   },
+   "e25": {
+    "fusion": "chant-de-sirene",
+    "cran": "III"
+   },
+   "e27": {
+    "fusion": "chant-de-sirene",
+    "cran": "IV"
+   },
+   "e6": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "III"
+   },
+   "e8": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "e15": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "e21": {
+    "fusion": "carapace-de-corail",
+    "cran": "III"
+   },
+   "e29": {
+    "fusion": "carapace-de-corail",
+    "cran": "IV"
+   },
+   "e16": {
+    "fusion": "marque-corrosive",
+    "cran": "III"
+   },
+   "e20": {
+    "fusion": "guet-des-fonds",
+    "cran": "II"
+   },
+   "e4": {
+    "fusion": "brise-garde",
+    "cran": "II"
+   },
+   "e5": {
+    "fusion": "oeil-du-malheur",
+    "cran": "II"
+   },
+   "e9": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "e13": {
+    "unique": "maree-noire"
+   },
+   "e14": {
+    "unique": "abime-absolu"
+   },
+   "e17": {
+    "unique": "songe-des-profondeurs"
+   },
+   "e19": {
+    "unique": "couronne-des-ecumes"
+   },
+   "e22": {
+    "unique": "benediction-des-berges"
+   },
+   "e28": {
+    "unique": "chant-du-naufrage"
+   },
+   "e30": {
+    "unique": "colere-des-recifs"
+   }
+  }
+ },
+ "forge": {
+  "trie": false
+ },
+ "bosquet": {
+  "trie": false
+ },
+ "crypte": {
+  "trie": false
+ },
+ "zenith": {
+  "trie": false
+ },
+ "divin": {
+  "trie": false
+ }
+}

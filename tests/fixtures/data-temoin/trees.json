@@ -1,0 +1,287 @@
+{
+ "humaine": {
+  "rang": 0,
+  "crans": {
+   "0": 0
+  },
+  "eveils": [
+   {
+    "de": "n1",
+    "vers": "a30",
+    "voie": "voie du guerrier",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n1",
+    "vers": "s14",
+    "voie": "voie de la protection",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n1",
+    "vers": "a33",
+    "voie": "voie sylvestre",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n2",
+    "vers": "a29",
+    "voie": "les flots — l’Eau",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n2",
+    "vers": "a32",
+    "voie": "la fournaise — le Feu",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n2",
+    "vers": "a33",
+    "voie": "les Sylvains — la Terre",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n2",
+    "vers": "s13",
+    "voie": "la lumière — l’élue de l’Aube",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n2",
+    "vers": "a31",
+    "voie": "l’ombre — l’élue du Crépuscule",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n3",
+    "vers": "s13",
+    "voie": "la lumière — la foi",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n3",
+    "vers": "s14",
+    "voie": "la garde — protéger les vivants",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n4",
+    "vers": "a31",
+    "voie": "voie de l’assassinat",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n4",
+    "vers": "a34",
+    "voie": "voie des quais",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n4",
+    "vers": "a37",
+    "voie": "voie de la fête",
+    "effet": "standard",
+    "ecoles": []
+   }
+  ]
+ },
+ "monstre": {
+  "rang": 1,
+  "crans": {
+   "1": 10
+  },
+  "eveils": [
+   {
+    "de": "n5",
+    "vers": "e3",
+    "voie": "voie du pillage — les récifs",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n5",
+    "vers": "e11",
+    "voie": "voie des berges",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n6",
+    "vers": "f3",
+    "voie": "voie de la suie",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n6",
+    "vers": "f15",
+    "voie": "voie de la fournaise",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n6",
+    "vers": "f24",
+    "voie": "voie du goblin",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n7",
+    "vers": "g3",
+    "voie": "voie de la mousse",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n7",
+    "vers": "g12",
+    "voie": "voie des sèves",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n8",
+    "vers": "k3",
+    "voie": "le gouffre",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n8",
+    "vers": "k12",
+    "voie": "le deuil marin",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n8",
+    "vers": "k24",
+    "voie": "le devoir brisé",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n9",
+    "vers": "z3",
+    "voie": "la voie dorée — la Légion Solaire",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n9",
+    "vers": "z16",
+    "voie": "la voie du feu céleste — les Phénix",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n9",
+    "vers": "z23",
+    "voie": "la voie du plein jour — le Clergé",
+    "effet": "standard",
+    "ecoles": []
+   }
+  ]
+ },
+ "mystique": {
+  "rang": 2,
+  "crans": {
+   "2": 20
+  },
+  "eveils": [
+   {
+    "de": "n10",
+    "vers": "e24",
+    "voie": "la forme — Sirène",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n11",
+    "vers": "g12",
+    "voie": "la forme — Dryade",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n12",
+    "vers": "k3",
+    "voie": "la forme — le gouffre",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n12",
+    "vers": "k12",
+    "voie": "la forme — le deuil marin",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n12",
+    "vers": "k24",
+    "voie": "la forme — le devoir brisé",
+    "effet": "standard",
+    "ecoles": []
+   }
+  ]
+ },
+ "divine": {
+  "rang": 3,
+  "crans": {
+   "3": 30
+  },
+  "eveils": [
+   {
+    "de": "n13",
+    "vers": "p1",
+    "voie": "l’éveil du service — l’Ange Éveillé",
+    "effet": "remplace",
+    "ecoles": [],
+    "disparait": "p2",
+    "portes": [
+     {
+      "id": "coloration",
+      "nom": "la coloration (l’eau, l’aube, le sabre)"
+     },
+     {
+      "id": "voie-celeste",
+      "nom": "la voie céleste (l’Archange)"
+     },
+     {
+      "id": "mauvaise-volonte",
+      "nom": "la mauvaise volonté (les anges dévoyés)"
+     }
+    ]
+   },
+   {
+    "de": "n14",
+    "vers": "d8",
+    "voie": "la voie du Chœur Miroir — la Réflexion",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n15",
+    "vers": "d14",
+    "voie": "la voie du Pont — le Liage",
+    "effet": "standard",
+    "ecoles": []
+   }
+  ]
+ }
+}

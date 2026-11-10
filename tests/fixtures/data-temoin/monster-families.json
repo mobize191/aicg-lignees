@@ -1,0 +1,364 @@
+{
+ "marees": [
+  {
+   "name": "Gobelins des Écumes",
+   "lines": [
+    [
+     "e1",
+     "e3",
+     "e4",
+     "e5"
+    ],
+    [
+     "e16",
+     "e17"
+    ],
+    [
+     "e18",
+     "e19"
+    ]
+   ],
+   "side": [
+    "e2",
+    "e10",
+    "e8"
+   ]
+  },
+  {
+   "name": "Abîmaux",
+   "lines": [
+    [
+     "e7",
+     "e11",
+     "e20"
+    ],
+    [
+     "e9",
+     "e6",
+     "e13"
+    ],
+    [
+     "e15",
+     "e21",
+     "e22"
+    ]
+   ],
+   "side": [
+    "e12"
+   ],
+   "mythic": "e14"
+  },
+  {
+   "name": "Sirènes des Récifs",
+   "lines": [
+    [
+     "e23",
+     "e24",
+     "e25",
+     "e26"
+    ],
+    [
+     "e27",
+     "e28"
+    ],
+    [
+     "e29",
+     "e30"
+    ]
+   ],
+   "side": []
+  }
+ ],
+ "forge": [
+  {
+   "name": "Cendrels",
+   "lines": [
+    [
+     "f1",
+     "f10",
+     "f11"
+    ],
+    [
+     "f16",
+     "f17",
+     "f18"
+    ],
+    [
+     "f19",
+     "f20",
+     "f21"
+    ]
+   ],
+   "side": [
+    "f7",
+    "f3",
+    "f8"
+   ],
+   "mythic": "f13"
+  },
+  {
+   "name": "Enfants de la Braise",
+   "lines": [
+    [
+     "f14",
+     "f15",
+     "f4"
+    ],
+    [
+     "f9",
+     "f6",
+     "f22"
+    ],
+    [
+     "f5",
+     "f23",
+     "f12"
+    ]
+   ],
+   "side": []
+  },
+  {
+   "name": "Gobelin des Fumées",
+   "lines": [
+    [
+     "f2",
+     "f24"
+    ]
+   ],
+   "side": []
+  }
+ ],
+ "bosquet": [
+  {
+   "name": "Bêtes du Fougeron",
+   "lines": [
+    [
+     "g1",
+     "g3",
+     "g4"
+    ],
+    [
+     "g13",
+     "g6",
+     "g7"
+    ],
+    [
+     "g14",
+     "g15",
+     "g16"
+    ]
+   ],
+   "side": [
+    "g2",
+    "g5"
+   ],
+   "mythic": "g8"
+  },
+  {
+   "name": "Gens des Sèves",
+   "lines": [
+    [
+     "g9",
+     "g12",
+     "g10"
+    ],
+    [
+     "g11",
+     "g17",
+     "g18"
+    ],
+    [
+     "g19",
+     "g20",
+     "g21"
+    ]
+   ],
+   "side": []
+  }
+ ],
+ "crypte": [
+  {
+   "name": "Spectres des Caveaux",
+   "lines": [
+    [
+     "k1",
+     "k3",
+     "k13"
+    ],
+    [
+     "k5",
+     "k6",
+     "k14"
+    ],
+    [
+     "k15",
+     "k16",
+     "k7"
+    ]
+   ],
+   "side": [],
+   "mythic": "k17"
+  },
+  {
+   "name": "Les Naufragés",
+   "lines": [
+    [
+     "k2",
+     "k12",
+     "k10"
+    ],
+    [
+     "k11",
+     "k18",
+     "k19"
+    ],
+    [
+     "k20",
+     "k21",
+     "k22"
+    ]
+   ],
+   "side": [
+    "k9"
+   ],
+   "mythic": "k8"
+  },
+  {
+   "name": "Chevalerie Défunte",
+   "lines": [
+    [
+     "k23",
+     "k24",
+     "k4"
+    ],
+    [
+     "k25",
+     "k26",
+     "k27"
+    ],
+    [
+     "k28",
+     "k29",
+     "k30"
+    ]
+   ],
+   "side": []
+  }
+ ],
+ "zenith": [
+  {
+   "name": "Légion Solaire",
+   "lines": [
+    [
+     "z1",
+     "z3",
+     "z4",
+     "z5"
+    ],
+    [
+     "z13",
+     "z7"
+    ],
+    [
+     "z14",
+     "z15"
+    ]
+   ],
+   "side": [
+    "z12",
+    "z10"
+   ],
+   "mythic": "z8"
+  },
+  {
+   "name": "Phénix Célestes",
+   "lines": [
+    [
+     "z2",
+     "z16",
+     "z17"
+    ],
+    [
+     "z18",
+     "z6",
+     "z19"
+    ],
+    [
+     "z20",
+     "z21",
+     "z22"
+    ]
+   ],
+   "side": []
+  },
+  {
+   "name": "Clergé du Plein Jour",
+   "lines": [
+    [
+     "z9",
+     "z23",
+     "z24",
+     "z11"
+    ],
+    [
+     "z25",
+     "z26"
+    ],
+    [
+     "z27",
+     "z28",
+     "z29"
+    ]
+   ],
+   "side": [],
+   "mythic": "z30"
+  }
+ ],
+ "divin": [
+  {
+   "name": "Arbitres du Seuil",
+   "lines": [
+    [
+     "d1",
+     "d2",
+     "d3"
+    ],
+    [
+     "d4",
+     "d5",
+     "d6"
+    ]
+   ]
+  },
+  {
+   "name": "Chœur Miroir",
+   "lines": [
+    [
+     "d7",
+     "d8",
+     "d9"
+    ],
+    [
+     "d10",
+     "d11",
+     "d12"
+    ]
+   ]
+  },
+  {
+   "name": "Tisseuses du Pont",
+   "lines": [
+    [
+     "d13",
+     "d14",
+     "d15"
+    ],
+    [
+     "d16",
+     "d17",
+     "d18"
+    ]
+   ]
+  }
+ ]
+}

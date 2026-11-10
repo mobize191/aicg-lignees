@@ -1,2 +1,7 @@
+node_modules/
+/tmp/
+*.log
+*.bak
+dist.reference.html
 campagne/
 campagne-wai/
