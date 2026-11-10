@@ -51,7 +51,8 @@ Preuve : la section mécanique de l'écran décrit encore « les cartes des deux
 
 Ordre d'exécution : T-FIX-1, T-FIX-2, T-FIX-3. T-ZONES-1 reste en draft : bloqué sur un design d'écran à écrire avec le designer. Un ticket = une préoccupation = un commit. Chaque ticket se prouve par ses commandes.
 
-### T-FIX-1. Le switch d'images vit dans src/, chaque build le régénère
+### T-FIX-1. [FAIT — voir docs/rapport-fix-1.md, VERDICT: PASS]
+ Le switch d'images vit dans src/, chaque build le régénère
 
 Problème : C1. Le bouton 🖼️ (switch d'images v0.47.2) et tout son code (`ART_MANIFESTS`, `artSrcKey`, `switchArtSrc`) n'existent que dans `dist.html` : le prochain rebuild les effacera.
 
@@ -67,7 +68,8 @@ Critères (commandes qui prouvent) :
 
 Interdits : ne pas modifier le comportement du switch d'images (localStorage, manifestes, re-render) ; ne pas éditer `dist.html` à la main ; ne pas restaurer le bouton de thème (décision du designer).
 
-### T-FIX-2. La migration v8 -> v12 branchée dans le flux réel
+### T-FIX-2. [FAIT — voir docs/rapport-fix-2.md, VERDICT: PASS]
+ La migration v8 -> v12 branchée dans le flux réel
 
 Problème : C2. `migrate()` est du code mort, `restore()` bloque les versions 9 à 12, la sauvegarde ne persiste pas les nouveaux champs.
 
@@ -81,7 +83,8 @@ Critères : `node --test` tout vert (56 + nouveaux) ; le scénario smoke passe s
 
 Interdits : ne pas réécrire les migrations (elles sont bonnes) ; ne pas toucher au format des champs existants ; aucune perte de données d'une v8 réelle (cartes, niveaux, éclats, jetons).
 
-### T-FIX-3. Le glossaire dit la vérité du moteur
+### T-FIX-3. [FAIT — voir docs/rapport-fix-3.md, VERDICT: PASS]
+ Le glossaire dit la vérité du moteur
 
 Problème : C4. L'ordre du tour est décrit sur l'attaque, le moteur trie sur l'agilité.
 
