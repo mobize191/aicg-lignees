@@ -585,8 +585,8 @@
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25,
+     "tours": 1
     },
     "III": {
      "cout": 5,
@@ -616,8 +616,7 @@
     "II": {
      "cout": 4,
      "largeur": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "mult": 1.5
     },
     "III": {
      "cout": 5,

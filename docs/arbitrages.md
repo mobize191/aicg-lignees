@@ -10,6 +10,7 @@
 - **Affectation des fondues aux crans** (règle 3) : la largeur native décide, le palier règle les litiges. f1/f2/f14 (C) et f3/f24 (UC) sur la Lame I-II ; f4/f8/f11 (R) au cran II ; f6 Éruption (UR, zone) au cran III ; f17 Tissage Ensorcelé (UR étroit, 6✦ ×2) monte au cran IV de Mélodie envoûtante (précédent e27) ; f16 Filet de Suie au cran II de l'Étreinte (2 ennemis) ; f7 Onguent de Suie greffe le cran I d'Onde Consacrée ; f9 Peau de Lave au cran I de la Barrière (1 allié), f10 Cendre Protectrice au cran II (2 alliés) ; f15/f19/f20 sur les crans I/II/III de Colonne de Feu.
 - **Migration v13** (EXI-T-4) : les sorts connus d'un biome nouvellement trié se re-mappent sur les crans de fusion (mécanisme v10 réutilisé, générique par biome) ; les biomes non triés gardent leur chemin legacy (testé sur le Bosquet).
 - Preuve : 75/75 tests (5 neufs : tri, uniques décision 3, cast du cran, migration v13, allowlist), smoke 164 checks, digest `7dfab0a2…` **inchangé** (couche data et sauvegarde, aucune maths de combat).
+- **Suivi (T2.1-b, même date)** : les crans que la Forge remplit ne sont plus marqués vides. Étreinte des Profondeurs II reprend l'échelle 14.3 (25 % × 1 tour, 2 ennemis, Filet de Suie f16) et Barrière de Corail II aussi (×1.5, 2 alliés, Cendre Protectrice f10). Un test interdit désormais toute fusion vers un cran vide ou absent (EXI-P2-3) ; les entrées d'école sans crans restent tolérées (recâblage Phase 3, noté).
 
 ## 2026-11-10 : ACTÉ — le rôle attaque/support sort de l'affichage (T0.3 du grand chantier)
 

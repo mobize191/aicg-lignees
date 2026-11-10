@@ -194,3 +194,29 @@ test('un monstre de la Forge caste son cran de fusion : Colonne de Feu III (T2.1
   assert.equal(appel.cout, 4);
   assert.equal(appel.largeur, 2, '2 renforts au cran II');
 });
+
+// ---------- T2.1-b : le tri ne fond jamais vers un cran vide ----------
+test('une fusion ne pointe jamais vers un cran vide ou absent (T2.1-b, EXI-P2-3)', () => {
+  const E = loadEngine();
+  const ecole = new Map(E.DATA.grimoire.ecole.map((s) => [s.id, s]));
+  const entrees = new Set(E.DATA.grimoire.entrees.map((s) => s.id));
+  const uniques = new Set(E.DATA.grimoire.uniques.map((s) => s.id));
+  for (const [biome, b] of Object.entries(E.DATA['fusion-map'])) {
+    if (!b.trie) continue;
+    for (const [id, entry] of Object.entries(b.signatures)) {
+      if (entry.unique) {
+        assert.ok(uniques.has(entry.unique), `l'unique ${entry.unique} de ${id} existe`);
+        continue;
+      }
+      assert.ok(ecole.has(entry.fusion) || entrees.has(entry.fusion), `le sort ${entry.fusion} de ${id} existe`);
+      // les entrées d'école attendent leur recâblage crans par crans (Phase 3, noté) : tolérées
+      if (entrees.has(entry.fusion)) continue;
+      const cran = ecole.get(entry.fusion).crans[entry.cran];
+      assert.ok(cran, `le cran ${entry.cran} de ${entry.fusion} (${id}) existe`);
+      assert.ok(!cran.vide, `le cran ${entry.cran} de ${entry.fusion} (${id}) n'est pas vide`);
+    }
+  }
+  // les crans remplis par la Forge reprennent l'échelle des taux (14.3)
+  assert.equal(E.cranOf('etreinte-des-profondeurs', 'II').taux, 0.25, 'Filet de Suie remplit l\u2019Étreinte II');
+  assert.equal(E.cranOf('carapace-de-corail', 'II').mult, 1.5, 'Cendre Protectrice remplit la Barrière II');
+});
