@@ -921,7 +921,7 @@ function evolveInstance(iid, targetId = null) {
   if (!isEveil) spendGems(tier, elt, n);
   const waitBonus = Math.round((inst.lvl - 10) * 5) / 10;
   inst.asc = Math.round((inst.asc + waitBonus) * 10) / 10;
-  const oldSpells = (cur.spells ?? []).map((sp) => ({ ...sp }));
+  const oldSpells = unknownSpellsOf((cur.spells ?? []).map((sp) => ({ ...sp })), byId(nextId)?.spells, inst.acc);
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   const prevId = inst.id;
   const eveil = eveilOf(prevId, nextId);
@@ -3751,7 +3751,14 @@ function renderCombat(root, opts = {}) {
     const base = withShards(byId(inst.id));
     const ascM = 1 + (inst.asc ?? 0) / 100;
     // retour terrain : les sorts h\u00e9rit\u00e9s remapp\u00e9s ({sort, cran}) se r\u00e9solvent en fiches compl\u00e8tes
-    const instSpells = [...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean);
+    // correctif terrain : la fusion acc + sorts de la forme est dédoublonnée (clé = nom, sinon id + cran)
+    const spellKeys = new Set();
+    const instSpells = [];
+    for (const sp of [...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean)) {
+      const k = spellKeyOf(sp);
+      if (k) { if (spellKeys.has(k)) continue; spellKeys.add(k); }
+      instSpells.push(sp);
+    }
     return {
       ...base,
       level: inst.lvl,

@@ -323,6 +323,22 @@ function resolveSpellEntry(sp) {
     ...(larg != null ? { largeur: larg } : {}),
   };
 }
+// cle d'unicite d'un sort pour dédoublonner : nom résolu, sinon id de sort + cran
+function spellKeyOf(sp) {
+  if (!sp) return null;
+  if (typeof sp.name === 'string') return 'n:' + sp.name;
+  if (typeof sp.sort === 'string') return 's:' + sp.sort + ':' + (sp.cran ?? '');
+  return null;
+}
+
+// correctif terrain : on ne cumule dans acc que les sorts inconnus de la nouvelle forme
+// (et pas déjà présents dans acc) — sinon la fusion acc + sorts de la forme ferait des doublons
+function unknownSpellsOf(oldSpells, newFormSpells, acc) {
+  const known = new Set((newFormSpells ?? []).map(spellKeyOf).filter(Boolean));
+  for (const sp of acc ?? []) { const k = spellKeyOf(sp); if (k) known.add(k); }
+  return (oldSpells ?? []).filter((sp) => { const k = spellKeyOf(sp); return k != null && !known.has(k); });
+}
+
 function largeurCibles(ligne, largeur, choix = null) {
   const n = (largeur === 'equipe' || largeur === 'equipe-renforcee') ? ligne.length : Number(largeur) || 1;
   const vivantes = ligne.filter((u) => u.hp > 0);

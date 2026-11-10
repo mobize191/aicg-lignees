@@ -60,7 +60,7 @@ function applyTreeEveil(inst, eveil) {
   if (!to) throw new Error(`éveil vers une carte inconnue : ${eveil.vers}`);
   const pct = cranPctOfRace(raceOfCard(to));
   const from = getCard(inst.id) ?? getMonster(inst.id) ?? {};
-  const oldSpells = (from.spells ?? []).map((sp) => ({ ...sp }));
+  const oldSpells = unknownSpellsOf((from.spells ?? []).map((sp) => ({ ...sp })), to.spells, inst.acc);
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   inst.id = eveil.vers;
   inst.voie = eveil.voie;
@@ -79,7 +79,7 @@ function applyRemplace(instances, eveil, targetIid) {
     if (inst.id === eveil.disparait) {
       const cible = instances.find((i) => i.iid === targetIid);
       if (cible) {
-        const pouvoirs = [...(inst.acc ?? []), ...(getCard(inst.id)?.spells ?? []).map((s) => ({ ...s }))];
+        const pouvoirs = unknownSpellsOf([...(inst.acc ?? []), ...(getCard(inst.id)?.spells ?? []).map((s) => ({ ...s }))], getCard(cible.id)?.spells, cible.acc);
         cible.acc = [...(cible.acc ?? []), ...pouvoirs];
       }
       retires.push(inst.iid);
