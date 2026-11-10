@@ -67,10 +67,39 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 1. **Checkpoint final** : WAI v17 vs NoobAI-XL vs autre finetune — test aveugle (5 cartes témoins + 1 fond).
 2. **Tier de bascule full body** (R ? SR seulement ?).
 3. **Liste des nommées** qui méritent un mini-LoRA ; validation de la méthode IPAdapter.
-4. **Tableau genre + espèce des 29 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data).
+4. **Tableau genre + espèce des ~46 nommées** à remplir (avec `tools/species-map.json` à créer depuis les data) : 29 monstres (série 1) + 7 têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa) + 7 graines dormantes (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) + les nouvelles familles v3 (Vesperine, Gadianton, Aurorine) — voir §10.
 5. **Vidéos FX** : alimentées par les arts v1 ou régénérées en v2 ?
 6. **Sort des 231 arts DreamShaper XL** : repli ou archivage de la campagne v1.
 7. Déco : vidéo vs parallaxe par écran ; WAN 5B vs 14B ; économie de la Boutique ; intérieur des Terres Sauvages (raccord donjons/errance) ; qui est le héros de l'errance (avatar joueur ou carte de l'équipe).
+
+## 10. Alignement sur les arbres v3 (comparaison du 10/11/2026)
+
+Comparaison entre cette charte, `docs/design/familles-races-v3.md`, `docs/design/arbres-evolution.md` et les data (`cards.json`, `monsters.json`, `families.json`). Constat : **la charte datait d'avant les nouvelles familles ; le périmètre de la campagne est à revoir à la hausse.**
+
+### Ce que les arbres v3 ajoutent
+
+- **4 nouvelles familles humaines actées, déjà dans `data/families.json` et `cards.json`** : Crépuscule (q1→q6, sommet **Vesperine, Reine de la Nuit**), Vol (t1→t6, sommet **Gadianton, Chef des Brigands**), Zèle (u1→u6, sommet **Aurorine, Lance de l'Aube**), École des Invocations (v1→v6, sommet **Archimage de l'Appel**, sans nom propre). Aucune n'a d'art ni de prompt à ce jour.
+- Les **7 graines dormantes** b1-b7 (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) sont des nommées à part entière : une référence d'art chacune (elles sont les graines des 2es voies des familles compagnons, cf. doc v3).
+- La **série 1 (34 prompts) ne couvre que les 29 nommées de monstres + 5 fonds** : ni les têtes de familles compagnons (Kenji, Kira, Alix, Léna, Argus, Solen, Maïa), ni Macha, Ysolde, Pontos, Justine, Célestin, Aurorine, ni les nouvelles familles. Le compte réel de références nommées à couvrir ≈ **46** (29 monstres + 7 compagnons + 7 graines + Vesperine, Gadianton, Aurorine).
+
+### Incohérence à trancher : Aurorine en double
+
+- `z15` "Aurorine, Lance de l'Aube" (Zénith, Assassin, Légion Solaire) et `u6` "Aurorine, Lance de l'Aube" (famille Zèle, Prêtre) : **même nom, même titre, deux cartes différentes** (classe et donjon distincts).
+- La règle de cohérence "une nommée = un même personnage sur toute sa lignée" ne peut pas s'appliquer à deux personnages différents du même nom : soit fusionner les entrées d'arbre, soit renommer (avis charte : **renommer l'une des deux**, l'identité visuelle serait sinon ambiguë pour le joueur).
+- À consigner dans `docs/arbitrages.md` avant la campagne d'arts compagnons.
+
+### L sans prénom : générique ou futur nommé ?
+
+Héraut du Zénith (z7), Gardien des Foyers (f12), Patriarche du Bosquet (g7), Archiliche des Caveaux (k7), Grande Prêtresse de l'Ombre (q5), Archimage de l'Appel (v6) portent un titre sans nom propre. Deux traitements possibles, à trancher :
+- **Générique libre** (règle "génériques" : images toutes différentes, aucune cohérence exigée) — recommandé si aucun nom n'est prévu ;
+- **Futur nommé** (art de référence verrouillé dès maintenant, à renommer plus tard) — coûteux, à réserver aux sommets emblématiques.
+En l'état, la série 1 les traite comme des références verrouillées (ex. `heraut-zenith`, `archiliche`) : garder ce statut pour eux, **mais l'arbitrage doit être explicite** dans `arbitrages.md`.
+
+### Conséquences pour la campagne
+
+1. Le périmètre passe de "231 arts + 29 références" à **231+24 arts (nouvelles familles) et ~46 références** : `tools/build-prompts.mjs` doit être relancé après ajout des q/t/u/v et re-extraction du catalogue.
+2. `tools/species-map.json` doit couvrir les nouvelles familles dès sa création : Crépuscule/Vol/Zèle/Appel = **humaines** (tags `human` + tenue par univers), sauf décision contraire ; Vesperine et Gadianton reçoivent un ADN complet comme les autres nommées.
+3. Le genre des nouvelles nommées (Vesperine, Gadianton) et des têtes de familles compagnons entre dans le tableau genre/espèce (~46 entrées) : viser ~50/50 sur l'ensemble, en comptant la série 1 existante (déjà plutôt féminine : Méliane, Thalassa, Zikka, Calcine, Ombeline, La Mort, Ysolde, Jeanne, Apolline, Pyrrha, Écho, Ananké, Kairos, Mycola, Adriel, Vesna vs Léviathan, Titan, Griknir, Seigneur des Cendres, Vulcain, Archiliche, Ahab, Astre Capiteux, Héraut, Fjalar, Célestin, Patriarche, Gardien des Foyers, Pontos) — **compagnons et graines doivent pencher masculin pour rééquilibrer** (ex. Kenji, Argus, Solen, Roc, Onyx ; à trancher dans le tableau).
 
 ## 9. Impact sur les scripts
 
@@ -78,7 +107,7 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 |---|---|
 | `tools/build-prompts.mjs` | 231 prompts en tags danbooru + cadrage + anti-texte + `character_dna` + `species` obligatoire (échec sans mapping) |
 | `tools/species-map.json` | NOUVEAU : mapping famille/espèce → tags |
-| `tools/serie1-prompts.json` | 29 références + 5 fonds, avec ADN et espèce explicités |
+| `tools/serie1-prompts.json` | 29 références + 5 fonds (monstres) ; à étendre aux ~17 références manquantes (7 compagnons, 7 graines, Vesperine, Gadianton, Aurorine + Macha, Ysolde, Pontos, Justine, Célestin selon priorités), avec ADN et espèce explicités |
 | `tools/comfy-batch.mjs` | hires fix + ADetailer + IPAdapter, checkpoint configurable |
 | `seeds.csv` | registre v2 (seeds v1 obsolètes au changement de checkpoint) + genre par carte |
 | `docs/images/images-conventions.md` | réécriture après validation (ce document devient la référence) |
