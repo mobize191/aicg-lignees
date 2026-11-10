@@ -1,6 +1,6 @@
 # Roadmap — AICG : Lignées
 
-> Dernière mise à jour : 10/11/2026, après les correctifs terrain v1.11-v1.12 : le grand chantier arbres + sorts est TERMINÉ (voir la section dédiée et le journal des arbitrages), la section « Ce qui reste à faire » a été réorganisée en conséquence.
+> Dernière mise à jour : 10/11/2026, après les correctifs terrain v1.11-v1.12 : le grand chantier arbres + sorts est TERMINÉ (voir la section dédiée et le journal des arbitrages), la section « Ce qui reste à faire » a été réorganisée en conséquence. Ajout des chantiers visuels proposés (charte graphique v2, déco/hub-ville, errance top-down).
 
 ## État actuel (v1.12, en ligne)
 
@@ -49,6 +49,16 @@ Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi
 6. **Calibrage digest avec Marc-Olivier** : la baseline `833a6d2c…` **518/3000** (0 exception, 1 marathon) est la mesure de référence, à affiner sur le terrain ; le coût de l'éveil et le rythme d'apprentissage des crans se calibrent au fil des lots de contenu (chaque changement de maths = digest recalibré et documenté dans arbitrages).
 7. **Pistes design ouvertes** (voir `docs/arbitrages.md`) : la zone triangle qui toucherait la ligne avant ET la ligne arrière (PISTE), les entrées d'école sans crans (tolérées, recâblage noté).
 8. **Plus tard (acté)** : méta P-Hub, déclinaisons des raretés basses à partir des arts de référence et de leurs seeds.
+
+## Chantiers visuels — charte v2, déco et errance top-down (PROPOSÉS, 10/11/2026)
+
+Travaillés avec Marc-Olivier le 10/11 en parallèle du chantier combat ; **aucun n'est codé**. Détail complet : `docs/images/charte-graphique-v2.md` (statut PROPOSÉ, à faire entrer dans `docs/arbitrages.md` à la prochaine session design) :
+
+1. **Charte graphique v2 (persos + environnements)** — direction ACTÉE : anime premium type WAI-Illustrious "assainie" (zéro texte, zéro cadre généré, rendu éclairci), cadrage demi-corps par défaut / full body pour les tiers hauts (jamais de plan où le visage domine : tête ≤ ~25-30 % du cadre), netteté du visage par ADetailer + hires fix. Verrous : espèce dérivée des data via `tools/species-map.json` (jamais du nom de la carte, échec explicite sans mapping), genre verrouillé dans l'ADN par nommée (~50/50 par campagne, variantes F/M écartées), cohérence des nommées par référence + IPAdapter (mini-LoRA optionnelle pour les héros majeurs). La campagne v1 DreamShaper XL reste en ligne tant que la v2 n'est pas validée.
+2. **Déco / hub-ville** — tranché : images partout d'abord, puis vidéos (Accueil + Combat seulement) ; 1 fond-monde + key art à générer en style v2 ; voile variable par écran (visible accueil, fort combat) ; mobile = cover + focal-point CSS. Accueil-ville = hub à fond vivant (WAN 2.2 5B ou 2.1 14B), menu latéral droit + défi du jour, transitions animées, personnage de référence interactif par écran, bouton retour partout. Navigation : **Les Terres Sauvages** (Donjons + Errance, gros bouton, pop-up si équipe vide), **La Guilde** (ex-Forge : évolutions + recrutement), page **Personnage** (Équipe + Inventaire en onglets), **Boutique** (acheter/vendre, économie à définir), **Paramètres** en pop-up. Limite d'1 Mo du dist LEVÉE ; la vraie contrainte = fluidité (une vidéo décodée à la fois, pause hors écran, pas de backdrop-filter sur vidéo, `prefers-reduced-motion` → image fixe).
+3. **Errance top-down** — guide technique complet dans `docs/design/errance-topdown.md` (pré-rendu canvas procédural peint une fois, A* + lissage, pilotage inertiel, caméra lerp + look-ahead, rencontres au pas avec grâce, interactions au clic-marche, pièges perf). Plan de génération : **hybride** — décor et ambiances restent procéduraux (seed déterministe, zéro asset), sprites IA pour les objets (~5 objets × 5 univers), héros/PNJ via art de référence v2 → cycle de marche WAN i2v → extraction de frames → sprite sheet. Zone témoin (Marées) avant généralisation. Ouverts : arbres/maisons procédural vs sprites IA, cohérence WAN sur un cycle complet.
+4. **À trancher avant toute génération** : checkpoint final (WAI v17 vs NoobAI-XL, test aveugle de 5 cartes témoins + 1 fond), tier de bascule full body, liste des nommées mini-LoRA, tableau genre/espèce des 29 nommées + `species-map.json`, vidéos FX alimentées en v1 ou v2, sort des 231 arts DreamShaper (repli ou archivage), économie de la Boutique, raccord errance ↔ Les Terres Sauvages, identité du héros d'errance.
+5. **Coordination** : les renommages de menus touchent `ui.js`, partagé avec le chantier combat — le chantier Accueil passe APRÈS la fin du combat v2.
 
 ## Le grand chantier : finir les arbres d'évolution et les sorts (audit du 10/11/2026, TERMINÉ)
 
