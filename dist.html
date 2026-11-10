@@ -2737,10 +2737,6 @@ const DATA = {
    "regen": 2
   },
   "EVO_COST": {
-   "N": [
-    "brut",
-    3
-   ],
    "C": [
     "brut",
     3
@@ -2766,6 +2762,8 @@ const DATA = {
     10
    ]
   },
+  "EVEIL_COST": 1,
+  "PIERRE_DROP_RATE": 0.15,
   "GEM_TIERS": [
    "brut",
    "poli",
@@ -8640,6 +8638,8 @@ const SAVE_VERSION = E.SAVE_VERSION;
 const CURRENT_VERSION = E.CURRENT_VERSION;
 const SAVE_KEY = E.SAVE_KEY;
 const EVO_COST = E.EVO_COST;
+const EVEIL_COST = E.EVEIL_COST;
+const PIERRE_DROP_RATE = E.PIERRE_DROP_RATE;
 const GEM_TIERS = E.GEM_TIERS;
 const GEM_LABEL = E.GEM_LABEL;
 const BOSS_GEM = E.BOSS_GEM;
@@ -10072,7 +10072,11 @@ function evoVoieOf(id, to) {
 }
 
 function evoCostOf(id) {
-  return EVO_COST[byId(id).rarity] ?? null;
+  const c = byId(id);
+  if (!c) return null;
+  // T1.2 : l'eveil d'une naissance (rang N) consomme des pierres d'eveil, pas des eclats
+  if (c.rarity === 'N') return ['pierre', DATA.engine.EVEIL_COST ?? 1];
+  return EVO_COST[c.rarity] ?? null;
 }
 
 // arbres de race (phase 1) : le moteur parcourt trees.json, il ne le connaît pas
@@ -10665,6 +10669,12 @@ function spendGems(tier, element, n) {
   store.gems[tier][element] = have - n;
   return true;
 }
+function pierreCount() {
+  return store.pierres ?? 0;
+}
+function addPierres(n = 1) {
+  store.pierres = pierreCount() + n;
+}
 function grantToken(rar, cat) {
   store.tokens.push({ rar, cat });
 }
@@ -10780,6 +10790,7 @@ const store = {
   dailyLevel: null, 
   defiActive: false, 
   regEclats: 0, 
+  pierres: 0, 
 };
 
 function progOf(dungeonId, diff = 0) {
@@ -10848,6 +10859,7 @@ function snapshot() {
     gems: store.gems,
     tokens: store.tokens.map((t) => ({ ...t })),
     regEclats: store.regEclats,
+    pierres: store.pierres ?? 0,
     fatigue: store.fatigue,
     dropFat: store.dropFat,
     milestones: { ...store.milestones },
@@ -10977,6 +10989,7 @@ function restore(data) {
       }
     }
     store.regEclats = Number.isInteger(data.regEclats) ? Math.max(0, data.regEclats) : 0;
+    store.pierres = Number.isInteger(data.pierres) ? Math.max(0, data.pierres) : 0;
     if (Array.isArray(data.tokens)) {
       for (const t of data.tokens) {
         if (t && typeof t === 'object' && typeof t.kind === 'string') store.tokens.push({ rar: t.rar ?? 'C', kind: t.kind });
@@ -11177,11 +11190,17 @@ function evolveInstance(iid, targetId = null) {
   const cost = evoCostOf(inst.id);
   if (!cost) return { ok: false, reason: 'Coût d’évolution inconnu pour cette rareté.' };
   const [tier, n] = cost;
+  const isEveil = tier === 'pierre';
   const elt = cur.element ?? byId(nextId).element; 
-  if (gemCount(tier, elt) < n) {
+  if (isEveil) {
+    if (pierreCount() < n) {
+      return { ok: false, reason: `Il faut ${n} pierre${n > 1 ? 's' : ''} d’éveil (vous en avez ${pierreCount()}) — les boss des donjons en lâchent rarement, le défi du jour en donne une.` };
+    }
+    store.pierres = pierreCount() - n;
+  } else if (gemCount(tier, elt) < n) {
     return { ok: false, reason: `Il faut ${n} éclat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} d’élément ${elt} (vous en avez ${gemCount(tier, elt)}) — les boss des étages 5 et 10 en lâchent.` };
   }
-  spendGems(tier, elt, n);
+  if (!isEveil) spendGems(tier, elt, n);
   const waitBonus = Math.round((inst.lvl - 10) * 5) / 10;
   inst.asc = Math.round((inst.asc + waitBonus) * 10) / 10;
   const oldSpells = (cur.spells ?? []).map((sp) => ({ ...sp }));
@@ -11893,13 +11912,15 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
       const evolveBtns = instsOf(card.id).filter((inst) => inst.lvl >= 10).map((inst) => {
         const cost = evoCostOf(card.id);
         const [tier, nG] = cost ?? ['?', 0];
+        const isEveil = tier === 'pierre';
         const gain = Math.max(0, Math.round((inst.lvl - 10) * 5) / 10);
         return targets.map((tid) => {
           const tgt = byId(tid);
           const elt = card.element ?? tgt.element; 
-          const have = tier === '?' ? 0 : gemCount(tier, elt);
+          const have = tier === '?' ? 0 : (isEveil ? pierreCount() : gemCount(tier, elt));
           const voie = evoVoieOf(card.id, tid);
-          return `<button type="button" class="btn small ${have >= nG ? 'gold' : ''}" data-evolve-iid="${inst.iid}" data-evolve-to="${tid}">\u00c9voluer l\u2019exemplaire Nv ${inst.lvl} \u2192 ${tgt.name}${voie ? ` (${voie})` : ''} : +${gain} % Ascendance \u00b7 ${nG} \u00e9clats ${GEM_LABEL[tier]} ${elt} (${have}/${nG})</button>`;
+          const costTxt = isEveil ? `${nG} pierre${nG > 1 ? 's' : ''} d\u2019\u00e9veil (${have}/${nG})` : `${nG} \u00e9clats ${GEM_LABEL[tier]} ${elt} (${have}/${nG})`;
+          return `<button type="button" class="btn small ${have >= nG ? 'gold' : ''}" data-evolve-iid="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} l\u2019exemplaire Nv ${inst.lvl} \u2192 ${tgt.name}${voie ? ` (${voie})` : ''} : +${gain} % Ascendance \u00b7 ${costTxt}</button>`;
         }).join('');
       }).join('');
       fusionBlock = `<h4>${multi ? '\u00c9volution \u2014 le choix de la voie' : '\u00c9volution'}</h4>
@@ -13638,10 +13659,11 @@ async function animate(events, ms, gen = null) {
           
           const drawn = drawDailyCommon();
           addGem('brut', drawn.element);
+          addPierres(1);
           grantCards([drawn.id]);
           save();
           updatePtsBadge();
-          rewardLine = `+${pts} ⚡ pts · 📠 +1 éclat brut ${drawn.element} · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
+          rewardLine = `+${pts} ⚡ pts · 📠 +1 éclat brut ${drawn.element} · 💎 +1 pierre d’éveil · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
         } else if (won) {
           
           
@@ -13694,6 +13716,10 @@ async function animate(events, ms, gen = null) {
               rewardLine += ` · 📠 Éclat brut (${e}) !`;
             }
           };
+          if (stage % 5 === 0 && uiRand() < PIERRE_DROP_RATE * tactMult * loot.drop) {
+            addPierres(1);
+            rewardLine += ` · 💎 Pierre d’éveil !`;
+          }
           if (stage === 5) {
             rollGem(BOSS_GEM[store.diff][0]);
             grantBrut(1);
@@ -14013,7 +14039,7 @@ function renderCombat(root, opts = {}) {
   }
   const isBossFloor = store.stage % 5 === 0;
   const runModDef = (!defi && runModById(store.runMod)) || null;
-  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
+  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
   const infoChips = [`<button type="button" class="info-chip" data-info="rules" title="Comment joue une carte ?">ℹ️</button>`]
     .concat(runModDef ? [`<button type="button" class="info-chip" data-info="mod" title="Modificateur du run">🎰 ${runModDef.name}</button>`] : [])
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
@@ -14167,7 +14193,7 @@ function renderDonjons(root) {
       <h3>🌟 Défi du jour</h3>
       ${store.dailyDone === todayKey()
         ? `<p class="muted">Déjà relevé aujourd’hui — le prochain défi arrive demain.</p>`
-        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément.</p>
+        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</p>
       <div class="dungeon-actions"><span class="btn big enter-btn-defi">Combattre le défi du jour</span></div>`}
     </div>
     <div class="dungeon-grid">
@@ -14263,6 +14289,7 @@ function renderForge(root) {
     const card = byId(inst.id);
     const cost = evoCostOf(inst.id);
     const [tier, n] = cost ?? ['?', 0];
+    const isEveil = tier === 'pierre';
     const gainNow = Math.max(0, Math.round((inst.lvl - 10) * 5) / 10);
     const st = statsAt(card, inst.lvl, inst.asc ?? 0);
     const nextNames = targets.map((tid) => {
@@ -14272,18 +14299,18 @@ function renderForge(root) {
     const btns = targets.map((tid) => {
       const next = byId(tid);
       const elt = card.element ?? next.element; 
-      const have = tier === '?' ? 0 : gemCount(tier, elt);
+      const have = tier === '?' ? 0 : (isEveil ? pierreCount() : gemCount(tier, elt));
       const ready = inst.lvl >= 10 && have >= n;
       const voie = evoVoieOf(inst.id, tid);
       return ready
-        ? `<button class="btn small gold" data-evolve="${inst.iid}" data-evolve-to="${tid}">\u00c9voluer \u2192 ${next.name}${voie ? ` (${voie})` : ''} (+${gainNow} % Ascendance)</button>`
-        : `<button class="btn small" disabled>${inst.lvl < 10 ? `Niveau ${inst.lvl}/10 requis \u2014 l\u2019XP vient des donjons` : `${have}/${n} \u00e9clats ${GEM_LABEL[tier]} d\u2019\u00e9l\u00e9ment ${elt}`}</button>`;
+        ? `<button class="btn small gold" data-evolve="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} \u2192 ${next.name}${voie ? ` (${voie})` : ''} (+${gainNow} % Ascendance)</button>`
+        : `<button class="btn small" disabled>${inst.lvl < 10 ? `Niveau ${inst.lvl}/10 requis \u2014 l\u2019XP vient des donjons` : (isEveil ? `${have}/${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${have}/${n} \u00e9clats ${GEM_LABEL[tier]} d\u2019\u00e9l\u00e9ment ${elt}`)}</button>`;
     }).join(' ');
     evoRows.push(`<div class="forge-row">
     <div class="forge-card" data-open="${inst.id}">${cardFront({ ...card, level: inst.lvl, atk: st.atk, hp: st.hp }, { extraClass: hasArt(card) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
     <div class="forge-acts">
       <p class="muted">${card.name} \u2014 <b>Nv ${inst.lvl}/20</b> \u00b7 Ascendance +${inst.asc ?? 0} % de base \u00b7 ATQ ${st.atk} / PV ${st.hp}</p>
-      <p class="muted">\u00c9voluer en <b>${nextNames}</b> : niveau 10 atteint + ${n} \u00e9clat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} dans l\u2019\u00e9l\u00e9ment de la forme choisie \u2014 la nouvelle forme repart niveau 1 et GARDE les sorts accumul\u00e9s.</p>
+      <p class="muted">${isEveil ? `\u00c9veiller` : `\u00c9voluer`} en <b>${nextNames}</b> : niveau 10 atteint + ${isEveil ? `${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${n} \u00e9clat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} dans l\u2019\u00e9l\u00e9ment de la forme choisie`} \u2014 la nouvelle forme repart niveau 1 et GARDE les sorts accumul\u00e9s.</p>
       <p class="muted">Dilemme de l\u2019Ascendance : \u00e9voluer maintenant grave <b>+${gainNow} %</b>${inst.lvl >= 20 ? ' (maximum atteint)' : ` \u00b7 attendre le niveau 20 graverait <b>+5 %</b>`} \u2014 le bonus se CUMULE \u00e0 chaque \u00e9volution.</p>
       ${btns}
     </div>
@@ -14323,6 +14350,8 @@ function renderForge(root) {
     ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : gagnez des cartes (donjons, jetons, autel) et montez-les au niveau 10 en donjon.</p>'}
     <h3>\u00c9clats d\u2019\u00e9volution en r\u00e9serve</h3>
     <p class="muted">${gemList || 'Aucun \u00e9clat pour l\u2019instant : les boss des \u00e9tages 5 et 10 en l\u00e2chent (tier selon la difficult\u00e9), et chaque \u00e9tage interm\u00e9diaire a une chance d\u2019\u00e9clat brut \u2014 fatigue quotidienne par donjon (premier drop garanti, puis 50 %, 25 %, 12,5 %\u2026 plancher 10 %, remise \u00e0 z\u00e9ro chaque nuit).'}</p>
+    <h3>💎 Pierres d’éveil en réserve : ${store.pierres ?? 0}</h3>
+    <p class="muted">La pierre d’éveil réveille une NAISSANCE (rang N) : elle ouvre sa voie (niveau 10 requis) et remplace les éclats pour ce rang et seulement lui. Les boss des donjons en lâchent rarement (${Math.round(PIERRE_DROP_RATE * 100)} % par boss d’étage vaincu), le défi du jour en donne une chaque victoire. Les autres rangs gardent leurs éclats.</p>
     <h3>\u{1F300} Éclats de régression en réserve : ${store.regEclats ?? 0}</h3>
     <p class="muted">L\u2019\u00c9clat de r\u00e9gression ne tombe qu\u2019\u00e0 partir de la difficult\u00e9 DIFFICILE, jamais avant (sauf m\u00e9canismes secrets \u00e0 venir) : 1,2 % par victoire en Difficile, 2,5 % en Cauchemar, 5 % en Enfer. Il ouvrira la r\u00e9gression : depuis un point de blocage, une NOUVELLE carte au palier R d\u2019une race sup\u00e9rieure, qui garde 100 % des sorts et 10 % des stats gagn\u00e9es \u2014 l\u2019ancienne reste. Les premi\u00e8res cibles arrivent avec les nouveaux arbres : la r\u00e9serve se remplit d\u00e8s maintenant.</p>
     <h3>Autel de g\u00e9n\u00e9ration ${'\u2014'} 5 pour 1</h3>
@@ -14401,6 +14430,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.2 : La pierre d’éveil', 'L’ÉVEIL TROUVE SA MONNAIE. Une naissance (rang N) ne paie plus ses éclats pour s’ouvrir : son éveil consomme une PIERRE D’ÉVEIL, hors éléments. Les boss des donjons en lâchent rarement, le défi du jour en offre une chaque victoire, et la Forge affiche la réserve. Les autres rangs gardent leurs éclats ; la voie choisie, l’Ascendance et les sorts accumulés ne changent pas.'],
   ['v1.1 : Le rang Naissance', 'LES NAISSANCES QUITTENT LA COMMUNE. Les 12 naissances raciales (les 4 Novices, les 5 Embryons \u2014 ex-Bestiaux \u2014 et les 3 Enge) passent au rang N, un cran sous la commune : elles n\u2019ont encore rien choisi, on les am\u00e8ne o\u00f9 l\u2019on veut. Le jeton et le d\u00e9fi du jour tirent d\u00e9sormais des naissances, jamais d\u2019autres communes ; les cartes divines (Ange, D\u00e9mon, \u00c9veill\u00e9 du Seuil) restent la porte du camp divin jusqu\u2019\u00e0 l\u2019Esprit Divin. La puissance du rang N est calibr\u00e9e 10 % sous la commune, et le glossaire s\u2019ouvre sur le nouveau rang.'],
   ['v0.47.2 : Source d’images au choix', 'Un bouton 🖼️ dans l’en-tête bascule les illustrations des cartes entre DreamShaper XL (assets.json, par défaut) et WAI-Illustrious v17 (assets-wai.json, campagne comparative), mémorisé entre les visites. Aucun impact sur le moteur.'],
   ['v1.0 : La refonte majeure', 'LE MONOLITHE DEVIENT MODULAIRE. Les donnees vivent desormais dans data/ (cartes, monstres, ecoles, grimoire a crans, arbres de race, zones), le moteur dans src/engine/ en modules purs, et dist.html est regenere par build.mjs. LES ARBRES DE RACE (v17) : crans +10/+20/+30 % en donnees, l\u2019Ange Eveille remplace l\u2019Ange Gardien, communes deleguees (Pousse des Seves, Fidele du Jour). LES SORTS (v2.3) : 8 ecoles, grimoire a crans I-IV, fusion des Marees (30 signatures -> 7 uniques + 23 fondues), fin du verrou de classe. LE MODE RPG : agilite et intelligence, mult sur la stat principale, la zone de 3, l\u2019ordre du tour sur l\u2019agilite, les taux contre les seuils. LES ZONES D\u2019ERRANCE : cadence zone/donjon, recoltes, apprentissage des crans. Sauvegardes migrees de v8 a v12 sans perte.'],
@@ -14552,6 +14582,7 @@ function renderGlossaire(root) {
       <h3>Comment les cartes arrivent (plus de boutique)</h3>
       <ul class="glo-list">
         <li><b>Un début quasi uniquement en communes</b> : le rythme est volontairement lent ; les raretés montent avec les donjons débloqués et les difficultés.</li>
+        <li><b>Pierres d’éveil</b> : l’éveil d’une naissance (rang N) exige 1 pierre d’éveil ; les boss des donjons en lâchent rarement, le défi du jour en donne une. Les autres rangs paient leurs évolutions en éclats.</li>
         <li><b>Jetons de génération</b> : le boss final de chaque donjon en lâche un, 1 par jour et par donjon (rareté selon les donjons bouclés) ; la première victoire finale d’un donjon offre un jeton bonus de son biome.</li>
         <li><b>Naissances raciales</b> : un jeton ne donne QUE la naissance, au hasard — les 4 Novices (humaine), les 5 Embryons (monstre), les 3 Enge (mystique), Ange / Démon / Éveillé du Seuil (divine). Le jeton humain raffiné entre au maillon d’une voie (UC, 15 % R) ; le jeton d’évolution, au palier indiqué. Jamais les vieilles cartes hors architecture ; le tirage reste borné par les déblocages.</li>
         <li><b>Autel 5-pour-1</b> : la chaîne mène à la Légendaire (5 UR = 1 L) ; la M ne passe jamais par l’autel.</li>
@@ -14561,7 +14592,7 @@ function renderGlossaire(root) {
         <li><b>Modificateurs de run (v0.42)</b> : chaque exploration tire un modificateur, montré AVANT d'entrer — 🐗 la Horde (+1 ennemi par vague, butin +20 %), 🕯 le Mana Stérile (régénération de mana −1 pendant chaque combat, points +25 %), 🛡 la Muraille (ennemis +25 % PV, chances d'éclats +50 %), ⚔ la Rage Partagée (ennemis +15 % ATQ, points +40 %). La face rude paie la face compense : accepter le modificateur majore le butin du run. Le refuser est gratuit — le run se joue alors sans modificateur ; seul le relancement du tirage coûte 1 éclat brut. Il tient du premier étage jusqu'à la fin du run (défaite ou donjon bouclé).</li>
         <li><b>La grammaire des sorts (v0.43)</b> : chaque carte connaît ses sorts par couches, du plus universel au plus personnel — un sort COMMUN (Frappe Précise / Premiers Soins, 2✦), un sort DE RACE (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), un sort DE CLASSE (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur) et sa SIGNATURE (le geste unique de la carte, 5✦). Les maillons des familles empilent le commun et les sorts de leur LIGNÉE, tier après tier. Côté soigneurs, le rang du sort décide du soin : plus le sort est cher, plus il soigne. Le Souffle Croisé, lui, n'est pas un sort : c'est l'action d'équipe des attaquants (voir Soins croisés).</li>
         <li><b>L'indice de force (v0.43)</b> : le niveau moyen ne dit pas si une équipe est faite de légendaires ou de communes. L'indice pondère l'ATQ et les PV au niveau courant (le cœur), la rareté (multiplicateur : elle capte la qualité des stats et la profondeur du grimoire) et le nombre de sorts (versatilité). Le seuil conseillé d'un donjon est calculé sur le boss final RÉEL de la difficulté courante : l'indice compare votre équipe à ce qu'elle affrontera.</li>
-        <li><b>Défi du jour</b> : une victoire par jour rapporte +40 ⚡, une commune de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, toujours une naissance raciale) et 1 éclat brut de son élément — la seule source régulière des cartes divines.</li>
+        <li><b>Défi du jour</b> : une victoire par jour rapporte +40 ⚡, une naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil — la seule source régulière des cartes divines.</li>
         <li><b>Mythiques</b> : jamais lâchées par un donjon — elles viendront des événements de héros et des sommets des nouveaux arbres.</li>
       </ul>
     </details>
@@ -14631,7 +14662,7 @@ function renderGlossaire(root) {
       <h3>Défi du jour 🌟</h3>
       <ul class="glo-list">
         <li><b>Une équipe divine par jour</b> : cinq cartes tirées des familles divines, au niveau de votre équipe au premier lancement du jour (figé ensuite, +2 pour leur chef, marqué boss). Pas d’étage, pas de difficulté — un combat, autant de tentatives que vous voulez.</li>
-        <li><b>Récompense</b> : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément.</li>
+        <li><b>Récompense</b> : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</li>
         <li><b>Règles divines</b> : le camp remplace l’élément (ange = Lumière, démon = Ombre) ; une seule carte par famille divine en équipe, trois au maximum ; dès deux cartes divines posées, vos dégâts ET vos soins gagnent +10 %.</li>
         <li><b>Sommets</b> : Kairos, Arbitre du Seuil (étourdissement double), Écho, Voix Miroir (copie des sorts adverses) et Ananké, Tisseuse du Pont (liens chaînés) — les L des trois familles ne tombent qu’ici.</li>
       </ul>
