@@ -1,6 +1,6 @@
 # Règles du jeu : la référence
 
-> Source de vérité : `data/*.json` (toutes les valeurs chiffrées) et ce document (les règles). Les tableaux détaillés vivent dans `docs/tables/` (générés). Tout ce qui est `PISTE` dans `docs/arbitrages.md` n'est PAS joué, c'est du design cible en maquette.
+> Source de vérité : `data/*.json` (toutes les valeurs chiffrées) et ce document (les règles). Les tableaux détaillés vivent dans `docs/tables/` (générés). Tout ce qui est `PISTE` dans `docs/arbitrages.md` n'est PAS joué, c'est du design cible en maquette. Les règles marquées **ACTÉ** sont tranchées et s'imposent aux data et au moteur ; celles du 10/11/2026 (lignes avant/arrière, économie v2, errance, équipement) sont en cours d'implémentation (chantier lignes puis bloc visuel, voir `docs/roadmap.md`).
 
 ## 1. L'identité d'une carte
 
@@ -11,6 +11,7 @@
 - **Caractéristiques (v0.47)** : chaque carte porte ATQ (la stat principale de combat), PV, **AGI** (agilité) et **INT** (intelligence), réparties par profil (`engine.moteur.STAT_RATIOS` : la stat principale domine toujours, le Guerrier est agile, le Mage et le Prêtre sont intelligents, l'Assassin le plus agile).
 - **Mana** : par palier de famille (`engine.FAMILY_MANA` : max 8/11/14/22/30/40, régén 2/3/3/5/6/8) ; **depuis la v0.47, l'intelligence enrichit le mana** : max = palier + 2×INT, recharge = palier + INT/2, bonus plafonnés à +50 % du palier (`MANA_PER_INT`, `MANA_REGEN_PER_INT`, `MANA_CAP_RATIO`) ; monstres 10 max, régén 2 (`MONSTER_MANA`).
 - **Seuils de résistance** : palier de la cible + INT/2 (`SEUIL_PER_INT`) — les effets (poison, brûlure, contrôle...) passent contre ce seuil.
+- **Rôle attaque/support supprimé (ACTÉ 10/11/2026, chantier lignes)** : plus de distinction attaque/support nulle part ; le champ `role` disparaît des data (113 cartes, 153 monstres), du moteur (lignes d'init, vagues ennemies) et de l'UI. Toute carte se place librement à l'avant ou à l'arrière ; son comportement suit sa classe et sa position. Les sorts gardent leur rôle d'école (dégâts, soin, bouclier…) défini dans `data/schools.json`.
 
 ## 2. Lignées et familles
 
@@ -43,7 +44,8 @@
 - **Résolution des sorts hérités (v1.11)** : un sort hérité remappé par le tri (école + cran) se résout en fiche nommée au moment de l'affichage et du lancer (`resolveSpellEntry`) ; crans vides et sorts inconnus filtrés, sauvegardes inchangées.
 - **Fenêtre d'action** : à chaque tour d'une carte, illustration, PV/ATQ/mana, puis des actions **détaillées** (v2.1) : badge de type (Dégâts, Soin, Bouclier… venant du rôle d'école dans `data/schools.json`), coût en mana, ligne méta école · puissance · zone, et le texte du sort ; actions éteintes si mana insuffisant ; puis **ciblage explicite** : liste cliquable + pion surligné sur le plateau + clic direct.
 - **Formation** : 5 cartes max, 3 devant + 2 derrière ou 2 + 3, choisie avant le combat, **figée** pendant le combat (ACTÉ 10/11/2026).
-- **Règles de rang** (ACTÉES) : une carte de l'arrière encaisse 50 % des dégâts tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié tant que l'avant tient (les autres profils frappent à plein). L'avant tombe : la protection saute pour tous. La protection de l'arrière ne couvre **pas** les attaques de zone.
+- **Règles de rang (ACTÉES, Option A, 10/11/2026)** : l'arrière est **ciblable** et encaisse **-50 %** tant qu'un allié tient à l'avant ; un Guerrier ou un Assassin en arrière frappe à moitié tant que l'avant tient (les autres profils frappent à plein) ; **les soins ne sont jamais affectés par la position** (seuls les dégâts). L'avant tombe : la protection saute pour tous. La protection de l'arrière ne couvre **pas** les attaques de zone. Les monstres suivent les mêmes règles de rang.
+- **Sorts croisés retirés (ACTÉ 10/11/2026, second tour)** : le système Souffle/Frappe Croisée (`CROSS` dans `data/engine.json`), défini par rôle, disparaît avec le rôle (lot B du chantier lignes, suppression pure) ; la frappe universelle ⚔ et la résolution des sorts hostils depuis n'importe quelle ligne (v1.12) couvrent l'usage. **PISTE** : des sorts spéciaux déclenchés par des conditions remplies en combat (synergie, position, seuil…) pourront plus tard constituer une nouvelle génération de sorts « croisés ».
 - **Synergies d'équipe** (`data/synergies.json`) : par classe, paliers à 1 et 2 exemplaires (ex : Guerrier → +10 % puis +25 % ATQ d'équipe).
 - **Mots-clés d'élément** (`data/keywords.json`) : brûlure, corrosion, poison, etc. : pourcentage de vie max par tour, contre le seuil de la cible.
 
@@ -51,11 +53,21 @@
 
 - **5 donjons** (`data/dungeons.json`) : Marées, Forge, Bosquet, Crypte, Zénith : 10 étages, boss aux étages 5 et 10, éclats (`shards`) à collectionner.
 - **Zones d'errance** (`data/zones.json`) : rencontres hors donjon, cadence zone.
+- **Errance v2 (ACTÉE 10/11/2026, bloc visuel après le calibrage)** : un **héros dédié** créé pour l'errance (ni une carte de la collection, ni un nommé existant) ; on entre par **Les Terres Sauvages** et l'on choisit sa zone (**départ : la zone de l'eau uniquement**). Une zone porte monstres, PNJ, objets à collecter, un endroit **donjon** (petit bâtiment) et un **hôtel des crans** (enseignements de sorts, prolongement des enseignements de zones actuelles) ; des quêtes pourront y vivre ; on y gagne XP et or. **Un bâtiment donjon par zone** : le vaincre débloque les zones suivantes (eau → feu + deuxième zone d'eau → …) ; pas d'open world complet, des zones reliées débloquées une à une. Moteur top-down : `docs/design/errance-topdown.md` (zone témoin : Marées, puis généralisation).
 - **Difficultés** (`data/difficulties.json`) : Facile/Normal/Difficile... plafonnent les raretés mob/boss et règlent drops et points.
 - **Modificateurs de run** (`data/run-mods.json`) : la Horde, le Mana Stérile, la Muraille... : chaque exploration a son tarif.
 - **Fusion** : les monstres capturés fusionnent en lignées (`data/monster-families.json`) et enseignent des sorts.
 
-## 7. Design cible des maquettes — IMPLÉMENTÉ le 10/11/2026 (UI du combat v2)
+## 7. Économie v2 (ACTÉE 10/11/2026, bloc visuel après le calibrage)
+
+- **L'or entre en jeu** : gagné en errance et en donjon ; les combats d'errance lâchent or, objets, éclats et pierres d'éveil ; l'énergie actuelle (⚡ les points de donjon, `store.points`, 40 par étage modulé par les mods de run) est **convertis en or** au chantier économie.
+- **Boutique** : on y achète des objets contre de l'or (consommables, éclats, équipement).
+- **Marchand de créatures** : vend des créatures contre de l'or ; il **remplace les jetons de génération** (les jetons de la Forge et leur table `JETON_RARITY` disparaissent).
+- **Guilde (ex-Forge)** : évolutions + recrutement de compagnons contre de l'or.
+- **Quêtes quotidiennes** : le défi du jour est **supprimé**, remplacé par des quêtes qui changent chaque jour (ex. vaincre 10 monstres, finir 2 donjons) ; un onglet quêtes vit dans le menu guide ; récompenses possibles : **or, carte N, pierre d'éveil et/ou éclats** (calibrage au chantier économie).
+- **Équipement (ACTÉ, le mix)** : des objets façon vrai RPG mais simplifiés ; chaque personnage porte **1 à 2 slots typés par classe** (épée pour le Guerrier, bâton pour le Mage…), plus des **slots d'équipe** génériques qui s'appliquent à tous ; l'inventaire de la page Personnage et le rayon équipement de la Boutique en dépendent. Types d'objets exacts et prix : calibrage au chantier.
+
+## 8. Design cible des maquettes — IMPLÉMENTÉ le 10/11/2026 (UI du combat v2)
 
 Les maquettes Vibe (errance, combat, fiches, DA) sont le **design cible** ; la page combat et la page fiches sont **implémentées** dans `dist.html` depuis le 10/11/2026 (voir `docs/arbitrages.md`) :
 
