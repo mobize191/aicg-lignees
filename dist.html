@@ -2934,9 +2934,9 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 13,
+  "SAVE_VERSION": 14,
   "SAVE_KEY": "fondations-cards-v1",
-  "CURRENT_VERSION": 13,
+  "CURRENT_VERSION": 14,
   "CROSS": {
    "yield": 0.6,
    "healThreshold": 0.2,
@@ -3670,7 +3670,88 @@ const DATA = {
    }
   },
   "bosquet": {
-   "trie": false
+   "trie": true,
+   "signatures": {
+    "g1": {
+     "fusion": "etreinte-des-profondeurs",
+     "cran": "I"
+    },
+    "g2": {
+     "fusion": "morsure-decume",
+     "cran": "I"
+    },
+    "g3": {
+     "fusion": "morsure-decume",
+     "cran": "II"
+    },
+    "g4": {
+     "fusion": "morsure-decume",
+     "cran": "II"
+    },
+    "g5": {
+     "fusion": "morsure-decume",
+     "cran": "III"
+    },
+    "g6": {
+     "fusion": "morsure-decume",
+     "cran": "III"
+    },
+    "g9": {
+     "fusion": "onde-consacree",
+     "cran": "I"
+    },
+    "g10": {
+     "fusion": "fournaise-invoquee",
+     "cran": "I"
+    },
+    "g11": {
+     "fusion": "carapace-de-corail",
+     "cran": "III"
+    },
+    "g12": {
+     "fusion": "carapace-de-corail",
+     "cran": "I"
+    },
+    "g13": {
+     "fusion": "fournaise-invoquee",
+     "cran": "II"
+    },
+    "g14": {
+     "fusion": "seve-rongeuse",
+     "cran": "I"
+    },
+    "g15": {
+     "fusion": "seve-rongeuse",
+     "cran": "II"
+    },
+    "g17": {
+     "fusion": "onde-consacree",
+     "cran": "III"
+    },
+    "g19": {
+     "fusion": "chant-de-sirene",
+     "cran": "IV"
+    },
+    "g20": {
+     "fusion": "morsure-decume",
+     "cran": "III"
+    },
+    "g7": {
+     "unique": "aube-foliaire"
+    },
+    "g8": {
+     "unique": "racine-monde"
+    },
+    "g16": {
+     "unique": "nuee-de-spores"
+    },
+    "g18": {
+     "unique": "premiere-clarte"
+    },
+    "g21": {
+     "unique": "nuit-des-seves"
+    }
+   }
   },
   "crypte": {
    "trie": false
@@ -4263,8 +4344,8 @@ const DATA = {
      "I": {
       "cout": 3,
       "largeur": 1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.3,
+      "tours": 1
      },
      "II": {
       "cout": 4,
@@ -4427,6 +4508,40 @@ const DATA = {
      "II": {
       "cout": 4,
       "largeur": 2
+     },
+     "III": {
+      "cout": 5,
+      "largeur": 3,
+      "vide": true,
+      "raison": "attend un autre biome ou la zone d’errance"
+     },
+     "IV": {
+      "cout": 6,
+      "largeur": 5,
+      "vide": true,
+      "raison": "attend un autre biome ou la zone d’errance"
+     }
+    }
+   },
+   {
+    "id": "seve-rongeuse",
+    "nom": "Sève Rongeuse",
+    "ecole": "mauvais-oeil",
+    "role": "malus",
+    "effet": "seve",
+    "desc": "La sève rongeuse du Bosquet : la sève se pose et ronge, contre le seuil de la cible.",
+    "crans": {
+     "I": {
+      "cout": 3,
+      "largeur": 1,
+      "taux": 0.25,
+      "tours": 2
+     },
+     "II": {
+      "cout": 4,
+      "largeur": 2,
+      "taux": 0.2,
+      "tours": 2
      },
      "III": {
       "cout": 5,
@@ -4614,6 +4729,100 @@ const DATA = {
      "desc": "la colère enflamme la zone qu’elle frappe"
     },
     "desc": "Le colosse ardent frappe la zone et l’enflamme (brûlure 15 % × 2 tours)."
+   },
+   {
+    "id": "aube-foliaire",
+    "nom": "Aube Foliaire",
+    "carte": "g7",
+    "role": "degats",
+    "cible": "tous les ennemis",
+    "cout": 6,
+    "mult": 2.6,
+    "largeur": 5,
+    "base": "morsure-decume",
+    "cran": "IV",
+    "delta": {
+     "soin": 0.15,
+     "desc": "l’aube traverse la canopée : la lumière rend au lanceur 15 % des dégâts"
+    },
+    "desc": "Le Patriarche du Bosquet lève l’aube foliaire : la lumière frappe tous les ennemis et nourrit son lanceur."
+   },
+   {
+    "id": "racine-monde",
+    "nom": "Racine-Monde",
+    "carte": "g8",
+    "role": "degats",
+    "cible": "tous les ennemis",
+    "cout": 6,
+    "mult": 2.6,
+    "largeur": 5,
+    "taux": 0.15,
+    "tours": 2,
+    "effet": "seve",
+    "base": "morsure-decume",
+    "cran": "IV",
+    "delta": {
+     "seve": 0.15,
+     "tours": 2,
+     "desc": "la racine s’ancre : la sève ronge la ligne entière (15 % × 2 tours)"
+    },
+    "desc": "La racine du monde traverse le champ, frappe tous les ennemis et la sève s’y installe (15 % × 2 tours)."
+   },
+   {
+    "id": "nuee-de-spores",
+    "nom": "Nuée de Spores",
+    "carte": "g16",
+    "role": "malus",
+    "cible": "tous les ennemis",
+    "cout": 6,
+    "largeur": 5,
+    "taux": 0.1,
+    "tours": 3,
+    "effet": "seve",
+    "base": "seve-rongeuse",
+    "cran": "IV",
+    "delta": {
+     "seve": 0.1,
+     "tours": 3,
+     "desc": "la nuée couvre la ligne entière et la sève ronge trois tours"
+    },
+    "desc": "Mycola couvre tous les ennemis de sa nuée : la sève ronge la ligne trois tours (10 % × 3 tours)."
+   },
+   {
+    "id": "premiere-clarte",
+    "nom": "Première Clarté",
+    "carte": "g18",
+    "role": "soin",
+    "cible": "l’équipe",
+    "cout": 6,
+    "base": "onde-consacree",
+    "cran": "III",
+    "delta": {
+     "revive": 0.6,
+     "desc": "la première clarté rend à la lumière l’âme tombée la plus grande (60 % de ses PV)"
+    },
+    "desc": "Adriel lève la première clarté : l’équipe est pansée et l’âme tombée la plus grande revient à la lumière."
+   },
+   {
+    "id": "nuit-des-seves",
+    "nom": "Nuit des Sèves",
+    "carte": "g21",
+    "role": "degats",
+    "cible": "la zone",
+    "cout": 5,
+    "mult": 2.2,
+    "largeur": 3,
+    "taux": 0.15,
+    "tours": 2,
+    "effet": "seve",
+    "base": "morsure-decume",
+    "cran": "III",
+    "delta": {
+     "seve": 0.15,
+     "tours": 2,
+     "desc": "la nuit sème la sève : la zone frappée se met à ronger"
+    },
+    "desc": "Vesna fauche la zone et la sève s’y glisse (15 % × 2 tours)."
    }
   ]
  },
@@ -10602,9 +10811,9 @@ function v11to12(s) {
 }
 // v12 -> v13 (tri des biomes, EXI-T-4) : a chaque biome marque trie, les sorts connus
 // qui portent encore un nom de signature legacy se re-mappent sur les crans de fusion
-// (le mecanisme de la v10, reutilise biome par biome)
-function v12to13(s) {
-  s.version = 13;
+// (le mecanisme de la v10, reutilise biome par biome) ; v13 -> v14 rejoue le meme
+// remap quand un nouveau biome passe trie (le Bosquet au T2.2).
+function triRemap(s) {
   const monsters = DATA.monsters ?? [];
   const bySignature = new Map();
   for (const m of monsters) if (m.soloSpell) bySignature.set(m.soloSpell, m.id);
@@ -10623,7 +10832,15 @@ function v12to13(s) {
   if (Array.isArray(s.grimoire)) s.grimoire = s.grimoire.map(remap);
   return s;
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13 };
+function v12to13(s) {
+  s.version = 13;
+  return triRemap(s);
+}
+function v13to14(s) {
+  s.version = 14;
+  return triRemap(s);
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;
@@ -14796,6 +15013,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.7 : Le tri du Bosquet', 'LE BOSQUET PROFOND FOND SES 21 SIGNATURES EN 16 CRANS D\u2019ÉCOLE ET 5 UNIQUES. La sève rongeuse devient un sort du Mauvais Œil (25/20 % \u00d7 2 tours), les soins des dryades greffent l\u2019entrée Onde Consacrée, la Sève Éveillée rejoint l\u2019Appel (2 renforts sylvestres), et les cartes nommées gardent leur geste : Aube Foliaire, Racine-Monde, Nuée de Spores, Première Clarté, Nuit des Sèves. Les sauvegardes passent en v14 : le Bosquet trié re-mappe ses sorts connus. Le combat ne change pas : le digest reste le même.'],
   ['v1.6 : Le tri de la Forge', 'LE GABARIT DES MARÉES S’ÉTEND À LA FORGE CENDRÉE. Les 24 signatures du biome fondent en 19 crans d’école et 5 uniques : la brûlure devient Colonne de Feu (le Mauvais Œil, taux normalisés 25/20/15 %), les invocations deviennent Fournaise Invoquée (l’Appel, la largeur compte les renforts), et les cartes nommées gardent leur geste sur une base d’école : Nuit de Cendres, Fournaise Éternelle, Linceul de Suie, Fournaise de Calcine, Colère de Vulcain. Les sauvegardes passent en v13 : les sorts connus d’un biome trié se re-mappent sur leurs crans. Le combat ne change pas : le digest reste le même.'],
   ['v1.5 : Le rôle sort de l’affichage', 'LE RÔLE ATTAQUE/SUPPORT DISPARAÎT DE LA FICHE ET DES LIBELLÉS. La grille identité de la fiche garde Classe, Élément et Rareté ; le bloc des sorts croisés parle de gestes (panser, frapper), plus de camps. Le champ moteur reste purement interne : il trie les lignes d’équipe, il ne décrit plus la carte. Aucune mécanique ne change, le combat reste exactement le même (digest inchangé).'],
   ['v1.4 : Le boost vise son camp', 'LE BUG DE CIBLAGE DU SORT DE BOOST EST CORRIGÉ. La fenêtre d’action ne décide plus du camp selon le rôle de la carte : elle lit la fiche du sort. Discipline de Ligne (soi) se pose sur son lanceur, sans liste de cibles ; Ferveur Céleste (1 allié) propose vos cartes ; et le moteur applique un vrai bonus d’ATQ pour la prochaine frappe au lieu de frapper l’ennemi. En mode Auto, le chemin historique ne bouge pas : le combat automatique reste exactement le même (indice de force et digest inchangés).'],
