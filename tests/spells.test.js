@@ -402,3 +402,60 @@ test('un monstre du Zenith caste son cran de fusion : Renvoi Celeste et Hymne (T
   assert.ok(E.cranOf('hymne', 'IV').vide, 'le cran IV de l\u2019Hymne attend son cantique final');
   assert.ok(E.cranOf('renvoi-celeste', 'III').vide, 'le cran III du Renvoi Celeste attend un autre biome');
 });
+
+
+// ---------- T2.5 : le tri des recrues, naissances et solos (lot 2, gabarit des Mar\u00e9es) ----------
+test('tri des recrues : 33 signatures fondues, les cartes cl\u00e9s divines attendent (T2.5, ACC-T)', () => {
+  const E = loadEngine();
+  const recrues = E.DATA['fusion-map'].recrues;
+  assert.ok(recrues.trie, 'le biome recrues est marqu\u00e9 tri\u00e9');
+  const ids = Object.keys(recrues.signatures);
+  assert.equal(ids.length, 33, '12 naissances raciales + 21 solos (5 d\u2019entr\u00e9e + 16 mini-lign\u00e9es)');
+  assert.ok(ids.every((id) => recrues.signatures[id].fusion), 'toutes les recrues fondent, aucune unique : ni L ni M dans le lot');
+  const marqu\u00e9es = E.DATA.cards.filter((c) => c.biome === 'recrues');
+  assert.equal(marqu\u00e9es.length, 33, 'les 33 cartes recrues portent le champ biome');
+  for (const id of ids) assert.ok(E.resolveSignature(id), `signature ${id} r\u00e9solue`);
+  assert.deepEqual(E.resolveSignature('n1'), { sort: 'carapace-de-corail', cran: 'I' }, 'Prise de Garde, la garde couvre 1 alli\u00e9');
+  assert.deepEqual(E.resolveSignature('n5'), { sort: 'morsure-decume', cran: 'I' }, 'Bruissement d\u2019\u00c9cume rejoint la Lame');
+  assert.deepEqual(E.resolveSignature('n11'), { sort: 'seve-rongeuse', cran: 'II' }, 'le Souffle des S\u00e8ves porte \u00e0 2');
+  assert.deepEqual(E.resolveSignature('a40'), { sort: 'morsure-decume', cran: 'II' }, 'la Vol\u00e9e de Bruine couvre 2 ennemis');
+  assert.deepEqual(E.resolveSignature('a44'), { sort: 'chant-de-sirene', cran: 'II' }, 'le Mirage du D\u00e9sert \u00e9gare 2 ennemis');
+  assert.deepEqual(E.resolveSignature('a49'), { sort: 'guet-des-fonds', cran: 'II' }, 'la Ronde \u00c9clair\u00e9e porte la Vigie sur 2 alli\u00e9s');
+  assert.equal(E.resolveSignature('n13'), null, 'l\u2019Ange, carte cl\u00e9 divine, attend les familles divines (T2.6)');
+  assert.equal(E.resolveSignature('n14'), null, 'le D\u00e9mon, carte cl\u00e9 divine, attend les familles divines (T2.6)');
+  assert.equal(E.resolveSignature('n15'), null, 'l\u2019\u00c9veill\u00e9 du Seuil, carte cl\u00e9 divine, attend les familles divines (T2.6)');
+  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+});
+
+test('les fondues des recrues visent les crans I-II remplis ou les entr\u00e9es (T2.5, EXI-P2-3)', () => {
+  const E = loadEngine();
+  const ecole = new Map(E.DATA.grimoire.ecole.map((s) => [s.id, s]));
+  const entrees = new Set(E.DATA.grimoire.entrees.map((s) => s.id));
+  for (const [id, entry] of Object.entries(E.DATA['fusion-map'].recrues.signatures)) {
+    assert.ok(ecole.has(entry.fusion) || entrees.has(entry.fusion), `le sort ${entry.fusion} de ${id} existe`);
+    if (entrees.has(entry.fusion)) continue;
+    assert.ok(['I', 'II'].includes(entry.cran), `${id} vise un cran I-II (le plan 14.5, \u00e9tape 5)`);
+    const cran = ecole.get(entry.fusion).crans[entry.cran];
+    assert.ok(cran && !cran.vide, `le cran ${entry.cran} de ${entry.fusion} (${id}) est rempli`);
+  }
+});
+
+test('une recrue caste son cran de fusion (T2.5, ACC-T)', () => {
+  const E = loadEngine();
+  const cibles = ligne5(E);
+  // n1 Prise de Garde : Barri\u00e8re de Corail I (1 alli\u00e9, \u00d71.7)
+  let res = E.castSpell(E.DATA, 'carapace-de-corail', 'I', { lanceur: lanceur(E), cibles: cibles.map((t) => ({ ...t })), events: [] });
+  assert.equal(res.cout, 3);
+  assert.equal(res.largeur, 1);
+  assert.equal(res.mult, 1.7);
+  // a40 Vol\u00e9e de Bruine : Lame d'\u00c9cume II (2 ennemis)
+  res = E.castSpell(E.DATA, 'morsure-decume', 'II', { lanceur: lanceur(E), cibles: cibles.map((t) => ({ ...t })), events: [] });
+  assert.equal(res.cibles.length, 2);
+  assert.equal(res.mult, 1.8);
+  // n12 Froid du Caveau : \u00c9treinte des Profondeurs I (30 %, 1 ennemi)
+  const events = [];
+  res = E.castSpell(E.DATA, 'etreinte-des-profondeurs', 'I', { lanceur: lanceur(E), cibles: cibles.map((t) => ({ ...t })), events, rng: () => 0 });
+  assert.equal(res.taux, 0.3);
+  assert.equal(res.largeur, 1);
+  assert.ok(events.some((e) => e.type === 'stun'), 'le froid fige sa cible (rng indulgent)');
+});

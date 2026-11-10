@@ -131,7 +131,10 @@ function validate(data, errors) {
   }
   // fusion (EXI-P2-3, EXI-P2-4) : un biome marqué trié couvre 100 % de ses signatures
   for (const [biome, b] of Object.entries(data['fusion-map'] ?? {})) {
-    const sigsBiome = (data.monsters ?? []).filter((m) => m.dungeon === biome).map((m) => m.id);
+    const sigsBiome = [
+      ...(data.monsters ?? []).filter((m) => m.dungeon === biome).map((m) => m.id),
+      ...(data.cards ?? []).filter((c) => c.biome === biome).map((c) => c.id),
+    ];
     if (!b.trie) continue;
     for (const id of sigsBiome) {
       const entry = (b.signatures ?? {})[id];

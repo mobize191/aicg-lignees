@@ -533,5 +533,142 @@
  },
  "divin": {
   "trie": false
+ },
+ "recrues": {
+  "trie": true,
+  "signatures": {
+   "n1": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "n2": {
+    "fusion": "decharge-arcanique",
+    "cran": "I"
+   },
+   "n3": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "n4": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "n5": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "n6": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "n7": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "n8": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "n9": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "n10": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "n11": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "n12": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "I"
+   },
+   "a3": {
+    "fusion": "carapace-de-corail",
+    "cran": "I"
+   },
+   "a4": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "a9": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "s2": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "s3": {
+    "fusion": "oeil-du-malheur",
+    "cran": "I"
+   },
+   "a34": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a35": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "a36": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "a37": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "I"
+   },
+   "a38": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a39": {
+    "fusion": "guet-des-fonds",
+    "cran": "I"
+   },
+   "a40": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "a41": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "a42": {
+    "fusion": "onde-consacree",
+    "cran": "I"
+   },
+   "a43": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "a44": {
+    "fusion": "chant-de-sirene",
+    "cran": "II"
+   },
+   "a45": {
+    "fusion": "frappe-dans-le-dos",
+    "cran": "II"
+   },
+   "a46": {
+    "fusion": "morsure-decume",
+    "cran": "II"
+   },
+   "a47": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "a48": {
+    "fusion": "carapace-de-corail",
+    "cran": "II"
+   },
+   "a49": {
+    "fusion": "guet-des-fonds",
+    "cran": "II"
+   }
+  }
  }
 }

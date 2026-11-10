@@ -328,3 +328,41 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | z29 | - | - |
 | z30 | - | - |
 
+### Donjon recrues
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| n1 | carapace-de-corail | I |
+| n2 | decharge-arcanique | I |
+| n3 | onde-consacree | I |
+| n4 | frappe-dans-le-dos | I |
+| n5 | morsure-decume | I |
+| n6 | colonne-de-feu | I |
+| n7 | seve-rongeuse | I |
+| n8 | morsure-putride | I |
+| n9 | etreinte-des-profondeurs | I |
+| n10 | carapace-de-corail | I |
+| n11 | seve-rongeuse | II |
+| n12 | etreinte-des-profondeurs | I |
+| a3 | carapace-de-corail | I |
+| a4 | colonne-de-feu | I |
+| a9 | morsure-decume | I |
+| s2 | onde-consacree | I |
+| s3 | oeil-du-malheur | I |
+| a34 | morsure-decume | I |
+| a35 | onde-consacree | I |
+| a36 | frappe-dans-le-dos | I |
+| a37 | frappe-dans-le-dos | I |
+| a38 | morsure-decume | I |
+| a39 | guet-des-fonds | I |
+| a40 | morsure-decume | II |
+| a41 | carapace-de-corail | II |
+| a42 | onde-consacree | I |
+| a43 | onde-consacree | II |
+| a44 | chant-de-sirene | II |
+| a45 | frappe-dans-le-dos | II |
+| a46 | morsure-decume | II |
+| a47 | morsure-decume | I |
+| a48 | carapace-de-corail | II |
+| a49 | guet-des-fonds | II |
+

@@ -56,7 +56,7 @@ test('v8 -> v12 : grimoire appris et zones visitées présents, chaîne complèt
   const E = loadEngine();
   const save = JSON.parse(readFileSync('tests/fixtures/save-v8.json', 'utf8'));
   const out = E.migrate(structuredClone(save));
-  assert.equal(out.version, 16);
+  assert.equal(out.version, 17);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.ok(Array.isArray(out.grimoire));
   assert.ok(Array.isArray(out.zonesVisitees));
@@ -71,7 +71,7 @@ test('v12 -> v13 : les sorts connus d\u2019un biome trie se re-mappent, les autr
     grimoire: [{ sort: 'morsure-decume', cran: 'I' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 16);
+  assert.equal(out.version, 17);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'morsure-decume', cran: 'I' }, 'Poing de Cendre fonde au cran I');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'colonne-de-feu', cran: 'III' }, 'la signature de f20 fond vers son cran');
@@ -89,7 +89,7 @@ test('v13 -> v14 : le Bosquet nouvellement tri\u00e9 remappe ses sorts legacy (E
     grimoire: [{ name: 'Ros\u00e9e Radieuse' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 16);
+  assert.equal(out.version, 17);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'seve-rongeuse', cran: 'I' }, 'Spores Vampires fonde au cran I de la S\u00e8ve Rongeuse');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-decume', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'fournaise-invoquee', cran: 'II' }, 'S\u00e8ve \u00c9veill\u00e9e (g13) fonde vers 2 renforts');
@@ -107,7 +107,7 @@ test('v14 -> v15 : la Crypte nouvellement tri\u00e9e remappe ses sorts legacy (E
     grimoire: [{ name: 'Hurlement Froid' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 16);
+  assert.equal(out.version, 17);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'morsure-putride', cran: 'I' }, 'Morsure Putride fonde au cran I de son propre sort d\u2019\u00e9cole');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'seve-rongeuse', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'fournaise-invoquee', cran: 'III' }, 'L\u00e9gion des Caveaux (k16) fonde vers 3 renforts');
@@ -125,7 +125,7 @@ test('v15 -> v16 : le Z\u00e9nith nouvellement tri\u00e9 remappe ses sorts legac
     grimoire: [{ name: 'Hymne du Z\u00e9nith' }],
   };
   const out = E.migrate(s);
-  assert.equal(out.version, 16);
+  assert.equal(out.version, 17);
   assert.deepEqual(out.instances[0].sorts[0], { sort: 'colonne-de-feu', cran: 'III' }, '\u00c9closion Ardente fonde au cran III de la Colonne de Feu');
   assert.deepEqual(out.instances[0].sorts[1], { sort: 'morsure-putride', cran: 'I' }, 'un sort deja remappe reste intact');
   assert.deepEqual(out.instances[0].acc[0], { sort: 'renvoi-celeste', cran: 'I' }, 'Plumage Miroir (z20) fonde vers le renvoi a 1 allie');
@@ -133,4 +133,24 @@ test('v15 -> v16 : le Z\u00e9nith nouvellement tri\u00e9 remappe ses sorts legac
   const s2 = { version: 15, instances: [{ iid: 'i2', id: 'd2', sorts: [{ name: 'Sable Glissant' }] }] };
   const out2 = E.migrate(s2);
   assert.deepEqual(out2.instances[0].sorts[0], { name: 'Sable Glissant' }, 'les divines non tri\u00e9es gardent leur signature legacy');
+});
+
+
+test('v16 -> v17 : les recrues nouvellement tri\u00e9es remappent leurs sorts legacy (EXI-T-4, T2.5)', () => {
+  const E = loadEngine();
+  const s = {
+    version: 16,
+    instances: [{ iid: 'i1', id: 'a3', sorts: [{ name: 'Prise de Garde', cost: 5, mult: 1.85, cat: 'unique' }, { sort: 'renvoi-celeste', cran: 'I' }], acc: [{ name: 'Ronde \u00c9clair\u00e9e' }] }],
+    grimoire: [{ name: 'Carrousel de Lames' }],
+  };
+  const out = E.migrate(s);
+  assert.equal(out.version, 17);
+  assert.deepEqual(out.instances[0].sorts[0], { sort: 'carapace-de-corail', cran: 'I' }, 'Prise de Garde (n1) fonde au cran I du Rempart');
+  assert.deepEqual(out.instances[0].sorts[1], { sort: 'renvoi-celeste', cran: 'I' }, 'un sort deja remappe reste intact');
+  assert.deepEqual(out.instances[0].acc[0], { sort: 'guet-des-fonds', cran: 'II' }, 'Ronde \u00c9clair\u00e9e (a49) fonde vers la Vigie, 2 alli\u00e9s');
+  assert.deepEqual(out.grimoire[0], { sort: 'morsure-decume', cran: 'II' }, 'Carrousel de Lames (a46) fauche 2 ennemis');
+  const s2 = { version: 16, instances: [{ iid: 'i2', id: 'n13', sorts: [{ name: '\u00c9clat d\u2019Aube' }, { name: 'Sable Glissant' }] }] };
+  const out2 = E.migrate(s2);
+  assert.deepEqual(out2.instances[0].sorts[0], { name: '\u00c9clat d\u2019Aube' }, 'les cartes cl\u00e9s divines gardent leur geste legacy (T2.6 dessinera les familles)');
+  assert.deepEqual(out2.instances[0].sorts[1], { name: 'Sable Glissant' }, 'les divines non tri\u00e9es gardent leur signature legacy');
 });

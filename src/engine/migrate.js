@@ -60,16 +60,25 @@ function v11to12(s) {
 // v12 -> v13 (tri des biomes, EXI-T-4) : a chaque biome marque trie, les sorts connus
 // qui portent encore un nom de signature legacy se re-mappent sur les crans de fusion
 // (le mecanisme de la v10, reutilise biome par biome) ; v13 -> v14 rejoue le meme
-// remap quand un nouveau biome passe trie (Bosquet T2.2, Crypte T2.3, Zenith T2.4).
+// remap quand un nouveau biome passe trie (Bosquet T2.2, Crypte T2.3, Zenith T2.4,
+// Recrues T2.5 : les naissances et les solos portent le champ biome).
 function triRemap(s) {
   const monsters = DATA.monsters ?? [];
+  const cards = DATA.cards ?? [];
   const bySignature = new Map();
   for (const m of monsters) if (m.soloSpell) bySignature.set(m.soloSpell, m.id);
+  for (const c of cards) if (c.biome && c.soloSpell) bySignature.set(c.soloSpell, c.id);
+  const ownerBiome = (id) => {
+    const m = monsters.find((x) => x.id === id);
+    if (m) return m.dungeon;
+    const c = cards.find((x) => x.id === id);
+    return c ? c.biome ?? null : null;
+  };
   const remap = (sp) => {
     if (!sp || typeof sp !== 'object' || sp.sort) return sp;
     const nom = sp.nom ?? sp.name ?? null;
     const monstreId = nom ? bySignature.get(nom) : null;
-    const entry = monstreId ? (FUSION_MAP[(monsters.find((m) => m.id === monstreId) ?? {}).dungeon] ?? {}).signatures?.[monstreId] : null;
+    const entry = monstreId ? (FUSION_MAP[ownerBiome(monstreId)] ?? {}).signatures?.[monstreId] : null;
     if (!entry) return sp;
     return entry.unique ? { sort: entry.unique, unique: true } : { sort: entry.fusion, cran: entry.cran };
   };
@@ -98,7 +107,12 @@ function v15to16(s) {
   s.version = 16;
   return triRemap(s);
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16 };
+// v16 -> v17 (T2.5) : les recrues (naissances et solos) passent triees, meme mecanisme.
+function v16to17(s) {
+  s.version = 17;
+  return triRemap(s);
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

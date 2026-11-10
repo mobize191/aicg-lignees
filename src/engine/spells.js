@@ -229,9 +229,10 @@ function castSpell(data, spellId, cran, contexte = {}) {
   return res;
 }
 // la fusion (phase 2) : une signature de monstre se résout en cran ou unique selon fusion-map
-function resolveSignature(monsterId) {
-  const biome = (DATA.monsters ?? []).find((m) => m.id === monsterId)?.dungeon;
-  const entry = FUSION_MAP[biome]?.signatures?.[monsterId];
+function resolveSignature(ownerId) {
+  const mon = (DATA.monsters ?? []).find((m) => m.id === ownerId);
+  const biome = mon ? mon.dungeon : (DATA.cards ?? []).find((c) => c.id === ownerId)?.biome ?? null;
+  const entry = FUSION_MAP[biome]?.signatures?.[ownerId];
   if (!entry) return null;
   return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
 }
