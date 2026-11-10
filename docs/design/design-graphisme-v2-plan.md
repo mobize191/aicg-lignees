@@ -17,12 +17,14 @@
 - Palette, typographie, densité, états des contrôles (normal/actif/éteint), style des listes et boutons, cohérents avec le combat v2 déjà en ligne (`dist.html`).
 - Contraintes : mobile-first, boutons ≥ 32 px, `dist.html` autonome (budget ~550 Ko à surveiller), aucune nouvelle technologie.
 
-### 1.2 Maquettes écran par écran (dans l'ordre du code)
+### 1.2 Maquettes écran par écran (ordre de production ACTÉ 11/11 : menu d'abord, puis les besoins du couloir 1, puis le reste)
 
-1. **Économie v2** : Boutique (rayons potions/éclats/gemmes brutes/équipement, prix affichés), page Quêtes du jour (3 quêtes + bonus de complétion), Guilde (évolutions + rotation de 3 compagnons), marchand de créatures, inventaire de la page Personnage (2 slots personnage + 2 slots d'équipe, stats base + bonus %).
-2. **Accueil / hub-ville** : navigation vers Boutique, Guilde, quêtes, Personnage et Les Terres Sauvages ; c'est la porte de l'errance.
-3. **Errance, zone témoin Marées** : HUD (PV/or/collectables), boutons flottants ⚔️/📦 tactiles, transitions de combat (flash + iris), autels, porte du bâtiment-donjon, hôtel des crans. Le moteur est déjà spécifié : la maquette **habille le contrat** de `errance-topdown.md` (tuiles, interactions, HUD), elle ne le réinvente pas.
-4. **Habillage des nouveautés de la boucle v2** (le couloir 1 code en parallèle, spec `boucle-v2-spec-plan.md`) : écran de départ à 2 cartes, sélecteur de marche (niveaux 1 → 25, bandes de rareté), action Objet et compteurs de potions, toasts de recrue.
+1. **Accueil / hub-ville (le nouveau menu)** : navigation vers Boutique, Guilde, quêtes, Personnage et Les Terres Sauvages ; c'est la porte de l'errance et la colonne vertébrale du redesign.
+2. **Habillage des nouveautés de la boucle v2** (le couloir 1 code les lots 3-4, spec `boucle-v2-spec-plan.md`) : écran de départ à 2 cartes, sélecteur de marche (niveaux 1 → 25, bandes de rareté), écran Récompenses, action Objet et compteurs de potions, page Inventaire, toasts de recrue. À produire juste après le menu : le couloir 1 en a besoin le plus tôt, et la charte évite de relooker deux fois.
+3. **Économie v2** : Boutique (rayons potions/éclats/gemmes brutes/équipement, prix affichés), page Quêtes du jour (3 quêtes + bonus de complétion), Guilde (évolutions + rotation de 3 compagnons), marchand de créatures, vue équipement de la Boutique.
+4. **Errance, zone témoin Marées** : HUD (PV/or/collectables), boutons flottants ⚔️/📦 tactiles, transitions de combat (flash + iris), autels, porte du bâtiment-donjon, hôtel des crans. Le moteur est déjà spécifié : la maquette **habille le contrat** de `errance-topdown.md` (tuiles, interactions, HUD), elle ne le réinvente pas.
+
+L'ordre de **codage** du couloir 1 reste celui de la roadmap point 9 (économie v2 → hub → errance) ; seul l'ordre de production des maquettes change.
 
 ### 1.3 Arts et DA
 

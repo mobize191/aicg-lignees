@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — ordre de production des maquettes : charte puis menu/hub d'abord (retour de Marc-Olivier)
+
+`docs/design/design-graphisme-v2-plan.md` §1.2 réordonné : (1) charte graphique v2 transverse, (2) **Accueil/hub-ville, le nouveau menu** (colonne vertébrale du redesign), (3) habillage des nouveautés boucle v2 (départ 2 cartes, sélecteur de marche, Récompenses, Objet, Inventaire, toasts — le couloir 1 en a besoin dès les lots 3-4, et la charte évite de relooker deux fois), (4) économie v2, (5) errance Marées. L'ordre de codage du couloir 1 ne change pas (roadmap point 9).
+
 ## 2026-11-11 : ACTÉ — écran de Récompenses après chaque combat, inventaire minimal au lot 4, errance après la boucle v2 (retour de Marc-Olivier)
 
 1. **Écran « Récompenses » après chaque combat** : or gagné, XP, drops (matériaux, pièces) aux couleurs de rareté, carte recrue le cas échéant ; chaque élément est cliquable, bouton « Tout ramasser » pour reprendre le donjon. Aucun drop invisible.
