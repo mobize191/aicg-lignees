@@ -532,7 +532,98 @@
   }
  },
  "divin": {
-  "trie": false
+  "trie": true,
+  "signatures": {
+   "d1": {
+    "fusion": "hurlement",
+    "cran": "I"
+   },
+   "d2": {
+    "fusion": "hurlement",
+    "cran": "II"
+   },
+   "d3": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "IV"
+   },
+   "d4": {
+    "fusion": "hurlement",
+    "cran": "IV"
+   },
+   "d5": {
+    "fusion": "hymne",
+    "cran": "IV"
+   },
+   "d6": {
+    "unique": "arret-du-temps"
+   },
+   "d7": {
+    "fusion": "renvoi-celeste",
+    "cran": "I"
+   },
+   "d8": {
+    "fusion": "hymne",
+    "cran": "I"
+   },
+   "d9": {
+    "fusion": "renvoi-celeste",
+    "cran": "III"
+   },
+   "d10": {
+    "fusion": "hymne",
+    "cran": "II"
+   },
+   "d11": {
+    "fusion": "renvoi-celeste",
+    "cran": "IV"
+   },
+   "d12": {
+    "unique": "refrain-eternel"
+   },
+   "d13": {
+    "fusion": "marque-corrosive",
+    "cran": "I"
+   },
+   "d14": {
+    "fusion": "morsure-putride",
+    "cran": "II"
+   },
+   "d15": {
+    "fusion": "marque-corrosive",
+    "cran": "IV"
+   },
+   "d16": {
+    "fusion": "morsure-putride",
+    "cran": "III"
+   },
+   "d17": {
+    "fusion": "morsure-putride",
+    "cran": "IV"
+   },
+   "d18": {
+    "unique": "destin-tisse"
+   },
+   "n13": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "n14": {
+    "fusion": "morsure-decume",
+    "cran": "I"
+   },
+   "n15": {
+    "fusion": "oeil-du-malheur",
+    "cran": "II"
+   },
+   "p1": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   },
+   "p2": {
+    "fusion": "onde-consacree",
+    "cran": "II"
+   }
+  }
  },
  "recrues": {
   "trie": true,

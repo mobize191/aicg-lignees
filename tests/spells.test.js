@@ -68,7 +68,7 @@ test('fusion des Marées : 30 signatures sur 30 résolues, 7 uniques + 23 fondue
   // un monstre des Marées caste son cran de fusion ; un biome non trié garde sa signature
   assert.deepEqual(E.resolveSignature('e1'), { sort: 'morsure-decume', cran: 'I' });
   assert.deepEqual(E.resolveSignature('e13'), { unique: 'maree-noire' });
-  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.equal(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('fin du verrou de classe : deux profils, même école ouverte, même sort, même effet (ACC-2-5)', () => {
@@ -159,7 +159,7 @@ test('tri de la Forge : 24 signatures resolues, 5 uniques + 19 fondues (T2.1, AC
   assert.deepEqual(E.resolveSignature('f20'), { sort: 'colonne-de-feu', cran: 'III' });
   assert.deepEqual(E.resolveSignature('f23'), { sort: 'fournaise-invoquee', cran: 'II' }, 'Gardiens Invoques, 2 renforts');
   assert.deepEqual(E.resolveSignature('f13'), { unique: 'nuit-de-cendres' }, 'le M garde son unique');
-  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.equal(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('les uniques de la Forge suivent la decision 3 : base d\u2019ecole + cran + delta (T2.1)', () => {
@@ -240,7 +240,7 @@ test('tri du Bosquet : 21 signatures resolues, 5 uniques + 16 fondues (T2.2, ACC
   assert.deepEqual(E.resolveSignature('g17'), { sort: 'onde-consacree', cran: 'III' }, 'Rosee Radieuse greffe l\u2019entree de baume');
   assert.deepEqual(E.resolveSignature('g19'), { sort: 'chant-de-sirene', cran: 'IV' }, 'Ombre Tissee, le controle de masse');
   assert.deepEqual(E.resolveSignature('g16'), { unique: 'nuee-de-spores' }, 'Mycola garde son unique');
-  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.equal(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('les uniques du Bosquet suivent la decision 3 : base d\u2019ecole ou d\u2019entree + cran + delta (T2.2)', () => {
@@ -300,7 +300,7 @@ test('tri de la Crypte : 30 signatures resolues, 8 uniques + 22 fondues (T2.3, A
   assert.deepEqual(E.resolveSignature('k21'), { sort: 'marque-corrosive', cran: 'II' }, 'Noyade Vengeresse remplit le cran II de la corrosion');
   assert.deepEqual(E.resolveSignature('k29'), { sort: 'guet-des-fonds', cran: 'IV' }, 'Serment Rallie, l\u2019equipe renforcee');
   assert.deepEqual(E.resolveSignature('k17'), { unique: 'fauchade-universelle' }, 'la Mort garde sa Fauchade (acte)');
-  assert.deepEqual(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.deepEqual(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('les uniques de la Crypte suivent la decision 3 : base + cran + delta (T2.3)', () => {
@@ -338,8 +338,8 @@ test('un monstre de la Crypte caste son cran de fusion : Morsure Putride I, Hurl
   for (const [sort, cran] of [['marque-corrosive', 'II'], ['fournaise-invoquee', 'III'], ['guet-des-fonds', 'I'], ['guet-des-fonds', 'III'], ['guet-des-fonds', 'IV']]) {
     assert.ok(!E.cranOf(sort, cran).vide, `le cran ${cran} de ${sort} est rempli par la Crypte`);
   }
-  assert.ok(E.cranOf('hurlement', 'IV').vide, 'le cran IV du Hurlement attend un autre biome');
-  assert.ok(E.cranOf('morsure-putride', 'II').vide, 'le cran II de la Morsure Putride attend un autre biome');
+  assert.ok(!E.cranOf('hurlement', 'IV').vide, 'le cran IV du Hurlement est rempli par les divines (T2.6)');
+  assert.ok(!E.cranOf('morsure-putride', 'II').vide, 'le cran II de la Morsure Putride est rempli par les divines (T2.6)');
 });
 
 
@@ -360,7 +360,7 @@ test('tri du Zenith : 30 signatures resolues, 8 uniques + 22 fondues (T2.4, ACC-
   assert.deepEqual(E.resolveSignature('z25'), { sort: 'hymne', cran: 'III' }, 'Hymne du Zenith, la Ferveur ne');
   assert.deepEqual(E.resolveSignature('z6'), { sort: 'morsure-decume', cran: 'IV' }, 'Pluie de Feu, la ligne entiere');
   assert.deepEqual(E.resolveSignature('z30'), { unique: 'prophetie-du-plein-jour' }, 'le M Apolline garde sa Prophetie (acte)');
-  assert.deepEqual(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.deepEqual(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('les uniques du Zenith suivent la decision 3 : base + cran + delta (T2.4)', () => {
@@ -399,8 +399,8 @@ test('un monstre du Zenith caste son cran de fusion : Renvoi Celeste et Hymne (T
   assert.equal(hymne3.largeur, 'equipe');
   assert.equal(hymne3.boost, 0.2);
   assert.equal(hymne3.tenue, 0.15);
-  assert.ok(E.cranOf('hymne', 'IV').vide, 'le cran IV de l\u2019Hymne attend son cantique final');
-  assert.ok(E.cranOf('renvoi-celeste', 'III').vide, 'le cran III du Renvoi Celeste attend un autre biome');
+  assert.ok(!E.cranOf('hymne', 'IV').vide, 'le cran IV de l\u2019Hymne est rempli par les divines (T2.6)');
+  assert.ok(!E.cranOf('renvoi-celeste', 'III').vide, 'le cran III du Renvoi Celeste est rempli par les divines (T2.6)');
 });
 
 
@@ -421,10 +421,10 @@ test('tri des recrues : 33 signatures fondues, les cartes cl\u00e9s divines atte
   assert.deepEqual(E.resolveSignature('a40'), { sort: 'morsure-decume', cran: 'II' }, 'la Vol\u00e9e de Bruine couvre 2 ennemis');
   assert.deepEqual(E.resolveSignature('a44'), { sort: 'chant-de-sirene', cran: 'II' }, 'le Mirage du D\u00e9sert \u00e9gare 2 ennemis');
   assert.deepEqual(E.resolveSignature('a49'), { sort: 'guet-des-fonds', cran: 'II' }, 'la Ronde \u00c9clair\u00e9e porte la Vigie sur 2 alli\u00e9s');
-  assert.equal(E.resolveSignature('n13'), null, 'l\u2019Ange, carte cl\u00e9 divine, attend les familles divines (T2.6)');
-  assert.equal(E.resolveSignature('n14'), null, 'le D\u00e9mon, carte cl\u00e9 divine, attend les familles divines (T2.6)');
-  assert.equal(E.resolveSignature('n15'), null, 'l\u2019\u00c9veill\u00e9 du Seuil, carte cl\u00e9 divine, attend les familles divines (T2.6)');
-  assert.equal(E.resolveSignature('d1'), null, 'les divines attendent leur tri');
+  assert.deepEqual(E.resolveSignature('n13'), { sort: 'onde-consacree', cran: 'II' }, 'la porte Ange est triée avec les divines (T2.6)');
+  assert.deepEqual(E.resolveSignature('n14'), { sort: 'morsure-decume', cran: 'I' }, 'le Démon est trié avec les divines (T2.6)');
+  assert.deepEqual(E.resolveSignature('n15'), { sort: 'oeil-du-malheur', cran: 'II' }, 'l’Éveillé du Seuil est trié avec les divines (T2.6)');
+  assert.equal(E.resolveSignature('x-inconnu'), null, 'id inconnu = chemin legacy');
 });
 
 test('les fondues des recrues visent les crans I-II remplis ou les entr\u00e9es (T2.5, EXI-P2-3)', () => {
@@ -458,4 +458,32 @@ test('une recrue caste son cran de fusion (T2.5, ACC-T)', () => {
   assert.equal(res.taux, 0.3);
   assert.equal(res.largeur, 1);
   assert.ok(events.some((e) => e.type === 'stun'), 'le froid fige sa cible (rng indulgent)');
+});
+
+// ---------- T2.6 : le tri des divines (lot 2, gabarit des Marées) ----------
+test('tri des divines : 23 signatures résolues, biome divin marqué trié (T2.6, ACC-T)', () => {
+  const E = loadEngine();
+  const divin = E.DATA['fusion-map'].divin;
+  assert.ok(divin.trie, 'le biome divin est marqué trié');
+  const sigs = Object.keys(divin.signatures);
+  assert.equal(sigs.length, 23);
+  const uniques = sigs.filter((id) => divin.signatures[id].unique);
+  assert.equal(uniques.length, 3, 'les 3 L divines gardent leur unique (Kairos, Écho, Ananké)');
+  for (const id of sigs) assert.ok(E.resolveSignature(id), `signature ${id} résolue`);
+  assert.deepEqual(E.resolveSignature('d6'), { unique: 'arret-du-temps' });
+  assert.deepEqual(E.resolveSignature('n13'), { sort: 'onde-consacree', cran: 'II' });
+  // aucun cran visé par une fusion n'est vide (anti cran vide)
+  for (const id of sigs) {
+    const e = divin.signatures[id];
+    if (!e.fusion) continue;
+    const def = E.getSchoolSpell(e.fusion);
+    if (!def) continue; // entrée d’école : pas de crans
+    const cran = def.crans[e.cran];
+    assert.ok(cran && !cran.vide, `le cran ${e.cran} de ${e.fusion} (${id}) n'est pas vide`);
+  }
+  // les 3 uniques suivent la décision 3 (base + cran + delta)
+  for (const u of E.DATA.grimoire.uniques.filter((x) => ['d6', 'd12', 'd18'].includes(x.carte))) {
+    assert.ok(u.base && u.cran && u.delta, `unique ${u.id} au format base+cran+delta`);
+    assert.ok(E.getSpellDef(u.base), `base ${u.base} existe`);
+  }
 });

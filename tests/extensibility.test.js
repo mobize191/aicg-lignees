@@ -35,6 +35,9 @@ test('l\u2019école fictive « l\u2019Éclipse » caste sur les quatre largeurs 
   // couverture des signatures d'un biome marque trie (EXI-P2-3). Deplace du zenith au T2.4.
   monsters.push({ id: 'x-eclipse', dungeon: 'divin', name: 'Éclipse du test', rarity: 'C', classe: 'Mage', element: 'Ombre', role: 'attaque', atk: 20, hp: 80, soloSpell: 'Trait d’Éclipse' });
   writeFileSync(`${dir}/monsters.json`, JSON.stringify(monsters, null, 1) + '\n');
+  const fmap = JSON.parse(readFileSync(`${dir}/fusion-map.json`, 'utf8'));
+  fmap.divin.signatures['x-eclipse'] = { fusion: 'trait-declipse', cran: 'I' };
+  writeFileSync(`${dir}/fusion-map.json`, JSON.stringify(fmap, null, 1) + '\n');
 
   const E = loadEngine(dir);
   assert.deepEqual(E.errors, []);

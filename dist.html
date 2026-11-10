@@ -1191,7 +1191,8 @@ const DATA = {
    "soloSpell": "Éclat d’Aube",
    "raciale": true,
    "agi": 5,
-   "int": 4
+   "int": 4,
+   "biome": "divin"
   },
   {
    "id": "n14",
@@ -1206,7 +1207,8 @@ const DATA = {
    "soloSpell": "Trait de Vice",
    "raciale": true,
    "agi": 8,
-   "int": 6
+   "int": 6,
+   "biome": "divin"
   },
   {
    "id": "n15",
@@ -1220,7 +1222,8 @@ const DATA = {
    "soloSpell": "Regard du Seuil",
    "raciale": true,
    "agi": 6,
-   "int": 5
+   "int": 5,
+   "biome": "divin"
   },
   {
    "id": "a1",
@@ -2337,7 +2340,8 @@ const DATA = {
    "raciale": true,
    "voie": "l’éveil du service — l’Ange Éveillé",
    "agi": 6,
-   "int": 5
+   "int": 5,
+   "biome": "divin"
   },
   {
    "id": "p2",
@@ -2358,7 +2362,8 @@ const DATA = {
    "archived": true,
    "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)",
    "agi": 5,
-   "int": 4
+   "int": 4,
+   "biome": "divin"
   },
   {
    "id": "p3",
@@ -2967,9 +2972,9 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 17,
+  "SAVE_VERSION": 18,
   "SAVE_KEY": "fondations-cards-v1",
-  "CURRENT_VERSION": 17,
+  "CURRENT_VERSION": 18,
   "CROSS": {
    "yield": 0.6,
    "healThreshold": 0.2,
@@ -4021,7 +4026,98 @@ const DATA = {
    }
   },
   "divin": {
-   "trie": false
+   "trie": true,
+   "signatures": {
+    "d1": {
+     "fusion": "hurlement",
+     "cran": "I"
+    },
+    "d2": {
+     "fusion": "hurlement",
+     "cran": "II"
+    },
+    "d3": {
+     "fusion": "etreinte-des-profondeurs",
+     "cran": "IV"
+    },
+    "d4": {
+     "fusion": "hurlement",
+     "cran": "IV"
+    },
+    "d5": {
+     "fusion": "hymne",
+     "cran": "IV"
+    },
+    "d6": {
+     "unique": "arret-du-temps"
+    },
+    "d7": {
+     "fusion": "renvoi-celeste",
+     "cran": "I"
+    },
+    "d8": {
+     "fusion": "hymne",
+     "cran": "I"
+    },
+    "d9": {
+     "fusion": "renvoi-celeste",
+     "cran": "III"
+    },
+    "d10": {
+     "fusion": "hymne",
+     "cran": "II"
+    },
+    "d11": {
+     "fusion": "renvoi-celeste",
+     "cran": "IV"
+    },
+    "d12": {
+     "unique": "refrain-eternel"
+    },
+    "d13": {
+     "fusion": "marque-corrosive",
+     "cran": "I"
+    },
+    "d14": {
+     "fusion": "morsure-putride",
+     "cran": "II"
+    },
+    "d15": {
+     "fusion": "marque-corrosive",
+     "cran": "IV"
+    },
+    "d16": {
+     "fusion": "morsure-putride",
+     "cran": "III"
+    },
+    "d17": {
+     "fusion": "morsure-putride",
+     "cran": "IV"
+    },
+    "d18": {
+     "unique": "destin-tisse"
+    },
+    "n13": {
+     "fusion": "onde-consacree",
+     "cran": "II"
+    },
+    "n14": {
+     "fusion": "morsure-decume",
+     "cran": "I"
+    },
+    "n15": {
+     "fusion": "oeil-du-malheur",
+     "cran": "II"
+    },
+    "p1": {
+     "fusion": "onde-consacree",
+     "cran": "II"
+    },
+    "p2": {
+     "fusion": "onde-consacree",
+     "cran": "II"
+    }
+   }
   },
   "recrues": {
    "trie": true,
@@ -4760,8 +4856,8 @@ const DATA = {
      "IV": {
       "cout": 6,
       "largeur": 5,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.15,
+      "tours": 1
      }
     }
    },
@@ -4803,8 +4899,8 @@ const DATA = {
      "I": {
       "cout": 3,
       "largeur": 1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.25,
+      "tours": 2
      },
      "II": {
       "cout": 4,
@@ -4821,8 +4917,8 @@ const DATA = {
      "IV": {
       "cout": 6,
       "largeur": 5,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.1,
+      "tours": 2
      }
     }
    },
@@ -4961,17 +5057,13 @@ const DATA = {
       "cout": 3,
       "largeur": 1,
       "taux": 0.25,
-      "tours": 1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 1
      },
      "II": {
       "cout": 4,
       "largeur": 2,
       "taux": 0.2,
-      "tours": 1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 1
      },
      "III": {
       "cout": 5,
@@ -4983,9 +5075,7 @@ const DATA = {
       "cout": 6,
       "largeur": 5,
       "taux": 0.1,
-      "tours": 1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 1
      }
     }
    },
@@ -5007,25 +5097,19 @@ const DATA = {
       "cout": 4,
       "largeur": 2,
       "taux": 0.2,
-      "tours": 2,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 2
      },
      "III": {
       "cout": 5,
       "largeur": 3,
       "taux": 0.15,
-      "tours": 2,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 2
      },
      "IV": {
       "cout": 6,
       "largeur": 5,
       "taux": 0.1,
-      "tours": 2,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 2
      }
     }
    },
@@ -5052,17 +5136,13 @@ const DATA = {
       "cout": 5,
       "largeur": "equipe",
       "taux": 0.15,
-      "tours": 2,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 2
      },
      "IV": {
       "cout": 6,
       "largeur": "equipe-renforcee",
       "taux": 0.2,
-      "tours": 2,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "tours": 2
      }
     }
    },
@@ -5076,18 +5156,12 @@ const DATA = {
      "I": {
       "cout": 3,
       "largeur": 1,
-      "boost": 0.15,
-      "tenue": 0.1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.25
      },
      "II": {
       "cout": 4,
       "largeur": 2,
-      "boost": 0.2,
-      "tenue": 0.1,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.2
      },
      "III": {
       "cout": 5,
@@ -5098,10 +5172,7 @@ const DATA = {
      "IV": {
       "cout": 6,
       "largeur": "equipe-renforcee",
-      "boost": 0.25,
-      "tenue": 0.15,
-      "vide": true,
-      "raison": "attend un autre biome ou la zone d’errance"
+      "taux": 0.2
      }
     }
    }
@@ -5667,6 +5738,57 @@ const DATA = {
      "desc": "la prophétie embrase la ligne (15 % × 2 tours) et dévoile les faiblesses : les dégâts qu’ils prennent sont amplifiés de 20 % pendant 2 tours"
     },
     "desc": "Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses."
+   },
+   {
+    "id": "arret-du-temps",
+    "nom": "Arrêt du Temps",
+    "carte": "d6",
+    "role": "controle",
+    "cible": "tous les ennemis",
+    "cout": 7,
+    "largeur": 5,
+    "effet": "stun",
+    "taux": 1,
+    "tours": 1,
+    "base": "hurlement",
+    "cran": "IV",
+    "delta": {
+     "stun": 1,
+     "desc": "le temps s’arrête : toute la ligne ennemie est figée 1 tour"
+    },
+    "desc": "Kairos, Arbitre du Seuil : le temps s’arrête sur toute la ligne ennemie."
+   },
+   {
+    "id": "refrain-eternel",
+    "nom": "Refrain Éternel",
+    "carte": "d12",
+    "role": "boost",
+    "cible": "l’équipe",
+    "cout": 6,
+    "largeur": "equipe",
+    "base": "hymne",
+    "cran": "IV",
+    "delta": {
+     "persiste": true,
+     "desc": "le chant ne s’éteint pas tant qu’Écho vit"
+    },
+    "desc": "Écho, Voix Miroir : le refrain du chœur ne s’éteint pas."
+   },
+   {
+    "id": "destin-tisse",
+    "nom": "Destin Tissé",
+    "carte": "d18",
+    "role": "manip",
+    "cible": "l’équipe",
+    "cout": 6,
+    "largeur": "equipe",
+    "base": "renvoi-celeste",
+    "cran": "IV",
+    "delta": {
+     "lien": 0.5,
+     "desc": "tous les alliés sont liés à 50 %"
+    },
+    "desc": "Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %)."
    }
   ]
  },
@@ -11712,7 +11834,12 @@ function v16to17(s) {
   s.version = 17;
   return triRemap(s);
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17 };
+// v17 -> v18 (T2.6) : les divines passent triees, meme mecanisme.
+function v17to18(s) {
+  s.version = 18;
+  return triRemap(s);
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

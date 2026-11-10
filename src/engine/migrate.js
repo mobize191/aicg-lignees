@@ -112,7 +112,12 @@ function v16to17(s) {
   s.version = 17;
   return triRemap(s);
 }
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17 };
+// v17 -> v18 (T2.6) : les divines passent triees, meme mecanisme.
+function v17to18(s) {
+  s.version = 18;
+  return triRemap(s);
+}
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

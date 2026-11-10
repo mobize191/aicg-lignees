@@ -14,7 +14,7 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
   'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance', 'jetonRarityFor',
   'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
-  'getSpellDef', 'getSchoolSpell', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
+  'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
   'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'runZone', 'learnCran', 'isLearned', 'canCastLearned'];
 export function loadEngine(dataDir = 'data') {

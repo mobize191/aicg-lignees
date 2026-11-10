@@ -597,8 +597,8 @@
     "IV": {
      "cout": 6,
      "largeur": 5,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.15,
+     "tours": 1
     }
    }
   },
@@ -640,8 +640,8 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25,
+     "tours": 2
     },
     "II": {
      "cout": 4,
@@ -658,8 +658,8 @@
     "IV": {
      "cout": 6,
      "largeur": 5,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.1,
+     "tours": 2
     }
    }
   },
@@ -798,17 +798,13 @@
      "cout": 3,
      "largeur": 1,
      "taux": 0.25,
-     "tours": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 1
     },
     "II": {
      "cout": 4,
      "largeur": 2,
      "taux": 0.2,
-     "tours": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 1
     },
     "III": {
      "cout": 5,
@@ -820,9 +816,7 @@
      "cout": 6,
      "largeur": 5,
      "taux": 0.1,
-     "tours": 1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 1
     }
    }
   },
@@ -844,25 +838,19 @@
      "cout": 4,
      "largeur": 2,
      "taux": 0.2,
-     "tours": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 2
     },
     "III": {
      "cout": 5,
      "largeur": 3,
      "taux": 0.15,
-     "tours": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 2
     },
     "IV": {
      "cout": 6,
      "largeur": 5,
      "taux": 0.1,
-     "tours": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 2
     }
    }
   },
@@ -889,17 +877,13 @@
      "cout": 5,
      "largeur": "equipe",
      "taux": 0.15,
-     "tours": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 2
     },
     "IV": {
      "cout": 6,
      "largeur": "equipe-renforcee",
      "taux": 0.2,
-     "tours": 2,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "tours": 2
     }
    }
   },
@@ -913,18 +897,12 @@
     "I": {
      "cout": 3,
      "largeur": 1,
-     "boost": 0.15,
-     "tenue": 0.1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.25
     },
     "II": {
      "cout": 4,
      "largeur": 2,
-     "boost": 0.2,
-     "tenue": 0.1,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2
     },
     "III": {
      "cout": 5,
@@ -935,10 +913,7 @@
     "IV": {
      "cout": 6,
      "largeur": "equipe-renforcee",
-     "boost": 0.25,
-     "tenue": 0.15,
-     "vide": true,
-     "raison": "attend un autre biome ou la zone d’errance"
+     "taux": 0.2
     }
    }
   }
@@ -1504,6 +1479,57 @@
     "desc": "la prophétie embrase la ligne (15 % × 2 tours) et dévoile les faiblesses : les dégâts qu’ils prennent sont amplifiés de 20 % pendant 2 tours"
    },
    "desc": "Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses."
+  },
+  {
+   "id": "arret-du-temps",
+   "nom": "Arrêt du Temps",
+   "carte": "d6",
+   "role": "controle",
+   "cible": "tous les ennemis",
+   "cout": 7,
+   "largeur": 5,
+   "effet": "stun",
+   "taux": 1,
+   "tours": 1,
+   "base": "hurlement",
+   "cran": "IV",
+   "delta": {
+    "stun": 1,
+    "desc": "le temps s’arrête : toute la ligne ennemie est figée 1 tour"
+   },
+   "desc": "Kairos, Arbitre du Seuil : le temps s’arrête sur toute la ligne ennemie."
+  },
+  {
+   "id": "refrain-eternel",
+   "nom": "Refrain Éternel",
+   "carte": "d12",
+   "role": "boost",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe",
+   "base": "hymne",
+   "cran": "IV",
+   "delta": {
+    "persiste": true,
+    "desc": "le chant ne s’éteint pas tant qu’Écho vit"
+   },
+   "desc": "Écho, Voix Miroir : le refrain du chœur ne s’éteint pas."
+  },
+  {
+   "id": "destin-tisse",
+   "nom": "Destin Tissé",
+   "carte": "d18",
+   "role": "manip",
+   "cible": "l’équipe",
+   "cout": 6,
+   "largeur": "equipe",
+   "base": "renvoi-celeste",
+   "cran": "IV",
+   "delta": {
+    "lien": 0.5,
+    "desc": "tous les alliés sont liés à 50 %"
+   },
+   "desc": "Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %)."
   }
  ]
 }

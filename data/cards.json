@@ -196,7 +196,8 @@
   "soloSpell": "Éclat d’Aube",
   "raciale": true,
   "agi": 5,
-  "int": 4
+  "int": 4,
+  "biome": "divin"
  },
  {
   "id": "n14",
@@ -211,7 +212,8 @@
   "soloSpell": "Trait de Vice",
   "raciale": true,
   "agi": 8,
-  "int": 6
+  "int": 6,
+  "biome": "divin"
  },
  {
   "id": "n15",
@@ -225,7 +227,8 @@
   "soloSpell": "Regard du Seuil",
   "raciale": true,
   "agi": 6,
-  "int": 5
+  "int": 5,
+  "biome": "divin"
  },
  {
   "id": "a1",
@@ -1342,7 +1345,8 @@
   "raciale": true,
   "voie": "l’éveil du service — l’Ange Éveillé",
   "agi": 6,
-  "int": 5
+  "int": 5,
+  "biome": "divin"
  },
  {
   "id": "p2",
@@ -1363,7 +1367,8 @@
   "archived": true,
   "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)",
   "agi": 5,
-  "int": 4
+  "int": 4,
+  "biome": "divin"
  },
  {
   "id": "p3",

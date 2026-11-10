@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (13), `lignee` (42), `uniques` (33).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (13), `lignee` (42), `uniques` (36).
 
 ## Sorts communs (2)
 
@@ -38,9 +38,9 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | --- | --- | --- | --- | --- | --- |
 | morsure-decume | Lame d’Écume | lame | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 | chant-de-sirene | Mélodie envoûtante | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
-| etreinte-des-profondeurs | Étreinte des Profondeurs | entrave | controle | - | I : 3 / 1 ; taux 30%, 1 tour(s) ; II : 4 / 2 ; taux 25%, 1 tour(s) ; III : 5 / 3 ; taux 20%, 1 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| etreinte-des-profondeurs | Étreinte des Profondeurs | entrave | controle | - | I : 3 / 1 ; taux 30%, 1 tour(s) ; II : 4 / 2 ; taux 25%, 1 tour(s) ; III : 5 / 3 ; taux 20%, 1 tour(s) ; IV : 6 / 5 ; taux 15%, 1 tour(s) |
 | carapace-de-corail | Barrière de Corail | rempart | bouclier | - | I : 3 / 1 ; x1.7 ; II : 4 / 2 ; x1.5 ; III : 5 / equipe ; x1.3 ; IV : 6 / equipe-renforcee ; x1.6 |
-| marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
+| marque-corrosive | Marque Corrosive | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; taux 10%, 2 tour(s) |
 | guet-des-fonds | Vigie des Flots | ferveur | boost | - | I : 3 / 1 ; taux 25% ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; taux 15% ; IV : 6 / equipe-renforcee ; taux 20% |
 | colonne-de-feu | Colonne de Feu | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
 | fournaise-invoquee | Fournaise Invoquée | appel | invocation | - | I : 3 / 1 ; II : 4 / 2 ; III : 5 / 3 ; IV : 6 / 5 ; VIDE : attend un autre biome ou la zone d’errance |
@@ -48,7 +48,7 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | hurlement | Hurlement | entrave | controle | - | I : 3 / 1 ; taux 25%, 1 tour(s) ; II : 4 / 2 ; taux 20%, 1 tour(s) ; III : 5 / 3 ; taux 15%, 1 tour(s) ; IV : 6 / 5 ; taux 10%, 1 tour(s) |
 | morsure-putride | Morsure Putride | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; taux 10%, 2 tour(s) |
 | renvoi-celeste | Renvoi Céleste | rempart | renvoi | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / equipe ; taux 15%, 2 tour(s) ; IV : 6 / equipe-renforcee ; taux 20%, 2 tour(s) |
-| hymne | Hymne | ferveur | boost | - | I : 3 / 1 ; VIDE : attend un autre biome ou la zone d’errance ; II : 4 / 2 ; VIDE : attend un autre biome ou la zone d’errance ; III : 5 / equipe ; IV : 6 / equipe-renforcee ; VIDE : attend un autre biome ou la zone d’errance |
+| hymne | Hymne | ferveur | boost | - | I : 3 / 1 ; taux 25% ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; IV : 6 / equipe-renforcee ; taux 20% |
 
 ## Sorts de lignee (42)
 
@@ -99,7 +99,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
 
-## Sorts uniques (33)
+## Sorts uniques (36)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -136,6 +136,9 @@ Un sort par palier de famille, appris en montant la lignee.
 | cantique-final | Cantique Final | z26 | boost | l’équipe | 6 | - | Célestin entonne le cantique final : l’équipe se dresse, boostée et affermie, tant que l’apôtre chante. |
 | peine-capitale | Peine Capitale | z29 | degats | tous les ennemis | 6 | 2.6 | Justine exécute la peine capitale : la lame frappe tous les ennemis et ignore leurs boucliers. |
 | prophetie-du-plein-jour | Prophétie du Plein Jour | z30 | degats | tous les ennemis | 6 | 2.6 | Apolline proclame la prophétie du plein jour : la lumière embrase tous les ennemis et dévoile leurs faiblesses. |
+| arret-du-temps | Arrêt du Temps | d6 | controle | tous les ennemis | 7 | - | Kairos, Arbitre du Seuil : le temps s’arrête sur toute la ligne ennemie. |
+| refrain-eternel | Refrain Éternel | d12 | boost | l’équipe | 6 | - | Écho, Voix Miroir : le refrain du chœur ne s’éteint pas. |
+| destin-tisse | Destin Tissé | d18 | manip | l’équipe | 6 | - | Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %). |
 
 ## Ecoles (data/schools.json)
 
@@ -327,6 +330,34 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | z26 | - | - |
 | z29 | - | - |
 | z30 | - | - |
+
+### Donjon divin
+
+| monstre | sort appris | cran |
+| --- | --- | --- |
+| d1 | hurlement | I |
+| d2 | hurlement | II |
+| d3 | etreinte-des-profondeurs | IV |
+| d4 | hurlement | IV |
+| d5 | hymne | IV |
+| d6 | - | - |
+| d7 | renvoi-celeste | I |
+| d8 | hymne | I |
+| d9 | renvoi-celeste | III |
+| d10 | hymne | II |
+| d11 | renvoi-celeste | IV |
+| d12 | - | - |
+| d13 | marque-corrosive | I |
+| d14 | morsure-putride | II |
+| d15 | marque-corrosive | IV |
+| d16 | morsure-putride | III |
+| d17 | morsure-putride | IV |
+| d18 | - | - |
+| n13 | onde-consacree | II |
+| n14 | morsure-decume | I |
+| n15 | oeil-du-malheur | II |
+| p1 | onde-consacree | II |
+| p2 | onde-consacree | II |
 
 ### Donjon recrues
 
