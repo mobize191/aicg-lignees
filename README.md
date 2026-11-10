@@ -18,28 +18,25 @@ Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : co
 
 ## Documentation
 
-Le dossier `docs/` contient la documentation de référence du jeu :
+Le dossier `docs/` est organisé par usage : commencer par `docs/00-SOMMAIRE.md` (la carte complète : où trouver quoi, où ranger quoi).
 
-- `docs/spec-design.md` : la spec complète (design v2) : univers, règles, cartes, sorts, combats, économie.
-- `docs/design-arbres.md` : le design détaillé des arbres d'évolution et de sorts (v16).
-- `docs/inventaire-cartes.md` : les 238 cartes, vue d'ensemble par type (naissances, familiales, solos, graines, monstres des donjons, divines) avec voies et signatures.
-- `docs/inventaire-sorts.md` : les 653 entrées de sorts du catalogue : communs, sorts de race et de classe, sorts de lignée des 7 familles, Pouvoirs, coûts et mana par palier.
-- `docs/arbres-evolution.md` : les arbres d'évolution en diagrammes : voies des naissances, 7 familles avec portes et graines, mini-lignées solos, webs des 5 donjons, familles divines.
-- `docs/arbres-sorts.md` : la chronologie d'acquisition : qui apprend quoi, quand ; un sort de lignée par palier, le cumul de l'exemplaire à chaque évolution, et les exceptions.
-- `docs/audit-sorts.md` : l'audit de cohérence des sorts : contrôles passés, constats et recommandations.
-- `docs/refonte-sorts.md` : les notes de la refonte des sorts.
+- `docs/prompt-lancement.md` : le prompt à copier au début de chaque session agent (contexte, règles d'or, chaîne de preuve).
 - `docs/roadmap.md` : l'état du prototype version par version et ce qui reste à faire.
-- `docs/travail-local.md` : les trois prompts de travail local (corrections v0.46, validation IHM par captures, campagne ComfyUI).
-- `docs/validation-ihm.md` : le protocole de validation IHM locale (scénarios S1-S10 avec captures d'écran).
-- `docs/plan-comfyui-images-videos.md` : le plan complet de la campagne d'illustrations et de vidéos (DreamShaper XL + WAN 2.2 5B, 9 tâches avec portes de validation).
-- `docs/images-prompt-serie1.md` : le brief historique de la série 1 (rédigé pour WAI) ; les prompts opérationnels en langage naturel sont dans `tools/serie1-prompts.json`.
-- `docs/images-conventions.md` : la feuille de conventions graphiques du projet (style, palettes, pipelines, règles de retry).
+- `docs/regles-jeu.md` : les règles actées du jeu, du combat aux donjons.
+- `docs/arbitrages.md` : le journal des décisions de design, datées et statuées (ACTÉ / PISTE / PROPOSÉ).
+- `docs/tables/` : les tableaux de référence (cartes, sorts, monstres, monde), générés depuis `data/*.json` par `node tools/gen-tables.mjs` : à relancer puis commiter après chaque évolution des données.
+- `docs/travail-local.md` : les prompts de travail local (corrections, validation IHM par captures, campagne ComfyUI).
+- `docs/validation-ihm.md` : le protocole de validation IHM locale (scénarios avec captures d'écran).
+- `docs/design/` : les designs normatifs (spec complète, arbres v16, refonte des sorts, inventaires du catalogue v3 : 238 cartes, 653 sorts).
+- `docs/images/` : conventions graphiques et plans de campagne d'illustrations.
+- `docs/historique/` : les rapports des chantiers passés (correctifs, phases 0 à 5 de la refonte, vérifications).
 
 ## Tests
 
 ```bash
+node build.mjs && node --test && node smoke-ui.mjs
 node combat-digest.mjs dist.html 3000
-node smoke-ui.mjs
+node tools/gen-tables.mjs   # si data/ a bougé
 ```
 
-Baseline v0.47 : digest `c5ab2af1f56c23f935859e9d9944e8183dafe5788ed48f097dab412107eb0f47`, 534 victoires / 3000 combats (le moteur pas-à-pas v0.46 est strictement équivalent à l'ancien resolveTurn : dormance prouvée par le check 46 i du smoke ; le patch v0.47 ne touche que des libellés).
+Baseline courante (migration d'arbitrages du 10/11/2026 : classe Invocateur retirée, Gardien-Mécanique Guerrier, Entrave ouverte Mage + Occultiste, sorts d'écolage communs renommés) : digest `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa`, 476 victoires / 3000 combats, 0 exception, 0 marathon ; smoke 121 checks verts. La baisse de victoires (534 avant) vient des reclassifications de classe, à surveiller au recalibrage des caractéristiques. Historique des baselines dans `docs/roadmap.md`.

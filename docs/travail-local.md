@@ -62,7 +62,7 @@ S8 — Fiches : ouvrir la fiche d'un pion en combat, FAIRE DÉFILER le contenu j
 S9 — Fin de combat : modale de récompenses, retour donjon, étage suivant proposé.
 S10 — Glossaire : section « Les symboles de l'écran » documentée.
 
-RAPPORT FINAL : rapport-validation.md avec, par scénario, statut OK/KO, captures nommées (S7-tactique-fenetre-mobile.png...), liste EXHAUSTIVE des erreurs console avec contexte, toute anomalie visuelle (coupé, chevauchement, mal aligné, tap sans effet) avec capture, verdict global, et les 3 corrections les plus urgentes.
+RAPPORT FINAL : docs/historique/rapport-validation.md avec, par scénario, statut OK/KO, captures nommées (S7-tactique-fenetre-mobile.png...), liste EXHAUSTIVE des erreurs console avec contexte, toute anomalie visuelle (coupé, chevauchement, mal aligné, tap sans effet) avec capture, verdict global, et les 3 corrections les plus urgentes.
 
 HARNAS EN PLUS (rapide) : node combat-digest.mjs dist.html 3000 (attendu : digest c5ab2af1f56c23f935859e9d9944e8183dafe5788ed48f097dab412107eb0f47, 534 victoires, 0 exception) et node smoke-ui.mjs (attendu : TOUT PASSE, ≥ 121 checks). Si le PROMPT A a été appliqué et que le digest/smoke diffèrent de ces valeurs, utilise les valeurs du README du repo à jour.
 ```
@@ -72,11 +72,11 @@ HARNAS EN PLUS (rapide) : node combat-digest.mjs dist.html 3000 (attendu : diges
 ## PROMPT C — Campagne d'illustrations et vidéos ComfyUI (à copier)
 
 ```text
-Tu travailles sur AICG : Lignées (repo GitHub mobize191/aicg-lignees, clone-le) et tu disposes de ComfyUI sur ce PC avec une GPU. Ta mission : exécuter le plan de campagne d'illustrations complet docs/plan-comfyui-images-videos.md du repo, tâche par tâche, dans l'ordre, en cochant chaque étape. Tous les scripts sont dans tools/ (déjà prêts et testés), les prompts de la série 1 dans tools/serie1-prompts.json.
+Tu travailles sur AICG : Lignées (repo GitHub mobize191/aicg-lignees, clone-le) et tu disposes de ComfyUI sur ce PC avec une GPU. Ta mission : exécuter le plan de campagne d'illustrations complet docs/images/plan-comfyui-images-videos.md du repo, tâche par tâche, dans l'ordre, en cochant chaque étape. Tous les scripts sont dans tools/ (déjà prêts et testés), les prompts de la série 1 dans tools/serie1-prompts.json.
 
 MODÈLE : DreamShaper XL (checkpoint dans ComfyUI/models/checkpoints, passe son nom exact par la variable COMFY_MODEL). Prompts en LANGAGE NATUREL (phrases descriptives), sampler dpmpp_2m_sde + karras, 28 steps, CFG 5-7, génération 832×1216 portrait (fonds 1216×832). Chaque prompt positif se termine par la phrase de style : « Painted in a painterly, semi-realistic fantasy card game illustration style, detailed shading, intricate background, epic fantasy trading card game artwork, rim lighting. » Si tu préfères piloter par le MCP ComfyUI connecté, fais-le pour les réglages image par image ; les batches passent par node tools/comfy-batch.mjs (API http://127.0.0.1:8188).
 
-RÈGLES DE QUALITÉ (feuille de conventions : docs/images-conventions.md) :
+RÈGLES DE QUALITÉ (feuille de conventions : docs/images/images-conventions.md) :
 - Palettes par univers : Marées bleu profond/turquoise/corail, Forge braise/suie/métal rougi, Bosquet vert mousse/spores dorées, Crypte gris-vert/bougies/brume, Zénith or/lumière chaude/ivoire, Divin ivoire/sabliers/miroirs/fils d'or.
 - Tier bas = calme (C/UC poses sobres, pas d'effet), L/M pleine action et aura ; zéro texte dans l'image ; silhouette lisible en vignette 200×280.
 - Cartes NOMMÉES (Kenji, Méliane, Apolline...) : générer la rareté la plus haute en RÉFÉRENCE, faire valider, verrouiller le seed dans seeds.csv, puis décliner. JAMAIS d'auto-retry en boucle : corriger le prompt.
@@ -99,4 +99,4 @@ INTOUCHABLE : dist.html et le moteur. Après chaque intégration : git status di
 
 ## Note
 
-Ces trois prompts sont aussi disponibles dans le repo (docs/travail-local.md). Le modèle d'illustration est DreamShaper XL (décision du 09/11, il remplace WAI-Illustrious v17) ; les briefs et la feuille de conventions sont dans docs/images-conventions.md, le plan de campagne complet dans docs/plan-comfyui-images-videos.md.
+Ces trois prompts sont aussi disponibles dans le repo (docs/travail-local.md). Le modèle d'illustration est DreamShaper XL (décision du 09/11, il remplace WAI-Illustrious v17) ; les briefs et la feuille de conventions sont dans docs/images/images-conventions.md, le plan de campagne complet dans docs/images/plan-comfyui-images-videos.md.
