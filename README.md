@@ -1,6 +1,6 @@
 # AICG : Lignées
 
-Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent du Novice au Légendaire. Prototype v0.47 (le mode Tactique devient un vrai tour de RPG depuis la v0.46 : fenêtre d'action carte par carte, ciblage explicite).
+Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent du Novice au Légendaire. Prototype v0.47.3 (combat v2.1 : rail d'ordre du tour, auto-run en Tactique, actions détaillées, fiche complète ; le mode Tactique est un vrai tour de RPG depuis la v0.46).
 
 **Jouer en ligne : https://mobize191.github.io/aicg-lignées/**
 
@@ -13,7 +13,7 @@ Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : co
 - `dist.html` : le jeu complet, autonome (HTML + JS + CSS, aucune dépendance).
 - `assets.json` : manifeste d'illustrations (data-URI : 231 arts de cartes + 5 fonds de donjons, DreamShaper XL, ~7,8 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne.
 - `combat-digest.mjs` : harnas d'équilibrage (3000 combats simulés, digest SHA256 de dormance).
-- `smoke-ui.mjs` : suite de fumée UI du dist publié (121 checks).
+- `smoke-ui.mjs` : suite de fumée UI du dist publié (158 checks).
 - `tools/` : les scripts de la campagne d'illustrations ComfyUI (extraction du catalogue, génération des prompts, batch API, intégration au manifeste, planches de contrôle).
 
 ## Documentation
@@ -39,4 +39,4 @@ node combat-digest.mjs dist.html 3000
 node tools/gen-tables.mjs   # si data/ a bougé
 ```
 
-Baseline courante (migration d'arbitrages du 10/11/2026 : classe Invocateur retirée, Gardien-Mécanique Guerrier, Entrave ouverte Mage + Occultiste, sorts d'écolage communs renommés) : digest `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa`, 476 victoires / 3000 combats, 0 exception, 0 marathon ; smoke 121 checks verts. La baisse de victoires (534 avant) vient des reclassifications de classe, à surveiller au recalibrage des caractéristiques. Historique des baselines dans `docs/roadmap.md`.
+Baseline courante (migration d'arbitrages du 10/11/2026 : classe Invocateur retirée, Gardien-Mécanique Guerrier, Entrave ouverte Mage + Occultiste, sorts d'écolage communs renommés) : digest `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa`, 476 victoires / 3000 combats, 0 exception, 0 marathon ; smoke 158 checks verts. La baisse de victoires (534 avant) vient des reclassifications de classe, à surveiller au recalibrage des caractéristiques. Historique des baselines dans `docs/roadmap.md`.

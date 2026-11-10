@@ -17,7 +17,7 @@
 - **Palettes par univers** (phrases exactes, aussi dans `build-prompts.mjs`) : Marées `deep blue and turquoise with sea foam swirls and coral accents` ; Forge `ember orange and soot black with glowing red metal and floating embers` ; Bosquet `moss green with golden spores and giant mushrooms` ; Crypte `grey green with candlelight and cold mist` ; Zénith `warm gold and ivory with radiant light` ; Divin `ivory and gold with hourglasses, mirrors and golden threads`.
 - **Règles visuelles** : tier bas = calme (C/UC poses sobres, pas d'effets) ; zéro texte dans l'image ; silhouette lisible en 200×280 ; visage/point focal hors du quart bas (zone du voile de texte) ; nommées = même personne sur toute la ligne (référence la plus haute rareté d'abord, seed verrouillé dans `seeds.csv`, puis déclinaison).
 - **Budgets d'intégration** (via `make-assets.py`) : art 300×420 JPEG ≤ 30 Ko ; fond 960×540 JPEG ≤ 110 Ko ; manifeste `assets.json` cible ≤ 8 Mo ; JSON en base64 **ASCII pur**.
-- **Intouchables** : `dist.html` et le moteur ne sont JAMAIS modifiés par cette campagne. Références de non-régression : digest `c5ab2af1f56c23f935859e9d9944e8183dafe5788ed48f097dab412107eb0f47` (534/3000, 0 exception) et smoke 121 PASS.
+- **Intouchables** : `dist.html` et le moteur ne sont JAMAIS modifiés par cette campagne. Références de non-régression : digest `7dfab0a295eaa1dab1f70e039b782e0ef06285fdd0fdf3e09d65304b966de5aa` (476/3000, 0 exception) et smoke 158 PASS.
 - **Périmètre** : 238 cartes moins 7 archives = 231 arts à produire + 5 fonds + 29 références v3 (`tools/serie1-prompts.json`, intégration différée au contenu v3) + vidéos sorts signature. Les 33 arts actuels (générateur en ligne) restent en place jusqu'à leur remplacement lot par lot.
 - **Vidéos** : WAN 2.2 5B, ~0,8 s (20 frames, 25 fps), boucle fermée, fond compatible voile sombre, **jamais en base64 dans le dist** (stockées dans le repo, chargement = chantier code séparé).
 
@@ -237,7 +237,7 @@ python3 contact-sheet.py out planche-reste.png
 python3 make-assets.py
 git add assets.json tools/seeds.csv 2>/dev/null; git commit -m "assets : naissances, familiales et solos DreamShaper XL" && git push
 ```
-Expected : manifeste final `arts : 231` (hors références v3), `fonds : 5` ; smoke 121 PASS et digest INCHANGÉS (aucune modification du `dist.html` n'a eu lieu, le vérifier : `git status dist.html` doit être propre).
+Expected : manifeste final `arts : 231` (hors références v3), `fonds : 5` ; smoke 158 PASS et digest INCHANGÉS (aucune modification du `dist.html` n'a eu lieu, le vérifier : `git status dist.html` doit être propre).
 
 ### Task 8 : Vidéos de sorts signature (WAN 2.2 5B)
 
@@ -299,8 +299,8 @@ git add tools/seeds.csv && git commit -m "campagne : registre complet des seeds"
 
 ```bash
 git status dist.html            # doit être PROPRE
-node combat-digest.mjs dist.html 3000   # digest c5ab2af1... 534 victoires, 0 exception
-node smoke-ui.mjs                      # TOUT PASSE (121 checks)
+node combat-digest.mjs dist.html 3000   # digest 7dfab0a2... 476 victoires, 0 exception
+node smoke-ui.mjs                      # TOUT PASSE (158 checks)
 ```
 Expected : digest et smoke identiques aux baselines (la campagne ne touche pas au jeu).
 
