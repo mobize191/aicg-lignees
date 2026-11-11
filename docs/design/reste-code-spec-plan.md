@@ -56,7 +56,7 @@ Implémenter dans `src/engine/combat.js` les règles de rang ACTÉES (arbitrages
 
 - Intégrer l'art livré : `tools/out-v2/v3/heros-errance.jpg` (héros dédié ACTÉ : femme cheveux blancs cape noire) + le cycle de marche `tools/out-v2/video/sprites_00002_.mp4` (extraction de frames → sprite sheet, plan hybride du guide).
 - Généraliser l'errance aux 5 zones de `data/zones.json` : `zone-marees`, `zone-forge`, `zone-bosquet`, `zone-crypte`, `zone-zenith` ; le déblocage en chaîne est déjà posé, les monstres/collectables/enseignements par zone existent (LOT 7 fait).
-- Conformité au guide `docs/design/errance-topdown.md` (pilotage inertiel `5, caméra `6, pré-rendu `3, DPR `9, entrées `4/`10) ; la régression smoke B13 doit rester verte.
+- Conformité au guide `docs/design/errance-topdown.md` (pilotage inertiel §5, caméra §6, pré-rendu §3, DPR §9, entrées §4/§10) ; la régression smoke B13 doit rester verte.
 
 ## Lot 7 — craft en ville + page Personnage à onglets
 
