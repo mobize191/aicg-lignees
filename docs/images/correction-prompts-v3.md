@@ -14,6 +14,10 @@
 
 **R1 — Sujet corrigé, jamais depuis le nom.** La phrase-sujet vient UNIQUEMENT de `species-map.json` + `character_dna` : espèce (description fixe par famille), genre verrouillé (1girl/1boy pour les humaines, jamais sur une bête `beast:true`), âge (`aged up` dérivé de `humanMaturityByRarity` pour les génériques humaines, champ `age` prioritaire pour les nommées). Les fragments issus du nom français sont supprimés. Modèle : « A <description d'espèce>, <rôle d'archétype>, in a <palette univers>… ».
 
+**Cas z19/z22 (confirmé par Marc-Olivier le 11/11 après vision QA des originaux)** : les prompts d'origine décrivent des phénix humanoïdes (« phoenix maiden », « phoenix warrior ») — ils sont **remplacés** par la description d'oiseau de feu géant (arbitrage `phoenixFirebird` / beast confirmé : jamais de figure humaine sur z19/z22 ni sur les phénix génériques z2/z6/z16/z17/z18/z20/z21).
+
+**QA vision des 8 originaux (e14, f18, d6, z19, a15, g16, a13, a14) — constats intégrés** : 7/8 ont un cadre de carte décoratif + texte pseudo-jeu (confirme R2) ; f18 a déjà le visage sous capuche dans l'origine (R5 indispensable) ; a15 Kenji rendu féminin (verrou 1boy indispensable) ; e14 rendu trop humain (description d'espèce plus bestiale). Palette/style/cadrage d'origine = sains (multicolore, painterly, full body centré).
+
 **R2 — Anti-cadre.** Remplacer les deux occurrences du style par : « Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting » (plus aucun mot « card » / « trading card »). Ajouter au négatif : `card frame, card border, ornate border, picture frame, text, letters, watermark, signature, logo`.
 
 **R3 — Cadrage par rareté (règle déjà actée).** Demi-corps (portrait framing, head and shoulders) pour C/UC/R/SR ; full body pour M/L/UR. Vérifier carte par carte la conformité du socle (85 portrait / 175 full) et corriger les écarts. Les fonds restent paysage sans humains.
