@@ -22,6 +22,7 @@
 - **Sorts en doublon** (diagnostic posé, arbitrages du 10/11 soir) : à chaque évolution, tous les sorts courants de la carte sont recopiés dans `inst.acc` (ui.js, `oldSpells`) puis fusionnés avec les sorts de la nouvelle forme (`instSpells`) sans dédoublonnage ; un préfixe dupliqué fait s'afficher 5 à 6 fois les sorts d'une carte montée en famille. Correctif : dédoublonner par identité de sort (école + cran) à la fusion, **réparer les sauvegardes déjà polluées** (migration non destructive), ne cumuler dans `inst.acc` que les sorts que la nouvelle forme ne connaît pas déjà.
 - **`elOf()`** doit surligner les pions du plateau, pas les rail-chips (ui.js:2966).
 - **Bouton réduire/masquer** sur la fenêtre d'action tactique (elle masque toute la ligne équipe, jusqu'à 78 dvh, sans bouton pour la refermer).
+- **Divers du point 1** : ajouter les 4 familles v3 à `FAM_ORDER` (crepuscule, vol, zele, appel), tailles de boutons mobile ≥ 32 px, corriger la double bordure de la zone de texte des cartes et son fond flou.
 - Preuve attendue : tests + smoke verts, digest inchangé (chemin Auto non touché), test de non-régression sur une carte évoluée deux fois.
 
 ## Lot 2 — moteur : rangs avant/arrière (roadmap point 4, règles ACTÉES)

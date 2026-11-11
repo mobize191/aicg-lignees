@@ -18,7 +18,7 @@ Tu codes sur le repo `aicg-lignees` (branche `main`). Lis d'abord `AGENT.md`, pu
 
 **Les 7 lots, dans l'ordre** (un chantier `ui.js` à la fois, détail dans la spec) :
 
-1. **Correctifs terrain restants** : dédoublonnage des sorts à l'évolution (+ réparation des sauvegardes polluées), `elOf()` surligne les pions pas les rail-chips, bouton réduire sur la fenêtre d'action. (roadmap point 1)
+1. **Correctifs terrain restants** : dédoublonnage des sorts à l'évolution (+ réparation des sauvegardes polluées), `elOf()` surligne les pions pas les rail-chips, bouton réduire sur la fenêtre d'action, `FAM_ORDER` des 4 familles v3 (crepuscule, vol, zele, appel), boutons mobiles ≥ 32 px, double bordure de la zone de texte des cartes. (roadmap point 1)
 2. **Moteur rangs avant/arrière** : règles ACTÉES Option A — l'arrière encaisse -50 % tant que l'avant tient (protection saute si l'avant tombe, zones non couvertes), Guerrier/Assassin en arrière frappent à moitié, soins jamais affectés par la position, formation figée en combat, CROSS retiré. Re-mesure digest + MESURE. (point 4)
 3. **Suppression du champ `role`** partout (113 cartes, 153 monstres, vagues, UI, sauvegardes, migration v27+) + écran de formation avant combat (3+2 / 2+3). (point 4)
 4. **Recâblage famille → école** : mapping `FAM_SCHOOL` en data, la fiche type pilote aussi les sorts de lignée. (point 3)
