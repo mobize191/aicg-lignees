@@ -24,7 +24,7 @@
 
 **R2 — Anti-cadre.** Remplacer les deux occurrences du style par : « Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting » (plus aucun mot « card » / « trading card »). Ajouter au négatif : `card frame, card border, ornate border, picture frame, text, letters, watermark, signature, logo`.
 
-**R3 — Cadrage par rareté (règle déjà actée).** Demi-corps (portrait framing, head and shoulders) pour C/UC/R/SR ; full body pour M/L/UR. Vérifier carte par carte la conformité du socle (85 portrait / 175 full) et corriger les écarts. Les fonds restent paysage sans humains.
+**R3 — Cadrage par rareté (règle déjà actée, précisée par R9).** Demi-corps (half body, waist up — jamais plus serré, cf. verrou R9) pour C/UC/R/SR ; full body pour M/L/UR. Vérifier carte par carte la conformité du socle (85 portrait / 175 full) et corriger les écarts. Les fonds restent paysage sans humains.
 
 **R4 — Négatif COURT canon (§15) + correctifs §14.** Canon court + anti-cadre (R2) + anti-tags ciblés par défaut : `front lighting, visible face` en positif et anti `dark face, hood covering face` pour les sujets à capuche/ombres ; `colorful` + accent de couleur de l'univers en positif contre le quasi-monochrome ; anti-signature ; renforts f13 (colossal, beast-like, no humanoid) et phénix (beast:true, bird only, no humans). **Maximum ~20 tags de négatif.**
 
