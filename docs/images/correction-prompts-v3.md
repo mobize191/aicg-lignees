@@ -34,6 +34,23 @@
 
 **R7 — QA.** Le style charte (painterly semi-réaliste, couleurs saines, zéro texte/cadre) est critère BLOQUANT sur chaque lot. Livrables : planches + comparatif canon avant/après (a15 / f18 / z19) en tête du rapport vague 3, diagnostic style en tête.
 
+## 4. Correctifs v3.1 (retour QA vague 3 de Marc-Olivier, 11/11)
+
+> Style VALIDÉ (« rendu vraiment top »). Trois défauts systémiques constatés : (1) monstres rendus en hybrides humain-monstre ou en humains ; (2) beaucoup trop de bustes, il devait y avoir majoritairement du demi-corps ; (3) ~95 % des humanoïdes sont féminins. Causes dans les prompts, corrections ci-dessous, régénération ciblée des seules cartes affectées (vague 3.1), mêmes seeds.
+
+**R8 — Bêtes = créatures pures, zéro terme humain.** Pour toute espèce `beast:true` de `species-map.json` (fireElemental, beastWood, beastWater, beastDark, phoenixFirebird, seaBehemoth, seaSerpent, …) : le prompt ne contient AUCUN terme de rôle humanoïde (« warrior in armor », « mage », « priest », « support caster », « knight », « in robes » sont retirés — ils traînent depuis le socle d'origine, ex. « A giant crab, warrior in armor »), la phrase-sujet est une description de créature pure (« a giant armored crab, … »), complétée par « a wild non-humanoid creature, no human traits, no human face, no human posture ». Négatif : `humans, humanoid, 1girl, 1boy, man, woman, human face, human posture`. Les espèces humanoïdes assumées (mermaid, dryad, shaman, herald, apostle, celestialJudge, fateWeaver, echoSpirit, undeadKnightF, human) ne changent PAS.
+
+**R9 — Demi-corps ≠ buste.** La formule du socle d'origine « Portrait framing, head and shoulders » produit des BUSTES. Elle est remplacée partout par : « half body framing, waist up, centered » pour C/UC/R/SR (demi-corps), « full body, centered » pour M/L/UR. « head and shoulders », « bust », « close-up », « portrait » passent au NÉGATIF des cartes demi-corps.
+
+**R10 — Parité de genre explicite.** Le checkpoint favorise fortement 1girl : ~95 % des humanoïdes sortent féminins. Correction : (1) nommées = genre verrouillé par `character_dna` comme avant (a15/a17 Kenji = homme) ; (2) génériques humanoïdes = genre assigné EXPLICITEMENT par carte, parité ~50/50 sur l'ensemble, consigné dans `tools/gender-map-v3.csv` (file,genre) et forcé dans le prompt en tête de sujet (« an adult man, … » / « an adult woman, … » + tags `1boy, male` ou `1girl, female`). L'assignation est déterministe (hash de l'id) pour rester stable aux retries. Vérification au rapport : proportion F/M des humanoïdes.
+
+## 5. Process vague 3.1 (correctif ciblé)
+
+1. `build-prompts.mjs` patché R8/R9/R10 → régénère `prompts-v3.json`.
+2. Lister les cartes affectées depuis le diff de prompts : toutes les `beast:true`, toutes les C/UC/R/SR (recadrage), tous les génériques humanoïdes (genre). Régénérer uniquement celles-ci, mêmes seeds.
+3. Planches : planche-v3-1-beasts.png, planche-v3-1-framing.png, planche-v3-1-gender.png + comptages (buste/demi-corps/full, F/M).
+4. Rapport : `tools/out-v2/RAPPORT-vague3-1.md`, diagnostic style inchangé (pas de re-test du style, il est validé).
+
 ## 3. Process de relance (vague 3)
 
 1. `build-prompts.mjs` v3 : socle NL painterly corrigé → `prompts-v3.json` (271). Les 271 seeds restent ceux de `seeds-v2.csv`.
