@@ -1,0 +1,297 @@
+
+<!doctype html>
+<!-- v1 : DA or médiéval validée (maquette n°1) ; specs boucle-v2 lots 1-4 -->
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AICG : Lignées — maquette boucle v2</title>
+<style>
+  :root{
+    --bg:#141a12; --panel:rgba(24,18,8,.80); --panel-2:rgba(30,22,10,.70);
+    --line:rgba(201,164,78,.6); --gold:#e8c268; --gold-dim:#9a7c3a;
+    --frame:#c9a44e; --frame-hi:#f4e2a8; --frame-lo:#7a5f28;
+    --txt:#dfe6f2; --muted:#a89c82;
+    --c:#9aa8b8; --uc:#7fd8a0; --r:#7ab8e8; --sr:#c79af0; --ur:#f0c96a; --l:#f0966a; --m:#f06a6a;
+    --r:14px; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:#0a0806;color:var(--txt);display:flex;min-height:100dvh;align-items:center;justify-content:center}
+  .phone{position:relative;width:390px;max-width:100vw;height:844px;max-height:100dvh;overflow:hidden;background:var(--bg);border-radius:26px;box-shadow:0 0 0 1px #2a2416,0 30px 80px #000}
+  @media (max-width:430px),(max-height:860px){.phone{width:100vw;height:100dvh;border-radius:0}}
+
+  /* ==== SCÈNE (placeholder peint — l'art WAN remplacera) ==== */
+  .scene{position:absolute;inset:0;background:linear-gradient(180deg,#5a748c 0%,#8aa894 34%,#c9b78e 55%,#6b5844 78%,#3a2e22 100%)}
+  .scene svg{position:absolute;inset:0;width:100%;height:100%}
+  .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,14,6,.62) 0%,rgba(20,14,6,.14) 30%,rgba(20,14,6,.12) 58%,rgba(18,12,5,.74) 100%);pointer-events:none;z-index:1}
+
+  /* ==== SÉLECTEUR D'ÉCRAN (outils de maquette) ==== */
+  .bar{position:absolute;top:0;left:0;right:0;z-index:30;display:flex;gap:6px;align-items:center;padding:8px 10px;background:linear-gradient(180deg,rgba(10,8,4,.9),transparent)}
+  .bar .lbl{font-size:9px;letter-spacing:.12em;color:var(--gold-dim);text-transform:uppercase;margin-right:2px}
+  .tab{border:1px solid var(--frame);border-radius:999px;background:rgba(24,18,8,.7);color:var(--txt);font-size:10.5px;font-weight:700;padding:5px 9px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.25)}
+  .tab.on{background:linear-gradient(180deg,#5a431c,#3a2c10);color:var(--frame-hi)}
+  .note-toggle{width:34px;height:28px;border-radius:9px;border:1px solid var(--gold-dim);background:rgba(30,24,12,.85);color:var(--gold);font-size:10px;font-weight:800;margin-left:auto}
+
+  /* ==== ÉCRANS ==== */
+  .scr{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;padding:56px 14px 14px}
+  .scr.on{display:flex}
+  .h2{font-family:Georgia,'Times New Roman',serif;font-size:16px;letter-spacing:.08em;color:#f4ead0;text-shadow:0 2px 12px #000b;margin:0 0 4px}
+  .sub{font-size:10px;color:var(--muted);letter-spacing:.05em;margin-bottom:10px}
+
+  /* ==== DÉPART : 4 propositions ==== */
+  .grid4{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px}
+  .prop{position:relative;border:1px solid var(--frame);border-radius:12px;background:linear-gradient(180deg,rgba(38,28,12,.82),rgba(24,18,8,.88));box-shadow:inset 0 0 0 1px rgba(244,226,168,.3),0 0 0 1px rgba(122,95,40,.85);padding:10px 8px;text-align:center;cursor:pointer;transition:.2s}
+  .prop:active{transform:scale(.97)}
+  .prop .art{width:100%;aspect-ratio:3/4;border-radius:8px;margin-bottom:7px;border:1px solid var(--frame-lo);overflow:hidden;position:relative}
+  .prop b{display:block;font-size:11.5px}
+  .prop small{display:block;font-size:9px;color:var(--muted);margin-top:2px}
+  .prop.pick{outline:2px solid var(--gold);box-shadow:0 0 18px #e8c26855}
+  .prop .rname{margin-top:6px;font-size:10px;color:var(--c);font-weight:800;letter-spacing:.08em}
+  .reveal{margin-top:10px;border:1px solid var(--frame);border-radius:12px;background:var(--panel);padding:10px 12px;font-size:12px;display:none}
+  .reveal.on{display:block}
+  .reveal b{color:var(--gold)}
+  .go{margin-top:10px;min-height:48px;border-radius:14px;border:1px solid var(--frame);background:linear-gradient(180deg,rgba(36,84,62,.88),rgba(18,44,34,.92));color:#eafff2;font-weight:800;font-size:14px;letter-spacing:.04em;box-shadow:inset 0 0 0 1px rgba(244,226,168,.4),0 0 0 1px rgba(122,95,40,.9)}
+
+  /* ==== SÉLECTEUR DE MARCHE ==== */
+  .walk{display:flex;gap:3px;margin:6px 0 10px}
+  .walk i{flex:1;height:14px;border-radius:4px;background:#4a4030;border:1px solid #2a2418}
+  .walk i.done{background:linear-gradient(180deg,#c9a44e,#8a6c2c)}
+  .walk i.boss{background:linear-gradient(180deg,#b0584a,#6a2c22)}
+  .selbox{border:1px solid var(--frame);border-radius:14px;background:var(--panel);padding:12px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.25)}
+  .selrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .selrow b{font-size:13px}
+  .steps{display:flex;gap:6px;flex-wrap:wrap}
+  .stp{width:34px;height:34px;border-radius:10px;border:1px solid var(--frame);background:var(--panel-2);color:var(--txt);font-weight:800;font-size:12px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.2)}
+  .stp.on{background:linear-gradient(180deg,#5a431c,#3a2c10);color:var(--frame-hi);outline:2px solid var(--gold)}
+  .stp.boss{border-color:#c96a5a}
+  .band{margin-top:8px;font-size:10.5px;line-height:1.5;color:var(--txt);border-top:1px solid rgba(201,164,78,.35);padding-top:8px}
+  .band b{color:var(--gold)}
+  .pill{display:inline-block;padding:1px 7px;border-radius:999px;font-size:9.5px;font-weight:800;margin-right:3px}
+
+  /* ==== COMBAT : fenêtre d'action ==== */
+  .foe{height:170px;border:1px solid var(--frame-lo);border-radius:12px;margin-bottom:8px;background:linear-gradient(180deg,#2c3844,#141c24);position:relative;overflow:hidden}
+  .foe .nm{position:absolute;left:10px;bottom:8px;font-size:11px;font-weight:800;text-shadow:0 1px 6px #000}
+  .foe .hp{position:absolute;right:10px;bottom:8px;font-size:10px;color:var(--muted)}
+  .act{border:1px solid var(--frame);border-radius:14px;background:var(--panel);padding:10px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.25)}
+  .act .ttl{font-size:10px;letter-spacing:.14em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:8px}
+  .arow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .abtn{position:relative;min-height:52px;border-radius:12px;border:1px solid var(--frame);background:linear-gradient(180deg,rgba(38,28,12,.82),rgba(24,18,8,.88));box-shadow:inset 0 0 0 1px rgba(244,226,168,.3),0 0 0 1px rgba(122,95,40,.85);color:var(--txt);font-size:12px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .abtn small{font-size:8.5px;font-weight:600;color:var(--muted)}
+  .abtn.off{opacity:.45;filter:grayscale(.6)}
+  .badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:999px;background:#8a2c2c;color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;border:1px solid #f4e2a855}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+
+  /* ==== RÉCOMPENSES ==== */
+  .rw{border:1px solid var(--frame);border-radius:16px;background:var(--panel);padding:14px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.3),0 14px 40px #000a}
+  .rw h3{margin:0 0 10px;font-size:15px;color:var(--gold);font-family:Georgia,serif}
+  .gain{display:flex;align-items:center;gap:9px;border:1px solid rgba(201,164,78,.4);border-radius:10px;padding:9px 10px;margin-bottom:7px;background:rgba(24,18,8,.5);cursor:pointer;font-size:12px}
+  .gain:active{transform:translateY(1px)}
+  .gain .ic{font-size:17px}
+  .gain b{font-size:12.5px}
+  .gain small{color:var(--muted);font-size:10px;margin-left:auto}
+  .gain.rc{border-color:var(--r)}
+  .gain.rg{outline:1px solid #e8c26844}
+  .tak{margin-top:6px;min-height:48px;width:100%;border-radius:13px;border:1px solid var(--frame);background:linear-gradient(180deg,#2b6a4c,#1c4a36);color:#eafff2;font-weight:800;font-size:14px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.35),0 0 0 1px rgba(122,95,40,.9)}
+
+  /* ==== INVENTAIRE ==== */
+  .inv{overflow:auto;flex:1;padding-bottom:4px}
+  .grp{border:1px solid var(--frame);border-radius:13px;background:var(--panel-2);box-shadow:inset 0 0 0 1px rgba(244,226,168,.22);margin-bottom:9px;padding:10px 11px}
+  .grp h4{margin:0 0 8px;font-size:11px;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
+  .it{display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 4px;border-bottom:1px solid rgba(201,164,78,.16)}
+  .it:last-child{border-bottom:0}
+  .it .qty{margin-left:auto;font-weight:800;color:var(--gold)}
+  .it small{color:var(--muted);font-size:10px}
+
+  /* ==== TOAST ==== */
+  .toast{position:absolute;left:50%;bottom:86px;transform:translate(-50%,16px);z-index:40;background:var(--panel);border:1px solid var(--r);border-radius:12px;padding:10px 14px;font-size:12px;display:flex;gap:8px;align-items:center;box-shadow:0 12px 30px #000b;opacity:0;pointer-events:none;transition:.3s}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+  .toast b{color:var(--r)}
+
+  /* ==== ANNOTATIONS ==== */
+  .note{position:absolute;z-index:35;background:#1a1508f2;border:1px solid var(--gold-dim);border-radius:10px;padding:8px 10px;font-size:10px;line-height:1.45;color:#f0e4c0;max-width:184px;opacity:0;pointer-events:none;transition:.2s}
+  body.notes .note{opacity:1}
+  .da{border-top:1px solid rgba(201,164,78,.3);margin-top:auto;padding-top:8px;font-size:9px;color:#6a5c40;text-align:center;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="phone" id="app">
+  <div class="scene" aria-hidden="true">
+    <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMax slice">
+      <circle cx="60" cy="96" r="48" fill="#ffe9a8" opacity=".35"/><circle cx="60" cy="96" r="26" fill="#fff3c9"/>
+      <path d="M0 430 Q90 400 190 432 T390 420 V844 H0 Z" fill="#7d8c5e"/>
+      <g><rect x="-4" y="436" width="80" height="82" fill="#e7d6b3"/><path d="M-10 436 L38 406 L86 436 Z" fill="#b0603f"/>
+      <rect x="250" y="442" width="70" height="76" fill="#e3cfa8"/><path d="M246 442 L285 412 L324 442 Z" fill="#a85a3c"/>
+      <rect x="96" y="456" width="60" height="62" fill="#efdfbf"/><path d="M92 456 L126 430 L160 456 Z" fill="#b0603f"/></g>
+      <path d="M0 560 Q195 528 390 560 V844 H0 Z" fill="#c2ab7c"/>
+      <g stroke="#a8906a" stroke-width="1" opacity=".5" fill="none"><path d="M0 600 L390 624 M0 672 L390 696 M0 752 L390 776"/></g>
+      <g fill="#5b4632"><g><circle cx="120" cy="640" r="5"/><path d="M114 646 Q112 664 114 676 L126 676 Q128 664 126 646 Z"/></g><g><circle cx="270" cy="652" r="5"/><path d="M264 658 Q262 676 264 688 L276 688 Q278 676 276 658 Z"/></g></g>
+    </svg>
+  </div>
+  <div class="veil"></div>
+
+  <div class="bar">
+    <span class="lbl">Écran</span>
+    <button class="tab on" data-scr="depart">Départ</button>
+    <button class="tab" data-scr="marche">Marche</button>
+    <button class="tab" data-scr="combat">Combat</button>
+    <button class="tab" data-scr="reward">Récompenses</button>
+    <button class="tab" data-scr="invent">Inventaire</button>
+    <button class="note-toggle" id="nt">DA</button>
+  </div>
+
+  <!-- ÉCRAN 1 : DÉPART À 2 CARTES -->
+  <section class="scr on" id="scr-depart">
+    <h2 class="h2">Le Port des Brumes</h2>
+    <p class="sub">Choisis ta première lignée — la seconde se révèlera parmi les trois restantes.</p>
+    <div class="grid4">
+      <div class="prop" data-race="h"><div class="art" style="background:linear-gradient(180deg,#6a8ab8,#3a4c68)"></div><b>Novice humain</b><small>Épéiste en herbe · voie du sabre</small><span class="rname">COMMUNE</span></div>
+      <div class="prop" data-race="b"><div class="art" style="background:linear-gradient(180deg,#8a6a3a,#4a3320)"></div><b>Bestial</b><small>Sanglier de mousse · enge du bois</small><span class="rname" style="color:var(--uc)">COMMUNE</span></div>
+      <div class="prop" data-race="m"><div class="art" style="background:linear-gradient(180deg,#7a5aa8,#3c2c58)"></div><b>Mystique</b><small>Apprentie des rivières · mage d'eau</small><span class="rname" style="color:var(--r)">COMMUNE</span></div>
+      <div class="prop" data-race="d"><div class="art" style="background:linear-gradient(180deg,#e8d48a,#8a7434)"></div><b>Divin</b><small>Écuyer du Zénith · héraut</small><span class="rname" style="color:var(--ur)">COMMUNE</span></div>
+    </div>
+    <div class="reveal" id="rev"><b>Le destin tire…</b> ta seconde lignée : <b id="rev2">—</b><br /><small style="color:var(--muted)">Recrue ajoutée à l'équipe — toast de confirmation.</small></div>
+    <button class="go" id="go">Commencer l'aventure</button>
+    <div class="da">maquette — lot 3 : départ à 2 cartes</div>
+  </section>
+
+  <!-- ÉCRAN 2 : SÉLECTEUR DE MARCHE -->
+  <section class="scr" id="scr-marche">
+    <h2 class="h2">Marées — Normal</h2>
+    <p class="sub">Sélecteur de marche · niveau de donjon 7</p>
+    <div class="walk">
+      <i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="boss"></i>
+    </div>
+    <div class="selbox">
+      <div class="selrow"><b>Marche 8 sur 25</b><span class="pill" style="background:#22406a;color:#a8c8f0">Normal</span></div>
+      <div class="steps">
+        <button class="stp">4</button><button class="stp">5</button><button class="stp">6</button><button class="stp">7</button><button class="stp on">8</button><button class="stp">9</button><button class="stp">10</button><button class="stp boss">25</button>
+      </div>
+      <div class="band"><b>Niveau de donjon :</b> 7 — puissance attendue de l'équipe.<br /><b>Bande de rareté :</b> <span class="pill" style="background:#1c3a28;color:#9fe0b8">UC</span>→<span class="pill" style="background:#2c2450;color:#c79af0">SR</span> en toutes lettres ; <b>boss final</b> en haut de bande (SR), boss intermédiaire un cran sous.</div>
+    </div>
+    <button class="go" style="margin-top:10px">Marcher vers l'étage 8</button>
+    <div class="da">maquette — lot 2 : 25 marches par donjon × mode</div>
+  </section>
+
+  <!-- ÉCRAN 3 : COMBAT / FENÊTRE D'ACTION -->
+  <section class="scr" id="scr-combat">
+    <h2 class="h2">Étage 8 — rencontre</h2>
+    <p class="sub">Fenêtre d'action · tour de ton Novice</p>
+    <div class="foe"><span class="nm">Gobelin des Récifs</span><span class="hp">PV 42/60</span></div>
+    <div class="act">
+      <div class="ttl">Action du tour</div>
+      <div class="arow">
+        <button class="abtn">⚔️<small>Attaque</small></button>
+        <button class="abtn">✨<small>Sort · Voie</small></button>
+        <button class="abtn" id="objbtn"><span class="badge" id="potq">2</span>🧪<small>Objet</small></button>
+      </div>
+      <div class="row2">
+        <button class="abtn" style="min-height:44px">🛡️<small>Défense · position</small></button>
+        <button class="abtn off" title="Stock vide"><span class="badge" style="display:none">0</span>🧪<small>Potions : 0</small></button>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:10px">Chaque gorgée coûte son tour (ACTÉ) · potions de soin 30 %/60 %, mana 40 %/80 % · Objet éteint si stock vide.</p>
+    <div class="da">maquette — lot 1 : action Objet + compteurs</div>
+  </section>
+
+  <!-- ÉCRAN 4 : RÉCOMPENSES -->
+  <section class="scr" id="scr-reward">
+    <h2 class="h2">Récompenses</h2>
+    <p class="sub">Chaque gain est cliquable — aucun drop invisible.</p>
+    <div class="rw">
+      <h3>Victoire ! Étage 8 nettoyé</h3>
+      <div class="gain"><span class="ic">💰</span><b>320 or</b><small>boutique · potions</small></div>
+      <div class="gain"><span class="ic">⭐</span><b>+45 XP</b><small>équipe</small></div>
+      <div class="gain rc"><span class="ic">🐚</span><b>Écume dure</b><small style="color:var(--r)">RARE · matériau Marées</small></div>
+      <div class="gain"><span class="ic">💎</span><b>Gemme brute</b><small style="color:var(--sr)">SR · à tailler</small></div>
+      <div class="gain rg"><span class="ic">🃏</span><b>Recrue : Crabe des Berges</b><small style="color:var(--uc)">PEU COMMUNE · rejoint l'équipe</small></div>
+      <button class="tak" id="tak">Tout ramasser</button>
+    </div>
+    <div class="da">maquette — lot 4 : drops v2 + recrutement naturel</div>
+  </section>
+
+  <!-- ÉCRAN 5 : INVENTAIRE -->
+  <section class="scr" id="scr-invent">
+    <h2 class="h2">Inventaire</h2>
+    <p class="sub">Groupé : potions · matériaux par zone · gemmes · pièces</p>
+    <div class="inv">
+      <div class="grp"><h4>🧪 Potions</h4>
+        <div class="it">🧪 Soin mineur <small>30 % PV</small><span class="qty">×3</span></div>
+        <div class="it">🧪 Soin majeur <small>60 % PV</small><span class="qty">×1</span></div>
+        <div class="it">🧪 Mana mineure <small>40 % PM</small><span class="qty">×2</span></div>
+      </div>
+      <div class="grp"><h4>🐚 Matériaux — Marées</h4>
+        <div class="it">Écume dure <small>RARE</small><span class="qty">×4</span></div>
+        <div class="it">Corail trempé <small>PEU COMMUN</small><span class="qty">×7</span></div>
+      </div>
+      <div class="grp"><h4>🔥 Matériaux — Forge</h4>
+        <div class="it">Braise condensée <small>RARE</small><span class="qty">×2</span></div>
+        <div class="it">Matière du boss <small>ÉPIQUE</small><span class="qty">×1</span></div>
+      </div>
+      <div class="grp"><h4>💎 Gemmes</h4>
+        <div class="it">Gemme brute <small>à tailler</small><span class="qty">×2</span></div>
+      </div>
+      <div class="grp"><h4>🛡️ Pièces possédées</h4>
+        <div class="it">Rondache de recrue <small>palier 1</small><span class="qty">×2</span></div>
+        <div class="it">Heaume des Écumes <small>set des Récifs · p2</small><span class="qty">×1</span></div>
+      </div>
+    </div>
+    <div class="da">maquette — lot 4 : inventaire minimal (craft et rayon au bloc visuel)</div>
+  </section>
+
+  <div class="toast" id="toast">🃏 <span><b>Crabe des Berges</b> rejoint ton équipe !</span></div>
+
+  <!-- ANNOTATIONS DA -->
+  <div class="note" style="left:12px;top:96px">① Départ à 2 cartes (lot 3) : 4 propositions, une par race (humain, bestial, mystique, divin). La choisie s'anime (liseré or) ; la seconde se révèle parmi les 3 restantes. Plus d'équipe complète de départ.</div>
+  <div class="note" style="left:150px;top:250px;max-width:200px">② Sélecteur de marche (lot 2) : 25 marches par donjon × mode, bandes de rareté en toutes lettres, niveau de donjon affiché, boss final en haut de bande. Le fil de marche doré marque la progression.</div>
+  <div class="note" style="left:12px;top:560px">③ Action Objet (lot 1) : même rang que ⚔ et sorts, badge du stock de potions, action éteinte si 0. Chaque gorgée coûte son tour (ACTÉ).</div>
+  <div class="note" style="left:160px;top:420px;max-width:190px">④ Récompenses (lot 4) : or, XP, drops aux couleurs de rareté, recrue éventuelle — tout cliquable, « Tout ramasser » referme. Aucun drop invisible (ACTÉ 11/11).</div>
+  <div class="note" style="left:12px;top:120px;display:none" id="note5">⑤ Inventaire minimal groupé (lot 4) : potions, matériaux par zone, gemmes, pièces. Craft + rayon Boutique = bloc visuel v2.</div>
+
+  <script>
+    // Onglets écran
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => t.onclick = () => {
+      tabs.forEach(x => x.classList.toggle('on', x === t));
+      document.querySelectorAll('.scr').forEach(s => s.classList.toggle('on', s.id === 'scr-' + t.dataset.scr));
+      const n5 = document.getElementById('note5');
+      if (n5) n5.style.display = t.dataset.scr === 'invent' ? 'block' : 'none';
+    });
+    document.getElementById('nt').onclick = () => document.body.classList.toggle('notes');
+
+    // Départ : choix + révélation aléatoire
+    const races = { h:'Novice humain', b:'Bestial', m:'Mystique', d:'Divin' };
+    document.querySelectorAll('.prop').forEach(p => p.onclick = () => {
+      document.querySelectorAll('.prop').forEach(x => x.classList.remove('pick'));
+      p.classList.add('pick');
+      const rest = Object.keys(races).filter(k => k !== p.dataset.race);
+      const pick = rest[Math.floor(Math.random() * rest.length)];
+      document.getElementById('rev2').textContent = races[pick];
+      document.getElementById('rev').classList.add('on');
+      showToast();
+    });
+    document.getElementById('go').onclick = () => tabs[1].click();
+    document.getElementById('tak').onclick = () => tabs[1].click();
+
+    // Sélecteur de marche
+    document.querySelectorAll('.stp').forEach(s => s.onclick = () => {
+      document.querySelectorAll('.stp').forEach(x => x.classList.remove('on'));
+      s.classList.add('on');
+    });
+
+    // Toast de recrue
+    let tmr;
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('on');
+      clearTimeout(tmr); tmr = setTimeout(() => t.classList.remove('on'), 2800);
+    }
+    document.getElementById('objbtn').onclick = () => {
+      const b = document.getElementById('potq');
+      const n = Math.max(0, parseInt(b.textContent) - 1);
+      b.textContent = n; b.style.display = n ? 'flex' : 'none';
+      if (!n) document.getElementById('objbtn').classList.add('off');
+    };
+  </script>
+</div>
+</body>
+</html>
