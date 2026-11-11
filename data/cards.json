@@ -1864,5 +1864,382 @@
   "branch": true,
   "agi": 38,
   "int": 17
+ },
+ {
+  "id": "w1",
+  "name": "Garde du Seuil",
+  "rarity": "C",
+  "classe": "Guerrier",
+  "element": "Lumière",
+  "atk": 8,
+  "hp": 60,
+  "family": "seuil",
+  "agi": 6,
+  "int": 3,
+  "soloSpell": "Interdiction"
+ },
+ {
+  "id": "w2",
+  "name": "Servante du Sablier",
+  "rarity": "UC",
+  "classe": "Occultiste",
+  "element": "Lumière",
+  "atk": 2,
+  "hp": 50,
+  "family": "seuil",
+  "agi": 1,
+  "int": 2,
+  "effect": {
+   "kind": "slow"
+  },
+  "soloSpell": "Sable Glissant",
+  "soloCost": 8
+ },
+ {
+  "id": "w3",
+  "name": "Huissier de l’Entre-Deux",
+  "rarity": "R",
+  "classe": "Occultiste",
+  "element": "Lumière",
+  "atk": 3,
+  "hp": 54,
+  "family": "seuil",
+  "agi": 2,
+  "int": 2,
+  "effect": {
+   "kind": "stun",
+   "count": 1
+  },
+  "soloSpell": "Sentence Lente",
+  "soloCost": 6
+ },
+ {
+  "id": "w4",
+  "name": "Juge des Heures",
+  "rarity": "SR",
+  "classe": "Mage",
+  "element": "Lumière",
+  "atk": 15,
+  "hp": 72,
+  "family": "seuil",
+  "agi": 8,
+  "int": 12,
+  "soloSpell": "Balance du Temps",
+  "soloCost": 5,
+  "soloMult": 1.8
+ },
+ {
+  "id": "w5",
+  "name": "Maître des Sabliers",
+  "rarity": "UR",
+  "classe": "Occultiste",
+  "element": "Lumière",
+  "atk": 4,
+  "hp": 66,
+  "family": "seuil",
+  "agi": 2,
+  "int": 3,
+  "effect": {
+   "kind": "curse",
+   "value": 0.25,
+   "turns": 2
+  },
+  "soloSpell": "Sablier Ensorcelé",
+  "soloCost": 6,
+  "soloMult": 2
+ },
+ {
+  "id": "w6",
+  "name": "Kairos, Juge Éternel",
+  "rarity": "L",
+  "classe": "Occultiste",
+  "element": "Lumière",
+  "atk": 6,
+  "hp": 92,
+  "effect": {
+   "kind": "stun",
+   "count": 2
+  },
+  "soloSpell": "Sentence Éternelle",
+  "soloCost": 7,
+  "soloMult": 2,
+  "family": "seuil",
+  "agi": 3,
+  "int": 5
+ },
+ {
+  "id": "w7",
+  "name": "Lame Miroir",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Eau",
+  "atk": 9,
+  "hp": 46,
+  "family": "miroir",
+  "agi": 8,
+  "int": 4,
+  "soloSpell": "Frappe Réfléchie"
+ },
+ {
+  "id": "w8",
+  "name": "Choriste Miroir",
+  "rarity": "UC",
+  "classe": "Mage",
+  "element": "Eau",
+  "atk": 12,
+  "hp": 50,
+  "family": "miroir",
+  "agi": 6,
+  "int": 10,
+  "soloSpell": "Voix Doubles",
+  "soloCost": 4,
+  "soloMult": 1.6
+ },
+ {
+  "id": "w9",
+  "name": "Prisme du Chœur",
+  "rarity": "R",
+  "classe": "Prêtre",
+  "element": "Eau",
+  "atk": 3,
+  "hp": 60,
+  "family": "miroir",
+  "agi": 2,
+  "int": 2,
+  "effect": {
+   "kind": "shield",
+   "value": 22
+  },
+  "soloSpell": "Reflet Protecteur"
+ },
+ {
+  "id": "w10",
+  "name": "Miroir Antiphonique",
+  "rarity": "SR",
+  "classe": "Occultiste",
+  "element": "Eau",
+  "atk": 4,
+  "hp": 66,
+  "family": "miroir",
+  "agi": 2,
+  "int": 3,
+  "effect": {
+   "kind": "copy"
+  },
+  "soloSpell": "Chant Miroir",
+  "soloCost": 6
+ },
+ {
+  "id": "w11",
+  "name": "Chef du Chœur",
+  "rarity": "UR",
+  "classe": "Prêtre",
+  "element": "Eau",
+  "atk": 5,
+  "hp": 74,
+  "family": "miroir",
+  "agi": 3,
+  "int": 4,
+  "effect": {
+   "kind": "reflect",
+   "value": 0.3,
+   "turns": 2
+  },
+  "soloSpell": "Renvoi en Chœur",
+  "soloCost": 6
+ },
+ {
+  "id": "w12",
+  "name": "Écho, Refrain Absolu",
+  "rarity": "L",
+  "classe": "Occultiste",
+  "element": "Eau",
+  "atk": 6,
+  "hp": 92,
+  "effect": {
+   "kind": "copy"
+  },
+  "soloSpell": "Refrain Absolu",
+  "soloCost": 6,
+  "soloMult": 2,
+  "family": "miroir",
+  "agi": 3,
+  "int": 5
+ },
+ {
+  "id": "w13",
+  "name": "Fileuse du Pont",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Terre",
+  "atk": 8,
+  "hp": 58,
+  "family": "pont",
+  "agi": 7,
+  "int": 3,
+  "soloSpell": "Fil Tendu"
+ },
+ {
+  "id": "w14",
+  "name": "Aiguille du Pont",
+  "rarity": "UC",
+  "classe": "Prêtre",
+  "element": "Terre",
+  "atk": 3,
+  "hp": 54,
+  "family": "pont",
+  "agi": 2,
+  "int": 2,
+  "effect": {
+   "kind": "shield",
+   "value": 17
+  },
+  "soloSpell": "Point Serré"
+ },
+ {
+  "id": "w15",
+  "name": "Brodeuse des Liens",
+  "rarity": "R",
+  "classe": "Assassin",
+  "element": "Terre",
+  "atk": 15,
+  "hp": 70,
+  "family": "pont",
+  "agi": 14,
+  "int": 6,
+  "soloSpell": "Point de Croix",
+  "soloCost": 5,
+  "soloMult": 1.8
+ },
+ {
+  "id": "w16",
+  "name": "Tisseuse des Nœuds",
+  "rarity": "SR",
+  "classe": "Occultiste",
+  "element": "Terre",
+  "atk": 4,
+  "hp": 66,
+  "family": "pont",
+  "agi": 2,
+  "int": 3,
+  "effect": {
+   "kind": "link"
+  },
+  "soloSpell": "Nœud d’Or",
+  "soloCost": 6
+ },
+ {
+  "id": "w17",
+  "name": "Architecte du Pont",
+  "rarity": "UR",
+  "classe": "Prêtre",
+  "element": "Terre",
+  "atk": 5,
+  "hp": 74,
+  "family": "pont",
+  "agi": 3,
+  "int": 4,
+  "effect": {
+   "kind": "link"
+  },
+  "soloSpell": "Deux Rives",
+  "soloCost": 5
+ },
+ {
+  "id": "w18",
+  "name": "Ananké, Gardienne des Rives",
+  "rarity": "L",
+  "classe": "Occultiste",
+  "element": "Terre",
+  "atk": 6,
+  "hp": 92,
+  "effect": {
+   "kind": "link"
+  },
+  "soloSpell": "Destin Gardé",
+  "soloCost": 6,
+  "soloMult": 2,
+  "family": "pont",
+  "agi": 3,
+  "int": 5
+ },
+ {
+  "id": "p5",
+  "name": "Séraphin, Porteur de Lumière",
+  "rarity": "UR",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "atk": 10,
+  "hp": 80,
+  "effect": {
+   "kind": "heal",
+   "value": 40
+  },
+  "soloSpell": "Éclat du Matin",
+  "soloCost": 5,
+  "family": "seuil",
+  "agi": 5,
+  "int": 8
+ },
+ {
+  "id": "p6",
+  "name": "Séraphin, Chérubin Éveillé",
+  "rarity": "L",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "atk": 12,
+  "hp": 100,
+  "effect": {
+   "kind": "heal",
+   "value": 60
+  },
+  "soloSpell": "Aube Éternelle",
+  "soloCost": 6,
+  "soloMult": 2,
+  "family": "seuil",
+  "agi": 6,
+  "int": 10
+ },
+ {
+  "id": "w19",
+  "name": "Sirène Nouvelle",
+  "rarity": "C",
+  "classe": "Occultiste",
+  "element": "Eau",
+  "atk": 7,
+  "hp": 50,
+  "soloSpell": "Berceuse des Brumes",
+  "family": "eau",
+  "agi": 4,
+  "int": 6,
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Brumes"
+ },
+ {
+  "id": "w20",
+  "name": "Fée Nouvelle",
+  "rarity": "C",
+  "classe": "Mage",
+  "element": "Lumière",
+  "atk": 7,
+  "hp": 46,
+  "soloSpell": "Lueur des Bois",
+  "family": "bosquet",
+  "agi": 4,
+  "int": 6,
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Bois"
+ },
+ {
+  "id": "w21",
+  "name": "Gorgonne Nouvelle",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "atk": 9,
+  "hp": 48,
+  "soloSpell": "Regard Pétrifiant",
+  "family": "ombre",
+  "agi": 8,
+  "int": 4,
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Caveaux"
  }
 ]

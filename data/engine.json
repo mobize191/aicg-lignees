@@ -486,7 +486,10 @@
   "crepuscule",
   "vol",
   "zele",
-  "appel"
+  "appel",
+  "seuil",
+  "miroir",
+  "pont"
  ],
  "FAM_SCHOOL": {
   "eau": "lame",
@@ -499,7 +502,10 @@
   "crepuscule": "mauvais-oeil",
   "vol": "ruse",
   "zele": "ferveur",
-  "appel": "appel"
+  "appel": "appel",
+  "seuil": "entrave",
+  "miroir": "rempart",
+  "pont": "appel"
  },
  "moteur": {
   "MANA_START_RATIO": 0.6,

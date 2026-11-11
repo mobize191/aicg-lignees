@@ -107,3 +107,33 @@ test('contenu v3 lot C4 — Clergé du Plein Jour : Apolline en M (fusion Céles
   const ids = [...fam.lines.flat(), ...(fam.side ?? [])];
   assert.deepEqual(ids.sort(), ['z11', 'z23', 'z24', 'z25', 'z26', 'z27', 'z28', 'z29', 'z9'].sort(), '10 cartes du Clergé');
 });
+
+test('contenu v3 lot C7 — familles divines joueur (seuil/miroir/pont C→L), maillons du Jeune Séraphin, lignées Enge', () => {
+  const data = loadData();
+  const E = loadEngine();
+  // familles divines côté joueur : 6 paliers C→L, sorts de lignée, FAM_SCHOOL/FAM_ORDER renseignés
+  for (const fam of ['seuil', 'miroir', 'pont']) {
+    const f = data.families[fam];
+    assert.ok(f, `famille ${fam} posée`);
+    assert.equal(f.steps.length, 6, `${fam} : 6 paliers`);
+    assert.deepEqual(f.steps.map((id) => data.cards.find((c) => c.id === id)?.rarity), ['C', 'UC', 'R', 'SR', 'UR', 'L'], `${fam} : C→L`);
+    assert.equal(data['lineage-spells'][fam].length, 6, `${fam} : 6 sorts de lignée`);
+    assert.deepEqual(data['lineage-spells'][fam].map((s) => s.cost), [2, 3, 5, 9, 14, 20], `${fam} : échelle 2/3/5/9/14/20`);
+    assert.ok(data.engine.FAM_ORDER.includes(fam) && data.engine.FAM_SCHOOL[fam], `${fam} : dans FAM_ORDER et FAM_SCHOOL`);
+    for (let i = 1; i < 6; i++) assert.ok(E.evoTargetsOf(f.steps[i - 1]).includes(f.steps[i]), `${fam} : ${f.steps[i - 1]} → ${f.steps[i]}`);
+  }
+  assert.deepEqual(data.families.seuil.steps.at(-1), 'w6');
+  assert.equal(data.cards.find((c) => c.id === 'w6').name, 'Kairos, Juge Éternel', 'L seuil côté joueur (nom distinct du monstre d6)');
+  // maillons du Jeune Séraphin : p1 → p5 (UR) → p6 (L)
+  assert.ok(E.evoTargetsOf('p1').includes('p5'), 'p1 évolue vers p5');
+  assert.equal(E.nextFormOf('p5'), 'p6', 'p5 évolue vers p6');
+  assert.equal(data.cards.find((c) => c.id === 'p6').rarity, 'L');
+  // lignées d'accueil des Enge : 3 communes C, voies depuis n10/n11/n12
+  const enge = { n10: 'w19', n11: 'w20', n12: 'w21' };
+  for (const [n, w] of Object.entries(enge)) {
+    assert.ok(E.evoTargetsOf(n).includes(w), `${n} a une voie vers ${w}`);
+    const card = data.cards.find((c) => c.id === w);
+    assert.ok(card && card.rarity === 'C' && card.family && !card.archived, `${w} : commune C en famille d'accueil (${card.family})`);
+  }
+  assert.deepEqual(E.errors, [], 'validateur vert (anti-doublon EXI-DATA-3 inclus)');
+});

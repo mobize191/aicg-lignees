@@ -38,7 +38,7 @@ async function main() {
   // ---------- voies EVO_CHOICES ----------
   const expectedVoies = {
     n5: ['e3', 'e11'], n6: ['f3', 'f15', 'f24'], n7: ['g3', 'g12'], n8: ['k3', 'k12', 'k24'],
-    n10: ['e24'], n11: ['g12'], n12: ['k3', 'k12', 'k24'],
+    n10: ['e24', 'w19'], n11: ['g12', 'w20'], n12: ['k3', 'k12', 'k24', 'w21'],
     n9: ['z3', 'z16', 'z23'], n13: ['p1'], n14: ['d8'], n15: ['d14'],
   };
   for (const [id, tos] of Object.entries(expectedVoies)) {

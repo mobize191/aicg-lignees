@@ -148,12 +148,20 @@
   {
    "to": "e24",
    "voie": "la forme — Sirène"
+  },
+  {
+   "to": "w19",
+   "voie": "la forme — Sirène Nouvelle (commune de la Crypte)"
   }
  ],
  "n11": [
   {
    "to": "g12",
    "voie": "la forme — Dryade"
+  },
+  {
+   "to": "w20",
+   "voie": "la forme — Fée Nouvelle (commune de la Crypte)"
   }
  ],
  "n12": [
@@ -168,6 +176,10 @@
   {
    "to": "k24",
    "voie": "la forme — le devoir brisé"
+  },
+  {
+   "to": "w21",
+   "voie": "la forme — Gorgonne Nouvelle (commune de la Crypte)"
   }
  ],
  "n9": [
@@ -255,6 +267,11 @@
      }
     ]
    }
+  },
+  {
+   "to": "p5",
+   "voie": "la voie céleste — le Porteur de Lumière",
+   "type": "standard"
   }
  ],
  "q1": [

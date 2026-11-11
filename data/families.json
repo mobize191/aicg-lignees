@@ -15,7 +15,8 @@
    "a48",
    "b3",
    "c3",
-   "c10"
+   "c10",
+   "w19"
   ]
  },
  "lame": {
@@ -48,7 +49,8 @@
    "b2",
    "s3",
    "c2",
-   "c9"
+   "c9",
+   "w21"
   ]
  },
  "aube": {
@@ -120,7 +122,8 @@
    "b7",
    "p3",
    "c7",
-   "c14"
+   "c14",
+   "w20"
   ]
  },
  "crepuscule": {
@@ -182,6 +185,45 @@
    "v4",
    "v5",
    "v6"
+  ],
+  "future": []
+ },
+ "seuil": {
+  "name": "Arbitres du Seuil",
+  "steps": [
+   "w1",
+   "w2",
+   "w3",
+   "w4",
+   "w5",
+   "w6"
+  ],
+  "future": [
+   "p5",
+   "p6"
+  ]
+ },
+ "miroir": {
+  "name": "Chœur Miroir",
+  "steps": [
+   "w7",
+   "w8",
+   "w9",
+   "w10",
+   "w11",
+   "w12"
+  ],
+  "future": []
+ },
+ "pont": {
+  "name": "Tisseuses du Pont",
+  "steps": [
+   "w13",
+   "w14",
+   "w15",
+   "w16",
+   "w17",
+   "w18"
   ],
   "future": []
  }
