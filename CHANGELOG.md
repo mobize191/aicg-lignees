@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.25] — 2026-11-11 — Économie v2 clôturée (lots E1-E5)
+
+Clôture du chantier économie v2 : Boutique complète, marchand de créatures, Guilde et compagnons du jour, jetons de génération supprimés (conversion en or, migration v25), quêtes quotidiennes (migration v24). Digest inchangé : `f72106ff…` 1379/3000, `3f9fe198…` 4558/10000 (N = 10 000). 134 tests, smoke 243 checks. Rapport : `docs/historique/economie-v2.md`. Prochain bloc : hub-ville + errance (craft en ville et page Personnage à onglets avec la maquette).
+
+
 ## [1.24] — 2026-11-11 — Économie v2, lot E3b : les jetons de génération disparaissent (migration v25)
 
 Les jetons de génération sont supprimés : plus d'octroi (départ, boss, jalons), plus de table `JETON_RARITY`. Les cartes naissent à la Guilde (compagnons du jour), au marchand de la Boutique, en quêtes quotidiennes et en donjon. Migration v25 non destructive : les jetons restants sont convertis en or (table `JETON_OR`, taux proposés C 100 → UR 5 000). Digest inchangé `f72106ff…` 1379/3000. 134 tests, smoke 243 checks (5 nouveaux verts).

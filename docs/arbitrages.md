@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 clôturée (lots E1-E5) : digest inchangé, baseline maintenue
+
+- **Clôture** : Boutique complète (E1), marchand de créatures (E2), Guilde + compagnons (E3a), jetons supprimés avec conversion en or (E3b, v25), quêtes quotidiennes + défi du jour supprimé (E4, v24). Preuve finale : build ok, **134 tests**, smoke **243 checks** (2 échecs préexistants hors chantier), digest **inchangé partout** — 3000 : `f72106ff…` 1379/3000 ; **N = 10 000 : `3f9fe198…` 4558/10000, 0 exception, 1 marathon** (même baseline que la clôture boucle v2 : l'économie v2 ne touche pas les maths de combat). Rapport : `docs/historique/economie-v2.md`. Reste au bloc visuel : craft en ville, page Personnage à onglets, hub-ville, errance.
+
 ## 2026-11-11 : MESURE — économie v2 lot E3b livré (suppression des jetons de génération, migration v25)
 
 - **Livré** : les jetons de génération disparaissent (ACTÉ 10/11) — plus d'octroi (départ, boss final, jalons), plus de section à la Guilde, plus de table `JETON_RARITY` (`jetonRarityFor` retiré du moteur). Les naissances passent par l'écran de départ, les quêtes (carte N 1 jour/3), la Guilde (compagnons) et le marchand. **Migration v24 → v25 non destructive** : chaque jeton restant est converti en or selon la table `JETON_OR` en data (C 100 → UR 5 000, taux **PROPOSÉ**) puis le champ est vidé. Textes d'accueil/donjon/Guilde mis à jour.
