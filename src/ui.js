@@ -458,6 +458,30 @@ function buyEquipment(id) {
   return true;
 }
 
+// économie v2 lot E2 : marchand de créatures — monstres non nommés, raretés vendues en data
+function marchandMonsters() {
+  const vendues = new Set(MARCHAND.raretesVendues ?? []);
+  return allMonsters().filter((m) => vendues.has(m.rarity) && !(m.name ?? '').includes(','));
+}
+
+function marchandPrix(monstre) {
+  return MARCHAND.prixParRarete?.[monstre.rarity] ?? null;
+}
+
+function buyMonster(id) {
+  const m = allMonsters().find((x) => x.id === id);
+  const prix = m ? marchandPrix(m) : null;
+  if (!m || prix == null) return false;
+  const max = MARCHAND.maxExemplaires ?? 3;
+  if ((ownedOf(id) ?? 0) >= max) { toast(`✗ Déjà ${max} exemplaires de ${m.name}.`, 'warn'); return false; }
+  if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour ${m.name}.`, 'warn'); return false; }
+  store.gold -= prix;
+  newInst(id, 1, 0);
+  save();
+  updatePtsBadge();
+  return true;
+}
+
 // PV/mana courants d'un exemplaire hors combat : persistés dans le run, à plein sinon
 function curHpManaOf(iid) {
   const inst = byIid(iid);
@@ -4604,6 +4628,15 @@ function renderBoutique(root) {
     <button type="button" class="btn small gold" data-buy-eclat="${el}" ${store.gold < eclatPrix ? 'disabled' : ''}>Acheter — ${eclatPrix} or</button>
   </div>`).join('');
   const boutiquePieces = EQUIPMENT.filter((p) => p.source === 'boutique');
+  const marchandRows = (MARCHAND.raretesVendues ?? []).map((rar) => {
+    const list = marchandMonsters().filter((m) => m.rarity === rar);
+    const prix = MARCHAND.prixParRarete?.[rar] ?? 0;
+    if (!list.length) return '';
+    return `<h4 class="shop-sub">${RARITY_LABEL[rar] ?? rar} — ${prix} or</h4>` + list.map((m) => `<div class="shop-row">
+      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}</span></span>
+      <button type="button" class="btn small gold" data-buy-mon="${m.id}" ${store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
+    </div>`).join('');
+  }).join('');
   const eqRows = boutiquePieces.map((p) => `<div class="shop-row">
     <span>${p.slot === 'arme' ? '🗡️' : p.slot === 'armure' ? '🛡️' : '📿'} <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée : <b>${equipPieceCount(p.id)}</b></span></span>
     <button type="button" class="btn small gold" data-buy-eq="${p.id}" ${store.gold < p.prix ? 'disabled' : ''}>Acheter — ${p.prix} or</button>
@@ -4616,7 +4649,10 @@ function renderBoutique(root) {
     <h3>💎 Éclats bruts</h3>
     ${eclatRows}
     <h3>🗡️ Équipement (rayon Boutique)</h3>
-    ${eqRows}`;
+    ${eqRows}
+    <h3>🐾 Marchand de créatures</h3>
+    <p class="muted">Monstres non nommés (fusion, enseignements), raretés ${MARCHAND.raretesVendues.join(' à ')} — échelle C 200 → UR 10 000 or.</p>
+    ${marchandRows}`;
   root.querySelectorAll('[data-buy]').forEach((b) => {
     b.onclick = () => {
       if (buyPotion(b.dataset.buy)) {
@@ -4638,6 +4674,15 @@ function renderBoutique(root) {
       const piece = EQUIP_BY_ID[b.dataset.buyEq];
       if (buyEquipment(b.dataset.buyEq)) {
         toast(`✓ ${piece.nom} achetée (${piece.prix} or) — elle rejoint l'inventaire, à équiper depuis la fiche.`);
+        renderBoutique(root);
+      }
+    };
+  });
+  root.querySelectorAll('[data-buy-mon]').forEach((b) => {
+    b.onclick = () => {
+      const m = allMonsters().find((x) => x.id === b.dataset.buyMon);
+      if (buyMonster(b.dataset.buyMon)) {
+        toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
         renderBoutique(root);
       }
     };
@@ -4889,6 +4934,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.21 : Économie v2 lot E2 — marchand de créatures', 'Nouveau rayon 🐾 à la Boutique : monstres non nommés, raretés C à UR, 200 à 10 000 or (échelle en données), limite 3 exemplaires — pour la fusion et les enseignements. Les jetons disparaîtront au rework Forge → Guilde. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.20 : Économie v2 lot E1 — Boutique complète', 'La Boutique couvre le catalogue fixe : potions, éclats bruts des 5 éléments (150 or, revendables 100 or) et rayon équipement (60 pièces, 200 à 1 600 or — armes typées, armures, slots d’équipe). Les pièces de set restent hors Boutique. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.18 : Boucle v2 lot 6 — baseline finale, chantier clos', 'Nouvelle baseline digest au pack N = 10 000 : 3f9fe198… 4558/10000 (45,6 %), 0 exception, 1 marathon (pack 3000 inchangé : f72106ff… 1379/3000). 128 tests, smoke 210 checks. Rapport de clôture dans docs/historique/rapport-boucle-v2.md. Les 6 lots de la boucle v2 sont livrés.'],

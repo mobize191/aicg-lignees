@@ -28,3 +28,19 @@ test('économie v2 — rayon équipement Boutique = pièces source boutique, 200
   assert.equal(sets.length, 90, '90 pièces de set (5 zones x 3 paliers x 6 pièces), hors Boutique');
   for (const p of sets) assert.notEqual(p.source, 'boutique', `${p.id} set non vendu à la Boutique`);
 });
+
+test('économie v2 lot E2 — marchand de créatures : échelle de prix en data, bornes actées', () => {
+  const D = loadData();
+  const m = D.marchand;
+  assert.ok(m, 'data/marchand.json existe');
+  assert.equal(m.prixParRarete.C, 200, 'borne basse actée : C 200 or');
+  assert.equal(m.prixParRarete.UR, 10000, 'borne haute actée : UR 10 000 or');
+  const rars = m.raretesVendues;
+  assert.deepEqual([...rars].sort(), ['C', 'R', 'SR', 'UC', 'UR'].sort(), 'raretés vendues C à UR (pas L/M)');
+  for (const r of rars) assert.ok(m.prixParRarete[r] > 0, `prix ${r} renseigné`);
+  assert.equal(m.maxExemplaires, 3, 'limite 3 exemplaires, comme le recrutement');
+  const nonNomme = D.monsters.filter((x) => !(x.name ?? '').includes(','));
+  for (const x of nonNomme) {
+    if (rars.includes(x.rarity)) assert.ok(m.prixParRarete[x.rarity], `${x.id} achetable`);
+  }
+});

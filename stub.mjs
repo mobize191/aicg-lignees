@@ -200,7 +200,7 @@ const API_PAIRS = {
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   drawNaissance: 'drawNaissance', noLossPctOf: 'noLossPctOf', xpToNext: 'xpToNext',
   EQUIPMENT: 'EQUIPMENT', EQUIP_BY_ID: 'EQUIP_BY_ID', equipBonusOfCard: 'equipBonusOfCard', equipTeamBonus: 'equipTeamBonus', bossPieceFor: 'bossPieceFor', addMateriau: 'addMateriau', materiauCount: 'materiauCount', addEquipmentPiece: 'addEquipmentPiece', equipPiece: 'equipPiece', openRecompensesModal: 'openRecompensesModal',
-  potionCount: 'potionCount', totalPotions: 'totalPotions', buyPotion: 'buyPotion', buyEclat: 'buyEclat', buyEquipment: 'buyEquipment', bonusLabelOf: 'bonusLabelOf', gemCount: 'gemCount', equipPieceCount: 'equipPieceCount', addGold: 'addGold', autelDeSoin: 'autelDeSoin', healRunComplet: 'healRunComplet', applyRunStateTo: 'applyRunStateTo', persistRunStateFrom: 'persistRunStateFrom', curHpManaOf: 'curHpManaOf', POTIONS: 'POTIONS',
+  potionCount: 'potionCount', totalPotions: 'totalPotions', buyPotion: 'buyPotion', buyEclat: 'buyEclat', buyEquipment: 'buyEquipment', buyMonster: 'buyMonster', marchandMonsters: 'marchandMonsters', marchandPrix: 'marchandPrix', MARCHAND: 'MARCHAND', ownedOf: 'ownedOf', bonusLabelOf: 'bonusLabelOf', gemCount: 'gemCount', equipPieceCount: 'equipPieceCount', addGold: 'addGold', autelDeSoin: 'autelDeSoin', healRunComplet: 'healRunComplet', applyRunStateTo: 'applyRunStateTo', persistRunStateFrom: 'persistRunStateFrom', curHpManaOf: 'curHpManaOf', POTIONS: 'POTIONS',
   _actEl: '() => actBox',
   _prompt: '() => promptState',
   _busy: '() => busy',

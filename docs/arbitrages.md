@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 lot E2 livré (marchand de créatures dans la Boutique)
+
+- **Livré** : rayon 🐾 Marchand de créatures à la Boutique — monstres **non nommés**, raretés C à UR, prix en data (`data/marchand.json` : C 200 → UR 10 000 or, bornes actées ; paliers UC 600 / R 1 800 / SR 4 000 **PROPOSÉ**, calibrage v0 à affiner au digest), limite 3 exemplaires. Achat en or, exemplaire ajouté à la collection (fusion/enseignements). Les rangs L/M et les nommés ne sont pas vendus. **La suppression des jetons de génération (`JETON_RARITY`) est reportée au lot E3 (rework Forge → Guilde)** — le marchand coexiste avec les jetons en attendant, option conservative.
+- **Preuve** : build ok, **131 tests** verts (échelle de prix en data), smoke **224 checks** (7 nouveaux B7 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (achats hors combat).
+
+## 2026-11-11 : PROPOSÉ — paliers intermédiaires du marchand de créatures (UC 600, R 1 800, SR 4 000 or)
+
+- Seules les bornes C 200 et UR 10 000 or sont actées ; les paliers intermédiaires sont proposés en progression croissante (×3 environ) et notés PROPOSÉ en attendant Marc-Olivier. Le L et le M restent hors vente (évolution/boss uniquement), comme les nommés.
+
 ## 2026-11-11 : MESURE — économie v2 lot E1 livré (Boutique complète : éclats bruts + rayon équipement)
 
 - **Livré** : la 🛒 Boutique couvre le catalogue fixe acté — rayon potions (déjà livré lot 1), **rayon éclats bruts** (5 éléments, achat `ECLAT_BUY_PRIX` = 150 or en data, revente 100 or via l'inventaire) et **rayon équipement** (les 60 pièces `source: "boutique"` de `data/equipment.json`, 200 à 1 600 or, armes typées par classe + armures + slots d'équipe ; les 90 pièces de set restent hors Boutique : boss, craft, évolutions). Achats en or, solde persisté, aucune migration (champs existants). Les pièces achetées rejoignent l'inventaire et s'équipent depuis la fiche.

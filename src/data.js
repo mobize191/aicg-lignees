@@ -113,6 +113,9 @@ const EQUIP_BY_ID = Object.fromEntries(EQUIPMENT.map((p) => [p.id, p]));
 
 const EQUIP_SETS = DATA.equipment?.sets ?? {};
 
+// économie v2 lot E2 : marchand de créatures (data/marchand.json)
+const MARCHAND = DATA.marchand ?? { prixParRarete: {}, raretesVendues: [], maxExemplaires: 3 };
+
 const EQUIP_DROP_RATE = E.EQUIP_DROP_RATE;
 
 const GEM_BRUT_PRIX = E.GEM_BRUT_PRIX;

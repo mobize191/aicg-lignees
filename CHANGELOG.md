@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.21] — 2026-11-11 — Économie v2, lot E2 : marchand de créatures à la Boutique
+
+Nouveau rayon 🐾 à la Boutique : monstres non nommés, raretés C à UR, prix en données (C 200 → UR 10 000 or, paliers intermédiaires proposés), limite de 3 exemplaires par créature. Pour la fusion et les enseignements. Les jetons de génération disparaîtront au lot E3 (rework Forge → Guilde). Digest inchangé `f72106ff…` 1379/3000. 131 tests, smoke 224 checks (7 nouveaux verts).
+
+
 ## [1.20] — 2026-11-11 — Économie v2, lot E1 : Boutique complète (éclats bruts + rayon équipement)
 
 La 🛒 Boutique couvre le catalogue fixe : potions, **éclats bruts** des 5 éléments (achat 150 or, revente 100 or via l'inventaire) et **rayon équipement** (60 pièces, 200 à 1 600 or — armes typées par classe, armures, slots d'équipe). Les pièces de set restent hors Boutique (boss, craft, évolutions). Pièces achetées équipables depuis la fiche. Digest inchangé `f72106ff…` 1379/3000. 130 tests, smoke 217 checks (7 nouveaux verts).

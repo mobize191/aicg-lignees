@@ -942,6 +942,28 @@ async function main() {
     check('B6 g 0 exception lot E1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot E2 économie v2 — marchand de créatures dans la Boutique
+    api.go('#boutique');
+    await wait(20);
+    const nbMon = doc.body.querySelectorAll('[data-buy-mon]').length;
+    const pool = api.marchandMonsters();
+    check('B7 a rayon marchand : monstres non nommés, raretés vendues en data', nbMon === pool.length && pool.length > 50 && pool.every((m) => !(m.name ?? '').includes(',')), `${nbMon}/${pool.length}`);
+    api.store.gold = 50000;
+    const m = pool.find((x) => x.rarity === 'C');
+    const gold0 = api.store.gold;
+    const owned0 = api.ownedOf(m.id);
+    check('B7 b achat monstre C : -200 or, +1 exemplaire', api.buyMonster(m.id) === true && api.store.gold === gold0 - api.marchandPrix(m) && api.ownedOf(m.id) === owned0 + 1, m.id);
+    check('B7 c prix selon échelle data (C 200, UR 10 000)', api.marchandPrix(pool.find((x) => x.rarity === 'C')) === 200 && api.marchandPrix(pool.find((x) => x.rarity === 'UR')) === 10000, '');
+    const named = (api.DATA.monsters ?? []).find((x) => (x.name ?? '').includes(','));
+    check('B7 d monstre nommé non vendu', api.buyMonster(named.id) === false, named.id);
+    const l = (api.DATA.monsters ?? []).find((x) => x.rarity === 'L');
+    check('B7 e rang L non vendu au marchand', api.buyMonster(l.id) === false, l.id);
+    api.store.gold = 0;
+    check('B7 f achat sans or refusé', api.buyMonster(m.id) === false, '');
+    check('B7 g 0 exception lot E2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }
