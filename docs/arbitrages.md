@@ -2,6 +2,30 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 (nuit, 2e tour) : SESSION — retours de jeu de Marc-Olivier : refonte de direction, questions ouvertes pour la session du 12/11
+
+Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS antérieurs ; le tranchage le plus récent prime ». Chaque point ci-dessous contredit volontairement des ACTÉS plus anciens : l'entrée du jour révisé, la session du 12/11 (doc `docs/design/session-qa-direction.md`) tranche le reste. Bugs et nettoyage : roadmap, section « Retours de session du 11/11 nuit ».
+
+**ACTÉ (ce tour)** :
+
+1. **Menu du haut supprimé** : menu latéral seul ; l'Accueil devient la page par défaut (« comme retourner à la maison », toujours visible en fond) ; chaque page reçoit son propre fond ; petites interactions depuis l'Accueil vers les Terres Sauvages, la Boutique, la Guilde.
+2. **Page Donjons supprimée** : absorbée par les Terres Sauvages — on marche jusqu'au donjon, on entre, un écran affiche les paliers accessibles ; les Terres affichent l'état des donjons déjà bouclés.
+3. **Guilde : l'hôtel de génération (compagnons du jour) supprimé** ; les compagnons actuels sont jugés pas assez chers et trop forts dès le début — recalibrage à la spec.
+4. **Gating global des acquisitions par la progression** (répété trois fois : très important) : marchand, boutique et acquisitions de cartes ne proposent que ce que la progression débloque (« tu as débloqué telle zone → droit à tel type de carte »).
+5. **Équipement refondu en sets assignables** : ~7 sets nommés à affinités et capacités (set assassin, set prêtre…) ; un set assigné à une carte y reste jusqu'à désassignation (un set = une carte à la fois) ; sets par famille/biome façon panoplies Dofus/Wakfu (gobelin → gobelin royal → sauvage) ; **rareté d'équipement bornée par la rareté de la carte** (N ≈ C ; C → objets C/UC ; UC → +R ; R → +SR — extrémités hautes à préciser en spec). Révise l'ACTÉ « équipement à slots typés par classe + slots d'équipe » du 10/11 nuit ; les ~90 arts complets par objet (ACTÉ du 11/11 soir) deviennent les pièces de sets.
+6. **Boutique refondue en onglets** (potions / éclats / armes / armures / talismans…, au lieu d'une liste unique déroulante) ; **Inventaire refondu en onglets par type** (petites cases symbole + nombre + description au clic). Trop d'objets affichés aujourd'hui.
+7. **Errance : rendu à refaire** — décor jugé « vraiment moche, pas du tout détaillé », héros « assez moche » ; la démo jouable `docs/design/maquettes/errance-demo-jouable.html` (upload de Marc-Olivier, 11/11 nuit) devient le **plancher de qualité** : prairie peinte à variations organiques, chemin de terre, étang vivant (nénuphars, roseaux, reflets), arbres en couches, rochers moussus, donjon visible à porte lumineuse, maisons fumantes, autel, hautes herbes animées, lucioles, ombres de nuages, feuilles au vent, marqueur de destination. Un **point de retour ville** devient obligatoire dans chaque zone d'errance (sans menu du haut, c'est le seul moyen de rentrer).
+
+**PROPOSÉ (à trancher en session du 12/11, doc dédié)** :
+
+8. **Donjons : 5 étages par donjon + zones d'errance intérieures** : boucler l'étage N débloque l'étage comme zone d'errance visitable (labyrinthes, découvertes) ; Terres Sauvages par profondeur (surface / profondeur 1/2/3) ; une seule grande carte continue avec animations de blocage — ressenti « 25 donjons ». Marc-Olivier demande à être challengé : analyse et questions dans le doc de session §3.
+9. **Retirer l'élément des cartes** : la carte porte sa classe (assassin, guerrier, prêtre, mage, occultiste), l'élément vit sur les sorts. Révise les ACTÉS familles/oppositions ; à trancher avant contenu v4.
+10. **Niveaux 1→100 + fusions** : la rareté devient le point de départ, le niveau la vraie échelle ; bonus de fusion précoce. À challenger (cohabitation avec les paliers de famille).
+11. **Identité du jeu** : recherche demandée et faite (DQM Joker vs Pokémon vs FF, doc de session §1) ; à trancher : taille d'équipe, nombre d'équipes (1-2 plutôt que 3 ?), rythme de la collection.
+12. **Lore et but du jeu** (manque assumé) : but, fin, post-fin, nommage lore des paliers, récompenses des donjons au-delà du drop, forçage des choix du joueur.
+
+**Conséquences d'ordonnancement** : points 8 à 12 se tranchent AVANT les chantiers de code concernés ; le couloir 1 (libre depuis v1.32) prend d'abord les bugs rapides ; le couloir design continue arts série 3 + habillage boucle v2 (maquette n°2 toujours en attente de validation).
+
 ## 2026-11-11 : MESURE — clôture du chantier « contenu v3 » (v1.32, 8 lots C1-C8) : digest complet N = 3000 ET N = 10 000, MESURE sans recalibrage
 
 - **Clôture** (spec `docs/design/contenu-v3-spec-plan.md`) : validateur data vert (anti-doublon de noms EXI-DATA-3 inclus), tables `docs/tables/` régénérées (`node tools/gen-tables.mjs`), CHANGELOG/HISTORY/roadmap à jour (v1.32), protocole IHM `docs/validation-ihm.md` actualisé v1.33 (S1-S20, baselines 150 tests / smoke 299 / digests courants). **Digest final N = 3000 : `f8a9f0bb…` 1359/3000 (0 exception, 1 marathon)** et **N = 10 000 : `978ed44b…` 4517/10000 (45,2 %, 0 exception, 1 marathon)** — contre baseline verrouillée `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000 : l'écart vient du lot C3 (gobelins régionaux dans les vagues du Bosquet/Crypte/Zénith) ; **MESURE consignée, aucune maths d'équilibrage touchée** (baseline ACTÉ 11/11). 150 tests verts, smoke 299 checks (seuls échecs préexistants 46 g/45 e). Validation finale téléphone ET PC par Marc-Olivier toujours en attente (protocole v1.33 prêt).
