@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — maquette n°1 Accueil/hub-ville validée + révision DA (retour de Marc-Olivier)
+
+- **La maquette n°1 (Accueil / hub-ville) est VALIDÉE** : `docs/design/maquettes/accueil-hub-ville.html` (scène hub-ville, voile, menu latéral droit Boutique/Guilde/Quêtes/Personnage/Paramètres, défi du jour, bouton Les Terres Sauvages avec pop-up équipe vide, héroïne cheveux blancs/cape noire cliquable, bouton retour, annotations DA). Elle passe au couloir 1 dans l'ordre acté ; la prochaine maquette du couloir design est l'habillage boucle v2.
+- **Révision DA du hub actée** (retour de Marc-Olivier) : (1) **cadres médiévaux dorés** — double liseré or (bord or sombre + filet clair interne), petits losanges ◆ en coins sur les boutons du menu — sur TOUS les contrôles de l'app : le cadre or médiéval devient le standard des boutons v2 ; (2) **place de village ensoleillée** — lumière chaude de jour, place pavée, **fontaine centrale**, étals de marché, villageois, oiseaux. La vidéo d'ambiance WAN 2.1 14B suivra cette DA : prompting naturel « sunny medieval town square, stone fountain, bustling villagers, warm daylight, static camera » (720p_14B, réglages WAN actés en tête de journal).
+- La charte graphique v2 hérite : lumière chaude de jour pour les écrans de ville, or médiéval pour les cadres de contrôles.
+
 ## 2026-11-11 : ACTÉ — prompt de lancement du chantier boucle de jeu v2 (couloir 1)
 
 `docs/prompt-boucle-v2.md` : le prompt à copier au début de la session agent du couloir 1. Il reprend la spec (`docs/design/boucle-v2-spec-plan.md`), les 6 lots avec leur contenu, le périmètre exclu (errance, craft/Boutique complète, équilibrage final, contenu v3, IA de combat), les règles d'or et la chaîne de preuve, dont le recalibrage du digest à chaque lot qui change les maths.
