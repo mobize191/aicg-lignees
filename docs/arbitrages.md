@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — retour au socle de prompts NL painterly d'origine, corrigé (vague 3)
+
+- **Verdict vague 2 de Marc-Olivier : résultat mauvais dans l'ensemble** — défauts techniques (quasi-monochrome ~15-20 %, visages sombres, 4 human review : z22, a16, d6, f18) et rupture avec le style painterly semi-réaliste des arts d'origine. La grammaire danbooru « anime style » de la vague 2 est **abandonnée**.
+- **Décision ACTÉE : repartir des prompts WAI d'origine (`seeds-wai.csv`, langage naturel painterly) comme socle de la vague 3**, avec les corrections : (1) suppression de l'ancre « trading card game artwork » (cause probable des effets de bordure de carte) remplacée par « epic fantasy splash artwork » + négatif anti-cadre ; (2) sujet reconstruit depuis `species-map.json` uniquement — les ~180 fragments issus de la traduction littérale des noms (« A bow », « A sea foam »…) sont supprimés ; (3) cadrage demi-corps/full body vérifié par rareté ; (4) négatif court §15 + correctifs §14 ; (5) conservation des acquis v2 (seeds, mapping strict, IPAdapter 0.4, budgets, i2v ambiances).
+- Spéc complète à appliquer : `docs/images/correction-prompts-v3.md`. Checkpoint inchangé (WAI v17, canon §15). Relance précédée d'un témoin de 6 cartes validé visuellement par Marc-Olivier.
+
 ## 2026-11-11 : ACTÉ — maquette n°1 Accueil/hub-ville validée + révision DA (retour de Marc-Olivier)
 
 - **La maquette n°1 (Accueil / hub-ville) est VALIDÉE** : `docs/design/maquettes/accueil-hub-ville.html` (scène hub-ville, voile, menu latéral droit Boutique/Guilde/Quêtes/Personnage/Paramètres, défi du jour, bouton Les Terres Sauvages avec pop-up équipe vide, héroïne cheveux blancs/cape noire cliquable, bouton retour, annotations DA). Elle passe au couloir 1 dans l'ordre acté ; la prochaine maquette du couloir design est l'habillage boucle v2.
