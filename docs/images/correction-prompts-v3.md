@@ -1,5 +1,7 @@
 # Spéc de correction — prompts v3 (retour au socle NL painterly d'origine, corrigé)
 
+> **Statut 11/11/2026 : vague 3 LIVRÉE et VALIDÉE (v1.28)** — 271 prompts générés (`tools/prompts-v3.json`, auto-vérification 0 erreur), 274 images, rapport `tools/out-v2/RAPPORT-vague3.md`, manifeste unique `assets-v3.json`. Seul échec constaté : d6 (visage sous capuche, retry recommandé).
+
 > Décision de Marc-Olivier du 11/11/2026 après verdict vague 2 : repartir des **prompts WAI d'origine (seeds-wai.csv)** comme socle et les corriger. Checkpoint inchangé : **WAI-Illustrious v17, réglages canon §15** (Euler a, tags qualité en fin si tags, VAE baked, hires fix denoise 0.35-0.5). Ce document remplace la grammaire danbooru de la vague 2 pour TOUTES les cartes (271).
 
 ## 1. Audit du socle d'origine (265 prompts analysés par le couloir design)

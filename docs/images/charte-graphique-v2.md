@@ -1,6 +1,6 @@
 # Charte graphique v2 — personnages, environnements, déco (PROPOSITION)
 
-> Statut : **PROPOSÉ** (10/11/2026), issu de la session design avec Marc-Olivier. Ne remplace pas encore `docs/images/images-conventions.md` : à faire entrer dans `docs/arbitrages.md` puis à acter après la campagne de validation. La feuille v1 reste la référence de production tant que la v2 n'est pas validée.
+> Statut : **ACTÉE et validée** (11/11/2026) — la campagne V3 a été produite et validée sur cette charte (budgets §13, canon §15, correctifs §14) ; v1.28 en fait la référence de production unique (`assets-v3.json`). Voir arbitrages du 11/11.
 
 ## 1. Direction artistique (ACTÉE par Marc-Olivier)
 
@@ -147,7 +147,7 @@ Les budgets v1 (art 300×420 ≤ 30 Ko, fond 960×540 ≤ 110 Ko, compression ag
 | Masters ComfyUI | non conservés | **conservés en 1040×1520** (hire fix ×1.25) pour upscale/print futur |
 
 - La lisibilité 200×280 (§1) reste la règle de DESIGN : silhouette claire, 2-3 plages de contraste — elle est indépendante du budget de fichier.
-- `make-assets.py` prendra ces budgets à la conversion ; les masters sont archivés à part (jamais dans le dist ni dans assets.json).
+- `make-assets.py --v2` applique ces budgets à la conversion ; les masters sont archivés à part, hors repo (jamais dans le dist ni dans `assets-v3.json`).
 - La netteté du visage après ADetailer survit enfin au zoom de fiche (le v1 en q72 la sacrifiait).
 
 

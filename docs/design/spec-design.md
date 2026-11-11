@@ -763,7 +763,7 @@ Après le tour « contenu massif », brancher la génération d'images (arts de 
 
 **Convention de noms** : `art/<id>.jpg|png` (art de carte, id du catalogue : e16, f3...), `bg/<id-donjon>.jpg|png` (fond de donjon : marees, forge, bosquet, crypte, zenith), `fx/<slug-sort>.mp4|webm` (vidéo de sort, slug = nom sans accents, minuscules, tirets : abime-absolu).
 
-**Module `js/ui/assets.js` (dans le dist)** : `initAssets()` tente `fetch('assets.json')` (manifeste généré par le packer, cas http : chargement instantané, aucune requête manquée) ; sinon sondage `new Image()` par carte et par donjon (tolérant en file://, double-clic) ; `probeFx(nom)` sonde les vidéos à la demande. Fichier manquant → retombe sur glyphe/dégradé, aucune erreur bloquante.
+**Module `js/ui/assets.js` (dans le dist)** : `initAssets()` tente `fetch('assets-v3.json')` depuis v1.28 (manifeste unique de la campagne V3, 265 arts + 8 fonds, servi par la CI Pages, cas http : chargement instantané, aucune requête manquée) ; sinon sondage `new Image()` par carte et par donjon (tolérant en file://, double-clic) ; `probeFx(nom)` sonde les vidéos à la demande. Fichier manquant → retombe sur glyphe/dégradé, aucune erreur bloquante. Les anciens manifests (`assets.json`, `assets-wai.json`, `assets-v2.json`) sont archivés dans `archives/assets/`.
 
 **Branchement UI** : `setArt(id, url)` dans card.js (la map ART vide était déjà câblée dans collection/équipe/combat/fiches, CSS `.art-img` existant) ; donjons : `d.art` déjà branché (écran donjons) + fond de combat illustré avec voile dégradé (`combatApp.style.background` = image + voile sombre) ; vidéos : `probeFx` exposé pour le futur chantier effets plein écran.
 

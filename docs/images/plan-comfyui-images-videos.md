@@ -1,5 +1,7 @@
 # Campagne d'illustrations et vidéos ComfyUI — plan d'exécution
 
+> **Historique depuis le 11/11/2026 (v1.28) :** ce plan série 1 (DreamShaper XL, `assets.json`) est **remplacé par la campagne v2/v3** (WAI-Illustrious v17, charte v2, manifeste unique `assets-v3.json`, anciens manifests archivés dans `archives/assets/`). La vague 3 est livrée et validée : rapport `tools/out-v2/RAPPORT-vague3.md`, spec `docs/images/correction-prompts-v3.md`. Ce document reste la trace du plan initial.
+
 > **Pour les agents d'exécution :** suivre ce plan tâche par tâche, dans l'ordre. Les étapes utilisent des cases à cocher (`- [ ]`) pour le suivi. Chaque tâche se termine par une porte de validation : ne jamais passer à la suivante sans l'avoir franchie.
 
 **Goal :** produire avec ComfyUI (DreamShaper XL) l'illustration de chaque carte du jeu AICG : Lignées, les 5 fonds de donjons, puis les vidéos de sorts signature (WAN 2.2 5B), et les intégrer au manifeste `assets.json` sans jamais toucher au moteur du jeu.
@@ -332,10 +334,10 @@ Hors périmètre (assumé) : les archives restent sans art (p2 Ange Gardien, b1-
 
 Méthode : pipeline série 1 inchangé (`tools/extract-cards.mjs` → `tools/build-prompts.mjs` → `tools/comfy-batch.mjs` → `tools/make-assets.py`), conventions v1 (`docs/images/images-conventions.md`) — la charte v2 est PROPOSÉE et n’a pas encore remplacé la v1 ; les 29 nommées de référence (`tools/seeds.csv`) servent de repère quand la carte existe. Budgets série 1 conservés : ≤ 30 Ko par art, ASCII pur ; le manifeste passe à ~8,6 Mo (231 + 27 = **258 arts** attendus).
 
-- [ ] **Étape 1** : générer les prompts des 27 cartes (même phrase de style finale), seed fixe consigné dans `tools/seeds.csv`.
-- [ ] **Étape 2** : rendu ComfyUI par batch, planche de contrôle (`tools/contact-sheet.py`) à valider par Marc-Olivier avant intégration.
-- [ ] **Étape 3** : intégration : ajouter les 27 arts au manifeste existant `assets.json` (vérifier le mode d’ajout de `tools/make-assets.py` ; les ids nouveaux s’ajoutent aux 231 existants, aucun id écrasé) ; si la comparaison WAI est maintenue, idem `assets-wai.json`.
-- [ ] **Étape 4** : mise à jour des docs (README section assets, roadmap série 2 → FAIT) ; non-régression inchangée : `dist.html` et le moteur non modifiés (digest `833a6d2c…` 518/3000, smoke 171 PASS).
+- [x] **Étape 1** : FAIT en vague 3 — prompts des 27 cartes via `tools/build-prompts-v3.mjs` → `tools/prompts-v3.json`, seeds dans `tools/seeds-v2.csv`.
+- [x] **Étape 2** : FAIT en vague 3 — rendu ComfyUI (`tools/gen-vague3.py`), planche `planche-v3-serie2.png` validée (IPAdapter 0.4 ease in-out end 0.85).
+- [x] **Étape 3** : FAIT en v1.28 — 27 arts intégrés à `assets-v3.json` (manifeste unique ; `assets.json`/`assets-wai.json` archivés).
+- [x] **Étape 4** : FAIT en v1.28 — docs mises à jour (README, roadmap, arbitrages, charte v2 actée) ; non-régression : 139 tests verts, digest `f72106ff…` 1379/3000 inchangé.
 
 ---
 
