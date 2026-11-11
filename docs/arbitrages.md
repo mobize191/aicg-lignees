@@ -12,6 +12,7 @@
   - **§3 Pré-rendu du décor — absent** : le décor est redessiné tuile par tuile à chaque frame (`fillRect` par tuile) au lieu d'un canvas offscreen peint une fois puis blitté en un `drawImage` par frame.
   - **Correctif** : implémenter §5, §6 et §3 en conformité avec le guide, sans toucher aux rencontres, à la grâce, aux autels/jarres ni à la persistance (déjà conformes).
 - **Ordonnancement** : les deux correctifs passent **avant** la généralisation de l'errance aux autres zones et avant le calibrage final (point 8 de la roadmap) ; le redesign de l'IA de combat (point 10) reste après. Aucune maths touchée : digest attendu inchangé `f72106ff…` 1379/3000.
+- **Brief de lancement** : `docs/prompt-correctifs-terrain.md` (correctif 1 : CSS mobile ; correctif 2 : conformité errance §3/§5/§6 du guide).
 
 ## 2026-11-11 : MESURE — bloc visuel H1/H2/H3 livré (hub-ville, Terres Sauvages, errance top-down zone témoin Marées, migration v26)
 

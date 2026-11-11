@@ -35,7 +35,7 @@ Les décisions de la session design sont appliquées aux données du jeu (voir `
 
 Le grand chantier arbres + sorts est terminé ; les caractéristiques v0.47 (agi/int, esquive, mana, seuils) et la campagne d'illustrations sont faites. Les tests IHM du 10/11 soir ont rapporté cinq corrections prioritaires, un bug de sorts en doublon (diagnostiqué) et un écart doc/moteur sur la règle de rang. Restent, dans l'ordre acté :
 
-1. **Correctifs terrain (tests IHM du 10/11 soir + retours mobile du 11/11 soir)** :
+1. **Correctifs terrain (tests IHM du 10/11 soir + retours mobile du 11/11 soir ; brief : `docs/prompt-correctifs-terrain.md`)** :
    - **Bug des sorts en doublon (diagnostic fait, correctif à écrire)** : à chaque évolution, tous les sorts courants de la carte sont recopiés dans `inst.acc` (ui.js, `oldSpells`) ; au combat, les sorts de l'unité = `inst.acc` + sorts de la nouvelle forme (ui.js, `instSpells`) ; or les sorts de lignée de la nouvelle forme incluent déjà ceux de l'ancienne (liste croissante par palier) → chaque évolution duplique le préfixe, et les premiers sorts d'une carte montée C → L au sein d'une famille s'affichent 5 à 6 fois. Correctif : dédoublonner par identité de sort à la fusion (répare aussi les sauvegardes déjà polluées) et ne cumuler dans `inst.acc` que les sorts que la nouvelle forme ne connaît pas déjà.
    - `elOf()` doit surligner les pions du plateau, pas les rail-chips (ui.js:2966).
    - Bouton réduire/masquer sur la fenêtre d'action tactique (elle masque toute la ligne équipe, jusqu'à 78 dvh, sans aucun bouton pour la refermer).
