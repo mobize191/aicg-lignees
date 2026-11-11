@@ -1124,6 +1124,39 @@ async function main() {
     check('B12 k 0 exception bloc visuel', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // ---------- B13 : correctifs terrain v1.29 — régression CSS mobile + pilotage inertiel de l'errance ----------
+    mem.clear();
+    store.instances = []; store.collection = new Map(); store.departFait = true;
+    store.team.slots = []; store.gold = 300; store.zonesUnlocked = []; store.zonesVisitees = []; store.errance = null;
+    const afterHtml = html.slice(html.lastIndexOf('</html>') + '</html>'.length).trim();
+    check('B13 a dist : plus aucun contenu après </html> (régression CSS mobile)', afterHtml === '', JSON.stringify(afterHtml.slice(0, 40)));
+    const styleBlock = html.slice(0, html.indexOf('</style>'));
+    check('B13 b classes des écrans récents bien dans le <style> du head', styleBlock.includes('.recomp-list') && styleBlock.includes('.chip.r-C') && styleBlock.includes('.fx-video'), '');
+    for (const id of ['n1', 'n2']) { const inst = api.newInst(id, 12); store.collection.set(inst.iid, inst); }
+    setup(['n1', 'n2'], 12);
+    api.go('#terres');
+    await wait(30);
+    els.get('app').querySelectorAll('.enter-zone')[0].click();
+    await wait(60);
+    const st = store.errance;
+    check('B13 c entrée en zone pour le test du pilotage', !!st && !!st.hero, st?.zone ?? 'rien');
+    const v0 = st.hero.v ?? { x: 0, y: 0 };
+    check('B13 d pilotage inertiel : vecteur vitesse hero.v et tilt présents', typeof v0.x === 'number' && typeof v0.y === 'number' && typeof st.hero.tilt === 'number', JSON.stringify(v0));
+    const tgt = { x: Math.floor(st.map.spawn.x) + 2, y: Math.floor(st.map.spawn.y) };
+    api.setTarget(st, tgt.x, tgt.y);
+    let minD = Infinity, maxSpeed = 0;
+    for (let i = 0; i < 300 && st.hero.path.length > 0; i++) {
+      api.stepErrance(st, 0.05, () => 0.99);
+      minD = Math.min(minD, Math.hypot(tgt.x + 0.5 - st.hero.x, tgt.y + 0.5 - st.hero.y)); // les waypoints sont aux centres de tuile
+      maxSpeed = Math.max(maxSpeed, Math.hypot(st.hero.v.x, st.hero.v.y));
+    }
+    check('B13 e arrivée nette sur la cible, sans orbite', st.hero.path.length === 0 && minD < 0.15, 'path=' + st.hero.path.length + ' d=' + minD.toFixed(3));
+    check('B13 f freinage : vitesse quasi nulle une fois arrivé', Math.hypot(st.hero.v.x, st.hero.v.y) < 0.05, 'v=' + Math.hypot(st.hero.v.x, st.hero.v.y).toFixed(3));
+    check('B13 g le héros a bien avancé en chemin (vitesse max mesurée)', maxSpeed > 0.5, 'maxV=' + maxSpeed.toFixed(2));
+    check('B13 h 0 exception correctifs terrain v1.29', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

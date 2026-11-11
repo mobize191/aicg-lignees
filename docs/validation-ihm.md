@@ -1,6 +1,6 @@
 # Validation IHM locale — protocole et prompt
 
-Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre.
+Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.30** (hub-ville, économie v2, errance top-down, correctifs terrain).
 
 ## Préparation (une fois)
 
@@ -8,8 +8,11 @@ Ce document fournit un **prompt prêt à copier** dans un agent local équipé d
 git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
-node combat-digest.mjs dist.html 3000   # baseline attendue : 833a6d2c…, ~518 victoires, 0 exception
-node smoke-ui.mjs dist.html             # baseline attendue : 171 checks TOUT PASSE
+node build.mjs                                # build déterministe : dist.html régénéré
+node --test                                   # 141 tests verts attendus
+node smoke-ui.mjs dist.html                   # 277 checks attendus (1 échec préexistant connu : 46 g, moteur)
+node combat-digest.mjs dist.html 3000         # baseline attendue : f72106ff…, 1379/3000, 0 exception, 1 marathon
+node combat-digest.mjs dist.html 10000        # baseline N = 10 000 : 3f9fe198…, 4558/10000
 # servir le jeu (le chargeur d'assets a besoin de http, pas de file://)
 python3 -m http.server 8080
 # → ouvrir http://localhost:8080/dist.html
@@ -19,40 +22,51 @@ python3 -m http.server 8080
 
 ---
 
-Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 100 % navigateur, servi sur `http://localhost:8080/dist.html` (SPA à hash-routing : `#accueil`, `#collection`, `#equipe`, `#donjons`, `#forge`, `#glossaire`, `#combat`). Ta mission : vérifier que tout fonctionne, que tout est bien aligné, que rien n'est coupé, et produire un rapport avec captures d'écran. Tu ne modifies AUCUN fichier du jeu.
+Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 100 % navigateur, servi sur `http://localhost:8080/dist.html` (SPA à hash-routing : `#accueil`, `#equipe`, `#collection`, `#forge` (la Guilde), `#donjons`, `#quetes`, `#terres`, `#errance`, `#boutique`, `#inventaire`, `#combat`, `#glossaire`). Ta mission : vérifier que tout fonctionne, que tout est bien aligné, que rien n'est coupé, et produire un rapport avec captures d'écran. Tu ne modifies AUCUN fichier du jeu.
 
 ### Règles générales
 
 1. Deux viewports systématiques : desktop **1440×900** et mobile **390×844** (ajoute **360×740** pour les cas limites). Pour chaque scénario ci-dessous, captures dans les deux viewports.
 2. À chaque page : capture plein écran, puis vérifie (a) aucune erreur dans la console (écoute `page.on('console')` et `page.on('pageerror')`), (b) pas de scroll horizontal (`document.documentElement.scrollWidth <= innerWidth`), (c) aucun texte tronqué visible (ellipsis attendues ok, coupures non), (d) tous les boutons interactifs ont une taille ≥ 32 px en mobile.
-3. Les illustrations (cartes + fonds de donjons) doivent se charger via `assets-v3.json` (manifeste unique depuis v1.28) : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond (`#app` avec background-image). Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
-4. Le jeu utilise localStorage : vide-le entre les scénarios qui posent une équipe (`localStorage.clear()`), pas pendant un combat.
+3. **Régression CSS mobile (v1.29)** : sur chaque page, fais défiler jusqu'en bas : AUCUN texte brut de type `.chip.r-C`, `.recomp-list`, `.shop-row`, `.fx-video` ne doit s'afficher (le bug « CSS visible sur téléphone » est corrigé, il ne doit jamais revenir).
+4. Les illustrations (cartes + fonds) se chargent via `assets-v3.json` (manifeste unique depuis v1.28, ~24 Mo) : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond. Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
+5. Le jeu utilise localStorage : vide-le entre les scénarios qui posent une équipe ou un départ (`localStorage.clear()`), jamais pendant un combat ni pendant l'errance.
 
 ### Scénarios (dans l'ordre)
 
-**S1 — Premier lancement.** Ouvre la page, capture l'accueil. Vérifie : le bandeau du haut et la navigation sont visibles ENTIÈREMENT sans scroll sur les deux viewports ; les stats se lisent ; le bouton de sauvegarde ouvre bien sa boîte.
+**S1 — Premier lancement / départ à 2 cartes.** `localStorage.clear()`, ouvre la page : l'écran de départ propose 4 cartes (une par race) ; choisis-en une, capture. Vérifie : 2 cartes accordées (1 choisie + 1 aléatoire), l'accueil/hub-ville s'ouvre ensuite.
 
-**S2 — Forge / premiers jetons.** Va sur `#forge`, génère une carte (les jetons de départ : 2 humains, 1 humain raffiné, 2 races). Capture la révélation (dos ✦ puis flip au clic). Vérifie : le bouton Générer se désactive après usage du jeton du jour, la nouvelle carte apparaît en collection avec un badge « nouvelle ».
+**S2 — Hub-ville (accueil).** Capture. Vérifie : scène de ville + voile + titre lisibles sur les deux viewports, menu latéral (Boutique, Guilde, Quêtes, Personnage/Inventaire, Paramètres) entièrement visible sans scroll en mobile, l'héroïne (cheveux blancs, cape noire) cliquable avec sa bulle de dialogue, le gros bouton « LES TERRES SAUVAGES » ouvre une pop-up si l'équipe est vide, bouton retour partout.
 
-**S3 — Collection.** Va sur `#collection`. Capture. Vérifie : sections par race lisibles, chaque carte affiche nom + rareté + élément + classe, les filtres s'ouvrent en popup et se ferment au clic extérieur, aucune carte ne déborde de sa grille.
+**S3 — Équipe.** `#equipe` : pose des cartes (3 exemplaires max par carte : la 4e pose refusée avec un message). Capture. Vérifie : 5 slots visibles sans scroll en mobile, puissance d'équipe affichée, appui long (ou clic droit) ouvre la fiche.
 
-**S4 — Équipe.** Va sur `#equipe`, pose 5 cartes (3 exemplaires max par carte : la 4e pose doit être refusée avec un message). Capture. Vérifie : 5 slots visibles sans scroll en mobile, la puissance d'équipe s'affiche, un appui long (clic droit ou pointerdown long) ouvre la fiche.
+**S4 — Collection.** `#collection` : capture. Vérifie : sections par race lisibles, chaque carte affiche nom + rareté + élément + classe, filtres en popup qui se ferment au clic extérieur, aucune carte ne déborde de sa grille.
 
-**S5 — Donjons + modificateur.** Va sur `#donjons`, capture. Entre dans le premier donjon : une modale de modificateur doit proposer Accepter / Entrer sans modificateur (gratuit) / Relancer (1 éclat brut, refusé sans éclat). Capture la modale. Vérifie les trois boutons.
+**S5 — Donjons.** `#donjons` : capture. Vérifie : chaîne des 5 donjons (les suivants verrouillés tant que le précédent n'est pas bouclé), sélecteur de niveau « Nv X » avec bande de rareté en toutes lettres (Facile C→R … Enfer UR→M), checkpoint à l'étage multiple de 5 le plus loin atteint.
 
-**S6 — Combat AUTO.** Lance un combat en mode Auto, vitesse normale, capture à mi-combat. Vérifie : plateau entier visible sans couper les contrôles en bas ; le journal défile ; les pastilles ℹ️/🎰/🌱 en haut du h2 sont cliquables et ouvrent une modale (capture une ouverte) ; le bandeau de sort spécial ne couvre pas le plateau ; menu ☰ ouvrable en overlay au-dessus du jeu.
+**S6 — Combat AUTO.** Lance un combat en Auto, capture à mi-combat. Vérifie : plateau entier visible sans couper les contrôles, rail d'ordre du tour lisible, journal qui défile, vitesse ×0,5 → ×32 via `#speed`, menu ☰ ouvrable en overlay.
 
-**S7 — Combat TACTIQUE (le cœur de la v0.46).** Nouveau combat, bascule en Mode : Tactique, lance le tour. Pour CHAQUE carte du joueur, une fenêtre d'action apparaît en bas : capture-la (une par type : attaquante, soigneuse). Vérifie : l'illustration de la carte est visible dans la fenêtre, PV/ATQ/mana affichés, les sorts au mana insuffisant sont grisés (`.off`), après choix d'action la liste des cibles apparaît avec le pion surligné sur le plateau, le clic sur un pion cible fonctionne aussi. Enchaîne un tour complet puis capture le tour ennemi en cours. Vérifie : aucun « tour fantôme » (le combat ne continue pas seul quand on change d'onglet), la fenêtre se ferme en quittant le combat.
+**S7 — Combat TACTIQUE + action Objet.** Nouveau combat en Tactique. Vérifie pour CHAQUE carte du joueur : fenêtre d'action (illustration, PV/ATQ/mana, sorts au mana insuffisant grisés `.off`, aucune ligne « ✦ undefined »), ciblage par liste et clic direct sur pion surligné. Ouvre l'action 🧪 Objet : choix de potion avec le stock affiché, la gorgée soigne et consomme (1 tour), sortie de combat = les boutons restent cohérents. Capture la fenêtre d'action ET le choix de potion.
 
-**S8 — Fiche en combat.** Clique un pion : capture la fiche (illustration en grand en tête, tous les effets actifs avec source et durée).
+**S8 — Fiche en combat.** Clique un pion : capture la fiche (illustration en grand, effets actifs avec source et durée).
 
-**S9 — Fin de combat.** Termine un combat (gagné ou perdu) : capture la modale de récompenses, vérifie le retour possible au donjon, et que l'étage suivant est proposé après victoire.
+**S9 — Fin de combat + Récompenses.** Termine un combat : l'écran Récompenses s'ouvre (or, XP, drops cliquables, recrue éventuelle). Capture. Vérifie : « Tout ramasser » referme la modale, l'étage suivant est proposé après victoire, le retour au donjon fonctionne.
 
-**S10 — Glossaire.** Va sur `#glossaire` : capture, vérifie que la section « Les symboles de l'écran » documente ℹ️/🎰/🌱 et les glyphes de combat.
+**S10 — Boutique.** `#boutique` : capture. Vérifie : rayons potions (soin 50 or, mana 60 or), éclat brut 150 or, équipement 200-1 600 or, marchand de créatures (C 200 → UR 10 000 or) ; un achat débite l'or et ajoute l'exemplaire (modale de révélation) ; refus propre si or insuffisant.
+
+**S11 — Guilde (ex-Forge).** `#forge` : capture. Vérifie : évolutions en gemmes, réserve de pierres d'éveil affichée, autel 5-pour-1, compagnons du jour (3 offres, prix 500-2 000 or), et AUCUNE trace de jetons de génération nulle part (supprimés v1.25).
+
+**S12 — Quêtes.** `#quetes` : capture. Vérifie : 3 quêtes du jour rendues, bonus de complétion (pierre d'éveil) mentionné, une quête réalisable se met à jour au fil du jeu.
+
+**S13 — Inventaire + équipement.** `#inventaire` : capture. Vérifie : page groupée (Potions, Pièces, Gemmes, Matériaux), puis sur la fiche d'une carte : 2 slots d'équipement (arme typée par classe + armure) + 2 slots d'équipe, bonus de set affiché quand les deux pièces d'un même set sont posées.
+
+**S14 — Terres Sauvages + errance.** `#terres` : capture. Vérifie : seule la zone de l'eau est ouverte au départ, zones visitées marquées. Entre dans la zone : le canvas d'errance prend l'écran. Sur MOBILE (doigt) et desktop (souris) : touche la carte → le héros s'y rend avec le **pilotage inertiel** (accélération, virages en arc, freinage à l'approche, arrêt net SANS orbite autour du point), toucher le héros casse une jarre adjacente, les hautes herbes déclenchent des rencontres (la grâce diminue), l'autel de soin restaure tout (+5 pas de grâce, toast), la porte du donjon lance le combat de zone. Capture : le déplacement, une jarre cassée, l'autel. Vérifie : aucune erreur console pendant 30 s d'errance continue, rendu net sur écran haute densité (pas de flou).
+
+**S15 — Glossaire.** `#glossaire` : capture, vérifie que « Les symboles de l'écran » documente ℹ️/🎰/🌱 et les glyphes de combat.
 
 ### Rapport final
 
-Produis `rapport-validation.md` avec : pour chaque scénario, statut OK/KO, captures nommées (`S3-collection-mobile.png`…), la liste EXHAUSTIVE des erreurs console avec contexte, et toute anomalie visuelle (élément coupé, mal aligné, chevauchement, texte tronqué) avec capture à l'appui. Termine par un verdict global et les 3 corrections les plus urgentes.
+Produis `rapport-validation.md` avec : pour chaque scénario, statut OK/KO, captures nommées (`S3-collection-mobile.png`…), la liste EXHAUSTIVE des erreurs console avec contexte, et toute anomalie visuelle (élément coupé, mal aligné, chevauchement, texte tronqué, CSS brut visible) avec capture à l'appui. Termine par un verdict global et les 3 corrections les plus urgentes.
 
 ---
 
@@ -60,4 +74,5 @@ Produis `rapport-validation.md` avec : pour chaque scénario, statut OK/KO, capt
 
 - Les vitesses de combat : le bouton `#speed` fait défiler ×0,5 → ×32 ; ×16/×32 coupent l'animation (utile pour S9).
 - « Auto ce tour » laisse l'IA jouer le tour courant sans bloquer le test du S7 sur les tours suivants.
+- Les vidéos de sorts (FX v0.48, `site-assets/fx/`) ne sont PAS encore affichées en jeu : ne pas échouer sur leur absence (chantier à venir).
 - Le digest et le smoke (baselines ci-dessus) valident le MOTEUR ; ce protocole valide l'AFFICHAGE réel dans un vrai Chromium, ce que le harnas ne peut pas faire (DOM simulé). Les deux sont complémentaires.

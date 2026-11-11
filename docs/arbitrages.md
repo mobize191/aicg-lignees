@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — harnas renforcé : smoke B13 (régression CSS mobile + pilotage inertiel) et protocole IHM actualisé v1.30
+
+- **Smoke B13 (8 checks)** : (a, b) plus rien après `/html` dans le dist et les classes des écrans récents (`.recomp-list`, `.chip.r-C`, `.fx-video`) vivent dans le `style` du head — le bug « CSS visible sur téléphone » (v1.29) est couvert par une régression à jamais ; (c-h) pilotage inertiel de l'errance vérifié au DOM : vecteur `hero.v` et `hero.tilt` présents, arrivée nette au centre de tuile sans orbite (d < 0,15), vitesse quasi nulle à l'arrivée (freinage), vitesse effective mesurée en chemin.
+- **Protocole `docs/validation-ihm.md` actualisé v1.30** : baselines rafraîchies (141 tests, smoke 277 checks, digest `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000 au N = 10 000), routes complètes, règle permanente anti-CSS-brut sur chaque page, scénarios S1-S15 couvrant le jeu livré (départ 2 cartes, hub-ville, Boutique + marchand, Guilde sans jetons, quêtes, inventaire + équipement, Terres Sauvages + errance tactile avec pilotage inertiel).
+- **Preuve** : build ok, 141 tests verts, smoke **277 checks** (seul échec : 46 g, préexistant, moteur, hors chantier), aucune source du jeu touchée (harnas seul).
+
 ## 2026-11-11 : MESURE — campagne d'illustrations V3 intégrée (assets-v3.json, manifeste unique, v1.28) : digest inchangé
 
 - (Entrée consignée a posteriori par le couloir pilotage : la livraison v1.28 n'avait pas d'entrée dédiée au journal.)
