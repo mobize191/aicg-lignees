@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — chantier « reste code » lot 1 clôturé (correctifs terrain restants) : migration v27, digest inchangé
+
+- **État constaté au re-fetch** : les correctifs terrain du lot 1 étaient déjà poussés sur `main` par le couloir précédent (dédoublonnage à la fusion `inst.acc` + `unknownSpellsOf`, `elOf()` qui prime sur les pions `.unit`, bouton ▾ réduire sur la fenêtre d'action, `FAM_ORDER` des 4 familles v3, boutons tactiles ≥ 32 px, double bordure des cartes supprimée). **Reste livré ici** : la réparation des sauvegardes déjà polluées — **migration v26 → v27 non destructive** qui dédoublonne `inst.acc` par clé d'identité de sort (nom résolu, sinon id + cran), idempotente ; `SAVE_VERSION`/`CURRENT_VERSION` passent à 27 ; test de non-régression double évolution (`unknownSpellsOf` ne recopie que les sorts inconnus de la nouvelle forme).
+- **Preuve** : build ok, **143 tests** verts (2 nouveaux), smoke **277 checks** (seul échec attendu : 46 g, préexistant moteur), digest **inchangé `f72106ff…` 1379/3000** (chemin Auto non touché). Tables `docs/tables/` régénérées.
+
 ## 2026-11-11 : MESURE — harnas renforcé : smoke B13 (régression CSS mobile + pilotage inertiel) et protocole IHM actualisé v1.30
 
 - **Smoke B13 (8 checks)** : (a, b) plus rien après `/html` dans le dist et les classes des écrans récents (`.recomp-list`, `.chip.r-C`, `.fx-video`) vivent dans le `style` du head — le bug « CSS visible sur téléphone » (v1.29) est couvert par une régression à jamais ; (c-h) pilotage inertiel de l'errance vérifié au DOM : vecteur `hero.v` et `hero.tilt` présents, arrivée nette au centre de tuile sans orbite (d < 0,15), vitesse quasi nulle à l'arrivée (freinage), vitesse effective mesurée en chemin.
