@@ -2,6 +2,13 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — campagne d'illustrations V3 intégrée (assets-v3.json, manifeste unique, v1.28) : digest inchangé
+
+- (Entrée consignée a posteriori par le couloir pilotage : la livraison v1.28 n'avait pas d'entrée dédiée au journal.)
+- **Livré** : la campagne AICG V3 (WAI-Illustrious v17, prompts NL painterly corrigés — vague 3, `docs/images/correction-prompts-v3.md`), validée par Marc-Olivier, est intégrée au jeu : **`assets-v3.json` devient le manifeste d'images unique** (265 arts + 8 fonds, ~24 Mo) ; les anciens manifests (`assets.json`, `assets-v2.json`, `assets-wai.json`) sont archivés dans `archives/assets/`. La CI Pages publie `assets-v3.json` et `site-assets/fx/` (vidéos de sorts) en ligne, déploiement sur gate.
+- **Preuve** : build ok, digest inchangé `f72106ff…` 1379/3000 et baseline N = 10 000 `3f9fe198…` 4558/10000 maintenues (images seules, aucune maths) ; état du 11/11 soir : 141 tests verts, smoke 269 checks.
+- **Reste** : validation visuelle en jeu par Marc-Olivier (source unique en ligne), affichage des vidéos FX en jeu (roadmap point 7), arts série 2 du contenu v3 (27 cartes sans illustration).
+
 ## 2026-11-11 : ACTÉ — retours terrain mobile : CSS brut visible sur téléphone + errance non conforme au guide (diagnostic posé, correctifs prioritaires)
 
 - **Contexte** : Marc-Olivier a testé le bloc visuel livré (v1.27) sur téléphone ; deux problèmes remontés, capture à l'appui. Diagnostic posé depuis `dist.html`, `src/shell.html`, `src/errance.js` et `src/ui.js`. Le reste est bien livré : boucle v2 lots 1-6, économie v2 E1-E5, hub-ville, Terres Sauvages, errance zone Marées (MESURE bloc visuel ci-dessous).
