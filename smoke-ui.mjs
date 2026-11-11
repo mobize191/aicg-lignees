@@ -629,7 +629,7 @@ async function main() {
   check('43.1 a plateau : largeur fixe et uniforme pour .unit', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)') && html.includes('.unit.boss { flex: 0 0 auto; width: clamp(112px, 22vw, 148px)') && html.includes('.row.back { opacity: .92; }'), '');
   check('43.1 a les anciennes surcharges de taille ont disparu', !html.includes('min-width: 104px; max-width: 172px') && !html.includes('flex: 1.8 1 0'), '');
   check('43.1 b modificateur réellement optionnel dans les textes', html.includes('entrez librement sans lui, ou relancez le tirage contre 1 éclat brut') && html.includes('Le refuser est gratuit'), '');
-  check('43.1 c b1-b7 marquées archived', ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7'].every((id) => api.byId(id).archived === true), '');
+  check('43.1 c b1-b7 greffées (plus archivées, famille d\'accueil renseignée)', ['b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7'].every((id) => api.byId(id).archived !== true && !!api.byId(id).family), '');
   check('43.1 c le pool du booster exclut les archives', (html.split('function pickCard')[1] ?? '').split('function ')[0].includes('!c.archived'), '');
   mem.clear();
   setup(['n1', 'n2', 'n3'], 10);
@@ -638,12 +638,11 @@ async function main() {
   const colHtml = els.get('app')?._innerHTML ?? '';
   check('43.1 d familles : la porte (novice/greffe) figure en tête de chaîne', colHtml.includes('évolue vers'), '');
   check('43.1 d le teaser BRANCHE (v0.36) a disparu', !colHtml.includes('v0.36 · voies'), '');
-  check('43.1 e sans carte archivée possédée, pas de section archives', !colHtml.includes('Les archives'), '');
+  check('43.1 e plus aucune archive en data : pas de section archives', !colHtml.includes('Les archives') && (api.DATA.cards ?? []).every((c) => !c.archived), '');
   api.newInst('b1');
   api.go('#collection');
   await wait(60);
-  check('43.1 f posséder une ancienne carte fait apparaître la section archives', (els.get('app')?._innerHTML ?? '').includes('Les archives — les anciennes cartes'), '');
-  check('43.1 f l\'archivée possédée y est visible', (els.get('app')?._innerHTML ?? '').includes('Yuki'), '');
+  check('43.1 f ex-solo greffé possédé : plus de section archives, b1 reste possédée avec sa famille d\'accueil', !(els.get('app')?._innerHTML ?? '').includes('Les archives — les anciennes cartes') && api.ownedOf('b1') === 1 && api.byId('b1').family === 'lame' && !api.byId('b1').archived, '');
   check('43.1 g 0 exception après collection', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
@@ -888,7 +887,7 @@ async function main() {
       const c = api.drawNaissance(() => (i * 0.7548776662) % 1);
       if (c && c.archived) sawArchived = true;
     }
-    check('B5 a solos archivés en data, hors drops (poolN) et hors naissances', arch.length >= 20 && inDropPool.length === 0 && !sawArchived, `${arch.length} archivées, ${inDropPool.length} dans poolN`);
+    check('B5 a greffe C5 : plus aucune archive, ex-solos hors poolN et hors naissances archivées', arch.length === 0 && inDropPool.length === 0 && !sawArchived, `${arch.length} archivées, ${inDropPool.length} dans poolN`);
     let maxRaritySeen = '';
     let sawDivine = false;
     for (let i = 0; i < 400; i++) {

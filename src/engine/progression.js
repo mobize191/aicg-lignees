@@ -6,7 +6,9 @@ function nextFormOf(id) {
   if (c.family) {
     const fam = FAMILIES[c.family];
     const t = fam.steps.indexOf(id);
-    return t >= 0 && t < fam.steps.length - 1 ? fam.steps[t + 1] : null;
+    // lot C5 : un ex-solo greffé n'est pas dans les steps de sa famille d'accueil,
+    // ses solo-steps (cibles d'évolution préservées) restent actifs
+    if (t >= 0) return t < fam.steps.length - 1 ? fam.steps[t + 1] : null;
   }
   if (c.dungeon && monsterNextLine(id)) return monsterNextLine(id).nextId;
   return SOLO_STEPS[id] ?? null;

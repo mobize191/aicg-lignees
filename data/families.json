@@ -9,7 +9,12 @@
    "a13",
    "a14"
   ],
-  "future": []
+  "future": [
+   "a38",
+   "a47",
+   "a48",
+   "b3"
+  ]
  },
  "lame": {
   "name": "Famille du Sabre",
@@ -21,7 +26,9 @@
    "a15",
    "a17"
   ],
-  "future": []
+  "future": [
+   "b1"
+  ]
  },
  "ombre": {
   "name": "Famille de l’Ombre",
@@ -33,7 +40,10 @@
    "a16",
    "a18"
   ],
-  "future": []
+  "future": [
+   "b2",
+   "s3"
+  ]
  },
  "aube": {
   "name": "Famille de l’Aube",
@@ -45,7 +55,11 @@
    "s9",
    "s10"
   ],
-  "future": []
+  "future": [
+   "b4",
+   "p2",
+   "s2"
+  ]
  },
  "bouclier": {
   "name": "Famille du Bouclier",
@@ -57,7 +71,13 @@
    "s11",
    "s12"
   ],
-  "future": []
+  "future": [
+   "a3",
+   "a39",
+   "a49",
+   "a9",
+   "b5"
+  ]
  },
  "braise": {
   "name": "Famille de la Braise",
@@ -69,7 +89,10 @@
    "a22",
    "a23"
   ],
-  "future": []
+  "future": [
+   "a4",
+   "b6"
+  ]
  },
  "bosquet": {
   "name": "Famille du Bosquet",
@@ -81,7 +104,10 @@
    "a27",
    "a28"
   ],
-  "future": []
+  "future": [
+   "b7",
+   "p3"
+  ]
  },
  "crepuscule": {
   "name": "Famille du Crépuscule",
@@ -105,7 +131,19 @@
    "t5",
    "t6"
   ],
-  "future": []
+  "future": [
+   "a34",
+   "a35",
+   "a36",
+   "a37",
+   "a40",
+   "a41",
+   "a42",
+   "a43",
+   "a44",
+   "a45",
+   "a46"
+  ]
  },
  "zele": {
   "name": "Famille du Zèle",
@@ -117,7 +155,9 @@
    "u5",
    "u6"
   ],
-  "future": []
+  "future": [
+   "p4"
+  ]
  },
  "appel": {
   "name": "École des Invocations",

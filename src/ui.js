@@ -73,11 +73,15 @@ function recommendedPower(d, diff) {
 
 
 for (const c of CATALOG) {
-  if (c.family) {
-    const fam = FAMILIES[c.family];
+  // lot C5 : les ex-solos greffés (dans le "future" d'une famille, hors steps) gardent
+  // leur fiche de solo (soloSpell, mana solo) ; seules les cartes des steps/branch prennent
+  // les sorts de lignée de la famille
+  const fam = c.family ? FAMILIES[c.family] : null;
+  const inSteps = !!fam && (c.branch || fam.steps.includes(c.id));
+  if (inSteps) {
     const t = fam.steps.indexOf(c.id);
-    
-    
+
+
     const tier = c.branch ? 3 : t;
     // recâblage famille → école : les sorts de lignée portent la clé d'école réelle de la famille
     const famSchoolKey = FAM_SCHOOL[c.family] ?? c.family;

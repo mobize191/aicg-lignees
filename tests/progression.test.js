@@ -231,18 +231,31 @@ test('boucle v2 lot 5 : rang N exclu des drops — drawNaissance ne sort jamais 
   }
 });
 
-test('boucle v2 lot 5 : solos archivés — hors pools actifs, toujours en data et jouables', () => {
+test('contenu v3 lot C5 : greffe des 31 solos — plus aucune archive, chaque ex-solo a une famille d’accueil', () => {
   const E = loadEngine();
-  const solos = E.DATA.cards.filter((c) => !c.family && !c.dungeon && !c.raciale);
-  assert.ok(solos.length >= 20, 'les solos existent en data');
-  assert.ok(solos.every((c) => c.archived === true), 'toutes les solos portent archived: true');
-  // hors des pools de tirage
-  const rng = E.mulberry32(99);
-  for (let i = 0; i < 200; i++) {
-    const id = E.pickCard(rng, 'C');
-    assert.notEqual(E.getCard(id).archived, true, 'pickCard ne sort jamais une archive');
+  const arch = E.DATA.cards.filter((c) => c.archived);
+  assert.equal(arch.length, 0, 'plus aucune carte archivée (greffe ACTÉE 11/11)');
+  const exSolos = ['a3', 'a4', 'a9', 's2', 's3', 'p2', 'p3', 'p4',
+    'a34', 'a35', 'a36', 'a37', 'a38', 'a39', 'a40', 'a41', 'a42', 'a43', 'a44', 'a45', 'a46', 'a47', 'a48', 'a49',
+    'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7'];
+  for (const id of exSolos) {
+    const c = E.getCard(id);
+    assert.ok(c && !c.archived, `${id} n'est plus archivée`);
+    assert.ok(c.family && E.getFamily(c.family), `${id} a une famille d'accueil (${c.family})`);
+    assert.ok(E.getFamily(c.family).future.includes(id), `${id} est dans le "future" de ${c.family}`);
   }
-  // jouables : une solo archivée reste instanciable et combative
-  const u = E.makeUnit({ ...E.getCard(solos[0].id), level: 5 }, 's', 5);
+  // cibles d'évolution préservées : les solo-steps mènent à des cartes non archivées
+  for (const [from, to] of Object.entries(E.DATA['solo-steps'])) {
+    const cible = E.getCard(to) ?? E.getMonster(to);
+    assert.ok(cible && !cible.archived, `la cible ${to} de ${from} n'est plus en archives`);
+  }
+  // les ex-solos C non-branch re-rentrent dans les tirages ; les branches de forge (b1-b7) restent hors drops
+  const rng = E.mulberry32(99);
+  const vus = new Set();
+  for (let i = 0; i < 400; i++) vus.add(E.pickCard(rng, 'C'));
+  assert.ok(vus.has('a3') || vus.has('s2') || vus.has('p3'), 'un ex-solo C peut re-sortir');
+  assert.ok(!vus.has('b1'), 'b1 (branche de forge) reste hors des drops aléatoires');
+  // jouables : un ex-solo reste instanciable et combatif
+  const u = E.makeUnit({ ...E.getCard('a3'), level: 5 }, 's', 5);
   assert.ok(u.atk > 0 && u.maxHp > 0);
 });

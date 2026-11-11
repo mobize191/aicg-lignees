@@ -444,7 +444,7 @@
   "agi": 4,
   "int": 6,
   "biome": "recrues",
-  "archived": true
+  "family": "bouclier"
  },
  {
   "id": "a4",
@@ -458,7 +458,7 @@
   "agi": 5,
   "int": 7,
   "biome": "recrues",
-  "archived": true
+  "family": "braise"
  },
  {
   "id": "a9",
@@ -472,7 +472,7 @@
   "agi": 8,
   "int": 4,
   "biome": "recrues",
-  "archived": true
+  "family": "bouclier"
  },
  {
   "id": "s1",
@@ -833,7 +833,7 @@
   "agi": 1,
   "int": 2,
   "biome": "recrues",
-  "archived": true
+  "family": "aube"
  },
  {
   "id": "s3",
@@ -851,7 +851,7 @@
   "agi": 5,
   "int": 2,
   "biome": "recrues",
-  "archived": true
+  "family": "ombre"
  },
  {
   "id": "a34",
@@ -865,7 +865,7 @@
   "agi": 8,
   "int": 4,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a35",
@@ -883,7 +883,7 @@
   "agi": 1,
   "int": 2,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a36",
@@ -897,7 +897,7 @@
   "agi": 11,
   "int": 5,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a37",
@@ -911,7 +911,7 @@
   "agi": 7,
   "int": 3,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a38",
@@ -925,7 +925,7 @@
   "agi": 7,
   "int": 4,
   "biome": "recrues",
-  "archived": true
+  "family": "eau"
  },
  {
   "id": "a39",
@@ -943,7 +943,7 @@
   "agi": 2,
   "int": 2,
   "biome": "recrues",
-  "archived": true
+  "family": "bouclier"
  },
  {
   "id": "a40",
@@ -963,7 +963,7 @@
   "agi": 12,
   "int": 5,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a41",
@@ -983,7 +983,7 @@
   "agi": 15,
   "int": 7,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a42",
@@ -1007,7 +1007,7 @@
   "agi": 2,
   "int": 2,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a43",
@@ -1031,7 +1031,7 @@
   "agi": 2,
   "int": 3,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a44",
@@ -1051,7 +1051,7 @@
   "agi": 14,
   "int": 6,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a45",
@@ -1071,7 +1071,7 @@
   "agi": 10,
   "int": 4,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a46",
@@ -1091,7 +1091,7 @@
   "agi": 14,
   "int": 6,
   "biome": "recrues",
-  "archived": true
+  "family": "vol"
  },
  {
   "id": "a47",
@@ -1111,7 +1111,7 @@
   "agi": 9,
   "int": 5,
   "biome": "recrues",
-  "archived": true
+  "family": "eau"
  },
  {
   "id": "a48",
@@ -1131,7 +1131,7 @@
   "agi": 12,
   "int": 7,
   "biome": "recrues",
-  "archived": true
+  "family": "eau"
  },
  {
   "id": "a49",
@@ -1155,7 +1155,7 @@
   "agi": 2,
   "int": 3,
   "biome": "recrues",
-  "archived": true
+  "family": "bouclier"
  },
  {
   "id": "b1",
@@ -1167,7 +1167,6 @@
   "hp": 82,
   "family": "lame",
   "branch": true,
-  "archived": true,
   "agi": 17,
   "int": 10
  },
@@ -1181,7 +1180,6 @@
   "hp": 66,
   "family": "ombre",
   "branch": true,
-  "archived": true,
   "agi": 23,
   "int": 10
  },
@@ -1195,7 +1193,6 @@
   "hp": 76,
   "family": "eau",
   "branch": true,
-  "archived": true,
   "agi": 11,
   "int": 18
  },
@@ -1209,7 +1206,6 @@
   "hp": 78,
   "family": "aube",
   "branch": true,
-  "archived": true,
   "effect": {
    "kind": "heal",
    "value": 46
@@ -1227,7 +1223,6 @@
   "hp": 96,
   "family": "bouclier",
   "branch": true,
-  "archived": true,
   "effect": {
    "kind": "shield",
    "value": 44
@@ -1245,7 +1240,6 @@
   "hp": 74,
   "family": "braise",
   "branch": true,
-  "archived": true,
   "agi": 12,
   "int": 18
  },
@@ -1259,7 +1253,6 @@
   "hp": 72,
   "family": "bosquet",
   "branch": true,
-  "archived": true,
   "agi": 23,
   "int": 10
  },
@@ -1298,12 +1291,11 @@
    "value": 20
   },
   "soloSpell": "Éclat d’Aube",
-  "raciale": true,
-  "archived": true,
-  "note": "l’Ange Gardien meurt (v16) : retiré de l’arbre, l’Ange Éveillé le remplace (v17)",
+  "note": "greffé à la famille de l'Aube (lot C5) ; l'éveil n13 → p1 le fait encore disparaître (v16)",
   "agi": 3,
   "int": 5,
-  "biome": "divin"
+  "biome": "divin",
+  "family": "aube"
  },
  {
   "id": "p3",
@@ -1320,7 +1312,7 @@
   "voie": "voie sylvestre — les Gens des Sèves",
   "agi": 3,
   "int": 4,
-  "archived": true
+  "family": "bosquet"
  },
  {
   "id": "p4",
@@ -1337,7 +1329,7 @@
   "voie": "voie du zèle — la commune du zèle",
   "agi": 3,
   "int": 5,
-  "archived": true
+  "family": "zele"
  },
  {
   "id": "q1",
