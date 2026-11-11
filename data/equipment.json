@@ -2232,5 +2232,21 @@
    "nom": "de l’Astre Capiteux",
    "zone": "zone-zenith"
   }
+ },
+ "craft": {
+  "base": {
+   "materiau": 3,
+   "or": 100
+  },
+  "supérieure": {
+   "materiau": 5,
+   "matiereBoss": 1,
+   "or": 300
+  },
+  "royale": {
+   "materiau": 8,
+   "matiereBoss": 1,
+   "or": 600
+  }
  }
 }

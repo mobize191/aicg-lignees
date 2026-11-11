@@ -80,3 +80,18 @@ test('migration v23 -> v24 : champ quetes initialisé, rien perdu', async () => 
   assert.equal(out.dailyDone, '2026-11-10', 'dailyDone inerté mais conservé');
   assert.deepEqual(out.quetes, { day: '', list: [], bonusDone: false }, 'quêtes initialisées vierges');
 });
+
+test('reste code lot 7 : table craft en data — chaque pièce de set a un coût résolu (matériau de zone, matière du boss sur paliers hauts)', () => {
+  const E = { DATA: loadData() };
+  const craft = E.DATA.equipment?.craft ?? {};
+  assert.ok(craft.base?.materiau > 0 && craft.base?.or > 0, 'base : matériaux + or');
+  assert.ok(craft['supérieure']?.materiau > 0 && craft['supérieure']?.matiereBoss > 0, 'supérieure : + matière du boss');
+  assert.ok(craft.royale?.materiau > 0 && craft.royale?.matiereBoss > 0, 'royale : + matière du boss');
+  const zones = new Map((E.DATA.zones ?? []).map((z) => [z.id, z]));
+  for (const p of E.DATA.equipment.pieces.filter((x) => x.source === 'set')) {
+    const niveau = p.id.split('-')[3];
+    assert.ok(craft[niveau], `coût craft défini pour le niveau ${niveau} (${p.id})`);
+    const z = zones.get(p.zone);
+    assert.ok(z?.materiau?.id && z?.matiereBoss?.id, `zone ${p.zone} porte matériau + matière du boss`);
+  }
+});

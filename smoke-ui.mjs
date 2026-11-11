@@ -1177,6 +1177,41 @@ async function main() {
     check('B14 f 0 exception lot 6', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // ---------- B15 : lot 7 — craft en ville (atelier Boutique) + page Personnage à onglets ----------
+    mem.clear();
+    store.instances = []; store.collection = new Map(); store.departFait = true;
+    store.team.slots = []; store.gold = 5000; store.materiaux = {}; store.equipment = {}; store.errance = null;
+    const craftTable = api.DATA.equipment?.craft ?? {};
+    const setPieces = (api.EQUIPMENT ?? []).filter((p) => p.source === 'set');
+    check('B15 a table craft en data couvre base/supérieure/royale', !!craftTable.base?.materiau && !!craftTable['supérieure']?.matiereBoss && !!craftTable.royale?.matiereBoss, Object.keys(craftTable).join());
+    check('B15 b chaque pièce de set a un coût de craft résolu', setPieces.length === 90 && setPieces.every((p) => !!api.craftCostOf(p)), `${setPieces.length} pièces`);
+    api.go('#boutique');
+    await wait(30);
+    const nbCraft = els.get('app').querySelectorAll('[data-craft]').length;
+    check('B15 c atelier : 90 boutons « Fabriquer » rendus dans la Boutique', nbCraft === 90, String(nbCraft));
+    const base = setPieces.find((p) => p.id.includes('-base-'));
+    const cost = api.craftCostOf(base);
+    check('B15 d craft refusé sans matériaux', api.craftPiece(base.id) === false && api.equipPieceCount(base.id) === 0, base.id);
+    store.materiaux[cost.materiauId] = cost.materiauN + 2;
+    const gold0 = store.gold;
+    check('B15 e craft OK : matériaux et or consommés, pièce possédée', api.craftPiece(base.id) === true && api.equipPieceCount(base.id) === 1 && store.gold === gold0 - cost.or && api.materiauCount(cost.materiauId) === 2, `or=${store.gold}`);
+    const sup = setPieces.find((p) => p.id.includes('-supérieure-'));
+    const costS = api.craftCostOf(sup);
+    check('B15 f paliers hauts exigent la matière du boss (refus sans)', api.craftPiece(sup.id) === false && costS.bossN > 0, sup.id);
+    api.go('#personnage');
+    await wait(30);
+    check('B15 g page Personnage : onglets Équipe + Inventaire + bouton retour', !!els.get('app').querySelector('#tab-equipe') && !!els.get('app').querySelector('#tab-inventaire') && !!els.get('app').querySelector('#perso-back'), '');
+    check('B15 h onglet Équipe actif rend la formation 3+2/2+3', !!els.get('app').querySelector('#form-3-2') && !!els.get('app').querySelector('#form-2-3'), '');
+    els.get('app').querySelector('#tab-inventaire').click();
+    await wait(20);
+    check('B15 i onglet Inventaire rend potions/matériaux/équipement', !!els.get('app').querySelector('#inv-back') && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('Potions'), '');
+    els.get('app').querySelector('#perso-back').click();
+    await wait(20);
+    check('B15 j bouton retour quitte la page Personnage (retour à l’accueil)', !els.get('app').querySelector('#perso-back') && (els.get('app')._innerHTML ?? '').length > 100, '');
+    check('B15 k 0 exception lot 7', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

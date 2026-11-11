@@ -461,6 +461,39 @@ function buyEquipment(id) {
   return true;
 }
 
+// reste code lot 7 : craft en ville — coût d'une pièce de set (table `craft` de data/equipment.json,
+// matériaux de la zone + matière du boss pour les paliers hauts, or) ; null si pas craftable
+function craftCostOf(piece) {
+  if (!piece?.set || piece.source !== 'set') return null;
+  const niveau = piece.id.split('-')[3];
+  const c = DATA.equipment?.craft?.[niveau];
+  if (!c) return null;
+  const zone = (DATA.zones ?? []).find((z) => z.id === piece.zone);
+  return {
+    niveau,
+    materiauId: zone?.materiau?.id, materiauNom: zone?.materiau?.nom, materiauN: c.materiau ?? 0,
+    bossId: zone?.matiereBoss?.id, bossNom: zone?.matiereBoss?.nom, bossN: c.matiereBoss ?? 0,
+    or: c.or ?? 0,
+  };
+}
+
+function craftPiece(id) {
+  const piece = EQUIP_BY_ID[id];
+  const cost = craftCostOf(piece);
+  if (!piece || !cost) return false;
+  if (materiauCount(cost.materiauId) < cost.materiauN) { toast(`✗ Il faut ${cost.materiauN}× ${cost.materiauNom} (zone ${piece.zone.replace('zone-', '')}).`, 'warn'); return false; }
+  if (cost.bossN > 0 && materiauCount(cost.bossId) < cost.bossN) { toast(`✗ Il faut ${cost.bossN}× ${cost.bossNom} (matière du boss du donjon de la zone).`, 'warn'); return false; }
+  if (store.gold < cost.or) { toast(`✗ Il faut ${cost.or} or pour fabriquer ${piece.nom}.`, 'warn'); return false; }
+  store.materiaux[cost.materiauId] -= cost.materiauN;
+  if (cost.bossN > 0) store.materiaux[cost.bossId] -= cost.bossN;
+  store.gold -= cost.or;
+  addEquipmentPiece(id, 1);
+  questProgress('craft');
+  save();
+  updatePtsBadge();
+  return true;
+}
+
 // économie v2 lot E3 : Guilde — compagnons du jour (rotation déterministe, seed de la date)
 function seedOfDay() {
   const k = todayKey();
@@ -967,9 +1000,12 @@ function restore(data) {
   store.milestones = { clear1: false, boss5: false, diff3: false };
   store.runMod = typeof data.runMod === 'string' && runModById(data.runMod) ? data.runMod : null;
   store.grimoire = Array.isArray(data.grimoire) ? data.grimoire.filter((g) => g && typeof g.sort === 'string') : [];
-  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
-  store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
-  store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
+  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
+
+  store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
+
+  store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
+
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
       if (!raw || typeof raw.id !== 'string' || !byId(raw.id)) continue;
@@ -1952,7 +1988,7 @@ function openEquipPicker(card, slot) {
       equipPiece(card.id, slot, b.dataset.piece || null);
       overlay.remove();
       closeCardModal();
-      openCardModal(byId(card.id), { onChange: () => renderEquipe(document.getElementById('app')) });
+      openCardModal(byId(card.id), { onChange: () => renderEquipe(equipeRoot || document.getElementById('app')) });
       toast(b.dataset.piece ? `✓ ${EQUIP_BY_ID[b.dataset.piece].nom} équipée.` : '✓ Slot déséquipé.');
     };
   });
@@ -2576,9 +2612,8 @@ function renderHome(root) {
       <a class="btn gold-frame" href="#boutique"><span class="ic">🛒</span>Boutique</a>
       <a class="btn gold-frame" href="#forge"><span class="ic">🛡️</span>Guilde</a>
       <a class="btn gold-frame" href="#quetes"><span class="ic">📜</span>Quêtes</a>
-      <a class="btn gold-frame" href="#equipe"><span class="ic">🛡️</span>Équipe</a>
+      <a class="btn gold-frame" href="#personnage"><span class="ic">🧝</span>Personnage</a>
       <a class="btn gold-frame" href="#collection"><span class="ic">🎴</span>Collection</a>
-      <a class="btn gold-frame" href="#inventaire"><span class="ic">🎒</span>Inventaire</a>
       <a class="btn gold-frame" href="#glossaire"><span class="ic">📖</span>Glossaire</a>
     </nav>
     <div class="hub-bottom">
@@ -2762,13 +2797,13 @@ function dropCard(idx, data) {
     store.team.slots.splice(Math.min(idx, store.team.slots.length), 0, moved);
     save();
   }
-  renderEquipe(document.getElementById('app'));
+  renderEquipe(equipeRoot || document.getElementById('app'));
 }
 
 function switchTeam(dir) {
   store.activeTeam = (store.activeTeam + dir + store.teams.length) % store.teams.length;
   save();
-  renderEquipe(document.getElementById('app'));
+  renderEquipe(equipeRoot || document.getElementById('app'));
 }
 
 function slotsHtml() {
@@ -2877,7 +2912,7 @@ function ownedCards() {
 
 function openTeamModal(card) {
   openCardModal(card, {
-    onChange: () => renderEquipe(document.getElementById('app')),
+    onChange: () => renderEquipe(equipeRoot || document.getElementById('app')),
     onAdd: () => addCard(card.id),
     onRemove: () => {
       const idx = store.team.slots.findIndex((x) => (byIid(x)?.id ?? null) === card.id);
@@ -2926,13 +2961,34 @@ function openTeamEquipPicker(idx) {
       store.equipTeam[idx] = b.dataset.piece || null;
       save();
       overlay.remove();
-      renderEquipe(document.getElementById('app'));
+      renderEquipe(equipeRoot || document.getElementById('app'));
       toast(b.dataset.piece ? `✓ ${EQUIP_BY_ID[b.dataset.piece].nom} équipé (équipe).` : '✓ Slot d\'équipe déséquipé.');
     };
   });
 }
 
+// reste code lot 7 : page Personnage à onglets (Équipe + Inventaire + équipement), bouton retour
+let persoTab = 'equipe';
+function renderPersonnage(root) {
+  root.innerHTML = `
+    <div class="top"><h2>🧝 Personnage</h2><span class="spacer"></span><button type="button" class="back" id="perso-back" title="Retour à l'accueil">←</button></div>
+    <div class="tabs" style="display:flex;gap:8px;margin:4px 0 12px">
+      <button type="button" class="btn${persoTab === 'equipe' ? ' gold' : ''}" id="tab-equipe">🛡️ Équipe</button>
+      <button type="button" class="btn${persoTab === 'inventaire' ? ' gold' : ''}" id="tab-inventaire">🎒 Inventaire</button>
+    </div>
+    <div id="perso-body"></div>`;
+  const body = root.querySelector('#perso-body');
+  root.querySelector('#perso-back').onclick = () => go('#accueil');
+  root.querySelector('#tab-equipe').onclick = () => { persoTab = 'equipe'; renderPersonnage(root); };
+  root.querySelector('#tab-inventaire').onclick = () => { persoTab = 'inventaire'; renderPersonnage(root); };
+  (persoTab === 'inventaire' ? renderInventaire : renderEquipe)(body);
+}
+
+// reste code lot 7 : la page Personnage embarque Équipe et Inventaire — leurs re-rendus internes
+// doivent cibler le conteneur courant, pas forcément #app
+let equipeRoot = null;
 function renderEquipe(root) {
+  equipeRoot = root;
   const owned = CATALOG.filter((c) => (store.collection.get(c.id) ?? 0) > 0);
   const visible = ownedCards();
   const nFiltered = owned.length - visible.length;
@@ -2945,7 +3001,7 @@ function renderEquipe(root) {
       .join(''))
     .join('');
   root.innerHTML = `
-    <h2>Mon équipe <span class="team-switch"><button type="button" class="btn" id="team-prev" title="Équipe précédente">◀</button><span class="muted">(Équipe ${store.activeTeam + 1}/3)</span><button type="button" class="btn" id="team-next" title="Équipe suivante">▶</button></span></h2>
+    <h2><button type="button" class="back" id="equipe-back" title="Retour à l'accueil">←</button> Mon équipe <span class="team-switch"><button type="button" class="btn" id="team-prev" title="Équipe précédente">◀</button><span class="muted">(Équipe ${store.activeTeam + 1}/3)</span><button type="button" class="btn" id="team-next" title="Équipe suivante">▶</button></span></h2>
     <p class="muted"><b>Appui court</b> : ajouter une carte de votre collection, ou retirer une carte placée. <b>Appui long</b> : la fiche (sorts, évolution, autel). 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
     <p class="muted">Formation (figée pendant le combat) : <button type="button" class="btn small${store.team.formation === '2-3' ? '' : ' gold'}" id="form-3-2">3 avant \u00b7 2 arri\u00e8re</button> <button type="button" class="btn small${store.team.formation === '2-3' ? ' gold' : ''}" id="form-2-3">2 avant \u00b7 3 arri\u00e8re</button></p>
     ${slotsHtml()}
@@ -2957,6 +3013,7 @@ function renderEquipe(root) {
         ? `<p class="empty-collection">Aucune carte ne correspond aux filtres actifs (${owned.length} possédée${owned.length > 1 ? 's' : ''}). <button class="btn" id="reset-filters">Réinitialiser les filtres</button></p>`
         : `<div class="grid">${cells}</div>`}`}`;
 
+  root.querySelector('#equipe-back')?.addEventListener('click', () => go('#accueil'));
   root.querySelector('#syn-help')?.addEventListener('click', openSynergyModal);
   root.querySelectorAll('.equip-slot[data-team-slot]').forEach((el) => {
     el.onclick = () => openTeamEquipPicker(Number(el.dataset.teamSlot));
@@ -4975,13 +5032,14 @@ function renderInventaire(root) {
     return `<div class="shop-row"><span class="r-${p.rarity}">⚔ <b>${p.nom}</b> <span class="chip r-${p.rarity}">${RARITY_LABEL[p.rarity]}</span> ×${n}</span><span class="muted">${pieceBonusText(p)}${p.set ? ` · set ${EQUIP_SETS[p.set]?.nom ?? ''}` : ''}</span></div>`;
   }).join('') || '<p class="muted">Aucune pièce d’équipement — les boss en garantissent une, le reste tombe à taux très faible.</p>';
   root.innerHTML = `
-    <h2>🎒 Inventaire</h2>
+    <h2><button type="button" class="back" id="inv-back" title="Retour à l'accueil">←</button> 🎒 Inventaire</h2>
     <p class="muted">Solde : <b>🪙 ${store.gold} or</b> · 🧪 potions <b>${totalPotions()}</b> · 💎 pierres d’éveil <b>${pierreCount()}</b></p>
     <h3>🧪 Potions</h3>${potRows}
     <h3>🧪 Matériaux par zone</h3>${matRows}
     <h3>💎 Gemmes (éclats)</h3>${gemRows}
     <h3>⚔️ Pièces d’équipement possédées</h3>${eqRows}
-    <p class="muted">Poser une pièce : fiche de la carte (2 slots : arme typée + armure) · 2 slots d'équipe sur la page Équipe. Le craft en ville arrive avec l’économie v2.</p>`;
+    <p class="muted">Poser une pièce : fiche de la carte (2 slots : arme typée + armure) · 2 slots d'équipe sur la page Équipe (onglet Équipe de la page Personnage). Fabriquer une pièce de set : atelier de la 🛒 Boutique.</p>`;
+  root.querySelector('#inv-back')?.addEventListener('click', () => go('#accueil'));
   const sellBtn = root.querySelector('#sell-brut');
   if (sellBtn) sellBtn.onclick = () => {
     let n = 0;
@@ -5026,9 +5084,25 @@ function renderBoutique(root) {
     <span>${p.slot === 'arme' ? '🗡️' : p.slot === 'armure' ? '🛡️' : '📿'} <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée : <b>${equipPieceCount(p.id)}</b></span></span>
     <button type="button" class="btn small gold" data-buy-eq="${p.id}" ${store.gold < p.prix ? 'disabled' : ''}>Acheter — ${p.prix} or</button>
   </div>`).join('');
+  // reste code lot 7 : atelier de craft en ville — pièces de set (matériaux de zone + matière du boss)
+  const setPieces = EQUIPMENT.filter((p) => p.source === 'set');
+  const atelierRows = (DATA.zones ?? []).map((z) => {
+    const pieces = setPieces.filter((p) => p.zone === z.id);
+    if (!pieces.length) return '';
+    const setKey = 'set-' + z.id.replace('zone-', '');
+    const rowsZ = pieces.map((p) => {
+      const c = craftCostOf(p);
+      const costTxt = c
+        ? `${c.materiauN}× ${c.materiauNom} (×${materiauCount(c.materiauId)})${c.bossN ? ` + ${c.bossN}× ${c.bossNom} (×${materiauCount(c.bossId)})` : ''} + ${c.or} or`
+        : 'non craftable';
+      const can = !!c && materiauCount(c.materiauId) >= c.materiauN && (c.bossN === 0 || materiauCount(c.bossId) >= c.bossN) && store.gold >= c.or;
+      return `<div class="shop-row"><span>🔨 <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée ×${equipPieceCount(p.id)}</span></span><span class="muted">${costTxt}</span><button type="button" class="btn small gold" data-craft="${p.id}" ${can ? '' : 'disabled'}>Fabriquer</button></div>`;
+    }).join('');
+    return `<h4 class="shop-sub">${z.nature ?? z.id} — set ${EQUIP_SETS[setKey]?.nom ?? ''}</h4>${rowsZ}`;
+  }).join('');
   root.innerHTML = `
     <h2>🛒 Boutique</h2>
-    <p class="muted">Solde : <b>🪙 ${store.gold} or</b> — conversion : <b>1 ⚡ = 1 or</b>. Catalogue fixe : potions (en combat, action 🧪 Objet, chaque gorgée coûte le tour ; entre les étages, gratuit), éclats bruts, équipement du bas de gamme. Les pièces de set et le haut de gamme se lootent en donjon ou se craftent en ville.</p>
+    <p class="muted">Solde : <b>🪙 ${store.gold} or</b> — conversion : <b>1 ⚡ = 1 or</b>. Catalogue fixe : potions (en combat, action 🧪 Objet, chaque gorgée coûte le tour ; entre les étages, gratuit), éclats bruts, équipement du bas de gamme. Les pièces de set et le haut de gamme se lootent en donjon ou se craftent à l'atelier ci-dessous.</p>
     <h3>🧪 Potions</h3>
     ${rows}
     <h3>💎 Éclats bruts</h3>
@@ -5037,7 +5111,10 @@ function renderBoutique(root) {
     ${eqRows}
     <h3>🐾 Marchand de créatures</h3>
     <p class="muted">Monstres non nommés (fusion, enseignements), raretés ${MARCHAND.raretesVendues.join(' à ')} — échelle C 200 → UR 10 000 or.</p>
-    ${marchandRows}`;
+    ${marchandRows}
+    <h3>🔨 Atelier — craft en ville (pièces de set)</h3>
+    <p class="muted">Les sets se fabriquent ici : la base demande des matériaux de la zone ; la supérieure et la royale exigent en plus la matière du boss du donjon de la zone (elle ne s'achète pas). Coûts en data (table « craft » de data/equipment.json).</p>
+    ${atelierRows}`;
   root.querySelectorAll('[data-buy]').forEach((b) => {
     b.onclick = () => {
       if (buyPotion(b.dataset.buy)) {
@@ -5068,6 +5145,15 @@ function renderBoutique(root) {
       const m = allMonsters().find((x) => x.id === b.dataset.buyMon);
       if (buyMonster(b.dataset.buyMon)) {
         toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
+        renderBoutique(root);
+      }
+    };
+  });
+  root.querySelectorAll('[data-craft]').forEach((b) => {
+    b.onclick = () => {
+      const piece = EQUIP_BY_ID[b.dataset.craft];
+      if (craftPiece(b.dataset.craft)) {
+        toast(`✓ ${piece.nom} fabriquée à l'atelier — elle rejoint l'inventaire, à équiper depuis la fiche.`);
         renderBoutique(root);
       }
     };
@@ -5631,6 +5717,7 @@ updatePtsBadge();
 
 registerRoute('#accueil', renderHome);
 registerRoute('#equipe', renderEquipe);
+registerRoute('#personnage', renderPersonnage);
 registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
