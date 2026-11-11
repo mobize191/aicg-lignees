@@ -28,7 +28,7 @@ L'ordre de **codage** du couloir 1 reste celui de la roadmap point 9 (économie 
 
 ### 1.3 Arts et DA
 
-- **Héros dédié de l'errance** : bloqué sur la validation de la planche vague 1 (en attente de Marc-Olivier) et le cycle de marche WAN ; les maquettes d'errance travaillent avec un sprite placeholder, le moteur d'errance peut être codé en parallèle (roadmap point 9).
+- **Héros dédié de l'errance — ARBITRÉ 11/11** : **femme aux cheveux blancs sous une cape noire** (Marc-Olivier). L'art de référence v2 est débloqué dès la validation de la planche vague 1 ; cycle de marche en **WAN 2.1 14B i2v** (arbitré : 14B partout, fp8 + offload sur RTX 5070). Jusqu'à l'art validé, les maquettes d'errance travaillent avec un sprite placeholder, le moteur d'errance peut être codé en parallèle (roadmap point 9).
 - **Série 2 de la campagne** (27 arts, plan existant) : priorité au pipeline validé (correctifs de prompts, IPAdapter poids 0.3-0.45 `ease in-out` end_at 0.8-0.9, règle `beast: true`).
 - **Équipement et sets** : PROPOSÉ — icônes par type et niveau (une icône par pièce de set et par palier d'arme/armure, pas un art illustré par objet) ; à trancher par Marc-Olivier. Les noms sont actés (`economie-v2-catalogues.md` §2).
 

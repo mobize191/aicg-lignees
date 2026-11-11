@@ -49,7 +49,7 @@ Pipeline v1 conservé (1216×832, mêmes palettes, négatif `people, creatures, 
 ## 6. Déco du jeu — hub-ville et menus (décisions TRANCHÉES, chantier non codé)
 
 - **Principe** : chaque écran a un décor vrai + voile de lisibilité calibré ; panneaux semi-transparents au-dessus au lieu de blocs noirs.
-- **Phasage** : images partout d'abord ; vidéos d'ambiance ensuite, limitées à **Accueil + Combat** (WAN 2.2 5B ou 2.1 14B selon l'écran). Jamais de vidéo en base64 dans le dist.
+- **Phasage** : images partout d'abord ; vidéos d'ambiance ensuite, limitées à **Accueil + Combat**. **Modèle vidéo : WAN 2.1 14B partout** (arbitré 11/11 : plus long mais meilleur résultat ; fp8 + offload sur RTX 5070 — voir arbitrages). Jamais de vidéo en base64 dans le dist.
 - **Fonds** : 1 fond-monde + key art d'accueil à générer en style v2 ; les 5 `bg-*` de donjons réutilisés pour Donjons/Forge/Combat.
 - **Voile variable** : visible à l'Accueil, fort en Combat, intermédiaire ailleurs. Mobile : cover + focal-point CSS (une image par fond).
 - **Accueil-ville (hub)** : fond vivant (ville médiévale fantastique, ambiance animée), menu latéral droit, bouton défi du jour, transitions animées entre écrans, personnage de référence interactif par écran (clic → bulle de dialogue, répliques en data JSON), bouton retour sur chaque page.
@@ -72,7 +72,7 @@ Guide technique : `docs/design/errance-topdown.md`. Découpage :
 4. **Tableau genre + espèce : TRANCHÉ ET CRÉÉ (10/11 soir)** — `tools/species-map.json` v1 couvre les 53 références nommées (35 monstres + 7 compagnons + 7 graines + 4 sommets v3), les 11 familles (dont Crépuscule/Vol/Zèle/Appel = humaines) et les règles génériques. Genres tranchés pour les 7 cas ambigus, dont **Ember = F** et **Archimage de l'Appel = F** (retours de Marc-Olivier) ; ratio final ~30 F / 23 M sans quota (voir §3.4 et §12). `build-prompts.mjs` doit échouer sans entrée.
 5. **Vidéos FX : TRANCHÉ (10/11 soir)** — **aucune vidéo avant la v2 complète** : pas de mini-vidéos alimentées par les arts v1, la génération WAN démarre après la campagne d'arts v2 validée.
 6. **Sort des 231 arts DreamShaper XL : TRANCHÉ (10/11 soir)** — **archivés en repli** jusqu'à la validation v2, remplacés carte par carte par la campagne v2, pas de suppression avant l'accord explicite.
-7. Déco : vidéo vs parallaxe par écran ; WAN 5B vs 14B ; économie de la Boutique ; intérieur des Terres Sauvages (raccord donjons/errance) ; qui est le héros de l'errance (avatar joueur ou carte de l'équipe).
+7. Déco : vidéo vs parallaxe par écran ; ~~WAN 5B vs 14B~~ TRANCHÉ (2.1 14B partout) ; économie de la Boutique ; intérieur des Terres Sauvages (raccord donjons/errance) ; ~~qui est le héros de l'errance~~ TRANCHÉ (femme aux cheveux blancs sous une cape noire, 11/11).
 
 ## 10. Alignement sur les arbres v3 (comparaison du 10/11/2026)
 
