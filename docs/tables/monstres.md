@@ -2,9 +2,9 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**153 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
+**159 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
 
-## Donjon bosquet (21)
+## Donjon bosquet (23)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -23,6 +23,8 @@
 | g20 | Rôdeuse des Sous-Bois | UR | Assassin | Ombre | - | 29 | 76 | 26 | 12 | Lames de Branchage | - |
 | g21 | Vesna, Dryade du Sous-Bois | L | Assassin | Ombre | - | 38 | 96 | 34 | 15 | Nuit des Sèves | - |
 | g3 | Sanglier de Mousse | UC | Guerrier | Terre | - | 11 | 54 | 8 | 4 | Culbute de Mousse | - |
+| g31 | Gobelin des Mousses | C | Assassin | Terre | - | 8 | 56 | 7 | 3 | Griffe de Mousse | - |
+| g32 | Gobelin des Racines | UC | Guerrier | Terre | - | 11 | 54 | 8 | 4 | Coup de Racine | - |
 | g4 | Gardien des Remparts Verts | R | Guerrier | Terre | - | 14 | 74 | 10 | 6 | Fronde de Ronce | - |
 | g5 | Prisme Vivant | SR | Mage | Lumière | - | 21 | 63 | 11 | 17 | Rayon Prismatique | - |
 | g6 | Colosse Sylvestre | UR | Guerrier | Terre | - | 29 | 82 | 20 | 12 | Poing Séculaire | - |
@@ -36,8 +38,9 @@
 | --- | --- | --- | --- |
 | Bêtes du Fougeron | g1 -> g3 -> g4 ; g13 -> g6 -> g7 ; g14 -> g15 -> g16 | g2, g5 | g8 |
 | Gens des Sèves | g9 -> g12 -> g10 ; g11 -> g17 -> g18 ; g19 -> g20 -> g21 | - | - |
+| Gobelins des Mousses | g31 -> g32 | - | - |
 
-## Donjon crypte (30)
+## Donjon crypte (32)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -65,6 +68,8 @@
 | k29 | Sermenteuse Défunte | UR | Occultiste | Ombre | - | 5 | 72 | 3 | 4 | Serment Rallié | warcry 0.2 |
 | k3 | Fossoyeur Nocturne | UC | Guerrier | Ombre | - | 12 | 52 | 8 | 5 | Coup de Bêche Noire | - |
 | k30 | Siegfried, Chevalière du Serment Brisé | L | Assassin | Ombre | - | 40 | 98 | 36 | 16 | Lame du Serment | - |
+| k31 | Gobelin des Caveaux | C | Assassin | Ombre | - | 9 | 50 | 8 | 4 | Griffe des Ténèbres | - |
+| k32 | Gobelin des Ossements | UC | Guerrier | Ombre | - | 12 | 52 | 8 | 5 | Coup d'Os | - |
 | k4 | Chevalier Défunt | R | Guerrier | Ombre | - | 15 | 72 | 11 | 6 | Frappe Rigide | - |
 | k5 | Spectre des Quais | SR | Mage | Eau | - | 21 | 60 | 11 | 17 | Brume Mordante | - |
 | k6 | Banshee des Caveaux | UR | Mage | Ombre | - | 30 | 76 | 15 | 24 | Hurlement Froid | - |
@@ -79,6 +84,7 @@
 | Spectres des Caveaux | k1 -> k3 -> k13 ; k5 -> k6 -> k14 ; k15 -> k16 -> k7 | - | k17 |
 | Les Naufragés | k2 -> k12 -> k10 ; k11 -> k18 -> k19 ; k20 -> k21 -> k22 | k9 | k8 |
 | Chevalerie Défunte | k23 -> k24 -> k4 ; k25 -> k26 -> k27 ; k28 -> k29 -> k30 | - | - |
+| Gobelins des Caveaux | k31 -> k32 | - | - |
 
 ## Donjon divin (18)
 
@@ -191,7 +197,7 @@
 | Abîmaux | e7 -> e11 -> e20 ; e9 -> e6 -> e13 ; e15 -> e21 -> e22 | e12 | e14 |
 | Sirènes des Récifs | e23 -> e24 -> e25 -> e26 ; e27 -> e28 ; e29 -> e30 | - | - |
 
-## Donjon zenith (30)
+## Donjon zenith (32)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -219,6 +225,8 @@
 | z29 | Justine, Justicière du Jour | L | Assassin | Lumière | - | 39 | 100 | 35 | 16 | Peine Capitale | - |
 | z3 | Arbalétrier Doré | UC | Assassin | Lumière | - | 12 | 50 | 11 | 5 | Carreau Doré | - |
 | z30 | Apolline, Prophétesse du Jour | M | Mage | Lumière | - | 52 | 145 | 26 | 42 | Prophétie du Plein Jour | - |
+| z31 | Gobelin des Nuages | C | Assassin | Lumière | - | 9 | 50 | 8 | 4 | Dard Céleste | - |
+| z32 | Gobelin du Soleil | UC | Guerrier | Feu | - | 12 | 52 | 8 | 5 | Lame Solaire | - |
 | z4 | Lancier Solaire | R | Guerrier | Feu | - | 14 | 73 | 10 | 6 | Lance Héliale | - |
 | z5 | Voulige d’Aube | SR | Mage | Lumière | - | 21 | 62 | 11 | 17 | Falaise de Lumière | - |
 | z6 | Phénix du Zénith | UR | Mage | Feu | - | 29 | 78 | 15 | 23 | Pluie de Feu | - |
@@ -233,4 +241,5 @@
 | Légion Solaire | z1 -> z3 -> z4 -> z5 ; z13 -> z7 ; z14 -> z15 | z12, z10 | z8 |
 | Phénix Célestes | z2 -> z16 -> z17 ; z18 -> z6 -> z19 ; z20 -> z21 -> z22 | - | - |
 | Clergé du Plein Jour | z9 -> z23 -> z24 -> z11 ; z25 -> z26 ; z27 -> z28 -> z29 | - | z30 |
+| Gobelins Célestes | z31 -> z32 | - | - |
 

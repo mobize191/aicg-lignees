@@ -73,9 +73,9 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | --- | --- | --- | --- | --- |
 | zone-marees | les berges des Marées (biome marees) | zone | donjon | 30 monstres : e1, e2, e3, e4, e5, e6, e13, e14, e11, e12, e7, e10, e8, e9, e15, e16, e17, e18, e19, e20, e21, e22, e23, e24, e25, e26, e27, e28, e29, e30 |
 | zone-forge | les coulées de la Forge (biome forge) | zone | donjon | 24 monstres : f1, f2, f3, f4, f5, f6, f11, f12, f13, f14, f15, f19, f20, f21, f22, f24, f7, f10, f8, f9, f16, f17, f18, f23 |
-| zone-bosquet | les clairières du Bosquet (biome bosquet) | zone | donjon | 21 monstres : g1, g2, g3, g4, g5, g6, g7, g8, g13, g14, g15, g16, g20, g21, g9, g12, g10, g11, g17, g18, g19 |
-| zone-crypte | les galeries de la Crypte (biome crypte) | zone | donjon | 30 monstres : k1, k2, k3, k4, k5, k6, k7, k8, k13, k14, k17, k20, k21, k22, k23, k24, k25, k27, k28, k30, k9, k12, k10, k11, k15, k16, k18, k19, k26, k29 |
-| zone-zenith | les pentes du Zénith (biome zenith) | zone | donjon | 30 monstres : z1, z2, z3, z4, z5, z6, z7, z8, z13, z14, z15, z16, z17, z18, z19, z28, z29, z30, z9, z12, z10, z11, z20, z21, z22, z23, z24, z25, z26, z27 |
+| zone-bosquet | les clairières du Bosquet (biome bosquet) | zone | donjon | 23 monstres : g1, g2, g3, g4, g5, g6, g7, g8, g13, g14, g15, g16, g20, g21, g9, g12, g10, g11, g17, g18, g19, g31, g32 |
+| zone-crypte | les galeries de la Crypte (biome crypte) | zone | donjon | 32 monstres : k1, k2, k3, k4, k5, k6, k7, k8, k13, k14, k17, k20, k21, k22, k23, k24, k25, k27, k28, k30, k9, k12, k10, k11, k15, k16, k18, k19, k26, k29, k31, k32 |
+| zone-zenith | les pentes du Zénith (biome zenith) | zone | donjon | 32 monstres : z1, z2, z3, z4, z5, z6, z7, z8, z13, z14, z15, z16, z17, z18, z19, z28, z29, z30, z9, z12, z10, z11, z20, z21, z22, z23, z24, z25, z26, z27, z31, z32 |
 
 ## Arbres d'eveil (data/trees.json)
 

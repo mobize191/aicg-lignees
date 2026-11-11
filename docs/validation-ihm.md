@@ -1,6 +1,6 @@
 # Validation IHM locale — protocole et prompt
 
-Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.32** (hub-ville, économie v2, errance 5 zones + héros dédié, craft en ville, page Personnage, vidéos FX en jeu, correctifs terrain + migration v27).
+Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.33** (contenu v3 : marchand v2 — 3 offres/jour et raretés débloquées par donjon bouclé, gobelins régionaux, greffe des 31 solos, familles compagnons 7 UR + 7 L, familles divines joueur + maillons du Jeune Séraphin + lignées des Enge). Baselines : 150 tests, smoke 299 checks, digest `f8a9f0bb…` 1359/3000 et `978ed44b…` 4517/10000 (MESURE post-contenu v3, sans recalibrage).
 
 ## Préparation (une fois)
 
@@ -9,10 +9,10 @@ git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
 node build.mjs                                # build déterministe : dist.html régénéré
-node --test                                   # 144 tests verts attendus
-node smoke-ui.mjs dist.html                   # 294 checks attendus (2 échecs préexistants connus : 46 g / 45 e, moteur)
-node combat-digest.mjs dist.html 3000         # baseline attendue : f72106ff…, 1379/3000, 0 exception, 1 marathon
-node combat-digest.mjs dist.html 10000        # baseline N = 10 000 : 3f9fe198…, 4558/10000
+node --test                                   # 150 tests verts attendus
+node smoke-ui.mjs dist.html                   # 299 checks attendus (2 échecs préexistants connus : 46 g / 45 e, moteur)
+node combat-digest.mjs dist.html 3000         # MESURE courante : f8a9f0bb…, 1359/3000, 0 exception, 1 marathon (baseline verrouillée f72106ff…, 1379/3000)
+node combat-digest.mjs dist.html 10000        # MESURE N = 10 000 : 978ed44b…, 4517/10000 (baseline verrouillée 3f9fe198…, 4558/10000)
 # servir le jeu en reproduisant le déploiement Pages (le chargeur d'assets a besoin de http, pas de file://)
 mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance
 cd .site && python3 -m http.server 8080
@@ -54,7 +54,7 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 
 **S9 — Fin de combat + Récompenses.** Termine un combat : l'écran Récompenses s'ouvre (or, XP, drops cliquables, recrue éventuelle). Capture. Vérifie : « Tout ramasser » referme la modale, l'étage suivant est proposé après victoire, le retour au donjon fonctionne.
 
-**S10 — Boutique + atelier de craft.** `#boutique` : capture. Vérifie : rayons potions (soin 50 or, mana 60 or), éclat brut 150 or, équipement 200-1 600 or, marchand de créatures (C 200 → UR 10 000 or) ; un achat débite l'or et ajoute l'exemplaire (modale de révélation) ; refus propre si or insuffisant. **Atelier 🔨 (v1.31)** : 90 boutons « Fabriquer » (5 zones × 3 niveaux × 6 pièces), coût affiché (matériaux de zone + or ; supérieure/royale + matière du boss) ; avec des matériaux posés en console de setup (`store.materiaux['ecume'] = 5`, `store.gold = 1000`, `save()`), fabriquer une pièce de base débite matériaux + or et ajoute la pièce à l'inventaire ; sans matière du boss, les paliers hauts restent désactivés.
+**S10 — Boutique + atelier de craft.** `#boutique` : capture. Vérifie : rayons potions (soin 50 or, mana 60 or), éclat brut 150 or, équipement 200-1 600 or, marchand de créatures v2 (3 offres du jour en rotation, catalogue complet C 200 → UR 10 000 or, prix actés UC 1 500 / R 4 500 / SR 8 000, rareté verrouillée 🔒 tant que la difficulté de donjon requise n'est pas bouclée) ; un achat débite l'or et ajoute l'exemplaire (modale de révélation) ; refus propre si or insuffisant ou rareté verrouillée. **Atelier 🔨 (v1.31)** : 90 boutons « Fabriquer » (5 zones × 3 niveaux × 6 pièces), coût affiché (matériaux de zone + or ; supérieure/royale + matière du boss) ; avec des matériaux posés en console de setup (`store.materiaux['ecume'] = 5`, `store.gold = 1000`, `save()`), fabriquer une pièce de base débite matériaux + or et ajoute la pièce à l'inventaire ; sans matière du boss, les paliers hauts restent désactivés.
 
 **S11 — Guilde (ex-Forge).** `#forge` : capture. Vérifie : évolutions en gemmes, réserve de pierres d'éveil affichée, autel 5-pour-1, compagnons du jour (3 offres, prix 500-2 000 or), et AUCUNE trace de jetons de génération nulle part (supprimés v1.25).
 

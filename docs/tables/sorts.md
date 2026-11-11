@@ -170,6 +170,9 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | vol | Larcin Agile / Coup de Jarnac / Dague dans le Dos / Fauchage / Embuscade / Coup de Grâce |
 | zele | Étincelle de Foi / Hymne du Matin / Bénédiction du Jour / Croisade / Aurore Radieuse / Lumière Éternelle |
 | appel | Appel Mineur / Élémentaire de Braise / Meute Spirituelle / Portail / Légion Céleste / Appel Suprême |
+| seuil | Sablier I / Sablier II / Sablier III / Sablier IV / Sablier V / Sablier VI |
+| miroir | Reflet I / Reflet II / Reflet III / Reflet IV / Reflet V / Reflet VI |
+| pont | Fil I / Fil II / Fil III / Fil IV / Fil V / Fil VI |
 
 ## Fusions de monstres (data/fusion-map.json)
 
@@ -264,6 +267,8 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | g16 | - | - |
 | g18 | - | - |
 | g21 | - | - |
+| g31 | seve-rongeuse | I |
+| g32 | etreinte-des-profondeurs | II |
 
 ### Donjon crypte
 
@@ -299,6 +304,8 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | k22 | - | - |
 | k27 | - | - |
 | k30 | - | - |
+| k31 | morsure-putride | I |
+| k32 | hurlement | I |
 
 ### Donjon zenith
 
@@ -334,6 +341,8 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | z26 | - | - |
 | z29 | - | - |
 | z30 | - | - |
+| z31 | colonne-de-feu | I |
+| z32 | renvoi-celeste | I |
 
 ### Donjon divin
 
