@@ -1,6 +1,6 @@
 # AICG : Lignées
 
-Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent du Novice au Légendaire. Prototype v1.12 (grand chantier arbres + sorts : stats RPG, grimoire trié, contenu v3, zones d'errance ; combat v2.1 : rail d'ordre du tour, auto-run en Tactique, actions détaillées, fiche complète).
+Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent du Novice au Légendaire. Prototype v1.30 (grand chantier arbres + sorts v1.12, boucle de jeu v2 et économie v2 clôturées le 11/11, bloc visuel v1.27 : hub-ville, Terres Sauvages, errance top-down zone Marées ; correctifs terrain v1.29 ; CI v1.30).
 
 **Jouer en ligne : https://mobize191.github.io/aicg-lignées/**
 

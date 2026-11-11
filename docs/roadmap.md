@@ -120,4 +120,9 @@ La spec et le plan d'exécution du grand chantier, archivés à la clôture : `d
 - v0.47.2 : source d'images au choix (bouton 🖼️, DreamShaper XL / WAI-Illustrious).
 - v0.47.3 : combat v2.1 (rail d'ordre du tour, auto-run en Tactique, actions détaillées, fiche complète) — baptême rétroactif du chantier de présentation du 10/11.
 - 11/11/2026 : v1.28 — campagne d'illustrations V3 validée, `assets-v3.json` source unique (265 arts + 8 fonds), anciennes sources archivées dans `archives/assets/` ; vidéos WAN v3 livrées (hors dist).
+- 11/11/2026 : v1.25 — économie v2 clôturée (lots E1-E5 : Boutique complète, marchand, Guilde+compagnons, jetons supprimés v25, quêtes quotidiennes v24) ; digest inchangé `f72106ff…` 1379/3000, baseline N=10 000 `3f9fe198…` 4558/10000 ; 134 tests, smoke 243 checks.
+- 11/11/2026 : v1.26 — correctif badge « nouvelle carte » retiré au placement en équipe + smoke B11 (parcours IHM complet, 258 checks) ; 134 tests, digest inchangé.
+- 11/11/2026 : v1.27 — bloc visuel : hub-ville, Terres Sauvages, errance top-down zone témoin Marées (migration v26) ; 139 tests, smoke 269 checks (B12), digest inchangé.
+- 11/11/2026 : v1.29 — correctifs terrain : CSS mobile (bloc remonté dans le `<style>`) + fluidité errance conforme au guide (pilotage inertiel §5, caméra §6, pré-rendu §3, DPR §9, entrées §4/§10) ; 141 tests, smoke 269 checks, digest inchangé.
+- 11/11/2026 : v1.30 — CI réparée (job test `build + node --test` gate le déploiement Pages : `assets-v3.json` + `fx/`) et documentation alignée (README, roadmap, travail-local, validation-ihm, CHANGELOG) ; digest inchangé.
 
