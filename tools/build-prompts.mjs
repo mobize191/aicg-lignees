@@ -24,7 +24,7 @@ const DUNGEON_FAMILY_SPECIES = {
   'forge|Cendrels': 'fireElemental', 'forge|Enfants de la Braise': 'fireElemental', 'forge|Gobelin des Fumées': 'shaman',
   'bosquet|Bêtes du Fougeron': 'beastWood', 'bosquet|Gens des Sèves': 'dryad',
   'crypte|Spectres des Caveaux': 'beastDark', 'crypte|Les Naufragés': 'beastWater', 'crypte|Chevalerie Défunte': 'undeadKnightF',
-  'zenith|Légion Solaire': 'herald', 'zenith|Phénix Célestes': 'phoenixM', 'zenith|Clergé du Plein Jour': 'apostle',
+  'zenith|Légion Solaire': 'herald', 'zenith|Phénix Célestes': 'phoenixFirebird', 'zenith|Clergé du Plein Jour': 'apostle',
   'divin|Arbitres du Seuil': 'celestialJudge', 'divin|Chœur Miroir': 'echoSpirit', 'divin|Tisseuses du Pont': 'fateWeaver',
 };
 const monsterFamilyOf = {};
@@ -38,7 +38,7 @@ for (const [dungeon, fams] of Object.entries(monsterFamilies)) {
 
 // espèces bestiales : pas de tag de genre, antiTags.beast au négatif
 const BEASTLIKE = new Set(['beast', 'beastWater', 'beastFire', 'beastWood', 'beastDark', 'seaSerpent', 'seaBehemoth', 'treant', 'magmaGolem']);
-const SPECIES_ANTI = { fireLord: 'fireLord' }; // antiTags.beast pour BEASTLIKE, antiTags.fireLord pour fireLord
+const SPECIES_ANTI = { fireLord: 'fireLord', phoenixFirebird: 'phoenixFirebird' }; // antiTags.beast pour BEASTLIKE, antiTags.<espèce> pour SPECIES_ANTI
 
 function resolveSpecies(card) {
   const id = card.id;
@@ -58,7 +58,7 @@ function resolveSpecies(card) {
 
 // ---------------------------------------------------------------------------
 const PALETTES = {
-  marees: 'deep blue and turquoise palette, sea foam, coral accents',
+  marees: 'deep blue and turquoise palette, sea foam, coral accents, warm rim light', // accent §14.2
   forge: 'ember orange and soot black palette, glowing red metal, floating embers',
   bosquet: 'moss green and gold palette, golden spores, giant mushrooms',
   crypte: 'grey green palette, candlelight, cold mist',
@@ -84,11 +84,9 @@ const TIER = {
   L: 'dynamic action pose, powerful aura, signature effect, intricate background',
   M: 'epic scale, full power aura, dramatic lighting, intricate background',
 };
-// maturité par rareté (arbitrage 10/11 soir) -> tags danbooru anglais
-const AGE_TAGS = {
-  C: 'teen, adolescent', UC: 'young adult', R: 'adult', SR: 'adult, mature',
-  UR: 'mature adult, veteran look', L: 'veteran, legendary aura, 50s', M: 'ancient, majestic, ageless',
-};
+// maturité par rareté (arbitrage 10/11 soir) -> mécanisme natif v17 (aged up) en TÊTE de prompt,
+// et non des tags d'âge libres (charte §15.6) ; échelle humanMaturityByRarity du species-map
+const AGED_UP = { C: 1.0, UC: 1.0, R: 1.2, SR: 1.4, UR: 1.6, L: 1.8, M: 2.0 };
 const NAMED_AGE_TAGS = {
   'adulte': 'adult', 'adulte aguerri': 'adult man, mature face, veteran warrior',
   'adulte défunt': 'adult, ghostly', 'adulte défunte': 'adult, ghostly',
@@ -96,8 +94,28 @@ const NAMED_AGE_TAGS = {
   'ancien colosse': 'ancient, colossal', 'éternel': 'ageless, divine presence', 'éternelle': 'ageless, divine presence',
   'mûre, majestueuse': 'mature woman, majestic',
 };
-const BASE_NEG = 'lowres, worst quality, low quality, blurry, bad anatomy, bad hands, missing fingers, extra digits, extra arms, mutated hands, poorly drawn hands, poorly drawn face, text, letters, numbers, watermark, signature, username, logo, frame, border, card frame, ornament, japanese text, chinese text, title, caption, close-up, portrait, face only, headshot, monochrome, greyscale, low contrast';
-const BASE_POS = 'masterpiece, best quality, anime style, clean lineart, vibrant colors, bright, soft ambient light, detailed background, rim lighting, sharp focus, solo';
+// NÉGATIF COURT canon v17 (charte §15.3 : un négatif trop long réduit la qualité et rend flou)
+// + anti-texte/zéro-cadre (charte §1, non négociable) + anti-signature + anatomie minimale + nsfw (filtre rating baked §15.5)
+const BASE_NEG = 'bad quality, worst quality, worst detail, sketch, censor, nsfw, text, letters, numbers, watermark, signature, artist name, artist signature, logo, frame, border, card frame, ornament, japanese text, chinese text, title, caption, close-up, portrait, face only, headshot, bad anatomy, bad hands, missing fingers, extra digits, extra arms, poorly drawn face, poorly drawn hands';
+// Correctifs §14 intégrés au négatif standard (vague 2) : visage jamais noir/encapuchonné, jamais quasi-monochrome
+const NEG_FACE = 'hooded, shadowed face, covered face, black face, obscured face, dark silhouette';
+const NEG_COLOR = 'monochrome, greyscale, single color palette, monochromatic background';
+// Tags qualité OBLIGATOIRES en FIN de prompt (canon v17 §15.2 — l'ordre compte)
+const QUALITY_TAIL = 'masterpiece, best quality, amazing quality';
+const BASE_POS = 'general, anime style, anime illustration, sharp lineart, clean lineart, vibrant colors, colorful, bright, soft ambient light, detailed background, rim lighting, sharp focus, solo, visible face, detailed eyes, face illuminated by soft glow, front lighting';
+// Renforts ciblés par carte (charte §14.3 Kenji, §14.5 f13)
+const NAMED_EXTRA = {
+  a15: { pos: 'bareheaded, beard stubble', neg: 'helmet, full helmet' },
+  a17: { pos: 'bareheaded, beard stubble', neg: 'helmet, full helmet' },
+  f13: { pos: 'colossal, bulky, beast-like, no humanoid proportions', neg: 'hood, slim, humanoid' },
+  // retry 2 vague 2 (défauts persistants au 1er retry, seed fixe) :
+  z19: { pos: 'giant bird, fully avian body, no arms, wings spread, perched', neg: 'humanoid body, arms, dress, robe, clothing, extra character, summoner, second figure' },
+  z22: { pos: 'giant bird, fully avian body, no arms, wings spread, perched', neg: 'humanoid body, arms, dress, robe, clothing, extra character, summoner, second figure' },
+  a16: { pos: 'hood down, face fully visible, detailed eyes', neg: 'hood up, shadowed face, covered face' },
+  d6: { pos: 'detailed eyes, visible expressive face, no mask', neg: 'faceless, blank face, featureless face, mask, glowing mask' },
+  a13: { pos: 'multicolored, coral accents, pink accents, gold accents', neg: 'monochrome, single color palette' },
+  f18: { pos: 'face fully visible, detailed eyes, bright face lighting', neg: 'shadowed face, dark face, obscured face' },
+};
 
 const FRAMING = (r) => (['UR', 'L', 'M'].includes(r) ? { pos: 'full body, standing, centered', neg: '', label: 'full body' } : { pos: 'upper body, cowboy shot, waist up', neg: ', full body', label: 'demi-corps' });
 
@@ -105,7 +123,8 @@ function buildCard(card) {
   const id = card.id;
   const named = speciesMap.named[id] || null;
   const { species, extraTags } = resolveSpecies(card); // lève une erreur explicite si absent
-  const beastlike = BEASTLIKE.has(species);
+  // beast:true dans species-map.json (ex. phénix z19/z22) = jamais de tag de genre, antiTags de l'espèce obligatoires
+  const beastlike = BEASTLIKE.has(species) || (named && named.beast === true);
   const rarity = card.rarity || 'C';
   const universe = card.dungeon || card.family || card.biome || 'naissance';
   const framing = FRAMING(rarity);
@@ -118,18 +137,24 @@ function buildCard(card) {
     const ageTag = NAMED_AGE_TAGS[named.age] || 'adult'; // champ age prioritaire pour les nommées
     pos.push(ageTag);
   } else if (species === 'human') {
-    pos.push(AGE_TAGS[rarity]); // génériques humaines : âge dérivé de la rareté
+    // génériques humaines : maturité par rareté via le mécanisme natif (aged up:N) en tête de prompt (charte §15.6)
+    pos.unshift(`(aged up:${AGED_UP[rarity] || 1.0})`);
   }
-  if (card.classe && CLASS_TAGS[card.classe]) pos.push(CLASS_TAGS[card.classe]);
+  if (card.classe && CLASS_TAGS[card.classe] && !(NAMED_EXTRA[id] && /hood/.test(CLASS_TAGS[card.classe]))) pos.push(CLASS_TAGS[card.classe]); // f13 : pas de 'hood' en positif
+  if (species === 'human') pos.push('fair skin, human skin tone'); // peau jamais dénaturée (retour vague 1, charte §14.3)
   if (ELEMENT_TAGS[card.element]) pos.push(ELEMENT_TAGS[card.element]);
   if (PALETTES[universe]) pos.push(PALETTES[universe]);
   pos.push(TIER[rarity] || TIER.C, framing.pos, 'looking at viewer');
+  if (NAMED_EXTRA[id]) pos.push(NAMED_EXTRA[id].pos);
+  pos.push(QUALITY_TAIL); // tags qualité en FIN de prompt (canon v17 §15.2)
 
-  let neg = BASE_NEG;
+  let neg = BASE_NEG + ', ' + NEG_FACE + ', ' + NEG_COLOR; // correctifs §14.1/§14.2 intégrés au standard
   if (universe !== 'crypte') neg += ', dark, muddy colors'; // sauf univers sombres voulus
   neg += framing.neg;
   if (beastlike) neg += ', ' + speciesMap.antiTags.beast.join(', ');
+  if (species === 'human') neg += ', blue skin, colored skin, inhuman skin';
   if (SPECIES_ANTI[species]) neg += ', ' + speciesMap.antiTags[SPECIES_ANTI[species]].join(', ');
+  if (NAMED_EXTRA[id]) neg += ', ' + NAMED_EXTRA[id].neg;
   if (named && /veteran warrior/.test(named.note || '')) neg += ', young, teen, boy'; // Kenji : adulte aguerri à tous les paliers
   if (named && /graine/.test(named.age || '')) neg += ', adult, mature, sexual, nude'; // graines 10-14 ans, jamais sexualisées
 
@@ -176,8 +201,8 @@ for (const bg of BGS) {
     id: 'bg-' + bg, file: 'bg-' + bg + '.jpg', name: 'Fond ' + bg, rarity: null, universe: bg,
     named: false, bg: true, species: null, gender: null, age: null, character_dna: null,
     framing: 'background', w: 1216, h: 832, seed: 2126100 + BGS.indexOf(bg),
-    positive: BASE_POS + ', scenery, no humans, detailed background, ' + BG_SCENERY[bg],
-    negative: BASE_NEG + ', people, creatures, humans, character, 1girl, 1boy, close-up, portrait',
+    positive: BASE_POS + ', scenery, no humans, detailed background, ' + BG_SCENERY[bg] + ', ' + QUALITY_TAIL,
+    negative: BASE_NEG + ', ' + NEG_COLOR + ', people, creatures, humans, character, 1girl, 1boy, close-up, portrait',
   });
 }
 

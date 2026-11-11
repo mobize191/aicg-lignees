@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.28] — 2026-11-11 — Illustrations : la campagne V3 devient la source unique, anciennes sources archivées
+
+La vague 3 (271 prompts langage naturel painterly, `tools/prompts-v3.json`, rapport `tools/out-v2/RAPPORT-vague3.md`) est validée et devient l'unique source d'illustrations : nouveau manifeste `assets-v3.json` (265 arts + 8 fonds, budgets charte §13, 24 Mo, 0 au-dessus du plafond), `ART_MANIFESTS = { v3: 'assets-v3.json' }` dans `src/ui.js`. Les anciens manifests `assets.json` (DreamShaper XL), `assets-wai.json` (WAI comparatif) et `assets-v2.json` (vague 2) sont déplacés dans `archives/assets/`. Vidéos WAN 2.1 v3 (hub, Marées, sprites) livrées dans `tools/out-v2/video/` avec frames QA. Masters 1040×1520 conservés hors repo (ComfyUI/output/out-v2/state/masters-v3). Moteur et data inchangés.
+
+
 ## [1.27] — 2026-11-11 — Bloc visuel : hub-ville, Les Terres Sauvages, errance top-down (zone témoin Marées)
 
 L'accueil devient un hub-ville (scène procédurale, menu latéral, quêtes du jour, héroïne cliquable) avec un gros bouton « LES TERRES SAUVAGES ». Nouvelle page Terres Sauvages : sélecteur de zones (départ verrouillé sur la zone de l'eau, déblocage en chaîne par le donjon de zone). Errance top-down dans la zone témoin Marées : carte canvas procédurale déterministe (seed en data), déplacement au clic avec A* + lissage, rencontres dans les hautes herbes, autel de soin et jarres, combats dans la chaîne d'étages (victoire = déblocage). Migration v26 non destructive. 139 tests, smoke 269 checks (11 nouveaux B12). Digest inchangé `f72106ff…` 1379/3000.

@@ -1530,14 +1530,15 @@ function updatePtsBadge() {
 
 const ART = {};
 
-// v0.47.2 : deux sources d'illustrations au choix (manifeste DreamShaper XL ou WAI)
-const ART_MANIFESTS = { dreamshaper: 'assets.json', wai: 'assets-wai.json' };
-const ART_SRC_LABEL = { dreamshaper: 'DreamShaper XL', wai: 'WAI-Illustrious v17' };
+// v1.28 : source d'illustrations unique = campagne AICG V3 (WAI-Illustrious v17, vague 3 validée).
+// Les anciens manifests (DreamShaper XL, WAI v2) sont archivés dans archives/assets/.
+const ART_MANIFESTS = { v3: 'assets-v3.json' };
+const ART_SRC_LABEL = { v3: 'AICG Lignées V3 (WAI-Illustrious v17)' };
 function artSrcKey() {
   try {
     const k = storage.getItem('fondations-art-src');
-    return ART_MANIFESTS[k] ? k : 'dreamshaper';
-  } catch (e) { return 'dreamshaper'; }
+    return ART_MANIFESTS[k] ? k : 'v3';
+  } catch (e) { return 'v3'; }
 }
 
 
@@ -1674,7 +1675,8 @@ async function initAssets() {
 
 // v0.47.2 : bascule la source d'images et re-rend la page courante
 async function switchArtSrc() {
-  const next = artSrcKey() === 'dreamshaper' ? 'wai' : 'dreamshaper';
+  const keys = Object.keys(ART_MANIFESTS);
+  const next = keys[(keys.indexOf(artSrcKey()) + 1) % keys.length];
   try { storage.setItem('fondations-art-src', next); } catch (e) { }
   for (const k of Object.keys(ART)) delete ART[k];
   for (const d of DUNGEONS) d.art = null;
