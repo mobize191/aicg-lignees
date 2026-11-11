@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 lot E3b livré (suppression des jetons de génération, migration v25)
+
+- **Livré** : les jetons de génération disparaissent (ACTÉ 10/11) — plus d'octroi (départ, boss final, jalons), plus de section à la Guilde, plus de table `JETON_RARITY` (`jetonRarityFor` retiré du moteur). Les naissances passent par l'écran de départ, les quêtes (carte N 1 jour/3), la Guilde (compagnons) et le marchand. **Migration v24 → v25 non destructive** : chaque jeton restant est converti en or selon la table `JETON_OR` en data (C 100 → UR 5 000, taux **PROPOSÉ**) puis le champ est vidé. Textes d'accueil/donjon/Guilde mis à jour.
+- **Preuve** : build ok, **134 tests** verts (migration v25 : conversion + idempotence, JETON_RARITY retiré), smoke **243 checks** (5 nouveaux B10 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (hors combat).
+
+## 2026-11-11 : PROPOSÉ — taux de conversion des jetons en or (JETON_OR : C 100, UC 300, R 800, SR 2 000, UR 5 000)
+
+- La migration v25 convertit les jetons restants en or à ces taux proposés (environ la moitié du prix marchand d'une créature de même rang), sans quoi la suppression serait destructive. À valider ou ajuster par Marc-Olivier.
+
 ## 2026-11-11 : MESURE — économie v2 lot E4 livré (quêtes quotidiennes, migration v24)
 
 - **Livré** : page 📜 Quêtes (menu + carte Donjons) — **3 quêtes/jour en rotation déterministe** (seed de la date : 1 petite + 1 moyenne + 1 grande, `data/quetes.json`), progression persistée et remise à zéro chaque nuit. Récompenses : or (60-150 selon la taille), la grande porte **1 éclat brut** ou **1 carte N un jour sur 3** (seed), **bonus de complétion : 1 pierre d'éveil** (acté). Hooks : monstres vaincus/boss/donjon fini en combat, achats Boutique, recrutement marchand, évolution, fusion à l'autel. Quêtes « errance » en data mais non tirées tant que l'errance n'existe pas. **Défi du jour supprimé** (remplacé par les quêtes, acté 10/11) ; `drawDailyCommon` reste la source des naissances de quête. Migration v23 → v24 non destructive (`quetes` initialisé, `dailyDone` inerté mais conservé).

@@ -225,51 +225,12 @@
  "EVEIL_COST": 1,
  "PIERRE_DROP_RATE": 0.15,
  "N_DROP_RATE": 0.02,
- "JETON_RARITY": {
-  "0": [
-   [
-    "C",
-    1
-   ]
-  ],
-  "2": [
-   [
-    "UC",
-    0.3
-   ],
-   [
-    "C",
-    0.7
-   ]
-  ],
-  "3": [
-   [
-    "R",
-    0.05
-   ],
-   [
-    "UC",
-    0.45
-   ],
-   [
-    "C",
-    0.5
-   ]
-  ],
-  "5": [
-   [
-    "R",
-    0.1
-   ],
-   [
-    "UC",
-    0.4
-   ],
-   [
-    "C",
-    0.5
-   ]
-  ]
+ "JETON_OR": {
+  "C": 100,
+  "UC": 300,
+  "R": 800,
+  "SR": 2000,
+  "UR": 5000
  },
  "GEM_TIERS": [
   "brut",
@@ -394,9 +355,9 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 24,
+ "SAVE_VERSION": 25,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 24,
+ "CURRENT_VERSION": 25,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",

@@ -862,13 +862,6 @@ function drawNaissance(rng = roll, keep = () => true) {
   return pool.length ? pool[Math.floor(rng() * pool.length)] : null;
 }
 
-// T1.3 : la rarete du jeton de generation, table en data, communes au taux de reference puis decroissant (decision 8)
-function jetonRarityFor(rng = roll, cleared = 0) {
-  const tiers = DATA.engine.JETON_RARITY ?? {};
-  const keys = Object.keys(tiers).map(Number).filter((k) => cleared >= k).sort((x, y) => y - x);
-  return rollRarity(rng, keys.length ? tiers[keys[0]] : [['C', 1]]);
-}
-
 function rollRewardRarity(rng) {
   const x = rng();
   let acc = 0;

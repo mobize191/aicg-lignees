@@ -74,7 +74,7 @@ test('migration v23 -> v24 : champ quetes initialisé, rien perdu', async () => 
   const E = loadEngine();
   const old = { version: 23, gold: 500, potions: { soin30: 2 }, dailyDone: '2026-11-10', instances: [] };
   const out = E.migrate(old);
-  assert.equal(out.version, 24);
+  assert.equal(out.version, 25, 'migration jusqu’à la v25');
   assert.equal(out.gold, 500, 'or conservé');
   assert.deepEqual(out.potions, { soin30: 2 }, 'potions conservées');
   assert.equal(out.dailyDone, '2026-11-10', 'dailyDone inerté mais conservé');

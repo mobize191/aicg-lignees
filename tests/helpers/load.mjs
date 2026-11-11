@@ -12,7 +12,7 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'peekRound', 'stepRound', 'playAuto', 'spellSideOf',
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById', 'dungeonLevelOf', 'bandOf',
-  'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance', 'jetonRarityFor',
+  'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance',
   'treeOfRace', 'cranPctOfRace', 'noLossPctOf', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
   'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',

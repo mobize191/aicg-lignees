@@ -186,7 +186,19 @@ function v23to24(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24 };
+// v24 -> v25 (économie v2 lot E3b) : les jetons de génération disparaissent — convertis en or
+// selon la table JETON_OR en data (taux PROPOSÉ), puis vidés. Non destructif.
+function v24to25(s) {
+  s.version = 25;
+  const table = DATA.engine.JETON_OR ?? {};
+  const jetons = Array.isArray(s.tokens) ? s.tokens : [];
+  const or = jetons.reduce((a, t) => a + (table[t?.rar] ?? table.C ?? 100), 0);
+  if (or > 0) s.gold = (s.gold ?? 0) + or;
+  s.tokens = [];
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

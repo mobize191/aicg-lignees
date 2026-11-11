@@ -9,7 +9,8 @@ test('v8 traverse la chaine sans perte (ACC-0-5, EXI-SAVE-1)', () => {
   const out = E.migrate(structuredClone(save));
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.equal(out.instances.length, save.instances.length);
-  assert.equal(out.tokens.length, save.tokens.length);
+  assert.equal(out.tokens.length, 0, 'jetons convertis en or puis vidés (v25)');
+  assert.ok(out.gold >= (save.gold ?? 0), 'or non perdu');
   assert.deepEqual(out.collection, save.collection);
   assert.deepEqual(out.instances.map((i) => [i.id, i.lvl, i.xp]), save.instances.map((i) => [i.id, i.lvl, i.xp]));
 });
@@ -49,7 +50,7 @@ test('v8 -> v11 : chaque exemplaire reçoit agilité et intelligence, aucune ré
     assert.ok(Number.isFinite(inst.agi) && inst.agi >= 1, `${inst.id} a une agilité`);
     assert.ok(Number.isFinite(inst.int) && inst.int >= 1, `${inst.id} a une intelligence`);
   }
-  assert.deepEqual(out.tokens.length, save.tokens.length);
+  assert.equal(out.tokens.length, 0, 'jetons convertis en or puis vidés (v25)');
 });
 
 test('v8 -> v12 : grimoire appris et zones visitées présents, chaîne complète (EXI-SAVE-1)', () => {
@@ -193,15 +194,16 @@ test('v20 -> v21 (boucle v2 lot 1) : points convertis en or (1 ⚡ = 1 or), poti
   };
   const out = E.migrate(s);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
-  assert.equal(out.gold, 137, 'conversion 1 ⚡ = 1 or');
+  assert.equal(out.gold, 137 + (E.DATA.engine.JETON_OR?.C ?? 100), 'conversion 1 ⚡ = 1 or + jeton C converti (v25)');
   assert.equal(out.points, undefined, 'le champ points est remplacé par gold');
   for (const pid of Object.keys(E.DATA.potions)) assert.equal(out.potions[pid], 0, `stock ${pid} initialisé`);
   assert.deepEqual(out.runState, { active: false, units: {} });
   assert.equal(out.instances.length, 1, 'aucune carte perdue');
-  assert.equal(out.tokens.length, 1, 'aucun jeton perdu');
+  assert.equal(out.tokens.length, 0, 'jetons supprimés (v25)');
+  assert.equal(out.gold, 137 + (E.DATA.engine.JETON_OR?.C ?? 100), 'jeton C converti en or selon JETON_OR (v25)');
   // idempotence : rejouer sur une v21 ne casse rien
   const again = E.migrate(structuredClone(out));
-  assert.equal(again.gold, 137);
+  assert.equal(again.gold, 137 + (E.DATA.engine.JETON_OR?.C ?? 100), 'idempotent : pas de double conversion');
   assert.deepEqual(again.runState, { active: false, units: {} });
 });
 

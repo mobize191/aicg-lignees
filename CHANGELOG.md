@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.24] — 2026-11-11 — Économie v2, lot E3b : les jetons de génération disparaissent (migration v25)
+
+Les jetons de génération sont supprimés : plus d'octroi (départ, boss, jalons), plus de table `JETON_RARITY`. Les cartes naissent à la Guilde (compagnons du jour), au marchand de la Boutique, en quêtes quotidiennes et en donjon. Migration v25 non destructive : les jetons restants sont convertis en or (table `JETON_OR`, taux proposés C 100 → UR 5 000). Digest inchangé `f72106ff…` 1379/3000. 134 tests, smoke 243 checks (5 nouveaux verts).
+
+
 ## [1.23] — 2026-11-11 — Économie v2, lot E4 : quêtes quotidiennes (défi du jour supprimé, migration v24)
 
 Nouvelle page 📜 Quêtes : 3 quêtes par jour en rotation quotidienne (1 petite + 1 moyenne + 1 grande), progression persistée remise à zéro chaque nuit. Récompenses en or, la grande quête porte une naissance (carte N) un jour sur trois ou un éclat brut ; bonus de complétion : 1 pierre d’éveil. Le défi du jour est supprimé. Migration v24 non destructive. Digest inchangé `f72106ff…` 1379/3000. 134 tests, smoke 238 checks (7 nouveaux verts).

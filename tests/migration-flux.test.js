@@ -21,7 +21,7 @@ test('flux réel (a) : la fixture v8 migre en v21 avec voies, sorts re-mappés, 
     assert.ok(Number.isFinite(inst.int) && inst.int >= 1);
   }
   assert.equal(out.instances.length, fixtureV8().instances.length);
-  assert.equal(out.tokens.length, fixtureV8().tokens.length);
+  assert.equal(out.tokens.length, 0, 'jetons convertis en or puis vidés (v25)');
 });
 
 test('flux réel (b) : la source branche la migration dans le chargement (pas de code mort)', () => {

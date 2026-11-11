@@ -716,15 +716,6 @@ function pierreCount() {
 function addPierres(n = 1) {
   store.pierres = pierreCount() + n;
 }
-function grantToken(rar, cat) {
-  store.tokens.push({ rar, cat });
-}
-
-function grantKindToken(kind, rar = 'C') {
-  store.tokens.push({ rar, kind });
-}
-
-
 function cardAvailable(c) {
   if (!c.dungeon) return true;
   if (c.dungeon === 'divin') return dungeonUnlocked(dungeonById('zenith'));
@@ -732,33 +723,6 @@ function cardAvailable(c) {
 }
 
 
-function tokenTypeKey(t) {
-  if (t.kind) return t.kind + ':' + (t.rar ?? 'C');
-  if (t.cat === 'pers') return 'humain:' + (t.rar ?? 'C');
-  return 'biome:' + t.cat + ':' + (t.rar ?? 'C');
-}
-
-
-function bossTokenFor(dungeonId) {
-  // T1.3 : la table de rarete du jeton vit dans les data (decision 8 : communes au taux de reference, decroissant avec la rarete)
-  const cleared = DUNGEONS.filter((d) => bestRecord(d.id) >= d.floors).length;
-  return { kind: 'biome', cat: dungeonId, rar: jetonRarityFor(uiRand, cleared) };
-}
-
-function tokenLabel(t) {
-  if (!t) return 'jeton';
-  const rar = t.rar ?? 'C';
-  if (t.kind === 'humain') return 'naissance humaine au hasard (rang N)';
-  if (t.kind === 'humain-riche') return 'humain raffin\u00e9 (maillon d\u2019une voie, 15 % R)';
-  if (t.kind === 'race') return 'les 4 races au tirage (naissance)';
-  if (t.kind === 'monstre' || t.kind === 'mystique' || t.kind === 'divine') return `race ${t.kind} au tirage (naissance)`;
-  if (t.kind === 'evolution') return `raccourci : palier ${rar} d\u2019une voie raciale`;
-  if (t.kind === 'biome') return `biome ${dungeonById(t.cat)?.name ?? t.cat} (${rar})`;
-  if (t.kind === 'non-humain') return 'race non humaine au tirage (naissance)';
-  return t.cat === 'pers' ? `personnages humains (${rar})` : `biome ${dungeonById(t.cat)?.name ?? t.cat} (${rar})`;
-}
-
-; 
 function maybeDropRegEclat(rng = uiRand, mult = 1) {
   if (rng() < (REG_ECLAT_RATE[store.diff - 1] ?? REG_ECLAT_RATE[0]) * mult) {
     store.regEclats = (store.regEclats ?? 0) + 1;
@@ -1267,7 +1231,7 @@ function evolveInstance(iid, targetId = null) {
   const elt = cur.element ?? byId(nextId).element; 
   if (isEveil) {
     if (pierreCount() < n) {
-      return { ok: false, reason: `Il faut ${n} pierre${n > 1 ? 's' : ''} d’éveil (vous en avez ${pierreCount()}) — les boss des donjons en lâchent rarement, le défi du jour en donne une.` };
+      return { ok: false, reason: `Il faut ${n} pierre${n > 1 ? 's' : ''} d’éveil (vous en avez ${pierreCount()}) — les boss des donjons en lâchent rarement, les quêtes quotidiennes en donnent.` };
     }
     store.pierres = pierreCount() - n;
   } else if (gemCount(tier, elt) < n) {
@@ -1301,55 +1265,6 @@ function evolveInstance(iid, targetId = null) {
   markSeen(nextId);
   save();
   return { ok: true, nextId, asc: inst.asc, inherited: inst.acc.length };
-}
-
-function useToken(idx) {
-  const t = store.tokens[idx];
-  if (!t) return { ok: false, reason: 'Jeton introuvable.' };
-  const rar = t.rar ?? 'C';
-  const inKind = (c) => cardAvailable(c) && !forgeOnly(c);
-  
-  const racialePool = (race, r) => CATALOG.filter((c) => c.raciale && c.rarity === r && raceOfCard(c) === race && inKind(c) && !c.archived);
-  // rang N (phase 1) : un jeton de naissance tire le rang de la naissance de la race ;
-  // les communes divines (Ange, Démon, Éveillé du Seuil) restent la porte divine jusqu'à l'Esprit Divin
-  const naissRar = (race) => (race === 'divine' ? 'C' : 'N');
-  
-  const raccourciPool = (race, r) => {
-    const set = new Set();
-    for (const n of CATALOG.filter((c) => c.raciale && raceOfCard(c) === race)) {
-      for (const f of formsOf(n.id)) set.add(f.to);
-      for (const f of formsOf(n.id)) for (const f2 of formsOf(f.to)) set.add(f2.to);
-      for (const f of formsOf(n.id)) for (const f2 of formsOf(f.to)) for (const f3 of formsOf(f2.to)) set.add(f3.to);
-    }
-    return [...set].map(byIdSoft).filter((c) => c && c.rarity === r && inKind(c) && raceOfCard(c) === race);
-  };
-  let pool = [];
-  if (t.kind === 'humain' || (!t.kind && t.cat === 'pers')) {
-    pool = racialePool('humaine', naissRar('humaine'));
-  } else if (t.kind === 'humain-riche') {
-    const drawRar = uiRand() < 0.15 ? 'R' : 'UC';
-    pool = raccourciPool('humaine', drawRar);
-  } else if (t.kind === 'race' || t.kind === 'non-humain') {
-    const races = t.kind === 'race' ? RACES : ['monstre', 'mystique', 'divine'];
-    const race = races[Math.floor(uiRand() * races.length)];
-    pool = racialePool(race, naissRar(race));
-    if (!pool.length) pool = raccourciPool(race, naissRar(race));
-    if (!pool.length) pool = races.flatMap((r2) => racialePool(r2, naissRar(r2)));
-  } else if (t.kind === 'monstre' || t.kind === 'mystique' || t.kind === 'divine') {
-    pool = racialePool(t.kind, naissRar(t.kind));
-    if (!pool.length) pool = raccourciPool(t.kind, naissRar(t.kind));
-  } else if (t.kind === 'evolution') {
-    pool = RACES.flatMap((r2) => raccourciPool(r2, rar));
-    if (!pool.length) pool = RACES.flatMap((r2) => racialePool(r2, naissRar(r2)));
-  } else {
-    const dg = t.cat;
-    pool = CATALOG.filter((c) => c.rarity === rar && c.dungeon === dg && inKind(c));
-  }
-  if (!pool.length) return { ok: false, reason: 'Aucune carte disponible pour ce jeton (biome verrouill\u00e9 ?).' };
-  const chosen = pool[Math.floor(uiRand() * pool.length)];
-  store.tokens.splice(idx, 1);
-  grantCards([chosen.id]);
-  return { ok: true, id: chosen.id };
 }
 
 function runAltar(rar, cat) {
@@ -2069,7 +1984,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
       }).join('');
       fusionBlock = `<h4>${multi ? '\u00c9volution \u2014 le choix de la voie' : '\u00c9volution'}</h4>
       <div class="fusion-list">
-        ${evolveBtns || `<button type="button" class="btn small" disabled>\u00c9voluer : niveau 10 requis + \u00e9clats d\u2019\u00e9volution \u2014 le dilemme de l\u2019Ascendance se joue \u00e0 la Forge</button>`}
+        ${evolveBtns || `<button type="button" class="btn small" disabled>\u00c9voluer : niveau 10 requis + \u00e9clats d\u2019\u00e9volution \u2014 le dilemme de l’Ascendance se joue à la Guilde</button>`}
       </div>
       ${multi ? `<p class="muted">Plusieurs voies s\u2019ouvrent \u2014 chaque bouton est une discipline diff\u00e9rente. Le choix est d\u00e9finitif pour CET exemplaire (une autre copie pourra prendre une autre voie) ; le novice sans \u00e9l\u00e9ment paie dans l\u2019\u00e9l\u00e9ment de la voie choisie.</p>` : ''}`;
     }
@@ -2105,7 +2020,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         <h3>${card.name}${!mystery ? ` <span class="lvl-chip">Nv ${level}</span>` : ''}</h3>
         <p class="muted">${card.rarity} \u00b7 ${card.classe} \u00b7 ${card.element ?? 'Neutre'}${owned ? ` \u00b7 poss\u00e9d\u00e9e \u00d7${owned}${placed ? ` (${usedInTeam(card.id)} en \u00e9quipe)` : ''}` : wasSeen ? ' \u00b7 plus poss\u00e9d\u00e9e' : ' \u00b7 pas encore d\u00e9voil\u00e9e'}</p>
         ${mystery
-          ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel ou par un jeton pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
+          ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel, au marchand ou \u00e0 la Guilde pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
           : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
         ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
@@ -2281,9 +2196,9 @@ function renderHome(root) {
           <h2>Bienvenue à AICG : Lignées !</h2>
           <p>Collectionnez des cartes, forgez des lignées, explorez le donjon des Marées. Voici comment démarrer :</p>
           <ol class="steps">
-            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 deux naissances vous sont offertes (l\u2019\u00c9p\u00e9iste Novice et le Pr\u00eatre Novice), jouables imm\u00e9diatement, et vos 5 jetons offerts (2 humains, 1 humain raffin\u00e9, 2 races au tirage \u2014 toutes des naissances) attendent la Forge.</li>
+            <li><b>G\u00e9n\u00e9rez vos premi\u00e8res cartes</b> \u2014 deux naissances vous sont offertes (choisissez l\u2019une d\u2019elles, une seconde au hasard), jouables imm\u00e9diatement.</li>
             <li><b>Composez votre \u00e9quipe</b> : 5 emplacements libres, des synergies de classe et d\u2019\u00e9l\u00e9ment.</li>
-            <li><b>Explorez le donjon</b> : chaque \u00e9tage vaincu rapporte des points et de l\u2019XP ; le boss final l\u00e2che un jeton de g\u00e9n\u00e9ration (1 par jour et par donjon).</li>
+            <li><b>Explorez le donjon</b> : chaque \u00e9tage vaincu rapporte de l\u2019or et de l\u2019XP ; les boss lâchent gemmes, éclats et parfois une pierre d\u2019\u00e9veil.</li>
             <li><b>Montez vos cartes</b> : au niveau 10, chacune \u00e9volue avec des \u00e9clats \u2014 et garde son identit\u00e9.</li>
           </ol>
           <a href="#forge" class="btn btn-hero">\u2694 G\u00e9n\u00e9rer mes premi\u00e8res cartes</a>
@@ -2312,7 +2227,7 @@ function renderHome(root) {
         <div class="home-actions">
           ${exploreBtn}
         </div>
-        <p class="muted">Victoire d\u2019étage : de l\u2019or · boss : or doublé. Les cartes naissent à la Forge (jetons, autel, défi du jour) ; le boss final lâche un jeton par jour et par donjon. Prochain boss : étage ${nextBoss}</p>
+        <p class="muted">Victoire d\u2019étage : de l\u2019or · boss : or doublé. Les cartes naissent à la Guilde (compagnons, autel), au marchand de la Boutique, en quêtes et en donjon. Prochain boss : étage ${nextBoss}</p>
       </div>
     </div>
     ${saveBoxHtml()}`;
@@ -2658,7 +2573,7 @@ function renderEquipe(root) {
     ${teamEquipHtml()}
     ${synPanel()}
     ${owned.length === 0
-      ? '<p class="empty-collection muted">Votre collection est vide — générez vos premières cartes avec vos jetons à la Forge !</p>'
+      ? '<p class="empty-collection muted">Votre collection est vide — recrutez à la Guilde, au marchand de la Boutique, ou en quêtes !</p>'
       : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''})</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
         ? `<p class="empty-collection">Aucune carte ne correspond aux filtres actifs (${owned.length} possédée${owned.length > 1 ? 's' : ''}). <button class="btn" id="reset-filters">Réinitialiser les filtres</button></p>`
         : `<div class="grid">${cells}</div>`}`}`;
@@ -2860,7 +2775,7 @@ function renderCollection(root) {
   const raceGrid = (race) => {
     const grp = raceGroup(race);
     const cells = racCells(grp);
-    return cells ? `<div class="fam-chain">${cells}</div>` : `<p class="muted fam-hint">Aucune pour l\u2019instant — les jetons et le d\u00e9fi du jour les font naître, au hasard de la naissance.</p>`;
+    return cells ? `<div class="fam-chain">${cells}</div>` : `<p class="muted fam-hint">Aucune pour l\u2019instant — les naissances viennent du départ, des quêtes et de la Guilde.</p>`;
   };
   
   const dungeonFamsOfRace = (race) => {
@@ -2895,7 +2810,7 @@ function renderCollection(root) {
     <h3 class="race-band">${RACE_GLYPH.humaine} Race humaine — la base <span class="muted">${solosOwned.length + raceGroup('humaine').filter((c) => ownedOf(c.id) > 0).length} portes d\u2019entr\u00e9e</span></h3>
     <div class="fam">
       <h4>Les 4 Novices — la naissance au hasard</h4>
-      <p class="muted fam-hint">Le jeton tire le novice au hasard ; le PREMIER CHOIX DU JOUEUR arrive \u00e0 la premi\u00e8re \u00e9volution : chaque Novice ouvre ses voies (l\u2019\u00e9p\u00e9e va du guerrier \u00e0 la sylvestre, le mage choisit son \u00e9l\u00e9ment ou la lumi\u00e8re, le pr\u00eatre la foi ou la garde, le voleur l\u2019assassinat ou les quais).</p>
+      <p class="muted fam-hint">Le novice est tiré au hasard au d\u00e9part ; le PREMIER CHOIX DU JOUEUR arrive \u00e0 la premi\u00e8re \u00e9volution : chaque Novice ouvre ses voies (l\u2019\u00e9p\u00e9e va du guerrier \u00e0 la sylvestre, le mage choisit son \u00e9l\u00e9ment ou la lumi\u00e8re, le pr\u00eatre la foi ou la garde, le voleur l\u2019assassinat ou les quais).</p>
       ${raceGrid('humaine')}
     </div>
     ${FAM_ORDER.map(famSection).join('')}
@@ -3716,7 +3631,6 @@ function runEndModal() {
     `\u26a1 Points gagn\u00e9s : <b>${r.points}</b>`,
     r.stages ? `\ud83e\uddf1 \u00c9tages vaincus : <b>${r.stages}</b>` : '',
     r.xp.length ? `\u2b50 XP d'\u00e9quipe (run) : <b>${r.xp.map((x) => `${x.name} \u2192 Nv ${x.level}${x.mult < 1 ? ` (${Math.round(x.mult * 100)} %)` : ''}`).join(' \u00b7 ')}</b>` : '',
-    r.tokens.length ? `\ud83c\udf9f\ufe0f Jetons de g\u00e9n\u00e9ration : <b>${r.tokens.map((t) => tokenLabel(t)).join(' \u00b7 ')}</b> — \u00e0 d\u00e9penser \u00e0 la Forge` : '',
     r.gems.length ? `\ud83d\udce0 \u00c9clats d'\u00e9volution : <b>${r.gems.join(', ')}</b>` : '',
   ].filter(Boolean);
   const overlay = document.createElement('div');
@@ -4047,7 +3961,7 @@ async function animate(events, ms, gen = null) {
           store.record = Math.max(store.record, stage);
           save();
           updatePtsBadge();
-          rewardLine = `+${pts} 🪙 or — les cartes naissent à la Forge : jetons, autel, défi du jour`;
+          rewardLine = `+${pts} 🪙 or — les cartes naissent à la Guilde (compagnons, autel), au marchand et en quêtes`;
           if (maybeDropRegEclat(uiRand, tactMult * loot.drop)) {
             pushRecomp('drop', '🌀 Éclat de régression', 'réserve de la Forge', 'SR');
             rewardLine += ' · 🌀 Éclat de régression trouvé ! (réserve de la Forge)';
@@ -4154,49 +4068,24 @@ async function animate(events, ms, gen = null) {
           if (stage === 5) {
             rollGem(BOSS_GEM[store.diff][0]);
             grantBrut(1);
-            if (!store.milestones.boss5) {
-              store.milestones.boss5 = true;
-              store.tokens.push({ kind: 'humain-riche', rar: 'UC' });
-              if (runLog) runLog.tokens.push({ kind: 'humain-riche', rar: 'UC' });
-              rewardLine += `· 🎁 Jalon : premier boss d'étage 5 vaincu — un jeton humain raffiné (PC garantie) rejoint la Forge ! `;
-            }
+            if (!store.milestones.boss5) store.milestones.boss5 = true;
           }
           if (stage === dg.floors) {
             rollGem(BOSS_GEM[store.diff][1]);
             grantBrut(2); 
             
-            store.tokenDays ??= {};
-            const today = todayKey();
-            if (store.tokenDays[store.dungeon] !== today) {
-              store.tokenDays[store.dungeon] = today;
-              const tok = bossTokenFor(store.dungeon);
-              store.tokens.push(tok);
-              if (runLog) runLog.tokens.push(tok);
-              rewardLine += ` · 🎟️ Jeton de génération (${tokenLabel(tok)}) pour la Forge !`;
-            } else {
-              rewardLine += ' · 🎟️ Jeton du jour déjà reçu pour ce donjon (1 par jour et par donjon).';
-            }
-            
             store.firstClearTokens ??= {};
             if (!store.firstClearTokens[store.dungeon]) {
               store.firstClearTokens[store.dungeon] = true;
-              const bonus = { kind: 'biome', cat: store.dungeon, rar: 'UC' };
-              store.tokens.push(bonus);
-              if (runLog) runLog.tokens.push(bonus);
-              rewardLine += ` · 🎁 Première victoire finale sur ${dg.name} : jeton bonus (biome, PC) !`;
+              rewardLine += ` · 🎁 Première victoire finale sur ${dg.name} !`;
             }
             if (!store.milestones.clear1) {
               store.milestones.clear1 = true;
-              store.tokens.push({ kind: 'humain-riche', rar: 'UC' });
-              store.tokens.push({ kind: 'race', rar: 'C' });
-              if (runLog) { runLog.tokens.push({ kind: 'humain-riche', rar: 'UC' }); runLog.tokens.push({ kind: 'race', rar: 'C' }); }
-              rewardLine += '· 🎁 Jalon : premier donjon terminé — un jeton humain raffiné ET un jeton de race rejoignent la Forge ! ';
+              rewardLine += '· 🎁 Jalon : premier donjon terminé ! ';
             }
             if (store.diff >= 3 && !store.milestones.diff3) {
               store.milestones.diff3 = true;
-              store.tokens.push({ kind: 'evolution', rar: 'SR' });
-              if (runLog) runLog.tokens.push({ kind: 'evolution', rar: 'SR' });
-              rewardLine += '· 🎁 Jalon : première Difficile terminée — un jeton d\u2019évolution (Super Rare) pour la Forge ! ';
+              rewardLine += '· 🎁 Jalon : première Difficile terminée ! ';
             }
           }
           save();
@@ -4814,7 +4703,7 @@ function renderQuetes(root) {
 function renderDonjons(root) {
   root.innerHTML = `
     <h2>Donjons</h2>
-    <p class="muted">Cinq régions à déverrouiller en chaîne, dix étages chacune, cinq difficultés : plus la difficulté monte, plus les créatures sont rares, les points abondants et les jetons du boss final précieux. Chaque entrée repart de l’étage 1 — une défaite ne bloque jamais.</p>
+    <p class="muted">Cinq régions à déverrouiller en chaîne, dix étages chacune, cinq difficultés : plus la difficulté monte, plus les créatures sont rares, les récompenses abondantes. Chaque entrée repart de l’étage 1 — une défaite ne bloque jamais.</p>
     <div class="defi-card">
       <h3>📜 Quêtes quotidiennes</h3>
       <p class="muted">Le défi du jour est remplacé par 3 quêtes en rotation quotidienne (1 petite + 1 moyenne + 1 grande) : or, parfois une naissance, et 1 pierre d’éveil si les trois sont accomplies.</p>
@@ -4826,7 +4715,6 @@ function renderDonjons(root) {
         const curDiff = store.progress[d.id].diff;
         const prog = progOf(d.id, curDiff);
         const nextBoss = Math.min(d.floors, Math.ceil(prog.stage / 5) * 5);
-        const dayTok = bossTokenFor(d.id);
         const cp = Math.floor(prog.record / 5) * 5 + 1;
         const hasCp = cp > 1 && cp <= d.floors;
         const DIFF = DIFFICULTIES[curDiff - 1];
@@ -4843,7 +4731,6 @@ function renderDonjons(root) {
             <h3>${d.name}${active ? ' <span class="chip on">actif</span>' : ''}</h3>
             <p class="muted">${d.desc}</p>
             <p><b>${d.floors}</b> étages · boss aux étages 5 et 10</p>
-            <p class="type-line">${d.types.map((t) => `<span class="chip">${t}</span>`).join(' ')} <span class="chip">${DIFF.name}</span> <span class="chip">🎟️ Boss final : ${tokenLabel(dayTok)} · 1/jour</span></p>
             <div class="diff-row">
               ${DIFFICULTIES.map((D) => {
                 const ok = diffUnlocked(d.id, D.id);
@@ -4854,7 +4741,7 @@ function renderDonjons(root) {
             <p class="muted">Conseil : les créatures ${d.types.join(' / ')} sont dominées par ${[...new Set(d.types.map((t) => BEATEN_BY[t]))].join(' / ')} (+25 % de dégâts pour qui les frappe).</p>
             <p class="rec-line">Force conseillée : indice d'équipe <b>≥ ${rec}</b> pour finir — ATQ, PV, rareté et sorts pondérés · votre équipe : <b>indice ${Math.round(teamPower())}</b>${teamPower() >= rec ? ' ✅' : ' ⚠️'}</p>
             <p class="muted">Record (${DIFF.name}) : étage ${prog.record || 0}/${d.floors} vaincu${prog.record > 1 ? 's' : ''} · meilleur : ${bestRecord(d.id)}/${d.floors}</p>
-            <p class="muted">Boss final : un jeton de génération (${tokenLabel(dayTok)}), 1 par jour et par donjon · première victoire finale : jeton bonus du biome. Éclat de régression : uniquement à partir de la difficulté Difficile (${Math.round(REG_ECLAT_RATE[2] * 100)} %), puis ${Math.round(REG_ECLAT_RATE[3] * 100)} % en Cauchemar et ${Math.round(REG_ECLAT_RATE[4] * 100)} % en Enfer. Éclats bruts : chaque boss d\u2019\u00e9tage en garantit 1, le boss final 2 (\u00e9l\u00e9ments du donjon : ${(d.types ?? []).join('/') || 'variable'}). Pierre d\u2019\u00e9veil : ${Math.round(PIERRE_DROP_RATE * 100)} % par boss d\u2019\u00e9tage. Naissance sauvage : ${Math.round(N_DROP_RATE * 100)} % par \u00e9tage vaincu, une naissance born\u00e9e par vos d\u00e9blocages se joint \u00e0 vous.</p>
+            <p class="muted">Éclat de régression : uniquement à partir de la difficulté Difficile (${Math.round(REG_ECLAT_RATE[2] * 100)} %), puis ${Math.round(REG_ECLAT_RATE[3] * 100)} % en Cauchemar et ${Math.round(REG_ECLAT_RATE[4] * 100)} % en Enfer. Éclats bruts : chaque boss d\u2019\u00e9tage en garantit 1, le boss final 2 (\u00e9l\u00e9ments du donjon : ${(d.types ?? []).join('/') || 'variable'}). Pierre d\u2019\u00e9veil : ${Math.round(PIERRE_DROP_RATE * 100)} % par boss d\u2019\u00e9tage. Naissance sauvage : ${Math.round(N_DROP_RATE * 100)} % par \u00e9tage vaincu, une naissance born\u00e9e par vos d\u00e9blocages se joint \u00e0 vous.</p>
             <div class="dungeon-actions">
               ${open
                 ? `<span class="btn big enter-btn" data-dungeon="${d.id}">Entrer — étage 1</span>
@@ -4867,7 +4754,7 @@ function renderDonjons(root) {
     </div>
     <p class="muted">🎰 À l'entrée de chaque exploration, un modificateur de run est tiré — acceptez-le (butin majoré), entrez librement sans lui, ou relancez le tirage contre 1 éclat brut.</p>
     <p class="vspace"></p>
-    <p class="muted">Chaque donjon a son bestiaire : les monstres vaincus ne se capturent plus — les cartes naissent à la Forge (jetons, autel, défi du jour) et montent en niveau par l’XP de donjon.</p>`;
+    <p class="muted">Chaque donjon a son bestiaire : les monstres vaincus ne se capturent plus — les cartes naissent à la Guilde (compagnons, autel), au marchand de la Boutique, en quêtes et en donjon ; elles montent en niveau par l’XP de donjon.</p>`;
   root.querySelectorAll('.enter-btn').forEach((el) => {
     el.onclick = () => enterAt(1, el.dataset.dungeon);
   });
@@ -4956,27 +4843,15 @@ function renderForge(root) {
     </div>`;
   });
 
-  const tokenGroups = [];
-  const seenTypes = new Map();
-  store.tokens.forEach((t, idx) => {
-    const key = tokenTypeKey(t);
-    if (!seenTypes.has(key)) { seenTypes.set(key, { t, idx, count: 0 }); tokenGroups.push(seenTypes.get(key)); }
-    seenTypes.get(key).count++;
-  });
-  const tokenRows = tokenGroups.map((g) => {
-    const label = tokenLabel(g.t);
-    return `<div class="forge-row"><div class="forge-acts"><p class="muted">\ud83c\udf9f\ufe0f Jeton <b>${g.t.rar}</b> \u00b7 ${label} ${g.count > 1 ? `<b>\u00d7 ${g.count}</b>` : ''}</p><button class="btn small gold" data-token="${g.idx}">G\u00e9n\u00e9rer une carte ${g.t.rar}</button></div></div>`;
-  }).join('');
-
   root.innerHTML = `
-    <h2>🛡️ La Guilde <span class="muted">\u2014 \u00e9volutions, autel, compagnons, jetons</span></h2>
+    <h2>🛡️ La Guilde <span class="muted">— évolutions, autel, compagnons</span></h2>
     <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) et son Ascendance propres. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
     <h3>\u00c9volutions ${evoRows.length ? `(${evoRows.length})` : ''}</h3>
-    ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : gagnez des cartes (donjons, jetons, autel) et montez-les au niveau 10 en donjon.</p>'}
+    ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : recrutez des cartes (Guilde, marchand, quêtes, donjon) et montez-les au niveau 10 en donjon.</p>'}
     <h3>\u00c9clats d\u2019\u00e9volution en r\u00e9serve</h3>
     <p class="muted">${gemList || 'Aucun \u00e9clat pour l\u2019instant : les boss des \u00e9tages 5 et 10 en l\u00e2chent (tier selon la difficult\u00e9), et chaque \u00e9tage interm\u00e9diaire a une chance d\u2019\u00e9clat brut \u2014 fatigue quotidienne par donjon (premier drop garanti, puis 50 %, 25 %, 12,5 %\u2026 plancher 10 %, remise \u00e0 z\u00e9ro chaque nuit).'}</p>
     <h3>💎 Pierres d’éveil en réserve : ${store.pierres ?? 0}</h3>
-    <p class="muted">La pierre d’éveil réveille une NAISSANCE (rang N) : elle ouvre sa voie (niveau 10 requis) et remplace les éclats pour ce rang et seulement lui. Les boss des donjons en lâchent rarement (${Math.round(PIERRE_DROP_RATE * 100)} % par boss d’étage vaincu), le défi du jour en donne une chaque victoire. Les autres rangs gardent leurs éclats.</p>
+    <p class="muted">La pierre d’éveil réveille une NAISSANCE (rang N) : elle ouvre sa voie (niveau 10 requis) et remplace les éclats pour ce rang et seulement lui. Les boss des donjons en lâchent rarement (${Math.round(PIERRE_DROP_RATE * 100)} % par boss d’étage vaincu), les quêtes quotidiennes en donnent. Les autres rangs gardent leurs éclats.</p>
     <h3>\u{1F300} Éclats de régression en réserve : ${store.regEclats ?? 0}</h3>
     <p class="muted">L\u2019\u00c9clat de r\u00e9gression ne tombe qu\u2019\u00e0 partir de la difficult\u00e9 DIFFICILE, jamais avant (sauf m\u00e9canismes secrets \u00e0 venir) : 1,2 % par victoire en Difficile, 2,5 % en Cauchemar, 5 % en Enfer. Il ouvrira la r\u00e9gression : depuis un point de blocage, une NOUVELLE carte au palier R d\u2019une race sup\u00e9rieure, qui garde 100 % des sorts et 10 % des stats gagn\u00e9es \u2014 l\u2019ancienne reste. Les premi\u00e8res cibles arrivent avec les nouveaux arbres : la r\u00e9serve se remplit d\u00e8s maintenant.</p>
     <h3>Autel de g\u00e9n\u00e9ration ${'\u2014'} 5 pour 1</h3>
@@ -4985,8 +4860,6 @@ function renderForge(root) {
     <h3>🤝 Compagnons du jour ${guildeRows.length ? `(${guildeRows.length})` : ''}</h3>
     <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre de l'or : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 500 → UR 2 000 or), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
     <div class="fusion-list">${guildeRows.join('') || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}</div>
-    <h3>Jetons de génération ${store.tokens.length ? `(${store.tokens.length})` : ''}</h3>
-    ${tokenRows || '<p class="muted fam-hint">Aucun jeton pour l\u2019instant. Le boss final de chaque donjon en l\u00e2che un (1 par jour et par donjon, raret\u00e9 selon les donjons d\u00e9j\u00e0 boucl\u00e9s), la premi\u00e8re victoire finale d\u2019un donjon offre un jeton bonus de son biome, le d\u00e9fi du jour en ajoute un, et les jalons (premier donjon, premier boss d\u2019\u00e9tage 5, premi\u00e8re Difficile) en distribuent.</p>'}
   `;
   root.querySelectorAll('[data-open]').forEach((el) => {
     el.addEventListener('click', () => openCardModal(byId(el.dataset.open)));
@@ -5007,13 +4880,6 @@ function renderForge(root) {
         toast(`✓ ${c.name} rejoint la collection (${compagnonPrix(c)} or).`);
         openRevealModal([c.id], { title: '🤝 Nouveau compagnon', subtitle: 'La carte rejoint déjà votre collection.', note: 'Touchez la carte pour la révéler.', cta: 'Bien reçu !' });
       }
-    }));
-  });
-  root.querySelectorAll('[data-token]').forEach((el) => {
-    el.addEventListener('click', () => act(() => {
-      const r = useToken(Number(el.dataset.token));
-      if (r.ok) openRevealModal([r.id], { title: '🎟️ Jeton de génération', subtitle: 'La carte rejoint déjà votre collection.', note: 'Touchez la carte pour la révéler.', cta: 'Bien reçu !' });
-      else toast(`\u2717 ${r.reason}`, 'warn');
     }));
   });
   root.querySelectorAll('[data-altar]').forEach((el) => {
@@ -5068,6 +4934,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.24 : Économie v2 lot E3b — les jetons disparaissent', 'Les jetons de génération sont supprimés : les naissances passent par le départ, les quêtes, la Guilde (compagnons) et le marchand. Migration v25 : les jetons restants sont convertis en or. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.23 : Économie v2 lot E4 — quêtes quotidiennes', 'Le défi du jour laisse place à 3 quêtes par jour (1 petite + 1 moyenne + 1 grande, rotation du jour) : or, parfois une naissance un jour sur trois, et 1 pierre d’éveil si les trois sont faites. Migration v24. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.22 : Économie v2 lot E3a — la Guilde recrute des compagnons', 'La Forge devient la Guilde. Compagnons du jour : 3 offres en rotation quotidienne (seed du jour), rangs C à UR, 500 à 2 000 or, limite 3 exemplaires — le rang L ne se recrute jamais. Digest inchangé : f72106ff… 1379/3000.'],
@@ -5250,7 +5118,7 @@ function renderGlossaire(root) {
       <h3>Comment les cartes arrivent (plus de boutique)</h3>
       <ul class="glo-list">
         <li><b>Un début quasi uniquement en communes</b> : le rythme est volontairement lent ; les raretés montent avec les donjons débloqués et les difficultés.</li>
-        <li><b>Pierres d’éveil</b> : l’éveil d’une naissance (rang N) exige 1 pierre d’éveil ; les boss des donjons en lâchent rarement, le défi du jour en donne une. Les autres rangs paient leurs évolutions en éclats.</li>
+        <li><b>Pierres d’éveil</b> : l’éveil d’une naissance (rang N) exige 1 pierre d’éveil ; les boss des donjons en lâchent rarement, les quêtes quotidiennes en donnent. Les autres rangs paient leurs évolutions en éclats.</li>
         <li><b>Naissances sauvages</b> : chaque étage de donjon vaincu offre une très faible chance (${Math.round(N_DROP_RATE * 100)} %) qu’une naissance se joigne directement à vous ; le tirage reste borné par vos déblocages, et la rareté des jetons suit la table des data (communes au taux de référence, décroissant avec la rareté).</li>
         <li><b>Jetons de génération</b> : le boss final de chaque donjon en lâche un, 1 par jour et par donjon (rareté selon les donjons bouclés) ; la première victoire finale d’un donjon offre un jeton bonus de son biome.</li>
         <li><b>Naissances raciales</b> : un jeton ne donne QUE la naissance, au hasard — les 4 Novices (humaine), les 5 Embryons (monstre), les 3 Enge (mystique), Ange / Démon / Éveillé du Seuil (divine). Le jeton humain raffiné entre au maillon d’une voie (UC, 15 % R) ; le jeton d’évolution, au palier indiqué. Jamais les vieilles cartes hors architecture ; le tirage reste borné par les déblocages.</li>
@@ -5351,12 +5219,7 @@ function renderGlossaire(root) {
 
 load();
 
-if (store.instances.length === 0 && store.tokens.length === 0) {
-  grantKindToken('humain');
-  grantKindToken('humain');
-  grantKindToken('humain-riche');
-  grantKindToken('race');
-  grantKindToken('race');
+if (store.instances.length === 0 && !store.departFait) {
   // boucle v2 lot 3 : départ à 2 cartes — l'écran de départ (renderDepart) s'affiche à l'accueil
   store.departFait = false;
   save();

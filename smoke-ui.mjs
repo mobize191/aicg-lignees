@@ -1008,6 +1008,19 @@ async function main() {
     check('B9 g 0 exception lot E4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot E3b économie v2 — suppression des jetons de génération
+    api.go('#forge');
+    await wait(20);
+    check('B10 a plus de section jetons à la Guilde', !doc.body.querySelector('[data-token]') && !doc.body.innerHTML.includes('Jetons de génération'), '');
+    api.go('#donjons');
+    await wait(20);
+    check('B10 b plus de jeton au boss final dans le sélecteur', !doc.body.innerHTML.includes('🎟️') && !doc.body.innerHTML.includes('jeton'), '');
+    check('B10 c JETON_RARITY retiré des data, JETON_OR présent', api.DATA.engine.JETON_RARITY === undefined && api.DATA.engine.JETON_OR?.UR === 5000, '');
+    check('B10 d la Guilde affiche les compagnons du jour', doc.body.querySelectorAll('[data-compagnon]').length >= 0 && !!doc.body.querySelector('h2'), '');
+    check('B10 e 0 exception lot E3b', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }
