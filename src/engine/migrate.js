@@ -159,7 +159,15 @@ function v20to21(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21 };
+// v21 -> v22 (boucle v2 lot 3) : écran de départ à 2 cartes — les sauvegardes qui ont déjà
+// des cartes sautent l'écran (departFait = true), les nouvelles commencent à false.
+function v21to22(s) {
+  s.version = 22;
+  if (typeof s.departFait !== 'boolean') s.departFait = (Array.isArray(s.instances) ? s.instances.length : 0) > 0;
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

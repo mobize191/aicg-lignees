@@ -582,6 +582,7 @@ const store = {
   gold: 0,
   potions: freshPotions(),
   runState: freshRunState(),
+  departFait: false,
   collection: new Map(), 
   instances: [], 
   instanceSeq: 1, 
@@ -662,6 +663,7 @@ function snapshot() {
     gold: store.gold,
     potions: { ...store.potions },
     runState: { active: !!store.runState.active, units: { ...(store.runState.units ?? {}) } },
+    departFait: !!store.departFait,
     collection: [...store.collection.entries()],
     instances: store.instances.map((i) => ({ ...i, acc: (i.acc ?? []).map((sp) => ({ ...sp })) })),
     instanceSeq: store.instanceSeq,
@@ -886,6 +888,7 @@ function restore(data) {
     store.runState.active = !!data.runState.active;
     if (data.runState.units && typeof data.runState.units === 'object') store.runState.units = { ...data.runState.units };
   }
+  store.departFait = !!data.departFait;
   store.dailyDone = typeof data.dailyDone === 'string' ? data.dailyDone : '';
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
@@ -1915,6 +1918,47 @@ function openSynergyModal() {
 
 
 
+// boucle v2 lot 3 : écran de départ à 2 cartes — 4 propositions (une par race), 1 choisie + 1 aléatoire
+function renderDepart(root) {
+  const props = DEPART_CHOIX.map((id) => byId(id)).filter(Boolean);
+  root.innerHTML = `
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-glyph">⚔</div>
+        <h2>Bienvenue à AICG : Lignées !</h2>
+        <p>Choisissez votre <b>première carte</b> parmi ces 4 novices (un par race) — une <b>seconde</b>, tirée au hasard parmi les trois restantes, vous rejoint aussitôt. L'équipe se remplira ensuite par recrutement, quêtes et Guilde.</p>
+        <div class="grid depart-grid">
+          ${props.map((c) => `<div class="gcell cat depart-choice" data-id="${c.id}" title="Choisir ${c.name}">${cardFront({ ...c, level: 1 }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<span class="chip">${RACE_LABEL[raceOfCard(c)] ?? ''}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    ${saveBoxHtml()}`;
+  wireSaveBox(root);
+  root.querySelectorAll('.depart-choice').forEach((el) => {
+    el.onclick = () => choisirDepart(el.dataset.id);
+  });
+}
+
+// boucle v2 lot 3 : le joueur choisit une proposition, la seconde est aléatoire parmi les 3 restantes
+function choisirDepart(id) {
+  if (store.departFait) return { ok: false, reason: 'Départ déjà effectué.' };
+  const props = DEPART_CHOIX.filter((x) => byId(x));
+  if (!props.includes(id)) return { ok: false, reason: 'Proposition inconnue.' };
+  const rest = props.filter((x) => x !== id);
+  const second = rest[Math.floor(uiRand() * rest.length)];
+  grantCards([id, second]);
+  store.departFait = true;
+  save();
+  openRevealModal([id, second], {
+    title: '🎴 Votre départ !',
+    subtitle: `${byId(id).name} (votre choix) + ${byId(second).name} (au hasard parmi les trois restantes).`,
+    note: 'Touchez une carte pour la révéler.',
+    cta: 'Composer mon équipe',
+  });
+  renderHome(document.getElementById('app'));
+  return { ok: true, choisis: id, alea: second };
+}
+
 function renderHome(root) {
   const owned = [...store.collection.entries()].filter(([id, n]) => n > 0 && byId(id)).length;
   const team = [...store.team.slots].filter(Boolean);
@@ -1928,6 +1972,8 @@ function renderHome(root) {
     .join('');
   const d = dungeonById(store.dungeon);
   const nextBoss = Math.min(d.floors, Math.ceil(store.stage / 5) * 5);
+  // boucle v2 lot 3 : tant que le départ n'est pas fait, l'accueil propose les 4 novices
+  if (owned === 0 && !store.departFait) { renderDepart(root); return; }
   if (owned === 0) {
     root.innerHTML = `
       <div class="hero">
@@ -3681,6 +3727,18 @@ async function animate(events, ms, gen = null) {
               rewardLine += ` · 🐥 ${oeuf.name} (naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}) se joint à vous !`;
             }
           }
+          // boucle v2 lot 3 : recrutement naturel — ~1 % par vaincu (hors boss et nommés), taux calibré par zone
+          const zoneRec = getZone(`zone-${store.dungeon}`);
+          const tauxRec = zoneRec?.recrute?.taux ?? RECRUTE_TAUX;
+          for (const m of recrutableMonsters(state)) {
+            if (uiRand() >= tauxRec * tactMult * loot.drop) continue;
+            if (instsOf(m.cardId).length >= 3) continue; // limite de 3 exemplaires par carte
+            newInst(m.cardId);
+            markSeen(m.cardId);
+            if (runLog) runLog.cards.push(m.name);
+            rewardLine += ` · 🐾 ${m.name} rejoint votre collection !`;
+            toast(`🐾 ${m.name} vaincu rejoint votre collection !`);
+          }
           if (stage === REGEN_BOSS_STAGE) rewardLine += ' · ⛲ Régénération complète après le premier boss !';
           if (stage === 5) {
             rollGem(BOSS_GEM[store.diff][0]);
@@ -4447,6 +4505,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.15 : Boucle v2 lot 3 — départ à 2 cartes, recrutement naturel', 'Au premier lancement, choisissez un novice parmi 4 (une par race) : un second, tiré au hasard, vous rejoint. Après chaque victoire, un vaincu (hors boss et nommés) peut rejoindre votre collection (~1 % par zone). Migration v22. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.14 : Boucle v2 lot 2 — niveaux de donjon 1→25', 'Chaque marche (donjon × mode) porte un niveau 1→25 et une bande de rareté affichés dans le sélecteur : Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M. Le bestiaire de chaque vague est pioché dans la bande de la marche. Digest : f72106ff… 1379/3000.'],
 
   ['v1.13 : Boucle v2 lot 1 — potions, or et persistance', 'L’économie de survie entre en jeu. L’énergie ⚡ devient de l’or (1 ⚡ = 1 or, conversion en sauvegarde v21). Nouvelle action 🧪 Objet dans la fenêtre d’action : potions de soin (30/60 % PV) et de mana (40/80 %), chaque gorgée coûte le tour, utilisables aussi entre les étages (bouton 🧪 Objets). Achat au rayon potions de la Boutique. Plus de régénération entre les combats d’un run : PV et mana persistent d’étage en étage, régénération complète après le premier boss, soins complets entre deux runs. Hook autel de soin posé pour l’errance. Digest inchangé (combats isolés) : aed250f9… 1274/3000.'],
@@ -4720,8 +4780,8 @@ if (store.instances.length === 0 && store.tokens.length === 0) {
   grantKindToken('humain-riche');
   grantKindToken('race');
   grantKindToken('race');
-  // T1.3 : deux naissances offertes des le depart, jouables immediatement (EXI-N-4)
-  grantCards(['n1', 'n3']);
+  // boucle v2 lot 3 : départ à 2 cartes — l'écran de départ (renderDepart) s'affiche à l'accueil
+  store.departFait = false;
   save();
 }
 updatePtsBadge();

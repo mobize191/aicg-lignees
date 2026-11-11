@@ -394,9 +394,9 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 21,
+ "SAVE_VERSION": 22,
  "SAVE_KEY": "fondations-cards-v1",
- "CURRENT_VERSION": 21,
+ "CURRENT_VERSION": 22,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",
@@ -699,5 +699,12 @@
  },
  "OR_PER_POINT": 1,
  "AUTEL_SOIN_GRACE": 5,
- "REGEN_BOSS_STAGE": 5
+ "REGEN_BOSS_STAGE": 5,
+ "DEPART_CHOIX": [
+  "n1",
+  "n5",
+  "n10",
+  "n13"
+ ],
+ "RECRUTE_TAUX": 0.01
 }

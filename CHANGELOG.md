@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.15] — 2026-11-11 — Boucle de jeu v2, lot 3 : départ à 2 cartes et recrutement naturel
+
+**Départ de partie à 2 cartes** : à la première partie, 4 novices sont proposés (un par race — humain, bestial, mystique, divin) ; vous en choisissez un, un second est tiré au hasard parmi les trois restantes. Plus d'équipe complète de départ. **Recrutement naturel** : après une victoire, chaque vaincu (hors boss et nommés) a ~1 % de chance de demander à rejoindre votre collection — taux calibré par zone dans `data/zones.json`, toast de recrue, limite de 3 exemplaires par carte. Migration v22 non destructive (les sauvegardes commencées sautent l'écran de départ). Digest inchangé `f72106ff…` 1379/3000. 122 tests, smoke 195 checks (7 nouveaux verts).
+
+
 ## [1.14] — 2026-11-11 — Boucle de jeu v2, lot 2 : niveaux de donjon 1→25 et bandes de rareté
 
 Chaque marche (donjon × mode) porte désormais un **niveau de donjon 1→25** et une **bande de rareté** affichés dans le sélecteur (Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M ; boss final en haut de bande, boss intermédiaire un cran sous). Le bestiaire de chaque vague est pioché dans la bande de la marche : la difficulté monte, les créatures montent avec elle. `data/difficulties.json` porte les bandes (`bande`), le validateur vérifie leur cohérence. Digest recalibré et consigné : `f72106ff…` 1379/3000, 0 exception, 1 marathon. 120 tests, smoke 188 checks (5 nouveaux verts).

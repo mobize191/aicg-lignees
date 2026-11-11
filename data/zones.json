@@ -84,7 +84,10 @@
     "sort": "carapace-de-corail",
     "cran": "III"
    }
-  ]
+  ],
+  "recrute": {
+   "taux": 0.008
+  }
  },
  {
   "id": "zone-forge",
@@ -157,7 +160,10 @@
     "sort": "marque-corrosive",
     "cran": "III"
    }
-  ]
+  ],
+  "recrute": {
+   "taux": 0.01
+  }
  },
  {
   "id": "zone-bosquet",
@@ -227,7 +233,10 @@
     "sort": "guet-des-fonds",
     "cran": "II"
    }
-  ]
+  ],
+  "recrute": {
+   "taux": 0.012
+  }
  },
  {
   "id": "zone-crypte",
@@ -306,7 +315,10 @@
     "sort": "chant-de-sirene",
     "cran": "III"
    }
-  ]
+  ],
+  "recrute": {
+   "taux": 0.014
+  }
  },
  {
   "id": "zone-zenith",
@@ -385,6 +397,9 @@
     "sort": "etreinte-des-profondeurs",
     "cran": "III"
    }
-  ]
+  ],
+  "recrute": {
+   "taux": 0.016
+  }
  }
 ]

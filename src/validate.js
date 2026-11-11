@@ -105,6 +105,11 @@ function validate(data, errors) {
         push(`la zone ${z.id} a un taux de récolte hors bornes (${tauxR})`, 'EXI-P4-1');
       }
     }
+    // boucle v2 lot 3 : taux de recrutement naturel calibré par zone, jamais en dur
+    const tauxRec = z.recrute?.taux;
+    if (tauxRec !== undefined && (typeof tauxRec !== 'number' || tauxRec < 0 || tauxRec > 1)) {
+      push(`la zone ${z.id} a un taux de recrue hors bornes (${tauxRec})`, 'EXI-DATA-1');
+    }
     for (const e of z.ecolages ?? []) {
       if (!sortsEcoleIds.has(e.sort)) push(`la zone ${z.id} enseigne le sort inconnu ${e.sort}`, 'EXI-P4-1');
       else if (!(data.grimoire.ecole.find((s) => s.id === e.sort)?.crans ?? {})[e.cran]) {
@@ -194,6 +199,12 @@ function validate(data, errors) {
     if (d.minR !== b[0] || d.mobCap !== b[1]) push(`la difficulté ${d.id} : minR/mobCap ne suivent pas la bande`, 'EXI-DATA-1');
     if (!ranks.has(d.boss5) || !ranks.has(d.boss10)) push(`la difficulté ${d.id} a un boss hors rang connu`, 'EXI-DATA-1');
     else if (!(data.engine.RANK[d.boss5] < data.engine.RANK[d.boss10])) push(`la difficulté ${d.id} : boss5 >= boss10`, 'EXI-DATA-1');
+  }
+  // boucle v2 lot 3 : propositions de départ = 4 novices d'autant de races, tous existants
+  for (const id of data.engine?.DEPART_CHOIX ?? []) {
+    const c = cardIds.has(id) ? (data.cards ?? []).find((x) => x.id === id) : null;
+    if (!c) push(`le départ propose la carte inconnue ${id}`, 'EXI-DATA-1');
+    else if (!c.raciale) push(`la proposition de départ ${id} n'est pas une naissance`, 'EXI-DATA-1');
   }
   // potions (boucle v2 lot 1) : id unique, genre soin/mana, pourcentage et prix valides
   const potionIds = new Set();

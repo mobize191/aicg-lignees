@@ -361,3 +361,17 @@ test('boucle v2 lot 2 : les vagues suivent la bande de rareté de la marche, bos
     assert.equal(boss10.rarity, df.boss10, `boss10 = haut de bande ${df.boss10} en diff ${df.id}`);
   }
 });
+
+test('boucle v2 lot 3 : recrutableMonsters exclut boss et nommés (nom « prénom, titre »)', () => {
+  const E = loadEngine();
+  const w = E.makeWave(77, 10, 'marees', 1); // étage 10 = boss final
+  const st = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 20 }], arriere: [] }, w, 77);
+  const elig = E.recrutableMonsters(st);
+  assert.ok(elig.length > 0, 'des vaincus sont éligibles');
+  assert.ok(elig.every((u) => !u.boss), 'aucun boss éligible');
+  assert.ok(elig.every((u) => !u.name.includes(',')), 'aucun nommé éligible');
+  // un nommé présent dans la vague n'est pas éligible
+  const w2 = { avant: [{ ...E.getMonster('e13') }], arriere: [] };
+  const st2 = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 20 }], arriere: [] }, w2, 5);
+  assert.equal(E.recrutableMonsters(st2).length, 0, 'e13 (nommé) exclu');
+});

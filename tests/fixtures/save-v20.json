@@ -1,5 +1,5 @@
 {
- "version": 21,
+ "version": 22,
  "teams": [
   {
    "slots": [
@@ -361,5 +361,6 @@
  "runState": {
   "active": false,
   "units": {}
- }
+ },
+ "departFait": true
 }

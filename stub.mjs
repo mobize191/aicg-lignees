@@ -184,6 +184,7 @@ export function makeEl(tag = 'div') {
 
 // paires clé -> expression à évaluer DANS le contexte du bundle
 const API_PAIRS = {
+  DATA: 'DATA',
   byId: 'byId', byIid: 'byIid', dungeonById: 'dungeonById', dungeonLevelOf: 'dungeonLevelOf', bandOf: 'bandOf', CATALOG: 'CATALOG', DUNGEONS: 'DUNGEONS',
   DIFFICULTIES: 'DIFFICULTIES', store: 'store', makeUnit: 'makeUnit', makeWave: 'makeWave',
   initCombat: 'initCombat', resolveTurn: 'resolveTurn', pickSpell: 'pickSpell', statsAt: 'statsAt',
@@ -196,7 +197,7 @@ const API_PAIRS = {
   addCardIid: 'addCardIid',
   _setAuto: '(v) => { autoMode = v; }',
   _state: '() => state',
-  beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion',
+  beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   potionCount: 'potionCount', totalPotions: 'totalPotions', buyPotion: 'buyPotion', autelDeSoin: 'autelDeSoin', healRunComplet: 'healRunComplet', applyRunStateTo: 'applyRunStateTo', persistRunStateFrom: 'persistRunStateFrom', curHpManaOf: 'curHpManaOf', POTIONS: 'POTIONS',
   _actEl: '() => actBox',
   _prompt: '() => promptState',

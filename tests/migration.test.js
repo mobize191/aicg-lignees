@@ -204,3 +204,15 @@ test('v20 -> v21 (boucle v2 lot 1) : points convertis en or (1 ⚡ = 1 or), poti
   assert.equal(again.gold, 137);
   assert.deepEqual(again.runState, { active: false, units: {} });
 });
+
+test('v21 -> v22 (boucle v2 lot 3) : departFait posé selon la présence de cartes, non destructif', () => {
+  const E = loadEngine();
+  const avec = { version: 21, instances: [{ iid: 'i1', id: 'n1', lvl: 1, xp: 0, acc: [] }], gold: 10, potions: {}, runState: { active: false, units: {} } };
+  const out = E.migrate(structuredClone(avec));
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.equal(out.departFait, true, 'sauvegarde déjà commencée : l’écran de départ est sauté');
+  assert.equal(out.gold, 10);
+  const neuve = { version: 21, instances: [], gold: 0, potions: {}, runState: { active: false, units: {} } };
+  const out2 = E.migrate(structuredClone(neuve));
+  assert.equal(out2.departFait, false, 'nouvelle partie : écran de départ à venir');
+});

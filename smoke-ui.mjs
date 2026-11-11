@@ -810,6 +810,31 @@ async function main() {
     check('B2 e 0 exception lot 2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- boucle v2 lot 3 : départ à 2 cartes + recrutement naturel ----------
+  {
+    mem.clear();
+    // on repart d'une sauvegarde neuve : pas de cartes, départ non fait
+    store.instances = []; store.collection = new Map(); store.departFait = false; store.tokens = [];
+    api.go('#accueil');
+    await wait(40);
+    const choices = els.get('app').querySelectorAll('.depart-choice');
+    check('B3 a écran de départ : 4 propositions (une par race)', choices.length === 4, String(choices.length));
+    const ids = [...choices].map((c) => c.dataset.id);
+    check('B3 b propositions = DEPART_CHOIX en data', ids.join(',') === api.DEPART_CHOIX.join(','), ids.join(','));
+    const r = api.choisirDepart(ids[0]);
+    await wait(30);
+    check('B3 c départ : 1 choisie + 1 aléatoire parmi les 3 restantes', r && r.ok && r.choisis === ids[0] && ids.includes(r.alea) && r.alea !== ids[0], JSON.stringify(r));
+    check('B3 d départ : 2 cartes accordées et departFait posé', store.instances.length === 2 && store.departFait === true, `inst=${store.instances.length} fait=${store.departFait}`);
+    // recrutement naturel : vaincus éligibles hors boss/nommés, taux par zone en data
+    const w = api.makeWave(77, 10, 'marees', 1);
+    const st = api.initCombat({ avant: [{ ...api.byId('n1'), level: 20 }], arriere: [] }, w, 77);
+    const elig = api.recrutableMonsters(st);
+    check('B3 e recrutement : éligibles = vaincus hors boss et nommés', elig.length > 0 && elig.every((u) => !u.boss && !u.name.includes(',')), elig.map((u) => u.name).join('|'));
+    const zones = api.DATA.zones ?? [];
+    check('B3 f taux de recrue par zone dans data/zones.json (~1 %)', zones.length === 5 && zones.every((z) => typeof z.recrute?.taux === 'number' && z.recrute.taux > 0 && z.recrute.taux <= 0.05), zones.map((z) => z.id + ':' + (z.recrute?.taux ?? '?')).join(' '));
+    check('B3 g 0 exception lot 3', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

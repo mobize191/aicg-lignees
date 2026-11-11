@@ -921,6 +921,13 @@ function openDivineBooster(rng) {
   ];
 }
 
+// boucle v2 lot 3 : vaincus éligibles au recrutement naturel (hors boss et nommés — un nommé
+// porte un nom complet « prénom, titre » avec virgule)
+function recrutableMonsters(state) {
+  return [...(state.enemies?.avant ?? []), ...(state.enemies?.arriere ?? [])]
+    .filter((u) => u && !u.boss && !(u.name ?? '').includes(','));
+}
+
 // la zone (phase 3, EXI-P3-3) : 3 cibles contiguës sur 5, centre en auto, sans glissement
 function pickZoneTargets(ligne, choix = null) {
   const largeur = 3;
