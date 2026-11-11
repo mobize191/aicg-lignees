@@ -1157,6 +1157,26 @@ async function main() {
     check('B13 h 0 exception correctifs terrain v1.29', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // ---------- B14 : lot 6 — errance généralisée aux 5 zones + héros d'errance intégré ----------
+    mem.clear();
+    store.zonesUnlocked = []; store.zonesVisitees = []; store.errance = null;
+    const zoneIds = (api.DATA?.zones ?? DATA?.zones ?? []).map((z) => z.id);
+    check('B14 a les 5 zones d’errance sont en data avec seed', JSON.stringify(zoneIds) === JSON.stringify(['zone-marees', 'zone-forge', 'zone-bosquet', 'zone-crypte', 'zone-zenith']) && (api.DATA?.zones ?? []).every((z) => z.errance?.seed), zoneIds.join());
+    const hc = (api.DATA?.engine ?? {}).ERRANCE_HERO ?? null;
+    check('B14 b config héros d’errance en data (sprite sheet WAN + poster)', !!hc && !!hc.sheet && !!hc.poster && hc.frames > 0 && hc.cols > 0, JSON.stringify(hc ?? 'absent').slice(0, 120));
+    check('B14 c déblocage en chaîne : seule la zone de départ ouverte au début', api.zoneUnlocked('zone-marees') === true && api.zoneUnlocked('zone-forge') === false && api.zoneUnlocked('zone-zenith') === false, '');
+    api.unlockZone('zone-marees');
+    check('B14 d vaincre le donjon des Marées débloque la Forge', api.zoneUnlocked('zone-forge') === true && api.zoneUnlocked('zone-bosquet') === false, '');
+    let allMaps = true;
+    for (const zid of zoneIds) {
+      const s = api.createErranceState(zid);
+      if (!s?.map?.terr || !s.map.donjon || !s.map.autel || s.hero?.x == null) allMaps = false;
+    }
+    check('B14 e chaque zone génère sa carte (terrain + donjon + autel + spawn)', allMaps, '');
+    check('B14 f 0 exception lot 6', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

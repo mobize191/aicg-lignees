@@ -3588,6 +3588,17 @@ const DATA = {
    "Destin Tissé": "fx-ananke-fils"
   },
   "OR_PER_POINT": 1,
+  "ERRANCE_HERO": {
+   "sheet": "errance/heros-walk.png",
+   "poster": "errance/heros-errance.jpg",
+   "cols": 9,
+   "frames": 81,
+   "frameW": 104,
+   "frameH": 192,
+   "fps": 16,
+   "cycle": 40,
+   "backFrom": 40
+  },
   "AUTEL_SOIN_GRACE": 5,
   "REGEN_BOSS_STAGE": 5,
   "DEPART_CHOIX": [
@@ -18167,6 +18178,17 @@ function renderErrance(root) {
     bx.fillRect(st.map.autel.x * T + 8, st.map.autel.y * T + 8, T - 16, T - 16);
   }
   const repaintTile = (x, y) => { if (x >= 0 && y >= 0 && x < st.map.w && y < st.map.h) paintTile(base.getContext('2d'), x, y); };
+  // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
+  // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
+  const heroCfg = E.ERRANCE_HERO ?? null;
+  let heroSheet = null, heroPoster = null;
+  if (heroCfg) {
+    (async () => {
+      const [sh, po] = await Promise.all([probeImage(heroCfg.sheet), probeImage(heroCfg.poster)]);
+      if (sh) { const im = new Image(); im.onload = () => { heroSheet = im; }; im.src = sh; }
+      if (po) { const im = new Image(); im.onload = () => { heroPoster = im; }; im.src = po; }
+    })();
+  }
   const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
   const draw = () => {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -18190,10 +18212,31 @@ function renderErrance(root) {
     ctx.save();
     ctx.translate(hx, hy);
     ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
-    ctx.fillStyle = '#171522';
-    ctx.beginPath(); ctx.arc(0, 0, 11, 0, 7); ctx.fill();
-    ctx.fillStyle = '#f4f1ea';
-    ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
+    const hv = st.hero.v ?? { x: 0, y: 0 };
+    const hsp = Math.hypot(hv.x, hv.y);
+    if (heroSheet && heroCfg) {
+      // cycle de marche : frame selon le temps, dos si le héros monte, miroir si déplacement à gauche
+      const moving = hsp > 0.15 && motionOK();
+      const back = hv.y < -0.05;
+      const cyc = heroCfg.cycle ?? 40;
+      const fi = moving ? Math.floor(performance.now() / 1000 * (heroCfg.fps ?? 16)) % cyc : 0;
+      const idx = (back ? (heroCfg.backFrom ?? 40) : 0) + fi;
+      const sx = (idx % heroCfg.cols) * heroCfg.frameW;
+      const sy = Math.floor(idx / heroCfg.cols) * heroCfg.frameH;
+      const dw = T * 0.66, dh = dw * heroCfg.frameH / heroCfg.frameW;
+      ctx.save();
+      if (hv.x < -0.05) ctx.scale(-1, 1);
+      ctx.drawImage(heroSheet, sx, sy, heroCfg.frameW, heroCfg.frameH, -dw / 2, -dh + T * 0.3, dw, dh);
+      ctx.restore();
+    } else if (heroPoster) {
+      const dw = T * 0.66, dh = dw * 560 / 400;
+      ctx.drawImage(heroPoster, -dw / 2, -dh + T * 0.3, dw, dh);
+    } else {
+      ctx.fillStyle = '#171522';
+      ctx.beginPath(); ctx.arc(0, 0, 11, 0, 7); ctx.fill();
+      ctx.fillStyle = '#f4f1ea';
+      ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
+    }
     ctx.restore();
     ctx.restore();
   };
