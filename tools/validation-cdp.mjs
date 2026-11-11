@@ -1,10 +1,10 @@
-// Driver CDP minimal (Node 22+, WebSocket global) — joue docs/validation-ihm.md (v1.32) S1-S20
+// Driver CDP minimal (Node 22+, WebSocket global) — joue docs/validation-ihm.md (v1.33) S1-S20 + checks contenu v3
 // Usage : staging .site servi sur 8080 + chrome --remote-debugging-port=9222
 import { writeFileSync, mkdirSync } from 'node:fs';
 
 const CDP_HTTP = 'http://localhost:9222';
 const GAME = 'http://localhost:8080/';
-const OUT = 'docs/captures-validation/v1.32';
+const OUT = 'docs/captures-validation/v1.33';
 mkdirSync(OUT, { recursive: true });
 
 const report = [];
@@ -182,6 +182,8 @@ async function main() {
   const s4 = await cdp.evaljs(`({ cards: document.querySelectorAll('.card').length, art: document.querySelectorAll('.art-img, .art img').length })`);
   log('S4 collection : cartes rendues', s4.cards > 0 ? 'OK' : 'KO', JSON.stringify(s4));
   log('S4 illustrations chargées (assets-v3.json)', s4.art > 0 ? 'OK' : 'INFO', `art=${s4.art}`);
+  const s4b = await cdp.evaljs(`(() => { const t = document.querySelector('#app').innerText; const heads = [...document.querySelectorAll('#app h3')].map(h => h.innerText); return { seuil: heads.some(h => /Arbitres du Seuil/i.test(h)), miroir: heads.some(h => /Chœur Miroir/i.test(h)), pont: heads.some(h => /Tisseuses du Pont/i.test(h)), compagnons: heads.some(h => /Sabre|Ombre|Aube|Bouclier|Braise|Bosquet|Eau/i.test(h)) }; })()`);
+  log('S4 collection : familles divines joueur (seuil/miroir/pont) listées', s4b.seuil && s4b.miroir && s4b.pont ? 'OK' : 'KO', JSON.stringify(s4b));
   await cdp.shot('S4-collection-desktop');
 
   // ---------- S5 ----------
@@ -283,6 +285,24 @@ async function main() {
   log('S10 craft pièce de base : matériaux + or débités, pièce possédée', craftInfo && craftInfo.owned === 1 && craftInfo.m1 === craftInfo.m0 - 3 && craftInfo.g1 === craftInfo.g0 - 100 ? 'OK' : 'KO', JSON.stringify(craftInfo));
   await cdp.shot('S10-atelier-desktop');
   await pageChecks(cdp, 'S10 boutique', false);
+  // contenu v3 lot C1 : marchand v2 — 3 offres du jour, catalogue complet, cadenas, achat
+  await cdp.evaljs(`store.gold = 50000; store.progress.marees.diffs[1].record = 0; save(); go("#boutique")`);
+  await new Promise(r => setTimeout(r, 600));
+  const s10m = await cdp.evaljs(`(() => { const offres = [...document.querySelectorAll('[data-buy-offre]')].map(b => b.dataset.buyOffre); const cat = document.querySelectorAll('[data-buy-mon]').length; const t = document.querySelector('#app').innerText; const locks = (t.match(/🔒/g) ?? []).length; const prix = /1\s?500/.test(t) && /4\s?500/.test(t) && /8\s?000/.test(t); const apiOffres = offresMarchandDuJour().map(m => m.id); return { nbOffres: offres.length, offres, apiOffres, cat, locks, prix, debloquees: raretesMarchandDebloquees().join(',') }; })()`);
+  log('S10 marchand v2 : 3 offres du jour rendues = rotation seedOfDay, catalogue complet, prix actés UC/R/SR', s10m.nbOffres === 3 && s10m.offres.join() === s10m.apiOffres.join() && s10m.cat > 50 && s10m.prix ? 'OK' : 'KO', JSON.stringify({ nbOffres: s10m.nbOffres, cat: s10m.cat, locks: s10m.locks, prix: s10m.prix, debloquees: s10m.debloquees }));
+  log('S10 sans donjon bouclé : seule C débloquée, cadenas 🔒 sur les autres raretés', s10m.debloquees === 'C' && s10m.locks > 0 ? 'OK' : 'KO', `debloquees=${s10m.debloquees} locks=${s10m.locks}`);
+  const buyOffre = await cdp.evaljs(`(() => { const b = document.querySelector('[data-buy-offre]:not([disabled])'); if (!b) return { ok: false, why: 'aucune offre achetable' }; const id = b.dataset.buyOffre; const g0 = store.gold, o0 = ownedOf(id) ?? 0; b.click(); return { ok: store.gold === g0 - marchandPrix(byIdSoft ? byIdSoft(id) : null) || store.gold < g0, id, g0, g1: store.gold, o1: ownedOf(id) ?? 0, o0 }; })()`);
+  log('S10 achat d’une offre du jour débite l’or et ajoute l’exemplaire', buyOffre.ok && buyOffre.o1 === buyOffre.o0 + 1 ? 'OK' : 'KO', JSON.stringify(buyOffre));
+  const buyLocked = await cdp.evaljs(`(() => { const pool = marchandMonsters(); const uc = pool.find(m => m.rarity === 'UC'); const g0 = store.gold; const r = buyMonster(uc.id); return { r, g1: store.gold, g0 }; })()`);
+  log('S10 achat UC refusé tant que verrouillée (pas d’or débité)', buyLocked.r === false && buyLocked.g1 === buyLocked.g0 ? 'OK' : 'KO', JSON.stringify(buyLocked));
+  await cdp.shot('S10-marchand-v2-desktop');
+  // S21 : déblocage par donjon bouclé en Facile
+  await cdp.evaljs(`store.progress.marees.diffs[1].record = 10; save(); go("#boutique")`);
+  await new Promise(r => setTimeout(r, 600));
+  const s21 = await cdp.evaljs(`(() => { const deb = raretesMarchandDebloquees().join(','); const pool = marchandMonsters(); const uc = pool.find(m => m.rarity === 'UC'); const g0 = store.gold; const r = buyMonster(uc.id); const t = document.querySelector('#app').innerText; const lockUc = t.includes('🔒'); return { deb, r, g1: store.gold, g0, lockUc }; })()`);
+  log('S21 donjon bouclé en Facile → UC débloquée et achetable (1 500 or)', s21.deb === 'C,UC' && s21.r === true && s21.g1 === s21.g0 - 1500 ? 'OK' : 'KO', JSON.stringify(s21));
+  await cdp.shot('S21-marchand-debloque-desktop');
+  await cdp.evaljs(`store.progress.marees.diffs[1].record = 0; save();`);
 
   // ---------- S11 ----------
   await cdp.evaljs('go("#forge")');
@@ -392,7 +412,7 @@ async function main() {
   const errsUniq = [...new Set(consoleErrors)];
   const kos = report.filter(r => r.status === 'KO');
   const rapport = [
-    '# Rapport de validation IHM — AICG : Lignées (protocole v1.32, headless Chromium via CDP)',
+    '# Rapport de validation IHM — AICG : Lignées (protocole v1.33, headless Chromium via CDP)',
     '',
     `Jeu servi en staging Pages (dist.html + assets-v3.json + fx/ + errance/) sur http://localhost:8080/ · Viewports 1440×900 et 390×844 · ${shotCount} captures dans \`${OUT}/\``,
     '',
