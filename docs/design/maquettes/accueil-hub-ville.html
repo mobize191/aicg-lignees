@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -6,8 +7,9 @@
 <title>AICG : Lignées — maquette Accueil / hub-ville</title>
 <style>
   :root{
-    --bg:#0a0e16; --panel:rgba(12,18,30,.78); --panel-2:rgba(16,24,40,.66);
-    --line:rgba(120,160,220,.16); --gold:#e8c268; --gold-dim:#9a7c3a;
+    --bg:#d9c9a4; --panel:rgba(24,18,8,.80); --panel-2:rgba(30,22,10,.70);
+    --line:rgba(201,164,78,.6); --gold:#e8c268; --gold-dim:#9a7c3a;
+    --frame:#c9a44e; --frame-hi:#f4e2a8; --frame-lo:#7a5f28;
     --txt:#dfe6f2; --muted:#8fa0b8; --wild:#7fd8a0; --wild-dim:#2c5e42;
     --danger:#e88a7a; --r:14px;
     font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -17,15 +19,15 @@
   .phone{position:relative;width:390px;max-width:100vw;height:844px;max-height:100dvh;overflow:hidden;background:var(--bg);border-radius:26px;box-shadow:0 0 0 1px #1c2740,0 30px 80px #000}
   @media (max-width:430px),(max-height:860px){.phone{width:100vw;height:100dvh;border-radius:0}}
 
-  /* ==== FOND HUB-VILLE (placeholder peint ; la vidéo d'ambiance WAN 2.1 14B remplacera) ==== */
-  .scene{position:absolute;inset:0;background:linear-gradient(180deg,#1a2c4e 0%,#31486e 34%,#5b5f78 55%,#2c2438 78%,#191426 100%)}
+  /* ==== FOND HUB-VILLE : place ensoleillée, fontaine, vie autour (placeholder peint ; la vidéo d'ambiance WAN 2.1 14B remplacera) ==== */
+  .scene{position:absolute;inset:0;background:linear-gradient(180deg,#8ecbe8 0%,#a8d5ec 30%,#efe0bd 52%,#dccfa9 72%,#c9b78e 100%)}
   .scene svg{position:absolute;inset:0;width:100%;height:100%}
-  .stars{position:absolute;inset:0;background-image:radial-gradient(1px 1px at 12% 8%,#fff9,transparent),radial-gradient(1.5px 1.5px at 78% 4%,#fff8,transparent),radial-gradient(1px 1px at 42% 12%,#fff7,transparent),radial-gradient(2px 2px at 64% 16%,#fff5,transparent)}
-  .glow{position:absolute;left:50%;top:58%;width:340px;height:340px;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffb45e33,transparent 62%);animation:pulse 6s ease-in-out infinite}
+  .haze{position:absolute;inset:0;background:radial-gradient(60% 38% at 70px 110px,#fff3c966,transparent 70%)}
+  .glow{position:absolute;left:50%;top:74%;width:320px;height:230px;transform:translate(-50%,-50%);background:radial-gradient(circle,#fff6d855,transparent 62%);animation:pulse 6s ease-in-out infinite}
   @keyframes pulse{50%{opacity:.65}}
 
   /* ==== VOILE (visible à l'accueil — charte §6) ==== */
-  .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,9,16,.55) 0%,rgba(6,9,16,.12) 30%,rgba(6,9,16,.10) 55%,rgba(6,9,16,.62) 100%);pointer-events:none}
+  .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,18,6,.48) 0%,rgba(28,18,6,.06) 30%,rgba(28,18,6,.05) 55%,rgba(26,17,6,.66) 100%);pointer-events:none}
 
   /* ==== HEADER ==== */
   .top{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:8px;padding:10px 12px}
@@ -34,7 +36,7 @@
   .spacer{flex:1}
   .back{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--txt);font-size:17px;backdrop-filter:blur(6px)}
   .title{position:absolute;top:52px;left:0;right:0;text-align:center;z-index:5;pointer-events:none}
-  .title h1{margin:0;font-size:21px;letter-spacing:.14em;color:#f4ead0;text-shadow:0 2px 14px #000a}
+  .title h1{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:21px;letter-spacing:.14em;color:#f4ead0;text-shadow:0 2px 16px #000b,0 0 24px #00000066}
   .title small{color:#c9b482;letter-spacing:.3em;font-size:9px;text-transform:uppercase}
 
   /* ==== PERSONNAGE DE RÉFÉRENCE (héros d'errance : femme, cheveux blancs, cape noire) ==== */
@@ -47,20 +49,21 @@
 
   /* ==== MENU LATÉRAL DROIT (charte §6 : navigation restructurée) ==== */
   .menu{position:absolute;right:10px;top:96px;z-index:20;display:flex;flex-direction:column;gap:9px;width:158px}
-  .btn{display:flex;align-items:center;gap:9px;min-height:46px;padding:10px 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel-2);color:var(--txt);font-size:13.5px;font-weight:600;backdrop-filter:blur(8px);box-shadow:0 6px 18px #0006;transition:.18s;cursor:pointer;text-align:left}
+  .btn{position:relative;display:flex;align-items:center;gap:9px;min-height:46px;padding:10px 12px;border-radius:var(--r);border:1px solid var(--frame);background:linear-gradient(180deg,rgba(38,28,12,.78),rgba(24,18,8,.84));color:var(--txt);font-size:13.5px;font-weight:600;backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(244,226,168,.32),0 0 0 1px rgba(122,95,40,.85),0 6px 18px #0007;transition:.18s;cursor:pointer;text-align:left}
+  .btn::before,.btn::after{content:"◆";position:absolute;color:var(--frame);font-size:7px;opacity:.9}
+  .btn::before{left:6px;top:4px}.btn::after{right:6px;bottom:4px}
   .btn .ic{font-size:17px;width:22px;text-align:center}
   .btn small{display:block;font-size:10px;font-weight:400;color:var(--muted)}
   .btn:active{transform:translateY(1px);border-color:var(--gold-dim)}
-  .btn.hot{border-color:#5a8a6e}
 
   /* ==== BAS : défi du jour + Terres Sauvages ==== */
   .bottom{position:absolute;left:12px;right:12px;bottom:14px;z-index:20;display:grid;gap:10px}
-  .daily{display:flex;align-items:center;gap:10px;border-radius:var(--r);border:1px solid var(--line);background:var(--panel-2);padding:11px 13px;backdrop-filter:blur(8px);cursor:pointer}
+  .daily{display:flex;align-items:center;gap:10px;border-radius:var(--r);border:1px solid var(--frame);background:linear-gradient(180deg,rgba(38,28,12,.78),rgba(24,18,8,.84));padding:11px 13px;backdrop-filter:blur(8px);cursor:pointer;box-shadow:inset 0 0 0 1px rgba(244,226,168,.32),0 0 0 1px rgba(122,95,40,.85)}
   .daily .ic{font-size:19px}
   .daily b{font-size:12.5px;display:block}
   .daily small{font-size:10.5px;color:var(--muted)}
   .daily .eta{margin-left:auto;font-size:11px;color:var(--gold)}
-  .wild{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;border-radius:18px;border:1px solid #4c8a68;background:linear-gradient(180deg,rgba(36,84,62,.88),rgba(18,44,34,.92));color:#eafff2;font-size:16.5px;font-weight:800;letter-spacing:.04em;box-shadow:0 10px 30px #0009, inset 0 1px 0 #ffffff18;cursor:pointer;transition:.18s}
+  .wild{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;border-radius:18px;border:1px solid var(--frame);background:linear-gradient(180deg,rgba(36,84,62,.88),rgba(18,44,34,.92));color:#eafff2;font-size:16.5px;font-weight:800;letter-spacing:.04em;box-shadow:inset 0 0 0 1px rgba(244,226,168,.4),0 0 0 1px rgba(122,95,40,.9),0 10px 30px #0009, inset 0 1px 0 #ffffff18;cursor:pointer;transition:.18s}
   .wild:active{transform:translateY(1px)}
   .wild .ic{font-size:23px}
 
@@ -72,47 +75,73 @@
   .card p{margin:0 0 14px;font-size:12.5px;line-height:1.5;color:var(--txt)}
   .row{display:grid;gap:9px}
   .row.two{grid-template-columns:1fr 1fr}
-  .ok{min-height:44px;border:0;border-radius:12px;background:linear-gradient(180deg,#2b6a4c,#1c4a36);color:#eafff2;font-weight:700;font-size:14px}
-  .ghost{min-height:44px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--txt);font-size:13.5px}
+  .ok{min-height:44px;border:1px solid var(--frame);border-radius:12px;background:linear-gradient(180deg,#2b6a4c,#1c4a36);color:#eafff2;font-weight:700;font-size:14px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.3),0 0 0 1px rgba(122,95,40,.85)}
+  .ghost{min-height:44px;border:1px solid var(--frame);border-radius:12px;background:rgba(24,18,8,.5);color:var(--txt);font-size:13.5px;box-shadow:inset 0 0 0 1px rgba(244,226,168,.2)}
 
   /* ==== ANNOTATIONS DA (toggle) ==== */
   .note-toggle{position:absolute;left:12px;top:52px;z-index:30;width:38px;height:38px;border-radius:12px;border:1px solid var(--gold-dim);background:rgba(30,24,12,.8);color:var(--gold);font-size:12px;font-weight:800;backdrop-filter:blur(6px)}
   .note{position:absolute;z-index:35;background:#1a1508f2;border:1px solid var(--gold-dim);border-radius:10px;padding:8px 10px;font-size:10px;line-height:1.45;color:#f0e4c0;max-width:180px;opacity:0;pointer-events:none;transition:.2s}
-  .note.on{opacity:1}
   body.notes .note{opacity:1}
 </style>
 </head>
 <body>
 <div class="phone" id="app">
   <div class="scene" aria-hidden="true">
-    <div class="stars"></div>
+    <div class="haze"></div>
     <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMax slice">
-      <!-- lune -->
-      <circle cx="308" cy="120" r="26" fill="#f4ead0" opacity=".92"/>
-      <circle cx="298" cy="114" r="26" fill="#1a2c4e" opacity=".28"/>
-      <!-- colline lointaine + château -->
-      <path d="M0 540 Q90 500 200 540 T390 530 V844 H0 Z" fill="#232b46"/>
-      <g fill="#1b2238">
-        <rect x="150" y="470" width="16" height="60"/><rect x="212" y="486" width="12" height="44"/>
-        <path d="M145 470 L158 452 L171 470 Z"/><path d="M207 486 L218 472 L229 486 Z"/>
+      <circle cx="70" cy="110" r="60" fill="#ffe9a8" opacity=".4"/>
+      <circle cx="70" cy="110" r="32" fill="#fff3c9"/>
+      <g fill="#ffffff" opacity=".85">
+        <ellipse cx="255" cy="92" rx="42" ry="13"/><ellipse cx="285" cy="82" rx="26" ry="10"/>
+        <ellipse cx="125" cy="178" rx="30" ry="9" opacity=".6"/>
       </g>
-      <!-- rangée de maisons (place du marché) -->
+      <g stroke="#5a4a3a" stroke-width="1.6" opacity=".5" fill="none">
+        <path d="M160 150 q6 -6 12 0 q6 -6 12 0"/>
+        <path d="M300 175 q5 -5 10 0 q5 -5 10 0"/>
+      </g>
+      <path d="M0 432 Q80 402 160 434 T390 424 V844 H0 Z" fill="#b9c98f"/>
       <g>
-        <rect x="18" y="600" width="66" height="70" rx="4" fill="#3a3350"/><path d="M14 600 L51 570 L88 600 Z" fill="#4a3a58"/>
-        <rect x="92" y="618" width="56" height="52" rx="4" fill="#35304b"/><path d="M88 618 L120 592 L152 618 Z" fill="#453a55"/>
-        <rect x="248" y="608" width="60" height="62" rx="4" fill="#3a3350"/><path d="M244 608 L278 582 L312 608 Z" fill="#4a3a58"/>
-        <rect x="316" y="626" width="52" height="44" rx="4" fill="#35304b"/><path d="M312 626 L342 604 L372 626 Z" fill="#453a55"/>
-        <g fill="#ffb45e" opacity=".85">
-          <rect x="38" y="622" width="10" height="13" rx="2"/><rect x="106" y="632" width="9" height="11" rx="2"/>
-          <rect x="266" y="630" width="10" height="12" rx="2"/><rect x="334" y="640" width="8" height="10" rx="2"/>
+        <rect x="-4" y="432" width="84" height="88" fill="#e7d6b3"/><path d="M-10 432 L38 400 L86 432 Z" fill="#b0603f"/>
+        <rect x="86" y="448" width="64" height="72" fill="#efdfbf"/><path d="M82 448 L118 420 L154 448 Z" fill="#a85a3c"/>
+        <rect x="248" y="438" width="70" height="82" fill="#e3cfa8"/><path d="M244 438 L283 406 L322 438 Z" fill="#b0603f"/>
+        <rect x="322" y="454" width="72" height="66" fill="#ead9b6"/><path d="M318 454 L358 428 L398 454 Z" fill="#a85a3c"/>
+        <g fill="#6b4a2e"><rect x="14" y="464" width="14" height="20" rx="7"/><rect x="106" y="474" width="12" height="18" rx="6"/><rect x="266" y="470" width="13" height="19" rx="6"/><rect x="346" y="476" width="12" height="16" rx="6"/></g>
+        <g fill="#ffe9a8"><rect x="38" y="470" width="10" height="12" rx="2"/><rect x="130" y="482" width="9" height="11" rx="2"/><rect x="292" y="478" width="10" height="12" rx="2"/><rect x="362" y="484" width="8" height="10" rx="2"/></g>
+      </g>
+      <path d="M0 540 Q195 514 390 542 V844 H0 Z" fill="#d9c9a4"/>
+      <g stroke="#c0ae86" stroke-width="1" opacity=".55" fill="none">
+        <path d="M30 572 L370 598 M0 612 L390 638 M0 662 L390 688 M0 716 L390 742 M0 776 L390 802"/>
+        <path d="M60 548 L20 844 M150 538 L128 844 M250 540 L262 844 M340 550 L368 844"/>
+      </g>
+      <g>
+        <rect x="8" y="600" width="66" height="46" fill="#c99a5f"/><path d="M2 600 L80 600 L73 583 L11 583 Z" fill="#c14a3a"/>
+        <g fill="#e2574a"><rect x="20" y="608" width="8" height="6" rx="2"/><rect x="34" y="612" width="8" height="6" rx="2"/><rect x="48" y="608" width="8" height="6" rx="2"/></g>
+        <g fill="#7fb069"><circle cx="24" cy="624" r="5"/><circle cx="38" cy="626" r="5"/><circle cx="52" cy="624" r="5"/></g>
+        <rect x="316" y="606" width="64" height="42" fill="#c99a5f"/><path d="M310 606 L388 606 L381 589 L317 589 Z" fill="#3f6fae"/>
+        <g fill="#f0d264"><circle cx="330" cy="618" r="4"/><circle cx="344" cy="620" r="4"/><circle cx="358" cy="618" r="4"/></g>
+      </g>
+      <g>
+        <ellipse cx="195" cy="714" rx="68" ry="18" fill="#b8a67e"/>
+        <ellipse cx="195" cy="710" rx="60" ry="15" fill="#9ecfe8"/>
+        <path d="M135 710 Q195 728 255 710" stroke="#b8a67e" stroke-width="6" fill="none"/>
+        <rect x="187" y="662" width="16" height="44" fill="#cabb96"/>
+        <path d="M180 664 Q195 642 210 664 L210 670 L180 670 Z" fill="#d6c8a4"/>
+        <circle cx="195" cy="642" r="8" fill="#d6c8a4"/>
+        <g stroke="#bfe6f7" stroke-width="3" stroke-linecap="round" fill="none" opacity=".95">
+          <path d="M195 646 Q185 670 175 702"/><path d="M195 646 Q205 670 215 702"/><path d="M195 646 Q195 674 195 706"/>
         </g>
+        <ellipse cx="195" cy="708" rx="30" ry="8" fill="#cfeefb" opacity=".55"/>
       </g>
-      <g opacity=".5" fill="#2a2440">
-        <ellipse cx="70" cy="716" rx="70" ry="16"/>
-        <path d="M0 700 Q195 676 390 702 V844 H0 Z" opacity=".9"/>
+      <g fill="#5b4632">
+        <g><circle cx="120" cy="668" r="5"/><path d="M114 674 Q112 694 114 704 L126 704 Q128 694 126 674 Z"/></g>
+        <g><circle cx="272" cy="672" r="5"/><path d="M266 678 Q264 698 266 708 L278 708 Q280 698 278 678 Z"/></g>
+        <g><circle cx="86" cy="700" r="4.5"/><path d="M81 706 Q79 724 81 732 L91 732 Q93 724 91 706 Z"/></g>
+        <g><circle cx="300" cy="704" r="4.5"/><path d="M295 710 Q293 728 295 736 L305 736 Q307 728 305 710 Z"/></g>
+        <g><circle cx="156" cy="736" r="4.5"/><path d="M151 742 Q149 758 151 766 L161 766 Q163 758 161 742 Z"/></g>
+        <g><circle cx="240" cy="742" r="4.5"/><path d="M235 748 Q233 764 235 772 L245 772 Q247 764 245 748 Z"/></g>
       </g>
-      <!-- lanterne de marché -->
-      <g transform="translate(196,656)"><rect x="-2" y="0" width="4" height="58" fill="#241f36"/><circle cx="0" cy="-8" r="9" fill="#ffb45e"/><circle cx="0" cy="-8" r="16" fill="#ffb45e" opacity=".25"/></g>
+      <g fill="#8a6b4a"><ellipse cx="332" cy="744" rx="10" ry="5"/><circle cx="344" cy="739" r="4"/><path d="M322 742 L317 752 L326 746 Z"/></g>
+      <g fill="#6d6d75"><ellipse cx="140" cy="772" rx="4" ry="3"/><ellipse cx="176" cy="784" rx="4" ry="3"/><ellipse cx="252" cy="776" rx="4" ry="3"/><ellipse cx="302" cy="792" rx="4" ry="3"/></g>
     </svg>
     <div class="glow"></div>
   </div>
@@ -128,25 +157,19 @@
   </header>
   <button class="note-toggle" id="nt" title="Annotations DA">DA</button>
 
-  <!-- personnage de référence interactif (bulles en data JSON côté prod) -->
   <svg class="npc" id="npc" viewBox="0 0 104 210" role="button" aria-label="Personnage de référence — cliquer pour dialoguer">
-    <!-- cape noire -->
     <path d="M30 62 Q22 130 26 196 L78 196 Q82 130 74 62 Z" fill="#171522"/>
     <path d="M30 62 Q22 130 26 196 L52 196 L52 64 Z" fill="#0d0c15"/>
-    <!-- silhouette / robe -->
     <path d="M36 96 Q32 150 40 196 L64 196 Q72 150 68 96 Z" fill="#26233a"/>
-    <!-- tête + cheveux blancs -->
     <ellipse cx="52" cy="44" rx="15" ry="17" fill="#e9d9c8"/>
-    <path d="M35 42 Q33 16 52 14 Q71 16 69 42 L71 62 Q64 50 52 52 Q40 50 33 62 Z" fill="#f4f1ea"/>
+    <path d="M35 44 Q33 16 52 14 Q71 16 69 42 L71 62 Q64 50 52 52 Q40 50 33 62 Z" fill="#f4f1ea"/>
     <path d="M35 44 Q30 78 34 92 L44 90 Q38 70 37 50 Z" fill="#f4f1ea"/>
     <path d="M69 44 Q74 78 70 92 L60 90 Q66 70 67 50 Z" fill="#f4f1ea"/>
-    <!-- capuche relevée derrière la tête -->
     <path d="M33 34 Q30 12 52 8 Q74 12 71 34 L64 26 Q60 20 52 20 Q44 20 40 26 Z" fill="#171522"/>
     <circle cx="46" cy="44" r="2.2" fill="#2c2c34"/><circle cx="58" cy="44" r="2.2" fill="#2c2c34"/>
   </svg>
   <div class="bubble" id="bubble"><b id="bn">???</b><span id="bt">…</span><span class="tap">Toucher pour continuer</span></div>
 
-  <!-- menu latéral droit -->
   <nav class="menu">
     <button class="btn"><span class="ic">🛒</span><span>Boutique<small>acheter · vendre</small></span></button>
     <button class="btn"><span class="ic">⚔️</span><span>La Guilde<small>évolutions · recrues</small></span></button>
@@ -164,7 +187,6 @@
     <button class="wild" id="wild"><span class="ic">🧭</span>LES TERRES SAUVAGES</button>
   </div>
 
-  <!-- pop-up Paramètres -->
   <div class="pop" id="pop-settings">
     <div class="card">
       <h3>⚙️ Paramètres</h3>
@@ -176,7 +198,6 @@
     </div>
   </div>
 
-  <!-- pop-up équipe vide (charte §6 : Terres Sauvages → pop-up si équipe vide) -->
   <div class="pop" id="pop-wild">
     <div class="card">
       <h3>🧭 Les Terres Sauvages</h3>
@@ -188,8 +209,7 @@
     </div>
   </div>
 
-  <!-- annotations DA -->
-  <div class="note" style="left:12px;top:100px;max-width:168px">① Fond vivant : aujourd'hui peint (placeholder), demain vidéo d'ambiance WAN 2.1 14B (une seule décodée, pause hors écran, prefers-reduced-motion → cette image fixe).</div>
+  <div class="note" style="left:12px;top:100px;max-width:168px">① Fond vivant : place du village ensoleillée, fontaine centrale, étals et villageois (placeholder peint). Demain vidéo d'ambiance WAN 2.1 14B, prompting naturel : « sunny medieval town square, stone fountain, bustling villagers, warm daylight » (une seule décodée, pause hors écran, prefers-reduced-motion → image fixe).</div>
   <div class="note" style="left:12px;top:250px;max-width:150px">② Voile de lisibilité : visible à l'accueil (dégradé haut/bas), plus fort en combat. Panneaux semi-transparents au-dessus, jamais de bloc noir.</div>
   <div class="note" style="left:190px;top:390px;max-width:170px">③ Menu latéral droit : Boutique, Guilde, Quêtes, Personnage. Paramètres en pop-up. Boutons ≥ 44 px, tactile mobile-first.</div>
   <div class="note" style="left:12px;bottom:280px;max-width:150px">④ Héroïne d'errance : cheveux blancs, cape noire (arbitré 11/11). Cliquable partout : bulles en data JSON par écran. L'art v2 remplacera le placeholder.</div>
