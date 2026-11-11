@@ -96,6 +96,16 @@
   "matiereBoss": {
    "id": "perle-souverain",
    "nom": "Perle du Souverain"
+  },
+  "errance": {
+   "seed": 20261110,
+   "encRate": 0.16,
+   "map": {
+    "w": 46,
+    "h": 32,
+    "t": 36
+   },
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
   }
  },
  {
@@ -181,6 +191,16 @@
   "matiereBoss": {
    "id": "coeur-braise",
    "nom": "Cœur de braise"
+  },
+  "errance": {
+   "seed": 20261111,
+   "encRate": 0.17,
+   "map": {
+    "w": 46,
+    "h": 32,
+    "t": 36
+   },
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
   }
  },
  {
@@ -263,6 +283,16 @@
   "matiereBoss": {
    "id": "ecorce-coeur",
    "nom": "Écorce du Cœur du Bosquet"
+  },
+  "errance": {
+   "seed": 20261112,
+   "encRate": 0.15,
+   "map": {
+    "w": 46,
+    "h": 32,
+    "t": 36
+   },
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
   }
  },
  {
@@ -354,6 +384,16 @@
   "matiereBoss": {
    "id": "os-poli",
    "nom": "Os poli des caveaux"
+  },
+  "errance": {
+   "seed": 20261113,
+   "encRate": 0.18,
+   "map": {
+    "w": 46,
+    "h": 32,
+    "t": 36
+   },
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
   }
  },
  {
@@ -445,6 +485,16 @@
   "matiereBoss": {
    "id": "cendre-astre",
    "nom": "Cendre de l’Astre"
+  },
+  "errance": {
+   "seed": 20261114,
+   "encRate": 0.2,
+   "map": {
+    "w": 46,
+    "h": 32,
+    "t": 36
+   },
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
   }
  }
 ]

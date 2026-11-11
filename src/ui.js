@@ -743,6 +743,8 @@ const store = {
   activeTeam: 0,
   grimoire: [],
   zonesVisitees: [],
+  zonesUnlocked: [],
+  errance: null,
   get team() {
     return this.teams[this.activeTeam];
   },
@@ -889,6 +891,8 @@ function snapshot() {
     runMod: store.runMod ?? null,
     grimoire: [...(store.grimoire ?? [])],
     zonesVisitees: [...(store.zonesVisitees ?? [])],
+    zonesUnlocked: [...(store.zonesUnlocked ?? [])],
+    errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
   };
 }
 
@@ -963,7 +967,9 @@ function restore(data) {
   store.milestones = { clear1: false, boss5: false, diff3: false };
   store.runMod = typeof data.runMod === 'string' && runModById(data.runMod) ? data.runMod : null;
   store.grimoire = Array.isArray(data.grimoire) ? data.grimoire.filter((g) => g && typeof g.sort === 'string') : [];
-  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
+  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
+  store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
+  store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
       if (!raw || typeof raw.id !== 'string' || !byId(raw.id)) continue;
@@ -2173,6 +2179,199 @@ function choisirDepart(id) {
   return { ok: true, choisis: id, alea: second };
 }
 
+// ---------- bloc visuel : errance top-down + Les Terres Sauvages ----------
+function dungeonOfZone(zoneId) {
+  return String(zoneId).replace(/^zone-/, '');
+}
+
+function startZoneFight(zoneId, { donjon = false } = {}) {
+  store.zoneFight = { zone: zoneId, donjon };
+  store.dungeon = dungeonOfZone(zoneId);
+  store.stage = 1;
+  store.runState = freshRunState();
+  store.runState.active = true;
+  store.runMod = null;
+  save();
+  updatePtsBadge();
+  go('#combat');
+}
+
+function enterZone(zoneId) {
+  if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
+  store.errance = createErranceState(zoneId);
+  if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
+    store.errance.hero.x = store.erranceSavedPos.x;
+    store.errance.hero.y = store.erranceSavedPos.y;
+  }
+  if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
+  save();
+  go('#errance');
+}
+
+function persistErrancePos() {
+  if (store.errance) {
+    store.erranceSavedPos = { zone: store.errance.zone, x: store.errance.hero.x, y: store.errance.hero.y };
+  }
+}
+
+function renderTerres(root) {
+  const zones = DATA.zones ?? [];
+  const cards = zones.map((z) => {
+    const open = zoneUnlocked(z.id);
+    const visited = (store.zonesVisitees ?? []).includes(z.id);
+    const dg = dungeonById(dungeonOfZone(z.id));
+    return `<div class="dungeon-card ${open ? '' : 'locked'}" style="--dcolor: ${dg?.accent ?? '#4dd0e1'}">
+      <div class="dungeon-body">
+        <h3>${z.nature} ${visited ? '<span class="chip on">visitée</span>' : ''}</h3>
+        <p class="muted">${z.rencontres?.length ?? 0} créatures · rencontres dans les hautes herbes (${Math.round((z.errance?.encRate ?? 0.16) * 100)} %/pas) · un autel de soin, des jarres, et <b>le donjon</b> qui ouvre la zone suivante.</p>
+        <div class="dungeon-actions">${open
+          ? `<span class="btn big enter-zone" data-zone="${z.id}">Entrer</span>`
+          : `<span class="btn big" disabled>🔒 Vainquez le donjon de la zone précédente</span>`}</div>
+      </div>
+    </div>`;
+  }).join('');
+  root.innerHTML = `
+    <h2>🌿 Les Terres Sauvages</h2>
+    <p class="muted">Choisissez une zone d'errance (départ : les berges des Marées, zone de l'eau). Chaque zone porte monstres, collectables, un autel de soin et un bâtiment donjon — le vaincre débloque la zone suivante. On y gagne or et XP.</p>
+    <div class="dungeon-grid">${cards}</div>`;
+  root.querySelectorAll('.enter-zone').forEach((el) => {
+    el.onclick = () => enterZone(el.dataset.zone);
+  });
+}
+
+let erranceRAF = null;
+function renderErrance(root) {
+  if (erranceRAF) cancelAnimationFrame(erranceRAF);
+  const st = store.errance;
+  if (!st) { go('#terres'); return; }
+  const zone = getZone(st.zone);
+  root.innerHTML = `
+    <div class="errance-wrap">
+      <div class="top errance-top">
+        <span class="chip">🌿 ${zone?.nature ?? st.zone}</span>
+        <span class="chip">🪙 ${store.gold} or</span>
+        <span class="chip">🛡️ grâce ${st.grace}</span>
+        <span class="spacer"></span>
+        <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
+      </div>
+      <canvas id="errance-canvas"></canvas>
+      <p class="muted errance-hint">Toucher la carte : s'y rendre · toucher le héros : frapper (casse les jarres) · hautes herbes : rencontres · autel : soin complet (+5 pas de grâce) · porte du donjon : combat de zone.</p>
+    </div>`;
+  const canvas = root.querySelector('#errance-canvas');
+  const ctx = canvas.getContext('2d');
+  const fit = () => {
+    canvas.width = Math.max(320, canvas.clientWidth || 360);
+    canvas.height = Math.max(320, canvas.clientHeight || 480);
+  };
+  fit();
+  const T = st.map.t;
+  const cam = { x: 0, y: 0 };
+  const draw = () => {
+    const w = canvas.width, h = canvas.height;
+    cam.x += ((st.hero.x * T - w / 2) - cam.x) * 0.12;
+    cam.y += ((st.hero.y * T - h / 2) - cam.y) * 0.12;
+    ctx.fillStyle = '#0a0f0a';
+    ctx.fillRect(0, 0, w, h);
+    const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
+    const x0 = Math.max(0, Math.floor(cam.x / T) - 1), y0 = Math.max(0, Math.floor(cam.y / T) - 1);
+    const x1 = Math.min(st.map.w - 1, Math.ceil((cam.x + w) / T) + 1), y1 = Math.min(st.map.h - 1, Math.ceil((cam.y + h) / T) + 1);
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+      const t = st.map.terr[st.map.idx(x, y)];
+      ctx.fillStyle = cols[t] ?? '#333';
+      ctx.fillRect(x * T - cam.x, y * T - cam.y, T, T);
+      if (t === 6) { ctx.fillStyle = '#3c6b31'; ctx.fillRect(x * T - cam.x + 6, y * T - cam.y + 8, 4, 14); ctx.fillRect(x * T - cam.x + 16, y * T - cam.y + 4, 4, 18); }
+    }
+    ctx.fillStyle = '#5a4632';
+    ctx.fillRect(st.map.donjon.x * T - cam.x, st.map.donjon.y * T - cam.y, st.map.donjon.w * T, st.map.donjon.h * T);
+    ctx.fillStyle = '#e8e8f2';
+    ctx.fillRect(st.map.autel.x * T - cam.x + 8, st.map.autel.y * T - cam.y + 8, T - 16, T - 16);
+    for (const j of st.map.jarres) {
+      const jid = `jarre-${j.x}-${j.y}`;
+      if (st.broken.includes(jid)) continue;
+      ctx.fillStyle = '#a8763e';
+      ctx.beginPath();
+      ctx.arc(j.x * T - cam.x + T / 2, j.y * T - cam.y + T / 2, 9, 0, 7);
+      ctx.fill();
+    }
+    const hx = st.hero.x * T - cam.x, hy = st.hero.y * T - cam.y;
+    ctx.fillStyle = '#171522';
+    ctx.beginPath(); ctx.arc(hx, hy, 11, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f4f1ea';
+    ctx.beginPath(); ctx.arc(hx, hy - 4, 6, 0, 7); ctx.fill();
+  };
+  let last = performance.now();
+  const loop = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (!store.errance || store.errance !== st) return;
+    const ev = stepErrance(st, dt);
+    if (ev.encounter && !store.zoneFight) {
+      persistErrancePos(); save();
+      startZoneFight(st.zone, { donjon: false });
+      return;
+    }
+    if (ev.arrived) {
+      const o = ev.arrived;
+      if (o.type === 'autel') {
+        interactAutel(st);
+        autelDeSoin();
+        toast('⛲ Autel de soin : PV et mana restaurés, +5 pas de grâce.');
+        save();
+      } else if (o.type === 'porte') {
+        persistErrancePos(); save();
+        startZoneFight(st.zone, { donjon: true });
+        return;
+      } else if (o.type === 'jarre') {
+        const jid = `jarre-${o.x}-${o.y}`;
+        const r = interactJarre(st, jid);
+        if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); }
+        save();
+      }
+    }
+    draw();
+    erranceRAF = requestAnimationFrame(loop);
+  };
+  erranceRAF = requestAnimationFrame(loop);
+  canvas.addEventListener('pointerdown', (e) => {
+    const r = canvas.getBoundingClientRect();
+    const px = e.clientX - r.left + cam.x, py = e.clientY - r.top + cam.y;
+    const hx = st.hero.x * T, hy = st.hero.y * T;
+    if (Math.hypot(px - hx, py - hy) < T) {
+      const fx = Math.floor(st.hero.x), fy = Math.floor(st.hero.y + 1);
+      const j = st.map.jarres.find((jj) => jj.x === fx && jj.y === fy && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+      if (j) {
+        const r2 = interactJarre(st, `jarre-${j.x}-${j.y}`);
+        if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); save(); }
+      }
+      return;
+    }
+    const tx = Math.floor(px / T), ty = Math.floor(py / T);
+    const m = st.map;
+    if (tx === m.autel.x && ty === m.autel.y) { st.pending = { type: 'autel', x: m.autel.x, y: m.autel.y }; }
+    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + 2) { st.pending = { type: 'porte', x: m.donjon.x, y: m.donjon.y + 2 }; }
+    else {
+      const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+      if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+    }
+    if (st.pending) {
+      const o = st.pending;
+      let best = null, bd = 1e9;
+      for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) {
+        const cx = o.x + dx, cy = o.y + dy;
+        if (!m.inb(cx, cy)) continue;
+        const tt = m.terr[m.idx(cx, cy)];
+        if ([2, 3, 4, 7, 8, 9, 10].includes(tt)) continue;
+        const d = Math.hypot(cx + 0.5 - st.hero.x, cy + 0.5 - st.hero.y);
+        if (d < bd) { bd = d; best = { x: cx, y: cy }; }
+      }
+      if (best) setTarget(st, best.x, best.y);
+    } else {
+      setTarget(st, tx, ty);
+    }
+  });
+  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#terres'); };
+}
+
 function renderHome(root) {
   const owned = [...store.collection.entries()].filter(([id, n]) => n > 0 && byId(id)).length;
   const team = [...store.team.slots].filter(Boolean);
@@ -2213,25 +2412,105 @@ function renderHome(root) {
   const exploreBtn = team.length === 0
     ? '<a href="#equipe" class="btn btn-hero">⚔ Composer mon équipe</a>'
     : '<a href="#donjons" class="btn btn-hero">⚔ Explorer le donjon (étage 1)</a>';
+  const nbBrut = Object.values(store.gems?.brut ?? {}).reduce((a, b) => a + b, 0);
+  const quetes = ensureQuetes();
+  const quetesDone = quetes.filter((q) => q.done).length;
   root.innerHTML = `
-    <div class="hero">
-      <div class="hero-inner">
-        <h2>${d.name}</h2>
-        <div class="home-stats">
-          <div class="stat"><b>🪙 ${store.gold}</b><span class="muted">or</span></div>
-          <div class="stat"><b>${owned}</b><span class="muted">/ ${CATALOG.length} cartes dévoilées</span></div>
-          <div class="stat"><b>${store.record || 0}</b><span class="muted">/ ${d.floors} record du donjon</span></div>
-          <div class="stat"><b>${team.length}</b><span class="muted">cartes en équipe</span></div>
-        </div>
-        ${chips ? `<div class="home-team">${chips}</div>` : `<p class="muted">Aucune carte en équipe — composez-la juste ci-dessous.</p>`}
-        <div class="home-actions">
-          ${exploreBtn}
-        </div>
-        <p class="muted">Victoire d\u2019étage : de l\u2019or · boss : or doublé. Les cartes naissent à la Guilde (compagnons, autel), au marchand de la Boutique, en quêtes et en donjon. Prochain boss : étage ${nextBoss}</p>
+    <div class="hub-scene" aria-hidden="true">
+      <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMax slice">
+        <circle cx="70" cy="110" r="60" fill="#ffe9a8" opacity=".4"/>
+        <circle cx="70" cy="110" r="32" fill="#fff3c9"/>
+        <g fill="#ffffff" opacity=".85">
+          <ellipse cx="255" cy="92" rx="42" ry="13"/><ellipse cx="285" cy="82" rx="26" ry="10"/>
+          <ellipse cx="125" cy="178" rx="30" ry="9" opacity=".6"/>
+        </g>
+        <path d="M0 432 Q80 402 160 434 T390 424 V844 H0 Z" fill="#b9c98f"/>
+        <g>
+          <rect x="-4" y="432" width="84" height="88" fill="#e7d6b3"/><path d="M-10 432 L38 400 L86 432 Z" fill="#b0603f"/>
+          <rect x="86" y="448" width="64" height="72" fill="#efdfbf"/><path d="M82 448 L118 420 L154 448 Z" fill="#a85a3c"/>
+          <rect x="248" y="438" width="70" height="82" fill="#e3cfa8"/><path d="M244 438 L283 406 L322 438 Z" fill="#b0603f"/>
+          <rect x="322" y="454" width="72" height="66" fill="#ead9b6"/><path d="M318 454 L358 428 L398 454 Z" fill="#a85a3c"/>
+        </g>
+        <path d="M0 540 Q195 514 390 542 V844 H0 Z" fill="#d9c9a4"/>
+        <g stroke="#c0ae86" stroke-width="1" opacity=".55" fill="none">
+          <path d="M30 572 L370 598 M0 612 L390 638 M0 662 L390 688 M0 716 L390 742 M0 776 L390 802"/>
+          <path d="M60 548 L20 844 M150 538 L128 844 M250 540 L262 844 M340 550 L368 844"/>
+        </g>
+        <g>
+          <ellipse cx="195" cy="714" rx="68" ry="18" fill="#b8a67e"/>
+          <ellipse cx="195" cy="710" rx="60" ry="15" fill="#9ecfe8"/>
+          <rect x="187" y="662" width="16" height="44" fill="#cabb96"/>
+          <circle cx="195" cy="642" r="8" fill="#d6c8a4"/>
+          <g stroke="#bfe6f7" stroke-width="3" stroke-linecap="round" fill="none" opacity=".95">
+            <path d="M195 646 Q185 670 175 702"/><path d="M195 646 Q205 670 215 702"/><path d="M195 646 Q195 674 195 706"/>
+          </g>
+        </g>
+        <g fill="#5b4632">
+          <g><circle cx="120" cy="668" r="5"/><path d="M114 674 Q112 694 114 704 L126 704 Q128 694 126 674 Z"/></g>
+          <g><circle cx="272" cy="672" r="5"/><path d="M266 678 Q264 698 266 708 L278 708 Q280 698 278 678 Z"/></g>
+          <g><circle cx="86" cy="700" r="4.5"/><path d="M81 706 Q79 724 81 732 L91 732 Q93 724 91 706 Z"/></g>
+          <g><circle cx="300" cy="704" r="4.5"/><path d="M295 710 Q293 728 295 736 L305 736 Q307 728 305 710 Z"/></g>
+        </g>
+      </svg>
+    </div>
+    <div class="hub-veil"></div>
+    <div class="hub-title"><h1>AICG · LIGNÉES</h1><small>Port des Brumes</small></div>
+    <header class="top hub-top">
+      <span class="chip">🪙 ${store.gold}</span>
+      <span class="chip">🔷 ${nbBrut} éclats</span>
+      <span class="spacer"></span>
+      <button type="button" class="back" id="hub-back" title="Retour">←</button>
+    </header>
+    <svg class="hub-npc" id="hub-npc" viewBox="0 0 104 210" role="button" aria-label="Personnage de référence — cliquer pour dialoguer">
+      <path d="M30 62 Q22 130 26 196 L78 196 Q82 130 74 62 Z" fill="#171522"/>
+      <path d="M36 96 Q32 150 40 196 L64 196 Q72 150 68 96 Z" fill="#26233a"/>
+      <ellipse cx="52" cy="44" rx="15" ry="17" fill="#e9d9c8"/>
+      <path d="M35 44 Q33 16 52 14 Q71 16 69 42 L71 62 Q64 50 52 52 Q40 50 33 62 Z" fill="#f4f1ea"/>
+      <path d="M35 44 Q30 78 34 92 L44 90 Q38 70 37 50 Z" fill="#f4f1ea"/>
+      <path d="M69 44 Q74 78 70 92 L60 90 Q66 70 67 50 Z" fill="#f4f1ea"/>
+      <circle cx="46" cy="44" r="2.2" fill="#2c2c34"/><circle cx="58" cy="44" r="2.2" fill="#2c2c34"/>
+    </svg>
+    <div class="hub-bubble" id="hub-bubble"><b>L'Errante</b><span>Bienvenue au Port des Brumes. Les Terres Sauvages vous attendent — composez d'abord une équipe.</span></div>
+    <nav class="hub-menu">
+      <a class="btn gold-frame" href="#donjons"><span class="ic">⛰️</span>Donjons</a>
+      <a class="btn gold-frame" href="#terres"><span class="ic">🌿</span>Terres Sauvages</a>
+      <a class="btn gold-frame" href="#boutique"><span class="ic">🛒</span>Boutique</a>
+      <a class="btn gold-frame" href="#forge"><span class="ic">🛡️</span>Guilde</a>
+      <a class="btn gold-frame" href="#quetes"><span class="ic">📜</span>Quêtes</a>
+      <a class="btn gold-frame" href="#equipe"><span class="ic">🛡️</span>Équipe</a>
+      <a class="btn gold-frame" href="#collection"><span class="ic">🎴</span>Collection</a>
+      <a class="btn gold-frame" href="#inventaire"><span class="ic">🎒</span>Inventaire</a>
+      <a class="btn gold-frame" href="#glossaire"><span class="ic">📖</span>Glossaire</a>
+    </nav>
+    <div class="hub-bottom">
+      <a class="hub-daily" href="#quetes">
+        <span class="ic">📜</span>
+        <span><b>Quêtes du jour</b><small>${quetesDone}/${quetes.length} accomplies — bonus pierre d'éveil</small></span>
+        <span class="eta">voir →</span>
+      </a>
+      <span class="btn big hub-wild" id="hub-wild"><span class="ic">🌿</span>LES TERRES SAUVAGES</span>
+    </div>
+    <div class="pop" id="hub-pop">
+      <div class="card">
+        <h3>Équipe vide</h3>
+        <p>Composez d'abord une équipe (5 cartes max) avant de partir dans les Terres Sauvages.</p>
+        <div class="row"><a class="btn ok" href="#equipe">Composer mon équipe</a><button type="button" class="btn ghost" id="hub-pop-close">Plus tard</button></div>
       </div>
     </div>
     ${saveBoxHtml()}`;
   wireSaveBox(root);
+  const npc = root.querySelector('#hub-npc');
+  const bubble = root.querySelector('#hub-bubble');
+  if (npc && bubble) npc.onclick = () => bubble.classList.toggle('on');
+  const back = root.querySelector('#hub-back');
+  if (back) back.onclick = () => { if (history.length > 1) history.back(); else go('#accueil'); };
+  const wild = root.querySelector('#hub-wild');
+  const pop = root.querySelector('#hub-pop');
+  if (wild) wild.onclick = () => {
+    if (team.length === 0) { pop?.classList.add('on'); return; }
+    go('#terres');
+  };
+  root.querySelector('#hub-pop-close')?.addEventListener('click', () => pop?.classList.remove('on'));
 }
 
 function saveBoxHtml() {
@@ -3949,6 +4228,15 @@ async function animate(events, ms, gen = null) {
           const lastRewards = stageRewards(store.seed, store.stage, 0, store.dungeon, store.diff);
           if (lastRewards?.boss) questProgress('boss');
           if (finalClear) questProgress('finirDonjon');
+          // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
+          if (store.zoneFight) {
+            questProgress('gagnerErrance');
+            if (store.errance) store.errance.grace = 2;
+            if (store.zoneFight.donjon) {
+              unlockZone(store.zoneFight.zone);
+              toast(`✓ Donjon de la zone vaincu — une nouvelle zone s'ouvre dans Les Terres Sauvages !`);
+            }
+          }
           
           
           
@@ -4169,7 +4457,16 @@ async function animate(events, ms, gen = null) {
           store.defiActive = false;
           save();
         }
-        if (won && !store.defiActive && store.stage < dungeonById(store.dungeon).floors) {
+        if (won && store.zoneFight) {
+          const zf = store.zoneFight;
+          store.zoneFight = null;
+          const back = () => {
+            if (recompOpen) { setTimeout(back, 400); return; }
+            save();
+            go('#errance');
+          };
+          setTimeout(back, instant() ? 150 : 1400);
+        } else if (won && !store.defiActive && store.stage < dungeonById(store.dungeon).floors) {
           const chainNext = () => {
             chainTimer = null;
             if (recompOpen) { chainTimer = setTimeout(chainNext, 400); return; } // on attend « Tout ramasser »
@@ -4935,6 +5232,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.27 : Bloc visuel — hub-ville, Terres Sauvages, errance (Marées)', 'L’accueil devient un hub-ville (scène procédurale, héroïne cliquable, quêtes du jour) avec le bouton « LES TERRES SAUVAGES ». Nouvelle page de sélection des zones (départ : la zone de l’eau, déblocage en chaîne par le donjon de zone) et errance top-down dans la zone témoin Marées : carte canvas déterministe, déplacement au clic (A* + lissage), rencontres dans les hautes herbes, autel de soin, combats en chaîne. Migration v26.'],
   ['v1.26 : Correctif — le badge « nouvelle carte » quitte l’équipe', 'Une carte placée en équipe perd enfin son badge ✨ (il n’était vidé que dans la fiche). Le test IHM couvre désormais un parcours complet : départ, équipe, donjon, combat, récompenses, quêtes, boutique, guilde, inventaire, sauvegarde.'],
 
   ['v1.25 : Économie v2 clôturée', 'Boutique complète (potions, éclats, équipement), marchand de créatures, Guilde et compagnons du jour, jetons supprimés (convertis en or, migration v25), quêtes quotidiennes (migration v24). Digest inchangé : f72106ff… 1379/3000.'],
@@ -5237,6 +5535,8 @@ registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
 registerRoute('#quetes', renderQuetes);
+registerRoute('#terres', renderTerres);
+registerRoute('#errance', renderErrance);
 registerRoute('#boutique', renderBoutique);
 registerRoute('#inventaire', renderInventaire);
 registerRoute('#combat', renderCombat);

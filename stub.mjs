@@ -61,11 +61,28 @@ function parseFragment(src, parentNode) {
   return root.children.map((f) => assemble(f));
 }
 
+function canvasCtx2d() {
+  return new Proxy({}, {
+    get(t, k) {
+      if (k === 'canvas') return null;
+      if (k === 'measureText') return () => ({ width: 10 });
+      if (k === 'createLinearGradient' || k === 'createRadialGradient') return () => ({ addColorStop() {} });
+      if (k === 'getImageData') return () => ({ data: [] });
+      if (!(k in t)) t[k] = () => {};
+      return t[k];
+    },
+    set(t, k, v) { t[k] = v; return true; },
+  });
+}
+
 export function makeEl(tag = 'div') {
   const listeners = {};
   const el = {
     tagName: String(tag).toUpperCase(),
     nodeType: 1,
+    width: 300,
+    height: 150,
+    getContext() { return canvasCtx2d(); },
     children: [],
     parentNode: null,
     dataset: {},
@@ -200,7 +217,7 @@ const API_PAIRS = {
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   drawNaissance: 'drawNaissance', noLossPctOf: 'noLossPctOf', xpToNext: 'xpToNext',
   EQUIPMENT: 'EQUIPMENT', EQUIP_BY_ID: 'EQUIP_BY_ID', equipBonusOfCard: 'equipBonusOfCard', equipTeamBonus: 'equipTeamBonus', bossPieceFor: 'bossPieceFor', addMateriau: 'addMateriau', materiauCount: 'materiauCount', addEquipmentPiece: 'addEquipmentPiece', equipPiece: 'equipPiece', openRecompensesModal: 'openRecompensesModal',
-  potionCount: 'potionCount', totalPotions: 'totalPotions', buyPotion: 'buyPotion', buyEclat: 'buyEclat', buyEquipment: 'buyEquipment', buyMonster: 'buyMonster', marchandMonsters: 'marchandMonsters', marchandPrix: 'marchandPrix', MARCHAND: 'MARCHAND', ownedOf: 'ownedOf', GUILDE: 'GUILDE', compagnonsDuJour: 'compagnonsDuJour', compagnonPrix: 'compagnonPrix', buyCompagnon: 'buyCompagnon', seedOfDay: 'seedOfDay', QUETES: 'QUETES', quetesDuJour: 'quetesDuJour', ensureQuetes: 'ensureQuetes', questProgress: 'questProgress', pierreCount: 'pierreCount', grantCards: 'grantCards', bonusLabelOf: 'bonusLabelOf', gemCount: 'gemCount', equipPieceCount: 'equipPieceCount', addGold: 'addGold', autelDeSoin: 'autelDeSoin', healRunComplet: 'healRunComplet', applyRunStateTo: 'applyRunStateTo', persistRunStateFrom: 'persistRunStateFrom', curHpManaOf: 'curHpManaOf', POTIONS: 'POTIONS',
+  potionCount: 'potionCount', totalPotions: 'totalPotions', buyPotion: 'buyPotion', buyEclat: 'buyEclat', buyEquipment: 'buyEquipment', buyMonster: 'buyMonster', marchandMonsters: 'marchandMonsters', marchandPrix: 'marchandPrix', MARCHAND: 'MARCHAND', ownedOf: 'ownedOf', GUILDE: 'GUILDE', compagnonsDuJour: 'compagnonsDuJour', compagnonPrix: 'compagnonPrix', buyCompagnon: 'buyCompagnon', seedOfDay: 'seedOfDay', QUETES: 'QUETES', quetesDuJour: 'quetesDuJour', ensureQuetes: 'ensureQuetes', questProgress: 'questProgress', pierreCount: 'pierreCount', grantCards: 'grantCards', genZoneMap: 'genZoneMap', astar: 'astar', smoothPath: 'smoothPath', createErranceState: 'createErranceState', setTarget: 'setTarget', stepErrance: 'stepErrance', interactAutel: 'interactAutel', interactJarre: 'interactJarre', zoneUnlocked: 'zoneUnlocked', unlockZone: 'unlockZone', ET: 'ET', enterZone: 'enterZone', startZoneFight: 'startZoneFight', dungeonOfZone: 'dungeonOfZone', bonusLabelOf: 'bonusLabelOf', gemCount: 'gemCount', equipPieceCount: 'equipPieceCount', addGold: 'addGold', autelDeSoin: 'autelDeSoin', healRunComplet: 'healRunComplet', applyRunStateTo: 'applyRunStateTo', persistRunStateFrom: 'persistRunStateFrom', curHpManaOf: 'curHpManaOf', POTIONS: 'POTIONS',
   _actEl: '() => actBox',
   _prompt: '() => promptState',
   _busy: '() => busy',

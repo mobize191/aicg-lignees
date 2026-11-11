@@ -198,7 +198,16 @@ function v24to25(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25 };
+// v25 -> v26 (bloc visuel : errance top-down) : état d'errance + zones débloquées, vierges. Non destructif.
+function v25to26(s) {
+  s.version = 26;
+  if (!s.errance || typeof s.errance !== 'object') s.errance = null;
+  if (!Array.isArray(s.zonesUnlocked)) s.zonesUnlocked = [];
+  if (!Array.isArray(s.zonesVisitees)) s.zonesVisitees = [];
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

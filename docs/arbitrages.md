@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — bloc visuel H1/H2/H3 livré (hub-ville, Terres Sauvages, errance top-down zone témoin Marées, migration v26)
+
+- **Livré** : (H1) **Accueil/hub-ville** — scène SVG procédurale (ville, voile, titre), menu latéral, quêtes du jour, héroïne cliquable (bulle de dialogue), gros bouton « LES TERRES SAUVAGES » avec pop-up si l'équipe est vide ; (H2) **Les Terres Sauvages** — sélecteur de zones, départ verrouillé sur la zone de l'eau, zones visitées marquées, déblocage en chaîne par le donjon de zone ; (H3) **errance top-down zone témoin Marées** — moteur canvas procédural déterministe (seed par zone en data), A* + lissage, pilotage au pointer (clic = déplacement, clic sur ennemi = attaque), rencontres au pas dans les hautes herbes avec grâce, interactions autel de soin (+5 grâce, hook posé) et jarres, combats lancés dans la chaîne d'étages existante (victoire = quête errance + grâce + déblocage). Toutes les valeurs (seed, taux de rencontre, carte 46×32, tuile 36 px) sont dans `data/zones.json`. **Migration v25 → v26 non destructive** (`errance`, `zonesUnlocked`, `zonesVisitees` initialisés).
+- **Preuve** : build ok, **139 tests** verts (5 nouveaux tests errance), smoke **269 checks** (11 nouveaux B12 verts ; 2 échecs préexistants hors chantier 46 g / 45 e), digest **inchangé `f72106ff…` 1379/3000** (hors maths de combat). `docs/tables/monde.md` régénérée. Reste pour ce bloc : généralisation de l'errance aux autres zones, art du héros dédié (campagne v2 + cycle WAN).
+
 ## 2026-11-11 : MESURE — correctif IHM + parcours de test complet (badge « nouvelle carte », smoke B11)
 
 - **Corrigé** : le badge « nouvelle carte » (✨) restait affiché sur les cartes placées en équipe — `isNew` n'était vidé que dans la fiche. Désormais `addCardIid` appelle `clearNewOf` au placement : une carte en équipe n'est plus marquée comme nouvelle. Régression couverte par les checks B11 d/e du smoke.

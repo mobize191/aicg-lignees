@@ -975,6 +975,44 @@ animation: newpulse 1.6s infinite;
 .quest-bar { width: 100%; height: 6px; background: rgba(255,255,255,.12); border-radius: 3px; margin-top: 4px; overflow: hidden; }
 .quest-fill { height: 100%; background: #4dd0e1; }
 .quest-row.done { opacity: .75; }
+
+/* bloc visuel : hub-ville (maquette n°1) + errance top-down */
+.hub-scene{position:fixed;inset:0;background:linear-gradient(180deg,#8ecbe8 0%,#a8d5ec 30%,#efe0bd 52%,#dccfa9 72%,#c9b78e 100%)}
+.hub-scene svg{position:absolute;inset:0;width:100%;height:100%}
+.hub-veil{position:fixed;inset:0;background:linear-gradient(180deg,rgba(28,18,6,.48) 0%,rgba(28,18,6,.06) 30%,rgba(28,18,6,.05) 55%,rgba(26,17,6,.66) 100%);pointer-events:none}
+.hub-title{position:fixed;top:52px;left:0;right:0;text-align:center;pointer-events:none;z-index:5}
+.hub-title h1{margin:0;font-family:Georgia,'Times New Roman',serif;font-size:21px;letter-spacing:.14em;color:#f4ead0;text-shadow:0 2px 16px #000b}
+.hub-title small{color:#c9b482;letter-spacing:.3em;font-size:9px;text-transform:uppercase}
+.hub-top{z-index:20}
+.hub-npc{position:fixed;left:14px;bottom:190px;z-index:10;width:104px;cursor:pointer}
+.hub-bubble{position:fixed;left:120px;bottom:210px;z-index:22;max-width:190px;background:rgba(24,18,8,.85);border:1px solid rgba(201,164,78,.6);border-radius:12px;padding:10px 12px;font-size:12.5px;color:#dfe6f2;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}
+.hub-bubble.on{opacity:1;transform:translateY(0);pointer-events:auto}
+.hub-bubble b{color:#e8c268;display:block;margin-bottom:3px;font-size:11px}
+.hub-menu{position:fixed;right:10px;top:96px;z-index:20;display:flex;flex-direction:column;gap:9px;width:158px}
+.hub-menu .btn{min-height:46px;text-decoration:none;color:#dfe6f2}
+.gold-frame{border:1px solid #c9a44e;background:linear-gradient(180deg,rgba(38,28,12,.78),rgba(24,18,8,.84));box-shadow:inset 0 0 0 1px rgba(244,226,168,.32),0 0 0 1px rgba(122,95,40,.85),0 6px 18px #0007;position:relative}
+.gold-frame::before,.gold-frame::after{content:"◆";position:absolute;color:#c9a44e;font-size:7px}
+.gold-frame::before{left:6px;top:4px}.gold-frame::after{right:6px;bottom:4px}
+.hub-menu .ic{font-size:17px;width:22px;text-align:center}
+.hub-bottom{position:fixed;left:12px;right:12px;bottom:14px;z-index:20;display:grid;gap:10px}
+.hub-daily{display:flex;align-items:center;gap:10px;border-radius:14px;border:1px solid #c9a44e;background:linear-gradient(180deg,rgba(38,28,12,.78),rgba(24,18,8,.84));padding:11px 13px;text-decoration:none;color:#dfe6f2}
+.hub-daily .ic{font-size:19px}
+.hub-daily b{font-size:12.5px;display:block;color:#e8c268}
+.hub-daily small{font-size:10.5px;color:#8fa0b8}
+.hub-daily .eta{margin-left:auto;font-size:11px;color:#e8c268}
+.hub-wild{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;border-radius:18px;border:1px solid #c9a44e;background:linear-gradient(180deg,rgba(36,84,62,.88),rgba(18,44,34,.92));color:#eafff2;font-size:16.5px;font-weight:800;letter-spacing:.04em;cursor:pointer}
+.hub-wild .ic{font-size:23px}
+.hub-pop,.pop{position:fixed;inset:0;z-index:40;background:rgba(4,6,11,.6);display:flex;align-items:center;justify-content:center;padding:22px;opacity:0;pointer-events:none;transition:.2s}
+.pop.on,.hub-pop.on{opacity:1;pointer-events:auto}
+.pop .card,.hub-pop .card{width:100%;max-width:340px;background:rgba(24,18,8,.92);border:1px solid rgba(201,164,78,.6);border-radius:18px;padding:18px}
+.pop h3{color:#e8c268}
+.pop .row{display:grid;gap:9px}
+.pop .ok{display:block;text-align:center;padding:12px;border-radius:12px;background:linear-gradient(180deg,#2b6a4c,#1c4a36);color:#eafff2;font-weight:700;text-decoration:none}
+.pop .ghost{padding:12px;border-radius:12px;background:rgba(24,18,8,.5);color:#dfe6f2;border:1px solid rgba(201,164,78,.6)}
+.errance-wrap{position:fixed;inset:0;display:flex;flex-direction:column}
+.errance-top{position:relative;display:flex;gap:8px;padding:10px 12px;z-index:5}
+#errance-canvas{flex:1;width:100%;touch-action:none}
+.errance-hint{padding:6px 12px;font-size:11px}
 </style>
 </head>
 <body>
@@ -991,6 +1029,7 @@ animation: newpulse 1.6s infinite;
   <a href="#forge">🛡️ Guilde</a>
   <a href="#donjons">⛰️ Donjons</a>
   <a href="#quetes">📜 Quêtes</a>
+  <a href="#terres">🌿 Terres</a>
   <a href="#boutique">🛒 Boutique</a>
   <a href="#inventaire">🎒 Inventaire</a>
   <a href="#glossaire">📖 Glossaire</a>
@@ -3230,9 +3269,9 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 25,
+  "SAVE_VERSION": 26,
   "SAVE_KEY": "fondations-cards-v1",
-  "CURRENT_VERSION": 25,
+  "CURRENT_VERSION": 26,
   "RACE_DIVINE_IDS": [
    "d1",
    "d2",
@@ -12786,6 +12825,16 @@ const DATA = {
    "matiereBoss": {
     "id": "perle-souverain",
     "nom": "Perle du Souverain"
+   },
+   "errance": {
+    "seed": 20261110,
+    "encRate": 0.16,
+    "map": {
+     "w": 46,
+     "h": 32,
+     "t": 36
+    },
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
    }
   },
   {
@@ -12871,6 +12920,16 @@ const DATA = {
    "matiereBoss": {
     "id": "coeur-braise",
     "nom": "Cœur de braise"
+   },
+   "errance": {
+    "seed": 20261111,
+    "encRate": 0.17,
+    "map": {
+     "w": 46,
+     "h": 32,
+     "t": 36
+    },
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
    }
   },
   {
@@ -12953,6 +13012,16 @@ const DATA = {
    "matiereBoss": {
     "id": "ecorce-coeur",
     "nom": "Écorce du Cœur du Bosquet"
+   },
+   "errance": {
+    "seed": 20261112,
+    "encRate": 0.15,
+    "map": {
+     "w": 46,
+     "h": 32,
+     "t": 36
+    },
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
    }
   },
   {
@@ -13044,6 +13113,16 @@ const DATA = {
    "matiereBoss": {
     "id": "os-poli",
     "nom": "Os poli des caveaux"
+   },
+   "errance": {
+    "seed": 20261113,
+    "encRate": 0.18,
+    "map": {
+     "w": 46,
+     "h": 32,
+     "t": 36
+    },
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
    }
   },
   {
@@ -13135,6 +13214,16 @@ const DATA = {
    "matiereBoss": {
     "id": "cendre-astre",
     "nom": "Cendre de l’Astre"
+   },
+   "errance": {
+    "seed": 20261114,
+    "encRate": 0.2,
+    "map": {
+     "w": 46,
+     "h": 32,
+     "t": 36
+    },
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
    }
   }
  ]
@@ -15263,6 +15352,230 @@ function evoLabelOf(from, to) {
   return e && e.type === 'secrete' ? '??' : (e?.voie || to);
 }
 
+// src/errance.js — errance top-down (zone témoin Marées puis généralisation)
+// Logique pure, testable sans DOM : génération déterministe de la carte (seed en data/zones.json),
+// A* 8 directions + lissage, rencontres au pas dans les hautes herbes, interactions (autel, collectables, donjon).
+// Guide : docs/design/errance-topdown.md
+
+// codes terrain
+const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10 };
+const SOLID = new Set([ET.EAU, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
+
+function lcg(seed) {
+  let s = seed >>> 0;
+  return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
+}
+
+// génère la carte d'une zone : Uint8Array + objets interactifs, déterministe (seed de la zone)
+function genZoneMap(zone) {
+  const w = zone.errance?.map?.w ?? 46;
+  const h = zone.errance?.map?.h ?? 32;
+  const t = zone.errance?.map?.t ?? 36;
+  const rnd = lcg(zone.errance?.seed ?? 20261110);
+  const terr = new Uint8Array(w * h);
+  const idx = (x, y) => y * w + x;
+  const inb = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
+  // ceinture d'eau + arbres en bordure
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    if (x === 0 || y === 0 || x === w - 1 || y === h - 1) terr[idx(x, y)] = (rnd() < 0.6 ? ET.EAU : ET.ARBRE);
+    else terr[idx(x, y)] = ET.PRAIRIE;
+  }
+  // un étang
+  const ex = 6 + Math.floor(rnd() * (w - 12)), ey = 5 + Math.floor(rnd() * (h - 10));
+  for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) if (inb(ex + dx, ey + dy)) terr[idx(ex + dx, ey + dy)] = ET.EAU;
+  // chemins croisés
+  const cy = Math.floor(h / 2), cx = Math.floor(w / 2);
+  for (let x = 2; x < w - 2; x++) terr[idx(x, cy)] = ET.CHEMIN;
+  for (let y = 2; y < h - 2; y++) terr[idx(cx, y)] = ET.CHEMIN;
+  // patchs de hautes herbes
+  const nPatch = 8 + Math.floor(rnd() * 5);
+  for (let p = 0; p < nPatch; p++) {
+    const px = 3 + Math.floor(rnd() * (w - 8)), py = 3 + Math.floor(rnd() * (h - 8));
+    const pw = 3 + Math.floor(rnd() * 4), ph = 2 + Math.floor(rnd() * 3);
+    for (let dy = 0; dy < ph; dy++) for (let dx = 0; dx < pw; dx++) {
+      const x = px + dx, y = py + dy;
+      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+    }
+  }
+  // rochers et arbres épars
+  const nRock = 10 + Math.floor(rnd() * 8);
+  for (let i = 0; i < nRock; i++) {
+    const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
+    if (terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = rnd() < 0.5 ? ET.ROCHER : ET.ARBRE;
+  }
+  // bâtiment donjon (mur 2x2 + porte au sud), autel, jarres — positions dérivées du seed, ordre fixe
+  const donjon = { x: w - 8, y: 3, w: 2, h: 2 };
+  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
+  terr[idx(donjon.x, donjon.y + 2)] = ET.PORTE; // porte au sud
+  const autel = { x: 5, y: h - 6 };
+  terr[idx(autel.x, autel.y)] = ET.AUTEL;
+  const jarres = [];
+  for (let i = 0; i < 6; i++) {
+    const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
+    if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); }
+  }
+  // spawn héros sur le chemin central, dégagé
+  const spawn = { x: cx + 0.5, y: cy + 1.5 };
+  terr[idx(cx, cy + 1)] = ET.CHEMIN;
+  return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
+}
+
+const solidT = (m, x, y) => !m.inb(x, y) || SOLID.has(m.terr[m.idx(x, y)]);
+
+// A* 8 directions, heuristique octile
+function astar(m, sx, sy, tx, ty) {
+  sx = Math.floor(sx); sy = Math.floor(sy); tx = Math.floor(tx); ty = Math.floor(ty);
+  if (!m.inb(tx, ty) || SOLID.has(m.terr[m.idx(tx, ty)])) return null;
+  const idx = m.idx;
+  const key = (x, y) => y * m.w + x;
+  const open = new Map(); // key -> {x,y,g,f,parent}
+  const closed = new Set();
+  const h = (x, y) => { const dx = Math.abs(x - tx), dy = Math.abs(y - ty); return Math.max(dx, dy) + 0.4142 * Math.min(dx, dy); };
+  const start = { x: sx, y: sy, g: 0, f: h(sx, sy), parent: null };
+  open.set(key(sx, sy), start);
+  const dirs = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+  let guard = 0;
+  while (open.size && guard++ < 4000) {
+    let bestK = -1, best = null;
+    for (const [k, n] of open) if (!best || n.f < best.f) { best = n; bestK = k; }
+    open.delete(bestK);
+    if (best.x === tx && best.y === ty) {
+      const path = [];
+      let n = best;
+      while (n) { path.push({ x: n.x + 0.5, y: n.y + 0.5 }); n = n.parent; }
+      return path.reverse();
+    }
+    closed.add(bestK);
+    for (const [dx, dy] of dirs) {
+      const nx = best.x + dx, ny = best.y + dy;
+      if (!m.inb(nx, ny)) continue;
+      const t = m.terr[idx(nx, ny)];
+      if (SOLID.has(t)) continue;
+      if (dx !== 0 && dy !== 0 && (SOLID.has(m.terr[idx(best.x + dx, best.y)]) || SOLID.has(m.terr[idx(best.x, best.y + dy)]))) continue; // pas de coupe-corner
+      const k = key(nx, ny);
+      if (closed.has(k)) continue;
+      const g = best.g + (dx !== 0 && dy !== 0 ? 1.4142 : 1);
+      const ex = open.get(k);
+      if (!ex || g < ex.g) open.set(k, { x: nx, y: ny, g, f: g + h(nx, ny), parent: best });
+    }
+  }
+  return null;
+}
+
+// lissage par ligne de vue (string pulling simplifié)
+function smoothPath(m, path) {
+  if (!path || path.length < 3) return path ?? [];
+  const lineOk = (a, b) => {
+    const steps = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) * 2);
+    for (let i = 0; i <= steps; i++) {
+      const x = Math.floor(a.x + (b.x - a.x) * (i / steps));
+      const y = Math.floor(a.y + (b.y - a.y) * (i / steps));
+      if (solidT(m, x, y)) return false;
+    }
+    return true;
+  };
+  const out = [path[0]];
+  let i = 0;
+  while (i < path.length - 1) {
+    let j = path.length - 1;
+    for (; j > i + 1; j--) if (lineOk(path[i], path[j])) break;
+    out.push(path[j]);
+    i = j;
+  }
+  return out;
+}
+
+// état d'errance d'une zone (persisté en sauvegarde, positions en tuiles)
+function createErranceState(zoneId) {
+  const zone = getZone(zoneId);
+  if (!zone) throw new Error(`zone inconnue : ${zoneId}`);
+  const map = genZoneMap(zone);
+  return {
+    zone: zoneId, map,
+    hero: { x: map.spawn.x, y: map.spawn.y, path: [], speed: 3.4 },
+    grace: 2, lastTile: -1, steps: 0,
+    looted: [], broken: [], // ids d'objets persistés
+    pending: null,
+  };
+}
+
+// pose une cible de déplacement (clic/tap) : A* + lissage
+function setTarget(st, tx, ty) {
+  const path = astar(st.map, st.hero.x, st.hero.y, tx, ty);
+  if (!path) return false;
+  st.hero.path = smoothPath(st.map, path);
+  st.pending = null;
+  return true;
+}
+
+// avance le héros le long du chemin ; retourne les événements de la frame
+function stepErrance(st, dt, rng = Math.random) {
+  const ev = { steps: 0, encounter: null, arrived: null };
+  const hero = st.hero;
+  if (hero.path.length) {
+    const next = hero.path[0];
+    const dx = next.x - hero.x, dy = next.y - hero.y;
+    const d = Math.hypot(dx, dy);
+    const step = hero.speed * dt;
+    if (d <= step) { hero.x = next.x; hero.y = next.y; hero.path.shift(); }
+    else { hero.x += (dx / d) * step; hero.y += (dy / d) * step; }
+  }
+  // détection de pas = changement de tuile
+  const tk = Math.floor(hero.x) * 1000 + Math.floor(hero.y);
+  if (tk !== st.lastTile) {
+    st.lastTile = tk;
+    st.steps++;
+    ev.steps++;
+    const t = st.map.terr[st.map.idx(Math.floor(hero.x), Math.floor(hero.y))];
+    if (st.grace > 0) st.grace--;
+    else if (t === ET.HERBES && rng() < st.map.encRate) ev.encounter = true;
+  }
+  // arrivée sur une cible d'interaction
+  if (st.pending && !hero.path.length) {
+    const o = st.pending;
+    if (Math.hypot(hero.x - (o.x + 0.5), hero.y - (o.y + 0.5)) < 1.6) {
+      st.pending = null;
+      ev.arrived = o;
+    }
+  }
+  return ev;
+}
+
+// interaction : autel soigne (hook posé lot 1, contrat errance-topdown §8 : +5 pas de grâce)
+function interactAutel(st) {
+  st.grace += 5;
+  return { type: 'autel' };
+}
+
+// interaction : jarre brisée -> lâche un collectable (éclat brut), redevient hautes herbes
+function interactJarre(st, jid) {
+  const j = st.map.jarres.find((x) => `jarre-${x.x}-${x.y}` === jid);
+  if (!j || st.broken.includes(jid)) return null;
+  st.broken.push(jid);
+  st.map.terr[st.map.idx(j.x, j.y)] = ET.HERBES;
+  return { type: 'jarre', loot: 'eclat' };
+}
+
+// ordre de déblocage des zones : suivre l'ordre des donjons (zones.json) ; store injectable pour les tests
+function erranceStore(st) {
+  return st ?? (typeof store !== 'undefined' ? store : { zonesUnlocked: [] });
+}
+
+function zoneUnlocked(zoneId, st) {
+  const s = erranceStore(st);
+  const order = (DATA.zones ?? []).map((z) => z.id);
+  const i = order.indexOf(zoneId);
+  if (i <= 0) return true; // la zone de départ (eau) est toujours ouverte
+  const prev = order[i - 1];
+  return (s.zonesUnlocked ?? []).includes(prev) || (s.zonesUnlocked ?? []).includes(zoneId);
+}
+
+function unlockZone(zoneId, st) {
+  const s = erranceStore(st);
+  s.zonesUnlocked = s.zonesUnlocked ?? [];
+  if (!s.zonesUnlocked.includes(zoneId)) s.zonesUnlocked.push(zoneId);
+}
+
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
 // v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
@@ -15463,7 +15776,16 @@ function v24to25(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25 };
+// v25 -> v26 (bloc visuel : errance top-down) : état d'errance + zones débloquées, vierges. Non destructif.
+function v25to26(s) {
+  s.version = 26;
+  if (!s.errance || typeof s.errance !== 'object') s.errance = null;
+  if (!Array.isArray(s.zonesUnlocked)) s.zonesUnlocked = [];
+  if (!Array.isArray(s.zonesVisitees)) s.zonesVisitees = [];
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;
@@ -16220,6 +16542,8 @@ const store = {
   activeTeam: 0,
   grimoire: [],
   zonesVisitees: [],
+  zonesUnlocked: [],
+  errance: null,
   get team() {
     return this.teams[this.activeTeam];
   },
@@ -16366,6 +16690,8 @@ function snapshot() {
     runMod: store.runMod ?? null,
     grimoire: [...(store.grimoire ?? [])],
     zonesVisitees: [...(store.zonesVisitees ?? [])],
+    zonesUnlocked: [...(store.zonesUnlocked ?? [])],
+    errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
   };
 }
 
@@ -16440,7 +16766,9 @@ function restore(data) {
   store.milestones = { clear1: false, boss5: false, diff3: false };
   store.runMod = typeof data.runMod === 'string' && runModById(data.runMod) ? data.runMod : null;
   store.grimoire = Array.isArray(data.grimoire) ? data.grimoire.filter((g) => g && typeof g.sort === 'string') : [];
-  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
+  store.zonesVisitees = Array.isArray(data.zonesVisitees) ? data.zonesVisitees.filter((z) => typeof z === 'string') : [];
+  store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
+  store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
       if (!raw || typeof raw.id !== 'string' || !byId(raw.id)) continue;
@@ -17650,6 +17978,199 @@ function choisirDepart(id) {
   return { ok: true, choisis: id, alea: second };
 }
 
+// ---------- bloc visuel : errance top-down + Les Terres Sauvages ----------
+function dungeonOfZone(zoneId) {
+  return String(zoneId).replace(/^zone-/, '');
+}
+
+function startZoneFight(zoneId, { donjon = false } = {}) {
+  store.zoneFight = { zone: zoneId, donjon };
+  store.dungeon = dungeonOfZone(zoneId);
+  store.stage = 1;
+  store.runState = freshRunState();
+  store.runState.active = true;
+  store.runMod = null;
+  save();
+  updatePtsBadge();
+  go('#combat');
+}
+
+function enterZone(zoneId) {
+  if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
+  store.errance = createErranceState(zoneId);
+  if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
+    store.errance.hero.x = store.erranceSavedPos.x;
+    store.errance.hero.y = store.erranceSavedPos.y;
+  }
+  if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
+  save();
+  go('#errance');
+}
+
+function persistErrancePos() {
+  if (store.errance) {
+    store.erranceSavedPos = { zone: store.errance.zone, x: store.errance.hero.x, y: store.errance.hero.y };
+  }
+}
+
+function renderTerres(root) {
+  const zones = DATA.zones ?? [];
+  const cards = zones.map((z) => {
+    const open = zoneUnlocked(z.id);
+    const visited = (store.zonesVisitees ?? []).includes(z.id);
+    const dg = dungeonById(dungeonOfZone(z.id));
+    return `<div class="dungeon-card ${open ? '' : 'locked'}" style="--dcolor: ${dg?.accent ?? '#4dd0e1'}">
+      <div class="dungeon-body">
+        <h3>${z.nature} ${visited ? '<span class="chip on">visitée</span>' : ''}</h3>
+        <p class="muted">${z.rencontres?.length ?? 0} créatures · rencontres dans les hautes herbes (${Math.round((z.errance?.encRate ?? 0.16) * 100)} %/pas) · un autel de soin, des jarres, et <b>le donjon</b> qui ouvre la zone suivante.</p>
+        <div class="dungeon-actions">${open
+          ? `<span class="btn big enter-zone" data-zone="${z.id}">Entrer</span>`
+          : `<span class="btn big" disabled>🔒 Vainquez le donjon de la zone précédente</span>`}</div>
+      </div>
+    </div>`;
+  }).join('');
+  root.innerHTML = `
+    <h2>🌿 Les Terres Sauvages</h2>
+    <p class="muted">Choisissez une zone d'errance (départ : les berges des Marées, zone de l'eau). Chaque zone porte monstres, collectables, un autel de soin et un bâtiment donjon — le vaincre débloque la zone suivante. On y gagne or et XP.</p>
+    <div class="dungeon-grid">${cards}</div>`;
+  root.querySelectorAll('.enter-zone').forEach((el) => {
+    el.onclick = () => enterZone(el.dataset.zone);
+  });
+}
+
+let erranceRAF = null;
+function renderErrance(root) {
+  if (erranceRAF) cancelAnimationFrame(erranceRAF);
+  const st = store.errance;
+  if (!st) { go('#terres'); return; }
+  const zone = getZone(st.zone);
+  root.innerHTML = `
+    <div class="errance-wrap">
+      <div class="top errance-top">
+        <span class="chip">🌿 ${zone?.nature ?? st.zone}</span>
+        <span class="chip">🪙 ${store.gold} or</span>
+        <span class="chip">🛡️ grâce ${st.grace}</span>
+        <span class="spacer"></span>
+        <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
+      </div>
+      <canvas id="errance-canvas"></canvas>
+      <p class="muted errance-hint">Toucher la carte : s'y rendre · toucher le héros : frapper (casse les jarres) · hautes herbes : rencontres · autel : soin complet (+5 pas de grâce) · porte du donjon : combat de zone.</p>
+    </div>`;
+  const canvas = root.querySelector('#errance-canvas');
+  const ctx = canvas.getContext('2d');
+  const fit = () => {
+    canvas.width = Math.max(320, canvas.clientWidth || 360);
+    canvas.height = Math.max(320, canvas.clientHeight || 480);
+  };
+  fit();
+  const T = st.map.t;
+  const cam = { x: 0, y: 0 };
+  const draw = () => {
+    const w = canvas.width, h = canvas.height;
+    cam.x += ((st.hero.x * T - w / 2) - cam.x) * 0.12;
+    cam.y += ((st.hero.y * T - h / 2) - cam.y) * 0.12;
+    ctx.fillStyle = '#0a0f0a';
+    ctx.fillRect(0, 0, w, h);
+    const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
+    const x0 = Math.max(0, Math.floor(cam.x / T) - 1), y0 = Math.max(0, Math.floor(cam.y / T) - 1);
+    const x1 = Math.min(st.map.w - 1, Math.ceil((cam.x + w) / T) + 1), y1 = Math.min(st.map.h - 1, Math.ceil((cam.y + h) / T) + 1);
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+      const t = st.map.terr[st.map.idx(x, y)];
+      ctx.fillStyle = cols[t] ?? '#333';
+      ctx.fillRect(x * T - cam.x, y * T - cam.y, T, T);
+      if (t === 6) { ctx.fillStyle = '#3c6b31'; ctx.fillRect(x * T - cam.x + 6, y * T - cam.y + 8, 4, 14); ctx.fillRect(x * T - cam.x + 16, y * T - cam.y + 4, 4, 18); }
+    }
+    ctx.fillStyle = '#5a4632';
+    ctx.fillRect(st.map.donjon.x * T - cam.x, st.map.donjon.y * T - cam.y, st.map.donjon.w * T, st.map.donjon.h * T);
+    ctx.fillStyle = '#e8e8f2';
+    ctx.fillRect(st.map.autel.x * T - cam.x + 8, st.map.autel.y * T - cam.y + 8, T - 16, T - 16);
+    for (const j of st.map.jarres) {
+      const jid = `jarre-${j.x}-${j.y}`;
+      if (st.broken.includes(jid)) continue;
+      ctx.fillStyle = '#a8763e';
+      ctx.beginPath();
+      ctx.arc(j.x * T - cam.x + T / 2, j.y * T - cam.y + T / 2, 9, 0, 7);
+      ctx.fill();
+    }
+    const hx = st.hero.x * T - cam.x, hy = st.hero.y * T - cam.y;
+    ctx.fillStyle = '#171522';
+    ctx.beginPath(); ctx.arc(hx, hy, 11, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f4f1ea';
+    ctx.beginPath(); ctx.arc(hx, hy - 4, 6, 0, 7); ctx.fill();
+  };
+  let last = performance.now();
+  const loop = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (!store.errance || store.errance !== st) return;
+    const ev = stepErrance(st, dt);
+    if (ev.encounter && !store.zoneFight) {
+      persistErrancePos(); save();
+      startZoneFight(st.zone, { donjon: false });
+      return;
+    }
+    if (ev.arrived) {
+      const o = ev.arrived;
+      if (o.type === 'autel') {
+        interactAutel(st);
+        autelDeSoin();
+        toast('⛲ Autel de soin : PV et mana restaurés, +5 pas de grâce.');
+        save();
+      } else if (o.type === 'porte') {
+        persistErrancePos(); save();
+        startZoneFight(st.zone, { donjon: true });
+        return;
+      } else if (o.type === 'jarre') {
+        const jid = `jarre-${o.x}-${o.y}`;
+        const r = interactJarre(st, jid);
+        if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); }
+        save();
+      }
+    }
+    draw();
+    erranceRAF = requestAnimationFrame(loop);
+  };
+  erranceRAF = requestAnimationFrame(loop);
+  canvas.addEventListener('pointerdown', (e) => {
+    const r = canvas.getBoundingClientRect();
+    const px = e.clientX - r.left + cam.x, py = e.clientY - r.top + cam.y;
+    const hx = st.hero.x * T, hy = st.hero.y * T;
+    if (Math.hypot(px - hx, py - hy) < T) {
+      const fx = Math.floor(st.hero.x), fy = Math.floor(st.hero.y + 1);
+      const j = st.map.jarres.find((jj) => jj.x === fx && jj.y === fy && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+      if (j) {
+        const r2 = interactJarre(st, `jarre-${j.x}-${j.y}`);
+        if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); save(); }
+      }
+      return;
+    }
+    const tx = Math.floor(px / T), ty = Math.floor(py / T);
+    const m = st.map;
+    if (tx === m.autel.x && ty === m.autel.y) { st.pending = { type: 'autel', x: m.autel.x, y: m.autel.y }; }
+    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + 2) { st.pending = { type: 'porte', x: m.donjon.x, y: m.donjon.y + 2 }; }
+    else {
+      const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+      if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+    }
+    if (st.pending) {
+      const o = st.pending;
+      let best = null, bd = 1e9;
+      for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) {
+        const cx = o.x + dx, cy = o.y + dy;
+        if (!m.inb(cx, cy)) continue;
+        const tt = m.terr[m.idx(cx, cy)];
+        if ([2, 3, 4, 7, 8, 9, 10].includes(tt)) continue;
+        const d = Math.hypot(cx + 0.5 - st.hero.x, cy + 0.5 - st.hero.y);
+        if (d < bd) { bd = d; best = { x: cx, y: cy }; }
+      }
+      if (best) setTarget(st, best.x, best.y);
+    } else {
+      setTarget(st, tx, ty);
+    }
+  });
+  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#terres'); };
+}
+
 function renderHome(root) {
   const owned = [...store.collection.entries()].filter(([id, n]) => n > 0 && byId(id)).length;
   const team = [...store.team.slots].filter(Boolean);
@@ -17690,25 +18211,105 @@ function renderHome(root) {
   const exploreBtn = team.length === 0
     ? '<a href="#equipe" class="btn btn-hero">⚔ Composer mon équipe</a>'
     : '<a href="#donjons" class="btn btn-hero">⚔ Explorer le donjon (étage 1)</a>';
+  const nbBrut = Object.values(store.gems?.brut ?? {}).reduce((a, b) => a + b, 0);
+  const quetes = ensureQuetes();
+  const quetesDone = quetes.filter((q) => q.done).length;
   root.innerHTML = `
-    <div class="hero">
-      <div class="hero-inner">
-        <h2>${d.name}</h2>
-        <div class="home-stats">
-          <div class="stat"><b>🪙 ${store.gold}</b><span class="muted">or</span></div>
-          <div class="stat"><b>${owned}</b><span class="muted">/ ${CATALOG.length} cartes dévoilées</span></div>
-          <div class="stat"><b>${store.record || 0}</b><span class="muted">/ ${d.floors} record du donjon</span></div>
-          <div class="stat"><b>${team.length}</b><span class="muted">cartes en équipe</span></div>
-        </div>
-        ${chips ? `<div class="home-team">${chips}</div>` : `<p class="muted">Aucune carte en équipe — composez-la juste ci-dessous.</p>`}
-        <div class="home-actions">
-          ${exploreBtn}
-        </div>
-        <p class="muted">Victoire d\u2019étage : de l\u2019or · boss : or doublé. Les cartes naissent à la Guilde (compagnons, autel), au marchand de la Boutique, en quêtes et en donjon. Prochain boss : étage ${nextBoss}</p>
+    <div class="hub-scene" aria-hidden="true">
+      <svg viewBox="0 0 390 844" preserveAspectRatio="xMidYMax slice">
+        <circle cx="70" cy="110" r="60" fill="#ffe9a8" opacity=".4"/>
+        <circle cx="70" cy="110" r="32" fill="#fff3c9"/>
+        <g fill="#ffffff" opacity=".85">
+          <ellipse cx="255" cy="92" rx="42" ry="13"/><ellipse cx="285" cy="82" rx="26" ry="10"/>
+          <ellipse cx="125" cy="178" rx="30" ry="9" opacity=".6"/>
+        </g>
+        <path d="M0 432 Q80 402 160 434 T390 424 V844 H0 Z" fill="#b9c98f"/>
+        <g>
+          <rect x="-4" y="432" width="84" height="88" fill="#e7d6b3"/><path d="M-10 432 L38 400 L86 432 Z" fill="#b0603f"/>
+          <rect x="86" y="448" width="64" height="72" fill="#efdfbf"/><path d="M82 448 L118 420 L154 448 Z" fill="#a85a3c"/>
+          <rect x="248" y="438" width="70" height="82" fill="#e3cfa8"/><path d="M244 438 L283 406 L322 438 Z" fill="#b0603f"/>
+          <rect x="322" y="454" width="72" height="66" fill="#ead9b6"/><path d="M318 454 L358 428 L398 454 Z" fill="#a85a3c"/>
+        </g>
+        <path d="M0 540 Q195 514 390 542 V844 H0 Z" fill="#d9c9a4"/>
+        <g stroke="#c0ae86" stroke-width="1" opacity=".55" fill="none">
+          <path d="M30 572 L370 598 M0 612 L390 638 M0 662 L390 688 M0 716 L390 742 M0 776 L390 802"/>
+          <path d="M60 548 L20 844 M150 538 L128 844 M250 540 L262 844 M340 550 L368 844"/>
+        </g>
+        <g>
+          <ellipse cx="195" cy="714" rx="68" ry="18" fill="#b8a67e"/>
+          <ellipse cx="195" cy="710" rx="60" ry="15" fill="#9ecfe8"/>
+          <rect x="187" y="662" width="16" height="44" fill="#cabb96"/>
+          <circle cx="195" cy="642" r="8" fill="#d6c8a4"/>
+          <g stroke="#bfe6f7" stroke-width="3" stroke-linecap="round" fill="none" opacity=".95">
+            <path d="M195 646 Q185 670 175 702"/><path d="M195 646 Q205 670 215 702"/><path d="M195 646 Q195 674 195 706"/>
+          </g>
+        </g>
+        <g fill="#5b4632">
+          <g><circle cx="120" cy="668" r="5"/><path d="M114 674 Q112 694 114 704 L126 704 Q128 694 126 674 Z"/></g>
+          <g><circle cx="272" cy="672" r="5"/><path d="M266 678 Q264 698 266 708 L278 708 Q280 698 278 678 Z"/></g>
+          <g><circle cx="86" cy="700" r="4.5"/><path d="M81 706 Q79 724 81 732 L91 732 Q93 724 91 706 Z"/></g>
+          <g><circle cx="300" cy="704" r="4.5"/><path d="M295 710 Q293 728 295 736 L305 736 Q307 728 305 710 Z"/></g>
+        </g>
+      </svg>
+    </div>
+    <div class="hub-veil"></div>
+    <div class="hub-title"><h1>AICG · LIGNÉES</h1><small>Port des Brumes</small></div>
+    <header class="top hub-top">
+      <span class="chip">🪙 ${store.gold}</span>
+      <span class="chip">🔷 ${nbBrut} éclats</span>
+      <span class="spacer"></span>
+      <button type="button" class="back" id="hub-back" title="Retour">←</button>
+    </header>
+    <svg class="hub-npc" id="hub-npc" viewBox="0 0 104 210" role="button" aria-label="Personnage de référence — cliquer pour dialoguer">
+      <path d="M30 62 Q22 130 26 196 L78 196 Q82 130 74 62 Z" fill="#171522"/>
+      <path d="M36 96 Q32 150 40 196 L64 196 Q72 150 68 96 Z" fill="#26233a"/>
+      <ellipse cx="52" cy="44" rx="15" ry="17" fill="#e9d9c8"/>
+      <path d="M35 44 Q33 16 52 14 Q71 16 69 42 L71 62 Q64 50 52 52 Q40 50 33 62 Z" fill="#f4f1ea"/>
+      <path d="M35 44 Q30 78 34 92 L44 90 Q38 70 37 50 Z" fill="#f4f1ea"/>
+      <path d="M69 44 Q74 78 70 92 L60 90 Q66 70 67 50 Z" fill="#f4f1ea"/>
+      <circle cx="46" cy="44" r="2.2" fill="#2c2c34"/><circle cx="58" cy="44" r="2.2" fill="#2c2c34"/>
+    </svg>
+    <div class="hub-bubble" id="hub-bubble"><b>L'Errante</b><span>Bienvenue au Port des Brumes. Les Terres Sauvages vous attendent — composez d'abord une équipe.</span></div>
+    <nav class="hub-menu">
+      <a class="btn gold-frame" href="#donjons"><span class="ic">⛰️</span>Donjons</a>
+      <a class="btn gold-frame" href="#terres"><span class="ic">🌿</span>Terres Sauvages</a>
+      <a class="btn gold-frame" href="#boutique"><span class="ic">🛒</span>Boutique</a>
+      <a class="btn gold-frame" href="#forge"><span class="ic">🛡️</span>Guilde</a>
+      <a class="btn gold-frame" href="#quetes"><span class="ic">📜</span>Quêtes</a>
+      <a class="btn gold-frame" href="#equipe"><span class="ic">🛡️</span>Équipe</a>
+      <a class="btn gold-frame" href="#collection"><span class="ic">🎴</span>Collection</a>
+      <a class="btn gold-frame" href="#inventaire"><span class="ic">🎒</span>Inventaire</a>
+      <a class="btn gold-frame" href="#glossaire"><span class="ic">📖</span>Glossaire</a>
+    </nav>
+    <div class="hub-bottom">
+      <a class="hub-daily" href="#quetes">
+        <span class="ic">📜</span>
+        <span><b>Quêtes du jour</b><small>${quetesDone}/${quetes.length} accomplies — bonus pierre d'éveil</small></span>
+        <span class="eta">voir →</span>
+      </a>
+      <span class="btn big hub-wild" id="hub-wild"><span class="ic">🌿</span>LES TERRES SAUVAGES</span>
+    </div>
+    <div class="pop" id="hub-pop">
+      <div class="card">
+        <h3>Équipe vide</h3>
+        <p>Composez d'abord une équipe (5 cartes max) avant de partir dans les Terres Sauvages.</p>
+        <div class="row"><a class="btn ok" href="#equipe">Composer mon équipe</a><button type="button" class="btn ghost" id="hub-pop-close">Plus tard</button></div>
       </div>
     </div>
     ${saveBoxHtml()}`;
   wireSaveBox(root);
+  const npc = root.querySelector('#hub-npc');
+  const bubble = root.querySelector('#hub-bubble');
+  if (npc && bubble) npc.onclick = () => bubble.classList.toggle('on');
+  const back = root.querySelector('#hub-back');
+  if (back) back.onclick = () => { if (history.length > 1) history.back(); else go('#accueil'); };
+  const wild = root.querySelector('#hub-wild');
+  const pop = root.querySelector('#hub-pop');
+  if (wild) wild.onclick = () => {
+    if (team.length === 0) { pop?.classList.add('on'); return; }
+    go('#terres');
+  };
+  root.querySelector('#hub-pop-close')?.addEventListener('click', () => pop?.classList.remove('on'));
 }
 
 function saveBoxHtml() {
@@ -19426,6 +20027,15 @@ async function animate(events, ms, gen = null) {
           const lastRewards = stageRewards(store.seed, store.stage, 0, store.dungeon, store.diff);
           if (lastRewards?.boss) questProgress('boss');
           if (finalClear) questProgress('finirDonjon');
+          // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
+          if (store.zoneFight) {
+            questProgress('gagnerErrance');
+            if (store.errance) store.errance.grace = 2;
+            if (store.zoneFight.donjon) {
+              unlockZone(store.zoneFight.zone);
+              toast(`✓ Donjon de la zone vaincu — une nouvelle zone s'ouvre dans Les Terres Sauvages !`);
+            }
+          }
           
           
           
@@ -19646,7 +20256,16 @@ async function animate(events, ms, gen = null) {
           store.defiActive = false;
           save();
         }
-        if (won && !store.defiActive && store.stage < dungeonById(store.dungeon).floors) {
+        if (won && store.zoneFight) {
+          const zf = store.zoneFight;
+          store.zoneFight = null;
+          const back = () => {
+            if (recompOpen) { setTimeout(back, 400); return; }
+            save();
+            go('#errance');
+          };
+          setTimeout(back, instant() ? 150 : 1400);
+        } else if (won && !store.defiActive && store.stage < dungeonById(store.dungeon).floors) {
           const chainNext = () => {
             chainTimer = null;
             if (recompOpen) { chainTimer = setTimeout(chainNext, 400); return; } // on attend « Tout ramasser »
@@ -20412,6 +21031,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.27 : Bloc visuel — hub-ville, Terres Sauvages, errance (Marées)', 'L’accueil devient un hub-ville (scène procédurale, héroïne cliquable, quêtes du jour) avec le bouton « LES TERRES SAUVAGES ». Nouvelle page de sélection des zones (départ : la zone de l’eau, déblocage en chaîne par le donjon de zone) et errance top-down dans la zone témoin Marées : carte canvas déterministe, déplacement au clic (A* + lissage), rencontres dans les hautes herbes, autel de soin, combats en chaîne. Migration v26.'],
   ['v1.26 : Correctif — le badge « nouvelle carte » quitte l’équipe', 'Une carte placée en équipe perd enfin son badge ✨ (il n’était vidé que dans la fiche). Le test IHM couvre désormais un parcours complet : départ, équipe, donjon, combat, récompenses, quêtes, boutique, guilde, inventaire, sauvegarde.'],
 
   ['v1.25 : Économie v2 clôturée', 'Boutique complète (potions, éclats, équipement), marchand de créatures, Guilde et compagnons du jour, jetons supprimés (convertis en or, migration v25), quêtes quotidiennes (migration v24). Digest inchangé : f72106ff… 1379/3000.'],
@@ -20714,6 +21334,8 @@ registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
 registerRoute('#quetes', renderQuetes);
+registerRoute('#terres', renderTerres);
+registerRoute('#errance', renderErrance);
 registerRoute('#boutique', renderBoutique);
 registerRoute('#inventaire', renderInventaire);
 registerRoute('#combat', renderCombat);

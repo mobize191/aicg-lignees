@@ -16,11 +16,11 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'treeOfRace', 'cranPctOfRace', 'noLossPctOf', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
   'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
-  'resolveSpellEntry', 'drinkPotion', 'recrutableMonsters', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf'];
+  'resolveSpellEntry', 'drinkPotion', 'recrutableMonsters', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf', 'genZoneMap', 'astar', 'smoothPath', 'createErranceState', 'setTarget', 'stepErrance', 'interactAutel', 'interactJarre', 'zoneUnlocked', 'unlockZone', 'ET'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',
-    'src/engine/combat.js', 'src/engine/summon.js', 'src/engine/progression.js', 'src/engine/migrate.js'];
+    'src/engine/combat.js', 'src/engine/summon.js', 'src/engine/progression.js', 'src/errance.js', 'src/engine/migrate.js'];
   const body = files.filter((f) => existsSync(f)).map((f) => readFileSync(f, 'utf8')).join('\n');
   const code = `const DATA = ${JSON.stringify(data)};\n${body}\n`
     + `const out = {};\nfor (const n of ${JSON.stringify(NAMES)}) { try { out[n] = eval(n); } catch {} }\nreturn out;`;

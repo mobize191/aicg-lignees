@@ -1085,8 +1085,43 @@ async function main() {
     check('B11 m inventaire groupé (potions + pièces + gemmes)', invHtml.includes('Potions') && invHtml.includes('Pièces') && invHtml.includes('Gemmes'), '');
     const rawSave = mem.get('aicg-save') ?? mem.get([...mem.keys()][0]);
     const parsed = rawSave ? JSON.parse(rawSave) : null;
-    check('B11 n sauvegarde persistée (version 25, quêtes, or)', !!(parsed && parsed.version === 25 && parsed.quetes && Number.isFinite(parsed.gold)), parsed ? `v${parsed.version} or=${parsed.gold}` : 'rien');
+    check('B11 n sauvegarde persistée (version courante, quêtes, or, zones)', !!(parsed && parsed.version === api.DATA.engine.CURRENT_VERSION && parsed.quetes && Number.isFinite(parsed.gold) && Array.isArray(parsed.zonesUnlocked)), parsed ? `v${parsed.version} or=${parsed.gold}` : 'rien');
     check('B11 o 0 exception parcours complet', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
+  {
+    // ---------- B12 : bloc visuel — hub-ville, Terres Sauvages, errance top-down ----------
+    mem.clear();
+    store.instances = []; store.collection = new Map(); store.departFait = true;
+    store.team.slots = []; store.gold = 300; store.zonesUnlocked = []; store.zonesVisitees = []; store.errance = null;
+    for (const id of ['n1', 'n2']) { const inst = api.newInst(id, 12); store.collection.set(inst.iid, inst); }
+    api.go('#accueil');
+    await wait(40);
+    check('B12 a hub-ville : scène + voile + titre + menu latéral + bouton Terres Sauvages', !!els.get('app').querySelector('.hub-scene') && !!els.get('app').querySelector('.hub-menu') && !!els.get('app').querySelector('#hub-wild') && !!els.get('app').querySelector('.hub-npc'), '');
+    check('B12 b Terres Sauvages avec équipe vide : pop-up équipe vide', (() => { els.get('app').querySelector('#hub-wild').click(); return els.get('app').querySelector('#hub-pop').classList.contains('on'); })(), '');
+    els.get('app').querySelector('#hub-pop-close').click();
+    setup(['n1', 'n2'], 12);
+    api.go('#terres');
+    await wait(30);
+    const zoneBtns = els.get('app').querySelectorAll('.enter-zone');
+    check('B12 c Terres Sauvages : seule la zone de départ (eau) est ouverte', zoneBtns.length === 1 && zoneBtns[0].dataset.zone === 'zone-marees', [...zoneBtns].map((b) => b.dataset.zone).join());
+    zoneBtns[0].click();
+    await wait(60);
+    check('B12 d entrée en zone : état d’errance créé, canvas rendu', !!store.errance && !!els.get('app').querySelector('#errance-canvas'), store.errance?.zone ?? 'rien');
+    const st = store.errance;
+    check('B12 e carte générée : donjon + autel + jarres + spawn praticable', !!st.map.donjon && !!st.map.autel && st.map.jarres.length > 0, '');
+    const okMove = api.setTarget(st, Math.floor(st.map.spawn.x) + 2, Math.floor(st.map.spawn.y));
+    check('B12 f setTarget : chemin A* trouvé vers une tuile valide', okMove === true && st.hero.path.length > 0, `path=${st.hero.path.length}`);
+    let ev = null;
+    for (let i = 0; i < 400 && !(ev && ev.encounter); i++) { ev = api.stepErrance(st, 0.05, () => 0.99); }
+    check('B12 g rencontres : pas de rencontre hors herbes (rng haut)', ev && ev.encounter !== true, '');
+    api.go('#terres');
+    await wait(30);
+    check('B12 h retour aux Terres : zone visitée marquée', store.zonesVisitees.includes('zone-marees') && els.get('app').innerHTML.includes('visitée'), '');
+    check('B12 i déblocage : zone suivante verrouillée tant que le donjon de zone n’est pas vaincu', api.zoneUnlocked('zone-forge') === false, '');
+    api.unlockZone('zone-marees');
+    check('B12 j déblocage en chaîne après victoire du donjon de zone', api.zoneUnlocked('zone-forge') === true, '');
+    check('B12 k 0 exception bloc visuel', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);

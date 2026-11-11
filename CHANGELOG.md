@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.27] — 2026-11-11 — Bloc visuel : hub-ville, Les Terres Sauvages, errance top-down (zone témoin Marées)
+
+L'accueil devient un hub-ville (scène procédurale, menu latéral, quêtes du jour, héroïne cliquable) avec un gros bouton « LES TERRES SAUVAGES ». Nouvelle page Terres Sauvages : sélecteur de zones (départ verrouillé sur la zone de l'eau, déblocage en chaîne par le donjon de zone). Errance top-down dans la zone témoin Marées : carte canvas procédurale déterministe (seed en data), déplacement au clic avec A* + lissage, rencontres dans les hautes herbes, autel de soin et jarres, combats dans la chaîne d'étages (victoire = déblocage). Migration v26 non destructive. 139 tests, smoke 269 checks (11 nouveaux B12). Digest inchangé `f72106ff…` 1379/3000.
+
+
 ## [1.26] — 2026-11-11 — Correctif IHM + parcours de test complet
 
 Le badge « nouvelle carte » (✨) ne reste plus affiché sur les cartes placées en équipe. Le smoke IHM gagne une section B11 : parcours complet (départ 2 cartes, équipe, donjon, combat, Récompenses, quêtes, Boutique, Guilde, inventaire, sauvegarde v25). 134 tests, smoke 258 checks (2 échecs préexistants hors chantier). Digest inchangé `f72106ff…` 1379/3000.
