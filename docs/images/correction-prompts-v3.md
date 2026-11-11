@@ -35,6 +35,6 @@
 ## 3. Process de relance (vague 3)
 
 1. `build-prompts.mjs` v3 : socle NL painterly corrigé → `prompts-v3.json` (271). Les 271 seeds restent ceux de `seeds-v2.csv`.
-2. **Témoin d'abord** : 6 cartes contrastées (e14 Titan, f18 Ombeline, d6 Kairos, z19 Pyrrha, a15 Kenji, g16 Mycola) — validation visuelle par Marc-Olivier avant la suite.
-3. Puis 271 complet (53 refs + 212 génériques + 6 fonds + héros + stills), retries inclus.
+2. **Pas de point d'arrêt** (choix de Marc-Olivier du 11/11) : les 271 partent en une seule session (53 refs + 212 génériques + 6 fonds + héros + stills + série 2 IPAdapter), les 6 cartes témoins (e14, f18, d6, z19, a15, g16) générées EN PREMIER et mises en tête de la planche de contrôle pour le QA vision immédiat à la réception.
+3. QA vision du couloir design à la réception du rapport ; recommandations garder / retry / relance par lot.
 4. Rapport : `tools/out-v2/RAPPORT-vague3.md`.
