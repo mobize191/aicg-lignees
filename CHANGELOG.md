@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.16] — 2026-11-11 — Boucle de jeu v2, lot 4 : drops v2, Récompenses, inventaire, équipement
+
+**Écran « Récompenses » après chaque combat** : or, XP, drops aux couleurs de rareté et recrues, chaque gain cliquable, « Tout ramasser » pour reprendre. **Drops v2** : matériau de la zone sur les monstres, pièce d'équipement du set de zone + matière du boss garanties sur les boss, équipement à taux très faible ailleurs, gemmes brutes vendables. **Inventaire** groupé (potions, matériaux par zone, gemmes, pièces). **Équipement sur la fiche** : 2 slots par carte (arme typée + armure) et 2 slots d'équipe, bonus de set +5 pts % (`data/equipment.json`, 150 pièces). Migration v23. Digest inchangé `f72106ff…` 1379/3000. 124 tests, smoke 205 checks (10 nouveaux verts).
+
+
 ## [1.15] — 2026-11-11 — Boucle de jeu v2, lot 3 : départ à 2 cartes et recrutement naturel
 
 **Départ de partie à 2 cartes** : à la première partie, 4 novices sont proposés (un par race — humain, bestial, mystique, divin) ; vous en choisissez un, un second est tiré au hasard parmi les trois restantes. Plus d'équipe complète de départ. **Recrutement naturel** : après une victoire, chaque vaincu (hors boss et nommés) a ~1 % de chance de demander à rejoindre votre collection — taux calibré par zone dans `data/zones.json`, toast de recrue, limite de 3 exemplaires par carte. Migration v22 non destructive (les sauvegardes commencées sautent l'écran de départ). Digest inchangé `f72106ff…` 1379/3000. 122 tests, smoke 195 checks (7 nouveaux verts).

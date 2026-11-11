@@ -1,0 +1,2236 @@
+{
+ "pieces": [
+  {
+   "id": "eq-guerrier-frappe-c",
+   "nom": "Épée de milicien",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-finesse-c",
+   "nom": "Rapière de milicien",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "finesse",
+   "rarity": "C",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-frappe-uc",
+   "nom": "Lame de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-finesse-uc",
+   "nom": "Rapière de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "finesse",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-frappe-r",
+   "nom": "Épée du guet de Marées",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-finesse-r",
+   "nom": "Rapière des Marées",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "finesse",
+   "rarity": "R",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-frappe-sr",
+   "nom": "Tailleuse de siège du Zénith",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-guerrier-finesse-sr",
+   "nom": "Rapière du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "finesse",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-frappe-c",
+   "nom": "Bâton d’apprenti",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-finesse-c",
+   "nom": "Bâton noueux de milicien",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "finesse",
+   "rarity": "C",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-frappe-uc",
+   "nom": "Bâton du Bosquet Profond",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-finesse-uc",
+   "nom": "Bâton noueux de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "finesse",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-frappe-r",
+   "nom": "Bâton d’arcane de la Crypte",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-finesse-r",
+   "nom": "Bâton noueux des Marées",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "finesse",
+   "rarity": "R",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-frappe-sr",
+   "nom": "Sceptre du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-mage-finesse-sr",
+   "nom": "Bâton noueux du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "finesse",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-frappe-c",
+   "nom": "Sceptre de chapelain",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-finesse-c",
+   "nom": "Sceptre de sagette de milicien",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "finesse",
+   "rarity": "C",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-frappe-uc",
+   "nom": "Sceptre du Baume",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-finesse-uc",
+   "nom": "Sceptre de sagette de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "finesse",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-frappe-r",
+   "nom": "Bénitier de la Crypte Oubliée",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-finesse-r",
+   "nom": "Sceptre de sagette des Marées",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "finesse",
+   "rarity": "R",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-frappe-sr",
+   "nom": "Sceptre de la Ferveur",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-prêtre-finesse-sr",
+   "nom": "Sceptre de sagette du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "finesse",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-frappe-c",
+   "nom": "Dagues émoussées",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-finesse-c",
+   "nom": "Dagues d’élan de milicien",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "finesse",
+   "rarity": "C",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-frappe-uc",
+   "nom": "Crochets de la Ruse",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-finesse-uc",
+   "nom": "Dagues d’élan de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "finesse",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-frappe-r",
+   "nom": "Dagues de la nuit des Marées",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-finesse-r",
+   "nom": "Dagues d’élan des Marées",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "finesse",
+   "rarity": "R",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-frappe-sr",
+   "nom": "Stylets de l’Ombre du Zénith",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-assassin-finesse-sr",
+   "nom": "Dagues d’élan du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "finesse",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-frappe-c",
+   "nom": "Focus de novice",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-finesse-c",
+   "nom": "Focus astral de milicien",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "finesse",
+   "rarity": "C",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-frappe-uc",
+   "nom": "Focus de la Crypte",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-finesse-uc",
+   "nom": "Focus astral de la Forge Cendrée",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "finesse",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-frappe-r",
+   "nom": "Talisman de l’Entrave",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-finesse-r",
+   "nom": "Focus astral des Marées",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "finesse",
+   "rarity": "R",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-frappe-sr",
+   "nom": "Iris de Nuit Éternelle",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-occultiste-finesse-sr",
+   "nom": "Focus astral du Zénith Ardent",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "finesse",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "intPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-armure-c",
+   "nom": "Tunique de milicien",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-armure-uc",
+   "nom": "Brigandine de la Forge Cendrée",
+   "slot": "armure",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-armure-r",
+   "nom": "Haubert des Marées",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-armure-sr",
+   "nom": "Égide du Zénith Ardent",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-bannière-c",
+   "nom": "Bannière de guerre",
+   "slot": "equipe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-bannière-uc",
+   "nom": "Bannière de guerre",
+   "slot": "equipe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-bannière-r",
+   "nom": "Bannière de guerre",
+   "slot": "equipe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-bannière-sr",
+   "nom": "Bannière de guerre",
+   "slot": "equipe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-oriflamme-c",
+   "nom": "Oriflamme de vigie",
+   "slot": "equipe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-oriflamme-uc",
+   "nom": "Oriflamme de vigie",
+   "slot": "equipe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-oriflamme-r",
+   "nom": "Oriflamme de vigie",
+   "slot": "equipe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-oriflamme-sr",
+   "nom": "Oriflamme de vigie",
+   "slot": "equipe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "agiPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-reliquaire-c",
+   "nom": "Reliquaire de chapelle",
+   "slot": "equipe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-reliquaire-uc",
+   "nom": "Reliquaire de chapelle",
+   "slot": "equipe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-reliquaire-r",
+   "nom": "Reliquaire de chapelle",
+   "slot": "equipe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-reliquaire-sr",
+   "nom": "Reliquaire de chapelle",
+   "slot": "equipe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-talisman-c",
+   "nom": "Talisman de camp (C)",
+   "slot": "equipe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "manaRegen",
+    "n": 1
+   },
+   "prix": 200,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-talisman-uc",
+   "nom": "Talisman de camp (UC)",
+   "slot": "equipe",
+   "rarity": "UC",
+   "bonus": {
+    "stat": "manaRegen",
+    "n": 1
+   },
+   "prix": 400,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-talisman-r",
+   "nom": "Talisman de camp (R)",
+   "slot": "equipe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "manaRegen",
+    "n": 2
+   },
+   "prix": 800,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-equipe-talisman-sr",
+   "nom": "Talisman de camp (SR)",
+   "slot": "equipe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "manaRegen",
+    "n": 3
+   },
+   "prix": 1600,
+   "source": "boutique"
+  },
+  {
+   "id": "eq-set-marees-base-armure",
+   "nom": "Robe de la Sirène",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-base-arme-Guerrier",
+   "nom": "Épée de la Sirène",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-base-arme-Mage",
+   "nom": "Bâton de la Sirène",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-base-arme-Prêtre",
+   "nom": "Sceptre de la Sirène",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-base-arme-Assassin",
+   "nom": "Dagues de la Sirène",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-base-arme-Occultiste",
+   "nom": "Focus de la Sirène",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-armure",
+   "nom": "Robe supérieure de la Sirène",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-arme-Guerrier",
+   "nom": "Épée supérieure de la Sirène",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-arme-Mage",
+   "nom": "Bâton supérieure de la Sirène",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-arme-Prêtre",
+   "nom": "Sceptre supérieure de la Sirène",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-arme-Assassin",
+   "nom": "Dagues supérieure de la Sirène",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-supérieure-arme-Occultiste",
+   "nom": "Focus supérieure de la Sirène",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-armure",
+   "nom": "Robe royale de la Sirène",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-arme-Guerrier",
+   "nom": "Épée royale de la Sirène",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-arme-Mage",
+   "nom": "Bâton royale de la Sirène",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-arme-Prêtre",
+   "nom": "Sceptre royale de la Sirène",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-arme-Assassin",
+   "nom": "Dagues royale de la Sirène",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-marees-royale-arme-Occultiste",
+   "nom": "Focus royale de la Sirène",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-marees",
+   "zone": "zone-marees",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-armure",
+   "nom": "Robe du Maître des Fours",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-arme-Guerrier",
+   "nom": "Épée du Maître des Fours",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-arme-Mage",
+   "nom": "Bâton du Maître des Fours",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-arme-Prêtre",
+   "nom": "Sceptre du Maître des Fours",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-arme-Assassin",
+   "nom": "Dagues du Maître des Fours",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-base-arme-Occultiste",
+   "nom": "Focus du Maître des Fours",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-armure",
+   "nom": "Robe supérieure du Maître des Fours",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-arme-Guerrier",
+   "nom": "Épée supérieure du Maître des Fours",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-arme-Mage",
+   "nom": "Bâton supérieure du Maître des Fours",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-arme-Prêtre",
+   "nom": "Sceptre supérieure du Maître des Fours",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-arme-Assassin",
+   "nom": "Dagues supérieure du Maître des Fours",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-supérieure-arme-Occultiste",
+   "nom": "Focus supérieure du Maître des Fours",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-armure",
+   "nom": "Robe royale du Maître des Fours",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-arme-Guerrier",
+   "nom": "Épée royale du Maître des Fours",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-arme-Mage",
+   "nom": "Bâton royale du Maître des Fours",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-arme-Prêtre",
+   "nom": "Sceptre royale du Maître des Fours",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-arme-Assassin",
+   "nom": "Dagues royale du Maître des Fours",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-forge-royale-arme-Occultiste",
+   "nom": "Focus royale du Maître des Fours",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-forge",
+   "zone": "zone-forge",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-armure",
+   "nom": "Robe de la Reine des Spores",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-arme-Guerrier",
+   "nom": "Épée de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-arme-Mage",
+   "nom": "Bâton de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-arme-Prêtre",
+   "nom": "Sceptre de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-arme-Assassin",
+   "nom": "Dagues de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-base-arme-Occultiste",
+   "nom": "Focus de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-armure",
+   "nom": "Robe supérieure de la Reine des Spores",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-arme-Guerrier",
+   "nom": "Épée supérieure de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-arme-Mage",
+   "nom": "Bâton supérieure de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-arme-Prêtre",
+   "nom": "Sceptre supérieure de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-arme-Assassin",
+   "nom": "Dagues supérieure de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-supérieure-arme-Occultiste",
+   "nom": "Focus supérieure de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-armure",
+   "nom": "Robe royale de la Reine des Spores",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-arme-Guerrier",
+   "nom": "Épée royale de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-arme-Mage",
+   "nom": "Bâton royale de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-arme-Prêtre",
+   "nom": "Sceptre royale de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-arme-Assassin",
+   "nom": "Dagues royale de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-bosquet-royale-arme-Occultiste",
+   "nom": "Focus royale de la Reine des Spores",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-bosquet",
+   "zone": "zone-bosquet",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-armure",
+   "nom": "Robe de la Faucheuse",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-arme-Guerrier",
+   "nom": "Épée de la Faucheuse",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-arme-Mage",
+   "nom": "Bâton de la Faucheuse",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-arme-Prêtre",
+   "nom": "Sceptre de la Faucheuse",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-arme-Assassin",
+   "nom": "Dagues de la Faucheuse",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-base-arme-Occultiste",
+   "nom": "Focus de la Faucheuse",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-armure",
+   "nom": "Robe supérieure de la Faucheuse",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-arme-Guerrier",
+   "nom": "Épée supérieure de la Faucheuse",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-arme-Mage",
+   "nom": "Bâton supérieure de la Faucheuse",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-arme-Prêtre",
+   "nom": "Sceptre supérieure de la Faucheuse",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-arme-Assassin",
+   "nom": "Dagues supérieure de la Faucheuse",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-supérieure-arme-Occultiste",
+   "nom": "Focus supérieure de la Faucheuse",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-armure",
+   "nom": "Robe royale de la Faucheuse",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-arme-Guerrier",
+   "nom": "Épée royale de la Faucheuse",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-arme-Mage",
+   "nom": "Bâton royale de la Faucheuse",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-arme-Prêtre",
+   "nom": "Sceptre royale de la Faucheuse",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-arme-Assassin",
+   "nom": "Dagues royale de la Faucheuse",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-crypte-royale-arme-Occultiste",
+   "nom": "Focus royale de la Faucheuse",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-crypte",
+   "zone": "zone-crypte",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-armure",
+   "nom": "Robe de l’Astre Capiteux",
+   "slot": "armure",
+   "rarity": "C",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-arme-Guerrier",
+   "nom": "Épée de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-arme-Mage",
+   "nom": "Bâton de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-arme-Prêtre",
+   "nom": "Sceptre de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-arme-Assassin",
+   "nom": "Dagues de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-base-arme-Occultiste",
+   "nom": "Focus de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "C",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.05
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-armure",
+   "nom": "Robe supérieure de l’Astre Capiteux",
+   "slot": "armure",
+   "rarity": "R",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-arme-Guerrier",
+   "nom": "Épée supérieure de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-arme-Mage",
+   "nom": "Bâton supérieure de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-arme-Prêtre",
+   "nom": "Sceptre supérieure de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-arme-Assassin",
+   "nom": "Dagues supérieure de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-supérieure-arme-Occultiste",
+   "nom": "Focus supérieure de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "R",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.15
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-armure",
+   "nom": "Robe royale de l’Astre Capiteux",
+   "slot": "armure",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "hpPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-arme-Guerrier",
+   "nom": "Épée royale de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Guerrier",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-arme-Mage",
+   "nom": "Bâton royale de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Mage",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-arme-Prêtre",
+   "nom": "Sceptre royale de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Prêtre",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-arme-Assassin",
+   "nom": "Dagues royale de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Assassin",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  },
+  {
+   "id": "eq-set-zenith-royale-arme-Occultiste",
+   "nom": "Focus royale de l’Astre Capiteux",
+   "slot": "arme",
+   "classe": "Occultiste",
+   "ligne": "frappe",
+   "rarity": "SR",
+   "bonus": {
+    "stat": "atkPct",
+    "pct": 0.25
+   },
+   "set": "set-zenith",
+   "zone": "zone-zenith",
+   "prix": null,
+   "source": "set"
+  }
+ ],
+ "sets": {
+  "set-marees": {
+   "nom": "de la Sirène",
+   "zone": "zone-marees"
+  },
+  "set-forge": {
+   "nom": "du Maître des Fours",
+   "zone": "zone-forge"
+  },
+  "set-bosquet": {
+   "nom": "de la Reine des Spores",
+   "zone": "zone-bosquet"
+  },
+  "set-crypte": {
+   "nom": "de la Faucheuse",
+   "zone": "zone-crypte"
+  },
+  "set-zenith": {
+   "nom": "de l’Astre Capiteux",
+   "zone": "zone-zenith"
+  }
+ }
+}

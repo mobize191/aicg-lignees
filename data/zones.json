@@ -87,6 +87,15 @@
   ],
   "recrute": {
    "taux": 0.008
+  },
+  "materiau": {
+   "id": "ecume",
+   "nom": "Écume de marée",
+   "taux": 0.3
+  },
+  "matiereBoss": {
+   "id": "perle-souverain",
+   "nom": "Perle du Souverain"
   }
  },
  {
@@ -163,6 +172,15 @@
   ],
   "recrute": {
    "taux": 0.01
+  },
+  "materiau": {
+   "id": "cendre",
+   "nom": "Cendre ardente",
+   "taux": 0.32
+  },
+  "matiereBoss": {
+   "id": "coeur-braise",
+   "nom": "Cœur de braise"
   }
  },
  {
@@ -236,6 +254,15 @@
   ],
   "recrute": {
    "taux": 0.012
+  },
+  "materiau": {
+   "id": "seve",
+   "nom": "Sève ancienne",
+   "taux": 0.34
+  },
+  "matiereBoss": {
+   "id": "ecorce-coeur",
+   "nom": "Écorce du Cœur du Bosquet"
   }
  },
  {
@@ -318,6 +345,15 @@
   ],
   "recrute": {
    "taux": 0.014
+  },
+  "materiau": {
+   "id": "larme",
+   "nom": "Larme de noyé",
+   "taux": 0.36
+  },
+  "matiereBoss": {
+   "id": "os-poli",
+   "nom": "Os poli des caveaux"
   }
  },
  {
@@ -400,6 +436,15 @@
   ],
   "recrute": {
    "taux": 0.016
+  },
+  "materiau": {
+   "id": "eclat-solaire",
+   "nom": "Éclat solaire",
+   "taux": 0.38
+  },
+  "matiereBoss": {
+   "id": "cendre-astre",
+   "nom": "Cendre de l’Astre"
   }
  }
 ]

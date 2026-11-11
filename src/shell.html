@@ -988,6 +988,7 @@ animation: newpulse 1.6s infinite;
   <a href="#forge">⚒️ Forge</a>
   <a href="#donjons">⛰️ Donjons</a>
   <a href="#boutique">🛒 Boutique</a>
+  <a href="#inventaire">🎒 Inventaire</a>
   <a href="#glossaire">📖 Glossaire</a>
 </nav>
 <main id="app"></main>
@@ -998,6 +999,12 @@ animation: newpulse 1.6s infinite;
 </html>
 .sort-badge.b-objet { background: rgba(77, 208, 225, .18); color: #7ce7f5; border-color: rgba(77, 208, 225, .45); }
 .shop-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border: 1px solid rgba(124, 77, 255, .25); border-radius: 10px; margin: 6px 0; flex-wrap: wrap; }
+.recomp-list { display: flex; flex-direction: column; gap: 6px; max-height: 52dvh; overflow-y: auto; }
+.recomp-row { text-align: left; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+.recomp-row .chip.r-C, .chip.r-C { color: #9aa5b5; } .chip.r-N { color: #8d99ad; } .chip.r-UC { color: #61d691; } .chip.r-R { color: #45a3ff; } .chip.r-SR { color: #b06bff; } .chip.r-UR { color: #ff9f43; } .chip.r-L { color: #ffd76e; } .chip.r-M { color: #ff6e8a; }
+.recomp-row.r-SR, .recomp-row.r-UR, .recomp-row.r-L, .recomp-row.r-M { border-left: 3px solid currentColor; }
+.equip-slots { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0; }
+.equip-slot { min-height: 32px; }
 .row-lab { width: 100%; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #93a0b5; margin-top: 6px; }
 .row.back { opacity: .92; }
 .line.team .row { justify-content: flex-start; }

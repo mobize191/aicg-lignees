@@ -375,3 +375,14 @@ test('boucle v2 lot 3 : recrutableMonsters exclut boss et nommés (nom « préno
   const st2 = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 20 }], arriere: [] }, w2, 5);
   assert.equal(E.recrutableMonsters(st2).length, 0, 'e13 (nommé) exclu');
 });
+
+test('boucle v2 lot 4 : makeUnit applique les bonus d\'équipement en % (stats de base) + régén mana', () => {
+  const E = loadEngine();
+  const base = E.makeUnit(E.getCard('n1'), 'u1', 10);
+  const withEq = E.makeUnit({ ...E.getCard('n1'), level: 10, equip: { atkPct: 0.15, hpPct: 0.25, agiPct: 0.10, intPct: 0, manaRegen: 2 } }, 'u2', 10);
+  assert.ok(withEq.atk > base.atk, 'ATQ boostée');
+  assert.ok(withEq.maxHp > base.maxHp, 'PV boostés');
+  assert.ok(withEq.agi > base.agi, 'AGI boostée');
+  assert.equal(withEq.manaRegen, base.manaRegen + 2, 'régén mana du talisman ajoutée');
+  assert.equal(Math.round(base.atk * 1.15), withEq.atk, 'bonus appliqué sur la stat de base (arrondi)');
+});

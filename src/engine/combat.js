@@ -7,15 +7,17 @@ function makeUnit(card, uid = card.id, level = null) {
   const m = 1 + LEVEL_BONUS * (lvl - 1);
   const cm = classeMods(card);
   const cranPct = cranPctOfRace(raceOfCard(card));
+  // boucle v2 lot 4 : bonus d'équipement en % sur les stats de base (posés par l'UI depuis data/equipment.json)
+  const eq = card.equip ?? null;
   const u = {
     uid, cardId: card.id, name: card.name, rarity: card.rarity,
     classe: card.classe, element: card.element, race: raceOfCard(card),
     cranPct,
-    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100))),
-    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
-    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100))),
-    agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + cranPct / 100))),
-    int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + cranPct / 100))),
+    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100) * (1 + (eq?.atkPct ?? 0)))),
+    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)))),
+    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)))),
+    agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.agiPct ?? 0)))),
+    int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.intPct ?? 0)))),
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
@@ -36,7 +38,7 @@ function makeUnit(card, uid = card.id, level = null) {
   const manaBase = card.mana ?? SOLO_MANA.max;
   const regenBase = card.manaRegen ?? SOLO_MANA.regen;
   u.manaMax = Math.round(manaBase * (1 + Math.min(M.MANA_CAP_RATIO, (u.int * M.MANA_PER_INT) / manaBase)));
-  u.manaRegen = Math.round(regenBase * (1 + Math.min(M.MANA_CAP_RATIO, (u.int * M.MANA_REGEN_PER_INT) / regenBase))) + (card.gimmick === 'prestige' ? 2 : 0);
+  u.manaRegen = Math.round(regenBase * (1 + Math.min(M.MANA_CAP_RATIO, (u.int * M.MANA_REGEN_PER_INT) / regenBase))) + (card.gimmick === 'prestige' ? 2 : 0) + (eq?.manaRegen ?? 0);
   u.mana = Math.min(u.manaMax, Math.round(u.manaMax * M.MANA_START_RATIO));
   return u;
 }

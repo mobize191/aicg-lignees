@@ -167,7 +167,18 @@ function v21to22(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22 };
+// v22 -> v23 (boucle v2 lot 4) : inventaire étendu — matériaux de zone, pièces d'équipement
+// possédées, slots d'équipement (2 par carte + 2 d'équipe). Non destructif.
+function v22to23(s) {
+  s.version = 23;
+  if (!s.materiaux || typeof s.materiaux !== 'object') s.materiaux = {};
+  if (!s.equipment || typeof s.equipment !== 'object') s.equipment = {};
+  if (!s.equip || typeof s.equip !== 'object') s.equip = {};
+  if (!Array.isArray(s.equipTeam) || s.equipTeam.length !== 2) s.equipTeam = [null, null];
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

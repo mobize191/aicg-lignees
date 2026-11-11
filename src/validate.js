@@ -206,6 +206,27 @@ function validate(data, errors) {
     if (!c) push(`le départ propose la carte inconnue ${id}`, 'EXI-DATA-1');
     else if (!c.raciale) push(`la proposition de départ ${id} n'est pas une naissance`, 'EXI-DATA-1');
   }
+  // équipement (boucle v2 lot 4) : slots valides, arme typée par classe, rareté connue, bonus positif
+  const eqIds = new Set();
+  const eqSets = new Set(Object.keys(data.equipment?.sets ?? {}));
+  const classesConnues = new Set((data.engine?.CLASSES ?? []));
+  for (const p of data.equipment?.pieces ?? []) {
+    if (eqIds.has(p.id)) push(`doublon de pièce ${p.id}`, 'EXI-DATA-3');
+    eqIds.add(p.id);
+    if (!['arme', 'armure', 'equipe'].includes(p.slot)) push(`la pièce ${p.id} a un slot invalide (${p.slot})`, 'EXI-DATA-1');
+    if (p.slot === 'arme' && !classesConnues.has(p.classe)) push(`l'arme ${p.id} a une classe inconnue (${p.classe})`, 'EXI-DATA-1');
+    if (p.slot !== 'arme' && p.classe) push(`la pièce ${p.id} porte une classe hors arme`, 'EXI-DATA-1');
+    if (!ranks.has(p.rarity)) push(`la pièce ${p.id} a une rareté inconnue (${p.rarity})`, 'EXI-DATA-1');
+    if (p.set && !eqSets.has(p.set)) push(`la pièce ${p.id} référence le set inconnu ${p.set}`, 'EXI-DATA-1');
+    if (p.bonus?.stat === 'manaRegen') { if (!(Number.isInteger(p.bonus.n) && p.bonus.n > 0)) push(`la pièce ${p.id} a un bonus mana invalide`, 'EXI-DATA-1'); }
+    else if (!(typeof p.bonus?.pct === 'number' && p.bonus.pct > 0)) push(`la pièce ${p.id} a un pourcentage invalide`, 'EXI-DATA-1');
+  }
+  // zones lot 4 : matériau de zone et matière de boss
+  for (const z of data.zones ?? []) {
+    if (!z.materiau?.id || !z.materiau?.nom) push(`la zone ${z.id} n'a pas de matériau`, 'EXI-DATA-1');
+    else if (!(typeof z.materiau.taux === 'number' && z.materiau.taux >= 0 && z.materiau.taux <= 1)) push(`la zone ${z.id} a un taux de matériau hors bornes`, 'EXI-DATA-1');
+    if (!z.matiereBoss?.id || !z.matiereBoss?.nom) push(`la zone ${z.id} n'a pas de matière de boss`, 'EXI-DATA-1');
+  }
   // potions (boucle v2 lot 1) : id unique, genre soin/mana, pourcentage et prix valides
   const potionIds = new Set();
   for (const [pid, p] of Object.entries(data.potions ?? {})) {

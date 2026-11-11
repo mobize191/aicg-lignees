@@ -1,5 +1,5 @@
 {
- "version": 22,
+ "version": 23,
  "teams": [
   {
    "slots": [
@@ -362,5 +362,12 @@
   "active": false,
   "units": {}
  },
- "departFait": true
+ "departFait": true,
+ "materiaux": {},
+ "equipment": {},
+ "equip": {},
+ "equipTeam": [
+  null,
+  null
+ ]
 }

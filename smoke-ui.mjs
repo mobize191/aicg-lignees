@@ -835,6 +835,48 @@ async function main() {
     check('B3 g 0 exception lot 3', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- boucle v2 lot 4 : drops v2, Récompenses, inventaire, équipement ----------
+  {
+    mem.clear();
+    check('B4 a catalogue équipement en data (150 pièces, sets par zone)', api.EQUIPMENT.length === 150 && Object.keys(api.DATA.equipment.sets).length === 5, String(api.EQUIPMENT.length));
+    // équipement : bonus de set et application moteur
+    store.equipment['eq-guerrier-frappe-c'] = 1;
+    store.equipment['eq-armure-c'] = 1;
+    store.equip['n1'] = { arme: 'eq-guerrier-frappe-c', armure: 'eq-armure-c' };
+    const eb = api.equipBonusOfCard('n1');
+    check('B4 b bonus de carte = somme des pièces (+5 % ATQ, +5 % PV)', Math.abs(eb.atkPct - 0.05) < 1e-9 && Math.abs(eb.hpPct - 0.05) < 1e-9, JSON.stringify(eb));
+    // set : arme + armure du même set -> +5 pts de pourcentage sur les deux
+    store.equipment['eq-set-marees-base-arme-Guerrier'] = 1;
+    store.equipment['eq-set-marees-base-armure'] = 1;
+    store.equip['n1'] = { arme: 'eq-set-marees-base-arme-Guerrier', armure: 'eq-set-marees-base-armure' };
+    const ebSet = api.equipBonusOfCard('n1');
+    check('B4 c bonus de set : +5 pts % sur les deux pièces (0.05 -> 0.10)', Math.abs(ebSet.atkPct - 0.10) < 1e-9 && Math.abs(ebSet.hpPct - 0.10) < 1e-9, JSON.stringify(ebSet));
+    const piece = api.bossPieceFor('zenith', 5);
+    check('B4 d boss Enfer : pièce du set zone, niveau royal', !!piece && piece.set === 'set-zenith' && piece.id.includes('-royale-'), piece && piece.id);
+    // slots d'équipe
+    store.equipment['eq-equipe-talisman-sr'] = 1;
+    store.equipTeam = ['eq-equipe-talisman-sr', null];
+    check('B4 e slot d\'équipe talisman SR : +3 régén mana', api.equipTeamBonus().manaRegen === 3, JSON.stringify(api.equipTeamBonus()));
+    // inventaire
+    store.gold = 200;
+    api.addMateriau('ecume', 3);
+    api.go('#inventaire');
+    await wait(40);
+    const invHtml = els.get('app')?._innerHTML ?? '';
+    check('B4 f page Inventaire groupée (potions, matériaux, gemmes, pièces)', invHtml.includes('Potions') && invHtml.includes('Matériaux') && invHtml.includes('Gemmes') && invHtml.includes('Pièces') && invHtml.includes('Écume de marée'), invHtml.slice(0, 200));
+    // écran Récompenses
+    api.openRecompensesModal([{ kind: 'or', label: '+25 or', detail: 'test', rarity: null }, { kind: 'drop', label: 'Robe de la sirène', detail: 'pièce', rarity: 'C' }]);
+    await wait(30);
+    const rows = doc.body.querySelectorAll('.recomp-row');
+    check('B4 g écran Récompenses : chaque gain cliquable + Tout ramasser', rows.length === 2 && !!doc.body.querySelector('#recomp-all'), String(rows.length));
+    const all = doc.body.querySelector('#recomp-all');
+    if (all) { all.click(); await wait(20); }
+    check('B4 h Tout ramasser referme la modale', !doc.body.querySelector('.recomp-overlay'), '');
+    // matériaux de zone en data
+    check('B4 i zones : materiau + matiereBoss en data', (api.DATA.zones ?? []).every((z) => z.materiau?.id && z.matiereBoss?.id), '');
+    check('B4 j 0 exception lot 4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

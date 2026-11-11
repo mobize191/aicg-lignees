@@ -106,6 +106,21 @@ const DEPART_CHOIX = E.DEPART_CHOIX ?? [];
 
 const RECRUTE_TAUX = E.RECRUTE_TAUX;
 
+// boucle v2 lot 4 : équipement (data/equipment.json), drops v2, inventaire
+const EQUIPMENT = DATA.equipment?.pieces ?? [];
+
+const EQUIP_BY_ID = Object.fromEntries(EQUIPMENT.map((p) => [p.id, p]));
+
+const EQUIP_SETS = DATA.equipment?.sets ?? {};
+
+const EQUIP_DROP_RATE = E.EQUIP_DROP_RATE;
+
+const GEM_BRUT_PRIX = E.GEM_BRUT_PRIX;
+
+const SET_BONUS_PCT = E.SET_BONUS_PCT;
+
+const BOSS_SET_TIER = E.BOSS_SET_TIER ?? {};
+
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;

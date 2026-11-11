@@ -318,6 +318,81 @@ const xpToNext = (lvl) => lvl;
 ;
 const freshGems = () => ({ brut: {}, poli: {}, grave: {}, eternel: {} });
 
+// boucle v2 lot 4 : matériaux de zone, pièces d'équipement, bonus d'équipement (données equipment.json)
+function addMateriau(id, n = 1) {
+  store.materiaux[id] = (store.materiaux[id] ?? 0) + n;
+}
+
+function materiauCount(id) {
+  return store.materiaux[id] ?? 0;
+}
+
+function addEquipmentPiece(id, n = 1) {
+  if (!EQUIP_BY_ID[id]) return;
+  store.equipment[id] = (store.equipment[id] ?? 0) + n;
+}
+
+function equipPieceCount(id) {
+  return store.equipment[id] ?? 0;
+}
+
+// bonus cumulé d'une carte équipée (arme + armure, bonus de set si même set) — à plat sur card.equip
+function equipBonusOfCard(cardId) {
+  const out = { atkPct: 0, hpPct: 0, agiPct: 0, intPct: 0, manaRegen: 0 };
+  const eq = store.equip[cardId] ?? {};
+  const pieces = [eq.arme, eq.armure].map((id) => EQUIP_BY_ID[id]).filter(Boolean);
+  const sameSet = pieces.length === 2 && !!pieces[0].set && pieces[0].set === pieces[1].set;
+  for (const p of pieces) {
+    const pct = (p.bonus?.pct ?? 0) + (sameSet ? (SET_BONUS_PCT ?? 0) / 100 : 0);
+    if (p.bonus?.stat === 'manaRegen') out.manaRegen += p.bonus.n ?? 0;
+    else if (p.bonus?.stat) out[p.bonus.stat] = (out[p.bonus.stat] ?? 0) + pct;
+  }
+  return out;
+}
+
+// bonus des 2 slots d'équipe, appliqués à toute l'équipe
+function equipTeamBonus() {
+  const out = { atkPct: 0, hpPct: 0, agiPct: 0, intPct: 0, manaRegen: 0 };
+  for (const id of store.equipTeam ?? []) {
+    const p = EQUIP_BY_ID[id];
+    if (!p) continue;
+    if (p.bonus?.stat === 'manaRegen') out.manaRegen += p.bonus.n ?? 0;
+    else if (p.bonus?.stat) out[p.bonus.stat] = (out[p.bonus.stat] ?? 0) + (p.bonus.pct ?? 0);
+  }
+  return out;
+}
+
+// pièces éligibles pour un slot donné d'une carte (possédées, non équipées ailleurs ici)
+function eligiblePiecesFor(card, slot) {
+  return EQUIPMENT.filter((p) => {
+    if (p.slot !== slot) return false;
+    if (slot === 'arme' && p.classe !== card.classe) return false;
+    return equipPieceCount(p.id) > 0;
+  });
+}
+
+function equipPiece(cardId, slot, pieceId) {
+  const eq = store.equip[cardId] ?? (store.equip[cardId] = { arme: null, armure: null });
+  if (pieceId && !EQUIP_BY_ID[pieceId]) return false;
+  eq[slot] = pieceId;
+  save();
+  return true;
+}
+
+// tirage d'une pièce de set de zone pour un boss (niveau selon la difficulté, en données)
+function bossPieceFor(dungeonId, diff) {
+  const zone = getZone(`zone-${dungeonId}`);
+  const tierIdx = BOSS_SET_TIER[String(diff)] ?? 0;
+  const setId = `set-${dungeonId}`;
+  const pool = EQUIPMENT.filter((p) => p.set === setId);
+  if (!pool.length) return null;
+  const niveaux = ['base', 'supérieure', 'royale'];
+  const niv = niveaux[Math.min(tierIdx, niveaux.length - 1)];
+  const tierPool = pool.filter((p) => p.id.includes(`-${niv}-`));
+  const finalPool = tierPool.length ? tierPool : pool;
+  return finalPool[Math.floor(uiRand() * finalPool.length)] ?? null;
+}
+
 // boucle v2 lot 1 : stock de potions et état de run (PV/mana persistants au sein d'un run)
 const freshPotions = () => Object.fromEntries(Object.keys(POTIONS).map((k) => [k, 0]));
 
@@ -583,6 +658,10 @@ const store = {
   potions: freshPotions(),
   runState: freshRunState(),
   departFait: false,
+  materiaux: {},
+  equipment: {},
+  equip: {},
+  equipTeam: [null, null],
   collection: new Map(), 
   instances: [], 
   instanceSeq: 1, 
@@ -664,6 +743,10 @@ function snapshot() {
     potions: { ...store.potions },
     runState: { active: !!store.runState.active, units: { ...(store.runState.units ?? {}) } },
     departFait: !!store.departFait,
+    materiaux: { ...(store.materiaux ?? {}) },
+    equipment: { ...(store.equipment ?? {}) },
+    equip: JSON.parse(JSON.stringify(store.equip ?? {})),
+    equipTeam: [...(store.equipTeam ?? [null, null])],
     collection: [...store.collection.entries()],
     instances: store.instances.map((i) => ({ ...i, acc: (i.acc ?? []).map((sp) => ({ ...sp })) })),
     instanceSeq: store.instanceSeq,
@@ -889,6 +972,10 @@ function restore(data) {
     if (data.runState.units && typeof data.runState.units === 'object') store.runState.units = { ...data.runState.units };
   }
   store.departFait = !!data.departFait;
+  store.materiaux = (data.materiaux && typeof data.materiaux === 'object') ? { ...data.materiaux } : {};
+  store.equipment = (data.equipment && typeof data.equipment === 'object') ? { ...data.equipment } : {};
+  store.equip = (data.equip && typeof data.equip === 'object') ? { ...data.equip } : {};
+  store.equipTeam = Array.isArray(data.equipTeam) && data.equipTeam.length === 2 ? [...data.equipTeam] : [null, null];
   store.dailyDone = typeof data.dailyDone === 'string' ? data.dailyDone : '';
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
@@ -1726,6 +1813,49 @@ function openCardModal(card, { onAdd = null, onRemove = null, onChange = null, l
   renderCardModal(overlay, card, { onAdd, onRemove, onChange, level });
 }
 
+// boucle v2 lot 4 : bloc équipement de la fiche — 2 slots (arme typée + armure), pièces éligibles au clic
+function equipBlockHtml(card) {
+  const eq = store.equip[card.id] ?? { arme: null, armure: null };
+  const slotBtn = (slot, label) => {
+    const p = eq[slot] ? EQUIP_BY_ID[eq[slot]] : null;
+    return `<button type="button" class="btn small equip-slot" data-slot="${slot}" data-card="${card.id}">
+      ${p ? `⚔ <b>${p.nom}</b> <span class="chip r-${p.rarity}">${RARITY_LABEL[p.rarity]}</span> <span class="muted">${pieceBonusText(p)}</span>` : `${label} — vide`}
+    </button>`;
+  };
+  const eb = equipBonusOfCard(card.id);
+  const bonusTxt = ['atkPct', 'hpPct', 'agiPct', 'intPct'].filter((k) => eb[k] > 0).map((k) => `+${Math.round(eb[k] * 100)} % ${({ atkPct: 'ATQ', hpPct: 'PV', agiPct: 'AGI', intPct: 'INT' })[k]}`).join(' · ');
+  return `<h4>Équipement</h4>
+    <div class="equip-slots">${slotBtn('arme', 'Arme (' + (card.classe ?? '') + ')')}${slotBtn('armure', 'Armure')}</div>
+    ${bonusTxt ? `<p class="muted">Bonus actuel : <b>${bonusTxt}</b>${eb.manaRegen ? ` · +${eb.manaRegen} régén mana` : ''}</p>` : '<p class="muted">Aucun bonus d’équipement.</p>'}}`;
+}
+
+// boucle v2 lot 4 : liste des pièces éligibles pour un slot, au clic sur le slot de la fiche
+function openEquipPicker(card, slot) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const eq = store.equip[card.id] ?? { arme: null, armure: null };
+  const list = eligiblePiecesFor(card, slot);
+  const rows = list.map((p) => `<button type="button" class="btn tac-btn equip-pick r-${p.rarity}" data-piece="${p.id}"><b>${p.nom}</b> <span class="chip r-${p.rarity}">${RARITY_LABEL[p.rarity]}</span> <span class="muted">${pieceBonusText(p)}${p.set ? ` · set ${EQUIP_SETS[p.set]?.nom ?? ''}` : ''} ×${equipPieceCount(p.id)}</span></button>`).join('');
+  overlay.innerHTML = `<div class="modal-box">
+    <h3>${slot === 'arme' ? `Arme (${card.classe})` : 'Armure'} — ${card.name}</h3>
+    <p class="muted">Pièces possédées éligibles. Actuellement : <b>${eq[slot] ? EQUIP_BY_ID[eq[slot]].nom : 'rien'}</b>.</p>
+    <div class="recomp-list">${rows || '<p class="muted">Aucune pièce éligible possédée.</p>'}
+      <button type="button" class="btn tac-btn" data-piece="">Déséquiper</button></div>
+    <div class="modal-actions"><button class="btn" id="equip-close">Fermer</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#equip-close').onclick = () => overlay.remove();
+  overlay.querySelectorAll('.equip-pick').forEach((b) => {
+    b.onclick = () => {
+      equipPiece(card.id, slot, b.dataset.piece || null);
+      overlay.remove();
+      closeCardModal();
+      openCardModal(byId(card.id), { onChange: () => renderEquipe(document.getElementById('app')) });
+      toast(b.dataset.piece ? `✓ ${EQUIP_BY_ID[b.dataset.piece].nom} équipée.` : '✓ Slot déséquipé.');
+    };
+  });
+}
+
 function renderCardModal(overlay, card, opts, feedbackText = '') {
   const { onAdd = null, onRemove = null, onChange = null, level: forcedLevel = null } = opts;
   const prevModal = overlay.querySelector('.modal');
@@ -1813,6 +1943,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         ${mystery
           ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel ou par un jeton pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
           : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
+        ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
         ${card.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Embryons, Enge, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
@@ -1838,6 +1969,10 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
   };
   overlay.querySelectorAll('[data-evo]').forEach((el) => {
     el.onclick = () => refresh(el.dataset.evo, '');
+  });
+  // boucle v2 lot 4 : clic sur un slot d'équipement de la fiche
+  overlay.querySelectorAll('.equip-slot').forEach((el) => {
+    el.onclick = () => openEquipPicker(byId(el.dataset.card), el.dataset.slot);
   });
   const feedback = overlay.querySelector('#modal-feedback');
   if (feedbackText) feedback.textContent = feedbackText;
@@ -2296,6 +2431,49 @@ function openTeamModal(card) {
   });
 }
 
+// boucle v2 lot 4 : 2 slots d'équipe (effet sur toute l'équipe), éditables depuis la page Équipe
+function teamEquipHtml() {
+  const tb = equipTeamBonus();
+  const slotBtn = (idx) => {
+    const id = store.equipTeam[idx];
+    const p = id ? EQUIP_BY_ID[id] : null;
+    const label = p
+      ? '🚩 <b>' + p.nom + '</b> <span class="chip r-' + p.rarity + '">' + (RARITY_LABEL[p.rarity] ?? p.rarity) + '</span> <span class="muted">' + pieceBonusText(p) + '</span>'
+      : 'Slot d’équipe ' + (idx + 1) + ' — vide';
+    return '<button type="button" class="btn small equip-slot" data-team-slot="' + idx + '">' + label + '</button>';
+  };
+  const stats = [['atkPct', 'ATQ'], ['hpPct', 'PV'], ['agiPct', 'AGI'], ['intPct', 'INT']];
+  const bonusTxt = stats.filter(([k]) => tb[k] > 0).map(([k, nm]) => '+' + Math.round(tb[k] * 100) + ' % ' + nm + ' équipe').join(' · ');
+  const bonusLine = bonusTxt
+    ? '<p class="muted">Bonus d’équipe actuel : <b>' + bonusTxt + '</b>' + (tb.manaRegen ? ' · +' + tb.manaRegen + ' régén mana' : '') + '</p>'
+    : '<p class="muted">Aucun bonus d’équipe.</p>';
+  return '<h3>Équipement d’équipe</h3> <div class="equip-slots">' + slotBtn(0) + slotBtn(1) + '</div> ' + bonusLine;
+}
+function openTeamEquipPicker(idx) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const list = EQUIPMENT.filter((p) => p.slot === 'equipe' && equipPieceCount(p.id) > 0);
+  const rows = list.map((p) => `<button type="button" class="btn tac-btn equip-pick r-${p.rarity}" data-piece="${p.id}"><b>${p.nom}</b> <span class="chip r-${p.rarity}">${RARITY_LABEL[p.rarity]}</span> <span class="muted">${pieceBonusText(p)} ×${equipPieceCount(p.id)}</span></button>`).join('');
+  overlay.innerHTML = `<div class="modal-box">
+    <h3>Slot d'équipe ${idx + 1}</h3>
+    <p class="muted">Pièces d'équipe possédées. Actuellement : <b>${store.equipTeam[idx] ? EQUIP_BY_ID[store.equipTeam[idx]].nom : 'rien'}</b>.</p>
+    <div class="recomp-list">${rows || '<p class="muted">Aucune pièce d\'équipe possédée.</p>'}
+      <button type="button" class="btn tac-btn" data-piece="">Déséquiper</button></div>
+    <div class="modal-actions"><button class="btn" id="equip-close">Fermer</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#equip-close').onclick = () => overlay.remove();
+  overlay.querySelectorAll('.equip-pick').forEach((b) => {
+    b.onclick = () => {
+      store.equipTeam[idx] = b.dataset.piece || null;
+      save();
+      overlay.remove();
+      renderEquipe(document.getElementById('app'));
+      toast(b.dataset.piece ? `✓ ${EQUIP_BY_ID[b.dataset.piece].nom} équipé (équipe).` : '✓ Slot d\'équipe déséquipé.');
+    };
+  });
+}
+
 function renderEquipe(root) {
   const owned = CATALOG.filter((c) => (store.collection.get(c.id) ?? 0) > 0);
   const visible = ownedCards();
@@ -2313,6 +2491,7 @@ function renderEquipe(root) {
     <p class="muted"><b>Appui court</b> : ajouter une carte de votre collection, ou retirer une carte placée. <b>Appui long</b> : la fiche (sorts, évolution, autel). 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
     <p class="muted">Formation (figée pendant le combat) : <button type="button" class="btn small${store.team.formation === '2-3' ? '' : ' gold'}" id="form-3-2">3 avant \u00b7 2 arri\u00e8re</button> <button type="button" class="btn small${store.team.formation === '2-3' ? ' gold' : ''}" id="form-2-3">2 avant \u00b7 3 arri\u00e8re</button></p>
     ${slotsHtml()}
+    ${teamEquipHtml()}
     ${synPanel()}
     ${owned.length === 0
       ? '<p class="empty-collection muted">Votre collection est vide — générez vos premières cartes avec vos jetons à la Forge !</p>'
@@ -2321,6 +2500,9 @@ function renderEquipe(root) {
         : `<div class="grid">${cells}</div>`}`}`;
 
   root.querySelector('#syn-help')?.addEventListener('click', openSynergyModal);
+  root.querySelectorAll('.equip-slot[data-team-slot]').forEach((el) => {
+    el.onclick = () => openTeamEquipPicker(Number(el.dataset.teamSlot));
+  });
   root.querySelector('#team-prev')?.addEventListener('click', () => switchTeam(-1));
   root.querySelector('#team-next')?.addEventListener('click', () => switchTeam(1));
   root.querySelector('#form-3-2')?.addEventListener('click', () => { store.team.formation = '3-2'; save(); renderEquipe(root); });
@@ -2613,6 +2795,7 @@ let speedIdx = 1;
 let autoMode = true;
 let busy = false;
 let chainTimer = null;
+let recompOpen = false; // boucle v2 lot 4 : l'écran Récompenses bloque la chaîne d'étages jusqu'à « Tout ramasser »
 let reduceFlashes = false; 
 
 let combatTally = { auto: 0, manual: 0 };
@@ -3258,6 +3441,32 @@ function updateHp(uid, delta) {
   if (hpEl) hpEl.textContent = `♥ ${shown}/${u.maxHp}`;
 }
 
+// boucle v2 lot 4 : écran « Récompenses » après chaque combat — chaque gain cliquable, « Tout ramasser » referme
+function openRecompensesModal(recomp) {
+  recompOpen = true;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay recomp-overlay';
+  const rows = recomp.map((r, i) => `<button type="button" class="btn tac-btn recomp-row r-${r.rarity ?? 'C'}" data-i="${i}">
+    <b>${r.label}</b>${r.rarity ? ` <span class="chip r-${r.rarity}">${RARITY_LABEL[r.rarity] ?? r.rarity}</span>` : ''}
+    <span class="muted">${r.detail ?? ''}</span></button>`).join('');
+  overlay.innerHTML = `<div class="modal-box recomp-box">
+    <h3>🎁 Récompenses du combat</h3>
+    <p class="muted">Chaque gain est détaillé au toucher. « Tout ramasser » referme et rend la main.</p>
+    <div class="recomp-list">${rows || '<p class="muted">Rien à ramasser.</p>'}</div>
+    <div class="modal-actions"><button class="btn big gold" id="recomp-all">Tout ramasser</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelectorAll('.recomp-row').forEach((b) => {
+    b.onclick = () => {
+      const r = recomp[Number(b.dataset.i)];
+      if (r) toast(`${r.label} — ${r.detail ?? ''}`, '');
+    };
+  });
+  const close = () => { recompOpen = false; overlay.remove(); };
+  overlay.querySelector('#recomp-all').onclick = close;
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+}
+
 function endModal(title, message) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -3651,6 +3860,9 @@ async function animate(events, ms, gen = null) {
         let rewardLine = '';
         let pts = 0;
         let rewards = null;
+        // boucle v2 lot 4 : récompenses structurées pour l'écran « Récompenses » (chaque gain cliquable)
+        const recomp = [];
+        const pushRecomp = (kind, label, detail = '', rarity = null) => recomp.push({ kind, label, detail, rarity });
         if (won && store.defiActive) {
           pts = Math.round(40 * tactMult * loot.pts);
           store.dailyDone = todayKey();
@@ -3673,11 +3885,13 @@ async function animate(events, ms, gen = null) {
           rewards = stageRewards(store.seed, stage, 0, store.dungeon, store.diff);
           pts = Math.round((15 + 5 * stage) * (rewards.boss ? 2 : 1) * DIFF.pts * tactMult * loot.pts);
           addGold(pts);
+          pushRecomp('or', `+${pts} 🪙 or`, `étage ${stage} × mode ${DIFF.name} × tactique ×${Math.round(tactMult * 100) / 100}`);
           store.record = Math.max(store.record, stage);
           save();
           updatePtsBadge();
           rewardLine = `+${pts} 🪙 or — les cartes naissent à la Forge : jetons, autel, défi du jour`;
           if (maybeDropRegEclat(uiRand, tactMult * loot.drop)) {
+            pushRecomp('drop', '🌀 Éclat de régression', 'réserve de la Forge', 'SR');
             rewardLine += ' · 🌀 Éclat de régression trouvé ! (réserve de la Forge)';
             if (runLog) runLog.gems.push('Éclat de régression');
           }
@@ -3700,6 +3914,7 @@ async function animate(events, ms, gen = null) {
             addGem('brut', elt);
             registerDrop(dg.id + ':stg');
             if (runLog) runLog.gems.push(`bruts ${elt}`);
+            pushRecomp('drop', `\ud83d\udce0 \u00c9clat brut (${elt})`, `gemme brute ${elt}, vendable`, 'C');
             rewardLine += ` \u00b7 \ud83d\udce0 \u00c9clat brut (${elt}) trouv\u00e9 !`;
           }
           
@@ -3717,6 +3932,7 @@ async function animate(events, ms, gen = null) {
           };
           if (stage % 5 === 0 && uiRand() < PIERRE_DROP_RATE * tactMult * loot.drop) {
             addPierres(1);
+            pushRecomp('drop', '💎 Pierre d’éveil', 'éveille une naissance (rang N → C)', 'SR');
             rewardLine += ` · 💎 Pierre d’éveil !`;
           }
           if (uiRand() < N_DROP_RATE * tactMult * loot.drop) {
@@ -3724,6 +3940,7 @@ async function animate(events, ms, gen = null) {
             if (oeuf) {
               grantCards([oeuf.id]);
               if (runLog) runLog.cards.push(oeuf.name);
+              pushRecomp('recrue', `🐥 ${oeuf.name}`, `naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}`, oeuf.rarity);
               rewardLine += ` · 🐥 ${oeuf.name} (naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}) se joint à vous !`;
             }
           }
@@ -3736,8 +3953,44 @@ async function animate(events, ms, gen = null) {
             newInst(m.cardId);
             markSeen(m.cardId);
             if (runLog) runLog.cards.push(m.name);
+            pushRecomp('recrue', `🐾 ${m.name}`, 'vaincu qui rejoint la collection', 'C');
             rewardLine += ` · 🐾 ${m.name} rejoint votre collection !`;
             toast(`🐾 ${m.name} vaincu rejoint votre collection !`);
+          }
+          // boucle v2 lot 4 : drops v2 — matériau de la zone sur chaque monstre vaincu
+          const zoneMat = getZone(`zone-${store.dungeon}`);
+          if (zoneMat?.materiau) {
+            for (const m of [...state.enemies.avant, ...state.enemies.arriere]) {
+              if (uiRand() < (zoneMat.materiau.taux ?? 0) * tactMult * loot.drop) {
+                addMateriau(zoneMat.materiau.id, 1);
+                pushRecomp('drop', `🧪 ${zoneMat.materiau.nom}`, `matériau de ${dungeonById(store.dungeon).name}`, 'C');
+                rewardLine += ` · 🧪 ${zoneMat.materiau.nom}`;
+              }
+            }
+          }
+          // boss : pièce d'équipement du set de la zone + matière du boss, garanties
+          if (stage % 5 === 0) {
+            const piece = bossPieceFor(store.dungeon, store.diff);
+            if (piece) {
+              addEquipmentPiece(piece.id, 1);
+              pushRecomp('drop', `⚔ ${piece.nom}`, `pièce d'équipement (${piece.rarity})${piece.set ? ` — set ${EQUIP_SETS[piece.set]?.nom ?? ''}` : ''}, posée sur la fiche`, piece.rarity);
+              rewardLine += ` · ⚔ ${piece.nom} (${piece.rarity}) !`;
+            }
+            if (zoneMat?.matiereBoss) {
+              addMateriau(zoneMat.matiereBoss.id, 1);
+              pushRecomp('drop', `💠 ${zoneMat.matiereBoss.nom}`, 'matière du boss — craft des paliers hauts', 'SR');
+              rewardLine += ` · 💠 ${zoneMat.matiereBoss.nom} !`;
+            }
+          }
+          // équipement à taux très faible partout ailleurs
+          if (uiRand() < EQUIP_DROP_RATE * tactMult * loot.drop) {
+            const pool = EQUIPMENT.filter((p) => p.source === 'boutique');
+            const piece = pool[Math.floor(uiRand() * pool.length)];
+            if (piece) {
+              addEquipmentPiece(piece.id, 1);
+              pushRecomp('drop', `⚔ ${piece.nom}`, `pièce d'équipement (${piece.rarity}), posée sur la fiche`, piece.rarity);
+              rewardLine += ` · ⚔ ${piece.nom} (${piece.rarity}) !`;
+            }
           }
           if (stage === REGEN_BOSS_STAGE) rewardLine += ' · ⛲ Régénération complète après le premier boss !';
           if (stage === 5) {
@@ -3818,6 +4071,7 @@ async function animate(events, ms, gen = null) {
           registerXpRun(iids);
           save();
           xpLine = `⭐ XP de run (${runLog.stages} étage${runLog.stages > 1 ? 's' : ''} × ×${DIFFX.pts}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 🧭 XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
+          pushRecomp('xp', 'XP de run — ' + runLog.stages + ' étage(s)', xpParts.join(' | '));
         }
         if (won && tactMult < 0.999) rewardLine += ` \u00b7 🧭 \u00d7${tactMult.toFixed(2)} \u2014 tours jou\u00e9s en auto : pts, \u00e9clats et XP r\u00e9duits`;
         else if (won) rewardLine += ' \u00b7 🧭 Tactique : r\u00e9compenses int\u00e9grales';
@@ -3861,17 +4115,21 @@ async function animate(events, ms, gen = null) {
           }
           save();
         }
+        // boucle v2 lot 4 : écran « Récompenses » après chaque combat gagné (chaque gain cliquable)
+        if (won && recomp.length) openRecompensesModal(recomp);
         if (won && store.defiActive) {
           store.defiActive = false;
           save();
         } else if (won && store.stage < dungeonById(store.dungeon).floors) {
-          chainTimer = setTimeout(() => {
+          const chainNext = () => {
             chainTimer = null;
+            if (recompOpen) { chainTimer = setTimeout(chainNext, 400); return; } // on attend « Tout ramasser »
             if (!document.body.classList.contains('in-combat')) return;
             store.stage += 1;
             save();
             renderCombat(combatApp, { autoFight: autoMode });
-          }, instant() ? 90 : turbo() ? 250 : 2100);
+          };
+          chainTimer = setTimeout(chainNext, instant() ? 90 : turbo() ? 250 : 2100);
         } else {
           save();
         }
@@ -4040,10 +4298,20 @@ function renderCombat(root, opts = {}) {
     const m = shardMult(n);
     return { ...card, atk: Math.max(1, Math.round(card.atk * m)), hp: Math.max(1, Math.round(card.hp * m)) };
   };
+  // boucle v2 lot 4 : bonus d'équipement (2 slots par carte + 2 slots d'équipe) appliqués au moteur
+  const teamBonus = equipTeamBonus();
   const cards = store.team.slots.filter(Boolean).map((iid) => {
     const inst = byIid(iid);
     if (!inst) return null;
     const base = withShards(byId(inst.id));
+    const eb = equipBonusOfCard(inst.id);
+    const equip = {
+      atkPct: eb.atkPct + teamBonus.atkPct,
+      hpPct: eb.hpPct + teamBonus.hpPct,
+      agiPct: eb.agiPct + teamBonus.agiPct,
+      intPct: eb.intPct + teamBonus.intPct,
+      manaRegen: eb.manaRegen + teamBonus.manaRegen,
+    };
     const ascM = 1 + (inst.asc ?? 0) / 100;
     // retour terrain : les sorts h\u00e9rit\u00e9s remapp\u00e9s ({sort, cran}) se r\u00e9solvent en fiches compl\u00e8tes
     // correctif terrain : la fusion acc + sorts de la forme est dédoublonnée (clé = nom, sinon id + cran)
@@ -4059,6 +4327,7 @@ function renderCombat(root, opts = {}) {
       level: inst.lvl,
       atk: Math.max(1, Math.round(base.atk * ascM)),
       hp: Math.max(1, Math.round(base.hp * ascM)),
+      equip,
       ...(instSpells.length ? { spells: instSpells } : {}),
     };
   }).filter(Boolean);
@@ -4237,6 +4506,53 @@ function selectDiff(d, diff) {
   store.progress[d.id].diff = diff;
   save();
   renderDonjons(document.getElementById('app'));
+}
+
+// boucle v2 lot 4 : page Inventaire groupée (potions, matériaux par zone, gemmes, pièces possédées)
+function renderInventaire(root) {
+  const potRows = Object.values(POTIONS).map((p) => `<div class="shop-row"><span>${p.glyph} <b>${p.nom}</b> <span class="muted">×${potionCount(p.id)}</span></span><span class="muted">${p.prix} or à la Boutique</span></div>`).join('') || '<p class="muted">Aucune potion.</p>';
+  const zones = (DATA.zones ?? []);
+  const matRows = zones.map((z) => {
+    const m = z.materiau;
+    if (!m) return '';
+    const n = materiauCount(m.id);
+    const b = z.matiereBoss;
+    return `<div class="shop-row"><span>🧪 <b>${m.nom}</b> <span class="muted">(${z.nature ?? z.id}) ×${n}</span></span><span class="muted">💠 ${b.nom} ×${materiauCount(b.id)} (boss)</span></div>`;
+  }).join('') || '<p class="muted">Aucun matériau.</p>';
+  const gemRows = GEM_TIERS.map((tier) => {
+    const elts = Object.entries(store.gems[tier] ?? {}).filter(([, n]) => n > 0);
+    const sell = tier === 'brut' ? `<span class="muted">vendable ${GEM_BRUT_PRIX} or / unité</span>` : '';
+    return `<div class="shop-row"><span>💎 Éclats ${GEM_LABEL[tier]}${elts.length ? ' : ' + elts.map(([e, n]) => `${e} ×${n}`).join(' · ') : ' : aucun'}</span>${sell}${tier === 'brut' && elts.length ? `<button type="button" class="btn small" id="sell-brut">Vendre tout (${elts.reduce((a, [, n]) => a + n, 0) * GEM_BRUT_PRIX} or)</button>` : ''}</div>`;
+  }).join('');
+  const eqRows = Object.entries(store.equipment).filter(([, n]) => n > 0).map(([id, n]) => {
+    const p = EQUIP_BY_ID[id];
+    return `<div class="shop-row"><span class="r-${p.rarity}">⚔ <b>${p.nom}</b> <span class="chip r-${p.rarity}">${RARITY_LABEL[p.rarity]}</span> ×${n}</span><span class="muted">${pieceBonusText(p)}${p.set ? ` · set ${EQUIP_SETS[p.set]?.nom ?? ''}` : ''}</span></div>`;
+  }).join('') || '<p class="muted">Aucune pièce d’équipement — les boss en garantissent une, le reste tombe à taux très faible.</p>';
+  root.innerHTML = `
+    <h2>🎒 Inventaire</h2>
+    <p class="muted">Solde : <b>🪙 ${store.gold} or</b> · 🧪 potions <b>${totalPotions()}</b> · 💎 pierres d’éveil <b>${pierreCount()}</b></p>
+    <h3>🧪 Potions</h3>${potRows}
+    <h3>🧪 Matériaux par zone</h3>${matRows}
+    <h3>💎 Gemmes (éclats)</h3>${gemRows}
+    <h3>⚔️ Pièces d’équipement possédées</h3>${eqRows}
+    <p class="muted">Poser une pièce : fiche de la carte (2 slots : arme typée + armure) · 2 slots d'équipe sur la page Équipe. Le craft en ville arrive avec l’économie v2.</p>`;
+  const sellBtn = root.querySelector('#sell-brut');
+  if (sellBtn) sellBtn.onclick = () => {
+    let n = 0;
+    for (const [e, c] of Object.entries(store.gems.brut ?? {})) { n += c; store.gems.brut[e] = 0; }
+    if (n > 0) {
+      addGold(n * GEM_BRUT_PRIX);
+      save();
+      toast(`✓ ${n} éclats bruts vendus contre ${n * GEM_BRUT_PRIX} or.`);
+      renderInventaire(root);
+    }
+  };
+}
+
+function pieceBonusText(p) {
+  if (p.bonus?.stat === 'manaRegen') return `+${p.bonus.n} régén mana d'équipe`;
+  const stat = { atkPct: 'ATQ', hpPct: 'PV', agiPct: 'AGI', intPct: 'INT' }[p.bonus?.stat] ?? p.bonus?.stat;
+  return `+${Math.round((p.bonus?.pct ?? 0) * 100)} % ${stat}`;
 }
 
 // boucle v2 lot 1 : point d'achat minimal — le rayon potions (le reste de la Boutique arrive avec l'économie v2)
@@ -4505,6 +4821,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.16 : Boucle v2 lot 4 — Récompenses, inventaire, équipement', 'Écran Récompenses après chaque combat (chaque gain cliquable, Tout ramasser). Matériaux de zone, pièce + matière garanties sur les boss, gemmes brutes vendables. Page Inventaire groupée. Équipement : 2 slots par carte + 2 slots d’équipe, bonus de set +5 pts %. Migration v22. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.15 : Boucle v2 lot 3 — départ à 2 cartes, recrutement naturel', 'Au premier lancement, choisissez un novice parmi 4 (une par race) : un second, tiré au hasard, vous rejoint. Après chaque victoire, un vaincu (hors boss et nommés) peut rejoindre votre collection (~1 % par zone). Migration v22. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.14 : Boucle v2 lot 2 — niveaux de donjon 1→25', 'Chaque marche (donjon × mode) porte un niveau 1→25 et une bande de rareté affichés dans le sélecteur : Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M. Le bestiaire de chaque vague est pioché dans la bande de la marche. Digest : f72106ff… 1379/3000.'],
@@ -4792,6 +5110,7 @@ registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
 registerRoute('#boutique', renderBoutique);
+registerRoute('#inventaire', renderInventaire);
 registerRoute('#combat', renderCombat);
 registerRoute('#glossaire', renderGlossaire);
 

@@ -216,3 +216,17 @@ test('v21 -> v22 (boucle v2 lot 3) : departFait posé selon la présence de cart
   const out2 = E.migrate(structuredClone(neuve));
   assert.equal(out2.departFait, false, 'nouvelle partie : écran de départ à venir');
 });
+
+test('v22 -> v23 (boucle v2 lot 4) : matériaux, équipement, slots d\'équipement initialisés, non destructif', () => {
+  const E = loadEngine();
+  const s = { version: 22, instances: [{ iid: 'i1', id: 'n1', lvl: 5, xp: 0, acc: [] }], gold: 42, departFait: true, potions: { soin30: 2 }, runState: { active: true, units: { i1: { hp: 30, mana: 4 } } } };
+  const out = E.migrate(structuredClone(s));
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.deepEqual(out.materiaux, {});
+  assert.deepEqual(out.equipment, {});
+  assert.deepEqual(out.equip, {});
+  assert.deepEqual(out.equipTeam, [null, null]);
+  assert.equal(out.gold, 42);
+  assert.deepEqual(out.potions, { soin30: 2 });
+  assert.deepEqual(out.runState, { active: true, units: { i1: { hp: 30, mana: 4 } } }, 'état de run conservé');
+});
