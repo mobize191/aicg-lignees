@@ -232,3 +232,36 @@ test('v22 -> v23 (boucle v2 lot 4) : matériaux, équipement, slots d\'équipeme
   assert.deepEqual(out.potions, { soin30: 2 });
   assert.deepEqual(out.runState, { active: true, units: { i1: { hp: 30, mana: 4 } } }, 'état de run conservé');
 });
+
+test('v26 -> v27 (reste code lot 1) : les sorts hérités (acc) pollués sont dédoublonnés, non destructif', () => {
+  const E = loadEngine();
+  const s = {
+    version: 26,
+    instances: [{
+      iid: 'i1', id: 'q6', lvl: 10, xp: 0,
+      acc: [
+        { sort: 'lame-decume', cran: 'I' }, { sort: 'lame-decume', cran: 'I' }, { sort: 'lame-decume', cran: 'II' },
+        { name: 'Jet d’Écume' }, { name: 'Jet d’Écume' },
+      ],
+    }],
+    gold: 7,
+  };
+  const out = E.migrate(structuredClone(s));
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.equal(out.instances[0].acc.length, 3, 'doublons retirés (clé = nom, sinon sort + cran)');
+  assert.deepEqual(out.instances[0].acc.map((x) => x.sort ?? x.name), ['lame-decume', 'lame-decume', 'Jet d’Écume']);
+  assert.equal(out.gold, 7);
+  const again = E.migrate(structuredClone(out));
+  assert.equal(again.instances[0].acc.length, 3, 'idempotent');
+});
+
+test('reste code lot 1 : unknownSpellsOf ne cumule que les sorts inconnus de la nouvelle forme (non-régression double évolution)', () => {
+  const E = loadEngine();
+  const acc = [{ sort: 'lame-decume', cran: 'I' }];
+  const oldSpells = [{ sort: 'lame-decume', cran: 'I' }, { sort: 'lame-decume', cran: 'II' }];
+  const newFormSpells = [{ sort: 'lame-decume', cran: 'I' }, { sort: 'lame-decume', cran: 'II' }, { sort: 'lame-decume', cran: 'III' }];
+  const kept = E.unknownSpellsOf(oldSpells, newFormSpells, acc);
+  assert.equal(kept.length, 0, 'la nouvelle forme connaît déjà tout : rien n’est recopié dans acc');
+  const kept2 = E.unknownSpellsOf([{ sort: 'colonne-de-feu', cran: 'I' }], newFormSpells, acc);
+  assert.equal(kept2.length, 1, 'un sort inconnu de la nouvelle forme est conservé une fois');
+});

@@ -207,7 +207,25 @@ function v25to26(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26 };
+// v26 -> v27 (reste code lot 1) : dédoublonne les sorts hérités (acc) des sauvegardes polluées
+// (avant le correctif, chaque évolution recopiait les sorts courants dans acc => doublons à la fusion). Non destructif.
+function v26to27(s) {
+  s.version = 27;
+  for (const inst of s.instances ?? []) {
+    if (!Array.isArray(inst.acc)) continue;
+    const seen = new Set();
+    inst.acc = inst.acc.filter((sp) => {
+      const k = spellKeyOf(sp);
+      if (k == null) return true;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  }
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

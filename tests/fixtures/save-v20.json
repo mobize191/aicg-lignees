@@ -1,5 +1,5 @@
 {
- "version": 23,
+ "version": 27,
  "teams": [
   {
    "slots": [
@@ -295,39 +295,7 @@
   "grave": {},
   "eternel": {}
  },
- "tokens": [
-  {
-   "rar": "C",
-   "kind": "humain"
-  },
-  {
-   "rar": "C",
-   "kind": "humain"
-  },
-  {
-   "rar": "C",
-   "kind": "humain-riche"
-  },
-  {
-   "rar": "C",
-   "kind": "race"
-  },
-  {
-   "rar": "C",
-   "kind": "race"
-  },
-  {
-   "kind": "race",
-   "rar": "C",
-   "cat": "race"
-  },
-  {
-   "kind": "gem",
-   "tier": "brut",
-   "element": "Feu",
-   "rar": "UC"
-  }
- ],
+ "tokens": [],
  "regEclats": 0,
  "fatigue": {
   "day": "",
@@ -351,7 +319,7 @@
  "runMod": null,
  "grimoire": [],
  "zonesVisitees": [],
- "gold": 137,
+ "gold": 1037,
  "potions": {
   "soin30": 0,
   "soin60": 0,
@@ -369,5 +337,12 @@
  "equipTeam": [
   null,
   null
- ]
+ ],
+ "quetes": {
+  "day": "",
+  "list": [],
+  "bonusDone": false
+ },
+ "errance": null,
+ "zonesUnlocked": []
 }
