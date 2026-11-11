@@ -4102,7 +4102,8 @@ function renderCombat(root, opts = {}) {
 function recommendedLevel(d, diff) {
   const DIFF = DIFFICULTIES[diff - 1] ?? DIFFICULTIES[0];
   const bossFinal = levelIn(d, d.floors, DIFF.boss10, true);
-  return Math.max(1, Math.round(bossFinal * 0.3));
+  // boucle v2 lot 2 : la force conseillée s'ancre sur le niveau de la marche (1 → 25)
+  return Math.max(1, Math.round(Math.max(bossFinal * 0.3, dungeonLevelOf(d.id ?? d, diff) * (M.RECO_LEVEL_RATIO ?? 0.8))));
 }
 
 function teamLevel() {
@@ -4239,10 +4240,10 @@ function renderDonjons(root) {
             <div class="diff-row">
               ${DIFFICULTIES.map((D) => {
                 const ok = diffUnlocked(d.id, D.id);
-                return `<button type="button" class="diff-chip ${D.id === curDiff ? 'sel' : ''} ${ok ? '' : 'lock'}" data-dungeon="${d.id}" data-diff="${D.id}" title="${ok ? D.name : 'Vainquez le boss final en ' + DIFFICULTIES[D.id - 2].name + ' d’abord'}">${ok ? D.name : '🔒 ' + D.name}</button>`;
+                return `<button type="button" class="diff-chip ${D.id === curDiff ? 'sel' : ''} ${ok ? '' : 'lock'}" data-dungeon="${d.id}" data-diff="${D.id}" title="${ok ? `Nv ${dungeonLevelOf(d.id, D.id)} · bande ${bandOf(D.id).join('→')} — ${D.name}` : 'Vainquez le boss final en ' + DIFFICULTIES[D.id - 2].name + ' d’abord'}">${ok ? `${D.name} · Nv ${dungeonLevelOf(d.id, D.id)}` : '🔒 ' + D.name}</button>`;
               }).join('')}
             </div>
-            <p class="muted">Créatures ${DIFF.minR} minimum · boss mi-course ${DIFF.boss5}, boss final ${DIFF.boss10}${DIFF.allBoss ? ' — un boss à CHAQUE étage' : ''} · points ×${DIFF.pts}.</p>
+            <p class="muted">Marche Nv <b>${dungeonLevelOf(d.id, curDiff)}</b> · bande de rareté <b>${bandOf(curDiff).join(' → ')}</b> · créatures ${DIFF.minR} minimum · boss mi-course ${DIFF.boss5}, boss final ${DIFF.boss10}${DIFF.allBoss ? ' — un boss à CHAQUE étage' : ''} · points ×${DIFF.pts}.</p>
             <p class="muted">Conseil : les créatures ${d.types.join(' / ')} sont dominées par ${[...new Set(d.types.map((t) => BEATEN_BY[t]))].join(' / ')} (+25 % de dégâts pour qui les frappe).</p>
             <p class="rec-line">Force conseillée : indice d'équipe <b>≥ ${rec}</b> pour finir — ATQ, PV, rareté et sorts pondérés · votre équipe : <b>indice ${Math.round(teamPower())}</b>${teamPower() >= rec ? ' ✅' : ' ⚠️'}</p>
             <p class="muted">Record (${DIFF.name}) : étage ${prog.record || 0}/${d.floors} vaincu${prog.record > 1 ? 's' : ''} · meilleur : ${bestRecord(d.id)}/${d.floors}</p>
@@ -4446,6 +4447,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.14 : Boucle v2 lot 2 — niveaux de donjon 1→25', 'Chaque marche (donjon × mode) porte un niveau 1→25 et une bande de rareté affichés dans le sélecteur : Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M. Le bestiaire de chaque vague est pioché dans la bande de la marche. Digest : f72106ff… 1379/3000.'],
+
   ['v1.13 : Boucle v2 lot 1 — potions, or et persistance', 'L’économie de survie entre en jeu. L’énergie ⚡ devient de l’or (1 ⚡ = 1 or, conversion en sauvegarde v21). Nouvelle action 🧪 Objet dans la fenêtre d’action : potions de soin (30/60 % PV) et de mana (40/80 %), chaque gorgée coûte le tour, utilisables aussi entre les étages (bouton 🧪 Objets). Achat au rayon potions de la Boutique. Plus de régénération entre les combats d’un run : PV et mana persistent d’étage en étage, régénération complète après le premier boss, soins complets entre deux runs. Hook autel de soin posé pour l’errance. Digest inchangé (combats isolés) : aed250f9… 1274/3000.'],
 
   ['v1.12 : La ligne support frappe aussi', 'RETOUR TERRAIN. Deux manques corrig\u00e9s d\u2019un m\u00eame geste. Un : le Garde du Rempart et tous les supports n\u2019avaient que le bouton de soin \u2014 d\u00e9sormais la frappe simple (\u2694, gratuite) est la premi\u00e8re action de TOUTE carte : on d\u00e9signe l\u2019ennemi, elle frappe. Deux : un sort de d\u00e9g\u00e2ts, de contr\u00f4le ou de malus lanc\u00e9 depuis la ligne support se r\u00e9sout enfin sur les ennemis selon sa fiche (largeur, puissance, taux, tours) \u2014 fini le soin fant\u00e2me quand un Embryon tapait avec Instinct Sauvage. La stat principale du lanceur fait les d\u00e9g\u00e2ts, l\u2019esquive et l\u2019\u00e9l\u00e9ment comptent comme pour la ligne d\u2019attaque, et les sorts alli\u00e9s gardent leur chemin. Les sorts malus ciblent d\u00e9sormais les ennemis dans les fiches r\u00e9solues. Le digest bouge (document\u00e9) : les supports mixtes frappent.'],

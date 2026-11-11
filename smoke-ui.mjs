@@ -794,6 +794,22 @@ async function main() {
     }
   }
 
+  // ---------- boucle v2 lot 2 : niveaux de donjon et bandes de rareté ----------
+  {
+    mem.clear();
+    check('B2 a 25 marches nivelées 1..25', (() => { const v = new Set(); for (const d of api.DUNGEONS) for (const df of api.DIFFICULTIES) v.add(api.dungeonLevelOf(d.id, df.id)); return v.size === 25 && Math.min(...v) === 1 && Math.max(...v) === 25; })(), '');
+    api.go('#donjons');
+    await wait(40);
+    const dgHtml = els.get('app')?._innerHTML ?? '';
+    const chips = els.get('app').querySelectorAll('.diff-chip');
+    check('B2 b sélecteur de marche : niveau affiché sur les 5 modes', chips.length >= 5 && [...chips].some((c) => /Nv \d+/.test(c.textContent ?? '')), [...chips].map((c) => c.textContent).join('|'));
+    check('B2 c carte donjon : bande de rareté en toutes lettres', dgHtml.includes('bande de rareté') && /C → R|UC → SR|R → UR|SR → L|UR → M/.test(dgHtml), dgHtml.slice(0, 80));
+    const w = api.makeWave(5, 10, 'zenith', 5);
+    const boss = [...w.avant, ...w.arriere].find((u) => u.boss);
+    check('B2 d boss final Enfer = haut de bande (M)', !!boss && boss.rarity === 'M', boss && boss.rarity);
+    check('B2 e 0 exception lot 2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

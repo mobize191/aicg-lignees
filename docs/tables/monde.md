@@ -43,11 +43,11 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 
 | id | nom | rarete min | plafond mob | boss 5 | boss 10 | tous boss | points | drop monstre | drop eclat |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Facile | C | R | R | SR | false | 1 | 0.25 | 0.3 |
-| 2 | Normal | UC | UR | SR | UR | false | 1.5 | 0.4 | 0.45 |
-| 3 | Difficile | R | UR | UR | L | false | 2 | 0.55 | 0.6 |
-| 4 | Très difficile | SR | L | L | M | false | 3 | 0.7 | 0.75 |
-| 5 | Enfer | SR | L | L | M | true | 5 | 0.9 | 1 |
+| 1 | Facile | C | R | UC | R | false | 1 | 0.25 | 0.3 |
+| 2 | Normal | UC | SR | R | SR | false | 1.5 | 0.4 | 0.45 |
+| 3 | Difficile | R | UR | SR | UR | false | 2 | 0.55 | 0.6 |
+| 4 | Très difficile | SR | L | SR | L | false | 3 | 0.7 | 0.75 |
+| 5 | Enfer | UR | M | UR | M | true | 5 | 0.9 | 1 |
 
 ## Modificateurs de run (data/run-mods.json)
 

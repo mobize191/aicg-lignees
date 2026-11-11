@@ -183,6 +183,18 @@ function validate(data, errors) {
       if (pa > pb && a.larg >= b.larg) push(`le sort ${b.id} est strictement dominé par ${a.id} au même coût (${k})`, 'EXI-T-3');
     }
   }
+  // difficultés (boucle v2 lot 2) : bande de rareté valide et cohérente, boss dans la bande
+  const ranks = new Set(Object.keys(data.engine?.RANK ?? {}));
+  for (const d of data.difficulties ?? []) {
+    const b = d.bande ?? null;
+    if (!Array.isArray(b) || b.length !== 2 || !ranks.has(b[0]) || !ranks.has(b[1])) {
+      push(`la difficulté ${d.id} a une bande invalide (${JSON.stringify(b)})`, 'EXI-DATA-1');
+      continue;
+    }
+    if (d.minR !== b[0] || d.mobCap !== b[1]) push(`la difficulté ${d.id} : minR/mobCap ne suivent pas la bande`, 'EXI-DATA-1');
+    if (!ranks.has(d.boss5) || !ranks.has(d.boss10)) push(`la difficulté ${d.id} a un boss hors rang connu`, 'EXI-DATA-1');
+    else if (!(data.engine.RANK[d.boss5] < data.engine.RANK[d.boss10])) push(`la difficulté ${d.id} : boss5 >= boss10`, 'EXI-DATA-1');
+  }
   // potions (boucle v2 lot 1) : id unique, genre soin/mana, pourcentage et prix valides
   const potionIds = new Set();
   for (const [pid, p] of Object.entries(data.potions ?? {})) {

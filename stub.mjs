@@ -184,7 +184,7 @@ export function makeEl(tag = 'div') {
 
 // paires clé -> expression à évaluer DANS le contexte du bundle
 const API_PAIRS = {
-  byId: 'byId', byIid: 'byIid', dungeonById: 'dungeonById', CATALOG: 'CATALOG', DUNGEONS: 'DUNGEONS',
+  byId: 'byId', byIid: 'byIid', dungeonById: 'dungeonById', dungeonLevelOf: 'dungeonLevelOf', bandOf: 'bandOf', CATALOG: 'CATALOG', DUNGEONS: 'DUNGEONS',
   DIFFICULTIES: 'DIFFICULTIES', store: 'store', makeUnit: 'makeUnit', makeWave: 'makeWave',
   initCombat: 'initCombat', resolveTurn: 'resolveTurn', pickSpell: 'pickSpell', statsAt: 'statsAt',
   teamLevel: 'teamLevel', cardPower: 'cardPower', teamPower: 'teamPower', recommendedPower: 'recommendedPower',

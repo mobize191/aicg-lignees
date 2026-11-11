@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.14] — 2026-11-11 — Boucle de jeu v2, lot 2 : niveaux de donjon 1→25 et bandes de rareté
+
+Chaque marche (donjon × mode) porte désormais un **niveau de donjon 1→25** et une **bande de rareté** affichés dans le sélecteur (Facile C→R, Normal UC→SR, Difficile R→UR, Très difficile SR→L, Enfer UR→M ; boss final en haut de bande, boss intermédiaire un cran sous). Le bestiaire de chaque vague est pioché dans la bande de la marche : la difficulté monte, les créatures montent avec elle. `data/difficulties.json` porte les bandes (`bande`), le validateur vérifie leur cohérence. Digest recalibré et consigné : `f72106ff…` 1379/3000, 0 exception, 1 marathon. 120 tests, smoke 188 checks (5 nouveaux verts).
+
+
 ## [1.13] — 2026-11-11 — Boucle de jeu v2, lot 1 : potions, or et persistance
 
 L’économie de survie entre en jeu (lot 1 de la boucle v2, `docs/design/boucle-v2-spec-plan.md`). L’énergie ⚡ devient de **l’or** (1 ⚡ = 1 or, conversion non destructive en sauvegarde v21). Nouvelle action **🧪 Objet** dans la fenêtre d’action : potions de soin (30/60 % des PV max) et de mana (40/80 %), chaque gorgée **coûte son tour**, utilisables aussi hors combat entre les étages (bouton 🧪 Objets). Point d’achat minimal : le rayon potions de la **Boutique** (50/120/60/140 or, `data/potions.json`). **Plus de régénération entre les combats d’un même run** : PV et mana persistent d’étage en étage, effets temporaires dissous entre combats, régénération complète après le premier boss (étage 5), soins complets entre deux runs distincts. Hook « autel de soin » posé pour l’errance (soin complet + 5 pas de grâce, `errance-topdown.md` §8). Preuve : digest inchangé `aed250f9…` (1274/3000, 0 exception — combats isolés à PV pleins), 118 tests, smoke 183 checks (12 nouveaux verts).

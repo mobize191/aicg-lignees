@@ -323,3 +323,41 @@ test('boucle v2 lot 1 : action Objet en combat — la gorgée coûte le tour (st
   assert.ok(u.hp > 2, 'l’unité a bu et regagné des PV');
   assert.ok(!r.done || st.winner, 'le tour est consommé comme une action');
 });
+
+test('boucle v2 lot 2 : niveaux de donjon 1 → 25, un par marche (donjon × mode)', () => {
+  const E = loadEngine();
+  const seen = new Set();
+  for (const d of E.DATA.dungeons) {
+    for (const df of E.DATA.difficulties) {
+      const lv = E.dungeonLevelOf(d.id, df.id);
+      assert.ok(lv >= 1 && lv <= 25, `niveau ${lv} dans 1..25`);
+      assert.ok(!seen.has(lv), `niveau ${lv} unique (marche ${d.id} × ${df.name})`);
+      seen.add(lv);
+    }
+  }
+  assert.equal(seen.size, 25, '25 marches');
+  assert.equal(E.dungeonLevelOf('marees', 1), 1);
+  assert.equal(E.dungeonLevelOf('zenith', 5), 25);
+});
+
+test('boucle v2 lot 2 : les vagues suivent la bande de rareté de la marche, boss haut de bande', () => {
+  const E = loadEngine();
+  const R = E.DATA.engine.RANK;
+  for (const df of E.DATA.difficulties) {
+    const [b0, b1] = E.bandOf(df.id);
+    for (const stage of [1, 3, 7]) {
+      const w = E.makeWave(1234, stage, 'zenith', df.id);
+      for (const u of [...w.avant, ...w.arriere]) {
+        if (u.boss) continue;
+        assert.ok(R[u.rarity] >= R[b0] - 0, `monstre ${u.id} ${u.rarity} >= ${b0} (diff ${df.id})`);
+        assert.ok(R[u.rarity] <= R[b1] + 1, `monstre ${u.id} ${u.rarity} <= ${b1} (diff ${df.id})`);
+      }
+    }
+    const w5 = E.makeWave(99, 5, 'marees', df.id);
+    const boss5 = w5.avant.find((u) => u.boss);
+    assert.equal(boss5.rarity, df.boss5, `boss5 = ${df.boss5} en diff ${df.id}`);
+    const w10 = E.makeWave(99, 10, 'marees', df.id);
+    const boss10 = w10.avant.find((u) => u.boss);
+    assert.equal(boss10.rarity, df.boss10, `boss10 = haut de bande ${df.boss10} en diff ${df.id}`);
+  }
+});

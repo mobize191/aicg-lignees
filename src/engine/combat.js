@@ -689,6 +689,20 @@ function difficultyById(id) {
   return DIFFICULTIES.find((d) => d.id === id) ?? DIFFICULTIES[0];
 }
 
+// boucle v2 lot 2 : niveau de donjon de chaque marche (donjon × mode), 1 → 25
+// (dungeon.tier * nombre de modes + id du mode : 5 donjons × 5 modes = 25 marches)
+function dungeonLevelOf(dungeonId, diff = 1) {
+  const d = dungeonById(dungeonId);
+  const n = DIFFICULTIES.length;
+  return (d.tier ?? 0) * n + Math.max(1, Math.min(n, Number(diff) || 1));
+}
+
+// bande de rareté d'une marche, en données (bande[0] → bande[1])
+function bandOf(diff) {
+  const D = difficultyById(diff);
+  return D.bande ?? [D.minR, D.mobCap];
+}
+
 function shardMult(count) {
   return 1 + SHARD_BONUS * (count ?? 0);
 }
@@ -732,8 +746,10 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
   const rng = mulberry32(hashSeed(seed, stage));
   const dungeon = dungeonById(dungeonId);
   const DIFF = difficultyById(diff);
-  const minRank = RANK[DIFF.minR];
-  const capRank = Math.min(RANK[DIFF.mobCap], minRank + spreadAt(stage));
+  // boucle v2 lot 2 : la bande de rareté de la marche pilote le bestiaire (thématique, croissant par mode)
+  const [bandMin, bandMax] = bandOf(diff);
+  const minRank = RANK[bandMin] ?? RANK[DIFF.minR];
+  const capRank = Math.min(RANK[bandMax] ?? RANK[DIFF.mobCap], minRank + spreadAt(stage));
   const POOL = monstersOf(dungeon.id);
   const levelFor = (rarity, boss = false) => levelIn(dungeon, stage, rarity, boss);
 
