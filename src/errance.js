@@ -138,7 +138,7 @@ function createErranceState(zoneId) {
   const map = genZoneMap(zone);
   return {
     zone: zoneId, map,
-    hero: { x: map.spawn.x, y: map.spawn.y, path: [], speed: 3.4 },
+    hero: { x: map.spawn.x, y: map.spawn.y, path: [], speed: 3.4, v: { x: 0, y: 0 }, tilt: 0 },
     grace: 2, lastTile: -1, steps: 0,
     looted: [], broken: [], // ids d'objets persistés
     pending: null,
@@ -158,14 +158,42 @@ function setTarget(st, tx, ty) {
 function stepErrance(st, dt, rng = Math.random) {
   const ev = { steps: 0, encounter: null, arrived: null };
   const hero = st.hero;
-  if (hero.path.length) {
-    const next = hero.path[0];
-    const dx = next.x - hero.x, dy = next.y - hero.y;
-    const d = Math.hypot(dx, dy);
-    const step = hero.speed * dt;
-    if (d <= step) { hero.x = next.x; hero.y = next.y; hero.path.shift(); }
-    else { hero.x += (dx / d) * step; hero.y += (dy / d) * step; }
+  dt = Math.min(0.05, dt); // dt borné : jamais de saut de tuile (onglet arrière-plan, iOS)
+  const v = hero.v ?? (hero.v = { x: 0, y: 0 });
+  const maxV = hero.speed; // tuiles/s
+  // §5 pilotage inertiel : abandon des waypoints atteints ou dépassés (produit scalaire => aucune orbite)
+  while (hero.path.length) {
+    const w = hero.path[0];
+    const dwx = w.x - hero.x, dwy = w.y - hero.y, d = Math.hypot(dwx, dwy);
+    if (hero.path.length > 1) {
+      const w2 = hero.path[1];
+      const dot = dwx * (w2.x - w.x) + dwy * (w2.y - w.y);
+      if (d < 0.5 || dot < 0) { hero.path.shift(); continue; } // « derrière » => abandonné
+    } else if (d < 0.07) { hero.path.shift(); v.x = 0; v.y = 0; break; }
+    break;
   }
+  if (hero.path.length) {
+    const w = hero.path[0];
+    const dwx = w.x - hero.x, dwy = w.y - hero.y, d = Math.hypot(dwx, dwy) || 1e-6;
+    // freinage progressif sur le DERNIER waypoint
+    const want = hero.path.length === 1 ? Math.min(maxV, d / 0.22) : maxV;
+    const dvx = (dwx / d) * want, dvy = (dwy / d) * want;
+    // virage limité : virages en arc
+    const turn = maxV * 5 * dt;
+    let ex = dvx - v.x, ey = dvy - v.y;
+    const em = Math.hypot(ex, ey) || 1e-9;
+    if (em > turn) { ex = (ex / em) * turn; ey = (ey / em) * turn; }
+    v.x += ex; v.y += ey;
+    // intégration + collision PAR AXE (glisse le long des murs)
+    const nx = hero.x + v.x * dt;
+    if (!solidT(st.map, Math.floor(nx), Math.floor(hero.y))) hero.x = nx; else v.x = 0;
+    const ny = hero.y + v.y * dt;
+    if (!solidT(st.map, Math.floor(hero.x), Math.floor(ny))) hero.y = ny; else v.y = 0;
+  } else {
+    const f = Math.max(0, 1 - 8 * dt); // freinage doux sans destination
+    v.x *= f; v.y *= f;
+  }
+  hero.tilt = (hero.tilt ?? 0) + (((v.x / maxV) * 0.09) - (hero.tilt ?? 0)) * Math.min(1, 10 * dt); // balancement
   // détection de pas = changement de tuile
   const tk = Math.floor(hero.x) * 1000 + Math.floor(hero.y);
   if (tk !== st.lastTile) {

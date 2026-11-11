@@ -81,3 +81,41 @@ test('errance : déblocage en chaîne — zone de départ ouverte, suivantes ver
   E.unlockZone('zone-marees', fakeStore);
   assert.equal(E.zoneUnlocked('zone-forge', fakeStore), true, 'vaincre le donjon de la zone débloque la suivante');
 });
+
+test('errance : pilotage inertiel — accélération, freinage sur le dernier waypoint, arrivée sans orbite', () => {
+  const E = loadEngine();
+  const D = loadData();
+  const st = E.createErranceState(D.zones[0].id);
+  const m = st.map;
+  const sy = Math.floor(m.spawn.y);
+  let tx = Math.floor(st.hero.x) + 1;
+  while (tx < m.w - 2 && [2, 3, 4, 7, 8, 9, 10].includes(m.terr[m.idx(tx, sy)])) tx++;
+  assert.ok(tx > Math.floor(st.hero.x), 'cible praticable trouvée');
+  assert.equal(E.setTarget(st, tx, sy), true, 'cible posée');
+  const startX = st.hero.x;
+  E.stepErrance(st, 0.05, () => 0.99);
+  assert.ok(Math.hypot(st.hero.v.x, st.hero.v.y) > 0.5, 'accélération progressive (pas de téléportation)');
+  let frames = 0;
+  while (st.hero.path.length && frames++ < 2000) E.stepErrance(st, 0.05, () => 0.99);
+  assert.equal(st.hero.path.length, 0, 'arrivé : aucun waypoint résiduel (pas d’orbite)');
+  const dEnd = Math.hypot(st.hero.x - (tx + 0.5), st.hero.y - (sy + 0.5));
+  assert.ok(dEnd < 0.6, `proche de la cible (d=${dEnd.toFixed(2)})`);
+  assert.ok(Math.hypot(st.hero.v.x, st.hero.v.y) < 0.01, 'freinage complet à l’arrêt');
+  assert.ok(st.hero.x > startX + 0.5, 'le héros a avancé');
+  assert.ok(Math.abs(st.hero.tilt) <= 0.1, 'tilt borné');
+});
+
+test('errance : collision par axe — le héros glisse le long d’un mur sans jamais le traverser', () => {
+  const E = loadEngine();
+  const D = loadData();
+  const st = E.createErranceState(D.zones[0].id);
+  const m = st.map;
+  // bord ouest (x=0) = eau/arbre : on pousse le héros tout droit dedans
+  st.hero.x = 1.5;
+  st.hero.y = Math.floor(m.spawn.y) + 0.5;
+  st.hero.v = { x: 0, y: 0 };
+  st.hero.path = [{ x: -2.5, y: st.hero.y }];
+  for (let i = 0; i < 300; i++) E.stepErrance(st, 0.05, () => 0.99);
+  assert.ok(st.hero.x >= 0.99, `jamais entré dans le mur (x=${st.hero.x.toFixed(2)})`);
+  assert.ok(st.hero.x < 1.6, 'le héros a bien tenté de traverser');
+});

@@ -15506,7 +15506,7 @@ function createErranceState(zoneId) {
   const map = genZoneMap(zone);
   return {
     zone: zoneId, map,
-    hero: { x: map.spawn.x, y: map.spawn.y, path: [], speed: 3.4 },
+    hero: { x: map.spawn.x, y: map.spawn.y, path: [], speed: 3.4, v: { x: 0, y: 0 }, tilt: 0 },
     grace: 2, lastTile: -1, steps: 0,
     looted: [], broken: [], // ids d'objets persistés
     pending: null,
@@ -15526,14 +15526,42 @@ function setTarget(st, tx, ty) {
 function stepErrance(st, dt, rng = Math.random) {
   const ev = { steps: 0, encounter: null, arrived: null };
   const hero = st.hero;
-  if (hero.path.length) {
-    const next = hero.path[0];
-    const dx = next.x - hero.x, dy = next.y - hero.y;
-    const d = Math.hypot(dx, dy);
-    const step = hero.speed * dt;
-    if (d <= step) { hero.x = next.x; hero.y = next.y; hero.path.shift(); }
-    else { hero.x += (dx / d) * step; hero.y += (dy / d) * step; }
+  dt = Math.min(0.05, dt); // dt borné : jamais de saut de tuile (onglet arrière-plan, iOS)
+  const v = hero.v ?? (hero.v = { x: 0, y: 0 });
+  const maxV = hero.speed; // tuiles/s
+  // §5 pilotage inertiel : abandon des waypoints atteints ou dépassés (produit scalaire => aucune orbite)
+  while (hero.path.length) {
+    const w = hero.path[0];
+    const dwx = w.x - hero.x, dwy = w.y - hero.y, d = Math.hypot(dwx, dwy);
+    if (hero.path.length > 1) {
+      const w2 = hero.path[1];
+      const dot = dwx * (w2.x - w.x) + dwy * (w2.y - w.y);
+      if (d < 0.5 || dot < 0) { hero.path.shift(); continue; } // « derrière » => abandonné
+    } else if (d < 0.07) { hero.path.shift(); v.x = 0; v.y = 0; break; }
+    break;
   }
+  if (hero.path.length) {
+    const w = hero.path[0];
+    const dwx = w.x - hero.x, dwy = w.y - hero.y, d = Math.hypot(dwx, dwy) || 1e-6;
+    // freinage progressif sur le DERNIER waypoint
+    const want = hero.path.length === 1 ? Math.min(maxV, d / 0.22) : maxV;
+    const dvx = (dwx / d) * want, dvy = (dwy / d) * want;
+    // virage limité : virages en arc
+    const turn = maxV * 5 * dt;
+    let ex = dvx - v.x, ey = dvy - v.y;
+    const em = Math.hypot(ex, ey) || 1e-9;
+    if (em > turn) { ex = (ex / em) * turn; ey = (ey / em) * turn; }
+    v.x += ex; v.y += ey;
+    // intégration + collision PAR AXE (glisse le long des murs)
+    const nx = hero.x + v.x * dt;
+    if (!solidT(st.map, Math.floor(nx), Math.floor(hero.y))) hero.x = nx; else v.x = 0;
+    const ny = hero.y + v.y * dt;
+    if (!solidT(st.map, Math.floor(hero.x), Math.floor(ny))) hero.y = ny; else v.y = 0;
+  } else {
+    const f = Math.max(0, 1 - 8 * dt); // freinage doux sans destination
+    v.x *= f; v.y *= f;
+  }
+  hero.tilt = (hero.tilt ?? 0) + (((v.x / maxV) * 0.09) - (hero.tilt ?? 0)) * Math.min(1, 10 * dt); // balancement
   // détection de pas = changement de tuile
   const tk = Math.floor(hero.x) * 1000 + Math.floor(hero.y);
   if (tk !== st.lastTile) {
@@ -17343,14 +17371,15 @@ function updatePtsBadge() {
 
 const ART = {};
 
-// v0.47.2 : deux sources d'illustrations au choix (manifeste DreamShaper XL ou WAI)
-const ART_MANIFESTS = { dreamshaper: 'assets.json', wai: 'assets-wai.json' };
-const ART_SRC_LABEL = { dreamshaper: 'DreamShaper XL', wai: 'WAI-Illustrious v17' };
+// v1.28 : source d'illustrations unique = campagne AICG V3 (WAI-Illustrious v17, vague 3 validée).
+// Les anciens manifests (DreamShaper XL, WAI v2) sont archivés dans archives/assets/.
+const ART_MANIFESTS = { v3: 'assets-v3.json' };
+const ART_SRC_LABEL = { v3: 'AICG Lignées V3 (WAI-Illustrious v17)' };
 function artSrcKey() {
   try {
     const k = storage.getItem('fondations-art-src');
-    return ART_MANIFESTS[k] ? k : 'dreamshaper';
-  } catch (e) { return 'dreamshaper'; }
+    return ART_MANIFESTS[k] ? k : 'v3';
+  } catch (e) { return 'v3'; }
 }
 
 
@@ -17487,7 +17516,8 @@ async function initAssets() {
 
 // v0.47.2 : bascule la source d'images et re-rend la page courante
 async function switchArtSrc() {
-  const next = artSrcKey() === 'dreamshaper' ? 'wai' : 'dreamshaper';
+  const keys = Object.keys(ART_MANIFESTS);
+  const next = keys[(keys.indexOf(artSrcKey()) + 1) % keys.length];
   try { storage.setItem('fondations-art-src', next); } catch (e) { }
   for (const k of Object.keys(ART)) delete ART[k];
   for (const d of DUNGEONS) d.art = null;
@@ -18072,45 +18102,67 @@ function renderErrance(root) {
     </div>`;
   const canvas = root.querySelector('#errance-canvas');
   const ctx = canvas.getContext('2d');
+  const T = st.map.t;
+  let dpr = 1, vw = 360, vh = 480;
   const fit = () => {
-    canvas.width = Math.max(320, canvas.clientWidth || 360);
-    canvas.height = Math.max(320, canvas.clientHeight || 480);
+    dpr = Math.min(2, window.devicePixelRatio || 1); // §9 : jamais de DPR > 2
+    vw = Math.max(320, canvas.clientWidth || 360);
+    vh = Math.max(320, canvas.clientHeight || 480);
+    canvas.width = Math.round(vw * dpr); // résolution native => rendu net sur mobile
+    canvas.height = Math.round(vh * dpr);
+    canvas.style.width = `${vw}px`;
+    canvas.style.height = `${vh}px`;
   };
   fit();
-  const T = st.map.t;
-  const cam = { x: 0, y: 0 };
+  // §3 pré-rendu du décor : peint UNE FOIS sur un canvas offscreen (world-space), puis 1 drawImage/frame
+  const base = document.createElement('canvas');
+  base.width = st.map.w * T;
+  base.height = st.map.h * T;
+  const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
+  const paintTile = (bx, x, y) => {
+    const t = st.map.terr[st.map.idx(x, y)];
+    bx.fillStyle = cols[t] ?? '#333';
+    bx.fillRect(x * T, y * T, T, T);
+    if (t === 6) { bx.fillStyle = '#3c6b31'; bx.fillRect(x * T + 6, y * T + 8, 4, 14); bx.fillRect(x * T + 16, y * T + 4, 4, 18); }
+  };
+  {
+    const bx = base.getContext('2d');
+    for (let y = 0; y < st.map.h; y++) for (let x = 0; x < st.map.w; x++) paintTile(bx, x, y);
+    bx.fillStyle = '#5a4632';
+    bx.fillRect(st.map.donjon.x * T, st.map.donjon.y * T, st.map.donjon.w * T, st.map.donjon.h * T);
+    bx.fillStyle = '#e8e8f2';
+    bx.fillRect(st.map.autel.x * T + 8, st.map.autel.y * T + 8, T - 16, T - 16);
+  }
+  const repaintTile = (x, y) => { if (x >= 0 && y >= 0 && x < st.map.w && y < st.map.h) paintTile(base.getContext('2d'), x, y); };
+  const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
   const draw = () => {
-    const w = canvas.width, h = canvas.height;
-    cam.x += ((st.hero.x * T - w / 2) - cam.x) * 0.12;
-    cam.y += ((st.hero.y * T - h / 2) - cam.y) * 0.12;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = '#0a0f0a';
-    ctx.fillRect(0, 0, w, h);
-    const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
-    const x0 = Math.max(0, Math.floor(cam.x / T) - 1), y0 = Math.max(0, Math.floor(cam.y / T) - 1);
-    const x1 = Math.min(st.map.w - 1, Math.ceil((cam.x + w) / T) + 1), y1 = Math.min(st.map.h - 1, Math.ceil((cam.y + h) / T) + 1);
-    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
-      const t = st.map.terr[st.map.idx(x, y)];
-      ctx.fillStyle = cols[t] ?? '#333';
-      ctx.fillRect(x * T - cam.x, y * T - cam.y, T, T);
-      if (t === 6) { ctx.fillStyle = '#3c6b31'; ctx.fillRect(x * T - cam.x + 6, y * T - cam.y + 8, 4, 14); ctx.fillRect(x * T - cam.x + 16, y * T - cam.y + 4, 4, 18); }
-    }
-    ctx.fillStyle = '#5a4632';
-    ctx.fillRect(st.map.donjon.x * T - cam.x, st.map.donjon.y * T - cam.y, st.map.donjon.w * T, st.map.donjon.h * T);
-    ctx.fillStyle = '#e8e8f2';
-    ctx.fillRect(st.map.autel.x * T - cam.x + 8, st.map.autel.y * T - cam.y + 8, T - 16, T - 16);
+    ctx.fillRect(0, 0, vw, vh);
+    ctx.save();
+    ctx.translate(vw / 2, vh / 2);
+    ctx.scale(cam.z, cam.z);
+    ctx.translate(-cam.x, -cam.y);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(base, 0, 0); // 1 appel : plus de fillRect tuile par tuile
     for (const j of st.map.jarres) {
       const jid = `jarre-${j.x}-${j.y}`;
       if (st.broken.includes(jid)) continue;
       ctx.fillStyle = '#a8763e';
       ctx.beginPath();
-      ctx.arc(j.x * T - cam.x + T / 2, j.y * T - cam.y + T / 2, 9, 0, 7);
+      ctx.arc(j.x * T + T / 2, j.y * T + T / 2, 9, 0, 7);
       ctx.fill();
     }
-    const hx = st.hero.x * T - cam.x, hy = st.hero.y * T - cam.y;
+    const hx = st.hero.x * T, hy = st.hero.y * T;
+    ctx.save();
+    ctx.translate(hx, hy);
+    ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
     ctx.fillStyle = '#171522';
-    ctx.beginPath(); ctx.arc(hx, hy, 11, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, 0, 11, 0, 7); ctx.fill();
     ctx.fillStyle = '#f4f1ea';
-    ctx.beginPath(); ctx.arc(hx, hy - 4, 6, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
+    ctx.restore();
+    ctx.restore();
   };
   let last = performance.now();
   const loop = (now) => {
@@ -18137,24 +18189,41 @@ function renderErrance(root) {
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
         const r = interactJarre(st, jid);
-        if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); }
+        if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(o.x, o.y); }
         save();
       }
     }
+    // §6 caméra : zoom selon la distance parcourue, look-ahead de 0,12 s sur la vitesse, lerp indépendant du framerate
+    const v = st.hero.v ?? { x: 0, y: 0 };
+    const moving = Math.hypot(v.x, v.y) > 0.05;
+    const dist = Math.hypot(st.hero.x - st.map.spawn.x, st.hero.y - st.map.spawn.y);
+    let zT = 1.05 + Math.min(1, dist / 26) * 0.6 - (moving ? 0.1 : 0);
+    zT = Math.max(1.0, Math.min(1.7, zT));
+    cam.z += (zT - cam.z) * Math.min(1, 3.5 * dt);
+    const cxT = st.hero.x * T + v.x * T * 0.12;
+    const cyT = st.hero.y * T + v.y * T * 0.12;
+    cam.x += (cxT - cam.x) * Math.min(1, 4.5 * dt);
+    cam.y += (cyT - cam.y) * Math.min(1, 4.5 * dt);
     draw();
     erranceRAF = requestAnimationFrame(loop);
   };
   erranceRAF = requestAnimationFrame(loop);
-  canvas.addEventListener('pointerdown', (e) => {
+  let dragging = false, lastTx = -1, lastTy = -1;
+  const toWorld = (e) => {
     const r = canvas.getBoundingClientRect();
-    const px = e.clientX - r.left + cam.x, py = e.clientY - r.top + cam.y;
+    return { x: cam.x + (e.clientX - r.left - vw / 2) / cam.z, y: cam.y + (e.clientY - r.top - vh / 2) / cam.z };
+  };
+  canvas.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    const wpos = toWorld(e);
+    const px = wpos.x, py = wpos.y;
     const hx = st.hero.x * T, hy = st.hero.y * T;
     if (Math.hypot(px - hx, py - hy) < T) {
       const fx = Math.floor(st.hero.x), fy = Math.floor(st.hero.y + 1);
       const j = st.map.jarres.find((jj) => jj.x === fx && jj.y === fy && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
       if (j) {
         const r2 = interactJarre(st, `jarre-${j.x}-${j.y}`);
-        if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); save(); }
+        if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(j.x, j.y); save(); }
       }
       return;
     }
@@ -18181,7 +18250,18 @@ function renderErrance(root) {
     } else {
       setTarget(st, tx, ty);
     }
+    lastTx = Math.floor(px / T); lastTy = Math.floor(py / T);
   });
+  // §4 : au drag, A* seulement si la tuile cible a changé (mémo lastTx/lastTy)
+  canvas.addEventListener('pointermove', (e) => {
+    if (!dragging || st.pending) return;
+    const wpos = toWorld(e);
+    const tx = Math.floor(wpos.x / T), ty = Math.floor(wpos.y / T);
+    if (tx !== lastTx || ty !== lastTy) { lastTx = tx; lastTy = ty; setTarget(st, tx, ty); }
+  });
+  // §10 iOS : pointerup/pointercancel écoutés sur window, pas sur le canvas
+  window.addEventListener('pointerup', () => { dragging = false; });
+  window.addEventListener('pointercancel', () => { dragging = false; });
   root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#terres'); };
 }
 
@@ -21045,6 +21125,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.29 : Correctifs terrain — CSS mobile + fluidité de l’errance', 'Le bloc CSS des écrans récents n’est plus affiché en texte brut sur téléphone (remonté dans le <style> du head). Errance : pilotage inertiel avec virages en arc et freinage (plus d’orbite), caméra fluide indépendante du framerate avec look-ahead et zoom, décor pré-rendu en un seul drawImage par frame, rendu net en haute densité (DPR ≤ 2), drag avec mémo de cible et pointerup sur window pour iOS.'],
   ['v1.27 : Bloc visuel — hub-ville, Terres Sauvages, errance (Marées)', 'L’accueil devient un hub-ville (scène procédurale, héroïne cliquable, quêtes du jour) avec le bouton « LES TERRES SAUVAGES ». Nouvelle page de sélection des zones (départ : la zone de l’eau, déblocage en chaîne par le donjon de zone) et errance top-down dans la zone témoin Marées : carte canvas déterministe, déplacement au clic (A* + lissage), rencontres dans les hautes herbes, autel de soin, combats en chaîne. Migration v26.'],
   ['v1.26 : Correctif — le badge « nouvelle carte » quitte l’équipe', 'Une carte placée en équipe perd enfin son badge ✨ (il n’était vidé que dans la fiche). Le test IHM couvre désormais un parcours complet : départ, équipe, donjon, combat, récompenses, quêtes, boutique, guilde, inventaire, sauvegarde.'],
 

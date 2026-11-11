@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.29] — 2026-11-11 — Correctifs terrain : CSS mobile + fluidité de l'errance
+
+Le bloc CSS des écrans récents (Récompenses, Boutique, équipement, FX), collé après `</html>`, est remonté dans le `<style>` du head : plus aucun texte brut visible sur téléphone. Errance conforme au guide : pilotage inertiel (§5 : accélération, virages en arc, freinage, aucune orbite, collision par axe, tilt), caméra lerp indépendante du framerate + look-ahead 0,12 s + zoom 1,05→1,7 (§6), décor pré-rendu une fois puis un seul `drawImage` par frame (§3), canvas en résolution native avec DPR plafonné à 2, mémo A* au drag et `pointerup` sur `window` pour iOS (§4/§10). 141 tests, smoke 269 checks. Digest inchangé `f72106ff…` 1379/3000.
+
+
 ## [1.28] — 2026-11-11 — Illustrations : la campagne V3 devient la source unique, anciennes sources archivées
 
 La vague 3 (271 prompts langage naturel painterly, `tools/prompts-v3.json`, rapport `tools/out-v2/RAPPORT-vague3.md`) est validée et devient l'unique source d'illustrations : nouveau manifeste `assets-v3.json` (265 arts + 8 fonds, budgets charte §13, 24 Mo, 0 au-dessus du plafond), `ART_MANIFESTS = { v3: 'assets-v3.json' }` dans `src/ui.js`. Les anciens manifests `assets.json` (DreamShaper XL), `assets-wai.json` (WAI comparatif) et `assets-v2.json` (vague 2) sont déplacés dans `archives/assets/`. Vidéos WAN 2.1 v3 (hub, Marées, sprites) livrées dans `tools/out-v2/video/` avec frames QA. Masters 1040×1520 conservés hors repo (ComfyUI/output/out-v2/state/masters-v3). Moteur et data inchangés.
