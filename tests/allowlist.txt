@@ -21,3 +21,4 @@
 21   # numero de version du format de sauvegarde (structure du champ)
 22   # numero de version du format de sauvegarde (structure du champ)
 23   # numero de version du format de sauvegarde (structure du champ)
+24   # numero de version du format de sauvegarde (structure du champ)

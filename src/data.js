@@ -119,6 +119,9 @@ const MARCHAND = DATA.marchand ?? { prixParRarete: {}, raretesVendues: [], maxEx
 // économie v2 lot E3 : Guilde (ex-Forge) — compagnons en rotation quotidienne (data/guilde.json)
 const GUILDE = DATA.guilde ?? { prixCompagnons: {}, nbOffresJour: 3, maxExemplaires: 3 };
 
+// économie v2 lot E4 : quêtes quotidiennes (data/quetes.json)
+const QUETES = DATA.quetes ?? { petites: [], moyennes: [], grandes: [], grandeBonusN: { unJourSur: 3 }, bonusCompletion: { pierre: 1 } };
+
 const EQUIP_DROP_RATE = E.EQUIP_DROP_RATE;
 
 const GEM_BRUT_PRIX = E.GEM_BRUT_PRIX;

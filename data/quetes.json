@@ -1,0 +1,23 @@
+{
+  "petites": [
+    { "id": "tuer10", "type": "tuer", "n": 10, "label": "Vaincre 10 monstres", "or": 80 },
+    { "id": "errance3", "type": "gagnerErrance", "n": 3, "label": "Gagner 3 combats d'errance", "or": 90, "errance": true },
+    { "id": "recolte10", "type": "recolter", "n": 10, "label": "Récolter 10 collectables en errance", "or": 80, "errance": true },
+    { "id": "boutique1", "type": "acheter", "n": 1, "label": "Acheter 1 objet à la Boutique", "or": 60 }
+  ],
+  "moyennes": [
+    { "id": "tuer25", "type": "tuer", "n": 25, "label": "Vaincre 25 monstres", "or": 120 },
+    { "id": "donjon1", "type": "finirDonjon", "n": 1, "label": "Finir 1 donjon", "or": 100 },
+    { "id": "evoluer1", "type": "evoluer", "n": 1, "label": "Évoluer 1 carte", "or": 100 },
+    { "id": "crans3", "type": "apprendre", "n": 3, "label": "Apprendre 3 crans", "or": 120, "errance": true },
+    { "id": "fusion2", "type": "fusionner", "n": 2, "label": "Fusionner 2 créatures", "or": 100 }
+  ],
+  "grandes": [
+    { "id": "donjons2", "type": "finirDonjon", "n": 2, "label": "Finir 2 donjons", "or": 150 },
+    { "id": "boss1", "type": "boss", "n": 1, "label": "Vaincre 1 boss", "or": 120 },
+    { "id": "recruter1", "type": "recruter", "n": 1, "label": "Recruter 1 créature au marchand", "or": 100, "eclat": true }
+  ],
+  "grandeBonusN": { "unJourSur": 3, "note": "la grande quête du jour porte une carte N (naissance) un jour sur trois (seed de la date)" },
+  "bonusCompletion": { "pierre": 1, "label": "Toutes les quêtes du jour : +1 pierre d'éveil" },
+  "note": "Quêtes quotidiennes (économie v2 lot E4) : 1 petite + 1 moyenne + 1 grande par jour, rotation seed de la date. Les quêtes marquées errance ne sont tirées qu'une fois l'errance implémentée. Progression persistée, remise à zéro au changement de jour."
+}

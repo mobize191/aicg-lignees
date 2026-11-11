@@ -985,6 +985,29 @@ async function main() {
     check('B8 g 0 exception lot E3a', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot E4 économie v2 — quêtes quotidiennes (page #quetes, progression, récompenses, bonus)
+    api.go('#quetes');
+    await wait(20);
+    const list = api.ensureQuetes();
+    check('B9 a 3 quêtes du jour (1 petite + 1 moyenne + 1 grande), déterministes', list.length === 3 && api.ensureQuetes().map((q) => q.id).join() === list.map((q) => q.id).join(), list.map((q) => q.id).join());
+    check('B9 b quêtes du jour rendues avec barre de progression', doc.body.querySelectorAll('.quest-row').length === 3 && !!doc.body.querySelector('.quest-bar'), '');
+    api.store.gold = 0;
+    const gold0 = api.store.gold;
+    const q = list.find((x) => x.type === 'tuer');
+    api.questProgress('tuer', q.n);
+    check('B9 c quête accomplie : +or, done=true', q.done === true && api.store.gold === gold0 + q.or, `or=${api.store.gold}`);
+    check('B9 d pas de bonus de complétion tant que les 3 ne sont pas faites', api.store.quetes.bonusDone === false && api.pierreCount() === 0, '');
+    const rest = list.filter((x) => !x.done);
+    for (const r of rest) api.questProgress(r.type, r.n);
+    check('B9 e bonus complétion : +1 pierre d’éveil une fois les 3 faites', api.store.quetes.bonusDone === true && api.pierreCount() === 1, `pierres=${api.pierreCount()}`);
+    const day2 = { ...api.store.quetes, day: '1999-01-01' };
+    api.store.quetes = day2;
+    const list2 = api.ensureQuetes();
+    check('B9 f changement de jour : quêtes remises à zéro', api.store.quetes.day !== '1999-01-01' && list2.every((x) => !x.done && x.progress === 0), '');
+    check('B9 g 0 exception lot E4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

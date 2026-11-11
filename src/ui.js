@@ -429,6 +429,7 @@ function buyPotion(id) {
   if (store.gold < p.prix) { toast(`✗ Il faut ${p.prix} or pour ${p.nom}.`, 'warn'); return false; }
   store.gold -= p.prix;
   addPotion(id, 1);
+  questProgress('acheter');
   save();
   updatePtsBadge();
   return true;
@@ -441,6 +442,7 @@ function buyEclat(element) {
   if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour un éclat brut (${element}).`, 'warn'); return false; }
   store.gold -= prix;
   addGem('brut', element, 1);
+  questProgress('acheter');
   save();
   updatePtsBadge();
   return true;
@@ -453,6 +455,7 @@ function buyEquipment(id) {
   if (store.gold < piece.prix) { toast(`✗ Il faut ${piece.prix} or pour ${piece.nom}.`, 'warn'); return false; }
   store.gold -= piece.prix;
   addEquipmentPiece(id, 1);
+  questProgress('acheter');
   save();
   updatePtsBadge();
   return true;
@@ -504,6 +507,55 @@ function buyCompagnon(id) {
   return true;
 }
 
+// économie v2 lot E4 : quêtes quotidiennes (1 petite + 1 moyenne + 1 grande, seed de la date)
+function quetesDuJour() {
+  const rng = mulberry32(seedOfDay());
+  const pick = (arr) => {
+    const pool = (arr ?? []).filter((q) => !q.errance);
+    return pool.length ? pool[Math.floor(rng() * pool.length)] : null;
+  };
+  const g = pick(QUETES.grandes);
+  const bonusN = !!g && (seedOfDay() % (QUETES.grandeBonusN?.unJourSur ?? 3)) === 0;
+  return [pick(QUETES.petites), pick(QUETES.moyennes), g].filter(Boolean)
+    .map((q) => ({ ...q, progress: 0, done: false, bonusN: q === g && bonusN }));
+}
+
+function ensureQuetes() {
+  if (store.quetes.day !== todayKey()) {
+    store.quetes = { day: todayKey(), list: quetesDuJour(), bonusDone: false };
+  }
+  return store.quetes.list;
+}
+
+function questProgress(type, n = 1) {
+  ensureQuetes();
+  let changed = false;
+  for (const q of store.quetes.list) {
+    if (q.done || q.type !== type) continue;
+    q.progress = Math.min(q.n, (q.progress ?? 0) + n);
+    if (q.progress >= q.n) {
+      q.done = true;
+      changed = true;
+      addGold(q.or ?? 0);
+      let extra = `+${q.or ?? 0} 🪙 or`;
+      if (q.eclat) { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); extra += ` · +1 éclat brut (${el})`; }
+      if (q.bonusN) { const c = drawDailyCommon(); grantCards([c.id]); extra += ` · ${RACE_GLYPH[raceOfCard(c)] ?? '🎴'} ${c.name} rejoint la collection`; }
+      toast(`✓ Quête accomplie : ${q.label} — ${extra}`);
+    }
+  }
+  if (changed) {
+    const all = store.quetes.list.length > 0 && store.quetes.list.every((q) => q.done);
+    if (all && !store.quetes.bonusDone) {
+      store.quetes.bonusDone = true;
+      const np = QUETES.bonusCompletion?.pierre ?? 1;
+      addPierres(np);
+      toast(`🏆 Toutes les quêtes du jour accomplies : +${np} pierre d'éveil !`);
+    }
+    save();
+    updatePtsBadge();
+  }
+}
+
 // économie v2 lot E2 : marchand de créatures — monstres non nommés, raretés vendues en data
 function marchandMonsters() {
   const vendues = new Set(MARCHAND.raretesVendues ?? []);
@@ -523,6 +575,7 @@ function buyMonster(id) {
   if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour ${m.name}.`, 'warn'); return false; }
   store.gold -= prix;
   newInst(id, 1, 0);
+  questProgress('recruter');
   save();
   updatePtsBadge();
   return true;
@@ -778,6 +831,7 @@ const store = {
   shards: {}, 
   saveBroken: false, 
   dailyDone: '', 
+  quetes: { day: '', list: [], bonusDone: false },
   dailyLevel: null, 
   defiActive: false, 
   regEclats: 0, 
@@ -866,6 +920,7 @@ function snapshot() {
     seen: [...store.seen],
     shards: store.shards,
     dailyDone: store.dailyDone,
+    quetes: { day: store.quetes?.day ?? '', list: (store.quetes?.list ?? []).map((q) => ({ ...q })), bonusDone: !!store.quetes?.bonusDone },
     dailyLevel: store.dailyLevel,
     runMod: store.runMod ?? null,
     grimoire: [...(store.grimoire ?? [])],
@@ -1081,6 +1136,9 @@ function restore(data) {
   store.equip = (data.equip && typeof data.equip === 'object') ? { ...data.equip } : {};
   store.equipTeam = Array.isArray(data.equipTeam) && data.equipTeam.length === 2 ? [...data.equipTeam] : [null, null];
   store.dailyDone = typeof data.dailyDone === 'string' ? data.dailyDone : '';
+  store.quetes = (data.quetes && typeof data.quetes === 'object')
+    ? { day: String(data.quetes.day ?? ''), list: Array.isArray(data.quetes.list) ? data.quetes.list.filter((q) => q && q.id).map((q) => ({ ...q })) : [], bonusDone: !!data.quetes.bonusDone }
+    : { day: '', list: [], bonusDone: false };
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
     : null;
@@ -3969,19 +4027,13 @@ async function animate(events, ms, gen = null) {
         // boucle v2 lot 4 : récompenses structurées pour l'écran « Récompenses » (chaque gain cliquable)
         const recomp = [];
         const pushRecomp = (kind, label, detail = '', rarity = null) => recomp.push({ kind, label, detail, rarity });
-        if (won && store.defiActive) {
-          pts = Math.round(40 * tactMult * loot.pts);
-          store.dailyDone = todayKey();
-          addGold(pts);
-          
-          const drawn = drawDailyCommon();
-          addGem('brut', drawn.element);
-          addPierres(1);
-          grantCards([drawn.id]);
-          save();
-          updatePtsBadge();
-          rewardLine = `+${pts} 🪙 or · 📠 +1 éclat brut ${drawn.element} · 💎 +1 pierre d’éveil · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
-        } else if (won) {
+        if (won) {
+          // économie v2 lot E4 : quêtes quotidiennes — monstres vaincus, boss, donjon fini
+          const nbEnnemis = [...(state.enemies?.avant ?? []), ...(state.enemies?.arriere ?? [])].filter((u) => u && u.hp <= 0).length;
+          if (nbEnnemis > 0) questProgress('tuer', nbEnnemis);
+          const lastRewards = stageRewards(store.seed, store.stage, 0, store.dungeon, store.diff);
+          if (lastRewards?.boss) questProgress('boss');
+          if (finalClear) questProgress('finirDonjon');
           
           
           
@@ -4226,7 +4278,8 @@ async function animate(events, ms, gen = null) {
         if (won && store.defiActive) {
           store.defiActive = false;
           save();
-        } else if (won && store.stage < dungeonById(store.dungeon).floors) {
+        }
+        if (won && !store.defiActive && store.stage < dungeonById(store.dungeon).floors) {
           const chainNext = () => {
             chainTimer = null;
             if (recompOpen) { chainTimer = setTimeout(chainNext, 400); return; } // on attend « Tout ramasser »
@@ -4735,16 +4788,37 @@ function renderBoutique(root) {
   });
 }
 
+// économie v2 lot E4 : page Quêtes quotidiennes
+function renderQuetes(root) {
+  const list = ensureQuetes();
+  const taille = (id) => (QUETES.petites ?? []).some((q) => q.id === id) ? 'Petite' : (QUETES.moyennes ?? []).some((q) => q.id === id) ? 'Moyenne' : 'Grande';
+  const rows = list.map((q) => {
+    const pct = Math.min(100, Math.round(((q.progress ?? 0) / q.n) * 100));
+    return `<div class="shop-row quest-row ${q.done ? 'done' : ''}">
+      <span>📜 <b>${q.label}</b> <span class="muted">${taille(q.id)} · ${q.progress ?? 0}/${q.n} · récompense : ${q.or} 🪙 or${q.eclat ? ' + 1 éclat brut' : ''}${q.bonusN ? ' + 1 naissance (carte N)' : ''}</span>
+        <div class="quest-bar"><div class="quest-fill" style="width:${pct}%"></div></div>
+      </span>
+      <span class="chip ${q.done ? 'on' : ''}">${q.done ? 'Accomplie' : `${pct} %`}</span>
+    </div>`;
+  }).join('');
+  const allDone = list.length > 0 && list.every((q) => q.done);
+  root.innerHTML = `
+    <h2>📜 Quêtes du jour</h2>
+    <p class="muted">3 quêtes en rotation quotidienne (seed du ${todayKey()}) — 1 petite, 1 moyenne, 1 grande. Progression persistée, remise à zéro chaque nuit. Solde : <b>🪙 ${store.gold} or</b> · pierres d’éveil : <b>💎 ${pierreCount()}</b>.</p>
+    ${rows || '<p class="muted fam-hint">Aucune quête aujourd’hui.</p>'}
+    <p class="muted">${allDone
+      ? `🏆 Toutes les quêtes sont accomplies — bonus de complétion : +${QUETES.bonusCompletion?.pierre ?? 1} pierre d’éveil ${store.quetes.bonusDone ? 'reçu' : ''}.`
+      : `Bonus de complétion : +${QUETES.bonusCompletion?.pierre ?? 1} pierre d’éveil si les 3 quêtes sont accomplies aujourd’hui.`}</p>`;
+}
+
 function renderDonjons(root) {
   root.innerHTML = `
     <h2>Donjons</h2>
     <p class="muted">Cinq régions à déverrouiller en chaîne, dix étages chacune, cinq difficultés : plus la difficulté monte, plus les créatures sont rares, les points abondants et les jetons du boss final précieux. Chaque entrée repart de l’étage 1 — une défaite ne bloque jamais.</p>
     <div class="defi-card">
-      <h3>🌟 Défi du jour</h3>
-      ${store.dailyDone === todayKey()
-        ? `<p class="muted">Déjà relevé aujourd’hui — le prochain défi arrive demain.</p>`
-        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</p>
-      <div class="dungeon-actions"><span class="btn big enter-btn-defi">Combattre le défi du jour</span></div>`}
+      <h3>📜 Quêtes quotidiennes</h3>
+      <p class="muted">Le défi du jour est remplacé par 3 quêtes en rotation quotidienne (1 petite + 1 moyenne + 1 grande) : or, parfois une naissance, et 1 pierre d’éveil si les trois sont accomplies.</p>
+      <div class="dungeon-actions"><a class="btn big" href="#quetes">Voir les quêtes du jour</a></div>
     </div>
     <div class="dungeon-grid">
       ${DUNGEONS.map((d) => {
@@ -4797,16 +4871,6 @@ function renderDonjons(root) {
   root.querySelectorAll('.enter-btn').forEach((el) => {
     el.onclick = () => enterAt(1, el.dataset.dungeon);
   });
-  root.querySelectorAll('.enter-btn-defi').forEach((el) => {
-    el.onclick = () => {
-      store.defiActive = true;
-      if (!store.dailyLevel || store.dailyLevel.day !== todayKey()) {
-        store.dailyLevel = { day: todayKey(), lvl: teamLevel() };
-      }
-      save();
-      go('#combat');
-    };
-  });
   root.querySelectorAll('.checkpoint-btn').forEach((el) => {
     el.onclick = () => enterAt(Number(el.dataset.stage), el.dataset.dungeon);
   });
@@ -4825,6 +4889,7 @@ function forgeEvolve(iid, to = null) {
     toast(`\u2717 ${r.reason}`, 'warn');
     return;
   }
+  questProgress('evoluer');
   toast(`\u2713 \u00c9volution : ${byId(r.nextId).name} \u2014 Ascendance +${r.asc} % grav\u00e9e${r.inherited ? `, ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''} !`);
   openRevealModal([r.nextId], { title: '⭐ ÉVOLUTION !', subtitle: `Ascendance grav\u00e9e : +${r.asc} % de stats de base${r.inherited ? ` \u00b7 ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''}.`, note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer' });
 }
@@ -4956,6 +5021,7 @@ function renderForge(root) {
       const [rar, cat] = el.dataset.altar.split('|');
       const r = runAltar(rar, cat);
       if (r.ok) {
+        questProgress('fusionner');
         toast(`\u2713 L\u2019autel absorbe 5 ${rar} (${cat === 'pers' ? 'personnages' : 'monstres'}) \u2014 ${byId(r.id).name} (${r.nextRar}, \u00e9l\u00e9ment ${r.element}) na\u00eet !`);
         openRevealModal([r.id], { title: '🕯️ L\u2019autel de génération', subtitle: `5 ${rar} absorb\u00e9es \u2014 \u00e9l\u00e9ment ${r.element} pond\u00e9r\u00e9. La carte rejoint d\u00e9j\u00e0 votre collection.`, note: 'Touchez la carte pour la révéler.', cta: 'Bien reçu !' });
       }
@@ -5002,6 +5068,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.23 : Économie v2 lot E4 — quêtes quotidiennes', 'Le défi du jour laisse place à 3 quêtes par jour (1 petite + 1 moyenne + 1 grande, rotation du jour) : or, parfois une naissance un jour sur trois, et 1 pierre d’éveil si les trois sont faites. Migration v24. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.22 : Économie v2 lot E3a — la Guilde recrute des compagnons', 'La Forge devient la Guilde. Compagnons du jour : 3 offres en rotation quotidienne (seed du jour), rangs C à UR, 500 à 2 000 or, limite 3 exemplaires — le rang L ne se recrute jamais. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.21 : Économie v2 lot E2 — marchand de créatures', 'Nouveau rayon 🐾 à la Boutique : monstres non nommés, raretés C à UR, 200 à 10 000 or (échelle en données), limite 3 exemplaires — pour la fusion et les enseignements. Les jetons disparaîtront au rework Forge → Guilde. Digest inchangé : f72106ff… 1379/3000.'],
@@ -5300,6 +5368,7 @@ registerRoute('#equipe', renderEquipe);
 registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
+registerRoute('#quetes', renderQuetes);
 registerRoute('#boutique', renderBoutique);
 registerRoute('#inventaire', renderInventaire);
 registerRoute('#combat', renderCombat);

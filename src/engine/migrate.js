@@ -178,7 +178,15 @@ function v22to23(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23 };
+// v23 -> v24 (économie v2 lot E4) : quêtes quotidiennes — état vierge, le défi du jour est remplacé
+// (le champ dailyDone reste en sauvegarde, inerté). Non destructif.
+function v23to24(s) {
+  s.version = 24;
+  if (!s.quetes || typeof s.quetes !== 'object') s.quetes = { day: '', list: [], bonusDone: false };
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

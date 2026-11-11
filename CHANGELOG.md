@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.23] — 2026-11-11 — Économie v2, lot E4 : quêtes quotidiennes (défi du jour supprimé, migration v24)
+
+Nouvelle page 📜 Quêtes : 3 quêtes par jour en rotation quotidienne (1 petite + 1 moyenne + 1 grande), progression persistée remise à zéro chaque nuit. Récompenses en or, la grande quête porte une naissance (carte N) un jour sur trois ou un éclat brut ; bonus de complétion : 1 pierre d’éveil. Le défi du jour est supprimé. Migration v24 non destructive. Digest inchangé `f72106ff…` 1379/3000. 134 tests, smoke 238 checks (7 nouveaux verts).
+
+
 ## [1.22] — 2026-11-11 — Économie v2, lot E3a : la Guilde recrute des compagnons
 
 La Forge s'appelle désormais la **Guilde**. Nouveau : les **compagnons du jour** — 3 offres en rotation quotidienne (seed de la date), rangs C à UR, 500 à 2 000 or, limite 3 exemplaires par carte, rang L jamais recrutable. Évolutions et autel inchangés. Digest inchangé `f72106ff…` 1379/3000. 132 tests, smoke 231 checks (7 nouveaux verts).

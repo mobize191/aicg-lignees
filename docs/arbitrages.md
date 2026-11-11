@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 lot E4 livré (quêtes quotidiennes, migration v24)
+
+- **Livré** : page 📜 Quêtes (menu + carte Donjons) — **3 quêtes/jour en rotation déterministe** (seed de la date : 1 petite + 1 moyenne + 1 grande, `data/quetes.json`), progression persistée et remise à zéro chaque nuit. Récompenses : or (60-150 selon la taille), la grande porte **1 éclat brut** ou **1 carte N un jour sur 3** (seed), **bonus de complétion : 1 pierre d'éveil** (acté). Hooks : monstres vaincus/boss/donjon fini en combat, achats Boutique, recrutement marchand, évolution, fusion à l'autel. Quêtes « errance » en data mais non tirées tant que l'errance n'existe pas. **Défi du jour supprimé** (remplacé par les quêtes, acté 10/11) ; `drawDailyCommon` reste la source des naissances de quête. Migration v23 → v24 non destructive (`quetes` initialisé, `dailyDone` inerté mais conservé).
+- **Preuve** : build ok, **134 tests** verts (migration v24 + pool de quêtes en data), smoke **238 checks** (7 nouveaux B9 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (les quêtes ne touchent pas les maths de combat).
+
 ## 2026-11-11 : MESURE — économie v2 lot E3a livré (Guilde ex-Forge : compagnons du jour)
 
 - **Livré** : la Forge s'appelle désormais la **Guilde** (route et menu inchangés côté hash) et propose, à côté des évolutions et de l'autel inchangés, une section **Compagnons du jour** : rotation déterministe de 3 offres (seed FNV de la date), cartes non monstres, non archivées, rangs C à UR, prix en data (`data/guilde.json` : C 500 → UR 2 000 or, acté), limite 3 exemplaires, rang L/N jamais recrutable. Achat en or, exemplaire ajouté à la collection avec modale de révélation. **Les jetons restent en place pour l'instant** — leur suppression (avec conversion en or en migration) est le lot E3b, option conservative pour garder un lot = une préoccupation.

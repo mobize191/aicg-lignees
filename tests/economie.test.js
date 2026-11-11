@@ -55,3 +55,28 @@ test('économie v2 lot E3a — Guilde : compagnons, prix actés C 500 → UR 2 0
   assert.ok(!('L' in g.prixCompagnons) && !('N' in g.prixCompagnons), 'L et N jamais recrutables');
   assert.equal(g.maxExemplaires, 3);
 });
+
+test('économie v2 lot E4 — quêtes quotidiennes en data + migration v24 non destructive', () => {
+  const D = loadData();
+  const q = D.quetes;
+  assert.ok(q.petites.length >= 3 && q.moyennes.length >= 3 && q.grandes.length >= 3, 'pool de quêtes par taille');
+  for (const t of ['petites', 'moyennes', 'grandes']) {
+    for (const quest of q[t]) {
+      assert.ok(quest.id && quest.type && quest.n > 0 && quest.or > 0, `quête ${quest.id} cohérente`);
+    }
+  }
+  assert.equal(q.bonusCompletion.pierre, 1, 'bonus de complétion : 1 pierre d’éveil (acté)');
+  assert.equal(q.grandeBonusN.unJourSur, 3, 'grande quête : carte N un jour sur trois');
+});
+
+test('migration v23 -> v24 : champ quetes initialisé, rien perdu', async () => {
+  const { loadEngine } = await import('./helpers/load.mjs');
+  const E = loadEngine();
+  const old = { version: 23, gold: 500, potions: { soin30: 2 }, dailyDone: '2026-11-10', instances: [] };
+  const out = E.migrate(old);
+  assert.equal(out.version, 24);
+  assert.equal(out.gold, 500, 'or conservé');
+  assert.deepEqual(out.potions, { soin30: 2 }, 'potions conservées');
+  assert.equal(out.dailyDone, '2026-11-10', 'dailyDone inerté mais conservé');
+  assert.deepEqual(out.quetes, { day: '', list: [], bonusDone: false }, 'quêtes initialisées vierges');
+});
