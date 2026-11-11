@@ -65,3 +65,28 @@ test('contenu v3 lot C2 — Sirènes des Récifs : 13e famille de monstres, 8 ca
   const sig = data['fusion-map'].marees.signatures;
   assert.ok(ids.every((id) => sig[id]), 'signatures de fusion couvertes (biome trié)');
 });
+test('contenu v3 lot C3 — gobelins régionaux : foyer Marées, variantes 2 cartes par région (Forge/Bosquet/Crypte/Zénith), pas de M', () => {
+  const data = loadData();
+  const variantes = {
+    forge: ['f2', 'f24'],
+    bosquet: ['g31', 'g32'],
+    crypte: ['k31', 'k32'],
+    zenith: ['z31', 'z32'],
+  };
+  for (const [dj, ids] of Object.entries(variantes)) {
+    const mobs = ids.map((id) => data.monsters.find((m) => m.id === id));
+    assert.ok(mobs.every(Boolean), `${dj} : variantes présentes`);
+    assert.ok(mobs.every((m) => m.dungeon === dj), `${dj} : variantes du bon donjon`);
+    assert.deepEqual(mobs.map((m) => m.rarity), ['C', 'UC'], `${dj} : 2 cartes C/UC`);
+    assert.ok(mobs.every((m) => !(m.name ?? '').includes(',') && m.rarity !== 'M'), `${dj} : pas de nommé ni de M`);
+    const zone = data.zones.find((z) => z.id === 'zone-' + dj);
+    assert.ok(ids.every((id) => zone.rencontres.includes(id)), `${dj} : variantes dans l'errance`);
+    const sig = data['fusion-map'][dj].signatures;
+    assert.ok(ids.every((id) => sig[id] && !data.grimoire.ecole.find((s) => s.id === sig[id].fusion).crans[sig[id].cran].vide), `${dj} : signatures vers des crans pleins`);
+  }
+  const foyer = (data['monster-families'].marees ?? []).find((f) => f.name === 'Gobelins des Écumes');
+  assert.ok(foyer && foyer.lines.flat().length === 8, 'foyer gobelin des Marées : 8 cartes');
+  for (const dj of ['bosquet', 'crypte', 'zenith']) {
+    assert.ok((data['monster-families'][dj] ?? []).some((f) => f.lines.flat().some((id) => variantes[dj].includes(id))), `${dj} : famille régionale déclarée`);
+  }
+});

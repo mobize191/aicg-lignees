@@ -294,6 +294,14 @@
    },
    "g21": {
     "unique": "nuit-des-seves"
+   },
+   "g31": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g32": {
+    "fusion": "etreinte-des-profondeurs",
+    "cran": "II"
    }
   }
  },
@@ -411,6 +419,14 @@
    },
    "k30": {
     "unique": "lame-du-serment"
+   },
+   "k31": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "k32": {
+    "fusion": "hurlement",
+    "cran": "I"
    }
   }
  },
@@ -528,6 +544,14 @@
    },
    "z30": {
     "unique": "prophetie-du-plein-jour"
+   },
+   "z31": {
+    "fusion": "colonne-de-feu",
+    "cran": "I"
+   },
+   "z32": {
+    "fusion": "renvoi-celeste",
+    "cran": "I"
    }
   }
  },

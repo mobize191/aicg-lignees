@@ -2462,5 +2462,83 @@
   "soloMult": 2,
   "agi": 3,
   "int": 5
+ },
+ {
+  "id": "g31",
+  "dungeon": "bosquet",
+  "name": "Gobelin des Mousses",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Terre",
+  "atk": 8,
+  "hp": 56,
+  "soloSpell": "Griffe de Mousse",
+  "agi": 7,
+  "int": 3
+ },
+ {
+  "id": "g32",
+  "dungeon": "bosquet",
+  "name": "Gobelin des Racines",
+  "rarity": "UC",
+  "classe": "Guerrier",
+  "element": "Terre",
+  "atk": 11,
+  "hp": 54,
+  "soloSpell": "Coup de Racine",
+  "agi": 8,
+  "int": 4
+ },
+ {
+  "id": "k31",
+  "dungeon": "crypte",
+  "name": "Gobelin des Caveaux",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Ombre",
+  "atk": 9,
+  "hp": 50,
+  "soloSpell": "Griffe des Ténèbres",
+  "agi": 8,
+  "int": 4
+ },
+ {
+  "id": "k32",
+  "dungeon": "crypte",
+  "name": "Gobelin des Ossements",
+  "rarity": "UC",
+  "classe": "Guerrier",
+  "element": "Ombre",
+  "atk": 12,
+  "hp": 52,
+  "soloSpell": "Coup d'Os",
+  "agi": 8,
+  "int": 5
+ },
+ {
+  "id": "z31",
+  "dungeon": "zenith",
+  "name": "Gobelin des Nuages",
+  "rarity": "C",
+  "classe": "Assassin",
+  "element": "Lumière",
+  "atk": 9,
+  "hp": 50,
+  "soloSpell": "Dard Céleste",
+  "agi": 8,
+  "int": 4
+ },
+ {
+  "id": "z32",
+  "dungeon": "zenith",
+  "name": "Gobelin du Soleil",
+  "rarity": "UC",
+  "classe": "Guerrier",
+  "element": "Feu",
+  "atk": 12,
+  "hp": 52,
+  "soloSpell": "Lame Solaire",
+  "agi": 8,
+  "int": 5
  }
 ]

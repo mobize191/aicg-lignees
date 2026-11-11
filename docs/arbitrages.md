@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — contenu v3 lot C3 (gobelins régionaux) livré : digest re-mesuré, MESURE consignée sans recalibrage
+
+- **Livré** : famille gobeline unique, foyer aux Marées (« Gobelins des Écumes », 8 cartes e1-e19) ; **variantes régionales de 2 cartes (C + UC) par donjon** — Forge (déjà posée : f2 Gobelin des Fumées, f24 Gobelin de Suie), **Bosquet (g31 Gobelin des Mousses, g32 Gobelin des Racines), Crypte (k31 Gobelin des Caveaux, k32 Gobelin des Ossements), Zénith (z31 Gobelin des Nuages, z32 Gobelin du Soleil)**. Pas de M gobelin, pas de nommé. Intégration : pool des vagues (`dungeon`), familles déclarées dans `monster-families`, rencontres d'errance des zones, signatures de fusion vers des crans pleins (biomes triés). Stats agi/int dérivées des `STAT_RATIOS` (invariant T4.3).
+- **Preuve** : build ok, **147 tests** verts (1 nouveau C3 + compteurs de tri T2.2/T2.3/T2.4 relevés à 23/32/32 signatures), smoke **300 checks** (seuls échecs préexistants 46 g/45 e), digest re-mesuré **`f8a9f0bb…` 1359/3000** (0 exception, 1 marathon) contre baseline verrouillée `f72106ff…` 1379/3000 — les vagues du Bosquet/Crypte/Zénith accueillent les nouveaux gobelins. **MESURE consignée, aucune maths d'équilibrage touchée** (baseline verrouillée ACTÉ 11/11).
+
 ## 2026-11-11 : MESURE — contenu v3 lot C2 (Sirènes des Récifs) audité et verrouillé : digest re-mesuré, inchangé
 
 - **Audit de conformité** : la 13e famille de monstres est complète en data depuis le lot 6 du grand chantier (audit session 5) — 8 cartes e23-e30 (C→UC→R→SR tronc, puis 2 voies : Chant/contrôle e27→**L Méliane, Voix du Large** e28, Récifs/dégâts e29→**L Thalassa, Reine des Récifs** e30 ; pas de M), foyer aux Marées (`monstersOf('marees')` = pool des vagues), déclarée dans `monster-families.marees`, intégrée aux rencontres d'errance `zone-marees`, signatures de fusion couvertes (biome trié). Test de régression ajouté (structure 8 cartes, 2 L nommées, pas de M, vagues + errance).

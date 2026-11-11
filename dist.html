@@ -6683,6 +6683,14 @@ const DATA = {
     },
     "g21": {
      "unique": "nuit-des-seves"
+    },
+    "g31": {
+     "fusion": "seve-rongeuse",
+     "cran": "I"
+    },
+    "g32": {
+     "fusion": "etreinte-des-profondeurs",
+     "cran": "II"
     }
    }
   },
@@ -6800,6 +6808,14 @@ const DATA = {
     },
     "k30": {
      "unique": "lame-du-serment"
+    },
+    "k31": {
+     "fusion": "morsure-putride",
+     "cran": "I"
+    },
+    "k32": {
+     "fusion": "hurlement",
+     "cran": "I"
     }
    }
   },
@@ -6917,6 +6933,14 @@ const DATA = {
     },
     "z30": {
      "unique": "prophetie-du-plein-jour"
+    },
+    "z31": {
+     "fusion": "colonne-de-feu",
+     "cran": "I"
+    },
+    "z32": {
+     "fusion": "renvoi-celeste",
+     "cran": "I"
     }
    }
   },
@@ -9431,6 +9455,16 @@ const DATA = {
      ]
     ],
     "side": []
+   },
+   {
+    "name": "Gobelins des Mousses",
+    "lines": [
+     [
+      "g31",
+      "g32"
+     ]
+    ],
+    "side": []
    }
   ],
   "crypte": [
@@ -9497,6 +9531,16 @@ const DATA = {
       "k28",
       "k29",
       "k30"
+     ]
+    ],
+    "side": []
+   },
+   {
+    "name": "Gobelins des Caveaux",
+    "lines": [
+     [
+      "k31",
+      "k32"
      ]
     ],
     "side": []
@@ -9569,6 +9613,16 @@ const DATA = {
     ],
     "side": [],
     "mythic": "z30"
+   },
+   {
+    "name": "Gobelins Célestes",
+    "lines": [
+     [
+      "z31",
+      "z32"
+     ]
+    ],
+    "side": []
    }
   ],
   "divin": [
@@ -12083,6 +12137,84 @@ const DATA = {
    "soloMult": 2,
    "agi": 3,
    "int": 5
+  },
+  {
+   "id": "g31",
+   "dungeon": "bosquet",
+   "name": "Gobelin des Mousses",
+   "rarity": "C",
+   "classe": "Assassin",
+   "element": "Terre",
+   "atk": 8,
+   "hp": 56,
+   "soloSpell": "Griffe de Mousse",
+   "agi": 7,
+   "int": 3
+  },
+  {
+   "id": "g32",
+   "dungeon": "bosquet",
+   "name": "Gobelin des Racines",
+   "rarity": "UC",
+   "classe": "Guerrier",
+   "element": "Terre",
+   "atk": 11,
+   "hp": 54,
+   "soloSpell": "Coup de Racine",
+   "agi": 8,
+   "int": 4
+  },
+  {
+   "id": "k31",
+   "dungeon": "crypte",
+   "name": "Gobelin des Caveaux",
+   "rarity": "C",
+   "classe": "Assassin",
+   "element": "Ombre",
+   "atk": 9,
+   "hp": 50,
+   "soloSpell": "Griffe des Ténèbres",
+   "agi": 8,
+   "int": 4
+  },
+  {
+   "id": "k32",
+   "dungeon": "crypte",
+   "name": "Gobelin des Ossements",
+   "rarity": "UC",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 12,
+   "hp": 52,
+   "soloSpell": "Coup d'Os",
+   "agi": 8,
+   "int": 5
+  },
+  {
+   "id": "z31",
+   "dungeon": "zenith",
+   "name": "Gobelin des Nuages",
+   "rarity": "C",
+   "classe": "Assassin",
+   "element": "Lumière",
+   "atk": 9,
+   "hp": 50,
+   "soloSpell": "Dard Céleste",
+   "agi": 8,
+   "int": 4
+  },
+  {
+   "id": "z32",
+   "dungeon": "zenith",
+   "name": "Gobelin du Soleil",
+   "rarity": "UC",
+   "classe": "Guerrier",
+   "element": "Feu",
+   "atk": 12,
+   "hp": 52,
+   "soloSpell": "Lame Solaire",
+   "agi": 8,
+   "int": 5
   }
  ],
  "potions": {
@@ -13008,7 +13140,9 @@ const DATA = {
     "g11",
     "g17",
     "g18",
-    "g19"
+    "g19",
+    "g31",
+    "g32"
    ],
    "drops": {
     "N": 0.02
@@ -13109,7 +13243,9 @@ const DATA = {
     "k18",
     "k19",
     "k26",
-    "k29"
+    "k29",
+    "k31",
+    "k32"
    ],
    "drops": {
     "N": 0.02
@@ -13210,7 +13346,9 @@ const DATA = {
     "z24",
     "z25",
     "z26",
-    "z27"
+    "z27",
+    "z31",
+    "z32"
    ],
    "drops": {
     "N": 0.02
