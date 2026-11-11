@@ -25,7 +25,7 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 
 1. Deux viewports systématiques : desktop **1440×900** et mobile **390×844** (ajoute **360×740** pour les cas limites). Pour chaque scénario ci-dessous, captures dans les deux viewports.
 2. À chaque page : capture plein écran, puis vérifie (a) aucune erreur dans la console (écoute `page.on('console')` et `page.on('pageerror')`), (b) pas de scroll horizontal (`document.documentElement.scrollWidth <= innerWidth`), (c) aucun texte tronqué visible (ellipsis attendues ok, coupures non), (d) tous les boutons interactifs ont une taille ≥ 32 px en mobile.
-3. Les illustrations (cartes + fonds de donjons) doivent se charger via `assets.json` : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond (`#app` avec background-image). Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
+3. Les illustrations (cartes + fonds de donjons) doivent se charger via `assets-v3.json` (manifeste unique depuis v1.28) : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond (`#app` avec background-image). Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
 4. Le jeu utilise localStorage : vide-le entre les scénarios qui posent une équipe (`localStorage.clear()`), pas pendant un combat.
 
 ### Scénarios (dans l'ordre)

@@ -47,7 +47,7 @@ Tu es un agent de validation UI pour AICG : Lignées, jeu de cartes solo 100% na
 RÈGLES GÉNÉRALES :
 1. Deux viewports systématiques : desktop 1440×900 et mobile 390×844 EN ÉMULATION TACTILE (isMobile + hasTouch, page.tap partout).
 2. À chaque page : capture plein écran + vérifie (a) zéro erreur console (page.on('console') et page.on('pageerror')), (b) pas de scroll horizontal, (c) aucun texte tronqué, (d) boutons interactifs ≥ 32 px (≥ 44 px dans la fenêtre d'action).
-3. Les illustrations (arts de cartes + fonds de donjons) se chargent via assets.json : vérifie qu'au moins une .art-img s'affiche en collection et qu'un combat a un fond. Sinon note « assets non chargés » sans échouer.
+3. Les illustrations (arts de cartes + fonds de donjons) se chargent via assets-v3.json (manifeste unique depuis v1.28) : vérifie qu'au moins une .art-img s'affiche en collection et qu'un combat a un fond. Sinon note « assets non chargés » sans échouer.
 4. localStorage.clear() entre les scénarios qui posent une équipe.
 
 SCÉNARIOS (dans l'ordre, capture à chaque étape dans les deux viewports) :
@@ -88,7 +88,7 @@ ORDRE (portes de validation obligatoires) :
 3. Les 5 fonds de donjons → intégration (python3 tools/make-assets.py) → push.
 4. Les 135 monstres par univers (batch-<univers>.json produits par tools/build-prompts.mjs) → planche par univers → intégration → push.
 5. Naissances (15), familiales et solos : les nommées d'abord (référence la plus haute), puis les autres → intégration → push.
-6. Vidéos de sorts signature (WAN 2.2 5B, 20 frames, 25 fps, boucle fermée ffmpeg, WebM) : après validation de la série d'images, stockées dans site-assets/fx/, JAMAIS dans assets.json ni en base64.
+6. Vidéos de sorts signature (WAN 2.2 5B, 20 frames, 25 fps, boucle fermée ffmpeg, WebM) : après validation de la série d'images, stockées dans site-assets/fx/ (publiées en fx/ par la CI Pages), JAMAIS dans assets-v3.json ni en base64.
 
 INTOUCHABLE : dist.html et le moteur. Après chaque intégration : git status dist.html doit être PROPRE, le digest (node combat-digest.mjs dist.html 3000 = 833a6d2c..., 518 victoires, 0 exception) et le smoke (node smoke-ui.mjs, 171 PASS) restent identiques. Budgets : ≤ 30 Ko par art, ≤ 110 Ko par fond, manifeste cible ≤ 8 Mo, ASCII pur.
 

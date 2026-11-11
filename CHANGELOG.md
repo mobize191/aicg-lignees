@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.30] — 2026-11-11 — CI réparée + documentation à jour
+
+Le workflow Pages copiait `assets.json`/`assets-wai.json`, archivés depuis v1.28 : le déploiement échouait. `.github/workflows/pages.yml` publie désormais `assets-v3.json` (manifeste unique) et `site-assets/fx/` → `fx/` (vidéos de sorts), précédé d'un job **test** (`node build.mjs && node --test`, 141 tests verts). README, travail-local, validation-ihm et roadmap alignés (manifeste v3, baseline courante `f72106ff…` 1379/3000, 141 tests, smoke 269 checks). Moteur et data inchangés : digest inchangé.
+
+
 ## [1.29] — 2026-11-11 — Correctifs terrain : CSS mobile + fluidité de l'errance
 
 Le bloc CSS des écrans récents (Récompenses, Boutique, équipement, FX), collé après `</html>`, est remonté dans le `<style>` du head : plus aucun texte brut visible sur téléphone. Errance conforme au guide : pilotage inertiel (§5 : accélération, virages en arc, freinage, aucune orbite, collision par axe, tilt), caméra lerp indépendante du framerate + look-ahead 0,12 s + zoom 1,05→1,7 (§6), décor pré-rendu une fois puis un seul `drawImage` par frame (§3), canvas en résolution native avec DPR plafonné à 2, mémo A* au drag et `pointerup` sur `window` pour iOS (§4/§10). 141 tests, smoke 269 checks. Digest inchangé `f72106ff…` 1379/3000.
