@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — contenu v3 lot C2 (Sirènes des Récifs) audité et verrouillé : digest re-mesuré, inchangé
+
+- **Audit de conformité** : la 13e famille de monstres est complète en data depuis le lot 6 du grand chantier (audit session 5) — 8 cartes e23-e30 (C→UC→R→SR tronc, puis 2 voies : Chant/contrôle e27→**L Méliane, Voix du Large** e28, Récifs/dégâts e29→**L Thalassa, Reine des Récifs** e30 ; pas de M), foyer aux Marées (`monstersOf('marees')` = pool des vagues), déclarée dans `monster-families.marees`, intégrée aux rencontres d'errance `zone-marees`, signatures de fusion couvertes (biome trié). Test de régression ajouté (structure 8 cartes, 2 L nommées, pas de M, vagues + errance).
+- **Preuve** : build ok, **146 tests** verts (1 nouveau), smoke **300 checks** (seuls échecs préexistants 46 g/45 e), digest re-mesuré **inchangé `f72106ff…` 1379/3000** (0 exception, 1 marathon) — attendu : les Sirènes étaient déjà dans le pool des vagues au moment de la baseline verrouillée ; MESURE consignée, aucun recalibrage.
+
 ## 2026-11-11 : MESURE — contenu v3 lot C1 (marchand v2, tranché ACTÉ) livré : digest inchangé
 
 - **Livré** : marchand de créatures v2 — **3 offres/jour** en rotation quotidienne (`seedOfDay`, même mécanique que les compagnons de la Guilde), prix actés en data (`data/marchand.json` : C 200 / UC 1 500 / R 4 500 / SR 8 000 / UR 10 000 or), **raretés débloquées par difficulté de donjon bouclée** (table `debloqueParDiff` : C dès le départ, +UC après un premier donjon bouclé en Facile, +R en Normal, +SR en Difficile, +UR en Très difficile), L/M/nommés hors vente, limite 3 exemplaires inchangée. UI : section « Offres du jour » + catalogue complet avec mention 🔒 et bouton désactivé tant que la rareté est verrouillée ; achat refusé avec toast si verrouillée.

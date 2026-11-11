@@ -48,3 +48,20 @@ test('le rang N : les 5 Embryons (ex-Bestiau) portent leurs nouveaux noms (renom
   assert.equal(byId('n8').name, 'Embryon des Ténèbres');
   assert.equal(byId('n9').name, 'Embryon des Cieux');
 });
+test('contenu v3 lot C2 — Sirènes des Récifs : 13e famille de monstres, 8 cartes C→L, 2 voies, L Méliane/Thalassa, pas de M, vagues + errance', () => {
+  const data = loadData();
+  const ids = ['e23', 'e24', 'e25', 'e26', 'e27', 'e28', 'e29', 'e30'];
+  const sirenes = ids.map((id) => data.monsters.find((m) => m.id === id));
+  assert.ok(sirenes.every(Boolean), 'les 8 cartes existent');
+  assert.ok(sirenes.every((m) => m.dungeon === 'marees'), 'foyer aux Marées (pool des vagues)');
+  assert.deepEqual(sirenes.map((m) => m.rarity), ['C', 'UC', 'R', 'SR', 'UR', 'L', 'UR', 'L'], 'tronc C→SR puis 2 voies UR→L (Chant et Récifs)');
+  const nommees = sirenes.filter((m) => (m.name ?? '').includes(',')).map((m) => m.name).sort();
+  assert.deepEqual(nommees, ['Méliane, Voix du Large', 'Thalassa, Reine des Récifs'], 'L Méliane et L Thalassa');
+  assert.ok(!sirenes.some((m) => m.rarity === 'M'), 'pas de M sirène');
+  const fam = (data['monster-families'].marees ?? []).find((f) => f.name === 'Sirènes des Récifs');
+  assert.ok(fam && [...fam.lines.flat(), ...(fam.side ?? [])].sort().join() === [...ids].sort().join(), 'famille déclarée dans le bestiaire des Marées');
+  const zone = data.zones.find((z) => z.id === 'zone-marees');
+  assert.ok(ids.every((id) => zone.rencontres.includes(id)), 'intégrées aux rencontres d’errance de la zone Marées');
+  const sig = data['fusion-map'].marees.signatures;
+  assert.ok(ids.every((id) => sig[id]), 'signatures de fusion couvertes (biome trié)');
+});
