@@ -34,6 +34,13 @@
 
 **R7 — QA.** Le style charte (painterly semi-réaliste, couleurs saines, zéro texte/cadre) est critère BLOQUANT sur chaque lot. Livrables : planches + comparatif canon avant/après (a15 / f18 / z19) en tête du rapport vague 3, diagnostic style en tête.
 
+## 3. Process de relance (vague 3)
+
+1. `build-prompts.mjs` v3 : socle NL painterly corrigé → `prompts-v3.json` (271). Les 271 seeds restent ceux de `seeds-v2.csv`.
+2. **Pas de point d'arrêt** (choix de Marc-Olivier du 11/11) : les 271 partent en une seule session (53 refs + 212 génériques + 6 fonds + héros + stills + série 2 IPAdapter), les 6 cartes témoins (e14, f18, d6, z19, a15, g16) générées EN PREMIER et mises en tête de la planche de contrôle pour le QA vision immédiat à la réception.
+3. QA vision du couloir design à la réception du rapport ; recommandations garder / retry / relance par lot.
+4. Rapport : `tools/out-v2/RAPPORT-vague3.md`.
+
 ## 4. Correctifs v3.1 (retour QA vague 3 de Marc-Olivier, 11/11)
 
 > Style VALIDÉ (« rendu vraiment top »). Trois défauts systémiques constatés : (1) monstres rendus en hybrides humain-monstre ou en humains ; (2) beaucoup trop de bustes, il devait y avoir majoritairement du demi-corps ; (3) ~95 % des humanoïdes sont féminins. Causes dans les prompts, corrections ci-dessous, régénération ciblée des seules cartes affectées (vague 3.1), mêmes seeds.
@@ -50,10 +57,3 @@
 2. Lister les cartes affectées depuis le diff de prompts : toutes les `beast:true`, toutes les C/UC/R/SR (recadrage), tous les génériques humanoïdes (genre). Régénérer uniquement celles-ci, mêmes seeds.
 3. Planches : planche-v3-1-beasts.png, planche-v3-1-framing.png, planche-v3-1-gender.png + comptages (buste/demi-corps/full, F/M).
 4. Rapport : `tools/out-v2/RAPPORT-vague3-1.md`, diagnostic style inchangé (pas de re-test du style, il est validé).
-
-## 3. Process de relance (vague 3)
-
-1. `build-prompts.mjs` v3 : socle NL painterly corrigé → `prompts-v3.json` (271). Les 271 seeds restent ceux de `seeds-v2.csv`.
-2. **Pas de point d'arrêt** (choix de Marc-Olivier du 11/11) : les 271 partent en une seule session (53 refs + 212 génériques + 6 fonds + héros + stills + série 2 IPAdapter), les 6 cartes témoins (e14, f18, d6, z19, a15, g16) générées EN PREMIER et mises en tête de la planche de contrôle pour le QA vision immédiat à la réception.
-3. QA vision du couloir design à la réception du rapport ; recommandations garder / retry / relance par lot.
-4. Rapport : `tools/out-v2/RAPPORT-vague3.md`.
