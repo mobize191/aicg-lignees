@@ -2,6 +2,12 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — maquette n°2 « habillage boucle v2 » validée + toast de recrue global
+
+- **La maquette n°2 est VALIDÉE** : `docs/design/maquettes/boucle-v2.html` (5 écrans des lots 1-4 de la boucle v2 : départ à 2 cartes avec 4 propositions par race et révélation aléatoire, sélecteur de marche 25 marches avec niveau de donjon et bande de rareté en toutes lettres, fenêtre d'action avec Objet + badge potions + état éteint, écran Récompenses tout cliquable avec « Tout ramasser », Inventaire minimal groupé). DA or médiévale validée en maquette n°1, appliquée telle quelle. Elle passe au couloir 1 dans l'ordre acté.
+- **Toast de recrue = composant GLOBAL (ACTÉ, retour de Marc-Olivier)** : il apparaît partout où la recrue atterrit — écran Récompenses, rencontre d'errance pendant la marche, fin de donjon. Même style (or médiéval), même position (bas d'écran), même comportement (auto-dismiss).
+- Prochaine maquette du couloir design : économie v2 (Boutique complète, craft), puis errance Marées.
+
 ## 2026-11-11 : ACTÉ — tranchages de session (Marc-Olivier) : calibrage digest verrouillé, JETON_OR clos, marchand v2, icônes refusées, greffe des solos
 
 - **Calibrage digest (roadmap point 8) : STATU QUO ACTÉ**. Relevé du couloir pilotage (N = 10 000, ventilé par donjon × difficulté) : Marées 71,6 %, Forge 58,1 %, Bosquet 46,5 %, Crypte 29,6 %, Zénith 22,1 % (global 45,6 %). Courbe strictement décroissante, Zénith = endgame, équipes du digest volontairement démunies (plancher pessimiste). **La baseline est verrouillée : `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000.** Irrégularités relevées et tolérées : Forge Facile plus dur que Bosquet Facile, Crypte Difficile ≥ Crypte Normal. Aucune maths touchée : les changements futurs (contenu v3, redesign IA de combat) donneront des MESURES, pas des recalibrages, sauf révision datée ici.

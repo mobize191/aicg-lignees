@@ -168,7 +168,7 @@
       </div>
       <div class="band"><b>Niveau de donjon :</b> 7 — puissance attendue de l'équipe.<br /><b>Bande de rareté :</b> <span class="pill" style="background:#1c3a28;color:#9fe0b8">UC</span>→<span class="pill" style="background:#2c2450;color:#c79af0">SR</span> en toutes lettres ; <b>boss final</b> en haut de bande (SR), boss intermédiaire un cran sous.</div>
     </div>
-    <button class="go" style="margin-top:10px">Marcher vers l'étage 8</button>
+    <button class="go" style="margin-top:10px" id="walkbtn">Marcher vers l'étage 8</button>
     <div class="da">maquette — lot 2 : 25 marches par donjon × mode</div>
   </section>
 
@@ -238,13 +238,14 @@
     <div class="da">maquette — lot 4 : inventaire minimal (craft et rayon au bloc visuel)</div>
   </section>
 
-  <div class="toast" id="toast">🃏 <span><b>Crabe des Berges</b> rejoint ton équipe !</span></div>
+  <div class="toast" id="toast">🃏 <span id="toast-txt"><b>Crabe des Berges</b> rejoint ton équipe !</span></div>
 
   <!-- ANNOTATIONS DA -->
   <div class="note" style="left:12px;top:96px">① Départ à 2 cartes (lot 3) : 4 propositions, une par race (humain, bestial, mystique, divin). La choisie s'anime (liseré or) ; la seconde se révèle parmi les 3 restantes. Plus d'équipe complète de départ.</div>
   <div class="note" style="left:150px;top:250px;max-width:200px">② Sélecteur de marche (lot 2) : 25 marches par donjon × mode, bandes de rareté en toutes lettres, niveau de donjon affiché, boss final en haut de bande. Le fil de marche doré marque la progression.</div>
   <div class="note" style="left:12px;top:560px">③ Action Objet (lot 1) : même rang que ⚔ et sorts, badge du stock de potions, action éteinte si 0. Chaque gorgée coûte son tour (ACTÉ).</div>
   <div class="note" style="left:160px;top:420px;max-width:190px">④ Récompenses (lot 4) : or, XP, drops aux couleurs de rareté, recrue éventuelle — tout cliquable, « Tout ramasser » referme. Aucun drop invisible (ACTÉ 11/11).</div>
+  <div class="note" style="left:150px;top:200px;max-width:200px">⑥ Toast de recrue = composant GLOBAL (ACTÉ 11/11 soir) : il apparaît partout où la recrue atterrit — écran Récompenses, rencontre d'errance pendant la marche (bouton « Marcher » ci-dessous), fin de donjon. Même style or, même position.</div>
   <div class="note" style="left:12px;top:120px;display:none" id="note5">⑤ Inventaire minimal groupé (lot 4) : potions, matériaux par zone, gemmes, pièces. Craft + rayon Boutique = bloc visuel v2.</div>
 
   <script>
@@ -278,13 +279,19 @@
       s.classList.add('on');
     });
 
-    // Toast de recrue
+    // Toast de recrue — composant global (Récompenses, errance, fin de donjon)
     let tmr;
-    function showToast() {
+    function showToast(html) {
       const t = document.getElementById('toast');
+      if (html) document.getElementById('toast-txt').innerHTML = html;
       t.classList.add('on');
       clearTimeout(tmr); tmr = setTimeout(() => t.classList.remove('on'), 2800);
     }
+    // Errance : la marche peut croiser une recrue naturelle
+    document.getElementById('walkbtn').onclick = () => {
+      showToast('🧭 <b>Errance</b> — <b>Moqueur des Marées</b> rejoint ton équipe !');
+      setTimeout(() => tabs[2].click(), 2900);
+    };
     document.getElementById('objbtn').onclick = () => {
       const b = document.getElementById('potq');
       const n = Math.max(0, parseInt(b.textContent) - 1);
