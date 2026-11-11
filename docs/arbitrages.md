@@ -2,6 +2,10 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : ACTÉ — prompt de lancement du chantier boucle de jeu v2 (couloir 1)
+
+`docs/prompt-boucle-v2.md` : le prompt à copier au début de la session agent du couloir 1. Il reprend la spec (`docs/design/boucle-v2-spec-plan.md`), les 6 lots avec leur contenu, le périmètre exclu (errance, craft/Boutique complète, équilibrage final, contenu v3, IA de combat), les règles d'or et la chaîne de preuve, dont le recalibrage du digest à chaque lot qui change les maths.
+
 ## 2026-11-11 : ACTÉ — héros de l'errance + WAN 2.1 14B pour tous les cycles vidéo
 
 - **Le héros de l'errance est arbitré** : une **femme aux cheveux blancs sous une cape noire** (Marc-Olivier, 11/11). L'art de référence v2 (WAI v17, canon §15) est débloqué dès la validation de la planche vague 1 ; ADN à inscrire au species-map (héros d'errance : 1girl, white hair, black cape). Le cycle de marche (4 directions, dos via IPAdapter) suit l'art validé.

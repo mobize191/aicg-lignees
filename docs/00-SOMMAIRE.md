@@ -24,6 +24,7 @@
 
 - `docs/validation-ihm.md` : protocole de validation locale avec captures d'écran.
 - `docs/prompt-maj-combat-v2.md` : le prompt de lancement de la mise à jour UI du combat (ciblage interactif, pied de stats, fiche plein cadre).
+- `docs/prompt-boucle-v2.md` : le prompt de lancement du chantier boucle de jeu v2 (régén, niveaux de donjon, départ à 2 cartes, recrutement, drops, XP, baseline).
 - `docs/travail-local.md` : prompts spécialisés prêts à copier (corrections terrain, validation navigateur, campagne d'illustrations).
 - `docs/design/` : les designs courants : spec complète (`spec-design.md`), arbres d'évolution et sorts actuels (`arbres-evolution.md`, `arbres-sorts.md`), familles et races v3 (`familles-races-v3.md`), guide de l'errance top-down (`errance-topdown.md`), catalogues de l'économie v2 (`economie-v2-catalogues.md`), spec et plan de la boucle de jeu v2 (`boucle-v2-spec-plan.md`), brief maquettes et graphismes du bloc visuel (`design-graphisme-v2-plan.md`). Les specs et plans des chantiers clos sont archivés dans `docs/historique/`.
 - `docs/images/` : conventions graphiques, charte graphique v2 (proposée) et plans de campagne d'illustrations.
