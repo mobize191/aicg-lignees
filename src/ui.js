@@ -2355,6 +2355,7 @@ function addCardIid(iid) {
   if (copies >= 3) return { ok: false, reason: 'D\u00e9j\u00e0 3 exemplaires de cette carte plac\u00e9s.' };
   if (copies >= owned) return { ok: false, reason: 'Vous ne poss\u00e9dez pas d\u2019autre exemplaire libre.' };
   store.team.slots.push(iid);
+  clearNewOf(inst.id); // carte placée en équipe : le badge « nouvelle carte » ✨ est retiré
   save();
   return { ok: true };
 }
@@ -4934,6 +4935,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.26 : Correctif — le badge « nouvelle carte » quitte l’équipe', 'Une carte placée en équipe perd enfin son badge ✨ (il n’était vidé que dans la fiche). Le test IHM couvre désormais un parcours complet : départ, équipe, donjon, combat, récompenses, quêtes, boutique, guilde, inventaire, sauvegarde.'],
+
   ['v1.25 : Économie v2 clôturée', 'Boutique complète (potions, éclats, équipement), marchand de créatures, Guilde et compagnons du jour, jetons supprimés (convertis en or, migration v25), quêtes quotidiennes (migration v24). Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.24 : Économie v2 lot E3b — les jetons disparaissent', 'Les jetons de génération sont supprimés : les naissances passent par le départ, les quêtes, la Guilde (compagnons) et le marchand. Migration v25 : les jetons restants sont convertis en or. Digest inchangé : f72106ff… 1379/3000.'],

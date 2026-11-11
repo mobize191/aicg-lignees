@@ -1021,6 +1021,74 @@ async function main() {
     check('B10 e 0 exception lot E3b', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // ---------- B11 : parcours IHM complet (départ -> équipe -> donjon -> combat -> récompenses -> quêtes -> boutique -> guilde -> inventaire -> sauvegarde) ----------
+    mem.clear();
+    store.instances = []; store.collection = new Map(); store.departFait = false; store.tokens = [];
+    store.team.slots = []; store.gold = 0;
+    api.go('#accueil');
+    await wait(40);
+    const choices = els.get('app').querySelectorAll('.depart-choice');
+    const rD = api.choisirDepart(choices[0].dataset.id);
+    await wait(30);
+    check('B11 a départ : 2 cartes accordées (1 choisie + 1 aléatoire)', rD && rD.ok && store.instances.length === 2, `inst=${store.instances.length}`);
+    check('B11 b nouvelle carte : isNew posé tant que non placée', store.instances.every((i) => i.isNew === true), '');
+    api.go('#equipe');
+    await wait(30);
+    const iidA = store.instances[0].iid;
+    const iidB = store.instances[1].iid;
+    api.addCardIid(iidA);
+    api.addCardIid(iidB);
+    check('B11 c équipe : 2 cartes placées', store.team.slots.length === 2, String(store.team.slots.length));
+    check('B11 d régression badge : isNew vidé au placement en équipe', store.instances.every((i) => i.isNew !== true), JSON.stringify(store.instances.map((i) => i.isNew)));
+    api.go('#equipe');
+    await wait(30);
+    check('B11 e plus de badge ✨ dans la grille après placement', !els.get('app').querySelector('.new-badge'), '');
+    api._setAuto(true);
+    api.enterAt(1, 'marees');
+    await wait(60);
+    let st = api._state();
+    check('B11 f combat lancé (étage 1)', !!st, '');
+    let guard = 0;
+    while (st && !st.winner && guard++ < 200) {
+      api.beginRound(st);
+      let g2 = 0;
+      while (g2++ < 60) { if (!api.peekRound(st) || st.winner) break; api.stepRound(st, null); }
+    }
+    check('B11 g combat terminé avec un vainqueur', !!(st && st.winner), `winner=${st && st.winner}`);
+    await wait(100);
+    api.openRecompensesModal([{ kind: 'or', label: '+12 🪙 or', detail: 'étage 1', rarity: null }]);
+    await wait(30);
+    check('B11 h écran Récompenses : modale ouverte avec gains cliquables', !!doc.body.querySelector('.recomp-overlay') && !!doc.body.querySelector('#recomp-all'), '');
+    const allBtn = doc.body.querySelector('#recomp-all');
+    if (allBtn) { allBtn.click(); await wait(30); }
+    check('B11 i « Tout ramasser » referme la modale', !doc.body.querySelector('.recomp-overlay'), '');
+    api.go('#quetes');
+    await wait(30);
+    check('B11 j page Quêtes : 3 quêtes du jour rendues', els.get('app').querySelectorAll('.quest-row').length === 3, String(els.get('app').querySelectorAll('.quest-row').length));
+    api.go('#boutique');
+    await wait(30);
+    store.gold = 500;
+    const g0 = store.gold;
+    api.buyPotion('soin30');
+    check('B11 k achat potion : or déduit, stock +1', store.gold === g0 - 50 && api.potionCount('soin30') >= 1, `or=${store.gold} stock=${api.potionCount('soin30')}`);
+    api.go('#forge');
+    await wait(30);
+    const off = api.compagnonsDuJour();
+    store.gold = 5000;
+    const g1 = store.gold;
+    api.buyCompagnon(off[0].id);
+    check('B11 l recrutement compagnon à la Guilde : or déduit, +1 carte', store.gold === g1 - api.compagnonPrix(off[0]) && store.instances.length === 3, `or=${store.gold} inst=${store.instances.length}`);
+    api.go('#inventaire');
+    await wait(30);
+    const invHtml = els.get('app').innerHTML;
+    check('B11 m inventaire groupé (potions + pièces + gemmes)', invHtml.includes('Potions') && invHtml.includes('Pièces') && invHtml.includes('Gemmes'), '');
+    const rawSave = mem.get('aicg-save') ?? mem.get([...mem.keys()][0]);
+    const parsed = rawSave ? JSON.parse(rawSave) : null;
+    check('B11 n sauvegarde persistée (version 25, quêtes, or)', !!(parsed && parsed.version === 25 && parsed.quetes && Number.isFinite(parsed.gold)), parsed ? `v${parsed.version} or=${parsed.gold}` : 'rien');
+    check('B11 o 0 exception parcours complet', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

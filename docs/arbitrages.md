@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — correctif IHM + parcours de test complet (badge « nouvelle carte », smoke B11)
+
+- **Corrigé** : le badge « nouvelle carte » (✨) restait affiché sur les cartes placées en équipe — `isNew` n'était vidé que dans la fiche. Désormais `addCardIid` appelle `clearNewOf` au placement : une carte en équipe n'est plus marquée comme nouvelle. Régression couverte par les checks B11 d/e du smoke.
+- **Ajouté** : section B11 du smoke IHM — parcours complet départ → équipe (placement + badge) → donjon → combat pas-à-pas → écran Récompenses → quêtes → achat Boutique → recrutement Guilde → inventaire → sauvegarde persistée (v25). Preuve : build ok, **134 tests**, smoke **258 checks** (15 nouveaux B11 verts ; 2 échecs préexistants hors chantier 46 g / 45 e), digest inchangé `f72106ff…` 1379/3000.
+
 ## 2026-11-11 : MESURE — économie v2 clôturée (lots E1-E5) : digest inchangé, baseline maintenue
 
 - **Clôture** : Boutique complète (E1), marchand de créatures (E2), Guilde + compagnons (E3a), jetons supprimés avec conversion en or (E3b, v25), quêtes quotidiennes + défi du jour supprimé (E4, v24). Preuve finale : build ok, **134 tests**, smoke **243 checks** (2 échecs préexistants hors chantier), digest **inchangé partout** — 3000 : `f72106ff…` 1379/3000 ; **N = 10 000 : `3f9fe198…` 4558/10000, 0 exception, 1 marathon** (même baseline que la clôture boucle v2 : l'économie v2 ne touche pas les maths de combat). Rapport : `docs/historique/economie-v2.md`. Reste au bloc visuel : craft en ville, page Personnage à onglets, hub-ville, errance.

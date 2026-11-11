@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.26] — 2026-11-11 — Correctif IHM + parcours de test complet
+
+Le badge « nouvelle carte » (✨) ne reste plus affiché sur les cartes placées en équipe. Le smoke IHM gagne une section B11 : parcours complet (départ 2 cartes, équipe, donjon, combat, Récompenses, quêtes, Boutique, Guilde, inventaire, sauvegarde v25). 134 tests, smoke 258 checks (2 échecs préexistants hors chantier). Digest inchangé `f72106ff…` 1379/3000.
+
+
 ## [1.25] — 2026-11-11 — Économie v2 clôturée (lots E1-E5)
 
 Clôture du chantier économie v2 : Boutique complète, marchand de créatures, Guilde et compagnons du jour, jetons de génération supprimés (conversion en or, migration v25), quêtes quotidiennes (migration v24). Digest inchangé : `f72106ff…` 1379/3000, `3f9fe198…` 4558/10000 (N = 10 000). 134 tests, smoke 243 checks. Rapport : `docs/historique/economie-v2.md`. Prochain bloc : hub-ville + errance (craft en ville et page Personnage à onglets avec la maquette).
