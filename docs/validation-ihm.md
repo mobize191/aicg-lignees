@@ -1,6 +1,6 @@
 # Validation IHM locale — protocole et prompt
 
-Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.31** (hub-ville, économie v2, errance 5 zones + héros dédié, craft en ville, page Personnage, correctifs terrain).
+Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.32** (hub-ville, économie v2, errance 5 zones + héros dédié, craft en ville, page Personnage, vidéos FX en jeu, correctifs terrain + migration v27).
 
 ## Préparation (une fois)
 
@@ -13,9 +13,11 @@ node --test                                   # 144 tests verts attendus
 node smoke-ui.mjs dist.html                   # 294 checks attendus (2 échecs préexistants connus : 46 g / 45 e, moteur)
 node combat-digest.mjs dist.html 3000         # baseline attendue : f72106ff…, 1379/3000, 0 exception, 1 marathon
 node combat-digest.mjs dist.html 10000        # baseline N = 10 000 : 3f9fe198…, 4558/10000
-# servir le jeu (le chargeur d'assets a besoin de http, pas de file://)
-python3 -m http.server 8080
-# → ouvrir http://localhost:8080/dist.html
+# servir le jeu en reproduisant le déploiement Pages (le chargeur d'assets a besoin de http, pas de file://)
+mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance
+cd .site && python3 -m http.server 8080
+# → ouvrir http://localhost:8080/  (index.html = dist.html ; fx/ et errance/ servis comme en ligne)
+# (servir la racine du dépôt à la place = comportement « assets non chargés » : le jeu doit continuer sans échouer)
 ```
 
 ## Le prompt (à copier tel quel)
@@ -36,7 +38,7 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 
 **S1 — Premier lancement / départ à 2 cartes.** `localStorage.clear()`, ouvre la page : l'écran de départ propose 4 cartes (une par race) ; choisis-en une, capture. Vérifie : 2 cartes accordées (1 choisie + 1 aléatoire), l'accueil/hub-ville s'ouvre ensuite.
 
-**S2 — Hub-ville (accueil).** Capture. Vérifie : scène de ville + voile + titre lisibles sur les deux viewports, menu latéral (Boutique, Guilde, Quêtes, Personnage/Inventaire, Paramètres) entièrement visible sans scroll en mobile, l'héroïne (cheveux blancs, cape noire) cliquable avec sa bulle de dialogue, le gros bouton « LES TERRES SAUVAGES » ouvre une pop-up si l'équipe est vide, bouton retour partout.
+**S2 — Hub-ville (accueil).** Capture. Vérifie : scène de ville + voile + titre lisibles sur les deux viewports, menu latéral (Donjons, Terres Sauvages, Boutique, Guilde, Quêtes, **Personnage**, Collection, Glossaire) entièrement visible sans scroll en mobile, l'héroïne (cheveux blancs, cape noire) cliquable avec sa bulle de dialogue, le gros bouton « LES TERRES SAUVAGES » ouvre une pop-up si l'équipe est vide, bouton retour partout.
 
 **S3 — Équipe.** `#equipe` : pose des cartes (3 exemplaires max par carte : la 4e pose refusée avec un message). Capture. Vérifie : 5 slots visibles sans scroll en mobile, puissance d'équipe affichée, appui long (ou clic droit) ouvre la fiche.
 
@@ -52,7 +54,7 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 
 **S9 — Fin de combat + Récompenses.** Termine un combat : l'écran Récompenses s'ouvre (or, XP, drops cliquables, recrue éventuelle). Capture. Vérifie : « Tout ramasser » referme la modale, l'étage suivant est proposé après victoire, le retour au donjon fonctionne.
 
-**S10 — Boutique.** `#boutique` : capture. Vérifie : rayons potions (soin 50 or, mana 60 or), éclat brut 150 or, équipement 200-1 600 or, marchand de créatures (C 200 → UR 10 000 or) ; un achat débite l'or et ajoute l'exemplaire (modale de révélation) ; refus propre si or insuffisant.
+**S10 — Boutique + atelier de craft.** `#boutique` : capture. Vérifie : rayons potions (soin 50 or, mana 60 or), éclat brut 150 or, équipement 200-1 600 or, marchand de créatures (C 200 → UR 10 000 or) ; un achat débite l'or et ajoute l'exemplaire (modale de révélation) ; refus propre si or insuffisant. **Atelier 🔨 (v1.31)** : 90 boutons « Fabriquer » (5 zones × 3 niveaux × 6 pièces), coût affiché (matériaux de zone + or ; supérieure/royale + matière du boss) ; avec des matériaux posés en console de setup (`store.materiaux['ecume'] = 5`, `store.gold = 1000`, `save()`), fabriquer une pièce de base débite matériaux + or et ajoute la pièce à l'inventaire ; sans matière du boss, les paliers hauts restent désactivés.
 
 **S11 — Guilde (ex-Forge).** `#forge` : capture. Vérifie : évolutions en gemmes, réserve de pierres d'éveil affichée, autel 5-pour-1, compagnons du jour (3 offres, prix 500-2 000 or), et AUCUNE trace de jetons de génération nulle part (supprimés v1.25).
 
@@ -60,9 +62,19 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 
 **S13 — Inventaire + équipement.** `#inventaire` : capture. Vérifie : page groupée (Potions, Pièces, Gemmes, Matériaux), puis sur la fiche d'une carte : 2 slots d'équipement (arme typée par classe + armure) + 2 slots d'équipe, bonus de set affiché quand les deux pièces d'un même set sont posées.
 
-**S14 — Terres Sauvages + errance.** `#terres` : capture. Vérifie : seule la zone de l'eau est ouverte au départ, zones visitées marquées. Entre dans la zone : le canvas d'errance prend l'écran. Sur MOBILE (doigt) et desktop (souris) : touche la carte → le héros s'y rend avec le **pilotage inertiel** (accélération, virages en arc, freinage à l'approche, arrêt net SANS orbite autour du point), toucher le héros casse une jarre adjacente, les hautes herbes déclenchent des rencontres (la grâce diminue), l'autel de soin restaure tout (+5 pas de grâce, toast), la porte du donjon lance le combat de zone. Capture : le déplacement, une jarre cassée, l'autel. Vérifie : aucune erreur console pendant 30 s d'errance continue, rendu net sur écran haute densité (pas de flou).
+**S14 — Terres Sauvages + errance (5 zones, héros dédié).** `#terres` : capture. Vérifie : les **5 zones** sont listées (`zone-marees`, `zone-forge`, `zone-bosquet`, `zone-crypte`, `zone-zenith`), seule la zone de l'eau est ouverte au départ, zones visitées marquées. En errance, vérifie que le sprite sheet du héros est servi (`fetch('errance/heros-walk.png')` → 200 en staging ; sinon repli poster/procédural attendu, non bloquant). Entre dans la zone : le canvas d'errance prend l'écran. Sur MOBILE (doigt) et desktop (souris) : touche la carte → le héros s'y rend avec le **pilotage inertiel** (accélération, virages en arc, freinage à l'approche, arrêt net SANS orbite autour du point), toucher le héros casse une jarre adjacente, les hautes herbes déclenchent des rencontres (la grâce diminue), l'autel de soin restaure tout (+5 pas de grâce, toast), la porte du donjon lance le combat de zone. Capture : le déplacement, une jarre cassée, l'autel. Vérifie : aucune erreur console pendant 30 s d'errance continue, rendu net sur écran haute densité (pas de flou).
 
 **S15 — Glossaire.** `#glossaire` : capture, vérifie que « Les symboles de l'écran » documente ℹ️/🎰/🌱 et les glyphes de combat.
+
+**S16 — Vidéos FX en jeu (v1.31).** En combat, déclenche un sort signature mappé (`FX_SPELLS`, ex. Marée Noire) : capture au moment du cast. Vérifie : overlay `.fx-video-overlay` présent avec une `<video>` qui joue (`video.readyState >= 2`, `!video.paused` hors écran caché), une seule vidéo à la fois (deux casts rapides → un seul overlay), le bouton `🎬 FX` bascule off/on et persiste au rechargement (`localStorage aicg-fx`), et en émulation `prefers-reduced-motion: reduce` aucun overlay n'apparaît (image fixe). Hors staging (assets absents) : pas d'overlay, pas d'erreur — fallback bandeau.
+
+**S17 — Page Personnage à onglets (v1.31).** `#personnage` (entrée 🧝 Personnage du hub) : capture. Vérifie : onglets **Équipe** et **Inventaire**, onglet Équipe = slots + formation 3+2/2+3 + équipement d'équipe, onglet Inventaire = page groupée, bouton retour ← ramène à l'accueil, et les anciennes routes `#equipe`/`#inventaire` restent accessibles (boutons retour présents).
+
+**S18 — Rangs avant/arrière en combat (règles Option A).** En combat : capture. Vérifie : le plateau rend **deux rangées** (avant/arrière étiquetées), chaque unité a un `rang` (`state.team.avant/arriere`, `state.enemies.avant/arriere`), **aucun bouton de formation** (`#form-3-2`/`#form-2-3`) n'est présent pendant le combat (formation figée), et en ciblant un pion arrière valide le pion est surligné (`.targeted` sur `.unit`, pas sur les rail-chips — régression `elOf()`).
+
+**S19 — Anti-doublons de sorts + sauvegarde (migration v27).** Setup console : faire évoluer deux fois une carte de famille (ou poser `inst.acc` avec doublons + recharger). En combat, ouvre la fenêtre d'action de la carte évoluée : capture. Vérifie : **aucun sort affiché en doublon** (noms de sorts uniques dans la liste), aucune ligne « ✦ undefined ». Recharge la page : vérifie `store.version === 27` et que `inst.acc` est dédoublonné (clé = nom ou sort+cran), la collection intacte.
+
+**S20 — Fenêtre d'action : réduire + Objet (rappel v1.31).** En combat tactique : ouvre la fenêtre d'action d'une carte, capture, clique **▾ réduire** → la fenêtre se replie (classe `.reduced`) sans masquer le plateau, **▴ ouvrir** la rouvre ; rouvre l'action 🧪 Objet, bois une potion (setup : `store.potions.soin30 = 1`) → PV restaurés, stock décrémenté, 1 tour consommé.
 
 ### Rapport final
 
@@ -74,5 +86,6 @@ Produis `rapport-validation.md` avec : pour chaque scénario, statut OK/KO, capt
 
 - Les vitesses de combat : le bouton `#speed` fait défiler ×0,5 → ×32 ; ×16/×32 coupent l'animation (utile pour S9).
 - « Auto ce tour » laisse l'IA jouer le tour courant sans bloquer le test du S7 sur les tours suivants.
-- Les vidéos de sorts (FX v0.48, `site-assets/fx/`) ne sont PAS encore affichées en jeu : ne pas échouer sur leur absence (chantier à venir).
+- Les vidéos de sorts (FX v0.48, servies via `fx/` en staging) **sont affichées en jeu depuis v1.31** (lot 5) : voir S16. Servir la racine du dépôt = assets absents = fallback attendu, non bloquant.
+- Scaffolding de test autorisé : `localStorage.clear()`, mutations de `store` en console (matériaux, or, potions, `acc`) pour poser un état, puis `save()` — mais AUCUNE modification de fichier du jeu.
 - Le digest et le smoke (baselines ci-dessus) valident le MOTEUR ; ce protocole valide l'AFFICHAGE réel dans un vrai Chromium, ce que le harnas ne peut pas faire (DOM simulé). Les deux sont complémentaires.
