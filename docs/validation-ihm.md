@@ -1,6 +1,6 @@
 # Validation IHM locale — protocole et prompt
 
-Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.30** (hub-ville, économie v2, errance top-down, correctifs terrain).
+Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.31** (hub-ville, économie v2, errance 5 zones + héros dédié, craft en ville, page Personnage, correctifs terrain).
 
 ## Préparation (une fois)
 
@@ -9,8 +9,8 @@ git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
 node build.mjs                                # build déterministe : dist.html régénéré
-node --test                                   # 141 tests verts attendus
-node smoke-ui.mjs dist.html                   # 277 checks attendus (1 échec préexistant connu : 46 g, moteur)
+node --test                                   # 144 tests verts attendus
+node smoke-ui.mjs dist.html                   # 294 checks attendus (2 échecs préexistants connus : 46 g / 45 e, moteur)
 node combat-digest.mjs dist.html 3000         # baseline attendue : f72106ff…, 1379/3000, 0 exception, 1 marathon
 node combat-digest.mjs dist.html 10000        # baseline N = 10 000 : 3f9fe198…, 4558/10000
 # servir le jeu (le chargeur d'assets a besoin de http, pas de file://)

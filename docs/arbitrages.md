@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — clôture du chantier « reste code » (v1.31) : digest complet N = 3000 ET N = 10 000, inchangé
+
+- **Clôture du chantier** (7 lots exécutés, spec `docs/design/reste-code-spec-plan.md`) : digest final **N = 3000 : `f72106ff…` 1379/3000 (0 exception, 1 marathon)** et **N = 10 000 : `3f9fe198…` 4558/10000 (45,6 %, 0 exception, 1 marathon)** — identiques aux baselines consignées (post-boucle v2/économie v2), attendus : aucun lot du chantier ne touche les maths de combat du chemin Auto (UI, data de présentation, errance, craft). Le lot 2 (rangs) avait déjà fait l'objet de sa re-mesure dédiée (`aed250f9…` 1274/3000, entrée « chantier lignes » ci-dessous).
+- **Preuve finale** : build ok, **144 tests** verts, smoke **294 checks** (seuls échecs : 46 g / 45 e, préexistants moteur, hors chantier), smoke B13 (conformité errance) et B14/B15 (lots 6-7) vertes, protocole IHM `docs/validation-ihm.md` actualisé v1.31 (S1-S15). Roadmap : points 1, 3, 4, 7 FAIT, point 9 complété. Reste hors périmètre inchangé : contenu v3, calibrage digest avec Marc-Olivier (point 8, après cette re-mesure), redesign IA de combat (point 10), les 4 PROPOSÉ en attente. Validation finale téléphone ET PC par Marc-Olivier en attente.
+
 ## 2026-11-11 : MESURE — chantier « reste code » lots 5-7 livrés (v1.31) : vidéos FX complètes, héros d'errance + 5 zones, craft en ville + page Personnage — digest inchangé
 
 - **Lot 5 (v0.48 vidéos FX, v1.31)** : complété — **une seule vidéo décodée à la fois** (l'overlay précédent est retiré au nouveau cast), **pause hors écran** (`visibilitychange` met la vidéo en pause/relance), `prefers-reduced-motion` court-circuite la vidéo (image fixe, le CSS masquait déjà l'overlay), **toggle de vitesse** : le `playbackRate` de la vidéo suit le sélecteur de vitesse du combat (×1→×4, turbo = pas de vidéo, conforme à l'arbitrage). Fallback image (bandeau existant) si la webm est absente/lente, inchangé.
