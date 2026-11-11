@@ -55,7 +55,7 @@
 - **XP classique** : croissance par niveau recalibrée sur l'échelle longue (25 marches), simulée au digest ; pas de gel à paliers (refusé).
 - **Palier d'évolution sans perte nette** : la forme suivante au niveau 1 reste au moins aussi forte que la forme précédente au niveau 10 (stats principales) ; vérifié par simulation, pas à la main.
 - **Solos archivés** : retrait du pool actif (drops, recrutement, offres), les cartes restent en data pour les vieilles sauvegardes ; greffe future aux familles inscrite en roadmap.
-- **Rang N des naissances** (ACTÉ, jamais migré) : rareté `N` sous C, éveil N → C, exclusions des drops et du recrutement ; les naissances restent jouables en combat (précision du 10/11).
+- **Rang N des naissances** (ACTÉ) : achever la migration, **en vérifiant d'abord l'état courant** (T1.1 du grand chantier annonce n1-n12 en `N` avec `RARITY_LABEL.N`/`RARITY_POWER.N`/`RANK.N` ; la précision du 10/11 soir mentionnait encore des raretés `C`) ; restent a priori l'**éveil N → C par la pierre d'éveil** (T1.2, coût interim `EVO_COST.N` en gemmes brutes) et les **exclusions des drops et du recrutement** ; les naissances restent jouables en combat.
 
 ## 2. Exigences UI
 
