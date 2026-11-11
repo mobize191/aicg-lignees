@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — contenu v3 lot C1 (marchand v2, tranché ACTÉ) livré : digest inchangé
+
+- **Livré** : marchand de créatures v2 — **3 offres/jour** en rotation quotidienne (`seedOfDay`, même mécanique que les compagnons de la Guilde), prix actés en data (`data/marchand.json` : C 200 / UC 1 500 / R 4 500 / SR 8 000 / UR 10 000 or), **raretés débloquées par difficulté de donjon bouclée** (table `debloqueParDiff` : C dès le départ, +UC après un premier donjon bouclé en Facile, +R en Normal, +SR en Difficile, +UR en Très difficile), L/M/nommés hors vente, limite 3 exemplaires inchangée. UI : section « Offres du jour » + catalogue complet avec mention 🔒 et bouton désactivé tant que la rareté est verrouillée ; achat refusé avec toast si verrouillée.
+- **Preuve** : build ok, **145 tests** verts (1 nouveau : prix actés + table de déblocage en data), smoke **300 checks** (6 nouveaux B7 h-m : rotation seedée, prix, déblocage Facile → UC, limite 3 ex., rendu des offres ; seuls échecs préexistants 46 g/45 e), digest **inchangé `f72106ff…` 1379/3000** (achats hors combat, aucune maths touchée — mesure consignée, pas d'ajustement).
+
 ## 2026-11-11 : ACTÉ — maquette n°2 « habillage boucle v2 » validée + toast de recrue global
 
 - **La maquette n°2 est VALIDÉE** : `docs/design/maquettes/boucle-v2.html` (5 écrans des lots 1-4 de la boucle v2 : départ à 2 cartes avec 4 propositions par race et révélation aléatoire, sélecteur de marche 25 marches avec niveau de donjon et bande de rareté en toutes lettres, fenêtre d'action avec Objet + badge potions + état éteint, écran Récompenses tout cliquable avec « Tout ramasser », Inventaire minimal groupé). DA or médiévale validée en maquette n°1, appliquée telle quelle. Elle passe au couloir 1 dans l'ordre acté.

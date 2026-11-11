@@ -595,6 +595,44 @@ function marchandMonsters() {
   return allMonsters().filter((m) => vendues.has(m.rarity) && !(m.name ?? '').includes(','));
 }
 
+// contenu v3 lot C1 : marchand v2 (ACTÉ 11/11) — raretés débloquées par difficulté de donjon bouclée
+function maxDiffBouclee() {
+  let max = 0;
+  for (const d of DUNGEONS) {
+    for (const [k, p] of Object.entries(store.progress?.[d.id]?.diffs ?? {})) {
+      if ((p.record ?? 0) >= d.floors) max = Math.max(max, Number(k) || 0);
+    }
+  }
+  return max;
+}
+
+function marchandRareteDebloquee(rar) {
+  const table = MARCHAND.debloqueParDiff ?? { C: 0 };
+  return (table[rar] ?? 99) <= maxDiffBouclee();
+}
+
+function raretesMarchandDebloquees() {
+  return (MARCHAND.raretesVendues ?? []).filter((r) => marchandRareteDebloquee(r));
+}
+
+// 3 offres du jour : rotation quotidienne déterministe (seedOfDay, comme la Guilde),
+// tirées parmi les raretés débloquées
+function offresMarchandDuJour() {
+  const rng = mulberry32(seedOfDay());
+  const debloquees = new Set(raretesMarchandDebloquees());
+  const pool = marchandMonsters().filter((m) => debloquees.has(m.rarity));
+  const n = Math.min(MARCHAND.nbOffresJour ?? 3, pool.length);
+  const out = [];
+  const used = new Set();
+  while (out.length < n && used.size < pool.length) {
+    const m = pool[Math.floor(rng() * pool.length)];
+    if (used.has(m.id)) continue;
+    used.add(m.id);
+    out.push(m);
+  }
+  return out;
+}
+
 function marchandPrix(monstre) {
   return MARCHAND.prixParRarete?.[monstre.rarity] ?? null;
 }
@@ -603,6 +641,7 @@ function buyMonster(id) {
   const m = allMonsters().find((x) => x.id === id);
   const prix = m ? marchandPrix(m) : null;
   if (!m || prix == null) return false;
+  if (!marchandRareteDebloquee(m.rarity)) { toast(`🔒 ${m.rarity} verrouillée au marchand : bouclez un donjon dans la difficulté requise.`, 'warn'); return false; }
   const max = MARCHAND.maxExemplaires ?? 3;
   if ((ownedOf(id) ?? 0) >= max) { toast(`✗ Déjà ${max} exemplaires de ${m.name}.`, 'warn'); return false; }
   if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour ${m.name}.`, 'warn'); return false; }
@@ -5071,13 +5110,24 @@ function renderBoutique(root) {
     <button type="button" class="btn small gold" data-buy-eclat="${el}" ${store.gold < eclatPrix ? 'disabled' : ''}>Acheter — ${eclatPrix} or</button>
   </div>`).join('');
   const boutiquePieces = EQUIPMENT.filter((p) => p.source === 'boutique');
+  const debloquees = new Set(raretesMarchandDebloquees());
+  const offres = offresMarchandDuJour();
+  const offreRows = offres.map((m) => {
+    const prix = marchandPrix(m) ?? 0;
+    return `<div class="shop-row">
+      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}</span></span>
+      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
+    </div>`;
+  }).join('');
   const marchandRows = (MARCHAND.raretesVendues ?? []).map((rar) => {
     const list = marchandMonsters().filter((m) => m.rarity === rar);
     const prix = MARCHAND.prixParRarete?.[rar] ?? 0;
     if (!list.length) return '';
-    return `<h4 class="shop-sub">${RARITY_LABEL[rar] ?? rar} — ${prix} or</h4>` + list.map((m) => `<div class="shop-row">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}</span></span>
-      <button type="button" class="btn small gold" data-buy-mon="${m.id}" ${store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
+    const verrou = !debloquees.has(rar);
+    const diffRequise = (DIFFICULTIES[(MARCHAND.debloqueParDiff?.[rar] ?? 1) - 1]?.name) ?? '';
+    return `<h4 class="shop-sub">${RARITY_LABEL[rar] ?? rar} — ${prix} or${verrou ? ` 🔒 <span class="muted">(déblocage : donjon bouclé en ${diffRequise})</span>` : ''}</h4>` + list.map((m) => `<div class="shop-row">
+      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}${verrou ? ' · 🔒 verrouillée' : ''}</span></span>
+      <button type="button" class="btn small gold" data-buy-mon="${m.id}" ${verrou || store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
     </div>`).join('');
   }).join('');
   const eqRows = boutiquePieces.map((p) => `<div class="shop-row">
@@ -5110,7 +5160,10 @@ function renderBoutique(root) {
     <h3>🗡️ Équipement (rayon Boutique)</h3>
     ${eqRows}
     <h3>🐾 Marchand de créatures</h3>
-    <p class="muted">Monstres non nommés (fusion, enseignements), raretés ${MARCHAND.raretesVendues.join(' à ')} — échelle C 200 → UR 10 000 or.</p>
+    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. <b>Offres du jour</b> : rotation quotidienne de ${MARCHAND.nbOffresJour ?? 3} offres (seed du jour), tirées parmi les raretés débloquées ; une rareté se débloque en bouclant un donjon dans la difficulté requise (C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
+    <h4 class="shop-sub">✨ Offres du jour (${offres.length})</h4>
+    ${offreRows || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}
+    <h4 class="shop-sub">Catalogue complet</h4>
     ${marchandRows}
     <h3>🔨 Atelier — craft en ville (pièces de set)</h3>
     <p class="muted">Les sets se fabriquent ici : la base demande des matériaux de la zone ; la supérieure et la royale exigent en plus la matière du boss du donjon de la zone (elle ne s'achète pas). Coûts en data (table « craft » de data/equipment.json).</p>
@@ -5144,6 +5197,15 @@ function renderBoutique(root) {
     b.onclick = () => {
       const m = allMonsters().find((x) => x.id === b.dataset.buyMon);
       if (buyMonster(b.dataset.buyMon)) {
+        toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
+        renderBoutique(root);
+      }
+    };
+  });
+  root.querySelectorAll('[data-buy-offre]').forEach((b) => {
+    b.onclick = () => {
+      const m = allMonsters().find((x) => x.id === b.dataset.buyOffre);
+      if (buyMonster(b.dataset.buyOffre)) {
         toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
         renderBoutique(root);
       }

@@ -962,6 +962,23 @@ async function main() {
     api.store.gold = 0;
     check('B7 f achat sans or refusé', api.buyMonster(m.id) === false, '');
     check('B7 g 0 exception lot E2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    // contenu v3 lot C1 — marchand v2 : 3 offres/jour (seedOfDay), prix actés, déblocage par donjon bouclé
+    const offres = api.offresMarchandDuJour();
+    check('B7 h offres du jour : 3 offres déterministes, distinctes, raretés débloquées', offres.length === 3 && new Set(offres.map((m) => m.id)).size === 3 && api.offresMarchandDuJour().map((m) => m.id).join() === offres.map((m) => m.id).join() && offres.every((m) => api.marchandRareteDebloquee(m.rarity)), offres.map((m) => m.id).join());
+    check('B7 i prix actés v2 (UC 1 500 / R 4 500 / SR 8 000 or)', api.marchandPrix(pool.find((x) => x.rarity === 'UC')) === 1500 && api.marchandPrix(pool.find((x) => x.rarity === 'R')) === 4500 && api.marchandPrix(pool.find((x) => x.rarity === 'SR')) === 8000, '');
+    const uc = pool.find((x) => x.rarity === 'UC');
+    api.store.gold = 50000;
+    check('B7 j sans donjon bouclé : seule C débloquée, achat UC refusé', api.raretesMarchandDebloquees().join() === 'C' && api.buyMonster(uc.id) === false, api.raretesMarchandDebloquees().join());
+    api.store.progress.marees.diffs[1].record = 10;
+    const ownedUc = api.ownedOf(uc.id);
+    check('B7 k donjon bouclé en Facile → UC débloquée et achetable', api.raretesMarchandDebloquees().join() === 'C,UC' && api.buyMonster(uc.id) === true && api.ownedOf(uc.id) === ownedUc + 1, api.raretesMarchandDebloquees().join());
+    api.store.progress.marees.diffs[1].record = 0;
+    const cAlt = pool.filter((x) => x.rarity === 'C')[1];
+    let ok3 = true;
+    for (let i = 0; i < 3; i++) ok3 = ok3 && api.buyMonster(cAlt.id) === true;
+    check('B7 l limite 3 exemplaires par monstre au marchand', ok3 && api.buyMonster(cAlt.id) === false, cAlt.id);
+    const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
+    check('B7 m rayon rend les 3 offres du jour', nbOffres === offres.length, `${nbOffres}/${offres.length}`);
   }
 
   {

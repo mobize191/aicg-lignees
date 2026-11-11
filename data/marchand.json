@@ -1,12 +1,14 @@
 {
   "prixParRarete": {
     "C": 200,
-    "UC": 600,
-    "R": 1800,
-    "SR": 4000,
+    "UC": 1500,
+    "R": 4500,
+    "SR": 8000,
     "UR": 10000
   },
   "raretesVendues": ["C", "UC", "R", "SR", "UR"],
+  "nbOffresJour": 3,
+  "debloqueParDiff": { "C": 0, "UC": 1, "R": 2, "SR": 3, "UR": 4 },
   "maxExemplaires": 3,
-  "note": "Marchand de créatures (économie v2) : monstres non nommés, raretés C à UR. Bornes actées C 200 → UR 10 000 or ; paliers intermédiaires PROPOSÉ (calibrage v0, à affiner au digest)."
+  "note": "Marchand de créatures v2 (ACTÉ 11/11) : 3 offres par jour (rotation quotidienne seedOfDay, comme la Guilde) tirées parmi les raretés débloquées ; prix actés C 200 / UC 1 500 / R 4 500 / SR 8 000 / UR 10 000 or. Raretés débloquées par difficulté de donjon bouclée : C dès le départ, +UC après un premier donjon bouclé en Facile, +R en Normal, +SR en Difficile, +UR en Très difficile. L/M/nommés hors vente, limite 3 exemplaires."
 }

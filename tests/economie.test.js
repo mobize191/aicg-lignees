@@ -45,6 +45,17 @@ test('économie v2 lot E2 — marchand de créatures : échelle de prix en data,
   }
 });
 
+test('contenu v3 lot C1 — marchand v2 (ACTÉ 11/11) : prix actés, 3 offres/jour, déblocage par difficulté bouclée', () => {
+  const D = loadData();
+  const m = D.marchand;
+  assert.deepEqual(m.prixParRarete, { C: 200, UC: 1500, R: 4500, SR: 8000, UR: 10000 }, 'prix actés C 200 / UC 1 500 / R 4 500 / SR 8 000 / UR 10 000 or');
+  assert.equal(m.nbOffresJour, 3, '3 offres par jour (rotation seedOfDay comme la Guilde)');
+  assert.deepEqual(m.debloqueParDiff, { C: 0, UC: 1, R: 2, SR: 3, UR: 4 }, 'C dès le départ ; +UC Facile ; +R Normal ; +SR Difficile ; +UR Très difficile');
+  for (const r of m.raretesVendues) assert.ok(r in m.debloqueParDiff, `rareté ${r} a un palier de déblocage`);
+  assert.ok(!('L' in m.debloqueParDiff) && !('M' in m.debloqueParDiff) && !('N' in m.debloqueParDiff), 'L/M/N hors vente');
+  assert.equal(m.maxExemplaires, 3, 'limite 3 exemplaires inchangée');
+});
+
 test('économie v2 lot E3a — Guilde : compagnons, prix actés C 500 → UR 2 000 or, 3 offres/jour', () => {
   const D = loadData();
   const g = D.guilde;
