@@ -6,12 +6,12 @@ Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent
 
 ## Jouer
 
-Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (workflow inclus : copie dist.html en index.html à chaque push sur main ; activez Pages avec « Source : GitHub Actions » dans les paramètres du repo).
+Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (https://mobize191.github.io/aicg-lignees/ ; activez Pages avec « Source : GitHub Actions » dans les paramètres du repo). La CI (`.github/workflows/pages.yml`) enchaîne deux jobs à chaque push sur `main` : un job **test** (`node build.mjs && node --test`) puis le **déploiement Pages** qui publie `dist.html` en `index.html`, le manifeste `assets-v3.json` et les vidéos de sorts `site-assets/fx/` → `fx/`.
 
 ## Structure
 
 - `dist.html` : le jeu complet, autonome (HTML + JS + CSS, aucune dépendance).
-- `assets.json` : manifeste d'illustrations (data-URI : 231 arts de cartes + 5 fonds de donjons, DreamShaper XL, ~7,8 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne.
+- `assets-v3.json` : manifeste d'illustrations unique depuis v1.28 (data-URI : 265 arts de cartes + 8 fonds de donjons, campagne AICG V3 / WAI-Illustrious v17, ~24 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne. Les anciens manifests (`assets.json`, `assets-wai.json`, `assets-v2.json`) sont archivés dans `archives/assets/`.
 - `combat-digest.mjs` : harnas d'équilibrage (3000 combats simulés, digest SHA256 de dormance).
 - `smoke-ui.mjs` : suite de fumée UI du dist publié (171 checks).
 - `tools/` : les scripts de la campagne d'illustrations ComfyUI (extraction du catalogue, génération des prompts, batch API, intégration au manifeste, planches de contrôle).
@@ -41,4 +41,4 @@ node combat-digest.mjs dist.html 3000
 node tools/gen-tables.mjs   # si data/ a bougé
 ```
 
-Baseline courante (grand chantier arbres + sorts du 10/11/2026 : stats RPG v0.47, tri des 189 signatures, contenu v3, mécanismes spéciaux) : digest `833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24`, 518 victoires / 3000 combats, 0 exception, 1 marathon ; smoke 171 checks verts, 114 tests verts. La hausse (476 avant) vient de l'esquive AGI et du mana d'intelligence. Historique des baselines dans `docs/roadmap.md` et `docs/arbitrages.md`.
+Baseline courante (11/11/2026, post boucle v2 + économie v2 + bloc visuel) : digest `f72106ff403cf3f96a35532fdf8ab9abdfa273a151424f3b92e6f05e876260ba`, **1379 victoires / 3000 combats, 0 exception, 1 marathon** ; pack N = 10 000 : `3f9fe198…` 4558/10000. **141 tests** verts, smoke **269 checks** (2 échecs préexistants hors chantier, non liés). Historique des baselines dans `docs/roadmap.md` et `docs/arbitrages.md`.

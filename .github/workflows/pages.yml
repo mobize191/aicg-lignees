@@ -1,4 +1,4 @@
-name: Deploy Pages
+name: CI + Deploy Pages
 on:
   push:
     branches: [main]
@@ -11,7 +11,17 @@ concurrency:
   group: pages
   cancel-in-progress: true
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node build.mjs
+      - run: node --test
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -21,8 +31,8 @@ jobs:
       - run: |
           mkdir -p site
           cp dist.html site/index.html
-          cp assets.json site/assets.json
-          cp assets-wai.json site/assets-wai.json
+          cp assets-v3.json site/assets-v3.json
+          cp -r site-assets/fx site/fx
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
