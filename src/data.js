@@ -92,6 +92,15 @@ const EVO_CHOICES = DATA.evolutions;
 const TEAM_MAX = E.TEAM_MAX;
 const FAM_ORDER = E.FAM_ORDER;
 
+// boucle v2 lot 1 : potions (data/potions.json), or (conversion 1 ⚡ = 1 or), hook autel de soin, régén après le premier boss
+const POTIONS = DATA.potions ?? {};
+
+const OR_PER_POINT = E.OR_PER_POINT;
+
+const AUTEL_SOIN_GRACE = E.AUTEL_SOIN_GRACE;
+
+const REGEN_BOSS_STAGE = E.REGEN_BOSS_STAGE;
+
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;

@@ -1,5 +1,5 @@
 {
- "version": 20,
+ "version": 21,
  "teams": [
   {
    "slots": [
@@ -175,7 +175,6 @@
   }
  },
  "seed": 42,
- "points": 137,
  "collection": [
   [
    "n1",
@@ -351,5 +350,16 @@
  "dailyLevel": null,
  "runMod": null,
  "grimoire": [],
- "zonesVisitees": []
+ "zonesVisitees": [],
+ "gold": 137,
+ "potions": {
+  "soin30": 0,
+  "soin60": 0,
+  "mana40": 0,
+  "mana80": 0
+ },
+ "runState": {
+  "active": false,
+  "units": {}
+ }
 }

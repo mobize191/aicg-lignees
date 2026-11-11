@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.13] — 2026-11-11 — Boucle de jeu v2, lot 1 : potions, or et persistance
+
+L’économie de survie entre en jeu (lot 1 de la boucle v2, `docs/design/boucle-v2-spec-plan.md`). L’énergie ⚡ devient de **l’or** (1 ⚡ = 1 or, conversion non destructive en sauvegarde v21). Nouvelle action **🧪 Objet** dans la fenêtre d’action : potions de soin (30/60 % des PV max) et de mana (40/80 %), chaque gorgée **coûte son tour**, utilisables aussi hors combat entre les étages (bouton 🧪 Objets). Point d’achat minimal : le rayon potions de la **Boutique** (50/120/60/140 or, `data/potions.json`). **Plus de régénération entre les combats d’un même run** : PV et mana persistent d’étage en étage, effets temporaires dissous entre combats, régénération complète après le premier boss (étage 5), soins complets entre deux runs distincts. Hook « autel de soin » posé pour l’errance (soin complet + 5 pas de grâce, `errance-topdown.md` §8). Preuve : digest inchangé `aed250f9…` (1274/3000, 0 exception — combats isolés à PV pleins), 118 tests, smoke 183 checks (12 nouveaux verts).
+
+
 Toutes les versions notables d'AICG : Lignées. Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) ; les numéros suivent le prototype (pas de SemVer). Les entrées reprennent l'historique en jeu (menu ⚙ → Historique) : les versions v1.0 à v1.12 et le baptême rétroactif v0.47.3 datent du 10/11/2026 (journée de la refonte majeure et du grand chantier arbres + sorts) ; les versions antérieures n'ont pas de date archivée.
 
 ## [1.12] — 2026-11-10 — La ligne support frappe aussi

@@ -278,3 +278,48 @@ test('retour terrain : castFoeSpell applique les dégâts puis le stun de la fic
   assert.ok((foe.status.stun ?? 0) >= 1, 'le stun passe quand le taux dépasse le seuil');
   assert.ok(events.some((e) => e.type === 'status' && e.kind === 'stun'), 'un événement stun est émis');
 });
+
+test('boucle v2 lot 1 : drinkPotion soigne (PV %) et recharge (mana %), plafonné au max', () => {
+  const E = loadEngine();
+  const u = E.makeUnit(E.getCard('n1'), 'u1', 5);
+  u.hp = 3;
+  u.mana = 0;
+  const soin = E.DATA.potions.soin30;
+  const mana = E.DATA.potions.mana40;
+  const ev1 = E.drinkPotion(u, soin);
+  assert.equal(u.hp, Math.min(u.maxHp, 3 + Math.max(1, Math.round(u.maxHp * soin.pct))), 'soin = 30 % des PV max');
+  assert.ok(ev1.some((e) => e.type === 'heal' && e.potion === 'soin30'));
+  const ev2 = E.drinkPotion(u, mana);
+  assert.equal(u.mana, Math.max(1, Math.round(u.manaMax * mana.pct)), 'mana = 40 % du mana max');
+  assert.ok(ev2.some((e) => e.type === 'buff' && e.value === 'mana'));
+  // plafonds : boire quand presque plein ne dépasse pas le max
+  u.hp = u.maxHp - 1;
+  u.mana = u.manaMax - 1;
+  E.drinkPotion(u, soin);
+  E.drinkPotion(u, mana);
+  assert.equal(u.hp, u.maxHp);
+  assert.equal(u.mana, u.manaMax);
+  // unité KO ou potion nulle : aucun effet
+  u.alive = false;
+  assert.deepEqual(E.drinkPotion(u, soin), []);
+  assert.deepEqual(E.drinkPotion(E.makeUnit(E.getCard('n1'), 'u2', 1), null), []);
+});
+
+test('boucle v2 lot 1 : action Objet en combat — la gorgée coûte le tour (strike et support)', () => {
+  const E = loadEngine();
+  const mk = (id, lvl) => ({ ...E.getCard(id), level: lvl });
+  const team = { avant: [mk('n1', 5)], arriere: [mk('n3', 5)] };
+  const wave = E.makeWave(42, 1, 'marees', 1);
+  const st = E.initCombat(team, wave, 42);
+  const u = st.team.avant[0];
+  u.hp = 2;
+  u.status = {};
+  E.beginRound(st);
+  // on force l'acteur courant sur notre unité
+  while (E.peekRound(st) && E.peekRound(st).u.uid !== u.uid) E.stepRound(st, null);
+  const potion = E.DATA.potions.soin60;
+  const r = E.stepRound(st, { kind: 'item', potion });
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.potion === 'soin60'), 'événement de soin émis');
+  assert.ok(u.hp > 2, 'l’unité a bu et regagné des PV');
+  assert.ok(!r.done || st.winner, 'le tour est consommé comme une action');
+});

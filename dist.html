@@ -987,6 +987,7 @@ animation: newpulse 1.6s infinite;
   <a href="#collection">🎴 Collection</a>
   <a href="#forge">⚒️ Forge</a>
   <a href="#donjons">⛰️ Donjons</a>
+  <a href="#boutique">🛒 Boutique</a>
   <a href="#glossaire">📖 Glossaire</a>
 </nav>
 <main id="app"></main>
@@ -3220,9 +3221,9 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 20,
+  "SAVE_VERSION": 21,
   "SAVE_KEY": "fondations-cards-v1",
-  "CURRENT_VERSION": 20,
+  "CURRENT_VERSION": 21,
   "RACE_DIVINE_IDS": [
    "d1",
    "d2",
@@ -3521,7 +3522,10 @@ const DATA = {
    "Épée de l'Aube": "fx-jeanne-halo",
    "Couronnement": "fx-astre-solaire",
    "Destin Tissé": "fx-ananke-fils"
-  }
+  },
+  "OR_PER_POINT": 1,
+  "AUTEL_SOIN_GRACE": 5,
+  "REGEN_BOSS_STAGE": 5
  },
  "evolutions": {
   "n1": [
@@ -9697,6 +9701,40 @@ const DATA = {
    "int": 5
   }
  ],
+ "potions": {
+  "soin30": {
+   "id": "soin30",
+   "nom": "Potion de soin",
+   "genre": "soin",
+   "pct": 0.3,
+   "prix": 50,
+   "glyph": "🧪"
+  },
+  "soin60": {
+   "id": "soin60",
+   "nom": "Potion de soin supérieure",
+   "genre": "soin",
+   "pct": 0.6,
+   "prix": 120,
+   "glyph": "🍷"
+  },
+  "mana40": {
+   "id": "mana40",
+   "nom": "Potion de mana",
+   "genre": "mana",
+   "pct": 0.4,
+   "prix": 60,
+   "glyph": "🔮"
+  },
+  "mana80": {
+   "id": "mana80",
+   "nom": "Potion de mana supérieure",
+   "genre": "mana",
+   "pct": 0.8,
+   "prix": 140,
+   "glyph": "💠"
+  }
+ },
  "run-mods": [
   {
    "id": "horde",
@@ -10735,6 +10773,15 @@ const EVO_CHOICES = DATA.evolutions;
 const TEAM_MAX = E.TEAM_MAX;
 const FAM_ORDER = E.FAM_ORDER;
 
+// boucle v2 lot 1 : potions (data/potions.json), or (conversion 1 ⚡ = 1 or), hook autel de soin, régén après le premier boss
+const POTIONS = DATA.potions ?? {};
+
+const OR_PER_POINT = E.OR_PER_POINT;
+
+const AUTEL_SOIN_GRACE = E.AUTEL_SOIN_GRACE;
+
+const REGEN_BOSS_STAGE = E.REGEN_BOSS_STAGE;
+
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;
@@ -10947,6 +10994,16 @@ function validate(data, errors) {
       const pa = aT ? a.taux : a.mult, pb = aT ? b.taux : b.mult;
       if (pa > pb && a.larg >= b.larg) push(`le sort ${b.id} est strictement dominé par ${a.id} au même coût (${k})`, 'EXI-T-3');
     }
+  }
+  // potions (boucle v2 lot 1) : id unique, genre soin/mana, pourcentage et prix valides
+  const potionIds = new Set();
+  for (const [pid, p] of Object.entries(data.potions ?? {})) {
+    if (potionIds.has(p.id ?? pid)) push(`doublon de potion ${p.id ?? pid}`, 'EXI-DATA-3');
+    potionIds.add(p.id ?? pid);
+    if (p.id !== pid) push(`la potion ${pid} porte un id différent (${p.id})`, 'EXI-DATA-3');
+    if (!['soin', 'mana'].includes(p.genre)) push(`la potion ${pid} a un genre invalide (${p.genre})`, 'EXI-DATA-1');
+    if (!(typeof p.pct === 'number' && p.pct > 0 && p.pct <= 1)) push(`la potion ${pid} a un pourcentage hors bornes (${p.pct})`, 'EXI-DATA-1');
+    if (!(Number.isInteger(p.prix) && p.prix > 0)) push(`la potion ${pid} a un prix invalide (${p.prix})`, 'EXI-DATA-1');
   }
   return errors;
 }
@@ -11754,6 +11811,22 @@ function peekRound(state) {
   return null;
 }
 
+// boucle v2 lot 1 : action Objet — une gorgée applique son effet au porteur (soin PV ou recharge mana)
+function drinkPotion(u, potion) {
+  if (!u || !u.alive || !potion) return [];
+  const pct = Number(potion.pct) || 0;
+  if (potion.genre === 'mana') {
+    const amt = Math.max(1, Math.round(u.manaMax * pct));
+    const real = Math.min(amt, Math.max(0, u.manaMax - u.mana));
+    u.mana += real;
+    return [{ type: 'buff', side: 'team', sourceId: u.uid, targetId: u.uid, kind: 'tactical', value: 'mana', amount: real, potion: potion.id }];
+  }
+  const amt = Math.max(1, Math.round(u.maxHp * pct));
+  const real = Math.min(amt, Math.max(0, u.maxHp - u.hp));
+  u.hp = Math.min(u.maxHp, u.hp + real);
+  return [{ type: 'heal', side: 'team', sourceId: u.uid, targetId: u.uid, amount: real, potion: potion.id, objet: true }];
+}
+
 function actTeamStriker(u, i, ctx, step) {
   const { team, enemies, mods } = ctx.state;
   const tacAct = step && step.tacAct ? step.tacAct : null;
@@ -11763,6 +11836,11 @@ function actTeamStriker(u, i, ctx, step) {
     ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'stun', value: u.status.stun });
     u.status.stun -= 1;
     if (u.status.stun <= 0) delete u.status.stun;
+    return false;
+  }
+  if (tacAct && tacAct.kind === 'item') {
+    // chaque gorgée coûte le tour, même si la cible est déjà à plein
+    ctx.events.push(...drinkPotion(u, tacAct.potion));
     return false;
   }
   if (tacAct && tacAct.kind === 'pass') {
@@ -11929,6 +12007,11 @@ function actTeamStriker(u, i, ctx, step) {
 function actTeamSupport(s, ctx, step) {
   if (!s.alive) return;
   const supAct = step && step.tacAct ? step.tacAct : null;
+  // boucle v2 lot 1 : la ligne support peut aussi boire une potion (coûte son tour)
+  if (supAct && supAct.kind === 'item') {
+    ctx.events.push(...drinkPotion(s, supAct.potion));
+    return;
+  }
   // retour terrain : l'etat voyage jusqu'au support (esquive, zone, fureur, sorts hostils)
   applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
@@ -12072,7 +12155,7 @@ function stepRound(state, stepChoice = null) {
   let targetIdx = null;
   if (stepChoice) {
     // retour terrain : la designation d'ennemi voyage jusqu'a la resolution (frappe et sorts hostils des supports)
-    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null };
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null, potion: stepChoice.potion ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
       const ti = [...state.enemies.avant, ...state.enemies.arriere].findIndex((x) => x.uid === stepChoice.targetUid);
@@ -12749,7 +12832,24 @@ function v19to20(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20 };
+// v20 -> v21 (boucle v2 lot 1) : les points ⚡ deviennent de l'or (1 ⚡ = 1 or), le stock de
+// potions et l'état de run (PV/mana persistants) entrent en sauvegarde. Non destructif.
+function v20to21(s) {
+  s.version = 21;
+  if (Number.isInteger(s.gold) && s.gold >= 0) s.gold = s.gold;
+  else if (Number.isInteger(s.points) && s.points >= 0) s.gold = s.points * (DATA.engine.OR_PER_POINT ?? 1);
+  else s.gold = 0;
+  delete s.points;
+  if (!s.potions || typeof s.potions !== 'object') s.potions = {};
+  for (const p of Object.values(DATA.potions ?? {})) {
+    if (!Number.isInteger(s.potions[p.id]) || s.potions[p.id] < 0) s.potions[p.id] = 0;
+  }
+  if (!s.runState || typeof s.runState !== 'object') s.runState = { active: false, units: {} };
+  if (!s.runState.units || typeof s.runState.units !== 'object') s.runState.units = {};
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;
@@ -13081,6 +13181,91 @@ const xpToNext = (lvl) => lvl;
 ;
 const freshGems = () => ({ brut: {}, poli: {}, grave: {}, eternel: {} });
 
+// boucle v2 lot 1 : stock de potions et état de run (PV/mana persistants au sein d'un run)
+const freshPotions = () => Object.fromEntries(Object.keys(POTIONS).map((k) => [k, 0]));
+
+const freshRunState = () => ({ active: false, units: {} });
+
+const potionCount = (id) => Math.max(0, store.potions[id] ?? 0);
+
+const totalPotions = () => Object.keys(POTIONS).reduce((a, k) => a + potionCount(k), 0);
+
+function addPotion(id, n = 1) {
+  if (!POTIONS[id]) return;
+  store.potions[id] = potionCount(id) + n;
+}
+
+function usePotionStock(id, n = 1) {
+  if (potionCount(id) < n) return false;
+  store.potions[id] = potionCount(id) - n;
+  return true;
+}
+
+function buyPotion(id) {
+  const p = POTIONS[id];
+  if (!p) return false;
+  if (store.gold < p.prix) { toast(`✗ Il faut ${p.prix} or pour ${p.nom}.`, 'warn'); return false; }
+  store.gold -= p.prix;
+  addPotion(id, 1);
+  save();
+  updatePtsBadge();
+  return true;
+}
+
+// PV/mana courants d'un exemplaire hors combat : persistés dans le run, à plein sinon
+function curHpManaOf(iid) {
+  const inst = byIid(iid);
+  if (!inst) return null;
+  const c = byId(inst.id);
+  const st = statsAt(c, inst.lvl, inst.asc ?? 0);
+  const mem = store.runState.active ? store.runState.units[iid] : null;
+  return {
+    hp: mem && Number.isFinite(mem.hp) ? Math.max(1, Math.min(st.hp, Math.round(mem.hp))) : st.hp,
+    maxHp: st.hp,
+    mana: mem && Number.isFinite(mem.mana) ? Math.max(0, Math.round(mem.mana)) : (c.mana ?? SOLO_MANA.max),
+    manaMax: c.mana ?? SOLO_MANA.max,
+  };
+}
+
+// soins complets : toute l'équipe repart à plein (entre deux runs, et hook autel de soin)
+function healRunComplet() {
+  store.runState = freshRunState();
+  store.runState.active = true;
+  save();
+}
+
+// hook « autel de soin » (errance-topdown §8) : soin complet + pas de grâce ; branché aux autels des zones quand l'errance arrive
+function autelDeSoin() {
+  healRunComplet();
+  return { grace: AUTEL_SOIN_GRACE };
+}
+
+// applique l'état de run persisté aux unités du combat (PV/mana conservés d'un étage à l'autre)
+function applyRunStateTo(state) {
+  if (!store.runState.active) return;
+  const iids = [...store.team.slots].filter(Boolean);
+  const units = [...state.team.avant, ...state.team.arriere];
+  iids.forEach((iid, k) => {
+    const u = units[k];
+    const mem = store.runState.units[iid];
+    if (!u || !mem) return;
+    if (Number.isFinite(mem.hp)) u.hp = Math.max(1, Math.min(u.maxHp, Math.round(mem.hp)));
+    if (Number.isFinite(mem.mana)) u.mana = Math.max(0, Math.min(u.manaMax, Math.round(mem.mana)));
+  });
+}
+
+// persiste les PV/mana restants à la fin d'un combat gagné (effets temporaires dissous au passage)
+function persistRunStateFrom(state) {
+  store.runState.active = true;
+  const iids = [...store.team.slots].filter(Boolean);
+  const units = [...state.team.avant, ...state.team.arriere];
+  iids.forEach((iid, k) => {
+    const u = units[k];
+    if (!u) return;
+    store.runState.units[iid] = { hp: u.hp, mana: u.mana };
+  });
+}
+
 let uiSeq = (Date.now() & 0x7fffffff) >>> 0;
 function uiRand() {
   return roll();
@@ -13257,7 +13442,9 @@ const store = {
     this.progress[this.dungeon].diffs[this.diff].pity = v;
   },
   seed: 42,
-  points: 0, 
+  gold: 0,
+  potions: freshPotions(),
+  runState: freshRunState(),
   collection: new Map(), 
   instances: [], 
   instanceSeq: 1, 
@@ -13335,7 +13522,9 @@ function snapshot() {
     dungeon: store.dungeon,
     progress: store.progress,
     seed: store.seed,
-    points: store.points,
+    gold: store.gold,
+    potions: { ...store.potions },
+    runState: { active: !!store.runState.active, units: { ...(store.runState.units ?? {}) } },
     collection: [...store.collection.entries()],
     instances: store.instances.map((i) => ({ ...i, acc: (i.acc ?? []).map((sp) => ({ ...sp })) })),
     instanceSeq: store.instanceSeq,
@@ -13546,8 +13735,20 @@ function restore(data) {
   store.seen = Array.isArray(data.seen) ? [...new Set(data.seen)] : [];
   for (const id of store.collection.keys()) markSeen(id);
   
-  if (Number.isInteger(data.points) && data.points >= 0) store.points = data.points;
-  else store.points = 25 * Math.max(0, (data.stage ?? 1) - 1);
+  if (Number.isInteger(data.gold) && data.gold >= 0) store.gold = data.gold;
+  else if (Number.isInteger(data.points) && data.points >= 0) store.gold = data.points * OR_PER_POINT;
+  else store.gold = 25 * Math.max(0, (data.stage ?? 1) - 1);
+  store.potions = freshPotions();
+  if (data.potions && typeof data.potions === 'object') {
+    for (const k of Object.keys(POTIONS)) {
+      if (Number.isInteger(data.potions[k]) && data.potions[k] >= 0) store.potions[k] = data.potions[k];
+    }
+  }
+  store.runState = freshRunState();
+  if (data.runState && typeof data.runState === 'object') {
+    store.runState.active = !!data.runState.active;
+    if (data.runState.units && typeof data.runState.units === 'object') store.runState.units = { ...data.runState.units };
+  }
   store.dailyDone = typeof data.dailyDone === 'string' ? data.dailyDone : '';
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
@@ -13813,10 +14014,10 @@ function altarPoolCount(rar, cat) {
   return n;
 }
 
-function addPoints(n) {
-  store.points = Math.max(0, store.points + n);
+function addGold(n) {
+  store.gold = Math.max(0, store.gold + Math.round(n * OR_PER_POINT));
   save();
-  return store.points;
+  return store.gold;
 }
 
 
@@ -13993,21 +14194,21 @@ function updatePtsBadge() {
   const el = document.getElementById('pts');
   if (!el) return;
   if (storage.persistent && !storage.persistent()) {
-    el.textContent = `💾 ⚡ ${store.points}`;
+    el.textContent = `💾 🪙 ${store.gold} or`;
     el.title = 'Sauvegarde de session : la page ne peut pas écrire sur l\u2019appareil — exportez votre progression depuis l\u2019accueil pour la conserver.';
     if (!saveWarnShown) {
       saveWarnShown = true;
       toast('💾 Sauvegarde de session : cette page ne peut pas écrire sur l\u2019appareil. La progression tient pour la session — exportez un code de sauvegarde depuis l\u2019accueil pour la garder.', 'warn');
     }
   } else if (store.saveBroken) {
-    el.textContent = `⚠️ ⚡ ${store.points}`;
+    el.textContent = `⚠️ 🪙 ${store.gold} or`;
     el.title = 'Sauvegarde impossible : la progression de cette session risque de ne pas être conservée.';
     if (!saveWarnShown) {
       saveWarnShown = true;
       toast('⚠️ Sauvegarde impossible — ta progression de cette session ne sera pas conservée si tu recharges la page.', 'warn');
     }
   } else {
-    el.textContent = `⚡ ${store.points}`;
+    el.textContent = `🪙 ${store.gold} or`;
     el.title = '';
   }
 }
@@ -14620,7 +14821,7 @@ function renderHome(root) {
       <div class="hero-inner">
         <h2>${d.name}</h2>
         <div class="home-stats">
-          <div class="stat"><b>⚡ ${store.points}</b><span class="muted">points</span></div>
+          <div class="stat"><b>🪙 ${store.gold}</b><span class="muted">or</span></div>
           <div class="stat"><b>${owned}</b><span class="muted">/ ${CATALOG.length} cartes dévoilées</span></div>
           <div class="stat"><b>${store.record || 0}</b><span class="muted">/ ${d.floors} record du donjon</span></div>
           <div class="stat"><b>${team.length}</b><span class="muted">cartes en équipe</span></div>
@@ -14629,7 +14830,7 @@ function renderHome(root) {
         <div class="home-actions">
           ${exploreBtn}
         </div>
-        <p class="muted">Victoire d\u2019étage : des ⚡ points · boss : points doublés. Les cartes naissent à la Forge (jetons, autel, défi du jour) ; le boss final lâche un jeton par jour et par donjon. Prochain boss : étage ${nextBoss}</p>
+        <p class="muted">Victoire d\u2019étage : de l\u2019or · boss : or doublé. Les cartes naissent à la Forge (jetons, autel, défi du jour) ; le boss final lâche un jeton par jour et par donjon. Prochain boss : étage ${nextBoss}</p>
       </div>
     </div>
     ${saveBoxHtml()}`;
@@ -15441,6 +15642,80 @@ function askActTarget(mode, pending) {
   });
 }
 
+// boucle v2 lot 1 : utiliser une potion hors combat, entre les étages (gratuit, hors combat)
+function openBagModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const render = () => {
+    const iids = [...store.team.slots].filter(Boolean);
+    const rows = iids.length ? iids.map((iid) => {
+      const inst = byIid(iid);
+      if (!inst) return '';
+      const c = byId(inst.id);
+      const cur = curHpManaOf(iid) ?? { hp: 1, maxHp: 1, mana: 0, manaMax: 1 };
+      const btns = Object.values(POTIONS).map((p) => {
+        const n = potionCount(p.id);
+        const full = p.genre === 'soin' ? cur.hp >= cur.maxHp : cur.mana >= cur.manaMax;
+        return `<button type="button" class="btn small act-potion-out" data-iid="${iid}" data-potion="${p.id}" ${n <= 0 || full ? 'disabled' : ''} title="${p.nom}">${p.glyph} ×${n}</button>`;
+      }).join(' ');
+      return `<div class="shop-row"><span>${artGlyph(c)} <b>${c.name}</b> <span class="muted">♥ ${cur.hp}/${cur.maxHp} · ✦ ${cur.mana}/${cur.manaMax}</span></span><span>${btns}</span></div>`;
+    }).join('') : '<p class="muted">Aucune carte en équipe.</p>';
+    overlay.innerHTML = `<div class="modal-box">
+      <h3>🧪 Objets — entre les étages</h3>
+      <p class="muted">Hors combat, boire une potion est gratuit (pas de tour consommé). En combat, chaque gorgée coûte le tour via l'action 🧪 Objet. Stock : ${totalPotions()} potion${totalPotions() > 1 ? 's' : ''}.</p>
+      ${rows}
+      <div class="modal-actions"><button class="btn" id="bag-close">Fermer</button></div>
+    </div>`;
+    overlay.querySelector('#bag-close').onclick = () => overlay.remove();
+    overlay.querySelectorAll('.act-potion-out').forEach((b) => {
+      b.onclick = () => {
+        const iid = Number(b.dataset.iid);
+        const pid = b.dataset.potion;
+        const cur = curHpManaOf(iid);
+        if (!cur || !usePotionStock(pid)) return;
+        const p = POTIONS[pid];
+        if (p.genre === 'soin') cur.hp = Math.min(cur.maxHp, cur.hp + Math.max(1, Math.round(cur.maxHp * p.pct)));
+        else cur.mana = Math.min(cur.manaMax, cur.mana + Math.max(1, Math.round(cur.manaMax * p.pct)));
+        if (!store.runState.active) { store.runState.active = true; }
+        store.runState.units[iid] = { hp: cur.hp, mana: cur.mana };
+        save();
+        toast(`✓ ${p.nom} bue.`);
+        render();
+      };
+    });
+  };
+  render();
+  document.body.appendChild(overlay);
+}
+
+// boucle v2 lot 1 : choix d'une potion dans la fenêtre d'action (la gorgée coûte le tour)
+function askPotionChoice(u) {
+  if (!promptState || !actBox) return;
+  promptState.phase = 'item';
+  const zoneEl = actBox.querySelector('.act-zone');
+  if (!zoneEl) return;
+  const stunned = !!(u.status && u.status.stun > 0);
+  const rows = Object.values(POTIONS)
+    .filter((p) => potionCount(p.id) > 0)
+    .map((p) => `<button type="button" class="btn tac-btn act-potion" data-potion="${p.id}">${p.glyph} <b>${p.nom}</b> <span class="muted">×${potionCount(p.id)} — ${p.genre === 'soin' ? `+${Math.round(p.pct * 100)} % PV` : `+${Math.round(p.pct * 100)} % mana`} sur ${u.name}</span></button>`)
+    .join(' ');
+  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Quelle potion boire ? <span class="muted">(chaque gorgée coûte le tour)</span></p>`
+    + `<button type="button" class="btn tac-btn act-cancel">\\u21a9 Annuler</button></div>`
+    + (rows || '<p class="muted">Aucune potion en stock — achetez-en à la Boutique (🛒).</p>');
+  const cancelBtn = zoneEl.querySelector('.act-cancel');
+  if (cancelBtn) cancelBtn.onclick = () => { if (promptState && promptState.showActions) promptState.showActions(); };
+  zoneEl.querySelectorAll('.act-potion').forEach((b) => {
+    b.onclick = () => {
+      if (!promptState || promptState.phase !== 'item') return;
+      const pid = b.dataset.potion;
+      if (stunned) { promptState.pick({ kind: 'item', potion: null }); return; }
+      if (!usePotionStock(pid)) return;
+      save();
+      promptState.pick({ kind: 'item', potion: POTIONS[pid] });
+    };
+  });
+}
+
 function actionButtonsHtml(u, kind) {
   const isStrike = kind === 'strike';
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
@@ -15452,6 +15727,13 @@ function actionButtonsHtml(u, kind) {
       `<span class="sort-badge b-degats">D\u00e9g\u00e2ts</span>`, 'gratuit')
     + `<span class="sort-meta">la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana</span>`,
     'act-attack'));
+  // boucle v2 lot 1 : action Objet — boire une potion (soin/mana), chaque gorgée coûte le tour
+  const potN = totalPotions();
+  parts.push(row(
+    top('🧪 Objet',
+      `<span class="sort-badge b-objet">Objet</span>`, `${potN} en stock`)
+    + `<span class="sort-meta">boire une potion sur soi : soin (PV) ou mana — chaque gorgée coûte le tour</span>`,
+    'act-item' + (potN <= 0 ? ' off' : '')));
   (u.spells ?? []).forEach((sp, k) => {
     const off = sp.cost > u.mana + u.manaRegen;
     // T4.2 : le résultat calculé (mult × stat principale) affiché avec le sort
@@ -15477,6 +15759,13 @@ function bindActionButtons(box, u, kind) {
     bAtk.onclick = () => {
       if (!promptState) return;
       askActTarget('enemy', { kind: 'attack' });
+    };
+  }
+  const bItem = box.querySelector('.act-item');
+  if (bItem) {
+    bItem.onclick = () => {
+      if (!promptState || bItem.classList.contains('off')) return;
+      askPotionChoice(u);
     };
   }
   box.querySelectorAll('.act-spell').forEach((b) => {
@@ -16182,7 +16471,7 @@ async function animate(events, ms, gen = null) {
         if (won && store.defiActive) {
           pts = Math.round(40 * tactMult * loot.pts);
           store.dailyDone = todayKey();
-          addPoints(pts);
+          addGold(pts);
           
           const drawn = drawDailyCommon();
           addGem('brut', drawn.element);
@@ -16190,7 +16479,7 @@ async function animate(events, ms, gen = null) {
           grantCards([drawn.id]);
           save();
           updatePtsBadge();
-          rewardLine = `+${pts} ⚡ pts · 📠 +1 éclat brut ${drawn.element} · 💎 +1 pierre d’éveil · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
+          rewardLine = `+${pts} 🪙 or · 📠 +1 éclat brut ${drawn.element} · 💎 +1 pierre d’éveil · ${RACE_GLYPH[raceOfCard(drawn)]} ${drawn.name} (${drawn.rarity === 'N' ? 'naissance' : 'commune'} ${RACE_LABEL[raceOfCard(drawn)].toLowerCase()}) rejoint votre collection !`;
         } else if (won) {
           
           
@@ -16200,11 +16489,11 @@ async function animate(events, ms, gen = null) {
           const DIFF = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           rewards = stageRewards(store.seed, stage, 0, store.dungeon, store.diff);
           pts = Math.round((15 + 5 * stage) * (rewards.boss ? 2 : 1) * DIFF.pts * tactMult * loot.pts);
-          addPoints(pts);
+          addGold(pts);
           store.record = Math.max(store.record, stage);
           save();
           updatePtsBadge();
-          rewardLine = `+${pts} ⚡ pts — les cartes naissent à la Forge : jetons, autel, défi du jour`;
+          rewardLine = `+${pts} 🪙 or — les cartes naissent à la Forge : jetons, autel, défi du jour`;
           if (maybeDropRegEclat(uiRand, tactMult * loot.drop)) {
             rewardLine += ' · 🌀 Éclat de régression trouvé ! (réserve de la Forge)';
             if (runLog) runLog.gems.push('Éclat de régression');
@@ -16255,6 +16544,7 @@ async function animate(events, ms, gen = null) {
               rewardLine += ` · 🐥 ${oeuf.name} (naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}) se joint à vous !`;
             }
           }
+          if (stage === REGEN_BOSS_STAGE) rewardLine += ' · ⛲ Régénération complète après le premier boss !';
           if (stage === 5) {
             rollGem(BOSS_GEM[store.diff][0]);
             grantBrut(1);
@@ -16365,6 +16655,17 @@ async function animate(events, ms, gen = null) {
         setTimeout(() => banner.classList.add('out'), 2600);
         setTimeout(() => banner.remove(), 3400);
         
+        // boucle v2 lot 1 : persistance — PV/mana conservés d'un combat à l'autre dans le run
+        if (!store.defiActive) {
+          if (won) {
+            persistRunStateFrom(state);
+            if (store.stage === REGEN_BOSS_STAGE) store.runState.units = {}; // régén complète après le premier boss
+            if (finalClear) store.runState.active = false; // run terminé : le prochain repart à plein
+          } else {
+            store.runState.active = false; // défaite : la prochaine exploration est un nouveau run
+          }
+          save();
+        }
         if (won && store.defiActive) {
           store.defiActive = false;
           save();
@@ -16581,9 +16882,11 @@ function renderCombat(root, opts = {}) {
   if (!defi && store.runMod === 'sterile') {
     for (const u of [...state.team.avant, ...state.team.arriere]) u.manaRegen = Math.max(1, u.manaRegen - 1);
   }
+  // boucle v2 lot 1 : persistance — PV/mana du run repris tels quels (pas de régén entre combats)
+  if (!defi) applyRunStateTo(state);
   const isBossFloor = store.stage % 5 === 0;
   const runModDef = (!defi && runModById(store.runMod)) || null;
-  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
+  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
   const infoChips = [`<button type="button" class="info-chip" data-info="rules" title="Comment joue une carte ?">ℹ️</button>`]
     .concat(runModDef ? [`<button type="button" class="info-chip" data-info="mod" title="Modificateur du run">🎰 ${runModDef.name}</button>`] : [])
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
@@ -16597,6 +16900,7 @@ function renderCombat(root, opts = {}) {
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
+      <button class="btn ctrl" id="bag" title="Boire une potion hors combat (entre les étages)">🧪 Objets (${totalPotions()})</button>
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
     <div class="rail-wrap"><div class="rail" id="rail"></div></div>
@@ -16646,6 +16950,7 @@ function renderCombat(root, opts = {}) {
     run();
   };
   combatApp.querySelector('#auto-turn').onclick = () => run(true);
+  combatApp.querySelector('#bag').onclick = () => openBagModal();
   drawBoard();
   renderRail();
   if (!teamEmpty && state && !state.winner && (autoMode || !tacPaused)) {
@@ -16679,7 +16984,9 @@ function enterAt(stage, dungeonId) {
   }
   store.dungeon = d.id;
   store.stage = Math.min(d.floors, Math.max(1, stage));
-  
+  // boucle v2 lot 1 : un nouveau run repart à plein (soins complets entre deux runs distincts)
+  store.runState = freshRunState();
+  store.runState.active = true;
   store.runMod = RUN_MODS[Math.floor(uiRand() * RUN_MODS.length)].id;
   save();
   updatePtsBadge();
@@ -16736,6 +17043,27 @@ function selectDiff(d, diff) {
   renderDonjons(document.getElementById('app'));
 }
 
+// boucle v2 lot 1 : point d'achat minimal — le rayon potions (le reste de la Boutique arrive avec l'économie v2)
+function renderBoutique(root) {
+  const rows = Object.values(POTIONS).map((p) => `<div class="shop-row">
+    <span>${p.glyph} <b>${p.nom}</b> <span class="muted">${p.genre === 'soin' ? `soigne +${Math.round(p.pct * 100)} % des PV max` : `recharge +${Math.round(p.pct * 100)} % du mana max`} — en combat chaque gorgée coûte le tour, utilisable aussi entre les étages · stock : <b>${potionCount(p.id)}</b></span></span>
+    <button type="button" class="btn small gold" data-buy="${p.id}" ${store.gold < p.prix ? 'disabled' : ''}>Acheter — ${p.prix} or</button>
+  </div>`).join('');
+  root.innerHTML = `
+    <h2>🛒 Boutique</h2>
+    <p class="muted">Solde : <b>🪙 ${store.gold} or</b> — conversion : <b>1 ⚡ = 1 or</b>. Rayon potions : utilisables en combat (action 🧪 Objet, chaque gorgée coûte le tour) et entre les étages (gratuit).</p>
+    ${rows}
+    <p class="muted">Le reste du catalogue (équipement, éclats, gemmes brutes) arrive avec l'économie v2 — voir la roadmap.</p>`;
+  root.querySelectorAll('[data-buy]').forEach((b) => {
+    b.onclick = () => {
+      if (buyPotion(b.dataset.buy)) {
+        toast(`✓ ${POTIONS[b.dataset.buy].nom} achetée (${POTIONS[b.dataset.buy].prix} or).`);
+        renderBoutique(root);
+      }
+    };
+  });
+}
+
 function renderDonjons(root) {
   root.innerHTML = `
     <h2>Donjons</h2>
@@ -16744,7 +17072,7 @@ function renderDonjons(root) {
       <h3>🌟 Défi du jour</h3>
       ${store.dailyDone === todayKey()
         ? `<p class="muted">Déjà relevé aujourd’hui — le prochain défi arrive demain.</p>`
-        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</p>
+        : `<p class="muted">Cinq cartes divines montent sur la brèche chaque jour, dont le chef de file en boss. Pas d’étage, pas de difficulté, autant de tentatives que vous voulez. Victoire : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</p>
       <div class="dungeon-actions"><span class="btn big enter-btn-defi">Combattre le défi du jour</span></div>`}
     </div>
     <div class="dungeon-grid">
@@ -16981,6 +17309,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.13 : Boucle v2 lot 1 — potions, or et persistance', 'L’économie de survie entre en jeu. L’énergie ⚡ devient de l’or (1 ⚡ = 1 or, conversion en sauvegarde v21). Nouvelle action 🧪 Objet dans la fenêtre d’action : potions de soin (30/60 % PV) et de mana (40/80 %), chaque gorgée coûte le tour, utilisables aussi entre les étages (bouton 🧪 Objets). Achat au rayon potions de la Boutique. Plus de régénération entre les combats d’un run : PV et mana persistent d’étage en étage, régénération complète après le premier boss, soins complets entre deux runs. Hook autel de soin posé pour l’errance. Digest inchangé (combats isolés) : aed250f9… 1274/3000.'],
+
   ['v1.12 : La ligne support frappe aussi', 'RETOUR TERRAIN. Deux manques corrig\u00e9s d\u2019un m\u00eame geste. Un : le Garde du Rempart et tous les supports n\u2019avaient que le bouton de soin \u2014 d\u00e9sormais la frappe simple (\u2694, gratuite) est la premi\u00e8re action de TOUTE carte : on d\u00e9signe l\u2019ennemi, elle frappe. Deux : un sort de d\u00e9g\u00e2ts, de contr\u00f4le ou de malus lanc\u00e9 depuis la ligne support se r\u00e9sout enfin sur les ennemis selon sa fiche (largeur, puissance, taux, tours) \u2014 fini le soin fant\u00e2me quand un Embryon tapait avec Instinct Sauvage. La stat principale du lanceur fait les d\u00e9g\u00e2ts, l\u2019esquive et l\u2019\u00e9l\u00e9ment comptent comme pour la ligne d\u2019attaque, et les sorts alli\u00e9s gardent leur chemin. Les sorts malus ciblent d\u00e9sormais les ennemis dans les fiches r\u00e9solues. Le digest bouge (document\u00e9) : les supports mixtes frappent.'],
   ['v1.11 : Fin des sorts undefined', 'RETOUR TERRAIN. Les sorts h\u00e9rit\u00e9s d\u2019une carte \u00e9volu\u00e9e \u00e9taient stock\u00e9s en sauvegarde sous leur forme remapp\u00e9e par le tri (\u00e9cole + cran), sans nom ni co\u00fbt : la fen\u00eatre d\u2019action et la fiche affichaient des lignes \u00ab \u2726 undefined \u00bb, et le sort ne se lan\u00e7ait pas. D\u00e9sormais chaque entr\u00e9e se r\u00e9sout en fiche compl\u00e8te depuis le grimoire : nom, co\u00fbt, puissance, taux, cible et description. Les uniques remapp\u00e9s se r\u00e9solvent aussi ; les crans vides et les sorts inconnus disparaissent proprement de la liste. Les sauvegardes ne changent pas : la r\u00e9solution se fait \u00e0 l\u2019usage, sans perte.'],
   ['v1.10 : Le tri des recrues', 'LES NAISSANCES ET LES SOLOS RENDENT LEUR GESTE AU GRIMOIRE. Les 33 signatures du lot (les 12 naissances raciales, les 5 solos d\u2019entr\u00e9e, les 16 cartes des quais, de la f\u00eate, des routes, des dunes, des berges et du guet) fondent en crans I-II des \u00e9coles existantes : la prise de garde prot\u00e8ge (le Rempart), le bruissement d\u2019\u00e9ume frappe (la Lame), le froid du caveau fige (l\u2019Entrave), la lanterne du guet \u00e9claire (la Ferveur). Les trois portes divines (l\u2019Ange, le D\u00e9mon, l\u2019\u00c9veill\u00e9 du Seuil) gardent leur geste : les familles divines le dessineront. Les sauvegardes passent en v17 : les sorts h\u00e9rit\u00e9s d\u2019une recrue se re-mapent sur leurs crans. Le combat ne change pas : le digest reste le m\u00eame.'],
@@ -17154,7 +17484,7 @@ function renderGlossaire(root) {
         <li><b>Modificateurs de run (v0.42)</b> : chaque exploration tire un modificateur, montré AVANT d'entrer — 🐗 la Horde (+1 ennemi par vague, butin +20 %), 🕯 le Mana Stérile (régénération de mana −1 pendant chaque combat, points +25 %), 🛡 la Muraille (ennemis +25 % PV, chances d'éclats +50 %), ⚔ la Rage Partagée (ennemis +15 % ATQ, points +40 %). La face rude paie la face compense : accepter le modificateur majore le butin du run. Le refuser est gratuit — le run se joue alors sans modificateur ; seul le relancement du tirage coûte 1 éclat brut. Il tient du premier étage jusqu'à la fin du run (défaite ou donjon bouclé).</li>
         <li><b>La grammaire des sorts (v0.43)</b> : chaque carte connaît ses sorts par couches, du plus universel au plus personnel — un sort COMMUN (Frappe Précise / Premiers Soins, 2✦), un sort DE RACE (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), un sort DE CLASSE (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur) et sa SIGNATURE (le geste unique de la carte, 5✦). Les maillons des familles empilent le commun et les sorts de leur LIGNÉE, tier après tier. Côté soigneurs, le rang du sort décide du soin : plus le sort est cher, plus il soigne. Le Souffle Croisé, lui, n'est pas un sort : c'est l'action d'équipe des attaquants (voir Soins croisés).</li>
         <li><b>L'indice de force (v0.43)</b> : le niveau moyen ne dit pas si une équipe est faite de légendaires ou de communes. L'indice pondère l'ATQ et les PV au niveau courant (le cœur), la rareté (multiplicateur : elle capte la qualité des stats et la profondeur du grimoire) et le nombre de sorts (versatilité). Le seuil conseillé d'un donjon est calculé sur le boss final RÉEL de la difficulté courante : l'indice compare votre équipe à ce qu'elle affrontera.</li>
-        <li><b>Défi du jour</b> : une victoire par jour rapporte +40 ⚡, une naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil — la seule source régulière des cartes divines.</li>
+        <li><b>Défi du jour</b> : une victoire par jour rapporte +40 🪙 or, une naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil — la seule source régulière des cartes divines.</li>
         <li><b>Mythiques</b> : jamais lâchées par un donjon — elles viendront des événements de héros et des sommets des nouveaux arbres.</li>
       </ul>
     </details>
@@ -17224,7 +17554,7 @@ function renderGlossaire(root) {
       <h3>Défi du jour 🌟</h3>
       <ul class="glo-list">
         <li><b>Une équipe divine par jour</b> : cinq cartes tirées des familles divines, au niveau de votre équipe au premier lancement du jour (figé ensuite, +2 pour leur chef, marqué boss). Pas d’étage, pas de difficulté — un combat, autant de tentatives que vous voulez.</li>
-        <li><b>Récompense</b> : +40 ⚡, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</li>
+        <li><b>Récompense</b> : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine, tirée au hasard : le joueur ne choisit pas sa naissance) et 1 éclat brut de son élément, plus 1 pierre d’éveil.</li>
         <li><b>Règles divines</b> : le camp remplace l’élément (ange = Lumière, démon = Ombre) ; une seule carte par famille divine en équipe, trois au maximum ; dès deux cartes divines posées, vos dégâts ET vos soins gagnent +10 %.</li>
         <li><b>Sommets</b> : Kairos, Arbitre du Seuil (étourdissement double), Écho, Voix Miroir (copie des sorts adverses) et Ananké, Tisseuse du Pont (liens chaînés) — les L des trois familles ne tombent qu’ici.</li>
       </ul>
@@ -17261,6 +17591,7 @@ registerRoute('#equipe', renderEquipe);
 registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
 registerRoute('#donjons', renderDonjons);
+registerRoute('#boutique', renderBoutique);
 registerRoute('#combat', renderCombat);
 registerRoute('#glossaire', renderGlossaire);
 
@@ -17270,6 +17601,8 @@ initAssets().then(() => start());
 </script>
 </body>
 </html>
+.sort-badge.b-objet { background: rgba(77, 208, 225, .18); color: #7ce7f5; border-color: rgba(77, 208, 225, .45); }
+.shop-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border: 1px solid rgba(124, 77, 255, .25); border-radius: 10px; margin: 6px 0; flex-wrap: wrap; }
 .row-lab { width: 100%; font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #93a0b5; margin-top: 6px; }
 .row.back { opacity: .92; }
 .line.team .row { justify-content: flex-start; }

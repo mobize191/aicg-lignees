@@ -1,0 +1,34 @@
+{
+  "soin30": {
+    "id": "soin30",
+    "nom": "Potion de soin",
+    "genre": "soin",
+    "pct": 0.3,
+    "prix": 50,
+    "glyph": "🧪"
+  },
+  "soin60": {
+    "id": "soin60",
+    "nom": "Potion de soin supérieure",
+    "genre": "soin",
+    "pct": 0.6,
+    "prix": 120,
+    "glyph": "🍷"
+  },
+  "mana40": {
+    "id": "mana40",
+    "nom": "Potion de mana",
+    "genre": "mana",
+    "pct": 0.4,
+    "prix": 60,
+    "glyph": "🔮"
+  },
+  "mana80": {
+    "id": "mana80",
+    "nom": "Potion de mana supérieure",
+    "genre": "mana",
+    "pct": 0.8,
+    "prix": 140,
+    "glyph": "💠"
+  }
+}

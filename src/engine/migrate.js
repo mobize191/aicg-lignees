@@ -142,7 +142,24 @@ function v19to20(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20 };
+// v20 -> v21 (boucle v2 lot 1) : les points ⚡ deviennent de l'or (1 ⚡ = 1 or), le stock de
+// potions et l'état de run (PV/mana persistants) entrent en sauvegarde. Non destructif.
+function v20to21(s) {
+  s.version = 21;
+  if (Number.isInteger(s.gold) && s.gold >= 0) s.gold = s.gold;
+  else if (Number.isInteger(s.points) && s.points >= 0) s.gold = s.points * (DATA.engine.OR_PER_POINT ?? 1);
+  else s.gold = 0;
+  delete s.points;
+  if (!s.potions || typeof s.potions !== 'object') s.potions = {};
+  for (const p of Object.values(DATA.potions ?? {})) {
+    if (!Number.isInteger(s.potions[p.id]) || s.potions[p.id] < 0) s.potions[p.id] = 0;
+  }
+  if (!s.runState || typeof s.runState !== 'object') s.runState = { active: false, units: {} };
+  if (!s.runState.units || typeof s.runState.units !== 'object') s.runState.units = {};
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

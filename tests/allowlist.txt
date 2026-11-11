@@ -18,3 +18,4 @@
 18   # numero de version du format de sauvegarde (structure du champ)
 19   # numero de version du format de sauvegarde (structure du champ)
 20   # numero de version du format de sauvegarde (structure du champ)
+21   # numero de version du format de sauvegarde (structure du champ)

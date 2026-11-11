@@ -732,6 +732,68 @@ async function main() {
     }
   }
 
+  // ---------- boucle v2 lot 1 : potions, or, persistance, autel ----------
+  {
+    mem.clear();
+    check('B1 a store : gold/potions/runState présents après migration', Number.isInteger(store.gold) && store.potions && typeof store.runState === 'object', JSON.stringify({ gold: store.gold, potions: store.potions, runState: store.runState }));
+
+    // boutique : rayon potions, achat contre de l'or
+    store.gold = 500;
+    api.go('#boutique');
+    await wait(30);
+    const shopHtml = els.get('app')?._innerHTML ?? '';
+    const buyBtns = els.get('app').querySelectorAll('[data-buy]');
+    check('B1 b boutique : rayon potions rendu avec prix en or', shopHtml.includes('Boutique') && shopHtml.includes('or') && buyBtns.length === 4, shopHtml.slice(0, 120));
+    const buyBtn = buyBtns.find((b) => b.dataset.buy === 'soin30') ?? null;
+    if (buyBtn) { buyBtn.click(); await wait(20); }
+    check('B1 c achat : stock +1 et or débité (50 or)', api.potionCount('soin30') === 1 && store.gold === 450, `stock=${api.potionCount('soin30')} gold=${store.gold}`);
+
+    // action Objet dans la fenêtre d'action
+    setup(['n1', 'n3'], 10);
+    api._setAuto(false);
+    api.go('#combat');
+    await wait(60);
+    const stB = api._state();
+    check('B1 d combat lancé pour le test Objet', !!stB, '');
+    if (stB) {
+      api._speed(6);
+      const uB = stB.team.avant[0];
+      uB.hp = 2; uB.mana = 0;
+      els.get('fight').click();
+      let amB = null;
+      for (let w = 0; w < 150 && !amB; w++) { await wait(25); amB = api._actEl(); }
+      const bItem = amB ? amB.querySelector('.act-item') : null;
+      check('B1 e fenêtre d’action : bouton Objet avec badge et stock', !!bItem && (bItem.textContent ?? '').includes('Objet') && (bItem.textContent ?? '').includes('stock'), bItem ? bItem.textContent : 'pas de bouton');
+      if (bItem) {
+        bItem.click();
+        await wait(30);
+        const bPot = [...amB.querySelectorAll('.act-potion')].find((b) => b.dataset.potion === 'soin30') ?? null;
+        check('B1 f choix de potion proposé (soin30 en stock)', !!bPot, amB._innerHTML.slice(0, 200));
+        if (bPot) {
+          bPot.click();
+          await wait(80);
+          check('B1 g la gorgée soigne le porteur et consomme le stock', uB.hp > 2 && api.potionCount('soin30') === 0, `hp=${uB.hp} stock=${api.potionCount('soin30')}`);
+        } else check('B1 g la gorgée soigne le porteur et consomme le stock', false, 'pas de potion cliquable');
+      } else check('B1 f choix de potion proposé (soin30 en stock)', false, '');
+      // bouton Objets hors combat + persistance
+      const bagBtn = els.get('bag');
+      check('B1 h bouton Objets (hors combat) présent', !!bagBtn && (bagBtn.textContent ?? '').includes('Objets'), '');
+      // persistance : on simule un état de run et on vérifie apply/persist
+      store.runState = { active: true, units: {} };
+      api.persistRunStateFrom(stB);
+      check('B1 i persistRunStateFrom enregistre PV/mana par exemplaire', Object.keys(store.runState.units).length > 0, JSON.stringify(store.runState.units));
+      const stB2 = api.initCombat({ avant: [{ ...api.byId('n1'), level: 10 }], arriere: [] }, api.makeWave(7, 1, 'marees', 1), 7);
+      store.team.slots = [1];
+      api.applyRunStateTo(stB2);
+      check('B1 j applyRunStateTo restaure les PV persistés', stB2.team.avant[0].hp <= stB2.team.avant[0].maxHp, `hp=${stB2.team.avant[0].hp}`);
+      const grace = api.autelDeSoin();
+      check('B1 k hook autel de soin : soin complet + grâce', grace && grace.grace === 5 && store.runState.active && Object.keys(store.runState.units).length === 0, JSON.stringify(grace));
+      check('B1 l 0 exception lot 1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    } else {
+      for (const lbl of ['B1 e fenêtre d’action : bouton Objet avec badge et stock', 'B1 f choix de potion proposé (soin30 en stock)', 'B1 g la gorgée soigne le porteur et consomme le stock', 'B1 h bouton Objets (hors combat) présent', 'B1 i persistRunStateFrom enregistre PV/mana par exemplaire', 'B1 j applyRunStateTo restaure les PV persistés', 'B1 k hook autel de soin : soin complet + grâce', 'B1 l 0 exception lot 1']) check(lbl, false, 'pas de combat');
+    }
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

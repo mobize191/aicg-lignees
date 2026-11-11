@@ -281,6 +281,22 @@ function peekRound(state) {
   return null;
 }
 
+// boucle v2 lot 1 : action Objet — une gorgée applique son effet au porteur (soin PV ou recharge mana)
+function drinkPotion(u, potion) {
+  if (!u || !u.alive || !potion) return [];
+  const pct = Number(potion.pct) || 0;
+  if (potion.genre === 'mana') {
+    const amt = Math.max(1, Math.round(u.manaMax * pct));
+    const real = Math.min(amt, Math.max(0, u.manaMax - u.mana));
+    u.mana += real;
+    return [{ type: 'buff', side: 'team', sourceId: u.uid, targetId: u.uid, kind: 'tactical', value: 'mana', amount: real, potion: potion.id }];
+  }
+  const amt = Math.max(1, Math.round(u.maxHp * pct));
+  const real = Math.min(amt, Math.max(0, u.maxHp - u.hp));
+  u.hp = Math.min(u.maxHp, u.hp + real);
+  return [{ type: 'heal', side: 'team', sourceId: u.uid, targetId: u.uid, amount: real, potion: potion.id, objet: true }];
+}
+
 function actTeamStriker(u, i, ctx, step) {
   const { team, enemies, mods } = ctx.state;
   const tacAct = step && step.tacAct ? step.tacAct : null;
@@ -290,6 +306,11 @@ function actTeamStriker(u, i, ctx, step) {
     ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'stun', value: u.status.stun });
     u.status.stun -= 1;
     if (u.status.stun <= 0) delete u.status.stun;
+    return false;
+  }
+  if (tacAct && tacAct.kind === 'item') {
+    // chaque gorgée coûte le tour, même si la cible est déjà à plein
+    ctx.events.push(...drinkPotion(u, tacAct.potion));
     return false;
   }
   if (tacAct && tacAct.kind === 'pass') {
@@ -456,6 +477,11 @@ function actTeamStriker(u, i, ctx, step) {
 function actTeamSupport(s, ctx, step) {
   if (!s.alive) return;
   const supAct = step && step.tacAct ? step.tacAct : null;
+  // boucle v2 lot 1 : la ligne support peut aussi boire une potion (coûte son tour)
+  if (supAct && supAct.kind === 'item') {
+    ctx.events.push(...drinkPotion(s, supAct.potion));
+    return;
+  }
   // retour terrain : l'etat voyage jusqu'au support (esquive, zone, fureur, sorts hostils)
   applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
@@ -599,7 +625,7 @@ function stepRound(state, stepChoice = null) {
   let targetIdx = null;
   if (stepChoice) {
     // retour terrain : la designation d'ennemi voyage jusqu'a la resolution (frappe et sorts hostils des supports)
-    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null };
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null, potion: stepChoice.potion ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
       const ti = [...state.enemies.avant, ...state.enemies.arriere].findIndex((x) => x.uid === stepChoice.targetUid);

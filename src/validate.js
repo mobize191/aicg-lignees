@@ -183,5 +183,15 @@ function validate(data, errors) {
       if (pa > pb && a.larg >= b.larg) push(`le sort ${b.id} est strictement dominé par ${a.id} au même coût (${k})`, 'EXI-T-3');
     }
   }
+  // potions (boucle v2 lot 1) : id unique, genre soin/mana, pourcentage et prix valides
+  const potionIds = new Set();
+  for (const [pid, p] of Object.entries(data.potions ?? {})) {
+    if (potionIds.has(p.id ?? pid)) push(`doublon de potion ${p.id ?? pid}`, 'EXI-DATA-3');
+    potionIds.add(p.id ?? pid);
+    if (p.id !== pid) push(`la potion ${pid} porte un id différent (${p.id})`, 'EXI-DATA-3');
+    if (!['soin', 'mana'].includes(p.genre)) push(`la potion ${pid} a un genre invalide (${p.genre})`, 'EXI-DATA-1');
+    if (!(typeof p.pct === 'number' && p.pct > 0 && p.pct <= 1)) push(`la potion ${pid} a un pourcentage hors bornes (${p.pct})`, 'EXI-DATA-1');
+    if (!(Number.isInteger(p.prix) && p.prix > 0)) push(`la potion ${pid} a un prix invalide (${p.prix})`, 'EXI-DATA-1');
+  }
   return errors;
 }

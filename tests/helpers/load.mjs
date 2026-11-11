@@ -9,14 +9,14 @@ export function loadData(dataDir = 'data') {
 const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell', 'getSchool',
   'getFamily', 'getTree', 'getZone', 'applyDamage', 'resolveTurn', 'applySupport', 'castSummon',
   'setRoll', 'roll', 'migrate', 'statsAt', 'castSpell', 'pickZoneTargets', 'evolve', 'openSchools',
-  'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'stepRound', 'playAuto', 'spellSideOf',
+  'mulberry32', 'elementMult', 'elementTag', 'makeUnit', 'initCombat', 'beginRound', 'peekRound', 'stepRound', 'playAuto', 'spellSideOf',
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById',
   'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance', 'jetonRarityFor',
   'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
   'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
-  'resolveSpellEntry', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf'];
+  'resolveSpellEntry', 'drinkPotion', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',
