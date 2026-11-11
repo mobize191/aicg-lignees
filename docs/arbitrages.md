@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 lot E3a livré (Guilde ex-Forge : compagnons du jour)
+
+- **Livré** : la Forge s'appelle désormais la **Guilde** (route et menu inchangés côté hash) et propose, à côté des évolutions et de l'autel inchangés, une section **Compagnons du jour** : rotation déterministe de 3 offres (seed FNV de la date), cartes non monstres, non archivées, rangs C à UR, prix en data (`data/guilde.json` : C 500 → UR 2 000 or, acté), limite 3 exemplaires, rang L/N jamais recrutable. Achat en or, exemplaire ajouté à la collection avec modale de révélation. **Les jetons restent en place pour l'instant** — leur suppression (avec conversion en or en migration) est le lot E3b, option conservative pour garder un lot = une préoccupation.
+- **Preuve** : build ok, **132 tests** verts (prix Guilde en data), smoke **231 checks** (7 nouveaux B8 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (achats hors combat).
+
 ## 2026-11-11 : MESURE — économie v2 lot E2 livré (marchand de créatures dans la Boutique)
 
 - **Livré** : rayon 🐾 Marchand de créatures à la Boutique — monstres **non nommés**, raretés C à UR, prix en data (`data/marchand.json` : C 200 → UR 10 000 or, bornes actées ; paliers UC 600 / R 1 800 / SR 4 000 **PROPOSÉ**, calibrage v0 à affiner au digest), limite 3 exemplaires. Achat en or, exemplaire ajouté à la collection (fusion/enseignements). Les rangs L/M et les nommés ne sont pas vendus. **La suppression des jetons de génération (`JETON_RARITY`) est reportée au lot E3 (rework Forge → Guilde)** — le marchand coexiste avec les jetons en attendant, option conservative.

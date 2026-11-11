@@ -964,6 +964,27 @@ async function main() {
     check('B7 g 0 exception lot E2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot E3a économie v2 — Guilde : compagnons du jour (rotation seed de la date)
+    api.go('#forge');
+    await wait(20);
+    const offres = api.compagnonsDuJour();
+    const nbBtn = doc.body.querySelectorAll('[data-compagnon]').length;
+    check('B8 a Guilde : 3 compagnons du jour rendus, rotation déterministe', offres.length === 3 && nbBtn === 3 && api.compagnonsDuJour().map((c) => c.id).join() === offres.map((c) => c.id).join(), offres.map((c) => c.id).join());
+    check('B8 b compagnons hors rang L/N/archivés/monstres', offres.every((c) => !c.monster && !c.archived && c.rarity !== 'N' && c.rarity !== 'L' && c.rarity !== 'M' && api.compagnonPrix(c) != null), '');
+    api.store.gold = 20000;
+    const c = offres[0];
+    const gold0 = api.store.gold;
+    const owned0 = api.ownedOf(c.id);
+    check('B8 c recrutement compagnon : -prix, +1 exemplaire', api.buyCompagnon(c.id) === true && api.store.gold === gold0 - api.compagnonPrix(c) && api.ownedOf(c.id) === owned0 + 1, `${c.id} ${api.compagnonPrix(c)}`);
+    check('B8 d prix actés (C 500, UR 2 000)', api.GUILDE.prixCompagnons.C === 500 && api.GUILDE.prixCompagnons.UR === 2000, '');
+    const nCard = (api.DATA.cards ?? []).find((x) => x.rarity === 'N');
+    check('B8 e rang N jamais recrutable à la Guilde', api.buyCompagnon(nCard.id) === false, nCard.id);
+    api.store.gold = 0;
+    check('B8 f recrutement sans or refusé', api.buyCompagnon(c.id) === false, '');
+    check('B8 g 0 exception lot E3a', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.22] — 2026-11-11 — Économie v2, lot E3a : la Guilde recrute des compagnons
+
+La Forge s'appelle désormais la **Guilde**. Nouveau : les **compagnons du jour** — 3 offres en rotation quotidienne (seed de la date), rangs C à UR, 500 à 2 000 or, limite 3 exemplaires par carte, rang L jamais recrutable. Évolutions et autel inchangés. Digest inchangé `f72106ff…` 1379/3000. 132 tests, smoke 231 checks (7 nouveaux verts).
+
+
 ## [1.21] — 2026-11-11 — Économie v2, lot E2 : marchand de créatures à la Boutique
 
 Nouveau rayon 🐾 à la Boutique : monstres non nommés, raretés C à UR, prix en données (C 200 → UR 10 000 or, paliers intermédiaires proposés), limite de 3 exemplaires par créature. Pour la fusion et les enseignements. Les jetons de génération disparaîtront au lot E3 (rework Forge → Guilde). Digest inchangé `f72106ff…` 1379/3000. 131 tests, smoke 224 checks (7 nouveaux verts).

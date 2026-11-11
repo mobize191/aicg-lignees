@@ -116,6 +116,9 @@ const EQUIP_SETS = DATA.equipment?.sets ?? {};
 // économie v2 lot E2 : marchand de créatures (data/marchand.json)
 const MARCHAND = DATA.marchand ?? { prixParRarete: {}, raretesVendues: [], maxExemplaires: 3 };
 
+// économie v2 lot E3 : Guilde (ex-Forge) — compagnons en rotation quotidienne (data/guilde.json)
+const GUILDE = DATA.guilde ?? { prixCompagnons: {}, nbOffresJour: 3, maxExemplaires: 3 };
+
 const EQUIP_DROP_RATE = E.EQUIP_DROP_RATE;
 
 const GEM_BRUT_PRIX = E.GEM_BRUT_PRIX;

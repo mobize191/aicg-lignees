@@ -44,3 +44,14 @@ test('économie v2 lot E2 — marchand de créatures : échelle de prix en data,
     if (rars.includes(x.rarity)) assert.ok(m.prixParRarete[x.rarity], `${x.id} achetable`);
   }
 });
+
+test('économie v2 lot E3a — Guilde : compagnons, prix actés C 500 → UR 2 000 or, 3 offres/jour', () => {
+  const D = loadData();
+  const g = D.guilde;
+  assert.ok(g, 'data/guilde.json existe');
+  assert.equal(g.prixCompagnons.C, 500);
+  assert.equal(g.prixCompagnons.UR, 2000);
+  assert.equal(g.nbOffresJour, 3, 'rotation de 3 offres par jour');
+  assert.ok(!('L' in g.prixCompagnons) && !('N' in g.prixCompagnons), 'L et N jamais recrutables');
+  assert.equal(g.maxExemplaires, 3);
+});

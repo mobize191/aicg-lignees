@@ -458,6 +458,52 @@ function buyEquipment(id) {
   return true;
 }
 
+// économie v2 lot E3 : Guilde — compagnons du jour (rotation déterministe, seed de la date)
+function seedOfDay() {
+  const k = todayKey();
+  let h = 2166136261;
+  for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+function compagnonPool() {
+  const prix = GUILDE.prixCompagnons ?? {};
+  return CATALOG.filter((c) => !c.monster && !c.archived && prix[c.rarity] != null);
+}
+
+function compagnonsDuJour() {
+  const rng = mulberry32(seedOfDay());
+  const pool = compagnonPool();
+  const n = Math.min(GUILDE.nbOffresJour ?? 3, pool.length);
+  const out = [];
+  const used = new Set();
+  while (out.length < n && used.size < pool.length) {
+    const c = pool[Math.floor(rng() * pool.length)];
+    if (used.has(c.id)) continue;
+    used.add(c.id);
+    out.push(c);
+  }
+  return out;
+}
+
+function compagnonPrix(card) {
+  return GUILDE.prixCompagnons?.[card.rarity] ?? null;
+}
+
+function buyCompagnon(id) {
+  const c = byId(id);
+  const prix = c ? compagnonPrix(c) : null;
+  if (!c || c.monster || prix == null) return false;
+  const max = GUILDE.maxExemplaires ?? 3;
+  if ((ownedOf(id) ?? 0) >= max) { toast(`✗ Déjà ${max} exemplaires de ${c.name}.`, 'warn'); return false; }
+  if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour recruter ${c.name}.`, 'warn'); return false; }
+  store.gold -= prix;
+  newInst(id, 1, 0);
+  save();
+  updatePtsBadge();
+  return true;
+}
+
 // économie v2 lot E2 : marchand de créatures — monstres non nommés, raretés vendues en data
 function marchandMonsters() {
   const vendues = new Set(MARCHAND.raretesVendues ?? []);
@@ -4835,6 +4881,16 @@ function renderForge(root) {
   }).filter(Boolean).join(' \u00b7 ');
 
   
+  const guildeRows = compagnonsDuJour().map((c) => {
+    const prix = compagnonPrix(c);
+    const owned = ownedOf(c.id) ?? 0;
+    const max = GUILDE.maxExemplaires ?? 3;
+    return `<div class="shop-row">
+      <span>🤝 <b>${c.name}</b> <span class="muted">${RARITY_LABEL[c.rarity] ?? c.rarity} · ${c.classe} · ${c.element} · possédée : <b>${owned}</b>/${max}</span></span>
+      <button type="button" class="btn small gold" data-compagnon="${c.id}" ${store.gold < prix || owned >= max ? 'disabled' : ''}>Recruter — ${prix} or</button>
+    </div>`;
+  });
+
   const tokenGroups = [];
   const seenTypes = new Map();
   store.tokens.forEach((t, idx) => {
@@ -4848,7 +4904,7 @@ function renderForge(root) {
   }).join('');
 
   root.innerHTML = `
-    <h2>\u2692\ufe0f La Forge <span class="muted">\u2014 \u00e9volutions, autel, jetons</span></h2>
+    <h2>🛡️ La Guilde <span class="muted">\u2014 \u00e9volutions, autel, compagnons, jetons</span></h2>
     <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) et son Ascendance propres. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
     <h3>\u00c9volutions ${evoRows.length ? `(${evoRows.length})` : ''}</h3>
     ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : gagnez des cartes (donjons, jetons, autel) et montez-les au niveau 10 en donjon.</p>'}
@@ -4861,7 +4917,10 @@ function renderForge(root) {
     <h3>Autel de g\u00e9n\u00e9ration ${'\u2014'} 5 pour 1</h3>
     <p class="muted fam-hint">Sacrifiez 5 exemplaires LIBRES d\u2019une m\u00eame cat\u00e9gorie (personnages OU monstres, jamais m\u00e9lang\u00e9s) pour g\u00e9n\u00e9rer 1 carte de raret\u00e9 sup\u00e9rieure, m\u00eame cat\u00e9gorie, \u00e9l\u00e9ment pond\u00e9r\u00e9 par les cartes sacrifi\u00e9es. Cha\u00eene compl\u00e8te : 5 C = 1 UC \u00b7 5 UC = 1 R \u00b7 5 R = 1 SR \u00b7 5 SR = 1 UR \u00b7 5 UR = 1 <b>L</b>. La L\u00e9gendaire est un PROJET, jamais un tirage : elle se construit (1 L = 25 SR = 125 R = 625 UC = 3125 communes, ou l\u2019\u00e9quivalent en jetons).</p>
     <div class="fusion-list">${altarBtns.join('')}</div>
-    <h3>Jetons de g\u00e9n\u00e9ration ${store.tokens.length ? `(${store.tokens.length})` : ''}</h3>
+    <h3>🤝 Compagnons du jour ${guildeRows.length ? `(${guildeRows.length})` : ''}</h3>
+    <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre de l'or : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 500 → UR 2 000 or), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
+    <div class="fusion-list">${guildeRows.join('') || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}</div>
+    <h3>Jetons de génération ${store.tokens.length ? `(${store.tokens.length})` : ''}</h3>
     ${tokenRows || '<p class="muted fam-hint">Aucun jeton pour l\u2019instant. Le boss final de chaque donjon en l\u00e2che un (1 par jour et par donjon, raret\u00e9 selon les donjons d\u00e9j\u00e0 boucl\u00e9s), la premi\u00e8re victoire finale d\u2019un donjon offre un jeton bonus de son biome, le d\u00e9fi du jour en ajoute un, et les jalons (premier donjon, premier boss d\u2019\u00e9tage 5, premi\u00e8re Difficile) en distribuent.</p>'}
   `;
   root.querySelectorAll('[data-open]').forEach((el) => {
@@ -4875,6 +4934,15 @@ function renderForge(root) {
   };
   root.querySelectorAll('[data-evolve]').forEach((el) => {
     el.addEventListener('click', () => act(() => forgeEvolve(el.dataset.evolve, el.dataset.evolveTo ?? null)));
+  });
+  root.querySelectorAll('[data-compagnon]').forEach((el) => {
+    el.addEventListener('click', () => act(() => {
+      const c = byId(el.dataset.compagnon);
+      if (buyCompagnon(el.dataset.compagnon)) {
+        toast(`✓ ${c.name} rejoint la collection (${compagnonPrix(c)} or).`);
+        openRevealModal([c.id], { title: '🤝 Nouveau compagnon', subtitle: 'La carte rejoint déjà votre collection.', note: 'Touchez la carte pour la révéler.', cta: 'Bien reçu !' });
+      }
+    }));
   });
   root.querySelectorAll('[data-token]').forEach((el) => {
     el.addEventListener('click', () => act(() => {
@@ -4934,6 +5002,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.22 : Économie v2 lot E3a — la Guilde recrute des compagnons', 'La Forge devient la Guilde. Compagnons du jour : 3 offres en rotation quotidienne (seed du jour), rangs C à UR, 500 à 2 000 or, limite 3 exemplaires — le rang L ne se recrute jamais. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.21 : Économie v2 lot E2 — marchand de créatures', 'Nouveau rayon 🐾 à la Boutique : monstres non nommés, raretés C à UR, 200 à 10 000 or (échelle en données), limite 3 exemplaires — pour la fusion et les enseignements. Les jetons disparaîtront au rework Forge → Guilde. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.20 : Économie v2 lot E1 — Boutique complète', 'La Boutique couvre le catalogue fixe : potions, éclats bruts des 5 éléments (150 or, revendables 100 or) et rayon équipement (60 pièces, 200 à 1 600 or — armes typées, armures, slots d’équipe). Les pièces de set restent hors Boutique. Digest inchangé : f72106ff… 1379/3000.'],
