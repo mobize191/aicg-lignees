@@ -14,6 +14,11 @@
 ## 2026-11-11 : PROPOSÉ — solos archivés encore cibles d'évolution ; défi du jour tire encore du rang N
 
 - Les 31 cartes archivées restent référencées comme cibles d'évolution (`evolutions.json` / `solo-steps.json`) : une carte qui évolue vers un solo atterrit dans les archives. PROPOSÉ : greffer les solos à des familles (roadmap contenu v3) plutôt que de casser les évolutions existantes. Le défi du jour (`drawDailyCommon`) peut encore tirer du rang N : laissé tel quel, conforme à l'arbitrage (source de N hors drops).
+## 2026-11-11 : ACTÉ — retour au socle de prompts NL painterly d'origine, corrigé (vague 3)
+
+- **Verdict vague 2 de Marc-Olivier : résultat mauvais dans l'ensemble** — défauts techniques (quasi-monochrome ~15-20 %, visages sombres, 4 human review : z22, a16, d6, f18) et rupture avec le style painterly semi-réaliste des arts d'origine. La grammaire danbooru « anime style » de la vague 2 est **abandonnée**.
+- **Décision ACTÉE : repartir des prompts WAI d'origine (`seeds-wai.csv`, langage naturel painterly) comme socle de la vague 3**, avec les corrections : (1) suppression de l'ancre « trading card game artwork » (cause probable des effets de bordure de carte) remplacée par « epic fantasy splash artwork » + négatif anti-cadre ; (2) sujet reconstruit depuis `species-map.json` uniquement — les ~180 fragments issus de la traduction littérale des noms (« A bow », « A sea foam »…) sont supprimés ; (3) cadrage demi-corps/full body vérifié par rareté ; (4) négatif court §15 + correctifs §14 ; (5) conservation des acquis v2 (seeds, mapping strict, IPAdapter 0.4, budgets, i2v ambiances).
+- Spéc complète à appliquer : `docs/images/correction-prompts-v3.md`. Checkpoint inchangé (WAI v17, canon §15). Relance précédée d'un témoin de 6 cartes validé visuellement par Marc-Olivier.
 
 ## 2026-11-11 : ACTÉ — maquette n°1 Accueil/hub-ville validée + révision DA (retour de Marc-Olivier)
 
