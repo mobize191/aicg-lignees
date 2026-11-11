@@ -90,3 +90,20 @@ test('contenu v3 lot C3 — gobelins régionaux : foyer Marées, variantes 2 car
     assert.ok((data['monster-families'][dj] ?? []).some((f) => f.lines.flat().some((id) => variantes[dj].includes(id))), `${dj} : famille régionale déclarée`);
   }
 });
+test('contenu v3 lot C4 — Clergé du Plein Jour : Apolline en M (fusion Célestin + Justine), nouvelle L Justine, Zénith à 2 M', () => {
+  const data = loadData();
+  const zen = data.monsters.filter((m) => m.dungeon === 'zenith');
+  const mythiques = zen.filter((m) => m.rarity === 'M').map((m) => m.name).sort();
+  assert.deepEqual(mythiques, ['Apolline, Prophétesse du Jour', 'Astre Capiteux'], 'le Zénith porte 2 M');
+  const apolline = zen.find((m) => m.id === 'z30');
+  assert.equal(apolline.rarity, 'M', 'Apolline, Prophétesse du Jour en M');
+  const justine = zen.find((m) => m.id === 'z29');
+  assert.equal(justine.rarity, 'L', 'nouvelle L Justine, Justicière du Jour');
+  assert.equal(justine.name, 'Justine, Justicière du Jour');
+  assert.ok(zen.some((m) => m.id === 'z28' && m.rarity === 'UR' && m.name === 'Justicière du Jour'), 'z28 UR Justicière du Jour');
+  assert.ok(zen.some((m) => m.id === 'z26' && m.rarity === 'L' && m.name === 'Célestin, Apôtre du Chant'), 'z26 L Célestin conservé');
+  const fam = (data['monster-families'].zenith ?? []).find((f) => f.name === 'Clergé du Plein Jour');
+  assert.ok(fam && fam.mythic === 'z30', 'famille Clergé du Plein Jour, mythique z30');
+  const ids = [...fam.lines.flat(), ...(fam.side ?? [])];
+  assert.deepEqual(ids.sort(), ['z11', 'z23', 'z24', 'z25', 'z26', 'z27', 'z28', 'z29', 'z9'].sort(), '10 cartes du Clergé');
+});

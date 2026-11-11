@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — contenu v3 lot C4 (Clergé du Plein Jour) audité et verrouillé : digest inchangé depuis C3
+
+- **Audit de conformité** : le Clergé du Plein Jour est posé en data depuis le lot 6 du grand chantier — **z30 Apolline, Prophétesse du Jour en M** (fusion Célestin + Justine), **z29 L Justine, Justicière du Jour** (nouvelle L), z28 UR Justicière du Jour, z26 L Célestin conservé ; le Zénith porte **2 M** (z8 Astre Capiteux + z30 Apolline). Famille « Clergé du Plein Jour » déclarée dans `monster-families.zenith` (10 cartes, mythique z30). Test de régression ajouté. Renommages/fusions d'affichage seuls : ids, stats, courbes inchangés, aucune migration nécessaire.
+- **Preuve** : build ok, **148 tests** verts (1 nouveau), smoke **300 checks** (seuls échecs préexistants 46 g/45 e), digest **inchangé `f8a9f0bb…` 1359/3000** (aucune vague modifiée depuis C3 — MESURE consignée, pas de recalibrage).
+
 ## 2026-11-11 : MESURE — contenu v3 lot C3 (gobelins régionaux) livré : digest re-mesuré, MESURE consignée sans recalibrage
 
 - **Livré** : famille gobeline unique, foyer aux Marées (« Gobelins des Écumes », 8 cartes e1-e19) ; **variantes régionales de 2 cartes (C + UC) par donjon** — Forge (déjà posée : f2 Gobelin des Fumées, f24 Gobelin de Suie), **Bosquet (g31 Gobelin des Mousses, g32 Gobelin des Racines), Crypte (k31 Gobelin des Caveaux, k32 Gobelin des Ossements), Zénith (z31 Gobelin des Nuages, z32 Gobelin du Soleil)**. Pas de M gobelin, pas de nommé. Intégration : pool des vagues (`dungeon`), familles déclarées dans `monster-families`, rencontres d'errance des zones, signatures de fusion vers des crans pleins (biomes triés). Stats agi/int dérivées des `STAT_RATIOS` (invariant T4.3).
