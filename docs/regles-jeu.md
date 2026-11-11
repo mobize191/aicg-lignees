@@ -68,7 +68,7 @@
 ## 7. Économie v2 (ACTÉE 10/11/2026, bloc visuel après le calibrage)
 
 - **L'or entre en jeu (IMPLÉMENTÉ lot 1 boucle v2, 11/11/2026)** : l'énergie ⚡ (points de donjon, 40 par étage modulé par les mods de run) est **convertie en or** (1 ⚡ = 1 or, `store.gold`, migration v21) ; gagné en donjon et en errance.
-- **Boutique (point d'achat minimal IMPLÉMENTÉ lot 1 : rayon potions)** : on y achète des objets contre de l'or ; le reste du catalogue (éclats, équipement, gemmes) arrive avec le bloc visuel économie v2.
+- **Boutique (ACTÉE 10/11/2026, IMPLÉMENTÉE économie v2 lot E1)** : catalogue fixe contre de l'or — potions (50/120/60/140 or), éclats bruts des 5 éléments (150 or, revendables 100 or), équipement du bas de gamme (200 à 1 600 or, armes typées par classe, armures, slots d'équipe) ; les pièces de set et le haut de gamme se lootent en donjon ou se craftent en ville.
 - **Marchand de créatures** : vend des créatures contre de l'or ; il **remplace les jetons de génération** (les jetons de la Forge et leur table `JETON_RARITY` disparaissent).
 - **Guilde (ex-Forge)** : évolutions + recrutement de compagnons contre de l'or.
 - **Quêtes quotidiennes** : le défi du jour est **supprimé**, remplacé par des quêtes qui changent chaque jour (ex. vaincre 10 monstres, finir 2 donjons) ; un onglet quêtes vit dans le menu guide ; **3 par jour en rotation**, récompenses 80 à 150 or, parfois une carte N, un éclat ou une pierre d'éveil, **bonus de complétion totale : 1 pierre d'éveil** (calibrage v0 acté le 10/11/2026, à affiner au digest).

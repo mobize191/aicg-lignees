@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.20] — 2026-11-11 — Économie v2, lot E1 : Boutique complète (éclats bruts + rayon équipement)
+
+La 🛒 Boutique couvre le catalogue fixe : potions, **éclats bruts** des 5 éléments (achat 150 or, revente 100 or via l'inventaire) et **rayon équipement** (60 pièces, 200 à 1 600 or — armes typées par classe, armures, slots d'équipe). Les pièces de set restent hors Boutique (boss, craft, évolutions). Pièces achetées équipables depuis la fiche. Digest inchangé `f72106ff…` 1379/3000. 130 tests, smoke 217 checks (7 nouveaux verts).
+
+
+## [1.19] — 2026-11-11 — Campagne d’illustrations v2 en 3e source d’images
+
+Le bouton 🖼️ cycle désormais entre **3 sources** : DreamShaper XL (`assets.json`, défaut), WAI-Illustrious v17 comparatif (`assets-wai.json`, inchangé) et la **campagne v2** (`assets-v2.json` : 265 arts WAI v17 + 6 fonds, budgets v2 charte §13 : arts 400×560 JPEG q80, fonds 1216×832 q72, manifeste ~21,5 Mo chargé en fetch, jamais embarqué dans le dist). Sources : `tools/out-v2/` (rapport `RAPPORT-vague2.md`), conversion `tools/make-assets.py --v2`. Moteur et data inchangés : digest `f72106ff…` 1379/3000 intact, 128 tests, smoke 210 checks (2 échecs 46 g / 45 e préexistants). Vidéos WAN et héros d’errance produits mais **non intégrés** (hors base64, arbitrage 10/11).
+
 ## [1.18] — 2026-11-11 — Boucle de jeu v2, lot 6 : baseline finale et clôture du chantier
 
 Chantier boucle de jeu v2 clos (6 lots, commits `25fd0e1` → lot 6). **Nouvelle baseline digest au pack N = 10 000** : `3f9fe198…` 4558/10000 (45,6 %), 0 exception, 1 marathon — pack 3000 inchangé `f72106ff…` 1379/3000. Preuve finale : build ok, 128 tests verts, smoke 210 checks (2 échecs préexistants hors chantier), tableaux régénérés. Rapport de clôture : `docs/historique/rapport-boucle-v2.md`. Aucun ajustement de maths : les arbitrages d'équilibre restent ouverts jusqu'à la re-mesure finale après l'économie v2.

@@ -919,6 +919,29 @@ async function main() {
     check('B5 e 0 exception lot 5', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot E1 économie v2 — Boutique complète : potions + éclats bruts + équipement rayon boutique
+    api.go('#boutique');
+    await wait(20);
+    api.store.gold = 5000;
+    const rows = doc.body.querySelectorAll('.shop-row');
+    check('B6 a la Boutique rend potions + éclats + équipement (rayons présents)', !!doc.body.querySelector('[data-buy]') && !!doc.body.querySelector('[data-buy-eclat]') && !!doc.body.querySelector('[data-buy-eq]'), `lignes: ${rows.length}`);
+    const nbEq = doc.body.querySelectorAll('[data-buy-eq]').length;
+    const nbPieces = (api.EQUIPMENT ?? []).filter((p) => p.source === 'boutique').length;
+    check('B6 b rayon équipement = pièces source boutique en data', nbEq === nbPieces && nbPieces === 60, `${nbEq}/${nbPieces}`);
+    const gold0 = api.store.gold;
+    const g0 = api.gemCount('brut', 'Eau');
+    check('B6 c achat éclat brut Eau : -150 or, +1 gemme', api.buyEclat('Eau') === true && api.store.gold === gold0 - (api.DATA.engine.ECLAT_BUY_PRIX ?? 150) && api.gemCount('brut', 'Eau') === g0 + 1, `or=${api.store.gold}`);
+    const piece = (api.EQUIPMENT ?? []).find((p) => p.source === 'boutique');
+    const gold1 = api.store.gold;
+    const owned0 = api.equipPieceCount(piece.id);
+    check('B6 d achat pièce boutique : -prix, +1 possédée', api.buyEquipment(piece.id) === true && api.store.gold === gold1 - piece.prix && api.equipPieceCount(piece.id) === owned0 + 1, piece.id);
+    const setPiece = (api.EQUIPMENT ?? []).find((p) => p.set);
+    check('B6 e pièce de set non vendable à la Boutique', api.buyEquipment(setPiece.id) === false, setPiece.id);
+    check('B6 f achat sans or suffisant refusé', (api.store.gold = 0, api.buyEclat('Feu') === false && api.buyEquipment(piece.id) === false, true));
+    check('B6 g 0 exception lot E1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

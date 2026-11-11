@@ -2,6 +2,11 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — économie v2 lot E1 livré (Boutique complète : éclats bruts + rayon équipement)
+
+- **Livré** : la 🛒 Boutique couvre le catalogue fixe acté — rayon potions (déjà livré lot 1), **rayon éclats bruts** (5 éléments, achat `ECLAT_BUY_PRIX` = 150 or en data, revente 100 or via l'inventaire) et **rayon équipement** (les 60 pièces `source: "boutique"` de `data/equipment.json`, 200 à 1 600 or, armes typées par classe + armures + slots d'équipe ; les 90 pièces de set restent hors Boutique : boss, craft, évolutions). Achats en or, solde persisté, aucune migration (champs existants). Les pièces achetées rejoignent l'inventaire et s'équipent depuis la fiche.
+- **Preuve** : build ok, **130 tests** verts (catalogue Boutique en data : prix, slots, sets exclus), smoke **217 checks** (7 nouveaux B6 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (achats hors combat — mesure consignée, pas d'ajustement).
+
 ## 2026-11-11 : MESURE — boucle v2 lot 6 livré, chantier clos : baseline finale au digest N = 10 000
 
 - **Livré** : digest final au pack **N = 10 000** : **`3f9fe198…` — 4558 victoires / 10000 (45,6 %), 0 exception, 1 marathon**, cohérent avec le pack 3000 (`f72106ff…` 1379/3000, 46,0 %). Nouvelle **baseline** consignée ici et dans `docs/roadmap.md`. Preuve finale : build ok, **128 tests** verts, smoke **210 checks** (2 échecs préexistants hors chantier), tableaux `docs/tables/` régénérés. `docs/regles-jeu.md` à jour (règles des 6 lots en IMPLÉMENTÉ). Rapport de clôture : `docs/historique/rapport-boucle-v2.md`. **Aucun ajustement de maths** : le digest est une mesure — les arbitrages d'équilibre (Zénith, taux global, prix des potions) restent ouverts jusqu'à la re-mesure finale après l'économie v2.
