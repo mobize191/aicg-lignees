@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.31] — 2026-11-11 — Chantier « reste code » exécuté (7 lots)
+
+Spec et plan : `docs/design/reste-code-spec-plan.md`. **Lot 1** : correctifs terrain (doublons de sorts à l'évolution, `elOf()` sur les pions, bouton réduire la fenêtre d'action, `FAM_ORDER` des 4 familles v3, boutons ≥ 32 px, double bordure des cartes) + **migration v27** qui dédoublonne les sorts hérités (`acc`) des sauvegardes polluées. **Lots 2-4** : conformité vérifiée — rangs avant/arrière Option A dans le moteur (`RANG_BACK_*`, soins jamais affectés, zones non couvertes, CROSS retiré), champ `role` supprimé partout avec formation 3+2/2+3 choisie avant le combat, `FAM_SCHOOL` en data pour le recâblage famille → école. **Lot 5** : vidéos FX complètes — une seule vidéo décodée à la fois, pause hors écran, `prefers-reduced-motion` → image fixe, vitesse de lecture suivant le combat. **Lot 6** : héros d'errance intégré (sprite sheet 81 frames extraite du cycle WAN dans `site-assets/errance/`, publié par la CI, repli procédural hors ligne) et errance généralisée aux 5 zones (smoke B14). **Lot 7** : craft en ville (atelier de la Boutique : matériaux de zone + matière du boss pour les paliers hauts, coûts en data) + page Personnage à onglets (Équipe/Inventaire, bouton retour) (smoke B15). 144 tests, smoke 294 checks (seuls échecs préexistants 46 g/45 e), digest inchangé `f72106ff…` 1379/3000. MESURE consignées dans `docs/arbitrages.md`.
+
+
 ## [1.30] — 2026-11-11 — CI réparée + documentation à jour
 
 Le workflow Pages copiait `assets.json`/`assets-wai.json`, archivés depuis v1.28 : le déploiement échouait. `.github/workflows/pages.yml` publie désormais `assets-v3.json` (manifeste unique) et `site-assets/fx/` → `fx/` (vidéos de sorts), précédé d'un job **test** (`node build.mjs && node --test`, 141 tests verts). README, travail-local, validation-ihm et roadmap alignés (manifeste v3, baseline courante `f72106ff…` 1379/3000, 141 tests, smoke 269 checks). Moteur et data inchangés : digest inchangé.
