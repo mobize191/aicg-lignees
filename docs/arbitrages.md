@@ -2,6 +2,15 @@
 
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
+## 2026-11-11 : MESURE — boucle v2 lot 5 livré (progression : XP recalibrée, palier sans perte nette, solos archivés, rang N hors drops/recrutement)
+
+- **Livré** : **courbe d'XP recalibrée sur l'échelle longue** (`moteur.XP_GROWTH = 0.25` dans `data/engine.json` : `xpToNext(lvl) = round(lvl × (1 + 0.25 × (lvl-1)))`) ; **palier d'évolution sans perte nette** : `noLossPctOf(from, to)` calcule depuis les données le bonus % garantissant que la forme suivante au niveau 1 reste au moins aussi forte (ATQ et PV) que la forme précédente au niveau 10 — calcul sur valeurs non arrondies + 1 pt de marge d'arrondi, **vérifié par simulation** (test sur toutes les cibles d'évolution + check smoke B5 c), appliqué via `inst.noLoss` dans `evolveInstance`/`applyTreeEveil` et transmis au moteur (`makeUnit`) ; **solos archivés** : 31 cartes solo marquées `archived: true` dans `data/cards.json`, exclues des tirages (`drawNaissance`, pools de naissances, `runZone`) mais toujours jouables et affichées dans « Les archives » ; **rang N achevé** : `drawNaissance` et `runZone` excluent la rareté N (les naissances viennent de l'écran de départ, des quêtes et de la Guilde ; seules les communes divines C restent la porte divine des drops), éveil N→C par la pierre d'éveil inchangé (T1.2), les naissances N restent jouables en combat. Bonus d'équipement (`card.equip`) et `noLossPct` appliqués dans `makeUnit`.
+- **Preuve** : build ok, **128 tests** verts (simulation sans perte nette sur toutes les évolutions, drawNaissance jamais N, solos archivés, courbe XP), smoke **210 checks** (5 nouveaux B5 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (le lot 5 ne touche pas les maths de combat du digest — mesure consignée, pas d'ajustement).
+
+## 2026-11-11 : PROPOSÉ — solos archivés encore cibles d'évolution ; défi du jour tire encore du rang N
+
+- Les 31 cartes archivées restent référencées comme cibles d'évolution (`evolutions.json` / `solo-steps.json`) : une carte qui évolue vers un solo atterrit dans les archives. PROPOSÉ : greffer les solos à des familles (roadmap contenu v3) plutôt que de casser les évolutions existantes. Le défi du jour (`drawDailyCommon`) peut encore tirer du rang N : laissé tel quel, conforme à l'arbitrage (source de N hors drops).
+
 ## 2026-11-11 : ACTÉ — maquette n°1 Accueil/hub-ville validée + révision DA (retour de Marc-Olivier)
 
 - **La maquette n°1 (Accueil / hub-ville) est VALIDÉE** : `docs/design/maquettes/accueil-hub-ville.html` (scène hub-ville, voile, menu latéral droit Boutique/Guilde/Quêtes/Personnage/Paramètres, défi du jour, bouton Les Terres Sauvages avec pop-up équipe vide, héroïne cheveux blancs/cape noire cliquable, bouton retour, annotations DA). Elle passe au couloir 1 dans l'ordre acté ; la prochaine maquette du couloir design est l'habillage boucle v2.

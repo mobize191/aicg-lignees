@@ -13,9 +13,9 @@ function makeUnit(card, uid = card.id, level = null) {
     uid, cardId: card.id, name: card.name, rarity: card.rarity,
     classe: card.classe, element: card.element, race: raceOfCard(card),
     cranPct,
-    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100) * (1 + (eq?.atkPct ?? 0)))),
-    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)))),
-    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)))),
+    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100) * (1 + (eq?.atkPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
+    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
+    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
     agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.agiPct ?? 0)))),
     int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.intPct ?? 0)))),
     level: lvl,
@@ -854,9 +854,11 @@ function drawDailyCommon(rng = roll) {
   return fallback[Math.floor(rng() * fallback.length)];
 }
 
-// T1.3 : tirage pur d'une naissance (rang N, porte divine en C tant que l'Esprit Divin n'existe pas)
+// T1.3 : tirage pur d'une naissance. Boucle v2 lot 5 : le rang N est exclu des drops et du
+// recrutement (il vient de l'écran de départ et de la Guilde) — seules les communes divines
+// (n13-n15, rang C) restent la porte divine des drops.
 function drawNaissance(rng = roll, keep = () => true) {
-  const pool = CATALOG.filter((c) => c.raciale && !c.archived && c.rarity === (raceOfCard(c) === 'divine' ? 'C' : 'N') && keep(c));
+  const pool = CATALOG.filter((c) => c.raciale && !c.archived && c.rarity !== 'N' && keep(c));
   return pool.length ? pool[Math.floor(rng() * pool.length)] : null;
 }
 

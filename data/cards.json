@@ -443,7 +443,8 @@
   "soloSpell": "Serment Protecteur",
   "agi": 4,
   "int": 6,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a4",
@@ -456,7 +457,8 @@
   "soloSpell": "Trait Incandescent",
   "agi": 5,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a9",
@@ -469,7 +471,8 @@
   "soloSpell": "Charge Hydraulique",
   "agi": 8,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "s1",
@@ -829,7 +832,8 @@
   "soloSpell": "Baume Apaisant",
   "agi": 1,
   "int": 2,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "s3",
@@ -846,7 +850,8 @@
   "soloSpell": "Œil du Stratège",
   "agi": 5,
   "int": 2,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a34",
@@ -859,7 +864,8 @@
   "soloSpell": "Flèche de Brume",
   "agi": 8,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a35",
@@ -876,7 +882,8 @@
   "soloSpell": "Litière Douce",
   "agi": 1,
   "int": 2,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a36",
@@ -889,7 +896,8 @@
   "soloSpell": "Pas de Sable",
   "agi": 11,
   "int": 5,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a37",
@@ -902,7 +910,8 @@
   "soloSpell": "Bottes Cachées",
   "agi": 7,
   "int": 3,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a38",
@@ -915,7 +924,8 @@
   "soloSpell": "Coup de Rame",
   "agi": 7,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a39",
@@ -932,7 +942,8 @@
   "soloSpell": "Lanterne du Guet",
   "agi": 2,
   "int": 2,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a40",
@@ -951,7 +962,8 @@
   "gimmickDesc": "Sa cible touchée, sa volée frappe aussi un second ennemi à 50 % des dégâts.",
   "agi": 12,
   "int": 5,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a41",
@@ -970,7 +982,8 @@
   "gimmickDesc": "25 % de chance d’annuler complètement un coup reçu.",
   "agi": 15,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a42",
@@ -993,7 +1006,8 @@
   "gimmickDesc": "Au départ du combat : bouclier de 15 % PV max pour toute l’équipe.",
   "agi": 2,
   "int": 2,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a43",
@@ -1016,7 +1030,8 @@
   "gimmickDesc": "En tombant : soigne toute l’équipe de 20 % des PV max de chacun.",
   "agi": 2,
   "int": 3,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a44",
@@ -1035,7 +1050,8 @@
   "gimmickDesc": "Renvoie 20 % des dégâts subis à l’attaquant.",
   "agi": 14,
   "int": 6,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a45",
@@ -1054,7 +1070,8 @@
   "gimmickDesc": "+2 de régénération de mana : ses sorts croisés reviennent plus vite.",
   "agi": 10,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a46",
@@ -1073,7 +1090,8 @@
   "gimmickDesc": "15 % de chance que son attaque touche tous les ennemis à 40 %.",
   "agi": 14,
   "int": 6,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a47",
@@ -1092,7 +1110,8 @@
   "gimmickDesc": "Bouclier personnel de 25 % PV max au départ du combat.",
   "agi": 9,
   "int": 5,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a48",
@@ -1111,7 +1130,8 @@
   "gimmickDesc": "Sa première attaque du combat inflige +50 % de dégâts.",
   "agi": 12,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "a49",
@@ -1134,7 +1154,8 @@
   "gimmickDesc": "Chaque tour : +3 % d’ATQ cumulée pour toute l’équipe (plafond +90 %).",
   "agi": 2,
   "int": 3,
-  "biome": "recrues"
+  "biome": "recrues",
+  "archived": true
  },
  {
   "id": "b1",
@@ -1298,7 +1319,8 @@
   },
   "voie": "voie sylvestre — les Gens des Sèves",
   "agi": 3,
-  "int": 4
+  "int": 4,
+  "archived": true
  },
  {
   "id": "p4",
@@ -1314,7 +1336,8 @@
   },
   "voie": "voie du zèle — la commune du zèle",
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "archived": true
  },
  {
   "id": "q1",

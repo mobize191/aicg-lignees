@@ -124,7 +124,8 @@ test('T1.3 : le tirage de naissance ne sort que des naissances disponibles, jama
     const c = E.drawNaissance();
     assert.ok(c, 'le pool de naissances est non vide');
     assert.ok(c.raciale, 'seules des naissances sortent');
-    assert.ok(c.rarity === 'N' || (c.rarity === 'C' && E.raceOfCard(c) === 'divine'), 'rang N, porte divine en C');
+    assert.ok(c.rarity !== 'N', 'boucle v2 lot 5 : le rang N est exclu des drops');
+    assert.ok(E.raceOfCard(c) === 'divine', 'seule la porte divine (C/UC) droppe encore');
     assert.ok(!c.archived, 'jamais une carte archivee (Ange Gardien)');
   }
   assert.equal(E.drawNaissance(mulberry32(1), () => false), null, 'pool filtre vide : null, pas de crash');
@@ -217,4 +218,47 @@ test('lot 6 : renommages actés (EXI-V-2) : p1 = Jeune Séraphin (id inchangé),
   const ecuyer = E.DATA.cards.find((c) => c.name === 'Écuyer Fervent');
   assert.ok(ecuyer, 'Écuyer Fervent existe (entrée paladin → Légion Solaire)');
   assert.ok(E.getFamily('zele').steps.includes(ecuyer.id));
+});
+
+test('boucle v2 lot 5 : palier d\'évolution sans perte nette, vérifié par simulation sur TOUTES les voies', () => {
+  const E = loadEngine();
+  let checked = 0;
+  for (const c of E.DATA.cards) {
+    for (const t of E.evoTargetsOf(c.id)) {
+      const to = E.getCard(t) ?? E.getMonster(t);
+      if (!to) continue;
+      checked++;
+      const pct = E.noLossPctOf(c, to);
+      const prev = E.makeUnit({ ...c }, 'p', 10);
+      const next = E.makeUnit({ ...to, noLossPct: pct }, 'n', 1);
+      assert.ok(next.atk >= prev.atk, `${c.id}->${t} ATQ ${prev.atk} -> ${next.atk}`);
+      assert.ok(next.maxHp >= prev.maxHp, `${c.id}->${t} PV ${prev.maxHp} -> ${next.maxHp}`);
+    }
+  }
+  assert.ok(checked > 50, `voies simulées : ${checked}`);
+});
+
+test('boucle v2 lot 5 : rang N exclu des drops — drawNaissance ne sort jamais une naissance N', () => {
+  const E = loadEngine();
+  const rng = E.mulberry32(1234);
+  for (let i = 0; i < 500; i++) {
+    const c = E.drawNaissance(rng, () => true);
+    if (c) assert.notEqual(c.rarity, 'N', `${c.id} est rang N et ne doit pas dropper`);
+  }
+});
+
+test('boucle v2 lot 5 : solos archivés — hors pools actifs, toujours en data et jouables', () => {
+  const E = loadEngine();
+  const solos = E.DATA.cards.filter((c) => !c.family && !c.dungeon && !c.raciale);
+  assert.ok(solos.length >= 20, 'les solos existent en data');
+  assert.ok(solos.every((c) => c.archived === true), 'toutes les solos portent archived: true');
+  // hors des pools de tirage
+  const rng = E.mulberry32(99);
+  for (let i = 0; i < 200; i++) {
+    const id = E.pickCard(rng, 'C');
+    assert.notEqual(E.getCard(id).archived, true, 'pickCard ne sort jamais une archive');
+  }
+  // jouables : une solo archivée reste instanciable et combative
+  const u = E.makeUnit({ ...E.getCard(solos[0].id), level: 5 }, 's', 5);
+  assert.ok(u.atk > 0 && u.maxHp > 0);
 });

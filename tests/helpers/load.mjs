@@ -13,7 +13,7 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'teamModifiers', 'pickSpell', 'tickStatuses', 'resolveTurn', 'evoTargetsOf', 'evoVoieOf', 'evoCostOf',
   'nextFormOf', 'formsOf', 'makeWave', 'monstersOf', 'allMonsters', 'cardPower', 'dungeonById', 'dungeonLevelOf', 'bandOf',
   'difficultyById', 'stageRewards', 'openDivineBooster', 'pickCard', 'drawDailyCommon', 'drawNaissance', 'jetonRarityFor',
-  'treeOfRace', 'cranPctOfRace', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
+  'treeOfRace', 'cranPctOfRace', 'noLossPctOf', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
   'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
   'resolveSpellEntry', 'drinkPotion', 'recrutableMonsters', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf'];

@@ -650,7 +650,8 @@
   "MANA_CAP_RATIO": 0.5,
   "SEUIL_PER_INT": 0.5,
   "REG_STATS_BONUS": 0.1,
-  "RECO_LEVEL_RATIO": 0.8
+  "RECO_LEVEL_RATIO": 0.8,
+  "XP_GROWTH": 0.25
  },
  "profils": {
   "Guerrier": {

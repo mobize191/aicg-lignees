@@ -309,7 +309,9 @@ const storage = makeSafeStorage();
 
 
 
-const xpToNext = (lvl) => lvl;
+// boucle v2 lot 5 : courbe d'XP recalibrée sur l'échelle longue (25 marches) — croissance
+// par niveau en données (XP_GROWTH), simulée au digest ; pas de gel à paliers (refusé)
+const xpToNext = (lvl) => Math.max(1, Math.round(lvl * (1 + (M.XP_GROWTH ?? 0) * (lvl - 1))));
 ;
 ;
 ;
@@ -1120,6 +1122,8 @@ function evolveInstance(iid, targetId = null) {
   const eveil = eveilOf(prevId, nextId);
   if (eveil) applyTreeEveil(inst, eveil);
   else {
+    // boucle v2 lot 5 : palier sans perte nette — bonus calculé depuis les données
+    inst.noLoss = noLossPctOf(cur, byId(nextId));
     inst.id = nextId;
     inst.lvl = 1;
     inst.xp = 0;
@@ -4327,6 +4331,7 @@ function renderCombat(root, opts = {}) {
       level: inst.lvl,
       atk: Math.max(1, Math.round(base.atk * ascM)),
       hp: Math.max(1, Math.round(base.hp * ascM)),
+      noLossPct: inst.noLoss ?? 0,
       equip,
       ...(instSpells.length ? { spells: instSpells } : {}),
     };
@@ -4821,6 +4826,8 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.17 : Boucle v2 lot 5 — progression', 'Courbe d’XP recalibrée sur l’échelle longue (XP_GROWTH en données). Palier d’évolution sans perte nette : la forme suivante au niv. 1 reste au moins aussi forte (ATQ/PV) que l’ancienne au niv. 10 — vérifié par simulation, appliqué au moteur. 31 cartes solos archivées (hors drops et naissances, toujours jouables). Rang N exclu des drops et du recrutement ; éveil N→C par la pierre d’éveil. Digest inchangé : f72106ff… 1379/3000.'],
+
   ['v1.16 : Boucle v2 lot 4 — Récompenses, inventaire, équipement', 'Écran Récompenses après chaque combat (chaque gain cliquable, Tout ramasser). Matériaux de zone, pièce + matière garanties sur les boss, gemmes brutes vendables. Page Inventaire groupée. Équipement : 2 slots par carte + 2 slots d’équipe, bonus de set +5 pts %. Migration v22. Digest inchangé : f72106ff… 1379/3000.'],
 
   ['v1.15 : Boucle v2 lot 3 — départ à 2 cartes, recrutement naturel', 'Au premier lancement, choisissez un novice parmi 4 (une par race) : un second, tiré au hasard, vous rejoint. Après chaque victoire, un vaincu (hors boss et nommés) peut rejoindre votre collection (~1 % par zone). Migration v22. Digest inchangé : f72106ff… 1379/3000.'],

@@ -17,8 +17,8 @@
 
 - **7 familles** : aube, bosquet, bouclier, braise, eau, lame, ombre (`data/families.json`). Une famille = un chemin de cartes (`steps`) qui monte en rareté, une carte par palier.
 - Chaque palier franchi apprend le **sort de lignée** du palier (`grimoire.lignee`, 42 sorts).
-- Les cartes simples évoluent en crans (`data/evolutions.json`, `data/solo-steps.json`) : n1 → a30, etc. **ACTÉ 11/11/2026 : les cartes solos sont archivées** (retrait du jeu actif) ; greffe ultérieure à des familles en roadmap.
-- **Évolution sans perte nette (ACTÉ 11/11/2026)** : la forme suivante au niveau 1 reste au moins aussi forte que la forme précédente au niveau 10 (stats principales) ; l'XP reste continue (pas de gel à paliers), croissance par niveau recalibrée sur l'échelle longue au digest.
+- Les cartes simples évoluent en crans (`data/evolutions.json`, `data/solo-steps.json`) : n1 → a30, etc. **ACTÉ 11/11/2026, IMPLÉMENTÉ lot 5 boucle v2 : les cartes solos sont archivées** (hors drops et naissances, toujours jouables, regroupées dans « Les archives » du Personnage) ; greffe ultérieure à des familles en roadmap.
+- **Évolution sans perte nette (ACTÉ 11/11/2026, IMPLÉMENTÉ lot 5 boucle v2)** : la forme suivante au niveau 1 reste au moins aussi forte que la forme précédente au niveau 10 (ATQ et PV) — bonus calculé depuis les données et vérifié par simulation, appliqué au moteur ; l'XP reste continue (pas de gel à paliers), croissance par niveau recalibrée sur l'échelle longue (`moteur.XP_GROWTH`) au digest.
 
 ## 3. Écoles et sorts
 
@@ -60,6 +60,7 @@
 - **Errance v2 (ACTÉE 10/11/2026, bloc visuel après le calibrage)** : un **héros dédié** créé pour l'errance (ni une carte de la collection, ni un nommé existant) ; on entre par **Les Terres Sauvages** et l'on choisit sa zone (**départ : la zone de l'eau uniquement**). Une zone porte monstres, PNJ, objets à collecter, un endroit **donjon** (petit bâtiment) et un **hôtel des crans** (enseignements de sorts, prolongement des enseignements de zones actuelles) ; des quêtes pourront y vivre ; on y gagne XP et or. **Un bâtiment donjon par zone** : le vaincre débloque les zones suivantes (eau → feu + deuxième zone d'eau → …) ; pas d'open world complet, des zones reliées débloquées une à une. Moteur top-down : `docs/design/errance-topdown.md` (zone témoin : Marées, puis généralisation).
 - **Difficultés** (`data/difficulties.json`) : Facile/Normal/Difficile... plafonnent les raretés mob/boss et règlent drops et points.
 - **Recrutement naturel (ACTÉ 11/11/2026, IMPLÉMENTÉ lot 3 boucle v2)** : pas de capture ; ~1 % de chance qu'un vaincu demande à rejoindre la collection (hors nommés et boss), taux calibré par zone.
+- **Rang N (ACTÉ 11/11/2026, IMPLÉMENTÉ lot 5 boucle v2)** : les naissances (rang N) ne droppent plus et ne sont plus recrutables — écran de départ, quêtes et Guilde restent leurs sources ; elles restent jouables en combat ; l'éveil N→C se fait par la pierre d'éveil (T1.2).
 - **Départ de partie (ACTÉ 11/11/2026, IMPLÉMENTÉ lot 3 boucle v2)** : on commence avec 2 cartes : une choisie parmi 4 propositions (un novice humain, un bestial, un mystique, un divin) et une aléatoire parmi les trois restantes ; l'équipe se remplit ensuite par recrutement, quêtes et Guilde.
 - **Modificateurs de run** (`data/run-mods.json`) : la Horde, le Mana Stérile, la Muraille... : chaque exploration a son tarif.
 - **Fusion** : les monstres capturés fusionnent en lignées (`data/monster-families.json`) et enseignent des sorts.

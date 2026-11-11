@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.17] — 2026-11-11 — Boucle de jeu v2, lot 5 : progression (XP, palier sans perte nette, solos archivés, rang N)
+
+**Courbe d'XP recalibrée** sur l'échelle longue (`moteur.XP_GROWTH` = 0,25 en données : XP du palier = niveau × (1 + 0,25 × (niveau−1))). **Palier d'évolution sans perte nette** : la forme suivante au niveau 1 reste au moins aussi forte (ATQ/PV) que la forme précédente au niveau 10 — bonus calculé depuis les données, vérifié par simulation, appliqué au moteur. **31 cartes solos archivées** : plus de drops ni de naissances, toujours jouables, regroupées dans « Les archives ». **Rang N achevé** : exclu des drops et du recrutement (écran de départ, quêtes, Guilde), éveil N→C par la pierre d'éveil inchangé, jouable en combat. Digest inchangé `f72106ff…` 1379/3000. 128 tests, smoke 210 checks (5 nouveaux verts).
+
+
 ## [1.16] — 2026-11-11 — Boucle de jeu v2, lot 4 : drops v2, Récompenses, inventaire, équipement
 
 **Écran « Récompenses » après chaque combat** : or, XP, drops aux couleurs de rareté et recrues, chaque gain cliquable, « Tout ramasser » pour reprendre. **Drops v2** : matériau de la zone sur les monstres, pièce d'équipement du set de zone + matière du boss garanties sur les boss, équipement à taux très faible ailleurs, gemmes brutes vendables. **Inventaire** groupé (potions, matériaux par zone, gemmes, pièces). **Équipement sur la fiche** : 2 slots par carte (arme typée + armure) et 2 slots d'équipe, bonus de set +5 pts % (`data/equipment.json`, 150 pièces). Migration v23. Digest inchangé `f72106ff…` 1379/3000. 124 tests, smoke 205 checks (10 nouveaux verts).

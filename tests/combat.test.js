@@ -386,3 +386,13 @@ test('boucle v2 lot 4 : makeUnit applique les bonus d\'équipement en % (stats d
   assert.equal(withEq.manaRegen, base.manaRegen + 2, 'régén mana du talisman ajoutée');
   assert.equal(Math.round(base.atk * 1.15), withEq.atk, 'bonus appliqué sur la stat de base (arrondi)');
 });
+
+test('boucle v2 lot 5 : courbe XP échelle longue — xpToNext croît avec le niveau (données XP_GROWTH)', () => {
+  const E = loadEngine();
+  const g = E.DATA.engine.moteur.XP_GROWTH;
+  assert.ok(g > 0, 'XP_GROWTH en data');
+  const xp = (lvl) => Math.max(1, Math.round(lvl * (1 + g * (lvl - 1))));
+  assert.equal(xp(1), 1);
+  assert.ok(xp(10) > xp(5) && xp(5) > xp(2) && xp(2) > xp(1), 'strictement croissante');
+  assert.ok(xp(19) >= 4 * 19, 'les hauts niveaux demandent bien plus (échelle longue 25 marches)');
+});

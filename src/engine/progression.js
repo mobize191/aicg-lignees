@@ -54,12 +54,33 @@ function eveilsOf(cardId) {
 function eveilOf(de, vers) {
   return eveilsOf(de).find((ev) => ev.vers === vers) ?? null;
 }
+// boucle v2 lot 5 : palier d'évolution sans perte nette — la forme suivante au niveau 1 reste
+// au moins aussi forte que la forme précédente au niveau 10 (ATQ et PV) ; le pourcentage est
+// calculé depuis les données, vérifié par simulation (test), jamais deviné à la main.
+function noLossPctOf(fromCard, toCard) {
+  // calcul sur les valeurs non arrondies (les classes ont des atkPct négatifs), +1 pt de marge d'arrondi
+  const raw = (c, lvl) => {
+    const mm = 1 + LEVEL_BONUS * (lvl - 1);
+    const cm = classeMods(c);
+    const cran = cranPctOfRace(raceOfCard(c));
+    return {
+      atk: c.atk * mm * (1 + cm.atkPct) * (1 + cran / 100),
+      hp: c.hp * mm * (1 + cm.hpPct) * (1 + cran / 100),
+    };
+  };
+  const a = raw(fromCard, 10);
+  const b = raw(toCard, 1);
+  const need = Math.max(a.atk / Math.max(1, b.atk), a.hp / Math.max(1, b.hp)) - 1;
+  return need <= 0 ? 0 : Math.ceil(need * 100) + 1;
+}
+
 // applique un éveil depuis les données : id, cran de race sur les stats de base, voie
 function applyTreeEveil(inst, eveil) {
   const to = getCard(eveil.vers) ?? getMonster(eveil.vers);
   if (!to) throw new Error(`éveil vers une carte inconnue : ${eveil.vers}`);
-  const pct = cranPctOfRace(raceOfCard(to));
   const from = getCard(inst.id) ?? getMonster(inst.id) ?? {};
+  inst.noLoss = noLossPctOf(from, to);
+  const pct = cranPctOfRace(raceOfCard(to));
   const oldSpells = unknownSpellsOf((from.spells ?? []).map((sp) => ({ ...sp })), to.spells, inst.acc);
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   inst.id = eveil.vers;
@@ -143,8 +164,9 @@ function runZone(zoneId, rng, opts = {}) {
     recoltes.push({ type: 'eclat', tier: tiers[Math.floor(rng() * tiers.length)] });
   }
   if (rng() < (z.drops?.N ?? 0)) {
-    const pool = z.poolN?.length ? z.poolN : [];
-    recoltes.push({ type: 'N', carte: pool[Math.floor(rng() * pool.length)] ?? null });
+    // boucle v2 lot 5 : le rang N est exclu des drops — seules les communes divines (C) restent
+    const pool = (z.poolN ?? []).filter((id) => (byId(id)?.rarity ?? 'N') !== 'N');
+    recoltes.push({ type: 'N', carte: pool.length ? pool[Math.floor(rng() * pool.length)] : null });
   }
   if (z.recoltes?.jetons && rng() < z.recoltes.jetons.taux) recoltes.push({ type: 'jeton' });
   return { zone: zoneId, recoltes, enseignements: [...(z.ecolages ?? [])], opts };

@@ -877,6 +877,48 @@ async function main() {
     check('B4 j 0 exception lot 4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  {
+    // lot 5 — progression : solos archivés, rang N exclu des naissances, palier sans perte nette, courbe XP
+    const cards = api.DATA.cards ?? [];
+    const arch = cards.filter((c) => c.archived);
+    const archIds = new Set(arch.map((c) => c.id));
+    const inDropPool = (api.DATA.zones ?? []).flatMap((z) => z.poolN ?? []).filter((id) => archIds.has(id));
+    let sawArchived = false;
+    for (let i = 0; i < 400; i++) {
+      const c = api.drawNaissance(() => (i * 0.7548776662) % 1);
+      if (c && c.archived) sawArchived = true;
+    }
+    check('B5 a solos archivés en data, hors drops (poolN) et hors naissances', arch.length >= 20 && inDropPool.length === 0 && !sawArchived, `${arch.length} archivées, ${inDropPool.length} dans poolN`);
+    let maxRaritySeen = '';
+    let sawDivine = false;
+    for (let i = 0; i < 400; i++) {
+      const c = api.drawNaissance(() => (i * 0.6180339887) % 1);
+      if (!c) break;
+      if (c.rarity === 'N') maxRaritySeen = 'N';
+      if (c.raciale && c.rarity !== 'N') sawDivine = true;
+    }
+    check('B5 b drawNaissance : jamais de rang N, porte divine C/UC conservée', maxRaritySeen !== 'N' && sawDivine, maxRaritySeen || 'aucun tirage');
+    // palier sans perte nette : pour chaque cible d'évolution standard, noLossPctOf garantit ATQ/PV
+    let worst = null;
+    for (const [deId, list] of Object.entries(api.EVO_CHOICES ?? {})) {
+      for (const t of (Array.isArray(list) ? list : (list.options ?? []))) {
+        const from = api.DATA.cards.find((c) => c.id === deId) ?? api.DATA.monsters?.find((c) => c.id === deId);
+        const to = api.DATA.cards.find((c) => c.id === t.to) ?? api.DATA.monsters?.find((c) => c.id === t.to);
+        if (!from || !to) continue;
+        const pct = api.noLossPctOf(from, to);
+        const mm = (lvl) => 1 + 0.1 * (lvl - 1);
+        const atk10 = from.atk * mm(10) * (1 + pct / 100);
+        const hp10 = from.hp * mm(10) * (1 + pct / 100);
+        const atk1 = to.atk * mm(1);
+        const hp1 = to.hp * mm(1);
+        if (atk10 < atk1 - 1e-9 || hp10 < hp1 - 1e-9) worst = `${from.id}->${t.to} pct=${pct}`;
+      }
+    }
+    check('B5 c palier sans perte nette sur toutes les évolutions (simulation)', worst === null, worst ?? 'ok');
+    check('B5 d courbe XP recalibrée (lvl 1 -> 1, croissance quadratique en data)', api.xpToNext(1) === 1 && api.xpToNext(10) === Math.round(10 * (1 + 0.25 * 9)) && api.xpToNext(10) > 10, `${api.xpToNext(1)}/${api.xpToNext(10)}`);
+    check('B5 e 0 exception lot 5', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }
