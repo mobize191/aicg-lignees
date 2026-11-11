@@ -17576,16 +17576,31 @@ function fxOn() {
 }
 
 // v0.48 : joue la vidéo du sort signature au-dessus du plateau ; fallback = le bandeau image existant
+// une seule vidéo décodée à la fois, pause hors écran, prefers-reduced-motion -> pas de vidéo
+let fxMotionOK = null;
+function motionOK() {
+  if (fxMotionOK == null) {
+    try { fxMotionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { fxMotionOK = true; }
+  }
+  return fxMotionOK;
+}
+document.addEventListener('visibilitychange', () => {
+  const v = document.querySelector('.fx-video-overlay video');
+  if (!v) return;
+  if (document.hidden) v.pause(); else v.play().catch(() => {});
+});
 async function playFxVideo(ev) {
-  if (!fxOn() || speedIdx >= 5 || !combatApp) return;
+  if (!fxOn() || speedIdx >= 5 || !combatApp || !motionOK()) return;
   const fxId = FX_SPELLS[ev.name];
   if (!fxId) return;
   const url = await probeFxId(fxId);
   if (!url || !combatApp) return;
+  combatApp.querySelector('.fx-video-overlay')?.remove(); // une seule vidéo décodée à la fois
   const ov = document.createElement('div');
   ov.className = 'fx-video-overlay';
   const v = document.createElement('video');
   v.src = url; v.muted = true; v.autoplay = true; v.playsInline = true;
+  v.playbackRate = Math.max(1, Math.min(4, 1200 / (SPEEDS[speedIdx] ?? 1200))); // toggle de vitesse du combat suivi par la vidéo
   v.className = 'fx-video';
   ov.appendChild(v);
   combatApp.appendChild(ov);
