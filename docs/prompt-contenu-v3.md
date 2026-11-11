@@ -13,7 +13,7 @@ Tu codes sur le repo `aicg-lignees` (branche `main`). Lis d'abord `AGENT.md`, pu
 - Une tâche = un commit français ; toute décision dans `docs/arbitrages.md` avec date et statut ; migrations non destructives versionnées.
 - **Aucun recalibrage** : la baseline est verrouillée (ACTÉ 11/11). Les lots qui changent les vagues (C2, C3, C5) re-mesurent le digest et consignent une MESURE, sans toucher aux maths d'équilibrage.
 
-**Chaîne de preuve à chaque lot** : `node build.mjs§` ; `node --test` (≥ 144 verts) ; `node smoke-ui.mjs dist.html` (≥ 294 checks, échecs préexistants 46 g/45 e tolérés) ; `node combat-digest.mjs dist.html 3000` (inchangé attendu SAUF lots C2/C3/C5 : re-mesure + MESURE). Clôture : digest 3000 ET 10000.
+**Chaîne de preuve à chaque lot** : `node build.mjs` ; `node --test` (≥ 144 verts) ; `node smoke-ui.mjs dist.html` (≥ 294 checks, échecs préexistants 46 g/45 e tolérés) ; `node combat-digest.mjs dist.html 3000` (inchangé attendu SAUF lots C2/C3/C5 : re-mesure + MESURE). Clôture : digest 3000 ET 10000.
 
 **Les 8 lots, dans l'ordre** :
 
