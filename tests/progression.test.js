@@ -259,3 +259,27 @@ test('contenu v3 lot C5 : greffe des 31 solos — plus aucune archive, chaque ex
   const u = E.makeUnit({ ...E.getCard('a3'), level: 5 }, 's', 5);
   assert.ok(u.atk > 0 && u.maxHp > 0);
 });
+
+test('contenu v3 lot C6 — familles compagnons : 7 voies b_i → UR → L nommée, graines = branches de forge', () => {
+  const E = loadEngine();
+  const voies = [
+    ['b1', 'c1', 'c8', 'Yuki'], ['b2', 'c2', 'c9', 'Onyx'], ['b3', 'c3', 'c10', 'Naïa'],
+    ['b4', 'c4', 'c11', 'Aïna'], ['b5', 'c5', 'c12', 'Roc'], ['b6', 'c6', 'c13', 'Ember'], ['b7', 'c7', 'c14', 'Sylve'],
+  ];
+  for (const [graine, ur, l, prenom] of voies) {
+    const g = E.getCard(graine);
+    assert.ok(g && g.branch && g.rarity === 'SR' && g.family, `${graine} : graine SR branche de forge`);
+    assert.equal(E.nextFormOf(graine), ur, `${graine} évolue vers l'UR ${ur}`);
+    const u = E.getCard(ur);
+    assert.ok(u && u.rarity === 'UR' && u.branch && u.family === g.family, `${ur} : UR de la voie, même famille`);
+    assert.equal(E.nextFormOf(ur), l, `${ur} évolue vers la L ${l}`);
+    const ll = E.getCard(l);
+    assert.ok(ll && ll.rarity === 'L' && ll.name.includes(','), `${l} : L nommée`);
+    assert.ok(ll.name.startsWith(prenom + ','), `${l} : même prénom que la graine (${prenom})`);
+    assert.ok(u.atk > g.atk && ll.atk > u.atk, `${graine} : courbe de stats croissante`);
+  }
+  // anti-doublon de nom complet (EXI-DATA-3) toujours vert avec les 7 nouvelles L
+  const errors = [];
+  E.validate(E.DATA, errors);
+  assert.deepEqual(errors, [], 'validateur vert (noms uniques)');
+});

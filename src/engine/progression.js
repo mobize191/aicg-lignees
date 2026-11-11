@@ -2,8 +2,8 @@
 
 function nextFormOf(id) {
   const c = byId(id);
-  if (!c || c.branch) return null;
-  if (c.family) {
+  if (!c) return null;
+  if (c.family && !c.branch) {
     const fam = FAMILIES[c.family];
     const t = fam.steps.indexOf(id);
     // lot C5 : un ex-solo greffé n'est pas dans les steps de sa famille d'accueil,
@@ -11,6 +11,7 @@ function nextFormOf(id) {
     if (t >= 0) return t < fam.steps.length - 1 ? fam.steps[t + 1] : null;
   }
   if (c.dungeon && monsterNextLine(id)) return monsterNextLine(id).nextId;
+  // lot C6 : les branches de forge (b1-b7, c1-c14) suivent aussi leurs solo-steps (voie UR → L)
   return SOLO_STEPS[id] ?? null;
 }
 
