@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.18] — 2026-11-11 — Boucle de jeu v2, lot 6 : baseline finale et clôture du chantier
+
+Chantier boucle de jeu v2 clos (6 lots, commits `25fd0e1` → lot 6). **Nouvelle baseline digest au pack N = 10 000** : `3f9fe198…` 4558/10000 (45,6 %), 0 exception, 1 marathon — pack 3000 inchangé `f72106ff…` 1379/3000. Preuve finale : build ok, 128 tests verts, smoke 210 checks (2 échecs préexistants hors chantier), tableaux régénérés. Rapport de clôture : `docs/historique/rapport-boucle-v2.md`. Aucun ajustement de maths : les arbitrages d'équilibre restent ouverts jusqu'à la re-mesure finale après l'économie v2.
+
+
 ## [1.17] — 2026-11-11 — Boucle de jeu v2, lot 5 : progression (XP, palier sans perte nette, solos archivés, rang N)
 
 **Courbe d'XP recalibrée** sur l'échelle longue (`moteur.XP_GROWTH` = 0,25 en données : XP du palier = niveau × (1 + 0,25 × (niveau−1))). **Palier d'évolution sans perte nette** : la forme suivante au niveau 1 reste au moins aussi forte (ATQ/PV) que la forme précédente au niveau 10 — bonus calculé depuis les données, vérifié par simulation, appliqué au moteur. **31 cartes solos archivées** : plus de drops ni de naissances, toujours jouables, regroupées dans « Les archives ». **Rang N achevé** : exclu des drops et du recrutement (écran de départ, quêtes, Guilde), éveil N→C par la pierre d'éveil inchangé, jouable en combat. Digest inchangé `f72106ff…` 1379/3000. 128 tests, smoke 210 checks (5 nouveaux verts).
