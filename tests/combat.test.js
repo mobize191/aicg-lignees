@@ -396,3 +396,43 @@ test('boucle v2 lot 5 : courbe XP échelle longue — xpToNext croît avec le ni
   assert.ok(xp(10) > xp(5) && xp(5) > xp(2) && xp(2) > xp(1), 'strictement croissante');
   assert.ok(xp(19) >= 4 * 19, 'les hauts niveaux demandent bien plus (échelle longue 25 marches)');
 });
+
+test('correctifs ciblage lot 1 (repro A) : les 84 sorts de lign\u00e9e ont une fiche de camp (assembl\u00e9s comme ui.js)', () => {
+  const E = loadEngine();
+  const FAMILY_SPELLS = E.DATA['lineage-spells'];
+  const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
+  const SCHOOLS = E.DATA.schools;
+  let n = 0;
+  for (const [fam, arr] of Object.entries(FAMILY_SPELLS)) {
+    const role = (SCHOOLS[FAM_SCHOOL[fam]] ?? {}).role;
+    for (const sp of arr) {
+      const assembled = { ...sp, cat: 'lign\u00e9e', ecole: FAM_SCHOOL[fam], role };
+      assert.ok(typeof sp.cible === 'string' && sp.cible.length > 0, `${sp.name} a un champ cible`);
+      assert.notEqual(E.spellSideOf(assembled), null, `${sp.name} : camp non null`);
+      n++;
+    }
+  }
+  assert.equal(n, 84, '84 sorts de lign\u00e9e couverts');
+});
+
+test('correctifs ciblage lot 1 : foeFacingSpell vrai pour exactement les m\u00eames sorts (r\u00f4les hostils inchang\u00e9s)', () => {
+  const E = loadEngine();
+  const FAMILY_SPELLS = E.DATA['lineage-spells'];
+  const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
+  const SCHOOLS = E.DATA.schools;
+  const HOSTILE = new Set(['degats', 'controle', 'malus']);
+  for (const [fam, arr] of Object.entries(FAMILY_SPELLS)) {
+    const role = (SCHOOLS[FAM_SCHOOL[fam]] ?? {}).role;
+    for (const sp of arr) {
+      const assembled = { ...sp, cat: 'lign\u00e9e', ecole: FAM_SCHOOL[fam], role };
+      assert.equal(E.foeFacingSpell(assembled), HOSTILE.has(role), `${sp.name} (${role}) : foeFacingSpell = ${HOSTILE.has(role)}`);
+    }
+  }
+});
+
+test('correctifs ciblage lot 1 : spellSideOf reconna\u00eet \u00ab la zone \u00bb et \u00ab les renforts \u00bb', () => {
+  const E = loadEngine();
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'la zone' }), 'zone');
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'les renforts' }), 'team');
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'zone' }), 'zone');
+});

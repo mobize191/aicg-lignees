@@ -145,8 +145,9 @@ function spellSideOf(sp) {
   if (c === 'soi') return 'self';
   if (c.includes('alli')) return 'ally';
   if (c.includes('quipe')) return 'team';
-  if (c === 'zone') return 'zone';       // lot 3 : la zone désigne un ancrage sur la ligne
-  if (c === 'tous' || c.includes('tous')) return 'all'; // lot 3 : aucune désignation
+  if (c === 'les renforts') return 'team'; // correctifs ciblage lot 1 : invocation
+  if (c === 'zone' || c === 'la zone') return 'zone'; // la zone désigne un ancrage sur la ligne
+  if (c === 'tous' || c.includes('tous')) return 'all'; // aucune désignation
   if (c.includes('ennemi')) return 'enemy';
   return null;
 }
