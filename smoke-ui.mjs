@@ -1358,6 +1358,16 @@ async function main() {
     }
     check('B16 c 0 exception smoke (section IA incluse)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
+    // ---------- B22 : correctifs v1.37 lot 2 — boutons ＋/−/ℹ️ en bas-droite, badge de niveau en haut-droite ----------
+    {
+      const cellActionsRule = (html.match(/\.cell-actions\s*\{[^}]*\}/) ?? [''])[0];
+      const slotOutRule = (html.match(/\.slot \.cell-btn\.slot-out\s*\{[^}]*\}/) ?? [''])[0];
+      const lvlRule = (html.match(/\.lvl-chip\s*\{[^}]*\}/) ?? [''])[0];
+      check('B22 a .cell-actions en bas-droite (bottom:4px, plus de top)', /bottom:\s*4px/.test(cellActionsRule) && !/top:\s*4px/.test(cellActionsRule), cellActionsRule);
+      check('B22 b bouton − des slots en bas-droite', /bottom:\s*4px/.test(slotOutRule) && !/top:\s*4px/.test(slotOutRule), slotOutRule);
+      check('B22 c badge de niveau .lvl-chip conservé en haut-droite', /top:\s*5px/.test(lvlRule) && /right:\s*5px/.test(lvlRule), lvlRule);
+    }
+
     // ---------- B19 : parties multiples — stockage par slots, migration, bascule ----------
     {
       const SK = 'fondations-cards-v1';
