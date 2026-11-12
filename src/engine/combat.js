@@ -68,7 +68,9 @@ function levelFor(levels, id, i) {
   return Number.isFinite(lv) && lv >= 1 ? Math.floor(lv) : 1;
 }
 
-function initCombat(teamCards, enemyCards, seed, levels = {}) {
+// opts.difficulty : profil IA de la difficulté (data/difficulties.json, champ ia) — lot 3 refonte IA
+function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
+  const iaProfile = (opts.difficulty != null ? difficultyById(opts.difficulty) : null)?.ia ?? { suboptimal: 0 };
   const team = {
     avant: (teamCards.avant ?? teamCards.avant ?? []).map((c, i) => makeUnit(c, `${c.id}.a${i}`, c.level ?? levelFor(levels, c.id, i))),
     arriere: (teamCards.arriere ?? teamCards.arriere ?? []).map((c, i) => makeUnit(c, `${c.id}.s${i}`, c.level ?? levelFor(levels, c.id, i))),
@@ -100,7 +102,7 @@ function initCombat(teamCards, enemyCards, seed, levels = {}) {
     if (u.gimmick === 'cale') u.shield += Math.round(u.maxHp * M.GIMMICK_CALE_SHIELD);
     if (u.gimmick === 'litiere') for (const a of all) a.shield += Math.round(a.maxHp * M.GIMMICK_LITIERE_SHIELD);
   }
-  return { rng: mulberry32(seed), turn: 0, team, enemies, mods, winner: null };
+  return { rng: mulberry32(seed), iaRng: mulberry32((Math.imul(seed >>> 0, 31) ^ 7) >>> 0), iaProfile, turn: 0, team, enemies, mods, winner: null };
 }
 
 // chantier lignes (Option A) : l'avant tient = au moins un vivant dans la ligne avant du camp
@@ -526,17 +528,22 @@ function targetUtilityScore(attacker, t, dmgBase, st, side) {
 // reste vivante et dans la marge TARGET_HYSTERESIS du meilleur score (skill utility-ai : inertie)
 function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
   if (!targets.length) return null;
-  let best = targets[0];
-  let bestScore = -Infinity;
-  for (const t of targets) {
-    const sc = targetUtilityScore(attacker, t, dmgBase, st, side);
-    if (sc > bestScore) { best = t; bestScore = sc; }
-  }
+  const ranked = targets
+    .map((t) => ({ item: t, score: targetUtilityScore(attacker, t, dmgBase, st, side) }))
+    .sort((a, b) => b.score - a.score);
+  let best = ranked[0].item;
+  const bestScore = ranked[0].score;
   if (st) {
     const last = st.lastTarget ? st.lastTarget[side] : null;
     const prev = last ? targets.find((t) => t.uid === last) : null;
     if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - M.TARGET_HYSTERESIS) {
       best = prev;
+    }
+    // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
+    // (graine IA dédiée, déterministe, jamais le RNG de combat)
+    const sub = st.iaProfile ? st.iaProfile.suboptimal ?? 0 : 0;
+    if (sub > 0 && st.iaRng && ranked.length > 1 && st.iaRng() < sub) {
+      best = ranked[1].item;
     }
     st.lastTarget = st.lastTarget ?? {};
     st.lastTarget[side] = best.uid;

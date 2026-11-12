@@ -32,17 +32,21 @@ function pickSpell(u, ctx = null) {
     if (killable(s)) sc += M.SPELL_KILL_BONUS;
     return sc;
   };
-  let best = affordable[0];
-  let bestScore = -Infinity;
-  for (const s of affordable) {
-    const sc = score(s);
-    if (sc > bestScore) { best = s; bestScore = sc; }
-  }
+  const ranked = affordable
+    .map((s) => ({ item: s, score: score(s) }))
+    .sort((a, b) => b.score - a.score);
+  let best = ranked[0].item;
+  const bestScore = ranked[0].score;
   const st = ctx.state ?? null;
   if (st) {
     const last = st.lastSpell ? st.lastSpell[u.uid] : null;
     const prev = last ? affordable.find((s) => s.name === last) : null;
     if (prev && score(prev) >= bestScore - M.SPELL_HYSTERESIS) best = prev;
+    // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
+    const sub = st.iaProfile ? st.iaProfile.suboptimal ?? 0 : 0;
+    if (sub > 0 && st.iaRng && ranked.length > 1 && st.iaRng() < sub) {
+      best = ranked[1].item;
+    }
     st.lastSpell = st.lastSpell ?? {};
     st.lastSpell[u.uid] = best.name;
   }

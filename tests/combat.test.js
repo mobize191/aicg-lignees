@@ -678,3 +678,37 @@ test('refonte IA lot 2 : sans contexte, pickSpell garde le comportement historiq
   assert.equal(E.pickSpell(u).name, 'B', 'plus cher abordable');
   assert.equal(u.mana, 5, 'coût déduit');
 });
+
+// ---------- refonte IA lot 3 : graduation par difficulté ----------
+test('refonte IA lot 3 : profil de difficulté en data + initCombat le porte (défaut = utilité complète)', () => {
+  const E = loadEngine();
+  const profs = E.DATA.difficulties.map((d) => d.ia.suboptimal);
+  assert.deepEqual(profs, [0.5, 0.3, 0.15, 0.05, 0], 'Facile sous-optimal -> Enfer utilité complète');
+  const st = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 42, {}, { difficulty: 1 });
+  assert.equal(st.iaProfile.suboptimal, 0.5, 'profil Facile porté par l\'état');
+  const stDef = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 42);
+  assert.equal(stDef.iaProfile.suboptimal, 0, 'sans difficulté : utilité complète (rétro-compat)');
+});
+
+test('refonte IA lot 3 : choix sous-optimal déterministe (graine IA dédiée) en Facile, jamais en Enfer', () => {
+  const E = loadEngine();
+  const spells = [
+    { name: 'A', cost: 2, mult: 1.0, role: 'degats', cible: '1 ennemi' },
+    { name: 'B', cost: 3, mult: 3.0, role: 'degats', cible: '1 ennemi' },
+  ];
+  const run = (diff) => {
+    const st = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 7, {}, { difficulty: diff });
+    const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells }, 'u1', 1);
+    u.mana = u.manaMax = 10;
+    const foe = E.makeUnit(E.getCard('a1'), 'f1', 1);
+    const ctx = { state: st, allies: st.team, foes: [foe], side: 'team' };
+    return E.pickSpell(u, ctx).name;
+  };
+  // même seed, profil Facile (0.5) : suite déterministe de tirages sous-optimaux possibles
+  const picks = [run(1), run(1), run(1)];
+  assert.ok(picks.every((p) => p === 'A' || p === 'B'), 'choix valides');
+  assert.ok(picks.includes('A'), 'en Facile le choix sous-optimal (A au lieu de B) sort parfois');
+  assert.equal(run(5), 'B', 'en Enfer : toujours le meilleur (utilité complète)');
+  // déterminisme : deux exécutions identiques -> mêmes choix
+  assert.deepEqual([run(1), run(1)], [run(1), run(1)], 'déterministe au seed près');
+});

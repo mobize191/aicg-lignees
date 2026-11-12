@@ -4890,6 +4890,7 @@ function renderCombat(root, opts = {}) {
     wave,
     wseed ^ (store.stage * 2654435761),
     {},
+    { difficulty: store.diff }, // refonte IA lot 3 : profil IA de la difficulté
   );
   const teamEmpty = state.team.avant.length === 0 && state.team.arriere.length === 0;
   

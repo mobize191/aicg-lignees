@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA lot 3 livré (graduation de l'intelligence par difficulté) : dans la tolérance
+
+- **Livré** : profil `ia.suboptimal` par difficulté en data (`data/difficulties.json` : Facile 0,5 → Normal 0,3 → Difficile 0,15 → Très difficile 0,05 → Enfer 0) ; `initCombat(..., { difficulty })` porte le profil + une graine IA dédiée (`iaRng`, déterministe, distincte du RNG de combat) ; à chaque décision (sort, cible), une part `suboptimal` des choix prend la deuxième meilleure option. Sans difficulté passée : utilité complète (rétro-compat). Le harnais digest et l'UI passent la difficulté de la marche. Défaut 12/11 appliqué : **pas d'IA par étage**, version difficultés actuelles. 2 tests headless déterministes. 169 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** contre `3811fda3…` 1219/3000 (lot 2) — écart **2,07 points ≤ 5 points** : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
 ## 2026-11-12 : MESURE — refonte IA lot 2 livré (choix de sort contextuel) : dans la tolérance
 
 - **Livré** : `pickSpell(u, ctx)` lit l'état public — soin si un allié est sous `SPELL_HEAL_THRESHOLD` (0,35), contrôle/malus sur la menace (`SPELL_CONTROL_BONUS`), burst si un kill est possible (`SPELL_KILL_BONUS`), sinon le plus efficace au coût (mult/coût) ; hystérésis `SPELL_HYSTERESIS` (sort en cours conservé dans la marge, mémorisé par unité). Poids en data (`data/engine.json`). S'applique aux deux camps (même fonction). Sans contexte : chemin historique inchangé. Règle d'économie « save for top » conservée. 4 tests headless déterministes. 167 tests verts, smoke 299 (3 échecs préexistants).
