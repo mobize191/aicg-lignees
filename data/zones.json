@@ -118,47 +118,53 @@
     "pathCore": "#d3b285"
    },
    "layout": {
-    "note": "layout v2 data-driven (style maquette A+) : chemin sinueux par waypoints, etang a l'echelle, 2 huttes avec dialogues, point de retour ville (ACTÉ 11/11 nuit, point 7)",
+    "note": "layout v3 plage (correctif v1.36.1 lot 2) : mer en bande de bord sud (profonde > peu profonde > sable), petit étang intérieur, chemin sinueux, 2 huttes, retour ville à ≤ 6 tuiles du spawn",
+    "sea": {
+     "side": "south",
+     "deep": 2,
+     "shallow": 2,
+     "sand": 1
+    },
     "waypoints": [
-     [
-      23,
-      29
-     ],
      [
       23,
       25
      ],
      [
+      23,
+      22
+     ],
+     [
       19,
-      21
+      18
      ],
      [
       20,
-      15
+      13
      ],
      [
       25,
-      11
+      9
      ],
      [
       25,
-      6
+      5
      ],
      [
       22,
-      4
+      3
      ]
     ],
     "pond": {
      "x": 37,
-     "y": 22,
-     "rx": 5,
-     "ry": 5
+     "y": 20,
+     "rx": 3,
+     "ry": 2
     },
     "patches": [
      [
       12,
-      17,
+      15,
       7,
       6
      ],
@@ -176,24 +182,24 @@
      ],
      [
       36,
-      26,
+      24,
       4,
       3
      ]
     ],
-    "trees": 30,
+    "trees": 26,
     "rocks": 8,
     "jarres": 6,
     "huttes": [
      {
       "x": 10,
-      "y": 25,
+      "y": 23,
       "title": "Hutte du Garde-Motte",
       "text": "« Méfie-toi des hautes herbes, voyageur. Les monstres y sommeillent — marche vite ou contourne. »"
      },
      {
       "x": 30,
-      "y": 28,
+      "y": 24,
       "title": "Cabane de l'Herboriste",
       "text": "« Ces herbes brillantes qui parsèment la prairie ? Cueille-les en passant, elles soignent… un jour. »"
      }
@@ -206,16 +212,20 @@
     },
     "autel": {
      "x": 31,
-     "y": 19
+     "y": 16
     },
     "retour": {
-     "x": 6,
-     "y": 29
+     "x": 20,
+     "y": 26
     },
     "spawn": {
      "x": 23.5,
-     "y": 29.5
+     "y": 25.5
     }
+   },
+   "water": {
+    "liseré": 2,
+    "note": "plage des Marées : bande de mer au sud (layout.sea), liseré peu profond praticable"
    }
   }
  },
@@ -341,6 +351,10 @@
    "ambiance": {
     "dayLen": 110,
     "note": "cycle un peu plus long, ciel de braises"
+   },
+   "water": {
+    "liseré": 0,
+    "note": "lave/fond profond : pas de liseré praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
    }
   }
  },
@@ -458,6 +472,10 @@
    },
    "ambiance": {
     "dayLen": 100
+   },
+   "water": {
+    "liseré": 1,
+    "note": "marigots peu profonds praticables en liseré — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
    }
   }
  },
@@ -592,6 +610,10 @@
    "ambiance": {
     "dayLen": 120,
     "note": "nuit plus longue en crypte"
+   },
+   "water": {
+    "liseré": 0,
+    "note": "eau entièrement profonde (infranchissable) — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
    }
   }
  },
@@ -725,6 +747,10 @@
    "ambiance": {
     "dayLen": 90,
     "note": "journées dorées plus courtes au Zénith"
+   },
+   "water": {
+    "liseré": 1,
+    "note": "liseré peu profond praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
    }
   }
  }

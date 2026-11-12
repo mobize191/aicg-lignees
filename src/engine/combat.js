@@ -459,7 +459,7 @@ function actTeamStriker(u, i, ctx, step) {
       const dmgT = Math.max(1, Math.round(dmgBase * elementMult(u.element, tgt.element)));
       const dodgeT = Math.min(M.DODGE_CAP, (classeMods(tgt).dodge || 0) + Math.max(0, (u.agi - tgt.agi)) * M.DODGE_PER_AGI);
       if (dodgeT > 0 && ctx.state.rng() < dodgeT) {
-        ctx.events.push({ type: 'dodge', side: 'enemies', targetId: tgt.uid });
+        ctx.events.push({ type: 'dodge', side: 'enemies', sourceId: u.uid, targetId: tgt.uid });
         if (tgt === target && hitList.length === 1) { dodged = true; break; }
         continue;
       }
@@ -621,7 +621,7 @@ function actEnemyStriker(e, ctx) {
   for (let h = 0; h < eHits && target.alive; h++) {
     const dodgeT2 = Math.min(M.DODGE_CAP, (classeMods(target).dodge || 0) + Math.max(0, (e.agi - target.agi)) * M.DODGE_PER_AGI);
     if (dodgeT2 > 0 && ctx.state.rng() < dodgeT2) {
-      ctx.events.push({ type: 'dodge', side: 'team', targetId: target.uid });
+      ctx.events.push({ type: 'dodge', side: 'team', sourceId: e.uid, targetId: target.uid });
       break;
     }
     ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(e.element, target.element), side: 'enemies' });

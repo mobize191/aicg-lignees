@@ -153,6 +153,30 @@ function spellSideOf(sp) {
   return null;
 }
 
+// correctifs v1.37 lot 6 : métadonnées (role/cible) du sort signature, dérivées des champs data
+// (soloMult/soloDot/effect.kind), surchargeables en data par soloRole/soloCible
+function signatureMetaOf(def) {
+  if (def.soloRole || def.soloCible) return { role: def.soloRole ?? null, cible: def.soloCible ?? null };
+  if (def.soloMult != null || def.soloDot) return { role: 'degats', cible: '1 ennemi' };
+  switch (def.effect?.kind ?? null) {
+    case 'heal': case 'revive': return { role: 'soin', cible: '1 allié' };
+    case 'shield': case 'reflect': return { role: 'bouclier', cible: 'l\u2019équipe' };
+    case 'atkBuff': case 'warcry': return { role: 'boost', cible: 'l\u2019équipe' };
+    case 'summon': return { role: 'invocation', cible: 'les renforts' };
+    case 'stun': case 'slow': return { role: 'controle', cible: '1 ennemi' };
+    case 'curse': case 'dot': return { role: 'malus', cible: '1 ennemi' };
+    case 'link': return { role: 'manip', cible: 'l\u2019équipe' };
+    case 'copy': return { role: 'manip', cible: 'soi' };
+    default: return { role: 'degats', cible: '1 ennemi' }; // mult par défaut -> dégâts sur 1 ennemi
+  }
+}
+
+// métadonnées du sort signature d'une unité (résolution Tactique uniquement, jamais en Auto)
+function signatureMetaOfUnit(u) {
+  const def = (DATA.cards ?? []).find((c) => c.id === u?.cardId) ?? (DATA.monsters ?? []).find((m) => m.id === u?.cardId) ?? null;
+  return def ? signatureMetaOf(def) : {};
+}
+
 const MONSTERS = RAW.map((m) => ({
   ...m,
   spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],

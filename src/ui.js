@@ -415,7 +415,7 @@ function bossPieceFor(dungeonId, diff) {
 // boucle v2 lot 1 : stock de potions et état de run (PV/mana persistants au sein d'un run)
 const freshPotions = () => Object.fromEntries(Object.keys(POTIONS).map((k) => [k, 0]));
 
-const freshRunState = () => ({ active: false, units: {} });
+const freshRunState = () => ({ active: false, units: {}, kind: null }); // kind: 'zone' | 'donjon' | 'defi' (v1.37 lot 1)
 
 const potionCount = (id) => Math.max(0, store.potions[id] ?? 0);
 
@@ -883,6 +883,7 @@ const store = {
   defiActive: false, 
   regEclats: 0, 
   pierres: 0, 
+  uiPrefs: { combatAuto: false },
 };
 
 function resetStore() {
@@ -925,6 +926,7 @@ function resetStore() {
   store.defiActive = false;
   store.regEclats = 0;
   store.pierres = 0;
+  store.uiPrefs = { combatAuto: false };
 }
 
 function progOf(dungeonId, diff = 0) {
@@ -1016,6 +1018,7 @@ function snapshot() {
     zonesVisitees: [...(store.zonesVisitees ?? [])],
     zonesUnlocked: [...(store.zonesUnlocked ?? [])],
     errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
+    uiPrefs: { combatAuto: store.uiPrefs?.combatAuto === true },
   };
 }
 
@@ -1242,6 +1245,8 @@ function restore(data) {
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
     : null;
+  store.uiPrefs = (data.uiPrefs && typeof data.uiPrefs === 'object') ? { combatAuto: data.uiPrefs.combatAuto === true } : { combatAuto: false };
+  autoMode = store.uiPrefs.combatAuto;
   store.defiActive = false;
   sanitizeTeams();
   return true;
@@ -1658,7 +1663,11 @@ function registerRoute(hash, fn) {
 
 let suppressHash = false; 
 
+let lastHash = '';
 function go(hash) {
+  // correctifs v1.37 lot 1 : sortie de #combat par navigation => plus d'état zombie (zoneFight nettoyé)
+  if (lastHash === '#combat' && hash !== '#combat' && store.zoneFight) { store.zoneFight = null; save(); }
+  lastHash = hash;
   (routes[hash] || routes['#accueil'])(document.getElementById('app'));
   document.body.classList.toggle('in-combat', hash === '#combat');
   if (hash !== '#combat') closeActModal();
@@ -2155,14 +2164,15 @@ function spellList(card) {
     .map(
       (sp) => {
         // correctifs lot 4 : fiche complète — rôle (grimoire), zone vs monocible, frappe en « dégâts (%) »
-        const zone = zoneLabelOf(sp);
-        const cibleLab = zone || (sp.cible ? String(sp.cible) : '1 ennemi');
+        const spx = uiSpellMeta(sp, card);
+        const zone = zoneLabelOf(spx);
+        const cibleLab = zone || (spx.cible ? String(spx.cible) : '1 ennemi');
         const pct = Math.round((sp.mult ?? 1) * 100);
         const powerLine = card.effect && card.effect.kind === 'heal'
           ? spellPowerLine(card.effect, sp.mult)
           : `dégâts (${pct} % ≈ ${Math.max(1, Math.round(stq.atk * (sp.mult ?? 1)))})`;
-        const roleLab = sp.role ? (SPELL_ROLE_LABEL[sp.role] ?? sp.role) : (SPELL_CAT_LABEL[sp.cat] ?? '');
-        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">✦ ${sp.cost}</span></span>
+        const roleLab = spx.role ? (SPELL_ROLE_LABEL[spx.role] ?? spx.role) : (SPELL_CAT_LABEL[spx.cat] ?? '');
+        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">✦ ${sp.cost}</span></span>
         <span class="muted sort-meta">${[roleLab, cibleLab, powerLine].filter(Boolean).join(' · ')}</span>
         ${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`;
       },
@@ -2346,7 +2356,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         <p class="muted">${card.rarity} \u00b7 ${card.classe} \u00b7 ${card.element ?? 'Neutre'}${owned ? ` \u00b7 poss\u00e9d\u00e9e \u00d7${owned}${placed ? ` (${usedInTeam(card.id)} en \u00e9quipe)` : ''}` : wasSeen ? ' \u00b7 plus poss\u00e9d\u00e9e' : ' \u00b7 pas encore d\u00e9voil\u00e9e'}</p>
         ${mystery
           ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel, au marchand ou \u00e0 la Guilde pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
-          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
+          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> <span class="muted">(\u00b7 frappe de ${card.classe} \u00e0 ${Math.round((CLASSE_MODS[card.classe]?.strike ?? 1) * 100)} %)</span> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
         ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
@@ -2506,7 +2516,12 @@ function dungeonOfZone(zoneId) {
 }
 
 function startZoneFight(zoneId, { donjon = false } = {}) {
+  // correctifs v1.37 lot 1 : garde équipe (défensif) + genre de combat rattaché au run
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.zoneFight = { zone: zoneId, donjon };
+  store.runState.kind = donjon ? 'donjon' : 'zone';
+  figerHero(store.errance); // lot 7 : héros figé pendant le combat
   store.dungeon = dungeonOfZone(zoneId);
   store.stage = 1;
   store.runState = freshRunState();
@@ -2518,6 +2533,9 @@ function startZoneFight(zoneId, { donjon = false } = {}) {
 }
 
 function enterZone(zoneId) {
+  // correctifs v1.37 lot 1 : garde « équipe formée » avant d'entrer dans les Terres Sauvages
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
   store.errance = createErranceState(zoneId);
   if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
@@ -2579,10 +2597,27 @@ function renderErrance(root) {
         <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
       </div>
       <canvas id="errance-canvas"></canvas>
+      <div class="pop" id="errance-dlg">
+        <div class="card">
+          <h3 id="errance-dlg-title"></h3>
+          <p id="errance-dlg-text" style="white-space:pre-line"></p>
+          <div class="row"><button type="button" class="btn ok" id="errance-dlg-close">Compris</button></div>
+        </div>
+      </div>
       <p class="muted errance-hint">Toucher la carte : s'y rendre · toucher le héros : frapper (casse les jarres) · hautes herbes : rencontres · autel : soin complet (+5 pas de grâce) · porte du donjon : combat de zone.</p>
     </div>`;
   const canvas = root.querySelector('#errance-canvas');
   const ctx = canvas.getContext('2d');
+  // correctif v1.36.1 lot 3 : dialogue des huttes + feedbacks d'interaction (fx)
+  const dlg = root.querySelector('#errance-dlg');
+  const showHutteDialog = (h) => {
+    if (!dlg) return;
+    root.querySelector('#errance-dlg-title').textContent = h.title ?? 'Hutte';
+    root.querySelector('#errance-dlg-text').textContent = h.text ?? '';
+    dlg.classList.add('on');
+  };
+  root.querySelector('#errance-dlg-close')?.addEventListener('click', () => dlg?.classList.remove('on'));
+  const fxList = []; // halos pulsés (autel au soin, retour ville au passage)
   const T = st.map.t;
   let dpr = 1, vw = 360, vh = 480;
   const fit = () => {
@@ -2623,17 +2658,9 @@ function renderErrance(root) {
   }
   let time = 0, atk = 0, lastPhase = '', smokeAcc = 0;
   const smoke = [];
-  // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
-  // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
-  const heroCfg = E.ERRANCE_HERO ?? null;
-  let heroSheet = null, heroPoster = null;
-  if (heroCfg) {
-    (async () => {
-      const [sh, po] = await Promise.all([probeImage(heroCfg.sheet), probeImage(heroCfg.poster)]);
-      if (sh) { const im = new Image(); im.onload = () => { heroSheet = im; }; im.src = sh; }
-      if (po) { const im = new Image(); im.onload = () => { heroPoster = im; }; im.src = po; }
-    })();
-  }
+  // correctif v1.36.1 lot 4 : héros vectoriel « petit bonhomme » de la maquette A+ (remplace le sprite WAN,
+  // contrainte « WAN gardé » levée par Marc-Olivier 12/11 6e tour ; l'asset reste dans les manifests)
+  const heroCfg = E.ERRANCE_HERO ?? null; // conservé pour compat, non utilisé au rendu
   const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
   const draw = (dtA) => {
     const animT = motionOK() ? time : 0; // prefers-reduced-motion : animations décoratives gelées (frame fixe), comme le héros
@@ -2660,7 +2687,7 @@ function renderErrance(root) {
       if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
       const al = Math.min(1, p.life / 5) * .28;
       ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-      ctx.fillStyle = 'rgba(70,55,35,' + al.toFixed(3) + ')';
+      ctx.fillStyle = p.wet ? 'rgba(200,235,255,' + al.toFixed(3) + ')' : 'rgba(70,55,35,' + al.toFixed(3) + ')';
       ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
@@ -2722,6 +2749,28 @@ function renderErrance(root) {
       ctx.fillStyle = pal.potDark; ctx.beginPath(); ctx.ellipse(cx2, cy2 - 11, 6.5, 3, 0, 0, 7); ctx.fill();
       ctx.strokeStyle = pal.potLine; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.stroke();
     }
+    // feedbacks d'interaction visibles (correctif v1.36.1 lot 3) : halo pulsé de l'autel au soin, du retour ville et de la porte au passage
+    for (let i = fxList.length - 1; i >= 0; i--) {
+      const f = fxList[i]; f.t -= dtA;
+      if (f.t <= 0) { fxList.splice(i, 1); continue; }
+      const pr = 1 - f.t / 2;
+      ctx.strokeStyle = 'rgba(140,220,255,' + (.8 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(f.x, f.y - 6, 10 + pr * 26, 0, 7); ctx.stroke();
+    }
+    if (st.map.retour && Math.hypot(st.hero.x - (st.map.retour.x + .5), st.hero.y - (st.map.retour.y + .5)) < 3.5) {
+      const pu = .5 + .5 * Math.sin(animT * 4);
+      ctx.strokeStyle = 'rgba(160,235,255,' + (.35 + .4 * pu).toFixed(2) + ')';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(st.map.retour.x * T + T / 2, st.map.retour.y * T + T / 2, 14 + pu * 6, 0, 7); ctx.stroke();
+    }
+    const porteT = { x: st.map.donjon.x + Math.floor(st.map.donjon.w / 2), y: st.map.donjon.y + st.map.donjon.h };
+    if (Math.hypot(st.hero.x - (porteT.x + .5), st.hero.y - (porteT.y + .5)) < 4) {
+      const pu = .5 + .5 * Math.sin(animT * 4);
+      ctx.strokeStyle = 'rgba(255,215,110,' + (.3 + .4 * pu).toFixed(2) + ')';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc((porteT.x + .5) * T, (porteT.y + .5) * T, 12 + pu * 5, 0, 7); ctx.stroke();
+    }
     const hx = st.hero.x * T, hy = st.hero.y * T;
     // ombre portée du héros, étirée avec l'obscurité + halo nocturne
     const shL = 1 + dark * 1.1;
@@ -2733,34 +2782,31 @@ function renderErrance(root) {
       hg.addColorStop(1, 'rgba(255,224,150,0)');
       ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy - 8, 46, 0, 7); ctx.fill();
     }
-    ctx.save();
-    ctx.translate(hx, hy);
-    ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
     const hv = st.hero.v ?? { x: 0, y: 0 };
     const hsp = Math.hypot(hv.x, hv.y);
-    if (heroSheet && heroCfg) {
-      // cycle de marche : frame selon le temps, dos si le héros monte, miroir si déplacement à gauche
-      const moving = hsp > 0.15 && motionOK();
-      const back = hv.y < -0.05;
-      const cyc = heroCfg.cycle ?? 40;
-      const fi = moving ? Math.floor(performance.now() / 1000 * (heroCfg.fps ?? 16)) % cyc : 0;
-      const idx = (back ? (heroCfg.backFrom ?? 40) : 0) + fi;
-      const sx = (idx % heroCfg.cols) * heroCfg.frameW;
-      const sy = Math.floor(idx / heroCfg.cols) * heroCfg.frameH;
-      const dw = T * 0.66, dh = dw * heroCfg.frameH / heroCfg.frameW;
-      ctx.save();
-      if (hv.x < -0.05) ctx.scale(-1, 1);
-      ctx.drawImage(heroSheet, sx, sy, heroCfg.frameW, heroCfg.frameH, -dw / 2, -dh + T * 0.3, dw, dh);
-      ctx.restore();
-    } else if (heroPoster) {
-      const dw = T * 0.66, dh = dw * 560 / 400;
-      ctx.drawImage(heroPoster, -dw / 2, -dh + T * 0.3, dw, dh);
-    } else {
-      ctx.fillStyle = '#171522';
-      ctx.beginPath(); ctx.arc(0, 0, 11, 0, 7); ctx.fill();
-      ctx.fillStyle = '#f4f1ea';
-      ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
-    }
+    const moving = hsp > 0.15 && motionOK();
+    const bob = motionOK() ? (moving ? Math.sin(time * 11) * 2 : Math.sin(time * 2.4) * 1) : 0;
+    const face = hv.x < -0.05 ? -1 : 1;
+    const walkPh = moving ? time * 11 : 0;
+    ctx.save();
+    ctx.translate(hx, hy + bob);
+    ctx.rotate((st.hero.tilt ?? 0) * face); // balancement dans les virages (§5)
+    ctx.scale(face, 1);
+    // héros vectoriel de la maquette A+ : sacoche, jambes animées, tunique deux tons, ceinture, bras, tête, chapeau
+    ctx.fillStyle = '#7a5b3a'; ctx.beginPath(); ctx.ellipse(-7, -3, 4, 5.5, .3, 0, 7); ctx.fill();
+    ctx.fillStyle = '#2a3b5c';
+    ctx.fillRect(-6, 9 + (moving ? Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
+    ctx.fillRect(2, 9 + (moving ? -Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
+    ctx.fillStyle = '#3d6fa8'; ctx.beginPath(); ctx.ellipse(0, -1, 8.5, 12.5, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath(); ctx.ellipse(-2.5, -3, 5, 8.5, .2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#2c4d78'; ctx.fillRect(-8, 4, 16, 3);
+    ctx.fillStyle = '#c8a24e'; ctx.fillRect(-1.5, 3.2, 3, 4.6);
+    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.ellipse(8, -2 + (moving ? Math.sin(walkPh) * 1.2 : 0), 2.6, 5.5, .5, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(0, -19, 7.5, 0, 7); ctx.fill();
+    ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.arc(0, -21.5, 7.2, Math.PI * .95, Math.PI * 2.05); ctx.fill();
+    ctx.fillStyle = '#2a2a2a'; ctx.beginPath(); ctx.arc(2.8, -19.5, 1.2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5b4a9e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-9.5, -29, 19, 6.5, 3) : ctx.rect(-9.5, -29, 19, 6.5); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(-9.5, -29, 19, 2.2);
     ctx.restore();
     // arc de frappe doré (feedback §8, 0,35 s)
     if (atk > 0) {
@@ -2880,12 +2926,13 @@ function renderErrance(root) {
     if (ev.steps) {
       const vv = st.hero.v ?? { x: 0, y: 0 };
       const vm = Math.hypot(vv.x, vv.y);
-      if (vm > 0.5 && st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))] === ET.CHEMIN) {
-        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5 });
+      const tileNow = st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))];
+      if (vm > 0.5 && (tileNow === ET.CHEMIN || tileNow === ET.EAU_PEU_PROFONDE)) { // éclaboussures en eau peu profonde (praticable)
+        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5, wet: tileNow === ET.EAU_PEU_PROFONDE });
         if (amb.prints.length > 40) amb.prints.shift();
       }
     }
-    if (ev.encounter && !store.zoneFight) {
+    if (ev.encounter && !combatZoneEnCours(store)) {
       persistErrancePos(); save();
       startZoneFight(st.zone, { donjon: false });
       return;
@@ -2895,7 +2942,11 @@ function renderErrance(root) {
       if (o.type === 'autel') {
         interactAutel(st);
         autelDeSoin();
+        fxList.push({ type: 'autel', x: st.map.autel.x * T + T / 2, y: st.map.autel.y * T, t: 2 });
         toast('⛲ Autel de soin : PV et mana restaurés, +5 pas de grâce.');
+        save();
+      } else if (o.type === 'maison') {
+        showHutteDialog(o.hutte ?? { title: 'Hutte', text: '' });
         save();
       } else if (o.type === 'porte') {
         persistErrancePos(); save();
@@ -2957,8 +3008,12 @@ function renderErrance(root) {
     else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + m.donjon.h) { st.pending = { type: 'porte', x: tx, y: ty }; }
     else if (m.retour && tx === m.retour.x && ty === m.retour.y) { st.pending = { type: 'retour', x: m.retour.x, y: m.retour.y }; }
     else {
-      const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
-      if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+      const hu = (m.huttes ?? []).find((h) => h.x === tx && h.y === ty);
+      if (hu) st.pending = { type: 'maison', x: hu.x, y: hu.y, hutte: hu };
+      else {
+        const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+        if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+      }
     }
     if (st.pending) {
       const o = st.pending;
@@ -3878,7 +3933,7 @@ const SPEED_LABELS = ['\u00d70,5', '\u00d71', '\u00d72', '\u00d74', '\u00d78', '
 let combatApp = null;
 let state = null;
 let speedIdx = 1;
-let autoMode = true;
+let autoMode = false;
 let busy = false;
 let chainTimer = null;
 let recompOpen = false; // boucle v2 lot 4 : l'écran Récompenses bloque la chaîne d'étages jusqu'à « Tout ramasser »
@@ -3955,6 +4010,13 @@ function zoneWidthOf(sp) {
 }
 
 // detail d'un sort : badge de type (le libelle vient du role d'ecole, data/engine.json)
+// correctifs v1.37 lot 6 : métadonnées d'affichage/ciblage d'un sort signature (dérivées des data,
+// sans toucher à l'objet runtime lu par le moteur — le digest Auto reste inchangé)
+function uiSpellMeta(sp, ownerDef) {
+  if (!sp || sp.role || sp.cible) return sp;
+  if (sp.cat === 'unique' && ownerDef) return { ...sp, ...signatureMetaOf(ownerDef) };
+  return sp;
+}
 function spellBadgeHtml(sp) {
   const role = sp?.role ?? null;
   if (role) return `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
@@ -4081,7 +4143,13 @@ function askActTarget(mode, pending) {
   const hint = mode === 'zone' ? 'posez le centre de la zone sur un ennemi' : 'ou touchez un pion illumin\u00e9';
   zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(${hint})</span></p>`
     + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
-    + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}</span></button>`).join(' ');
+    + list.map((t) => {
+    const actor = promptState.unit;
+    const dp = (mode === 'enemy' || mode === 'zone')
+      ? Math.min(M.DODGE_CAP ?? 0.3, (CLASSE_MODS[t.classe]?.dodge || 0) + Math.max(0, (actor?.agi ?? 0) - (t.agi ?? 0)) * (M.DODGE_PER_AGI ?? 0.01))
+      : 0;
+    return `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}${dp > 0 ? ` \u00b7 \ud83d\udca8 ${Math.round(dp * 100)} %` : ''}</span></button>`;
+  }).join(' ');
   const cancelBtn = zoneEl.querySelector('.act-cancel');
   if (cancelBtn) cancelBtn.onclick = () => { if (promptState && promptState.showActions) promptState.showActions(); };
   zoneEl.querySelectorAll('.act-target').forEach((b) => {
@@ -4173,11 +4241,14 @@ function actionButtonsHtml(u, kind) {
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
   const top = (nm, badge, cost) => `<span class="sort-top"><span class="sort-nm">${nm}</span>${badge ?? ''}<span class="sort-cost">${cost}</span></span>`;
   const parts = [];
+  const cmU = CLASSE_MODS[u.classe] ?? {};
+  const strikePct = Math.round((cmU.strike ?? 1) * 100);
+  const atkEff = Math.max(0, Math.round(u.atk * (1 + (u.atkBuff ?? 0)) * (cmU.strike ?? 1)));
   // retour terrain : la frappe simple (gratuite) est la premiere action de TOUTE carte, support compris
   parts.push(row(
     top('\u2694 Attaque',
       `<span class="sort-badge b-degats">D\u00e9g\u00e2ts</span>`, 'gratuit')
-    + `<span class="sort-meta">la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana</span>`,
+    + `<span class="sort-meta">frappe simple : ~${atkEff} d\u00e9g\u00e2ts sur 1 ennemi \u00b7 frappe de ${u.classe} \u00e0 ${strikePct} % \u00b7 sans mana</span>`,
     'act-attack'));
   // boucle v2 lot 1 : action Objet — boire une potion (soin/mana), chaque gorgée coûte le tour
   const potN = totalPotions();
@@ -4191,8 +4262,8 @@ function actionButtonsHtml(u, kind) {
     // T4.2 : le résultat calculé (mult × stat principale) affiché avec le sort
     const prevu = sp.mult ? ` \u2192 ~${Math.round(sp.mult * statOf(u))}` : '';
     parts.push(row(
-      top('\u2726 ' + sp.name, spellBadgeHtml(sp), '\u2726' + sp.cost)
-      + `<span class="sort-meta">${spellMetaHtml(sp)}${prevu}</span>`
+      top('\u2726 ' + sp.name, spellBadgeHtml(uiSpellMeta(sp, byIdSoft(u.cardId))), '\u2726' + sp.cost)
+      + `<span class="sort-meta">${spellMetaHtml(uiSpellMeta(sp, byIdSoft(u.cardId)))}${prevu}</span>`
       + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
@@ -4225,7 +4296,7 @@ function bindActionButtons(box, u, kind) {
       if (!promptState || b.classList.contains('off')) return;
       const k = Number(b.dataset.k);
       const sp = (u.spells ?? [])[k];
-      const side = spellSideOf(sp);
+      const side = spellSideOf(sp) ?? spellSideOf(uiSpellMeta(sp, byIdSoft(u.cardId)));
       const kind = isStrike ? 'spell' : 'cast';
       // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
       // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
@@ -4384,7 +4455,7 @@ function openUnitModal(u) {
     ${card?.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
-    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(sp)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => { const spx = uiSpellMeta(sp, card); return `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(spx)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`; }).join('')}</ul>` : ''}
     <div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
   overlay.appendChild(box);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
@@ -4960,7 +5031,7 @@ async function animate(events, ms, gen = null) {
           // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
           if (store.zoneFight) {
             questProgress('gagnerErrance');
-            if (store.errance) store.errance.grace = 2;
+            if (store.errance) store.errance.grace = M.ERRANCE_GRACE_COMBAT; // lot 7 : grâce post-combat en data (8 pas)
             if (store.zoneFight.donjon) {
               unlockZone(store.zoneFight.zone);
               toast(`✓ Donjon de la zone vaincu — une nouvelle zone s'ouvre dans Les Terres Sauvages !`);
@@ -5247,8 +5318,20 @@ async function animate(events, ms, gen = null) {
           el.classList.add('ko');
           floatText(el, '⌛', 'dmg');
         } else if (ev.type === 'dodge') {
-          floatText(el, '💨 Esquive', 'buff');
-          await sleep(ms * 0.15);
+          const srcU = ev.sourceId ? findUnit(ev.sourceId) : null;
+          const tgtU = findUnit(ev.targetId);
+          floatText(el, '💨 Esquivé !', 'dodge fx-special');
+          el.classList.add('dodge-pose');
+          setTimeout(() => el.classList.remove('dodge-pose'), 520);
+          const logEl = combatApp ? combatApp.querySelector('#log') : null;
+          if (logEl) {
+            const p = document.createElement('p');
+            p.className = 'logline dodge';
+            p.textContent = `${tgtU ? tgtU.name : 'La cible'} esquive${srcU ? ` la frappe de ${srcU.name}` : ' l’attaque'}.`;
+            logEl.appendChild(p);
+            while (logEl.children.length > 30) logEl.firstChild.remove();
+          }
+          await sleep(ms * 0.3);
         } else if (ev.type === 'link') {
           floatText(el, `🔗 ${ev.amount}`, 'buff');
         }
@@ -5463,6 +5546,8 @@ function renderCombat(root, opts = {}) {
   });
   combatApp.querySelector('#mode').onclick = (e) => {
     autoMode = !autoMode;
+    store.uiPrefs.combatAuto = autoMode;
+    save();
     e.target.textContent = autoMode ? 'Mode : Auto' : 'Mode : Tactique';
     if (autoMode) closeActModal();
     else tacPaused = false; // retour en Tactique : le flux repart tout seul
@@ -5517,7 +5602,11 @@ function teamLevel() {
 }
 
 function enterAt(stage, dungeonId) {
+  // correctifs v1.37 lot 1 : garde équipe + état propre (plus de zoneFight résiduel => étages enchaînés)
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.defiActive = false;
+  store.zoneFight = null;
   const d = DUNGEONS.find((x) => x.id === dungeonId) ?? DUNGEONS[0];
   if (!dungeonUnlocked(d)) {
     const req = DUNGEONS.find((x) => x.id === d.req);
@@ -5529,6 +5618,7 @@ function enterAt(stage, dungeonId) {
   // boucle v2 lot 1 : un nouveau run repart à plein (soins complets entre deux runs distincts)
   store.runState = freshRunState();
   store.runState.active = true;
+  store.runState.kind = 'donjon';
   store.runMod = RUN_MODS[Math.floor(uiRand() * RUN_MODS.length)].id;
   save();
   updatePtsBadge();
@@ -5645,25 +5735,15 @@ function renderBoutique(root) {
     <button type="button" class="btn small gold" data-buy-eclat="${el}" ${store.gold < eclatPrix ? 'disabled' : ''}>Acheter — ${eclatPrix} or</button>
   </div>`).join('');
   const boutiquePieces = EQUIPMENT.filter((p) => p.source === 'boutique');
-  const debloquees = new Set(raretesMarchandDebloquees());
   const offres = offresMarchandDuJour();
   const offreRows = offres.map((m) => {
     const prix = marchandPrix(m) ?? 0;
-    return `<div class="shop-row">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}</span></span>
-      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
+    const max = MARCHAND.maxExemplaires ?? 3;
+    const epuisee = (ownedOf(m.id) ?? 0) >= max;
+    return `<div class="shop-row${epuisee ? ' out' : ''}">
+      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${max}${epuisee ? ' · épuisée' : ''}</span></span>
+      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || epuisee ? 'disabled' : ''}>Acheter — ${prix} or</button>
     </div>`;
-  }).join('');
-  const marchandRows = (MARCHAND.raretesVendues ?? []).map((rar) => {
-    const list = marchandMonsters().filter((m) => m.rarity === rar);
-    const prix = MARCHAND.prixParRarete?.[rar] ?? 0;
-    if (!list.length) return '';
-    const verrou = !debloquees.has(rar);
-    const diffRequise = (DIFFICULTIES[(MARCHAND.debloqueParDiff?.[rar] ?? 1) - 1]?.name) ?? '';
-    return `<h4 class="shop-sub">${RARITY_LABEL[rar] ?? rar} — ${prix} or${verrou ? ` 🔒 <span class="muted">(déblocage : donjon bouclé en ${diffRequise})</span>` : ''}</h4>` + list.map((m) => `<div class="shop-row">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}${verrou ? ' · 🔒 verrouillée' : ''}</span></span>
-      <button type="button" class="btn small gold" data-buy-mon="${m.id}" ${verrou || store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
-    </div>`).join('');
   }).join('');
   const eqRows = boutiquePieces.map((p) => `<div class="shop-row">
     <span>${p.slot === 'arme' ? '🗡️' : p.slot === 'armure' ? '🛡️' : '📿'} <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée : <b>${equipPieceCount(p.id)}</b></span></span>
@@ -5695,11 +5775,9 @@ function renderBoutique(root) {
     <h3>🗡️ Équipement (rayon Boutique)</h3>
     ${eqRows}
     <h3>🐾 Marchand de créatures</h3>
-    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. <b>Offres du jour</b> : rotation quotidienne de ${MARCHAND.nbOffresJour ?? 3} offres (seed du jour), tirées parmi les raretés débloquées ; une rareté se débloque en bouclant un donjon dans la difficulté requise (C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
+    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. Seules les <b>${MARCHAND.nbOffresJour ?? 3} offres du jour</b> sont affichées (rotation quotidienne, seed du jour) ; une rareté verrouillée par la progression est masquée jusqu'à son déblocage (boucler un donjon dans la difficulté requise : C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
     <h4 class="shop-sub">✨ Offres du jour (${offres.length})</h4>
     ${offreRows || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}
-    <h4 class="shop-sub">Catalogue complet</h4>
-    ${marchandRows}
     <h3>🔨 Atelier — craft en ville (pièces de set)</h3>
     <p class="muted">Les sets se fabriquent ici : la base demande des matériaux de la zone ; la supérieure et la royale exigent en plus la matière du boss du donjon de la zone (elle ne s'achète pas). Coûts en data (table « craft » de data/equipment.json).</p>
     ${atelierRows}`;
@@ -5724,15 +5802,6 @@ function renderBoutique(root) {
       const piece = EQUIP_BY_ID[b.dataset.buyEq];
       if (buyEquipment(b.dataset.buyEq)) {
         toast(`✓ ${piece.nom} achetée (${piece.prix} or) — elle rejoint l'inventaire, à équiper depuis la fiche.`);
-        renderBoutique(root);
-      }
-    };
-  });
-  root.querySelectorAll('[data-buy-mon]').forEach((b) => {
-    b.onclick = () => {
-      const m = allMonsters().find((x) => x.id === b.dataset.buyMon);
-      if (buyMonster(b.dataset.buyMon)) {
-        toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
         renderBoutique(root);
       }
     };

@@ -692,6 +692,7 @@
   "progressEps": 0.01
  },
  "AUTEL_SOIN_GRACE": 5,
+ "ERRANCE_GRACE_COMBAT": 8,
  "REGEN_BOSS_STAGE": 5,
  "DEPART_CHOIX": [
   "n1",

@@ -273,6 +273,10 @@ animation: floatup 1.5s ease-out forwards;
 .float.block { color: #40c4ff; font-size: 1rem; }
 .float.cast { color: #b39dff; }
 .float.fx-special { font-size: 1.5rem; color: #ffe082; text-shadow: 0 0 14px rgba(255, 213, 79, .95), 0 2px 6px rgba(0,0,0,.85); }
+.float.dodge { font-size: 1.3rem; font-weight: 700; color: #b3e5fc; text-shadow: 0 0 12px rgba(179,229,252,.9), 0 2px 6px rgba(0,0,0,.85); }
+@keyframes dodgePose { 30% { transform: translateX(-14px) rotate(-6deg); } 60% { transform: translateX(8px); } }
+.unit.dodge-pose { animation: dodgePose .5s ease; }
+.logline.dodge { color: #b3e5fc; }
 @keyframes floatup {
 0% { opacity: 0; transform: translateX(-50%) translateY(6px) scale(.7); }
 12% { opacity: 1; transform: translateX(-50%) translateY(-4px) scale(1.15); }
@@ -376,11 +380,11 @@ background: rgba(26, 34, 51, .9); border: 1px solid rgba(77, 208, 225, .28); col
 .gcell { position: relative; cursor: pointer; }
 .gcell .card { cursor: pointer; }
 /* correctifs lot 4 : boutons d'action explicites sur les cellules (fiche ℹ️, ajouter ＋, retirer −/✕) */
-.cell-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 4px; z-index: 3; }
+.cell-actions { position: absolute; bottom: 4px; right: 4px; top: auto; display: flex; gap: 4px; z-index: 3; }
 .cell-btn { width: 32px; height: 32px; padding: 0; border-radius: 8px; border: 1px solid rgba(212, 175, 55, .65); background: rgba(16, 21, 33, .88); color: #ffd97a; font-size: .95rem; font-weight: 700; line-height: 1; cursor: pointer; }
 .cell-btn:active { transform: scale(.92); }
 .slot { position: relative; }
-.slot .cell-btn.slot-out { position: absolute; top: 4px; right: 4px; z-index: 3; color: #ff9a9a; }
+.slot .cell-btn.slot-out { position: absolute; bottom: 4px; right: 4px; top: auto; z-index: 3; color: #ff9a9a; }
 .empty-collection { padding: 18px; text-align: center; }
 
 .fam {
@@ -1031,6 +1035,7 @@ animation: newpulse 1.6s infinite;
 .errance-hint{padding:6px 12px;font-size:11px}
 .sort-badge.b-objet { background: rgba(77, 208, 225, .18); color: #7ce7f5; border-color: rgba(77, 208, 225, .45); }
 .shop-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border: 1px solid rgba(124, 77, 255, .25); border-radius: 10px; margin: 6px 0; flex-wrap: wrap; }
+.shop-row.out { opacity: .55; }
 .recomp-list { display: flex; flex-direction: column; gap: 6px; max-height: 52dvh; overflow-y: auto; }
 .recomp-row { text-align: left; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
 .recomp-row .chip.r-C, .chip.r-C { color: #9aa5b5; } .chip.r-N { color: #8d99ad; } .chip.r-UC { color: #61d691; } .chip.r-R { color: #45a3ff; } .chip.r-SR { color: #b06bff; } .chip.r-UR { color: #ff9f43; } .chip.r-L { color: #ffd76e; } .chip.r-M { color: #ff6e8a; }

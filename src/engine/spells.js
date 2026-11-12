@@ -80,7 +80,7 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
   const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
   const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
   if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
-    events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+    events.push({ type: 'dodge', side: foeSide, sourceId: s.uid, targetId: t.uid });
     return;
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
@@ -122,7 +122,7 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
     if (!t.alive) continue;
     const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
     if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
-      events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+      events.push({ type: 'dodge', side: foeSide, sourceId: s.uid, targetId: t.uid });
       continue;
     }
     if (spell.mult) {
@@ -176,8 +176,14 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     spell = pickSpell(s, { state: st, allies, foes, side });
   }
   if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  // correctifs v1.37 lot 6 : sort signature (cat 'unique') — en Tactique (action avec désignation),
+  // la métadonnée dérivée des data pilote le camp ; en Auto (pas d'action) le comportement historique est conservé
+  const sigMeta = (spell && spell.cat === 'unique' && action) ? signatureMetaOfUnit(s) : null;
+  const sigSide = sigMeta && sigMeta.cible ? spellSideOf({ ...spell, ...sigMeta }) : null;
+  const sigRole = sigMeta && sigMeta.role ? sigMeta.role : null;
+  const hostileSig = sigSide === 'enemy' || sigSide === 'zone' || sigSide === 'all' || sigRole === 'degats' || sigRole === 'controle' || sigRole === 'malus';
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
-  if (spell && foes.length && foeFacingSpell(spell)) {
+  if (spell && foes.length && (foeFacingSpell(spell) || (hostileSig && action.targetUid != null))) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
@@ -185,9 +191,9 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
   // depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant — en Tactique
   // (action présent, allié désigné) comme en Auto (soigne le plus blessé, buffer/bouclier l'avant).
-  if (spell && !s.effect && !foeFacingSpell(spell)) {
-    const sd = spellSideOf(spell);
-    const role = spell.role ?? null;
+  if (spell && !s.effect && !foeFacingSpell(spell) && !hostileSig) {
+    const sd = spellSideOf(spell) ?? sigSide;
+    const role = spell.role ?? sigRole;
     if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
       const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
       let t = s;

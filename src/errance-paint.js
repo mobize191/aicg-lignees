@@ -13,6 +13,7 @@ function errancePalette(zone) {
     pathBase: '#b3945f', pathCore: '#d3b285', pathRut: 'rgba(120,95,60,.35)', pathStone: 'rgba(90,75,50,.5)',
     sand: '#c9b083', sandDark: '#a8926b',
     water0: '#78c2de', water1: '#4b8db0', water2: '#27556f', waterDeep: 'rgba(20,50,70,.25)', waterGlint: 'rgba(255,255,255,.35)',
+    waterShallow0: 'rgba(170,225,240,.8)', waterShallow1: 'rgba(110,185,210,.6)', waterShallowGlint: 'rgba(255,255,255,.5)',
     reed: '#5e8a4a', reedTip: '#7a5b3a', lily: '#4c8a4f', lilyCut: '#2b5f80', lilyFlower: '#ffd76e',
     herbSocleDark: 'rgba(24,62,32,.85)', herbSocle: 'rgba(46,104,50,.5)',
     bladeA: '#3f8a42', bladeB: '#2e6b34',
@@ -61,26 +62,48 @@ function decorOrders(map, zone) {
   }
   for (let i = 0; i < 900; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathRuts.push({ x, y, rx: 2 + rnd() * 4, ry: 1 + rnd() * 2, rot: rnd() * 3 }); }
   for (let i = 0; i < 260; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathStones.push({ x, y, r: 1 + rnd() * 1.6 }); }
-  // étang : centroïde + rayons depuis l'emprise des tuiles EAU
+  // étang peint : amas d'eau INTÉRIEUR uniquement (ceinture de bord x/y ∈ {0, w-1, h-1} exclue —
+  // correctif v1.36.1 lot 1 « grand lac »), débordement plafonné à 0,25·T hors tuiles EAU.
+  // Si la zone porte layout.pond en data, le pond peint en découle (mêmes tuiles EAU).
   let pond = null;
   {
     let n = 0, minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
-    for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) if (terr[idx(x, y)] === ET.EAU) {
+    for (let y = 1; y < map.h - 1; y++) for (let x = 1; x < map.w - 1; x++) if (terr[idx(x, y)] === ET.EAU) {
       n++; if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
     }
     if (n > 0) {
-      pond = { cx: (minx + maxx) / 2 * T + T / 2, cy: (miny + maxy) / 2 * T + T / 2, rx: (maxx - minx + 1) / 2 * T + T * .4, ry: (maxy - miny + 1) / 2 * T + T * .4 };
+      // aucun débordement d'eau hors tuiles EAU (garde-fou v1.36.1) : on rétrécit l'ellipse tant qu'une
+      // tuile non-EAU a son centre dans (rx + 0,25·T, ry + 0,25·T) — l'anneau de sable peint prend +0,25·T max
+      let rx = (maxx - minx + 1) / 2 * T, ry = (maxy - miny + 1) / 2 * T;
+      const cx = (minx + maxx) / 2 * T + T / 2, cy = (miny + maxy) / 2 * T + T / 2;
+      let guard = 0;
+      while (guard++ < 40) {
+        let bad = false;
+        for (let y = 1; y < map.h - 1 && !bad; y++) for (let x = 1; x < map.w - 1; x++) {
+          if (terr[idx(x, y)] === ET.EAU) continue;
+          const dxn = (x * T + T / 2 - cx) / rx;
+          const dyn = (y * T + T / 2 - cy) / ry;
+          if (dxn * dxn + dyn * dyn < 1) { bad = true; break; }
+        }
+        if (!bad) break;
+        rx = Math.max(T * .5, rx - T * .25);
+        ry = Math.max(T * .5, ry - T * .25);
+      }
+      pond = { cx, cy, rx, ry };
     }
   }
   const pondDeep = [], pondGlints = [], lilies = [], reeds = [];
   if (pond) {
-    for (let i = 0; i < 6; i++) pondDeep.push({ x: pond.cx + (rnd() - .5) * pond.rx * 1.6, y: pond.cy + (rnd() - .5) * pond.ry * 1.4, rx: 20 + rnd() * 30, ry: 8 + rnd() * 14, rot: rnd() * 3 });
-    for (let i = 0; i < 9; i++) pondGlints.push({ x: pond.cx - 62 + i * 7 + rnd() * 8, y: pond.cy - 78 + i * 20, w: 48 + i * 5 + rnd() * 10 });
+    for (let i = 0; i < 6; i++) pondDeep.push({ x: pond.cx + (rnd() - .5) * pond.rx * 1.2, y: pond.cy + (rnd() - .5) * pond.ry * 1.2, rx: 20 + rnd() * 30, ry: 8 + rnd() * 14, rot: rnd() * 3 });
+    for (let i = 0; i < 9; i++) {
+      const a = rnd() * 7;
+      pondGlints.push({ x: pond.cx + Math.cos(a) * pond.rx * (0.2 + rnd() * 0.6), y: pond.cy + Math.sin(a) * pond.ry * (0.2 + rnd() * 0.6), w: 20 + rnd() * 26 });
+    }
     const lilyOff = [[-.7, -.3], [.45, .1], [-.25, .58], [.2, -.58]];
     for (const o of lilyOff) lilies.push({ x: pond.cx + o[0] * pond.rx * .8, y: pond.cy + o[1] * pond.ry * .8 });
     for (let i = 0; i < 9; i++) {
       const a = -2.4 + i * .6;
-      reeds.push({ x: pond.cx + Math.cos(a) * (pond.rx + T * .25), y: pond.cy + Math.sin(a) * (pond.ry + T * .25), h: 22 + rnd() * 8 });
+      reeds.push({ x: pond.cx + Math.cos(a) * (pond.rx - 2), y: pond.cy + Math.sin(a) * (pond.ry - 2), h: 22 + rnd() * 8 });
     }
   }
   // hautes herbes : socles par tuile, lames animées, bordure de fleurs sur les tuiles en lisière
@@ -163,14 +186,33 @@ function paintZoneBase(bx, map, zone) {
   for (const r of decor.pathRuts) { bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
   bx.fillStyle = pal.pathStone;
   for (const s of decor.pathStones) { bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  // 4. étang : rive, eau en dégradé radial, profondeur, reflets, nénuphars, roseaux
+  // 4. eau : EAU/EAU_PROFONDE = sombre opaque (infranchissable) ; EAU_PEU_PROFONDE = claire translucide avec reflets (praticable) ; SABLE = plage
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
+    const tt = terr[idx(x, y)];
+    if (tt === ET.EAU || tt === ET.EAU_PROFONDE) {
+      const gw0 = bx.createRadialGradient(x * T + T / 2 - 6, y * T + T / 2 - 8, 2, x * T + T / 2, y * T + T / 2, T * .9);
+      gw0.addColorStop(0, pal.water0); gw0.addColorStop(1, pal.water2);
+      bx.fillStyle = gw0; bx.fillRect(x * T, y * T, T, T);
+    } else if (tt === ET.EAU_PEU_PROFONDE) {
+      bx.fillStyle = pal.sand; bx.fillRect(x * T, y * T, T, T);
+      const gw1 = bx.createRadialGradient(x * T + T / 2 - 4, y * T + T / 2 - 5, 2, x * T + T / 2, y * T + T / 2, T * .95);
+      gw1.addColorStop(0, pal.waterShallow0); gw1.addColorStop(1, pal.waterShallow1);
+      bx.fillStyle = gw1; bx.fillRect(x * T, y * T, T, T);
+      bx.strokeStyle = pal.waterShallowGlint; bx.lineWidth = 1.4; bx.lineCap = 'round';
+      bx.beginPath(); bx.moveTo(x * T + 6 + (x * 7 + y * 13) % 10, y * T + T * .62); bx.quadraticCurveTo(x * T + T / 2, y * T + T * .55, x * T + T - 6 - (x * 5 + y * 11) % 8, y * T + T * .66); bx.stroke();
+    } else if (tt === ET.SABLE) {
+      bx.fillStyle = pal.sand; bx.fillRect(x * T, y * T, T, T);
+      bx.fillStyle = pal.sandDark;
+      for (let k = 0; k < 5; k++) { bx.beginPath(); bx.arc(x * T + ((k * 29 + x * 17 + y * 7) % 31) + 2, y * T + ((k * 19 + x * 11 + y * 23) % 29) + 2, 1 + (k % 2), 0, 7); bx.fill(); }
+    }
+  }
   if (decor.pond) {
     const p = decor.pond;
-    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
-    bx.fillStyle = pal.sandDark; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .3, p.ry + T * .3, 0, 0, 7); bx.fill();
-    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
+    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .25, p.ry + T * .25, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.sandDark; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry));
     gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
-    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx - 2, p.ry - 2, 0, 0, 7); bx.fill();
     bx.fillStyle = pal.waterDeep;
     for (const d of decor.pondDeep) { bx.beginPath(); bx.ellipse(d.x, d.y, d.rx, d.ry, d.rot, 0, 7); bx.fill(); }
     bx.strokeStyle = pal.waterGlint; bx.lineWidth = 2;
@@ -256,6 +298,11 @@ function paintZoneBase(bx, map, zone) {
     const gg = bx.createRadialGradient(dX + 16, Y + 52, 2, dX + 16, Y + 52, 34);
     gg.addColorStop(0, pal.donjonGlow); gg.addColorStop(1, 'rgba(255,215,110,0)');
     bx.fillStyle = gg; bx.beginPath(); bx.arc(dX + 16, Y + 52, 34, 0, 7); bx.fill();
+    if (bx.fillText) { // panneau « ⚔ Donjon » : repérable dès l'arrivée dans la zone
+      bx.font = 'bold 13px sans-serif'; bx.textAlign = 'center';
+      bx.fillStyle = 'rgba(10,14,22,.8)'; bx.fillText('⚔ Donjon', X + Wd / 2 + 1, Y - 18);
+      bx.fillStyle = '#ffd76e'; bx.fillText('⚔ Donjon', X + Wd / 2, Y - 19);
+    }
   }
   if (map.autel) {
     const X = map.autel.x * T, Y = map.autel.y * T;
@@ -277,6 +324,11 @@ function paintZoneBase(bx, map, zone) {
     const gr = bx.createRadialGradient(X + T / 2, Y + T - 4, 2, X + T / 2, Y + T - 4, 26);
     gr.addColorStop(0, pal.retourGlow); gr.addColorStop(1, 'rgba(160,235,255,0)');
     bx.fillStyle = gr; bx.beginPath(); bx.arc(X + T / 2, Y + T - 4, 26, 0, 7); bx.fill();
+    if (bx.fillText) { // enseigne « ↩ Ville » lisible
+      bx.font = 'bold 13px sans-serif'; bx.textAlign = 'center';
+      bx.fillStyle = 'rgba(10,14,22,.8)'; bx.fillText('↩ Ville', X + T / 2 + 1, Y - 22);
+      bx.fillStyle = '#bfe8ff'; bx.fillText('↩ Ville', X + T / 2, Y - 23);
+    }
   }
 }
 
@@ -302,12 +354,19 @@ function paintTileGround(bx, map, zone, x, y) {
     for (const r of decor.pathRuts) { if (r.x < px || r.x > px + T || r.y < py || r.y > py + T) continue; bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
     bx.fillStyle = pal.pathStone;
     for (const s of decor.pathStones) { if (s.x < px || s.x > px + T || s.y < py || s.y > py + T) continue; bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  } else if (t === ET.EAU && decor.pond) {
-    const p = decor.pond;
-    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
-    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
-    gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
-    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+  } else if (t === ET.EAU || t === ET.EAU_PROFONDE) {
+    const gw = bx.createRadialGradient(px + T / 2 - 6, py + T / 2 - 8, 2, px + T / 2, py + T / 2, T * .9);
+    gw.addColorStop(0, pal.water0); gw.addColorStop(1, pal.water2);
+    bx.fillStyle = gw; bx.fillRect(px, py, T, T);
+  } else if (t === ET.EAU_PEU_PROFONDE) {
+    bx.fillStyle = pal.sand; bx.fillRect(px, py, T, T);
+    const gw = bx.createRadialGradient(px + T / 2 - 4, py + T / 2 - 5, 2, px + T / 2, py + T / 2, T * .95);
+    gw.addColorStop(0, pal.waterShallow0); gw.addColorStop(1, pal.waterShallow1);
+    bx.fillStyle = gw; bx.fillRect(px, py, T, T);
+  } else if (t === ET.SABLE) {
+    bx.fillStyle = pal.sand; bx.fillRect(px, py, T, T);
+    bx.fillStyle = pal.sandDark;
+    for (let k = 0; k < 5; k++) { bx.beginPath(); bx.arc(px + ((k * 29 + x * 17 + y * 7) % 31) + 2, py + ((k * 19 + x * 11 + y * 23) % 29) + 2, 1 + (k % 2), 0, 7); bx.fill(); }
   } else if (t === ET.HERBES) {
     bx.fillStyle = pal.herbSocleDark; bx.beginPath(); bx.ellipse(px + T / 2, py + T / 2, T * .62, T * .55, 0, 0, 7); bx.fill();
     bx.fillStyle = pal.herbSocle; bx.beginPath(); bx.ellipse(px + T / 2 + 3, py + T / 2 + 2, T * .4, T * .3, 0, 0, 7); bx.fill();

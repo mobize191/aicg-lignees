@@ -213,6 +213,7 @@ const API_PAIRS = {
   addXpI: 'addXpI',
   addCardIid: 'addCardIid',
   _setAuto: '(v) => { autoMode = v; }',
+  _autoMode: '() => autoMode',
   _state: '() => state',
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   drawNaissance: 'drawNaissance', noLossPctOf: 'noLossPctOf', xpToNext: 'xpToNext',
@@ -234,6 +235,9 @@ const API_PAIRS = {
   save: 'save', load: 'load', listSlots: 'listSlots', switchToSlot: 'switchToSlot', newSlot: 'newSlot', renameSlot: 'renameSlot', deleteSlot: 'deleteSlot', resetStore: 'resetStore',
   _activeSlot: '() => activeSlot', _slotsIndex: '() => slotsIndex', SLOTS_KEY: 'SLOTS_KEY', slotKey: 'slotKey', slotBak: 'slotBak',
   errancePalette: 'errancePalette', decorOrders: 'decorOrders', buildAmbiance: 'buildAmbiance', rescueHeroPos: 'rescueHeroPos',
+  signatureMetaOf: 'signatureMetaOf', signatureMetaOfUnit: 'signatureMetaOfUnit',
+  allMonsters: 'allMonsters',
+  spellSideOf: 'spellSideOf',
 };
 
 export function bootDist(file, extraPairs = {}) {
