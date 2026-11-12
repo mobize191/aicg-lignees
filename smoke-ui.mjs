@@ -947,7 +947,7 @@ async function main() {
     await wait(20);
     const nbMon = doc.body.querySelectorAll('[data-buy-mon]').length;
     const pool = api.marchandMonsters();
-    check('B7 a rayon marchand : monstres non nommés, raretés vendues en data', nbMon === pool.length && pool.length > 50 && pool.every((m) => !(m.name ?? '').includes(',')), `${nbMon}/${pool.length}`);
+    check('B7 a marchand v2 : catalogue complet MASQUÉ (0 bouton data-buy-mon), pool data intact (> 50 non nommés)', nbMon === 0 && pool.length > 50 && pool.every((m) => !(m.name ?? '').includes(',')), `${nbMon}/${pool.length}`);
     api.store.gold = 50000;
     const m = pool.find((x) => x.rarity === 'C');
     const gold0 = api.store.gold;
@@ -978,6 +978,34 @@ async function main() {
     check('B7 l limite 3 exemplaires par monstre au marchand', ok3 && api.buyMonster(cAlt.id) === false, cAlt.id);
     const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
     check('B7 m rayon rend les 3 offres du jour', nbOffres === offres.length, `${nbOffres}/${offres.length}`);
+
+    // ---------- B24 : correctifs v1.37 lot 4 — Boutique : 3 offres du jour seules, verrous masqués ----------
+    check('B24 a le dist ne contient plus « Catalogue complet »', !html.includes('Catalogue complet'), '');
+    check('B24 b le dist ne rend plus de boutons data-buy-mon', !html.includes('data-buy-mon'), '');
+    api.go('#boutique');
+    await wait(20);
+    check('B24 c Boutique : 3 offres du jour seules au rayon marchand, aucun article verrouillé affiché', doc.body.querySelectorAll('[data-buy-offre]').length === offres.length && doc.body.querySelectorAll('[data-buy-mon]').length === 0, `offres=${doc.body.querySelectorAll('[data-buy-offre]').length}`);
+    // offre épuisée : grisée avec compteur, bouton désactivé
+    const o0 = offres[0];
+    for (let k = 0; k < (api.MARCHAND.maxExemplaires ?? 3); k++) api.newInst(o0.id, 1, 0);
+    api.go('#boutique');
+    await wait(20);
+    const rowOut = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o0.id);
+    check('B24 d offre du jour épuisée : ligne grisée (.out) avec compteur N/max + « épuisée », bouton désactivé', !!rowOut && rowOut.classList.contains('out') && /épuisée/.test(rowOut.textContent) && rowOut.querySelector('button').getAttribute('disabled') !== null, rowOut ? rowOut.textContent.slice(0, 90) : 'ligne absente');
+    // manque d'or seul : article visible, bouton grisé, PAS masqué
+    api.store.gold = 0;
+    api.go('#boutique');
+    await wait(20);
+    const o1 = offres[1];
+    const rowPoor = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o1.id);
+    check('B24 e manque d\u2019or seul : offre du jour toujours visible, bouton grisé (pas de .out)', !!rowPoor && !rowPoor.classList.contains('out') && rowPoor.querySelector('button').getAttribute('disabled') !== null, rowPoor ? rowPoor.classList.contains('out') + '/' + String(rowPoor.querySelector('button').getAttribute('disabled')) : 'absente');
+    // progression avancée : les raretés débloquées ne rouvrent pas le catalogue
+    api.store.gold = 50000;
+    api.store.progress.marees.diffs[1].record = 10;
+    api.go('#boutique');
+    await wait(20);
+    check('B24 f donjon bouclé (UC débloquée) : toujours seules les offres du jour, aucun article de catalogue réaffiché', doc.body.querySelectorAll('[data-buy-mon]').length === 0 && doc.body.querySelectorAll('[data-buy-offre]').length >= 1, `mon=${doc.body.querySelectorAll('[data-buy-mon]').length}`);
+    api.store.progress.marees.diffs[1].record = 0;
   }
 
   {

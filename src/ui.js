@@ -5705,25 +5705,15 @@ function renderBoutique(root) {
     <button type="button" class="btn small gold" data-buy-eclat="${el}" ${store.gold < eclatPrix ? 'disabled' : ''}>Acheter — ${eclatPrix} or</button>
   </div>`).join('');
   const boutiquePieces = EQUIPMENT.filter((p) => p.source === 'boutique');
-  const debloquees = new Set(raretesMarchandDebloquees());
   const offres = offresMarchandDuJour();
   const offreRows = offres.map((m) => {
     const prix = marchandPrix(m) ?? 0;
-    return `<div class="shop-row">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}</span></span>
-      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
+    const max = MARCHAND.maxExemplaires ?? 3;
+    const epuisee = (ownedOf(m.id) ?? 0) >= max;
+    return `<div class="shop-row${epuisee ? ' out' : ''}">
+      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${max}${epuisee ? ' · épuisée' : ''}</span></span>
+      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || epuisee ? 'disabled' : ''}>Acheter — ${prix} or</button>
     </div>`;
-  }).join('');
-  const marchandRows = (MARCHAND.raretesVendues ?? []).map((rar) => {
-    const list = marchandMonsters().filter((m) => m.rarity === rar);
-    const prix = MARCHAND.prixParRarete?.[rar] ?? 0;
-    if (!list.length) return '';
-    const verrou = !debloquees.has(rar);
-    const diffRequise = (DIFFICULTIES[(MARCHAND.debloqueParDiff?.[rar] ?? 1) - 1]?.name) ?? '';
-    return `<h4 class="shop-sub">${RARITY_LABEL[rar] ?? rar} — ${prix} or${verrou ? ` 🔒 <span class="muted">(déblocage : donjon bouclé en ${diffRequise})</span>` : ''}</h4>` + list.map((m) => `<div class="shop-row">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · possédée : <b>${ownedOf(m.id)}</b>/${MARCHAND.maxExemplaires ?? 3}${verrou ? ' · 🔒 verrouillée' : ''}</span></span>
-      <button type="button" class="btn small gold" data-buy-mon="${m.id}" ${verrou || store.gold < prix || (ownedOf(m.id) ?? 0) >= (MARCHAND.maxExemplaires ?? 3) ? 'disabled' : ''}>Acheter — ${prix} or</button>
-    </div>`).join('');
   }).join('');
   const eqRows = boutiquePieces.map((p) => `<div class="shop-row">
     <span>${p.slot === 'arme' ? '🗡️' : p.slot === 'armure' ? '🛡️' : '📿'} <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée : <b>${equipPieceCount(p.id)}</b></span></span>
@@ -5755,11 +5745,9 @@ function renderBoutique(root) {
     <h3>🗡️ Équipement (rayon Boutique)</h3>
     ${eqRows}
     <h3>🐾 Marchand de créatures</h3>
-    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. <b>Offres du jour</b> : rotation quotidienne de ${MARCHAND.nbOffresJour ?? 3} offres (seed du jour), tirées parmi les raretés débloquées ; une rareté se débloque en bouclant un donjon dans la difficulté requise (C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
+    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. Seules les <b>${MARCHAND.nbOffresJour ?? 3} offres du jour</b> sont affichées (rotation quotidienne, seed du jour) ; une rareté verrouillée par la progression est masquée jusqu'à son déblocage (boucler un donjon dans la difficulté requise : C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
     <h4 class="shop-sub">✨ Offres du jour (${offres.length})</h4>
     ${offreRows || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}
-    <h4 class="shop-sub">Catalogue complet</h4>
-    ${marchandRows}
     <h3>🔨 Atelier — craft en ville (pièces de set)</h3>
     <p class="muted">Les sets se fabriquent ici : la base demande des matériaux de la zone ; la supérieure et la royale exigent en plus la matière du boss du donjon de la zone (elle ne s'achète pas). Coûts en data (table « craft » de data/equipment.json).</p>
     ${atelierRows}`;
@@ -5784,15 +5772,6 @@ function renderBoutique(root) {
       const piece = EQUIP_BY_ID[b.dataset.buyEq];
       if (buyEquipment(b.dataset.buyEq)) {
         toast(`✓ ${piece.nom} achetée (${piece.prix} or) — elle rejoint l'inventaire, à équiper depuis la fiche.`);
-        renderBoutique(root);
-      }
-    };
-  });
-  root.querySelectorAll('[data-buy-mon]').forEach((b) => {
-    b.onclick = () => {
-      const m = allMonsters().find((x) => x.id === b.dataset.buyMon);
-      if (buyMonster(b.dataset.buyMon)) {
-        toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
         renderBoutique(root);
       }
     };
