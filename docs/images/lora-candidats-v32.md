@@ -9,7 +9,7 @@
 | Gobelin des Marées (et gobelins du contenu v3) | [Goblin \| IL & Pony & Anima \| DND](https://civitai.com/models/492126) | **Illustrious natif**, ⭐864, dl 6,4k, SFW | LE candidat n°1 : gobelin D&D classique (vert, noueux, grandes oreilles), exactement le canon visé. Versions Illustrious ET Anima disponibles. |
 | treant, dryad, fireflySpirit, esprits du Bosquet | [Forest Guardians \[Dragon/Treant/Dryad/Spirit\] IL&NoobAI](https://civitai.com/models/1039143) | Illustrious + NoobAI, ⭐165, SFW | Multi-espèces (un seul LoRA pour 4 espèces du Bosquet) — cœur de la forêt = ent, dryades, esprits. Signe « Shrekman Aesthetic Loras » : série sérieuse de concept LoRAs nature. |
 | magmaGolem (Vulcain), golems/bêtes minérales de la Forge | [Golems - Illustrious](https://civitai.com/models/574367) | **Illustrious natif**, ⭐90, SFW | Golems + élémentaires ; a priori le plus proche du magma golem. |
-| seaBehemoth / léviathan des Marées | [Leviathan the Tidehunter - DotA2 \[ILXL\]](https://civitai.com/models/1728100) | **Illustrious natif**, ⭐148, SFW | Monstre marin colossal type DotA2 ; bon pour le Titan des Marées / bêtes aquatiques massives. |
+| seaBehemoth / léviathan des Marées | [Leviathan XL](https://civitai.com/models/237733) | **Illustrious natif**, ⭐154, SFW | **ACTÉ Marc-Olivier 12/11.** Canon visuel = le Léviathan du film Disney « Atlantide, la cité perdue » (monstre colossal à carapace de crustacé, yeux rouges luisants, gueule à tentacules). **Route 1 : description R11** « a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, dark underwater ruins » + **Leviathan XL en appui** (léviathan mythique générique, ancre la morphologie non humanoïde). Tidehunter DotA2 écarté (géant bleu humanoïde, pas la cible) ; aucun LoRA dédié au design Disney n'existe sur Civitai. |
 
 ## Priorité 2 — selon résultats P1
 
@@ -43,3 +43,5 @@
 - **Goblin girl / Goblin Slayer (personnages)** : personnages précis ou féminisation, pas l'espèce générique. Écarté (sauf le 492126 qui est l'espèce D&D).
 - **SD 1.5** (ex. Goblins ⭐3363) : architecture incompatible avec WAI-Illustrious (SDXL). Écarté.
 - **Marvel/Marvel Rivals Phoenix, NIKKE Leviathan, Jean Grey** : personnages nommés sous copyright, pas des espèces. Écartés.
+- **Leviathan the Tidehunter (DotA2)** : écarté (Marc-Olivier, 12/11) — géant bleu humanoïde, pas le gardien carapacé du canon Atlantide.
+- **Atlantis 2001 (Krea 2)** et **Atlantis tech - World Morph (SD 1.5)** : bases incompatibles avec WAI-Illustrious, et personnages du film, pas l'espèce. Écartés.
