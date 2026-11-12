@@ -258,6 +258,48 @@ function setTarget(st, tx, ty) {
   return true;
 }
 
+// v1.40 : hitbox d'interaction élargie — bâtiment donjon = murs + porte + 1 anneau ; autel/retour/huttes = tuile + 8-voisinage ; jarre = tuile exacte.
+// Si plusieurs interactions couvrent le clic, la plus proche du héros gagne. Retourne la cible canonique + son libellé.
+function interactAt(map, tx, ty, heroX, heroY, broken = []) {
+  const cands = [];
+  const d = map.donjon;
+  if (d && tx >= d.x - 1 && tx <= d.x + d.w && ty >= d.y - 1 && ty <= d.y + d.h + 1) {
+    cands.push({ type: 'porte', x: d.x + Math.floor(d.w / 2), y: d.y + d.h, label: 'la porte du donjon' });
+  }
+  if (map.autel && Math.abs(tx - map.autel.x) <= 1 && Math.abs(ty - map.autel.y) <= 1) {
+    cands.push({ type: 'autel', x: map.autel.x, y: map.autel.y, label: 'l’autel' });
+  }
+  if (map.retour && Math.abs(tx - map.retour.x) <= 1 && Math.abs(ty - map.retour.y) <= 1) {
+    cands.push({ type: 'retour', x: map.retour.x, y: map.retour.y, label: 'le retour à la ville' });
+  }
+  for (const hu of map.huttes ?? []) {
+    if (Math.abs(tx - hu.x) <= 1 && Math.abs(ty - hu.y) <= 1) cands.push({ type: 'maison', x: hu.x, y: hu.y, hutte: hu, label: 'la hutte' });
+  }
+  for (const j of map.jarres ?? []) {
+    if (j.x === tx && j.y === ty && !broken.includes(`jarre-${j.x}-${j.y}`)) cands.push({ type: 'jarre', x: j.x, y: j.y, label: 'la jarre' });
+  }
+  if (!cands.length) return null;
+  cands.sort((a, b) => Math.hypot(a.x + .5 - heroX, a.y + .5 - heroY) - Math.hypot(b.x + .5 - heroX, b.y + .5 - heroY));
+  return cands[0];
+}
+
+// v1.40 : tuile praticable la plus proche du héros autour de la cible — anneau 8-voisinage d'abord (distance max ~1,42 < seuil), repli ±2 ensuite
+function nearestWalkableNear(map, hx, hy, tx, ty) {
+  const R = DATA.engine.ERRANCE_INTERACT_SEARCH ?? 2;
+  for (let r = 1; r <= R; r++) {
+    let best = null, bd = 1e9;
+    for (let dx = -r; dx <= r; dx++) for (let dy = -r; dy <= r; dy++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue; // anneau courant seulement
+      const cx = tx + dx, cy = ty + dy;
+      if (!map.inb(cx, cy) || solidT(map, cx, cy)) continue;
+      const d = Math.hypot(cx + .5 - hx, cy + .5 - hy);
+      if (d < bd) { bd = d; best = { x: cx, y: cy }; }
+    }
+    if (best) return best;
+  }
+  return null;
+}
+
 // avance le héros le long du chemin ; retourne les événements de la frame
 function stepErrance(st, dt, rng = Math.random) {
   const ev = { steps: 0, encounter: null, arrived: null };
@@ -341,7 +383,7 @@ function stepErrance(st, dt, rng = Math.random) {
   // arrivée sur une cible d'interaction
   if (st.pending && !hero.path.length) {
     const o = st.pending;
-    if (Math.hypot(hero.x - (o.x + 0.5), hero.y - (o.y + 0.5)) < 1.6) {
+    if (Math.hypot(hero.x - (o.x + 0.5), hero.y - (o.y + 0.5)) < (DATA.engine.ERRANCE_ARRIVAL_RADIUS ?? 1.9)) { // v1.40 : seuil en data, cohérent avec le 8-voisinage
       st.pending = null;
       ev.arrived = o;
     }

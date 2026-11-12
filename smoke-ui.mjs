@@ -1048,6 +1048,8 @@ async function main() {
       let steps27 = 0, enc27 = 0;
       for (let k = 0; k < 40; k++) { const ev = api.stepErrance(st27, 0.05, () => 0); steps27 += ev.steps; if (ev.encounter) enc27++; }
       check('B27 e héros figé : 0 pas automatique, 0 rencontre sans input après le combat', steps27 === 0 && enc27 === 0, `steps=${steps27} enc=${enc27}`);
+      check('B27 f v1.40 : hitbox élargie (interactAt bâtiment+anneau / 8-voisinage) et seuil d’arrivée 1,9 en data', /function interactAt\(/.test(html) && /function nearestWalkableNear\(/.test(html) && api.DATA.engine.ERRANCE_ARRIVAL_RADIUS === 1.9, String(api.DATA.engine.ERRANCE_ARRIVAL_RADIUS));
+      check('B27 g v1.40 : retour ville -> #accueil (hub-ville) + toast chemin bloqué', /o\.type === 'retour'[\s\S]{0,200}go\('#accueil'\)/.test(html) && /Chemin bloqué vers/.test(html), '');
     // ---------- B28 : correctifs v1.38 lot 1 — XP distribuée à tout combat de zone terminé ----------
     {
       const prevAuto28 = api._autoMode();

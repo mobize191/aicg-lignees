@@ -711,5 +711,7 @@
   "3": 1,
   "4": 1,
   "5": 2
- }
+ },
+ "ERRANCE_ARRIVAL_RADIUS": 1.9,
+ "ERRANCE_INTERACT_SEARCH": 2
 }

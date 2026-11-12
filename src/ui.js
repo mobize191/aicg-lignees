@@ -2941,6 +2941,10 @@ function renderErrance(root) {
       startZoneFight(st.zone, { donjon: false });
       return;
     }
+    if (ev.abandoned && st.pending) { // v1.40 : A* abandonné -> toast explicite, pending annulé
+      toast(`✗ Chemin bloqué vers ${st.pending.label ?? 'la cible'}.`);
+      st.pending = null;
+    }
     if (ev.arrived) {
       const o = ev.arrived;
       if (o.type === 'autel') {
@@ -2956,10 +2960,10 @@ function renderErrance(root) {
         persistErrancePos(); save();
         startZoneFight(st.zone, { donjon: true });
         return;
-      } else if (o.type === 'retour') {
+      } else if (o.type === 'retour') { // v1.40 : retour ville -> hub-ville (Accueil), pas la sélection des zones
         persistErrancePos(); save();
         toast('✨ Retour à la ville.');
-        go('#terres');
+        go('#accueil');
         return;
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
@@ -3008,29 +3012,21 @@ function renderErrance(root) {
     }
     const tx = Math.floor(px / T), ty = Math.floor(py / T);
     const m = st.map;
-    if (tx === m.autel.x && ty === m.autel.y) { st.pending = { type: 'autel', x: m.autel.x, y: m.autel.y }; }
-    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + m.donjon.h) { st.pending = { type: 'porte', x: tx, y: ty }; }
-    else if (m.retour && tx === m.retour.x && ty === m.retour.y) { st.pending = { type: 'retour', x: m.retour.x, y: m.retour.y }; }
-    else {
-      const hu = (m.huttes ?? []).find((h) => h.x === tx && h.y === ty);
-      if (hu) st.pending = { type: 'maison', x: hu.x, y: hu.y, hutte: hu };
-      else {
-        const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
-        if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+    // v1.40 : hitbox élargie (bâtiment + anneau, 8-voisinage) — feedback immédiat au clic, arrivée garantie
+    const inter = interactAt(m, tx, ty, st.hero.x, st.hero.y, st.broken);
+    if (inter) {
+      const RADIUS = DATA.engine.ERRANCE_ARRIVAL_RADIUS ?? 1.9;
+      toast(`→ ${inter.label[0].toUpperCase()}${inter.label.slice(1)}`);
+      const dHero = Math.hypot(st.hero.x - (inter.x + 0.5), st.hero.y - (inter.y + 0.5));
+      if (dHero < RADIUS) {
+        // déjà à portée : déclenchement immédiat, sans repath (le prochain stepErrance pose ev.arrived)
+        st.hero.path = []; st.hero.v.x = 0; st.hero.v.y = 0; st.goal = null;
+        st.pending = inter;
+      } else {
+        const dest = nearestWalkableNear(m, st.hero.x, st.hero.y, inter.x, inter.y);
+        if (dest && setTarget(st, dest.x, dest.y)) st.pending = inter; // pending posé APRÈS setTarget (qui le remet à null)
+        else { toast(`✗ Chemin bloqué vers ${inter.label}.`); st.pending = null; }
       }
-    }
-    if (st.pending) {
-      const o = st.pending;
-      let best = null, bd = 1e9;
-      for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) {
-        const cx = o.x + dx, cy = o.y + dy;
-        if (!m.inb(cx, cy)) continue;
-        const tt = m.terr[m.idx(cx, cy)];
-        if ([2, 3, 4, 7, 8, 9, 10].includes(tt)) continue;
-        const d = Math.hypot(cx + 0.5 - st.hero.x, cy + 0.5 - st.hero.y);
-        if (d < bd) { bd = d; best = { x: cx, y: cy }; }
-      }
-      if (best) setTarget(st, best.x, best.y);
     } else {
       setTarget(st, tx, ty);
     }
@@ -3046,7 +3042,7 @@ function renderErrance(root) {
   // §10 iOS : pointerup/pointercancel écoutés sur window, pas sur le canvas
   window.addEventListener('pointerup', () => { dragging = false; });
   window.addEventListener('pointercancel', () => { dragging = false; });
-  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#terres'); };
+  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#accueil'); }; // v1.40 : hub-ville = Accueil
 }
 
 function renderHome(root) {
@@ -6035,6 +6031,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.40 : Les interactions d’errance répondent au clic', 'Porte du donjon cliquable sur tout le bâtiment (plus l’anneau), autel/retour/huttes au 8-voisinage, toast de confirmation au clic. Arrivée garantie : tuile praticable recherchée à côté de la cible, déclenchement immédiat si vous y êtes déjà, et « ✗ Chemin bloqué » explicite si le chemin échoue. Le retour à la ville renvoie au hub-ville (Accueil). 214 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.39 : XP par combat + fin du mode Auto', 'L’XP est distribuée à CHAQUE combat terminé (même formule, ramenée à un étage : un run de 5 étages donne le même total, mais au fil des combats) et l’écran Récompenses l’affiche par personnage, avec l’or et les objets. En défaite de donjon, l’XP des combats gagnés reste acquise. Le mode Auto disparaît du combat joué (boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence persistée, pénalités de récompenses) : les récompenses sont toujours intégrales. L’auto-résolution interne du moteur reste intacte pour les futures missions spéciales. 209 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.36 : Refonte visuelle de l’errance (maquette A+)', 'Peinture organique en pré-rendu unique (étang, chemin texturé, arbres en couches, donjon peint), ambiance jour/nuit avec faune et lames animées, layout v2 des Marées + point de retour ville dans chaque zone, palettes des 5 zones en data. 175 tests, smoke 355 checks, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.35 : Parties multiples (4 slots de sauvegarde)', 'Jusqu’à 4 parties coexistent dans le navigateur (clés `fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie). Migration sans perte : l’ancienne sauvegarde devient la Partie 1. Panneau « Parties » sur l’Accueil : ▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer (double confirmation) ; la partie en cours est sauvegardée avant toute bascule, la partie active est mémorisée. Export FCSAVE1 inchangé (partie active). 171 tests, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
