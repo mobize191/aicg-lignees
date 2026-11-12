@@ -17311,26 +17311,32 @@ function decorOrders(map, zone) {
   }
   for (let i = 0; i < 900; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathRuts.push({ x, y, rx: 2 + rnd() * 4, ry: 1 + rnd() * 2, rot: rnd() * 3 }); }
   for (let i = 0; i < 260; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathStones.push({ x, y, r: 1 + rnd() * 1.6 }); }
-  // étang : centroïde + rayons depuis l'emprise des tuiles EAU
+  // étang peint : amas d'eau INTÉRIEUR uniquement (ceinture de bord x/y ∈ {0, w-1, h-1} exclue —
+  // correctif v1.36.1 lot 1 « grand lac »), débordement plafonné à 0,25·T hors tuiles EAU.
+  // Si la zone porte layout.pond en data, le pond peint en découle (mêmes tuiles EAU).
   let pond = null;
   {
     let n = 0, minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
-    for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) if (terr[idx(x, y)] === ET.EAU) {
+    for (let y = 1; y < map.h - 1; y++) for (let x = 1; x < map.w - 1; x++) if (terr[idx(x, y)] === ET.EAU) {
       n++; if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
     }
     if (n > 0) {
-      pond = { cx: (minx + maxx) / 2 * T + T / 2, cy: (miny + maxy) / 2 * T + T / 2, rx: (maxx - minx + 1) / 2 * T + T * .4, ry: (maxy - miny + 1) / 2 * T + T * .4 };
+      const M = T * 0.25; // marge max de débordement hors tuiles EAU
+      pond = { cx: (minx + maxx) / 2 * T + T / 2, cy: (miny + maxy) / 2 * T + T / 2, rx: (maxx - minx + 1) / 2 * T + M, ry: (maxy - miny + 1) / 2 * T + M };
     }
   }
   const pondDeep = [], pondGlints = [], lilies = [], reeds = [];
   if (pond) {
-    for (let i = 0; i < 6; i++) pondDeep.push({ x: pond.cx + (rnd() - .5) * pond.rx * 1.6, y: pond.cy + (rnd() - .5) * pond.ry * 1.4, rx: 20 + rnd() * 30, ry: 8 + rnd() * 14, rot: rnd() * 3 });
-    for (let i = 0; i < 9; i++) pondGlints.push({ x: pond.cx - 62 + i * 7 + rnd() * 8, y: pond.cy - 78 + i * 20, w: 48 + i * 5 + rnd() * 10 });
+    for (let i = 0; i < 6; i++) pondDeep.push({ x: pond.cx + (rnd() - .5) * pond.rx * 1.2, y: pond.cy + (rnd() - .5) * pond.ry * 1.2, rx: 20 + rnd() * 30, ry: 8 + rnd() * 14, rot: rnd() * 3 });
+    for (let i = 0; i < 9; i++) {
+      const a = rnd() * 7;
+      pondGlints.push({ x: pond.cx + Math.cos(a) * pond.rx * (0.2 + rnd() * 0.6), y: pond.cy + Math.sin(a) * pond.ry * (0.2 + rnd() * 0.6), w: 20 + rnd() * 26 });
+    }
     const lilyOff = [[-.7, -.3], [.45, .1], [-.25, .58], [.2, -.58]];
     for (const o of lilyOff) lilies.push({ x: pond.cx + o[0] * pond.rx * .8, y: pond.cy + o[1] * pond.ry * .8 });
     for (let i = 0; i < 9; i++) {
       const a = -2.4 + i * .6;
-      reeds.push({ x: pond.cx + Math.cos(a) * (pond.rx + T * .25), y: pond.cy + Math.sin(a) * (pond.ry + T * .25), h: 22 + rnd() * 8 });
+      reeds.push({ x: pond.cx + Math.cos(a) * (pond.rx - 2), y: pond.cy + Math.sin(a) * (pond.ry - 2), h: 22 + rnd() * 8 });
     }
   }
   // hautes herbes : socles par tuile, lames animées, bordure de fleurs sur les tuiles en lisière
@@ -17413,14 +17419,20 @@ function paintZoneBase(bx, map, zone) {
   for (const r of decor.pathRuts) { bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
   bx.fillStyle = pal.pathStone;
   for (const s of decor.pathStones) { bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  // 4. étang : rive, eau en dégradé radial, profondeur, reflets, nénuphars, roseaux
+  // 4. eau : toutes les tuiles EAU peintes en eau (ceinture de mer comprise), puis l'étang intérieur en dégradé
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
+    if (terr[idx(x, y)] !== ET.EAU) continue;
+    const gw0 = bx.createRadialGradient(x * T + T / 2 - 6, y * T + T / 2 - 8, 2, x * T + T / 2, y * T + T / 2, T * .9);
+    gw0.addColorStop(0, pal.water0); gw0.addColorStop(1, pal.water2);
+    bx.fillStyle = gw0; bx.fillRect(x * T, y * T, T, T);
+  }
   if (decor.pond) {
     const p = decor.pond;
-    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
-    bx.fillStyle = pal.sandDark; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .3, p.ry + T * .3, 0, 0, 7); bx.fill();
-    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
+    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .25, p.ry + T * .25, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.sandDark; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry));
     gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
-    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx - 2, p.ry - 2, 0, 0, 7); bx.fill();
     bx.fillStyle = pal.waterDeep;
     for (const d of decor.pondDeep) { bx.beginPath(); bx.ellipse(d.x, d.y, d.rx, d.ry, d.rot, 0, 7); bx.fill(); }
     bx.strokeStyle = pal.waterGlint; bx.lineWidth = 2;
@@ -17552,12 +17564,10 @@ function paintTileGround(bx, map, zone, x, y) {
     for (const r of decor.pathRuts) { if (r.x < px || r.x > px + T || r.y < py || r.y > py + T) continue; bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
     bx.fillStyle = pal.pathStone;
     for (const s of decor.pathStones) { if (s.x < px || s.x > px + T || s.y < py || s.y > py + T) continue; bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  } else if (t === ET.EAU && decor.pond) {
-    const p = decor.pond;
-    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
-    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
-    gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
-    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+  } else if (t === ET.EAU) {
+    const gw = bx.createRadialGradient(px + T / 2 - 6, py + T / 2 - 8, 2, px + T / 2, py + T / 2, T * .9);
+    gw.addColorStop(0, pal.water0); gw.addColorStop(1, pal.water2);
+    bx.fillStyle = gw; bx.fillRect(px, py, T, T);
   } else if (t === ET.HERBES) {
     bx.fillStyle = pal.herbSocleDark; bx.beginPath(); bx.ellipse(px + T / 2, py + T / 2, T * .62, T * .55, 0, 0, 7); bx.fill();
     bx.fillStyle = pal.herbSocle; bx.beginPath(); bx.ellipse(px + T / 2 + 3, py + T / 2 + 2, T * .4, T * .3, 0, 0, 7); bx.fill();

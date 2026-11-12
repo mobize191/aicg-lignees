@@ -219,3 +219,29 @@ test('refonte errance lot 3 : migration v27 -> v28 normalise errance (non destru
   const bad = E.migrate({ version: 27, errance: { zone: 'zone-marees' } });
   assert.equal(bad.errance.x, null, 'position absente normalisée en null (secourue au chargement)');
 });
+
+test('correctif v1.36.1 lot 1 : le pond peint ne déborde pas des tuiles EAU (grand lac) — 5 zones', () => {
+  const E = loadEngine();
+  const D = loadData();
+  for (const zone of D.zones) {
+    const m = E.genZoneMap(zone);
+    const d = E.decorOrders(m, zone);
+    const T = m.t;
+    if (!d.pond) continue;
+    const p = d.pond;
+    // aucune tuile non-EAU ne doit être couverte par l'ellipse + marge 0,25·T
+    for (let y = 0; y < m.h; y++) for (let x = 0; x < m.w; x++) {
+      const t = m.terr[m.idx(x, y)];
+      if (t === E.ET.EAU) continue;
+      const dxn = (x * T + T / 2 - p.cx) / (p.rx + 0.25 * T);
+      const dyn = (y * T + T / 2 - p.cy) / (p.ry + 0.25 * T);
+      assert.ok(dxn * dxn + dyn * dyn >= 1, `${zone.id}: tuile non-EAU (${x},${y}) sous le pond peint (centre ${Math.round(p.cx)},${Math.round(p.cy)} r ${Math.round(p.rx)}x${Math.round(p.ry)})`);
+    }
+    // si layout.pond en data, le pond peint correspond au pond data
+    const lp = zone.errance?.layout?.pond;
+    if (lp) {
+      assert.ok(Math.abs(p.cx - (lp.x + .5) * T) <= T && Math.abs(p.cy - (lp.y + .5) * T) <= T, `${zone.id}: centre du pond peint != layout.pond`);
+      assert.ok(Math.abs(p.rx - lp.rx * T) <= T + 0.25 * T && Math.abs(p.ry - lp.ry * T) <= T + 0.25 * T, `${zone.id}: rayons du pond peint != layout.pond`);
+    }
+  }
+});
