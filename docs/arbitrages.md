@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : EN COURS — correctifs v1.38 (TRANCHÉ 12/11, 9e tour) : lot 1 livré, lot 2 restant
+
+- **Lot 1 — XP des combats de zone (LIVRÉ, racine diagnostiquée)** : l'XP de run exigeait `!won || finalClear` ; une victoire de zone n'étant ni l'un ni l'autre, **jamais d'XP en errance**. Correctif minimal : la condition devient `(!won || finalClear || !!store.zoneFight)` — tout combat de zone terminé (victoire OU défaite, porte du donjon de zone comprise) distribue l'XP d'un étage de run à l'écran Récompenses, **formule inchangée** (`DIFFX.pts × 1,5 × 0,8 × tactXpMult`, bonus de découverte éventuel), via le bloc existant (`runLog.stages = 1`). Runs de donjon classiques inchangés (XP cumulée en fin de run uniquement).
+- **Preuves (lot 1)** : 198 tests verts (2 nouveaux `tests/xpzone-v138.test.js`, garde-fous source sur la condition), smoke **396 checks** (B28 : condition + victoire de zone fonctionnelle avec XP avant/après sur `inst.xp`, 3 échecs préexistants hors périmètre), digests **inchangés `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000** (l'XP est un flux UI/progression, le digest rejoue le moteur headless).
+- **Restant** : lot 2 (aléatoire PAR COMBAT via `zoneFightCount` persisté dans le seed des vagues de zone + `errance.waveSize` en data).
+
 ## 2026-11-12 : SIGNALÉ + TRANCHÉ (9e tour, retours terrain de Marc-Olivier) — zéro XP dans les Terres Sauvages, aléatoire PAR COMBAT, vague 2-3 monstres → correctifs v1.38
 
 - **Zéro XP en errance (des dizaines de combats, équipes sans un point d'XP, constat de Marc-Olivier)** : diagnostic vérifié sur main `735e70d` par le couloir pilotage — l'XP de run n'est accordée que si `(!won || finalClear)` (`src/ui.js`, bloc XP de fin de run) : une victoire de combat de zone n'est NI une défaite NI un dernier étage → **l'XP n'est jamais distribuée pour les rencontres des Terres Sauvages**, ni pour la porte de donjon de zone. ACTÉ : tout combat de zone terminé (victoire ou défaite) distribue l'XP d'une étage de run (formule existante, écran Récompenses), garde-fou test avant/après ; formule et équilibrage inchangés, digests inchangés attendus.

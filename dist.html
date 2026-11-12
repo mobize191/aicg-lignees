@@ -23209,7 +23209,7 @@ async function animate(events, ms, gen = null) {
         }
         
         let xpLine = '';
-        if (!store.defiActive && runLog && (!won || finalClear) && runLog.stages > 0) {
+        if (!store.defiActive && runLog && (!won || finalClear || !!store.zoneFight) && runLog.stages > 0) { // v1.38 lot 1 : un combat de zone terminé distribue l'XP (victoire comme défaite)
           const DIFFX = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           
           const discOn = store.diff === 1 && dungeonById(store.dungeon).tier === 0 && (store.progress[store.dungeon]?.diffs?.[1]?.record ?? 0) < 10;

@@ -1048,6 +1048,29 @@ async function main() {
       let steps27 = 0, enc27 = 0;
       for (let k = 0; k < 40; k++) { const ev = api.stepErrance(st27, 0.05, () => 0); steps27 += ev.steps; if (ev.encounter) enc27++; }
       check('B27 e héros figé : 0 pas automatique, 0 rencontre sans input après le combat', steps27 === 0 && enc27 === 0, `steps=${steps27} enc=${enc27}`);
+    // ---------- B28 : correctifs v1.38 lot 1 — XP distribuée à tout combat de zone terminé ----------
+    {
+      const prevAuto28 = api._autoMode();
+      check('B28 a la condition XP couvre le combat de zone (victoire ou défaite)', /\(!won \|\| finalClear \|\| !!store\.zoneFight\)/.test(html), '');
+      api.go('#accueil'); await wait(30); // repartir d'une route neutre (go ne re-déclenche pas la même hash)
+      setup(['n1', 'n3'], 5);
+      const iid28 = store.team.slots[0];
+      const xp028 = api.byIid(iid28).xp;
+      api._setAuto(true); api._tacPause(false); api._speed(6); // mode Auto + pas de pause : le combat démarre seul
+      api.store.errance = api.createErranceState('zone-marees');
+      api.startZoneFight('zone-marees', { donjon: false });
+      const st28 = api._state();
+      for (const e of [...st28.enemies.avant, ...st28.enemies.arriere]) { e.hp = 1; e.maxHp = 1; } // victoire rapide
+      let w28 = null;
+      for (let k = 0; k < 250 && !w28; k++) { await wait(60); const s2 = api._state(); if (s2 && s2.winner) w28 = s2.winner; }
+      await wait(500); // laisse le handler de fin (XP) s'exécuter
+      check('B28 b victoire de zone : XP distribuée à l\u2019équipe (avant/après sur inst.xp)', w28 === 'team' && api.byIid(iid28).xp > xp028, `winner=${w28} xp=${xp028}->${api.byIid(iid28).xp}`);
+      api.store.errance = null; // stoppe la boucle rAF d'errance
+      api._setAuto(prevAuto28);
+      doc.body.querySelector('.recomp-overlay')?.remove(); // ferme la modale Récompenses ouverte par la victoire
+      api.go('#accueil'); await wait(30);
+    }
+
     }
 
     }
