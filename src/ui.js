@@ -1739,7 +1739,7 @@ function start() {
 
 
 const GLYPH = { Guerrier: '⚔', Mage: '✦', Prêtre: '✚', Assassin: '🗡', Occultiste: '🔮', Invocateur: '🕯️' };
-const EL_GLYPH = { Neutre: '⚪', Feu: '🔥', Eau: '💧', Terre: '⛰', Ombre: '🌑', Lumière: '✨', Divin: '🌟' }
+const EL_GLYPH = { Neutre: '⚪', Feu: '🔥', Eau: '💧', Nature: '⛰', Ombre: '🌑', Lumière: '✨', Divin: '🌟' }
 ;
 
 
@@ -2360,7 +2360,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
-        ${card.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Embryons, Enge, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
+        ${card.element && card.element !== 'Neutre' ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Embryons, Enge, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
         ${exemplairesBlock}
         ${spellList(card)}`}
         ${evo}
@@ -2448,7 +2448,7 @@ function openSynergyModal() {
       <div class="modal-info" style="grid-column: 1 / -1;">
         <h3>Synergies \u2014 comment \u00e7a marche ?</h3>
         <p><b>ATQ de l\u2019\u00e9quipe</b> (Guerrier, Eau, Lumi\u00e8re) augmente la <b>stat \u2694</b> affich\u00e9e sur vos cartes : c\u2019est le bonus le plus fr\u00e9quent. <b>D\u00e9g\u00e2ts finaux</b> (Mage, Ombre) s\u2019appliquent APR\u00c8S, sur chaque coup : ils multiplient tout, sorts compris. Les deux se cumulent en se multipliant : +10 % ATQ et +10 % d\u00e9g\u00e2ts = \u00d71,21 sur chaque attaque. Les soins, boucliers et r\u00e9ductions de d\u00e9g\u00e2ts fonctionnent \u00e0 part.</p>
-        <p><b>Oppositions d\u2019\u00e9l\u00e9ments</b> (v0.20) : un <b>cercle</b> \u2014 le <b>Feu</b> domine la <b>Terre</b>, qui domine l\u2019<b>Eau</b>, qui domine le <b>Feu</b> ; la <b>Lumi\u00e8re</b> et l\u2019<b>Ombre</b> se dominent mutuellement. Celui qui frappe ce qu\u2019il domine gagne <b>+25 %</b> de d\u00e9g\u00e2ts \u2014 et l\u2019ennemi en profite autant que vous : regardez les \u00e9l\u00e9ments de la vague avant de composer. En combat, \u25b2 marque vos coups dominants sur l\u2019ennemi, \u25bc les coups ennemis qui dominent vos cartes.</p>
+        <p><b>Oppositions d\u2019\u00e9l\u00e9ments</b> (v0.20) : un <b>cercle</b> \u2014 le <b>Feu</b> domine la <b>Nature</b>, qui domine l\u2019<b>Eau</b>, qui domine le <b>Feu</b> ; la <b>Lumi\u00e8re</b> et l\u2019<b>Ombre</b> se dominent mutuellement. Celui qui frappe ce qu\u2019il domine gagne <b>+25 %</b> de d\u00e9g\u00e2ts \u2014 et l\u2019ennemi en profite autant que vous : regardez les \u00e9l\u00e9ments de la vague avant de composer. La frappe simple d’une carte utilise son élément ; un sort utilise l’élément de son école (badge sur le sort). En combat, \u25b2 marque vos coups dominants sur l\u2019ennemi, \u25bc les coups ennemis qui dominent vos cartes.</p>
         <p>Chaque carte porte une <b>classe</b> et un <b>\u00e9l\u00e9ment</b>. Pour chaque type, on compte les cartes <b>uniques</b> de l\u2019\u00e9quipe : ${PALIERS[0]} cartes \u2192 palier 1, ${PALIERS[1]} cartes \u2192 palier 2. Deux exemplaires d\u2019une m\u00eame carte ne comptent qu\u2019une fois, mais les deux b\u00e9n\u00e9ficient des bonus.</p>
         <h4>Classes</h4>
         ${list(CLASSES)}
@@ -4010,16 +4010,21 @@ function uiSpellMeta(sp, ownerDef) {
   return sp;
 }
 function spellBadgeHtml(sp) {
+  // Lot B : badge délément du sort = élément de son école (data SCHOOL_ELEMENT)
+  const el = sp?.ecole ? (SCHOOL_ELEMENT[sp.ecole] ?? null) : null;
+  const elBadge = el ? `<span class="sort-badge b-el" title="élément du sort (opposition sort > cible)" style="margin-right:4px">(EL_GLYPH[el] ?? '') ${el}</span>` : '';
   const role = sp?.role ?? null;
-  if (role) return `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
-  if (sp?.cat) return `<span class="sort-badge b-cat">sort ${SPELL_CAT_LABEL[sp.cat] ?? sp.cat}</span>`;
-  return '';
+  if (role) return elBadge + `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
+  if (sp?.cat) return elBadge + `<span class="sort-badge b-cat">sort ${SPELL_CAT_LABEL[sp.cat] ?? sp.cat}</span>`;
+  return elBadge;
 }
 // meta d'un sort : ecole · categorie · puissance · cible/zone (tout vient des data)
 function spellMetaHtml(sp) {
   const bits = [];
   const school = sp?.ecole ? (SCHOOLS[sp.ecole] ?? null) : null;
   if (school) bits.push(school.nom);
+  const elS = sp?.ecole ? (SCHOOL_ELEMENT[sp.ecole] ?? null) : null;
+  if (elS) bits.push((EL_GLYPH[elS] ?? '') + ' ' + elS); // Lot B : élément du sort = école
   const roleLab = sp?.role ? (DATA.engine.SPELL_ROLE_LABEL?.[sp.role] ?? sp.role) : null;
   if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
@@ -4479,7 +4484,7 @@ function openUnitModal(u) {
       <span class="fstat"><b>Élément</b>${card?.element ?? 'Neutre'}</span>
       <span class="fstat"><b>Rareté</b>${card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : '—'}</span>
     </div>
-    ${card?.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
+    ${card?.element && card?.element !== 'Neutre' ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
     ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => { const spx = uiSpellMeta(sp, card); return `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(spx)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`; }).join('')}</ul>` : ''}
@@ -5533,7 +5538,7 @@ function renderCombat(root, opts = {}) {
   if (!defi) applyRunStateTo(state);
   const isBossFloor = store.stage % 5 === 0;
   const runModDef = (!defi && runModById(store.runMod)) || null;
-  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Terre selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
+  const rulesHtml = `<p class="muted">${defi ? 'Un défi divin : les 18 cartes du Seuil, race Divine (éléments Lumière, Eau ou Nature selon leur famille), et dès que vous posez deux divines, vos dégâts ET vos soins gagnent +10 %. Récompense unique par jour : +40 🪙 or, 1 naissance raciale de n’importe quelle race (50 % humaine, 30 % monstre, 15 % mystique, 5 % divine) et 1 éclat brut de son élément, plus 1 pierre d’éveil.' : `Chaque unité régénère du mana (✦) à chaque action et lance le sort le plus cher qu\u2019elle peut payer — s\u2019il sent son gros sort proche, il épargne. Cliquez une carte pour voir sa fiche et TOUS ses effets actifs.`}</p>`;
   const infoChips = [`<button type="button" class="info-chip" data-info="rules" title="Comment joue une carte ?">ℹ️</button>`]
     .concat(runModDef ? [`<button type="button" class="info-chip" data-info="mod" title="Modificateur du run">🎰 ${runModDef.name}</button>`] : [])
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
@@ -6092,6 +6097,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.42 : Oppositions au sort + Nature', 'Le bonus d\u2019opposition (+25 %) se calcule désormais entre l\u2019élément de l\u2019école du SORT (badge \u2192 sur chaque sort) et l\u2019élément inné de la cible ; la frappe simple garde l\u2019élément de la carte. Les cartes humaines sont Neutres (hors oppositions), les monstres et divins gardent leur élément inné. L\u2019élément « Terre » s\u2019appelle désormais « Nature » (mêmes oppositions). 225 tests, digest MESURÉ `daef2bca\u2026` 835/3000 et `883c1c18\u2026` 2797/10000.'],
   ['v1.41 : Formation 3 actifs + 2 réserve', 'Chaque combat aligne 3 cartes actives et garde 2 cartes en réserve (bandeau d\u2019dié sous l\u2019équipe, hors ciblage). Nouvelle action \u21c4 Échanger : la carte de réserve entre immédiatement mais son tour est consommé (elle n\u2019agit qu\u2019au tour suivant), PV et mana conservés des deux côtés. Si une carte active tombe K.O., la réserve entre automatiquement et GRATUITEMENT (aucun tour consommé, elle joue au tour suivant). La réserve gagne 50 % d\u2019XP (`reserveXpMult`). 220 tests, digest MESURÉ `5bdb0c6d\u2026` 822/3000 et `1122225c\u2026` 2787/10000 (formation 3+2 : les équipes du harnais combattent à 2 actifs au lieu de 3).'],
   ['v1.40 : Les interactions d’errance répondent au clic', 'Porte du donjon cliquable sur tout le bâtiment (plus l’anneau), autel/retour/huttes au 8-voisinage, toast de confirmation au clic. Arrivée garantie : tuile praticable recherchée à côté de la cible, déclenchement immédiat si vous y êtes déjà, et « ✗ Chemin bloqué » explicite si le chemin échoue. Le retour à la ville renvoie au hub-ville (Accueil). 214 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.39 : XP par combat + fin du mode Auto', 'L’XP est distribuée à CHAQUE combat terminé (même formule, ramenée à un étage : un run de 5 étages donne le même total, mais au fil des combats) et l’écran Récompenses l’affiche par personnage, avec l’or et les objets. En défaite de donjon, l’XP des combats gagnés reste acquise. Le mode Auto disparaît du combat joué (boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence persistée, pénalités de récompenses) : les récompenses sont toujours intégrales. L’auto-résolution interne du moteur reste intacte pour les futures missions spéciales. 209 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
@@ -6260,7 +6266,7 @@ function renderGlossaire(root) {
         <li><b>Fureur</b> : passé le tour 15, tous les dégâts montent de 8 % par tour supplémentaire, des deux côtés : les combats ne s’éternisent jamais.</li>
         <li><b>Vitesse</b> : de \u00d70,5 \u00e0 \u00d732 \u2014 \u00e0 \u00d716 les animations sont coup\u00e9es mais le rythme reste visible ; \u00e0 \u00d732 le combat est quasi instantan\u00e9 (seul le plateau se redessine tour par tour). Le combat se lance tout seul \u00e0 l\u2019entr\u00e9e du donjon et \u00e0 chaque \u00e9tage, sauf en mode manuel.</li>
         <li><b>Rangs avant/arrière</b> : 3 cartes devant + 2 derrière (ou 2 + 3), choisi avant le combat et figé. L’arrière est ciblable et encaisse -50 % de dégâts tant qu’un allié tient à l’avant ; un Guerrier ou un Assassin en arrière frappe à moitié ; les soins ne sont jamais affectés ; les attaques de zone ignorent la protection de l’arrière.</li>
-        <li><b>Éléments</b> : ${Object.entries(BEATS).map(([a, b]) => `${EL_GLYPH[a] ?? ''} ${a} bat ${b}`).join(', ')} ; domination = +25 % de dégâts ; ⚪ Neutre = hors oppositions (ni bonus ni malus : les naissances raciales avant leur voie).</li>
+        <li><b>Éléments</b> : ${Object.entries(BEATS).map(([a, b]) => `${EL_GLYPH[a] ?? ''} ${a} bat ${b}`).join(', ')} ; domination = +25 % de dégâts ; ⚪ Neutre = hors oppositions (ni bonus ni malus : les cartes humaines sont Neutres ; un sort porte l’élément de son école).</li>
         <li><b>Races</b> : chaque carte porte une race — Humaine (la référence), Monstre (+10 % de stats de base), Mystique (+20 %), Divine (+30 %) ; la régression comble l’écart en entrant dans la race plus forte. L’élément Divin n’existe plus : les divines ont un vrai élément, et leur bonus d’équipe (+10 % dégâts et +10 % soins dès 2 en équipe) est porté par la race.</li>
         <li><b>Régression</b> : depuis un point de blocage (l’UR d’une lignée scellée), un Éclat de régression ouvre une NOUVELLE carte au palier R d’une race supérieure — 100 % des sorts, 10 % des stats gagnées, l’ancienne reste. L’Éclat tombe dans tous les donjons, de 0,3 % (Facile) à 5 % (Enfer) par victoire. Les monstres n’y ont pas accès.</li>
         <li><b>Verrou</b> : une carte verrouillée porte son cadenas et sa condition en fiche ; le standard sera le SR des nouvelles lignées, jamais après L.</li>
@@ -6348,7 +6354,7 @@ function renderGlossaire(root) {
         <li><b>Les nouvelles lignées (v0.41)</b> : le Bestiau des Cieux ouvre à son évolution les trois voies du Zénith — la Légion Solaire, les Phénix Célestes, le Clergé du Plein Jour. Les naissances divines rejoignent les lignées du Seuil : l’Ange les Arbitres, le Démon le Chœur Miroir, l’Éveillé du Seuil les Tisseuses du Pont, trois chaînes qui courent désormais jusqu’à leurs Légendaires (Kairos, Écho, Ananké). Et l’audit des vieilles cartes est fermé : les 5 solos d’origine sont rattachés aux chaînes (Garde-Promesse rejoint la garde, Étincelle Vive la braise, Médecin de Camp l’aube, Veilleur d’Acier l’ombre, Pilier Mécanique le bouclier) — toute copie possédée évolue dans l’architecture ; seules les 7 branches SR des familles restent dormantes, pour les choix à venir.</li>
         <li><b>Ascendance</b> : évoluer au niveau 10 ne grave rien ; chaque niveau d’attente au-delà grave +0,5 % de stats de base (jusqu’à +5 % au niveau 20), pour toujours, cumulée à chaque évolution. Évoluer vite ou attendre fort : le dilemme.</li>
         <li><b>Éclats d’évolution</b> : les boss des étages 5 et 10 en lâchent (tier de la difficulté ci-dessous), et chaque étage intermédiaire offre une chance d’éclat brut :</li>
-        <li><b>Couleur des éclats</b> : l’élément d’un éclat est tiré des monstres du donjon courant, et chaque donjon concentre deux éléments (Marées : Eau et Terre · Forge : Feu et Ombre · Bosquet : Terre et Lumière · Crypte : Ombre et Eau · Zénith : Lumière et Feu). Pour évoluer une carte Eau, farmez les donjons où l’Eau coule ; le rang (brut, poli, gravé, éternel) dépend de la difficulté.</li>
+        <li><b>Couleur des éclats</b> : l’élément d’un éclat est tiré des monstres du donjon courant, et chaque donjon concentre deux éléments (Marées : Eau et Nature · Forge : Feu et Ombre · Bosquet : Nature et Lumière · Crypte : Ombre et Eau · Zénith : Lumière et Feu). Pour évoluer une carte Eau, farmez les donjons où l’Eau coule ; le rang (brut, poli, gravé, éternel) dépend de la difficulté.</li>
       </ul>
       <table class="glo-table"><tr><th>Difficulté</th><th>Boss étage 5</th><th>Boss étage 10</th></tr>${gemRows}</table>
       <ul class="glo-list">

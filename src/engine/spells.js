@@ -126,8 +126,9 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
       continue;
     }
     if (spell.mult) {
-      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * rangAtkMult(st, side, s) * elementMult(s.element, t.element)));
-      events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(s.element, t.element), side });
+      const elSort = schoolElementOf(spell); // Lot B : opposition = école du sort contre élément inné de la cible
+      const dmg = Math.max(1, Math.round(statOf(s) * spell.mult * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * (1 - curse) * rage * rangAtkMult(st, side, s) * elementMult(elSort, t.element)));
+      events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'special', mana: s.mana, elem: elementTag(elSort, t.element), side });
       applyDamage(t, dmg, events, foeSide, null, true, { state: st, zone: larg >= 3 });
       if (t.alive && t.status && t.status.reflect && dmg > 0) {
         const back = Math.max(1, Math.round(dmg * t.status.reflect.pct));

@@ -60,6 +60,13 @@ function elementTag(atkEl, defEl) {
   if (!atkEl || !defEl) return null;
   return BEATS[atkEl] === defEl ? 'fort' : null;
 }
+// Lot B (refonte direction, TRANCHE 12/11) : l'element d'un SORT = element de son ECOLE (data SCHOOL_ELEMENT),
+// pas celui de la carte lanceuse ; la frappe simple garde l'element de la carte. Neutre = hors oppositions.
+function schoolElementOf(spell) {
+  if (!spell || !spell.ecole) return null;
+  return (E.SCHOOL_ELEMENT ?? {})[spell.ecole] ?? null;
+}
+function atkElementOf(u, spell) { return spell ? (schoolElementOf(spell) ?? u.element) : u.element; }
 
 function cardPower(card, lvl) {
   const st = statsAt(card, lvl, 0);

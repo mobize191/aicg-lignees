@@ -79,7 +79,7 @@
    "dmgReduction": 0.25
   }
  },
- "Terre": {
+ "Nature": {
   "1": {
    "desc": "+15 % ATQ de l’équipe (la stat ⚔ des cartes)",
    "atkPct": 0.15

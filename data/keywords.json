@@ -15,7 +15,7 @@
   "desc": "pourcentage de la vie max par tour, contre le seuil de la cible"
  },
  "seve": {
-  "element": "Terre",
+  "element": "Nature",
   "biome": "bosquet",
   "desc": "sève rongeuse : pourcentage de la vie max par tour, contre le seuil de la cible"
  }

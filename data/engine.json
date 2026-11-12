@@ -9,7 +9,7 @@
  "ELEMENTS": [
   "Feu",
   "Eau",
-  "Terre",
+  "Nature",
   "Ombre",
   "Lumière"
  ],
@@ -63,16 +63,16 @@
   "M": 6
  },
  "BEATS": {
-  "Feu": "Terre",
-  "Terre": "Eau",
+  "Feu": "Nature",
+  "Nature": "Eau",
   "Eau": "Feu",
   "Lumière": "Ombre",
   "Ombre": "Lumière"
  },
  "BEATEN_BY": {
   "Feu": "Eau",
-  "Eau": "Terre",
-  "Terre": "Feu",
+  "Eau": "Nature",
+  "Nature": "Feu",
   "Lumière": "Ombre",
   "Ombre": "Lumière"
  },
@@ -714,5 +714,15 @@
  },
  "ERRANCE_ARRIVAL_RADIUS": 1.9,
  "ERRANCE_INTERACT_SEARCH": 2,
- "reserveXpMult": 0.5
+ "reserveXpMult": 0.5,
+ "SCHOOL_ELEMENT": {
+  "lame": "Neutre",
+  "baume": "Lumière",
+  "rempart": "Nature",
+  "appel": "Lumière",
+  "entrave": "Ombre",
+  "mauvais-oeil": "Ombre",
+  "ferveur": "Lumière",
+  "ruse": "Eau"
+ }
 }

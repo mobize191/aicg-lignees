@@ -24,8 +24,8 @@ test('applyDamage respecte le bouclier puis la vie (ACC-0-6)', () => {
 
 test('le bonus d\u2019opposition suit BEATS (ACC-0-6)', () => {
   const E = loadEngine();
-  assert.equal(E.elementMult('Feu', 'Terre'), 1 + E.DATA.engine.OPP_BONUS);
-  assert.equal(E.elementMult('Eau', 'Terre'), 1);
+  assert.equal(E.elementMult('Feu', 'Nature'), 1 + E.DATA.engine.OPP_BONUS);
+  assert.equal(E.elementMult('Eau', 'Nature'), 1);
 });
 
 test('un soin plafonne a la vie max de la cible (ACC-0-6)', () => {

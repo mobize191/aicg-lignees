@@ -430,10 +430,11 @@ function actTeamStriker(u, i, ctx, step) {
     u.belierUsed = true;
   }
   const kind = spell ? 'special' : 'basic';
+  const atkEl = atkElementOf(u, spell); // Lot B : sort = élément de l'école, frappe simple = élément de la carte
   if (mods.aoe && ctx.firstAttack) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(u.element, f.element))), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
+      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
     }
     ctx.firstAttack = false;
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -449,7 +450,7 @@ function actTeamStriker(u, i, ctx, step) {
   if (!spell && classeMods(u).wave) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state, zone: true });
+      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state, zone: true });
     }
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
@@ -474,17 +475,17 @@ function actTeamStriker(u, i, ctx, step) {
     dmg = Math.max(1, Math.round(dmg * (1 + cmU.exec)));
     ctx.events.push({ type: 'status', side: 'enemies', targetId: target.uid, kind: 'exec', value: cmU.exec });
   }
-  const elem = elementTag(u.element, target.element);
+  const elem = elementTag(atkEl, target.element);
   const dmgBase = dmg;
-  dmg = Math.max(1, Math.round(dmg * elementMult(u.element, target.element)));
+  dmg = Math.max(1, Math.round(dmg * elementMult(atkEl, target.element)));
   const slowed = foes.some((f) => f.status && f.status.slow > 0);
   const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
   for (let h = 0; h < hits; h++) {
     let dodged = false;
     for (const tgt of hitList) {
       if (!tgt.alive) continue;
-      const elemT = elementTag(u.element, tgt.element);
-      const dmgT = Math.max(1, Math.round(dmgBase * elementMult(u.element, tgt.element)));
+      const elemT = elementTag(atkEl, tgt.element);
+      const dmgT = Math.max(1, Math.round(dmgBase * elementMult(atkEl, tgt.element)));
       const dodgeT = Math.min(M.DODGE_CAP, (classeMods(tgt).dodge || 0) + Math.max(0, (u.agi - tgt.agi)) * M.DODGE_PER_AGI);
       if (dodgeT > 0 && ctx.state.rng() < dodgeT) {
         ctx.events.push({ type: 'dodge', side: 'enemies', sourceId: u.uid, targetId: tgt.uid });
@@ -510,8 +511,8 @@ function actTeamStriker(u, i, ctx, step) {
     const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
     for (const f of others) {
       const half = Math.max(1, Math.round(dmg * ratio));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, f.element), side: 'team' });
-      applyDamage(f, Math.max(1, Math.round(half * elementMult(u.element, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state });
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, f.element), side: 'team' });
+      applyDamage(f, Math.max(1, Math.round(half * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state });
     }
   }
   if (u.gimmick === 'volee') {
@@ -519,8 +520,8 @@ function actTeamStriker(u, i, ctx, step) {
     if (others.length) {
       const t2 = others[0];
       const half = Math.max(1, Math.round(dmg * M.BELIER_SPLASH));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(u.element, t2.element), side: 'team' });
-      applyDamage(t2, Math.max(1, Math.round(half * elementMult(u.element, t2.element))), ctx.events, 'enemies', null, false, { state: ctx.state });
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, t2.element), side: 'team' });
+      applyDamage(t2, Math.max(1, Math.round(half * elementMult(atkEl, t2.element))), ctx.events, 'enemies', null, false, { state: ctx.state });
     }
   }
   if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -617,12 +618,13 @@ function actEnemyStriker(e, ctx) {
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
   const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
+  const eAtkEl = atkElementOf(e, spell); // Lot B : idem côté ennemis
   const target = enemyPickTarget(e, targets, dmgBase, ctx.state);
   const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
   const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
   const redFactor = gRed >= DMG_REDUCTION_MAX ? 1
     : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed)) / (1 - gRed));
-  const dmg = Math.max(1, Math.round(dmgBase * redFactor * elementMult(e.element, target.element)));
+  const dmg = Math.max(1, Math.round(dmgBase * redFactor * elementMult(eAtkEl, target.element)));
   const eHits = targets.some((t) => t.status && t.status.slow > 0) ? 2 : 1;
   let dmgFinal = dmg;
   let died = false;
@@ -632,8 +634,8 @@ function actEnemyStriker(e, ctx) {
       const tRed2 = t.status && t.status.dmgRed ? t.status.dmgRed.pct : 0;
       const rf2 = gRed >= DMG_REDUCTION_MAX ? 1
         : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
-      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(e.element, t.element)));
-      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(e.element, t.element), side: 'enemies' });
+      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element)));
+      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies' });
       died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
@@ -652,7 +654,7 @@ function actEnemyStriker(e, ctx) {
       ctx.events.push({ type: 'dodge', side: 'team', sourceId: e.uid, targetId: target.uid });
       break;
     }
-    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(e.element, target.element), side: 'enemies' });
+    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(eAtkEl, target.element), side: 'enemies' });
     if (target.gimmick === 'voile' && ctx.state.rng() < M.VOILE_CHANCE) {
       ctx.events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
     } else {

@@ -1,3 +1,12 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 3 (Lot B refonte) LIVRÉE : OPPOSITIONS AU SORT + NATURE (v1.42)
+
+- **Renommage** : l'élément « Terre » devient « Nature » partout en data (ELEMENTS, BEATS/BEATEN_BY, cartes, monstres, donjons, synergies, arbres, keywords, textes) — topologie inchangée. Changelog in-game historique NON réécrit. 137 cartes humaines passent à l'élément « Neutre ».
+- **Opposition au sort** : le bonus +25 % se calcule entre l'élément de l'ÉCOLE du sort (`SCHOOL_ELEMENT` en data, moteur `schoolElementOf`/`atkElementOf`) et l'élément inné de la cible, dans tout le moteur (frappe équipe, frappe ennemie, sorts hostiles `castFoeSpell`). Frappe simple = élément de la carte (inchangé). Les humains Neutres ne font jamais de bonus de frappe.
+- **SCHOOL_ELEMENT proposé [À TRANCHER]** : lame=Neutre, baume=Lumière, rempart=Nature, appel=Lumière, entrave=Ombre, mauvais-oeil=Ombre, ferveur=Lumière, ruse=Eau.
+- **UI** : badge d'élément sur chaque sort (grimoire + fenêtre d'action, via `spellBadgeHtml`/`spellMetaHtml`), fiches cartes : Neutre = hors oppositions, aide/glossaire à jour (sort → cible expliqué).
+- Heuristique d'utilité de ciblage IA laissée sur l'élément de carte (impact marginal, signalé).
+- Tests : 5 headless (`tests/opposition-v142.test.js`) + 2 tests historiques mises à jour (Terre→Nature). 225 tests verts (1 échec préexistant date). **DIGEST CHANGÉ (attendu) : MESURÉ `daef2bca…` 835/3000 et `883c1c18…` 2797/10000** (cumul étapes 2+3 vs baseline `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 2 (Lot A refonte) LIVRÉE : FORMATION 3 ACTIFS + 2 RÉSERVE (v1.41)
 
 - **Moteur** (`src/engine/combat.js`) : `initCombat` prend `{avant, reserve}` — slots 0-2 en avant, 3-4 en `state.reserve` (l'arrière joueur disparaît du plateau). La réserve est hors ciblage, hors dégâts de zone, hors items de tour. `peekRound` saute les unités `benched`.

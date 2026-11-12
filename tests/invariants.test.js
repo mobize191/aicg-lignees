@@ -64,8 +64,8 @@ test('castSummon invoque un allie avec un sort (ACC-0-6)', () => {
 
 test('elementTag signale fort contre BEATS', () => {
   const E = loadEngine();
-  assert.equal(E.elementTag('Feu', 'Terre'), 'fort');
-  assert.equal(E.elementTag('Terre', 'Feu'), null);
+  assert.equal(E.elementTag('Feu', 'Nature'), 'fort');
+  assert.equal(E.elementTag('Nature', 'Feu'), null);
 });
 
 test('BEATEN_BY est l\u2019inverse de BEATS', () => {
