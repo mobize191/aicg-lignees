@@ -111,6 +111,6 @@
 2. **Specs des ACTÉS de ce soir** : sets d'équipement, navigation/hub, Boutique + Inventaire onglets, gating des acquisitions, retour ville + état des donjons, décor d'errance au niveau maquette.
 3. **Selon tranchage des points 1 à 5** : architecture errance × donjons (« 25 donjons »), élément des cartes, niveaux 1→100 + fusions — gros chantiers, avant tout contenu v4.
 4. **En parallèle (couloir design)** : arts série 3 (en cours), maquette habillage boucle v2 (en attente de validation), héros d'errance propre.
-5. **Attendent** : redesign de l'IA de combat (après errance et calibrage) ; calibrage (MESURE après chaque changement de maths, jamais de recalibrage sauf tranchage).
+5. **Attendent** : redesign de l'IA de combat (après errance et calibrage ; guidé par le skill `docs/skills/game-ai/`, importé le 12/11 — voir roadmap ; calibrage (MESURE après chaque changement de maths, jamais de recalibrage sauf tranchage).
 
 **Validations en attente de Marc-Olivier** : v1.32 sur téléphone ET PC ; maquette habillage boucle v2 (couloir design).
