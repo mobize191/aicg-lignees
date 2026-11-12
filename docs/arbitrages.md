@@ -1,10 +1,10 @@
 # Journal des arbitrages et décisions
 
-## 2026-11-12 : EN COURS — correctifs v1.38 (TRANCHÉ 12/11, 9e tour) : lot 1 livré, lot 2 restant
+## 2026-11-12 : EN COURS — correctifs v1.38 (TRANCHÉ 12/11, 9e tour) : TOUS LES LOTS LIVRÉS (1-2) — chantier v1.38 clôturé
 
 - **Lot 1 — XP des combats de zone (LIVRÉ, racine diagnostiquée)** : l'XP de run exigeait `!won || finalClear` ; une victoire de zone n'étant ni l'un ni l'autre, **jamais d'XP en errance**. Correctif minimal : la condition devient `(!won || finalClear || !!store.zoneFight)` — tout combat de zone terminé (victoire OU défaite, porte du donjon de zone comprise) distribue l'XP d'un étage de run à l'écran Récompenses, **formule inchangée** (`DIFFX.pts × 1,5 × 0,8 × tactXpMult`, bonus de découverte éventuel), via le bloc existant (`runLog.stages = 1`). Runs de donjon classiques inchangés (XP cumulée en fin de run uniquement).
-- **Preuves (lot 1)** : 198 tests verts (2 nouveaux `tests/xpzone-v138.test.js`, garde-fous source sur la condition), smoke **396 checks** (B28 : condition + victoire de zone fonctionnelle avec XP avant/après sur `inst.xp`, 3 échecs préexistants hors périmètre), digests **inchangés `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000** (l'XP est un flux UI/progression, le digest rejoue le moteur headless).
-- **Restant** : lot 2 (aléatoire PAR COMBAT via `zoneFightCount` persisté dans le seed des vagues de zone + `errance.waveSize` en data).
+- **Lot 2 — aléatoire PAR COMBAT + taille en data (LIVRÉ, TRANCHÉ 9e tour)** : `startZoneFight` incrémente `store.zoneFightCount` (**persisté dans la save**, champ additif sans bump de version) ; les rencontres de zone utilisent `waveSeedFor(donjon, diff, zoneFightCount)` = `hash(jour|donjon|diff|compteur)` → chaque combat est différent, reproductible dans une sauvegarde donnée. **Sans extra, le hash est bit-identique à l'ancien** (`jour|donjon|diff`) : donjons classiques et digest inchangés. La porte du donjon de zone garde le seed classique. Taille de vague : `errance.waveSize: [2, 3]` en data pour les 5 zones, consommée par `makeWave(..., waveSizeRange)` (6e param, défaut null = comportement historique) — croissance future (4-5, supports) tranchée après la session 1→100, en data uniquement.
+- **Preuves (lots 1-2)** : 202 tests verts (6 nouveaux : `tests/xpzone-v138.test.js` + `tests/aleatoire-v138.test.js`), smoke **404 checks** (B28/B29, 10 checks, 3 échecs préexistants hors périmètre), digests **inchangés `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000**.
 
 ## 2026-11-12 : SIGNALÉ + TRANCHÉ (9e tour, retours terrain de Marc-Olivier) — zéro XP dans les Terres Sauvages, aléatoire PAR COMBAT, vague 2-3 monstres → correctifs v1.38
 

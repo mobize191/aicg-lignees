@@ -1,8 +1,8 @@
 # Changelog
 
-## [1.38] — 2026-11-12 — Correctifs retours terrain 9e tour — EN COURS (lot 1/2)
+## [1.38] — 2026-11-12 — Correctifs retours terrain 9e tour — LIVRÉE (2 lots)
 
-Prompt `docs/prompt-correctifs-v1.38.md` (TRANCHÉ 12/11). **Lot 1** : tout combat de zone terminé (victoire **ou** défaite, porte du donjon de zone comprise) distribue désormais l'XP d'un étage de run à l'écran Récompenses — la condition `!won || finalClear` est devenue `!won || finalClear || zoneFight`. **Formule inchangée**, runs de donjon inchangés (XP en fin de run uniquement). 198 tests, smoke 396 checks (B28, XP avant/après mesurée sur une victoire de zone). Digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.
+Prompt `docs/prompt-correctifs-v1.38.md` (TRANCHÉ 12/11). **Lot 1** : tout combat de zone terminé (victoire **ou** défaite, porte du donjon de zone comprise) distribue désormais l'XP d'un étage de run à l'écran Récompenses — la condition `!won || finalClear` est devenue `!won || finalClear || zoneFight`. **Formule inchangée**, runs de donjon inchangés (XP en fin de run uniquement). **Lot 2 (TRANCHÉ)** : l'aléatoire se lance **par combat** — un compteur persisté (`zoneFightCount`) entre dans le seed des vagues de zone (`hash(jour|donjon|diff|compteur)`), chaque rencontre est différente et reproductible ; les donjons classiques gardent leur seed inchangé. Taille des vagues de zone en data (`errance.waveSize: [2, 3]` pour les 5 zones, consommée par `makeWave`) — la croissance se fera plus tard, en data uniquement. 202 tests, smoke 404 checks (B28/B29). **Digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.**
 
 ## [1.37] — 2026-11-12 — Correctifs retours terrain 7e-8e tours — — LIVRÉE (7 lots)
 
