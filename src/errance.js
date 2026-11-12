@@ -4,7 +4,7 @@
 // Guide : docs/design/errance-topdown.md
 
 // codes terrain
-const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10 };
+const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11 };
 const SOLID = new Set([ET.EAU, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
 
 function lcg(seed) {
@@ -13,6 +13,8 @@ function lcg(seed) {
 }
 
 // génère la carte d'une zone : Uint8Array + objets interactifs, déterministe (seed de la zone)
+// refonte errance lot 3 : si la zone porte un errance.layout en data (style maquette), il est consommé
+// (chemin sinueux par waypoints, étang à l'échelle, huttes, point de retour ville) ; sinon repli sur le générateur historique.
 function genZoneMap(zone) {
   const w = zone.errance?.map?.w ?? 46;
   const h = zone.errance?.map?.h ?? 32;
@@ -21,49 +23,130 @@ function genZoneMap(zone) {
   const terr = new Uint8Array(w * h);
   const idx = (x, y) => y * w + x;
   const inb = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
-  // ceinture d'eau + arbres en bordure
+  // ceinture d'eau + arbres en bordure (commun aux deux générateurs)
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     if (x === 0 || y === 0 || x === w - 1 || y === h - 1) terr[idx(x, y)] = (rnd() < 0.6 ? ET.EAU : ET.ARBRE);
     else terr[idx(x, y)] = ET.PRAIRIE;
   }
-  // un étang
-  const ex = 6 + Math.floor(rnd() * (w - 12)), ey = 5 + Math.floor(rnd() * (h - 10));
-  for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) if (inb(ex + dx, ey + dy)) terr[idx(ex + dx, ey + dy)] = ET.EAU;
-  // chemins croisés
-  const cy = Math.floor(h / 2), cx = Math.floor(w / 2);
-  for (let x = 2; x < w - 2; x++) terr[idx(x, cy)] = ET.CHEMIN;
-  for (let y = 2; y < h - 2; y++) terr[idx(cx, y)] = ET.CHEMIN;
-  // patchs de hautes herbes
-  const nPatch = 8 + Math.floor(rnd() * 5);
-  for (let p = 0; p < nPatch; p++) {
-    const px = 3 + Math.floor(rnd() * (w - 8)), py = 3 + Math.floor(rnd() * (h - 8));
-    const pw = 3 + Math.floor(rnd() * 4), ph = 2 + Math.floor(rnd() * 3);
-    for (let dy = 0; dy < ph; dy++) for (let dx = 0; dx < pw; dx++) {
-      const x = px + dx, y = py + dy;
-      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+  const layout = zone.errance?.layout;
+  let donjon, autel, spawn, jarres = [], retour = null, huttes = [];
+  if (layout) {
+    // chemin sinueux par waypoints (largeur ~3 tuiles, style maquette)
+    const wp = layout.waypoints ?? [[Math.floor(w / 2), h - 3], [Math.floor(w / 2), Math.floor(h / 2)], [Math.floor(w / 2), 3]];
+    const line = (a, b) => {
+      const steps = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])) + 1;
+      for (let s = 0; s <= steps; s++) {
+        const cx = Math.round(a[0] + (b[0] - a[0]) * s / steps), cy = Math.round(a[1] + (b[1] - a[1]) * s / steps);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++)
+          if (inb(cx + dx, cy + dy) && terr[idx(cx + dx, cy + dy)] === ET.PRAIRIE) terr[idx(cx + dx, cy + dy)] = ET.CHEMIN;
+      }
+    };
+    for (let i = 0; i < wp.length - 1; i++) line(wp[i], wp[i + 1]);
+    // étang à l'échelle (ellipse en tuiles)
+    if (layout.pond) {
+      const p = layout.pond;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const dxn = (x - p.x) / p.rx, dyn = (y - p.y) / p.ry;
+        if (dxn * dxn + dyn * dyn < 1 && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.EAU;
+      }
+    }
+    // patchs de hautes herbes
+    for (const p of layout.patches ?? []) {
+      for (let y = p[1]; y < p[1] + p[3]; y++) for (let x = p[0]; x < p[0] + p[2]; x++)
+        if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+    }
+    // arbres épars puis rochers
+    let placed = 0, tries = 0;
+    while (placed < (layout.trees ?? 30) && tries++ < 600) {
+      const x = 1 + Math.floor(rnd() * (w - 2)), y = 1 + Math.floor(rnd() * (h - 2));
+      if (terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.ARBRE; placed++; }
+    }
+    let rocks = 0; tries = 0;
+    while (rocks < (layout.rocks ?? 8) && tries++ < 600) {
+      const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
+      if (terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.ROCHER; rocks++; }
+    }
+    // huttes décoratives (dialogues)
+    for (const hu of layout.huttes ?? []) {
+      if (inb(hu.x, hu.y) && terr[idx(hu.x, hu.y)] === ET.PRAIRIE) {
+        terr[idx(hu.x, hu.y)] = ET.MAISON;
+        huttes.push({ x: hu.x, y: hu.y, type: 'maison', title: hu.title ?? 'Hutte', text: hu.text ?? '' });
+      }
+    }
+    // bâtiment donjon (murs + porte au sud), autel, point de retour ville
+    donjon = { x: layout.donjon?.x ?? w - 8, y: layout.donjon?.y ?? 3, w: layout.donjon?.w ?? 2, h: layout.donjon?.h ?? 2 };
+    for (let dy = 0; dy < donjon.h; dy++) for (let dx = 0; dx < donjon.w; dx++) if (inb(donjon.x + dx, donjon.y + dy)) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
+    terr[idx(donjon.x + Math.floor(donjon.w / 2), donjon.y + donjon.h)] = ET.PORTE;
+    autel = { x: layout.autel?.x ?? 5, y: layout.autel?.y ?? h - 6 };
+    if (inb(autel.x, autel.y) && terr[idx(autel.x, autel.y)] === ET.PRAIRIE) terr[idx(autel.x, autel.y)] = ET.AUTEL;
+    if (layout.retour && inb(layout.retour.x, layout.retour.y) && terr[idx(layout.retour.x, layout.retour.y)] === ET.PRAIRIE) {
+      retour = { x: layout.retour.x, y: layout.retour.y };
+      terr[idx(retour.x, retour.y)] = ET.RETOUR;
+    }
+    // jarres
+    let nj = 0; tries = 0;
+    while (nj < (layout.jarres ?? 6) && tries++ < 300) {
+      const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
+      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); nj++; }
+    }
+    // spawn : praticable, sinon premier waypoint praticable
+    spawn = { x: layout.spawn?.x ?? wp[0][0] + .5, y: layout.spawn?.y ?? wp[0][1] + .5 };
+    const probe = { terr, idx, inb, w, h };
+    if (solidT(probe, Math.floor(spawn.x), Math.floor(spawn.y))) {
+      for (const wpt of wp) {
+        const wx = Math.min(w - 1, Math.max(0, wpt[0])), wy = Math.min(h - 1, Math.max(0, wpt[1]));
+        if (!SOLID.has(terr[idx(wx, wy)])) { spawn = { x: wx + .5, y: wy + .5 }; break; }
+      }
+    }
+  } else {
+    // générateur historique (repli) : étang 4x3, chemins en croix, patchs, rochers/arbres épars
+    const ex = 6 + Math.floor(rnd() * (w - 12)), ey = 5 + Math.floor(rnd() * (h - 10));
+    for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) if (inb(ex + dx, ey + dy)) terr[idx(ex + dx, ey + dy)] = ET.EAU;
+    const cy = Math.floor(h / 2), cx = Math.floor(w / 2);
+    for (let x = 2; x < w - 2; x++) terr[idx(x, cy)] = ET.CHEMIN;
+    for (let y = 2; y < h - 2; y++) terr[idx(cx, y)] = ET.CHEMIN;
+    const nPatch = 8 + Math.floor(rnd() * 5);
+    for (let p = 0; p < nPatch; p++) {
+      const px = 3 + Math.floor(rnd() * (w - 8)), py = 3 + Math.floor(rnd() * (h - 8));
+      const pw = 3 + Math.floor(rnd() * 4), ph = 2 + Math.floor(rnd() * 3);
+      for (let dy = 0; dy < ph; dy++) for (let dx = 0; dx < pw; dx++) {
+        const x = px + dx, y = py + dy;
+        if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+      }
+    }
+    const nRock = 10 + Math.floor(rnd() * 8);
+    for (let i = 0; i < nRock; i++) {
+      const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
+      if (terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = rnd() < 0.5 ? ET.ROCHER : ET.ARBRE;
+    }
+    donjon = { x: w - 8, y: 3, w: 2, h: 2 };
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
+    terr[idx(donjon.x, donjon.y + 2)] = ET.PORTE; // porte au sud
+    autel = { x: 5, y: h - 6 };
+    terr[idx(autel.x, autel.y)] = ET.AUTEL;
+    for (let i = 0; i < 6; i++) {
+      const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
+      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); }
+    }
+    spawn = { x: cx + 0.5, y: cy + 1.5 };
+    terr[idx(cx, cy + 1)] = ET.CHEMIN;
+  }
+  return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, retour, huttes, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
+}
+
+// sûreté des saves (refonte errance lot 3) : si la position persistée est solide ou orpheline (le layout a bougé),
+// secourir vers la tuile praticable la plus proche du spawn (ordre déterministe)
+function rescueHeroPos(map, x, y) {
+  if (Number.isFinite(x) && Number.isFinite(y) && !solidT(map, Math.floor(x), Math.floor(y))) return { x, y };
+  const sx = Math.floor(map.spawn.x), sy = Math.floor(map.spawn.y);
+  for (let r = 0; r <= 14; r++) {
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const tx = sx + dx, ty = sy + dy;
+      if (!solidT(map, tx, ty)) return { x: tx + .5, y: ty + .5 };
     }
   }
-  // rochers et arbres épars
-  const nRock = 10 + Math.floor(rnd() * 8);
-  for (let i = 0; i < nRock; i++) {
-    const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
-    if (terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = rnd() < 0.5 ? ET.ROCHER : ET.ARBRE;
-  }
-  // bâtiment donjon (mur 2x2 + porte au sud), autel, jarres — positions dérivées du seed, ordre fixe
-  const donjon = { x: w - 8, y: 3, w: 2, h: 2 };
-  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
-  terr[idx(donjon.x, donjon.y + 2)] = ET.PORTE; // porte au sud
-  const autel = { x: 5, y: h - 6 };
-  terr[idx(autel.x, autel.y)] = ET.AUTEL;
-  const jarres = [];
-  for (let i = 0; i < 6; i++) {
-    const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
-    if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); }
-  }
-  // spawn héros sur le chemin central, dégagé
-  const spawn = { x: cx + 0.5, y: cy + 1.5 };
-  terr[idx(cx, cy + 1)] = ET.CHEMIN;
-  return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
+  return { x: map.spawn.x, y: map.spawn.y };
 }
 
 const solidT = (m, x, y) => !m.inb(x, y) || SOLID.has(m.terr[m.idx(x, y)]);

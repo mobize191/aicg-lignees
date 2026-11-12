@@ -1335,7 +1335,7 @@ async function main() {
       api.save();
       check('B19 a save() écrit le slot actif p0 + l\'index .slots', mem.has(p0) && mem.has(slotsKey), [...mem.keys()].join(','));
       const idx1 = JSON.parse(mem.get(slotsKey));
-      check('B19 b index : 4 slots, active 0, entrée p0 « Partie 1 » avec version/date/résumé', idx1.slots.length === 4 && idx1.active === 0 && idx1.slots[0] && idx1.slots[0].name === 'Partie 1' && idx1.slots[0].version === 27 && !!idx1.slots[0].date && idx1.slots[0].summary && idx1.slots[0].summary.gold === 321, JSON.stringify(idx1.slots[0] ?? null).slice(0, 140));
+      check('B19 b index : 4 slots, active 0, entrée p0 « Partie 1 » avec version/date/résumé', idx1.slots.length === 4 && idx1.active === 0 && idx1.slots[0] && idx1.slots[0].name === 'Partie 1' && idx1.slots[0].version === api.DATA.engine.CURRENT_VERSION && !!idx1.slots[0].date && idx1.slots[0].summary && idx1.slots[0].summary.gold === 321, JSON.stringify(idx1.slots[0] ?? null).slice(0, 140));
       check('B19 c slot actif exposé = 0', api._activeSlot() === 0, String(api._activeSlot()));
 
       // migration sans perte depuis la clé historique (flux réel v8 -> v27)

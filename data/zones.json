@@ -116,6 +116,106 @@
     "sand": "#c9b083",
     "pathBase": "#b3945f",
     "pathCore": "#d3b285"
+   },
+   "layout": {
+    "note": "layout v2 data-driven (style maquette A+) : chemin sinueux par waypoints, etang a l'echelle, 2 huttes avec dialogues, point de retour ville (ACTÉ 11/11 nuit, point 7)",
+    "waypoints": [
+     [
+      23,
+      29
+     ],
+     [
+      23,
+      25
+     ],
+     [
+      19,
+      21
+     ],
+     [
+      20,
+      15
+     ],
+     [
+      25,
+      11
+     ],
+     [
+      25,
+      6
+     ],
+     [
+      22,
+      4
+     ]
+    ],
+    "pond": {
+     "x": 37,
+     "y": 22,
+     "rx": 5,
+     "ry": 5
+    },
+    "patches": [
+     [
+      12,
+      17,
+      7,
+      6
+     ],
+     [
+      28,
+      7,
+      6,
+      5
+     ],
+     [
+      14,
+      7,
+      6,
+      5
+     ],
+     [
+      36,
+      26,
+      4,
+      3
+     ]
+    ],
+    "trees": 30,
+    "rocks": 8,
+    "jarres": 6,
+    "huttes": [
+     {
+      "x": 10,
+      "y": 25,
+      "title": "Hutte du Garde-Motte",
+      "text": "« Méfie-toi des hautes herbes, voyageur. Les monstres y sommeillent — marche vite ou contourne. »"
+     },
+     {
+      "x": 30,
+      "y": 28,
+      "title": "Cabane de l'Herboriste",
+      "text": "« Ces herbes brillantes qui parsèment la prairie ? Cueille-les en passant, elles soignent… un jour. »"
+     }
+    ],
+    "donjon": {
+     "x": 20,
+     "y": 1,
+     "w": 3,
+     "h": 2
+    },
+    "autel": {
+     "x": 31,
+     "y": 19
+    },
+    "retour": {
+     "x": 6,
+     "y": 29
+    },
+    "spawn": {
+     "x": 23.5,
+     "y": 29.5
+    }
    }
   }
  },

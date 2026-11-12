@@ -1095,6 +1095,10 @@ function restore(data) {
   store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
 
   store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
+  // refonte errance lot 3 : position héros persistée rechargée (secourue à l'entrée de zone si besoin)
+  store.erranceSavedPos = (data.errance && typeof data.errance === 'object' && typeof data.errance.zone === 'string'
+    && Number.isFinite(data.errance.x) && Number.isFinite(data.errance.y))
+    ? { zone: data.errance.zone, x: data.errance.x, y: data.errance.y } : null;
 
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
@@ -2517,8 +2521,10 @@ function enterZone(zoneId) {
   if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
   store.errance = createErranceState(zoneId);
   if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
-    store.errance.hero.x = store.erranceSavedPos.x;
-    store.errance.hero.y = store.erranceSavedPos.y;
+    // sûreté des saves (lot 3) : position secourue vers le spawn si le layout a rendu la tuile solide
+    const p = rescueHeroPos(store.errance.map, store.erranceSavedPos.x, store.erranceSavedPos.y);
+    store.errance.hero.x = p.x;
+    store.errance.hero.y = p.y;
   }
   if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
   save();
@@ -2895,6 +2901,11 @@ function renderErrance(root) {
         persistErrancePos(); save();
         startZoneFight(st.zone, { donjon: true });
         return;
+      } else if (o.type === 'retour') {
+        persistErrancePos(); save();
+        toast('✨ Retour à la ville.');
+        go('#terres');
+        return;
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
         const r = interactJarre(st, jid);
@@ -2943,7 +2954,8 @@ function renderErrance(root) {
     const tx = Math.floor(px / T), ty = Math.floor(py / T);
     const m = st.map;
     if (tx === m.autel.x && ty === m.autel.y) { st.pending = { type: 'autel', x: m.autel.x, y: m.autel.y }; }
-    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + 2) { st.pending = { type: 'porte', x: m.donjon.x, y: m.donjon.y + 2 }; }
+    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + m.donjon.h) { st.pending = { type: 'porte', x: tx, y: ty }; }
+    else if (m.retour && tx === m.retour.x && ty === m.retour.y) { st.pending = { type: 'retour', x: m.retour.x, y: m.retour.y }; }
     else {
       const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
       if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
