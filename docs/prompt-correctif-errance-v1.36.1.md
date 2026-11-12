@@ -1,6 +1,6 @@
 # Prompt — correctif errance v1.36.1 : grand lac, thème plage, interactions, héros vectoriel (retours terrain de Marc-Olivier, 12/11 6e tour)
 
-> Statut : ACTÉ par Marc-Olivier (12/11, 6e tour — retours de test de la v1.36 déployée). Coulloir 1 : lis ce document en entier, puis exécute lot par lot. Une tâche = un commit FR. Preuve par lot : build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests INCHANGÉS + captures S24 (protocole `docs/validation-ihm.md`) pour les lots 2-4.
+> Statut : ACTÉ par Marc-Olivier (12/11, 6e tour — retours de test de la v1.36 déployée). Couloir 1 : lis ce document en entier, puis exécute lot par lot. Une tâche = un commit FR. Preuve par lot : build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests INCHANGÉS + captures S24 (protocole `docs/validation-ihm.md`) pour les lots 2-4.
 
 ## Contexte
 
