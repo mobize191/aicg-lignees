@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : ACTÉ (Porte A refonte IA) — prérequis livré + tranchages par défaut de la session 12/11 consignés, Phase 2 lancée
+
+- **Prérequis** : le chantier correctifs ciblage (`docs/prompt-correctifs-ciblage.md`) est livré (lots 1-3 : fiche `cible` des 84 sorts de lignée, camp de ciblage depuis la fiche, sorts alliés de lignée résolus par rôle en Tactique) — digest inchangé `f8a9f0bb…` 1359/3000, 157 tests verts. Note : les lots 4-5 du prompt (bugs rapides IHM : gestes fiche/équipe, fiche carte complète) restent à faire, hors du périmètre de la refonte IA. Décision de portée : le rôle `manip` (famille vol) garde un camp non hostile (`1 allié`), cohérent avec `foeFacingSpell` et `resolveSpellEntry` — l'ensemble des sorts hostils est identique avant/après (test obligatoire vert).
+- **Phase 1 livrée** : `docs/design/refonte-ia-audit.md` + `docs/design/refonte-ia-spec-plan.md` (docs uniquement, build/tests/smoke/digest inchangés).
+- **Tranches de la session du 12/11 non tranchées explicitement** → **défauts appliqués et consignés ici** (Porte A du prompt) : (a) **variante (a) statu quo raretés/paliers** — l'IA optimise la victoire avec les paliers actuels, pas les niveaux 1→100 ; (b) **pas d'IA par étage** — le lot 3 reste en version difficultés actuelles (Facile → Enfer) ; (c) **go digest = OUI**, sous la tolérance du §4 du prompt (écart ≤ 5 points, 0 exception, ≤ 1 marathon à chaque MESURE N = 3000 ; N = 10 000 à la clôture).
+- **Règle du chantier** : chaque changement de mesure est une MESURE consignée ici, jamais un recalibrage caché ; les maths du côté joueur ne bougent pas ; l'IA ne lit que l'état public. Baseline de comparaison du chantier : la mesure courante au lancement de chaque lot (`f8a9f0bb…` 1359/3000, `978ed44b…` 4517/10000).
+
 ## 2026-11-12 : ACTÉ — illustrations V3.1 publiées en doublon commutable (bouton 🖼️), assets 3.1-only par défaut partout
 
 - **Décision (v1.33)** : la relance 3.1 (271 cartes, verrous R8/R9/R10, rapport `tools/out-v2/RAPPORT-v31-session.md`) est publiée en second manifeste `assets-v3.1.json`, commutable avec V3.0 (`assets-v3.json`) via le bouton 🖼️ existant (`ART_MANIFESTS = { v3, v31 }`, choix persisté en localStorage `fondations-art-src`, défaut = v3). Objectif : comparer les cartes 3.0 vs 3.1 côte à côte.
