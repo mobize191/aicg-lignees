@@ -436,3 +436,82 @@ test('correctifs ciblage lot 1 : spellSideOf reconna\u00eet \u00ab la zone \u00b
   assert.equal(E.spellSideOf({ name: 'x', cible: 'les renforts' }), 'team');
   assert.equal(E.spellSideOf({ name: 'x', cible: 'zone' }), 'zone');
 });
+
+// ---------- correctifs ciblage lot 3 (moteur, Tactique uniquement) ----------
+const ligneeSpell = (E, fam, nom) => {
+  const sp = E.DATA['lineage-spells'][fam].find((x) => x.name === nom);
+  const role = (E.DATA.schools[E.DATA.engine.FAM_SCHOOL[fam]] ?? {}).role;
+  return { ...sp, cat: 'lignée', ecole: E.DATA.engine.FAM_SCHOOL[fam], role };
+};
+
+test('correctifs lot 3 (repro C) : sort de lignée soin depuis l\'arrière en Tactique soigne l\'allié désigné', () => {
+  const E = loadEngine();
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  assert.equal(rayon.role, 'soin');
+  assert.equal(E.spellSideOf(rayon), 'ally');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  ally.hp = 5;
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'cast', idx: 0, allyUid: 'ally1' });
+  assert.ok(ally.hp > 5, 'l\'allié désigné est soigné');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'ally1'), 'événement de soin émis');
+  assert.ok(r.events.some((e) => e.type === 'cast' && e.name === 'Rayon Matinal'), 'événement cast émis');
+  assert.equal(foe.hp, foe.maxHp, 'aucun dégât ennemi');
+});
+
+test('correctifs lot 3 (repro B) : sort de lignée dégâts depuis l\'arrière ignore la désignation alliée et frappe l\'ennemi', () => {
+  const E = loadEngine();
+  const taillade = ligneeSpell(E, 'lame', 'Millième Taillade');
+  assert.equal(E.spellSideOf(taillade), 'enemy');
+  assert.ok(E.foeFacingSpell(taillade));
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [taillade] }, 's1', 1);
+  sup.mana = sup.manaMax = 20;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpFoe = foe.hp, hpAlly = ally.hp;
+  const r = E.stepRound(st, { kind: 'cast', idx: 0, allyUid: 'ally1' });
+  assert.ok(foe.hp < hpFoe, 'l\'ennemi le plus faible est frappé');
+  assert.equal(ally.hp, hpAlly, 'l\'allié désigné n\'est pas touché');
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === 'f1' && e.kind === 'special'), 'dégâts du sort sur l\'ennemi');
+});
+
+test('correctifs lot 3 : le chemin Auto (action null) est inchangé pour un sort allié de lignée', () => {
+  const E = loadEngine();
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  ally.hp = 5;
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const r = E.stepRound(st, null);
+  assert.ok(r.events.some((e) => e.type === 'cast'), 'cast historique émis');
+  assert.ok(!r.events.some((e) => e.type === 'heal'), 'pas de soin en Auto (comportement historique, lot 0 de la refonte IA)');
+});
+
+test('correctifs lot 3 : depuis la ligne avant, un sort de lignée soin en Tactique soigne (pas de atkBuff)', () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  const u1 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 'u1', 1);
+  const u2 = E.makeUnit(E.getCard('a1'), 'u2', 1);
+  u2.hp = 5;
+  u1.mana = u1.manaMax = 10;
+  const st = boostState([u1, u2]);
+  u1.agi = 20; u2.agi = 10;
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, allyUid: 'u2' });
+  assert.ok(u2.hp > 5, 'l\'allié est soigné depuis la ligne avant');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'u2'), 'événement heal');
+  assert.ok(!r.events.some((e) => e.type === 'buff'), 'pas de atkBuff pour un sort de soin');
+});

@@ -139,6 +139,40 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
   }
+  // correctifs ciblage lot 3 (Tactique uniquement, action present) : un sort allié de lignée
+  // (soin/boost/bouclier) depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant.
+  // Le chemin Auto (action null) garde le comportement historique.
+  if (action && spell && !s.effect && !foeFacingSpell(spell)) {
+    const sd = spellSideOf(spell);
+    const role = spell.role ?? null;
+    if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
+      const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
+      let t = s;
+      if (sd === 'ally' && action.allyUid) t = alliesAlive.find((x) => x.uid === action.allyUid) ?? t;
+      else if (sd === 'ally') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? s;
+      else if (sd === 'team') t = allies.avant.filter((u) => u.alive)[0] ?? alliesAlive[0] ?? s;
+      const big = !!spell.big || spell.cost >= 5;
+      if (role === 'soin') {
+        const amount = Math.min(Math.max(1, Math.round(statOf(s) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'heal', mana: s.mana });
+        if (amount > 0) {
+          t.hp += amount;
+          events.push({ type: 'heal', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+        }
+      } else if (role === 'bouclier') {
+        const amount = Math.min(Math.round(statOf(s) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.shield += amount;
+        events.push({ type: 'shield', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+      } else {
+        const value = Math.max(0, (spell.mult ?? 1) - 1);
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.atkBuff = (t.atkBuff ?? 0) + value;
+        events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+      }
+      return;
+    }
+  }
   const fx = s.effect ? s.effect.kind : 'heal';
   if (spell) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx, mana: s.mana });

@@ -328,15 +328,36 @@ function actTeamStriker(u, i, ctx, step) {
       if (cand && cand.cost <= u.mana) {
         u.mana -= cand.cost;
         const side = spellSideOf(cand);
-        // T0.2 : un sort de boost vise son camp (soi / 1 allie), pas l'ennemi ; en auto le chemin historique reste un coup
-        if (side === 'self' || side === 'ally') {
+        // T0.2 + correctifs ciblage lot 3 : un sort allié vise son camp (soi / 1 allié / l'équipe),
+        // résolu par son rôle (soin -> heal, boost/bouclier -> buff/bouclier) ; en auto le chemin historique reste un coup
+        if (side === 'self' || side === 'ally' || side === 'team') {
+          const role = cand.role ?? null;
           const t = side === 'ally' && tacAct.allyUid
             ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? u)
-            : u;
-          const value = Math.max(0, (cand.mult ?? 1) - 1);
-          t.atkBuff = (t.atkBuff ?? 0) + value;
-          ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
-          ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            : side === 'team'
+              ? (ctx.teamAll().filter((a) => a.rang === 'avant' && a.alive)[0] ?? ctx.teamAll()[0] ?? u)
+              : u;
+          if (role === 'soin') {
+            const cible = tacAct.allyUid
+              ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
+              : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
+            const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'heal', mana: u.mana });
+            if (amount > 0) {
+              cible.hp += amount;
+              ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' });
+            }
+          } else if (role === 'bouclier') {
+            const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            t.shield += amount;
+            ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+          } else {
+            const value = Math.max(0, (cand.mult ?? 1) - 1);
+            t.atkBuff = (t.atkBuff ?? 0) + value;
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+          }
           ctx.firstAttack = false;
           return false;
         }
