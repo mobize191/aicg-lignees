@@ -34,19 +34,21 @@ Suite de la session (10e-11e tours, même soir) :
 19. **XP PAR COMBAT** : chaque combat distribue l'XP immédiatement (formule par étage inchangée, donjons compris — fin du modèle « XP de run » cumulée en fin de run) ; la fenêtre de fin de combat affiche **l'XP gagnée par chaque personnage, les objets trouvés et l'or gagné**. → chantier v1.39 lancé (`docs/prompt-correctifs-v1.39.md`, couloir 1).
 20. **Mode auto SUPPRIMÉ** du combat joué : boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence `combatAuto`, pénalité de récompenses des tours auto — tout disparaît ; l'auto-résolution interne du moteur reste pour le futur mode « missions spéciales » (expéditions), qui ne s'appellera pas « auto ». → chantier v1.39.
 
+Suite de la session (12e tour) :
+
+21. **Fusion, forme exacte TRANCHÉE** : enfant **niveau 1** ; **25 % des stats cumulées des parents, plafonné par la rareté de l'enfant** (le bonus d'héritage ne peut pas dépasser un pourcentage max de la base de l'enfant, défini par rareté — une commune fusionnée à fond reste utile mais ne dépasse pas objectivement une légendaire de même niveau, la rareté garde son sens de potentiel) ; **2-3 sorts hérités** (dont sorts de famille, jamais le signature de l'enfant) ; rareté de l'enfant par **table de synthèse** en `data/`. Pourcentages exacts du plafond : en data au moment de la spec fusion.
+22. **Carte du monde TRANCHÉE : 3-4 cartes régionales FIXES multibiomes** (recommandation de l'étude acceptée) — attachement au lieu, gating lisible, coût maîtrisé ; errance intérieure et profondeurs générées par seed comme aujourd'hui.
+23. **Expéditions TRANCHÉES : temps réel plafonné** (style DQ Treasures / Poké Jobs) — missions 4/8/12/24 h résolues par l'auto-résolution interne du moteur, drops exclusifs + XP, plafond de durée à définir en spec.
+24. **Fin du jeu TRANCHÉE : fins multiples à l'Échiquier des Quatre** — Le Lieur reste la colonne vertébrale (les quatre verbes de recrutement), l'Échiquier fournit les fins : imposer une race, l'équilibre, ou soi-même, selon la race liée en priorité. Post-fin et endgame après la dernière chaîne royale : à designer.
+
 ### ⏳ RESTE À TRANCHER (rien ne bouge sans décision explicite)
 
-1. **Carte du monde** : régionale fixe (recommandé par l'étude) vs géante ; combien de cartes ; multibiomes.
-2. **Fusion, forme exacte** : plafond d'héritage des stats (25 % proposé), nombre de sorts hérités (2-3 proposé), table de synthèse (rareté de l'enfant), bonus de fusion précoce.
-3. **Expéditions / missions spéciales** : temps réel vs temps de jeu (recommandation : temps réel plafonné) ; nom du mode ; récompenses exclusives.
-4. **Équipe de repli** : réserve intégrée au combat (recommandé) vs équipe entière de substitution ; calibrage du switch (coût, conditions).
-5. **Choix initial de lignée exclusive** : combien de familles proposées, à quel moment, réversibilité exacte.
-6. **Donjons divins** : chaîne Démons, chaîne Anges, donjon de l'Équilibre (Ananke) — familles, ordre, gating.
-7. **Fin et post-fin du Lieur** : multi-fins (Échiquier) vs fin unique ; nouveau cycle ; endgame après la dernière chaîne royale.
-8. **Élément d'un sort** : lié à la famille (proposition) ou libre par carte + grimoires.
-9. **Équipement** : nombre d'emplacements par carte (6-8 proposés), panoplies par famille ou biome × classe, bonus aux paliers, où vit l'assignation.
-10. **Cohabitation fusion × familles** : (a) palier + niveau conservés (recommandé) ou (b) niveau seul.
-11. **Ops en attente** : verrouillage de la baseline courante (`c62fcbd1…`/`5059e683…`), les 3 échecs smoke préexistants (40, B1 g, B7 b), validations téléphone ET PC des lots visuels v1.37 (S24/S25), maquette habillage boucle v2 (couloir design).
+1. **Choix initial de lignée exclusive** : combien de familles proposées, à quel moment, réversibilité exacte.
+2. **Donjons divins** : chaîne Démons, chaîne Anges, donjon de l'Équilibre (Ananke) — familles, ordre, gating.
+3. **Élément d'un sort** : lié à la famille (proposition) ou libre par carte + grimoires.
+4. **Équipement** : nombre d'emplacements par carte (6-8 proposés), panoplies par famille ou biome × classe, bonus aux paliers, où vit l'assignation.
+5. **Cohabitation fusion × familles** : (a) palier + niveau conservés (recommandé) ou (b) niveau seul.
+6. **Ops en attente** : verrouillage de la baseline courante (`c62fcbd1…`/`5059e683…`) puis NOUVELLE baseline après les lots A et B de la refonte, les 3 échecs smoke préexistants (40, B1 g, B7 b), validations téléphone ET PC des lots visuels v1.37 (S24/S25), maquette habillage boucle v2 (couloir design).
 
 ## 1. Identité du jeu — recherche demandée (DQM Joker vs Pokémon vs Final Fantasy)
 
@@ -79,8 +81,8 @@ Suite de la session (10e-11e tours, même soir) :
 
 **Questions à trancher** :
 
-1. **Le BUT du jeu** : **TRANCHÉ (12/11, fin de session) : Le Lieur** (« l'unité des quatre races »). La combinaison avec l'Échiquier (fins à choix) et la reconnaissance par donjon (Silence du Zénith) reste ouverte pour la fin et le post-fin.
-2. **Fin et post-fin** : multi-fins ? nouveau cycle ? endgame après la dernière chaîne royale ?
+1. **Le BUT du jeu** : **TRANCHÉ (12/11, fin de session) : Le Lieur** (« l'unité des quatre races »).
+2. **Fin et post-fin** : **TRANCHÉ (12/11, 12e tour) : fins multiples à l'Échiquier des Quatre** — selon la race liée en priorité (imposer une race, l'équilibre, ou soi-même) ; Le Lieur reste la colonne vertébrale, l'Échiquier fournit les fins. Post-fin/endgame après la dernière chaîne royale : à designer.
 3. **Une histoire écrite** : oui/non ; si oui, sous quelle forme (un doc lore court, intros de zones, PNJ de l'errance) ?
 4. **Nommage lore des 5 paliers** (Facile → Enfer aujourd'hui ; étages 1→5 demain) : noms thématiques à définir.
 5. **Récompenses des donjons au-delà du drop** : TRANCHÉ en principe le 12/11 — les drops uniques du boss servent au craft des panoplies ; restent à définir : déblocages de zones, morceaux d'histoire par donjon.
@@ -100,7 +102,7 @@ Suite de la session (10e-11e tours, même soir) :
 
 **TRANCHÉ (12/11, en principe)** : la logique Dofus des **chaînes de donjons par famille** est actée — donjon des Gobelins des Marées bouclé → donjon des Gobelins Royaux (~10 niveaux au-dessus, mêmes lieux environ), le boss royal droppe des ressources **uniques** → craft de panoplie ; **deux difficultés par donjon** (précédent Wakfu Stasis : difficulté choisie à l'entrée, meilleur loot) ; « un donjon tous les 5 niveaux » sur 1→100 ≈ 20-25 donjons, l'intuition tient ; **des donjons divins à ajouter** (chaîne Démons, chaîne Anges, donjon de l'Équilibre/Ananke — aujourd'hui aucun donjon divin hors Zénith/phénix).
 
-**Question posée le 12/11** : une seule carte géante (auto-générée ?) vs une carte par biome vs multibiomes ? L'étude (recherche section 12) recommande **3-4 cartes régionales FIXES de 4-5 biomes** (multibiomes assumés), errance intérieure et profondeurs générées par seed comme aujourd'hui : attachement au lieu, gating lisible, coût maîtrisé. **À trancher.**
+**Question posée le 12/11** : une seule carte géante (auto-générée ?) vs une carte par biome vs multibiomes ? L'étude (recherche section 12) recommandait **3-4 cartes régionales FIXES de 4-5 biomes** (multibiomes assumés), errance intérieure et profondeurs générées par seed comme aujourd'hui : attachement au lieu, gating lisible, coût maîtrisé. **TRANCHÉ (12/11, 12e tour) : 3-4 cartes régionales fixes multibiomes.**
 
 **Points de vigilance (mon challenge)** :
 
@@ -134,17 +136,17 @@ Suite de la session (10e-11e tours, même soir) :
 
 **TRANCHÉ (12/11)** : niveaux **1→100 ACTÉS**. La rareté = le point de départ ; une commune montant 1→100 sans fusion, avec un des meilleurs équipements du jeu, doit **rivaliser avec une légendaire** ; les légendaires commencent elles aussi **niveau 1** — l'équilibre : chaque carte gagnée se monte, aucune n'est « déjà forte ». La montée des lignées/évolutions est conservée. **XP PAR COMBAT TRANCHÉE (12/11, 11e tour)** : chaque combat distribue l'XP immédiatement (formule par étage inchangée, donjons compris — fin du modèle « XP de run »), la fenêtre de fin de combat affiche l'XP par personnage, les objets et l'or ; chantier v1.39 (`docs/prompt-correctifs-v1.39.md`, couloir 1).
 
-**Fusion (ADORÉE, ACTÉE en principe, forme à trancher)** — l'étude DQM est dans `recherche-direction-2026-11-12.md` section 7 :
+**Fusion (ADORÉE — forme TRANCHÉE le 12/11, 12e tour)** — l'étude DQM est dans `recherche-direction-2026-11-12.md` section 7 :
 
 - **DQM The Dark Prince** : parents consommés, enfant **niveau 1**, hérite **1/4 des stats cumulées** des parents, jusqu'à 3 talents (moitié des points investis conservés), rang par table de synthèse, bonus « + » selon le niveau des parents.
-- **Recommandation pour Lignées** : enfant niveau 1 toujours ; 25 % des stats cumulées des parents **plafonné par la rareté de l'enfant** ; 2-3 sorts hérités (dont sorts de famille, jamais le signature de l'enfant) ; rareté par table de synthèse en `data/` ; le **mystère préservé** (collection : on voit la carte, pas la descendance — ACTÉ en principe).
+- **Forme TRANCHÉE pour Lignées** : enfant **niveau 1** toujours ; **25 % des stats cumulées des parents, plafonné par la rareté de l'enfant** (le bonus d'héritage est borné : il ne peut pas dépasser un % max de la base de l'enfant, défini par rareté en `data/` — deux parents très montés ne donnent pas à une commune des stats de légendaire, la rareté reste le potentiel max) ; **2-3 sorts hérités** (dont sorts de famille, jamais le signature de l'enfant) ; rareté par **table de synthèse** en `data/` ; le **mystère préservé** (collection : on voit la carte, pas la descendance — ACTÉ en principe).
 - La question posée par Marc-Olivier (« est-ce que l'enfant revient niveau 1 ou récupère des stats des parents ? ») a une réponse dans les précédents : **les deux** — niveau 1 ET héritage partiel.
 
 **Cohabitation avec les familles/paliers** (mon challenge initial, toujours ouvert) : (a) recommandé — niveau + famille conservés, la fusion fait grimper le palier ET garde le niveau 1, la L de famille reste un but ; (b) niveau seul, familles cosmétiques. Borner le grind : bonus de fusion = accélérateurs, pas multiplicateurs ouverts.
 
 **Drops et acquisitions rares (TRANCHÉ en principe le 12/11)** : en errance, drops R/SR à taux très faible (pas de L en farm libre) ; événements qui débloquent ponctuellement des rares ; **un cadeau rare tôt dans le jeu** (précédent gacha : première rare offerte pour accrocher, « oh, j'ai une super-rare alors que je n'ai que des communes ») ; **lignées uniques au choix initial** parmi quelques familles (exclusives, choix définitif).
 
-**Questions à trancher** : (1) valider la forme de fusion recommandée ; (2) cohabitation avec familles/paliers (a ou b) ; (3) forme du bonus de fusion précoce ; (4) le choix initial de lignée exclusive : combien de familles proposées, quand, irréversible ? ; (5) impact digest accepté (re-mesure documentée).
+**Questions à trancher** : (1) valider la forme de fusion recommandée : **TRANCHÉE (12/11, 12e tour) — validée telle quelle** ; (2) cohabitation avec familles/paliers (a ou b) ; (3) forme du bonus de fusion précoce ; (4) le choix initial de lignée exclusive : combien de familles proposées, quand, irréversible ? ; (5) impact digest accepté (re-mesure documentée).
 
 ## 6. Équipement : sets assignables + panoplies complètes (ACTÉ ce soir — spec à écrire)
 
@@ -182,7 +184,7 @@ Suite de la session (10e-11e tours, même soir) :
 
 1. **Équipe de réserve/repli** (l'idée « switch quand l'équipe principale meurt/est affaiblie ») : étude section 5 de la recherche — recommandation **3 actifs + 2 en réserve** intégrée à l'équipe, switch coûtant un tour ; l'équipe de repli entière à réserver au mode exploration. Précéder le calibrage du niveau max (Suikoden 108 étoiles = 6 actifs : la contre-référence).
 2. **HP/MP limités entre combats** (pour forcer le choix des sorts) : recherche APPROFONDIE le 12/11 soir, après challenge de Marc-Olivier (« la majorité des jeux ne reset pas la vie entre chaque combat, à la limite le mana ») — **il a raison** : la convention du genre (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville (auberge/feu de camp/autel) et via objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary, système décrit comme « unique » par la presse ; DQM Joker probable, à confirmer). Recommandation révisée : **persistance partout, errance comprise**, points de repos en ville + consommables + sorts de soin coûteux en MP. **TRANCHÉ (12/11, fin de session) : restauration gratuite en ville et à l'autel, objets en donjon ; aucun soin automatique post-combat.**
-3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné. **Note 11e tour** : le mode auto du combat (supprimé en v1.39) servira CE mode — l'auto-résolution interne du moteur reste disponible pour résoudre les missions spéciales, qui ne s'appelleront pas « auto ».
+3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné. **Note 11e tour** : le mode auto du combat (supprimé en v1.39) servira CE mode — l'auto-résolution interne du moteur reste disponible pour résoudre les missions spéciales, qui ne s'appelleront pas « auto ». **TRANCHÉ (12/11, 12e tour) : temps réel plafonné.**
 4. **Pierre d'évolution divine** (2-3 par partie, humains → divins, etc.) : ACTÉE en principe, spec à écrire ; l'inverse (divin → humain) à envisager.
 5. **Choix forcés** : lignées exclusives initiales, branches verrouillées, pierres limitées — ACTÉ en principe, répartition exacte à définir.
 

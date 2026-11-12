@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : 12e TOUR (suite) — 4 TRANCHAGES DE FIN DE SESSION : fusion (forme exacte), carte du monde (3-4 régionales fixes), expéditions (temps réel plafonné), fin du jeu (fins multiples Échiquier)
+
+- **Fusion, forme exacte TRANCHÉE** : enfant **niveau 1** ; **25 % des stats cumulées des parents, plafonné par la rareté de l'enfant** — le bonus d'héritage est borné par un % max de la base de l'enfant, défini par rareté en `data/` (une commune fusionnée à fond reste utile mais n'atteint pas objectivement une légendaire de même niveau : la rareté garde son sens de potentiel) ; **2-3 sorts hérités** (jamais le signature de l'enfant) ; rareté par **table de synthèse**. Pourcentages exacts du plafond : à définir en data à la spec fusion.
+- **Carte du monde TRANCHÉE : 3-4 cartes régionales FIXES multibiomes** (recommandation de l'étude acceptée) ; errance intérieure et profondeurs générées par seed comme aujourd'hui.
+- **Expéditions TRANCHÉES : temps réel plafonné** (DQ Treasures / Poké Jobs) — résolues par l'auto-résolution interne du moteur (conservée à cet effet en v1.39), drops exclusifs + XP ; plafond de durée en spec.
+- **Fin du jeu TRANCHÉE : fins multiples à l'Échiquier des Quatre** — Le Lieur reste la colonne vertébrale (allégeance/pacte/énigme/consécration), l'Échiquier fournit les fins selon la race liée en priorité (imposer une race, l'équilibre, ou soi-même).
+- Tableau de bord de session mis à jour (`docs/design/session-qa-direction.md` section 0) : **24 points TRANCHÉS, 6 restant à trancher** (lignée exclusive initiale, donjons divins, élément des sorts famille vs libre, emplacements d'équipement, cohabitation fusion × familles, ops).
+
 ## 2026-11-12 : ARBITRAGES Marc-Olivier (revue 4-lens, suite) : hit-stop à tester, CRITS d'agilité à créer, héros errance par code, manifeste JSON
 
 - **Hit-stop** : « pourquoi pas, à tester » — réversible (une constante pour le couper), tier large uniquement. Verdict définitif à la lecture en jeu.
@@ -248,16 +256,4 @@ Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS a
 5. **Équipement refondu en sets assignables** : ~7 sets nommés à affinités et capacités (set assassin, set prêtre…) ; un set assigné à une carte y reste jusqu'à désassignation (un set = une carte à la fois) ; sets par famille/biome façon panoplies Dofus/Wakfu (gobelin → gobelin royal → sauvage) ; **rareté d'équipement bornée par la rareté de la carte** (N ≈ C ; C → objets C/UC ; UC → +R ; R → +SR — extrémités hautes à préciser en spec). Révise l'ACTÉ « équipement à slots typés par classe + slots d'équipe » du 10/11 nuit ; les ~90 arts complets par objet (ACTÉ du 11/11 soir) deviennent les pièces de sets.
 6. **Boutique refondue en onglets** (potions / éclats / armes / armures / talismans…, au lieu d'une liste unique déroulante) ; **Inventaire refondu en onglets par type** (petites cases symbole + nombre + description au clic). Trop d'objets affichés aujourd'hui.
 7. **Errance : rendu à refaire** — décor jugé « vraiment moche, pas du tout détaillé », héros « assez moche » ; la démo jouable `docs/design/maquettes/errance-demo-jouable.html` (upload de Marc-Olivier, 11/11 nuit) devient le **plancher de qualité** : prairie peinte à variations organiques, chemin de terre, étang vivant (nénuphars, roseaux, reflets), arbres en couches, rochers moussus, donjon visible à porte lumineuse, maisons fumantes, autel, hautes herbes animées, lucioles, ombres de nuages, feuilles au vent, marqueur de destination. Un **point de retour ville** devient obligatoire dans chaque zone d'errance (sans menu du haut, c'est le seul moyen de rentrer).
-
-**PROPOSÉ (à trancher en session du 12/11, doc dédié)** :
-
-8. **Donjons : 5 étages par donjon + zones d'errance intérieures** : boucler l'étage N débloque l'étage comme zone d'errance visitable (labyrinthes, découvertes) ; Terres Sauvages par profondeur (surface / profondeur 1/2/3) ; une seule grande carte continue avec animations de blocage — ressenti « 25 donjons ». Marc-Olivier demande à être challengé : analyse et questions dans le doc de session §3.
-9. **Retirer l'élément des cartes** : la carte porte sa classe (assassin, guerrier, prêtre, mage, occultiste), l'élément vit sur les sorts. Révise les ACTÉS familles/oppositions ; à trancher avant contenu v4.
-10. **Niveaux 1→100 + fusions** : la rareté devient le point de départ, le niveau la vraie échelle ; bonus de fusion précoce. À challenger (cohabitation avec les paliers de famille).
-11. **Identité du jeu** : recherche demandée et faite (DQM Joker vs Pokémon vs FF, doc de session §1) ; à trancher : taille d'équipe, nombre d'équipes (1-2 plutôt que 3 ?), rythme de la collection.
-12. **Lore et but du jeu** (manque assumé) : but, fin, post-fin, nommage lore des paliers, récompenses des donjons au-delà du drop, forçage des choix du joueur.
-
-**Conséquences d'ordonnancement** : points 8 à 12 se tranchent AVANT les chantiers de code concernés ; le couloir 1 (libre depuis v1.32) prend d'abord les bugs rapides ; le couloir design continue arts série 3 + habillage boucle v2 (maquette n°2 toujours en attente de validation).
-
-## 2026-11-11 : MESURE — clôture du chantier « contenu v3 » (v1.32, 8 lots C1-C8) : digest complet N = 3000 ET N = 10 000, MESURE sans recalibrage
 
