@@ -298,6 +298,11 @@ function paintZoneBase(bx, map, zone) {
     const gg = bx.createRadialGradient(dX + 16, Y + 52, 2, dX + 16, Y + 52, 34);
     gg.addColorStop(0, pal.donjonGlow); gg.addColorStop(1, 'rgba(255,215,110,0)');
     bx.fillStyle = gg; bx.beginPath(); bx.arc(dX + 16, Y + 52, 34, 0, 7); bx.fill();
+    if (bx.fillText) { // panneau « ⚔ Donjon » : repérable dès l'arrivée dans la zone
+      bx.font = 'bold 13px sans-serif'; bx.textAlign = 'center';
+      bx.fillStyle = 'rgba(10,14,22,.8)'; bx.fillText('⚔ Donjon', X + Wd / 2 + 1, Y - 18);
+      bx.fillStyle = '#ffd76e'; bx.fillText('⚔ Donjon', X + Wd / 2, Y - 19);
+    }
   }
   if (map.autel) {
     const X = map.autel.x * T, Y = map.autel.y * T;
@@ -319,6 +324,11 @@ function paintZoneBase(bx, map, zone) {
     const gr = bx.createRadialGradient(X + T / 2, Y + T - 4, 2, X + T / 2, Y + T - 4, 26);
     gr.addColorStop(0, pal.retourGlow); gr.addColorStop(1, 'rgba(160,235,255,0)');
     bx.fillStyle = gr; bx.beginPath(); bx.arc(X + T / 2, Y + T - 4, 26, 0, 7); bx.fill();
+    if (bx.fillText) { // enseigne « ↩ Ville » lisible
+      bx.font = 'bold 13px sans-serif'; bx.textAlign = 'center';
+      bx.fillStyle = 'rgba(10,14,22,.8)'; bx.fillText('↩ Ville', X + T / 2 + 1, Y - 22);
+      bx.fillStyle = '#bfe8ff'; bx.fillText('↩ Ville', X + T / 2, Y - 23);
+    }
   }
 }
 

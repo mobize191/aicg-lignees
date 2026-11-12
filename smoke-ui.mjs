@@ -1224,6 +1224,7 @@ async function main() {
     const st21 = store.errance;
     check('B21 f entrée en zone Marées, décor A+ construit (lames, étang, socles)', !!st21 && st21.map.decor && st21.map.decor.blades.length > 0 && !!st21.map.decor.pond && st21.map.decor.herbSocles.length > 0, `blades=${st21?.map.decor?.blades?.length}`);
     check('B21 g HUD : puce de phase jour/nuit présente dans la barre d\'errance', !!els.get('app').querySelector('#errance-phase'), '');
+    check('B21 g2 huttes interactives : 2 huttes avec dialogue en data + encart de dialogue dans le DOM', st21.map.huttes.length === 2 && st21.map.huttes.every((h) => h.title && h.text) && !!els.get('app').querySelector('#errance-dlg'), `huttes=${st21?.map?.huttes?.length}`);
     check('B21 h 0 exception B21 (refonte errance)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 

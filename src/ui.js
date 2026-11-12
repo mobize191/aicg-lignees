@@ -2579,10 +2579,27 @@ function renderErrance(root) {
         <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
       </div>
       <canvas id="errance-canvas"></canvas>
+      <div class="pop" id="errance-dlg">
+        <div class="card">
+          <h3 id="errance-dlg-title"></h3>
+          <p id="errance-dlg-text" style="white-space:pre-line"></p>
+          <div class="row"><button type="button" class="btn ok" id="errance-dlg-close">Compris</button></div>
+        </div>
+      </div>
       <p class="muted errance-hint">Toucher la carte : s'y rendre · toucher le héros : frapper (casse les jarres) · hautes herbes : rencontres · autel : soin complet (+5 pas de grâce) · porte du donjon : combat de zone.</p>
     </div>`;
   const canvas = root.querySelector('#errance-canvas');
   const ctx = canvas.getContext('2d');
+  // correctif v1.36.1 lot 3 : dialogue des huttes + feedbacks d'interaction (fx)
+  const dlg = root.querySelector('#errance-dlg');
+  const showHutteDialog = (h) => {
+    if (!dlg) return;
+    root.querySelector('#errance-dlg-title').textContent = h.title ?? 'Hutte';
+    root.querySelector('#errance-dlg-text').textContent = h.text ?? '';
+    dlg.classList.add('on');
+  };
+  root.querySelector('#errance-dlg-close')?.addEventListener('click', () => dlg?.classList.remove('on'));
+  const fxList = []; // halos pulsés (autel au soin, retour ville au passage)
   const T = st.map.t;
   let dpr = 1, vw = 360, vh = 480;
   const fit = () => {
@@ -2721,6 +2738,28 @@ function renderErrance(root) {
       ctx.fillStyle = pal.potLight; ctx.beginPath(); ctx.ellipse(cx2 - 3, cy2 - 3, 7, 9, 0, 0, 7); ctx.fill();
       ctx.fillStyle = pal.potDark; ctx.beginPath(); ctx.ellipse(cx2, cy2 - 11, 6.5, 3, 0, 0, 7); ctx.fill();
       ctx.strokeStyle = pal.potLine; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.stroke();
+    }
+    // feedbacks d'interaction visibles (correctif v1.36.1 lot 3) : halo pulsé de l'autel au soin, du retour ville et de la porte au passage
+    for (let i = fxList.length - 1; i >= 0; i--) {
+      const f = fxList[i]; f.t -= dtA;
+      if (f.t <= 0) { fxList.splice(i, 1); continue; }
+      const pr = 1 - f.t / 2;
+      ctx.strokeStyle = 'rgba(140,220,255,' + (.8 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(f.x, f.y - 6, 10 + pr * 26, 0, 7); ctx.stroke();
+    }
+    if (st.map.retour && Math.hypot(st.hero.x - (st.map.retour.x + .5), st.hero.y - (st.map.retour.y + .5)) < 3.5) {
+      const pu = .5 + .5 * Math.sin(animT * 4);
+      ctx.strokeStyle = 'rgba(160,235,255,' + (.35 + .4 * pu).toFixed(2) + ')';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(st.map.retour.x * T + T / 2, st.map.retour.y * T + T / 2, 14 + pu * 6, 0, 7); ctx.stroke();
+    }
+    const porteT = { x: st.map.donjon.x + Math.floor(st.map.donjon.w / 2), y: st.map.donjon.y + st.map.donjon.h };
+    if (Math.hypot(st.hero.x - (porteT.x + .5), st.hero.y - (porteT.y + .5)) < 4) {
+      const pu = .5 + .5 * Math.sin(animT * 4);
+      ctx.strokeStyle = 'rgba(255,215,110,' + (.3 + .4 * pu).toFixed(2) + ')';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc((porteT.x + .5) * T, (porteT.y + .5) * T, 12 + pu * 5, 0, 7); ctx.stroke();
     }
     const hx = st.hero.x * T, hy = st.hero.y * T;
     // ombre portée du héros, étirée avec l'obscurité + halo nocturne
@@ -2896,7 +2935,11 @@ function renderErrance(root) {
       if (o.type === 'autel') {
         interactAutel(st);
         autelDeSoin();
+        fxList.push({ type: 'autel', x: st.map.autel.x * T + T / 2, y: st.map.autel.y * T, t: 2 });
         toast('⛲ Autel de soin : PV et mana restaurés, +5 pas de grâce.');
+        save();
+      } else if (o.type === 'maison') {
+        showHutteDialog(o.hutte ?? { title: 'Hutte', text: '' });
         save();
       } else if (o.type === 'porte') {
         persistErrancePos(); save();
@@ -2958,8 +3001,12 @@ function renderErrance(root) {
     else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + m.donjon.h) { st.pending = { type: 'porte', x: tx, y: ty }; }
     else if (m.retour && tx === m.retour.x && ty === m.retour.y) { st.pending = { type: 'retour', x: m.retour.x, y: m.retour.y }; }
     else {
-      const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
-      if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+      const hu = (m.huttes ?? []).find((h) => h.x === tx && h.y === ty);
+      if (hu) st.pending = { type: 'maison', x: hu.x, y: hu.y, hutte: hu };
+      else {
+        const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
+        if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
+      }
     }
     if (st.pending) {
       const o = st.pending;
