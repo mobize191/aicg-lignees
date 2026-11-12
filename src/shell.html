@@ -375,6 +375,12 @@ background: rgba(26, 34, 51, .9); border: 1px solid rgba(77, 208, 225, .28); col
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px 10px; margin: 10px 0 18px; }
 .gcell { position: relative; cursor: pointer; }
 .gcell .card { cursor: pointer; }
+/* correctifs lot 4 : boutons d'action explicites sur les cellules (fiche ℹ️, ajouter ＋, retirer −/✕) */
+.cell-actions { position: absolute; top: 4px; right: 4px; display: flex; gap: 4px; z-index: 3; }
+.cell-btn { width: 32px; height: 32px; padding: 0; border-radius: 8px; border: 1px solid rgba(212, 175, 55, .65); background: rgba(16, 21, 33, .88); color: #ffd97a; font-size: .95rem; font-weight: 700; line-height: 1; cursor: pointer; }
+.cell-btn:active { transform: scale(.92); }
+.slot { position: relative; }
+.slot .cell-btn.slot-out { position: absolute; top: 4px; right: 4px; z-index: 3; color: #ff9a9a; }
 .empty-collection { padding: 18px; text-align: center; }
 
 .fam {
