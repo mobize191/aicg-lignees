@@ -1,8 +1,17 @@
-# Prompt — correctifs v1.37 : flux Terres Sauvages/donjons, boutons équipe, Tactique par défaut, Boutique (retours terrain de Marc-Olivier, 12/11 7e tour)
+# Prompt — correctifs v1.37 : flux Terres Sauvages/donjons, boutons équipe, Tactique par défaut, Boutique, esquive invisible, sorts signature, héros errant (retours terrain de Marc-Olivier, 12/11 7e et 8e tours)
 
-> Statut : ACTÉ par Marc-Olivier (12/11, 7e tour). Couloir 1 : exécute APRÈS le chantier errance v1.36.1 (`docs/prompt-correctif-errance-v1.36.1.md`), qui reste prioritaire. Une tâche = un commit FR. Preuve par lot : build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests INCHANGÉS. Lot 2 : capture 390×844 exigée.
+> Statut : ACTÉ par Marc-Olivier (12/11, 7e et 8e tours). Couloir 1 : exécute APRÈS le chantier errance v1.36.1 (`docs/prompt-correctif-errance-v1.36.1.md`), qui reste prioritaire. Une tâche = un commit FR. Preuve par lot : build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests INCHANGÉS. Lot 2 : capture 390×844 exigée ; lot 5 : capture du feedback d'esquive exigée.
 
-## Contexte (reproduit et vérifié sur main `a04aad23` par le couloir pilotage)
+## Contexte (reproduit et vérifié sur main par le couloir pilotage)
+
+**8e tour (combats de zone dans les Marées, équipe Ange + Épéiste Novice vs Chanteuse + Pillard des Récifs, 6 fois le même bug)** :
+
+1. **« Rien ne se passe » au tour 2 = esquive invisible.** Le Pillard des Récifs est un **Assassin** : esquive 15 % + 1 % par point d'AGI d'écart (plafond 30 %, `DODGE_PER_AGI`) → ~22 % contre l'Ange (AGI 3 vs 10). L'attaque de l'Ange au tour 2 a été **esquivée** : le moteur pousse bien un événement `dodge` (`src/engine/combat.js`), l'UI l'affiche seulement en `floatText('💨 Esquive')` fugace — invisible en jeu. Et comme le seed de la vague est **identique toute la journée** (`waveSeedFor` = hash de `jour|donjon|diff`), les 6 combats ont rejoué la même séquence → 6 fois le même jet d'esquive au tour 2. Attaquer la Chanteuse (Occultiste, 0 esquive) ne montre rien d'anormal, ce qui confirme.
+2. **« 5 dégâts au lieu de 7 » = frappe de Prêtre à 70 %.** L'Ange (n13) est de classe **Prêtre** : `CLASSE_MODS.Prêtre.strike = 0.7` (dans `data/engine.json`) → 7 × 0,7 ≈ 5. Mécanique normale, mais **rien ne l'explique au joueur** (ni fiche, ni fenêtre d'action).
+3. **Sorts signature : ciblage toujours « alliés » + effets absents.** Les sorts signature (`cat: 'unique'`, construits dans `src/data.js` et `src/ui.js` sans `cible` ni `role`) font renvoyer `null` par `spellSideOf` → le filet retombe sur `'ally'` → la fenêtre d'action propose **toujours les alliés** comme cibles, même pour un sort de dégâts ; le moteur, lui, applique les dégâts aux ennemis → « en sélectionnant une de mes cartes, ça attaque les ennemis ». Et la fiche n'affiche pas l'effet du sort signature (rôle, puissance, cible).
+4. **Reprise de mouvement après combat.** `store.errance` traverse le combat tel quel (`hero.path`, `pending`, `goal` intacts) : au retour dans l'errance le héros **reprend son chemin tout seul** ; la grâce post-combat n'est que de **2 pas** (consommés en une à deux secondes) → rencontre relancée immédiatement après une victoire.
+
+**7e tour (flux, IHM, Boutique)** :
 
 1. **Flux zombie** : Marc-Olivier a pu **entrer dans les Terres Sauvages sans équipe formée** (`enterZone` n'a aucune garde). Une rencontre s'est lancée (`startZoneFight`), l'écran de combat a affiché « Placez d'abord des cartes dans votre équipe ! ». En quittant le combat par la navigation (lien « Composer mon équipe → »), **`store.zoneFight` n'est jamais nettoyé** : il n'est remis à null QUE sur victoire (`src/ui.js`, `zoneFight = null` dans la branche victoire). Conséquences en chaîne, toutes vérifiées dans le code :
    - **les rencontres de l'errance sont bloquées** : le déclencheur teste `ev.encounter && !store.zoneFight` ;
@@ -35,6 +44,24 @@
 - **Règle générale** : tout article verrouillé par la progression (raretés non débloquées, gating à venir de la spec acquisitions) est **masqué** ; le manque d'or seul garde le bouton grisé (article visible). Potions et éclats restent tels quels.
 - Smoke : durcir la section Boutique (absence du catalogue complet dans le dist, présence des offres du jour uniquement).
 - NB : la spec `docs/design/spec-boutique-inventaire-onglets.md` (PROPOSÉE) devra **harmoniser** ses questions ouvertes avec ce tranchage (le présent ACTÉ prime).
+
+### Lot 5 — Esquive visible + dégâts de frappe expliqués (combat Tactique)
+
+- **Esquive impossible à rater** : floatText « 💨 Esquivé ! » proéminent sur la cible (taille/durée au moins égales à un chiffre de dégâts), petite pose d'esquive du pion (translation rapide), et **ligne dans le journal de combat** (« Le Pillard des Récifs esquive la frappe de l'Ange. »). Aucune attaque résolue ne doit paraître « ne rien faire ».
+- **Dégâts attendus affichés** : la fenêtre d'action montre la frappe simple avec sa puissance effective (« ⚔ Attaque — ~5 · frappe de Prêtre à 70 % »), et la fiche de chaque carte affiche le pourcentage de frappe de sa classe (issue de `CLASSE_MODS.strike`, en data — ne pas le coder en dur). L'esquive de la cible (si > 0, depuis sa classe/AGI) peut être rappelée dans la fenêtre de désignation.
+- **Garde-fou test headless** : avec un seed fixe, une attaque contre un Assassin (esquive > 0) produit bien un événement `dodge` et zéro dégât (déterministe) ; test que `CLASSE_MODS.strike` existe pour toutes les classes. Capture du feedback exigée (protocole IHM).
+
+### Lot 6 — Sorts signature : fiche complète et ciblage correct
+
+- **Métadonnées en data** : chaque sort signature (cartes ET monstres, `cat: 'unique'`) reçoit `cible` ("1 ennemi" pour les dégâts, "1 allié"/"soi" pour soins et boosts, "zone"/"tous" le cas échéant) et `role` ('degats'/'soin'/'buff'/…), dérivés des champs existants (`soloMult`, `soloDot`, `effect.kind`) et complétés en data là où la sémantique manque. La fiche du sort signature affiche rôle · cible · puissance, comme les autres sorts.
+- **Ciblage suit la fiche** : plus jamais de liste d'alliés pour un sort de dégâts ; l'action s'applique à la cible désignée. Fin du comportement « je clique un de mes cartes et ça frappe les ennemis ».
+- **Garde-fou test headless** : pour 100 % des sorts de toutes les cartes et de tous les monstres, `spellSideOf(sort)` ≠ null ; un sort de rôle dégâts ne propose jamais de cible alliée (assertion structurelle sur les data).
+
+### Lot 7 — Errance : héros figé après un combat
+
+- Au lancement d'un combat depuis l'errance (rencontre ou porte du donjon) : **vider le mouvement** (`hero.path = []`, `pending = null`, `goal = null`) avant `go('#combat')`. Au retour de combat, le héros est **figé** : il ne se remet en marche que sur un tap du joueur.
+- **Grâce post-combat relevée** : 8 pas (constante en data) après tout combat de zone, au lieu de 2.
+- **Garde-fou test headless** : après un combat de zone, aucun pas automatique n'est joué et aucune rencontre ne peut se déclencher sans input joueur ; la grâce vaut 8.
 
 ## Contraintes et hors périmètre
 
