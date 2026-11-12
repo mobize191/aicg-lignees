@@ -21,7 +21,7 @@ Journal complet : arbitrages du 11/11 nuit (2e tour). Session de tranchage prép
 
 **À trancher en session (12/11)** : architecture donjons × errance (5 étages par donjon, zones d'errance intérieures, profondeurs, « 25 donjons ») ; retrait de l'élément des cartes (sorts typés à la place) ; niveaux 1→100 + fusions ; identité du jeu (recherche DQM/Pokémon/FF dans le doc de session) ; lore et but du jeu, fin/post-fin ; forçage des choix du joueur ; nombre d'équipes (1-2 ?).
 
-**Coordination** : couloir 1 libre depuis v1.32 — pas de chantier de fond sur ui.js avant la session du 12/11 ; couloir design : arts série 3 en cours + maquette habillage boucle v2 en attente de validation ; validation téléphone ET PC de v1.32 en attente.
+**Coordination** : couloir 1 libre depuis v1.32 — activités immédiates prêtes à lancer : correctifs ciblage puis specs des ACTÉS (`docs/prompt-activites-immediates.md`) ; pas de chantier de fond sur ui.js avant la session du 12/11 ; couloir design : arts série 3 en cours + maquette habillage boucle v2 en attente de validation ; validation téléphone ET PC de v1.32 en attente.
 
 ## État actuel (v1.30, en ligne)
 
