@@ -1,54 +1,60 @@
-# Prompt de lancement — refonte de l'IA de combat, Phase 1 : audit + spec (AUCUN code)
+# Prompt de lancement — refonte de l'IA de combat : Phase 1 (audit + spec), Phase 2 (code), mise en place
 
-> À coller au couloir 1. Le chantier « refonte de l'IA » est différé après l'errance et le calibrage (arbitrage ACTÉ) : on ne lance maintenant que sa **Phase 1, la rédaction** (audit + spec). **Aucun code, aucune data : à l'issue de ce lancement, build, tests, smoke et digest sont strictement inchangés.** La Phase 2 (code) sera déverrouillée par les tranchages de la session du 12/11. Règles du repo : une tâche = un commit français ; re-fetch avant chaque édition ; toute décision de design vit dans `docs/arbitrages.md`.
+> À coller au couloir 1. Règles du repo : une tâche = un commit français ; `data/*.json` source de vérité ; `dist.html` jamais édité à la main (`node build.mjs`) ; zéro dépendance npm ; re-fetch avant chaque édition ; toute décision de design vit dans `docs/arbitrages.md` (entrées récentes en haut, date + statut). Le chantier « refonte de l'IA » était différé après l'errance et le calibrage (arbitrage ACTÉ 11/11) : Marc-Olivier en demande le lancement complet. **Une refonte de l'IA changera le digest : chaque changement de mesure est une MESURE consignée dans arbitrages, jamais un recalibrage caché ; les maths du côté joueur ne bougent pas.**
 
-## 0. Contexte
+## 0. Contexte et périmètre
 
-- Le chemin Auto actuel : `pickSpell` (le sort le plus cher abordable, sans lecture du contexte), `enemyPickTarget` (score : bonus de kill + avantage d'élément − PV), `actEnemySupport`, les gimmicks (bélier, carrousel, cale…), `castSummon`. Le digest mesure ce chemin : baseline verrouillée (arbitrage calibrage du 11/11, STATU QUO ACTÉ) `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000, courbe par donjon 71,6 → 22,1 %.
-- Une refonte de l'IA **changera le digest** : c'est une MESURE à consigner, jamais un recalibrage caché. Le go/no-go et le calendrier appartiennent à Marc-Olivier : section Questions ouvertes.
-- Les tranchages de la session (identité du jeu, niveaux 1→100, architecture donjons × errance) conditionnent ce que l'IA doit optimiser : la spec marque ces dépendances au lieu de les supposer.
+- Le chemin Auto actuel : `pickSpell` (le sort le plus cher abordable, sans lecture du contexte), `enemyPickTarget` (score : bonus de kill + avantage d'élément − PV), `actEnemySupport`, les gimmicks (bélier, carrousel, cale…), `castSummon`. Ce chemin sert **à la fois l'ennemi et le mode 🤖 Auto du joueur** (roadmap, point 10 : les deux sont dans le périmètre).
+- Baselines : verrouillées `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000 (courbe par donjon 71,6 → 22,1 %, calibrage STATU QUO ACTÉ) ; mesure courante post-contenu v3 `f8a9f0bb…` 1359/3000 et `978ed44b…` 4517/10000. **Baseline de comparaison du chantier : la mesure courante au lancement de chaque lot** (re-mesurée avant/après, `node combat-digest.mjs dist.html 3000` puis `10000` à la clôture).
+- Périmètre : le moteur de décision du combat (choix de sort, choix de cible, modes Auto joueur et IA ennemie) et les garde-fous d'équité. Hors périmètre : maths de combat, équilibrage, économie, contenu, structure de l'errance.
 
-## 1. Lectures obligatoires
+## 1. Prérequis et lectures
 
-- `docs/skills/game-ai/` (SKILL.md, `references/`, SOURCES.md) : choix du modèle de décision, garde-fous (hystérésis, équité de perception, anti-blocage), vérifications exécutables.
-- `docs/skills/ai-behavior-trees-utility-ai/` (SKILL.md + 4 références, mêmes provenance et licence) : score d'utilité, considérations, courbes de réponse, hystérésis, cycle de vie, test headless — c'est la référence la plus directement applicable au combat tour par tour.
-- `docs/arbitrages.md` : entrées calibrage (11/11), T0.2 (camp de ciblage), « 2026-11-11 (nuit, 2e tour) ».
-- `docs/design/session-qa-direction.md` : points 1 (identité) et 5 (niveaux).
-- Le code : `src/engine/combat.js` (`pickSpell`, `enemyPickTarget`, `actEnemyStriker`, `actEnemySupport`), `src/engine/spells.js` (`applySupport`, `foeFacingSpell`), `src/engine/summon.js`, `src/errance.js` (`astar`), `combat-digest.mjs` (le harnas de mesure).
-- `docs/prompt-correctifs-ciblage.md` : les correctifs en cours touchent le même code ; la spec en tient compte, mais aucun chantier code IA ne part avant la session.
+- **Prérequis absolu** : le chantier correctifs ciblage (`docs/prompt-correctifs-ciblage.md`) est livré (le lot 0 de l'IA en est la suite directe). Sinon : le livrer d'abord.
+- `docs/skills/game-ai/` et `docs/skills/ai-behavior-trees-utility-ai/` (SKILL.md + références, provenance dans les SOURCES.md) : modèle de décision, score d'utilité, hystérésis, équité de perception, vérifications headless.
+- `docs/arbitrages.md` : calibrage (11/11), T0.2, « 2026-11-11 (nuit, 2e tour) ». `docs/design/session-qa-direction.md` : points 1 et 5.
+- Le code : `src/engine/combat.js`, `src/engine/spells.js`, `src/engine/summon.js`, `src/errance.js` (`astar`), `combat-digest.mjs`.
 
-## 2. Livrable 1 — l'audit : `docs/design/refonte-ia-audit.md`
+## 2. Phase 1 — audit + spec (documents uniquement, aucun code)
 
-Un doc qui inventorie chaque décision actuelle de l'IA, son comportement exact et ses limites :
+**Livrable 1 : `docs/design/refonte-ia-audit.md`** — inventaire de chaque décision actuelle de l'IA (comportement exact, limites, référence fichier/fonction, repro minimal testable) : choix de sort, ciblage, ligne support ennemie, invocations, gimmicks, statuts ; asymétries joueur/IA ; audit du A* de l'errance contre `references/pathfinding.md` (admissibilité, corner cutting, repathing, anti-blocage).
 
-- **Choix de sort** (`pickSpell` : le plus cher abordable, pas de notion de contexte ; le sort de soin d'une carte de famille sans `effect` reste un coup sur l'ennemi en Auto : PISTE déjà consignée au correctif ciblage).
-- **Ciblage** (`enemyPickTarget` : bonus de kill + avantage d'élément − PV ; l'arrière protégé à −50 % ; l'Option A).
-- **Ligne support ennemie** (`actEnemySupport`), **invocations** (`castSummon`), **gimmicks**, **statuts** (dot, curse, reflect, stun).
-- **Asymétries joueur/IA** : le joueur a la Tactique et sa fenêtre d'action ; l'IA a son propre chemin. Lister où l'IA est plus bête ou plus maline que le joueur.
-- **Audit de l'A* de l'errance** (`src/errance.js`, `astar`) contre `references/pathfinding.md` du skill game-ai : admissibilité de l'heuristique (diagonales √2 vs 1), corner cutting, politique de repathing, anti-blocage. Pour chaque gotcha du skill : conforme ou écart.
+**Livrable 2 : `docs/design/refonte-ia-spec-plan.md`** — la spec du chantier complet (trame des specs existantes : contexte, verrous, lots, preuves). Elle reprend les lots de la Phase 2 ci-dessous, les affine avec les constats de l'audit, et marque `[À TRANCHE — SESSION 12/11]` : ce que l'IA optimise (statu quo raretés vs niveaux 1→100), l'IA graduée par étage, le go/no-go digest. Chaque lot : preuves attendues (tests headless déterministes semés, jamais de validation à l'œil).
 
-Chaque constat : référence fichier/fonction + repro minimal quand c'est testable.
+**Porte A (fin de Phase 1) — STOP** : la Phase 2 démarre quand les tranchages de la session du 12/11 sont consignés dans arbitrages. À défaut de tranchage explicite, les défauts suivants s'appliquent et sont consignés : variante (a) statu quo raretés/paliers ; pas d'IA par étage (lot 3 en version difficultés actuelles) ; go digest = oui, sous la tolérance du §4.
 
-## 3. Livrable 2 — la spec : `docs/design/refonte-ia-spec-plan.md`
+## 3. Phase 2 — le code, lot par lot
 
-Trame des specs existantes (`docs/design/contenu-v3-spec-plan.md`, `docs/design/reste-code-spec-plan.md`) : contexte, verrous, lots, preuves attendues. Contenu attendu :
+Un lot à la fois, preuve avant le suivant, un commit français par lot. Symétrie : chaque amélioration de décision s'applique à l'IA ennemie ET au mode 🤖 Auto du joueur, mêmes règles (l'IA ne lit que l'état public : anti-triche, équité de perception du skill).
 
-- **Modèle de décision recommandé** : selon la table du skill game-ai, un modèle par périmètre. Combat tour par tour : recommandation attendue = score d'utilité par unité (voir `references/utility-ai-system.md` du skill compagnon : considérations, courbes, hystérésis anti flip-flop), un arbre complet n'est probablement pas nécessaire. Errance : réactions simples, perception équitable (pas d'omniscience, réaction différée), garde-fous anti-blocage.
-- **Ce que l'IA optimise** : deux variantes balisées `[À TRANCHE — SESSION 12/11]` selon (a) statu quo raretés/paliers, (b) niveaux 1→100 + fusions.
-- **Lots proposés** : lot 0 = suite du correctif ciblage (chemin Auto des sorts alliés des lignées, PISTE existante) ; lot 1 = utilité de ciblage (menace, fragilité, position, lignes) ; lot 2 = choix de sort contextuel (soin si un allié est blessé, contrôle sur la plus grosse menace, burst si un kill est possible) ; lot 3 = intelligence graduée par étage de donjon (si l'architecture « 5 étages » passe en session : l'IA monte en compétence avec l'étage) `[À TRANCHE — SESSION 12/11]` ; lot 4 = errance (perception, réaction différée, anti-blocage).
-- **Digest** : chaque lot changera la mesure → protocole : MESURE N = 3000 et N = 10 000 avant/après chaque lot, comparaison à la baseline verrouillée, écarts consignés dans arbitrages. Aucune maths du côté joueur ne bouge : la difficulté ne vient que de l'IA. Go/no-go final : Marc-Olivier `[À TRANCHE — SESSION 12/11]`.
-- **Anti-triche** : l'IA ne lit aucune information cachée au joueur ; équité de perception du skill (dernière position connue, délai de réaction).
-- **Preuves attendues par lot** : décisions déterministes semées et testables headless (cf. « Headless tick test » du skill compagnon), pas de validation à l'œil.
+- **Lot 0 — chemin Auto des sorts alliés des lignées** (suite directe du correctif ciblage, PISTE déjà consignée) : en Auto, un sort de lignée soin/boost/bouclier depuis l'arrière fait quelque chose d'utile (soigner le plus blessé, buffer l'avant) au lieu du comportement historique. Le chemin Tactique ne bouge pas. Première MESURE attendue du chantier.
+- **Lot 1 — utilité de ciblage** (`enemyPickTarget`) : score d'utilité (fragilité/kill possible, menace, position et lignes, opposition d'élément) avec hystérésis anti flip-flop (pas de changement de cible au bord du seuil sans raison). Tests : décisions déterministes semées sur états reconstitués.
+- **Lot 2 — choix de sort contextuel** (`pickSpell`) : considérations et courbes du skill compagnon (soin si un allié est blessé sous seuil, contrôle sur la plus grosse menace, burst si un kill est possible, sinon le sort le plus efficace par rapport au coût). Hystérésis, pas de flip-flop entre tours.
+- **Lot 3 — graduation de l'intelligence** : profils par difficulté actuelle (Facile = choix pondérés volontairement sous-optimaux → Enfer = utilité complète) ; extensible aux étages si l'architecture « 5 étages » est tranchée en session `[À TRANCHE]`.
+- **Lot 4 — errance** : garde-fous sur l'existant selon l'audit (perception équitable : dernière position connue, réaction différée, pas d'omniscience ; anti-blocage : repath après stagnation, changement d'état après échecs). Ce lot ne touche ni le décor ni la structure des zones (chantiers séparés).
 
-## 4. Interdits
+## 4. Tolérance de mesure (défaut, portée aux tranchages)
 
-- **Aucun code, aucune data dans cette phase** : deux documents uniquement.
-- Le digest, les tests, le smoke et le build restent strictement inchangés à l'issue de ce lancement.
-- Pas de moteur temps réel : les skills parlent d'agents temps réel (steering, tick par frame) ; le combat de Lignées est tour par tour : n'importer que les principes (modèle de décision, garde-fous, vérifications headless).
-- Aucun lancement de chantier code IA avant les tranchages de la session du 12/11.
+Après chaque lot : MESURE N = 3000, comparaison à la mesure courante du lot précédent. Le lot passe si : écart du taux global ≤ 5 points, 0 exception, ≤ 1 marathon ; N = 10 000 à la clôture du chantier. Hors tolérance : STOP, consignation dans arbitrages, avis de Marc-Olivier avant de continuer. **Aucun ajustement des maths joueur pour « compenser » : la difficulté ne vient que de l'IA.**
 
-## 5. Preuves de la Phase 1
+## 5. Mise en place (clôture du chantier)
 
-- Les deux docs poussés (audit, puis spec), un commit français par doc.
-- Validation finale : build + `node --test` + `node smoke-ui.mjs dist.html` + digest inchangés (aucun code touché), validateur vert.
-- Les sections Questions ouvertes alimentent la session du 12/11.
+1. **Tests et smoke** : tests headless permanents des décisions (déterminisme semé) ; smoke enrichi (section dédiée : anti-triche vérifiée par introspection — l'IA ne lit aucune information hors état public ; modes Auto/ennemi sur chaque difficulté).
+2. **Digest final** : MESURE N = 3000 + N = 10 000 consignée dans arbitrages, avec proposition de verrouillage de la nouvelle baseline (décision : Marc-Olivier).
+3. **Protocole IHM** : `docs/validation-ihm.md` versionné (combats Tactique contre l'IA améliorée par difficulté, aucune régression du mode Auto, captures).
+4. **Documentation** : CHANGELOG, HISTORY, roadmap, `docs/tables/` régénérées si utile ; glossaire joueur inchangé sauf si un libellé devient faux.
+5. **Build et déploiement** : `node build.mjs`, CI verte (tests + Pages), dist publié.
+6. **Validation finale** : Marc-Olivier sur téléphone ET PC selon le protocole, puis verrouillage de la baseline actée dans arbitrages.
+
+## 6. Interdits
+
+- L'IA ne lit aucune information cachée au joueur (main, intentions, RNG futur) ; équité de perception du skill (délai de réaction, dernière position connue).
+- Pas de moteur temps réel : le combat de Lignées est tour par tour ; n'importer des skills que les principes (modèle de décision, garde-fous, vérifications headless).
+- Pas de recalibrage caché, pas de nouvelle data d'équilibrage, pas de contenu, pas de refonte de l'errance ni de `src/ui.js` au-delà des branchements nécessaires du mode Auto.
+- Un lot ne démarre jamais sans que le précédent ait sa preuve complète (build + tests + smoke + MESURE).
+
+## 7. Récapitulatif des preuves
+
+- Phase 1 : deux docs poussés, un commit par doc, build/tests/smoke/digest inchangés.
+- Phase 2 : par lot, commit français + tests headless verts + MESURE dans la tolérance consignée dans arbitrages.
+- Mise en place : smoke enrichi, MESURE finale N = 3000 + 10 000, protocole IHM versionné, docs à jour, CI verte, validation Marc-Olivier, baseline verrouillée.
