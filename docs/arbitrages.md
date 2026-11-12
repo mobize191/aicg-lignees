@@ -1,5 +1,17 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : 12e TOUR (fin) — 6 NOUVEAUX TRANCHAGES ORAUX + GRAND LANCEMENT UNIFIÉ (refonte direction + vie du jeu en une session)
+
+- **Carte du monde AFFINÉE : 4 cartes multibiomes** (le « 3-4 » tranché à 4).
+- **Remplacement sur K.O. TRANCHÉ** : switch volontaire = tour de l'entrante consommé ; **K.O. → le remplaçant entre automatiquement SANS consommer de tour et ne joue qu'au tour suivant** (précédé : changement de personnage à la Clair Obscur). Intégré au Lot A de `docs/prompt-refonte-direction.md`.
+- **Donjons divins TRANCHÉS : 3 donjons** avec chaîne sous-bosses → boss — Démons (ex. succube → roi des démons), Anges (anges élémentaires → grand ange de lumière), Équilibre (sous-bosses → Ananke version supérieure).
+- **Mécanique des fins TRANCHÉE** : fins multiples (Échiquier) ; la fin dépend des choix **lier/renier** faits à chaque chaîne de donjon + du nombre de créatures liées par race. Lore à écrire, surcoût assumé.
+- **Élément des sorts TRANCHÉ : libre par carte + grimoires**, avec 2-3 sorts signatures par famille, quelques sorts par race, gros corpus libre ; piste sorts par biome à étudier en spec contenu.
+- **Équipement TRANCHÉ : 6-8 emplacements ; panoplies famille × classe SÉLECTIVES** (sirènes → magiciens, monstres marins → guerriers/prêtres, gobelins → chamanes, roi → guerriers, sirène → assassins ; répartition par biome/donjon en spec).
+- **RESTENT à trancher** : lignée exclusive initiale (« aucune idée » — questions posées : par race ? créées ? existantes ?), cohabitation fusion × familles (a/b, explication fournie), ops DIFFÉRÉS.
+- **GRAND LANCEMENT UNIFIÉ** : `docs/prompt-grand-lancement.md` — fusion refonte direction (A-D) + vie du jeu (0-5) + v1.40 en tête, exécution d'une traite, un commit FR par lot, clôture unique : rapport + nouvelle baseline digest PROPOSÉE + validation IHM (`docs/validation-ihm.md`, scénarios ajoutés/modifiés, téléphone ET PC) + docs + push + CI vérifiée. Ordre : v1.40 → A → B → crits → C → D → 0 → 2 → 3 → 4 → 5.
+- Tableau de bord de session (`docs/design/session-qa-direction.md` section 0) : **30 points TRANCHÉS, 3 restant à trancher.**
+
 ## 2026-11-12 : 12e TOUR (suite) — 4 TRANCHAGES DE FIN DE SESSION : fusion (forme exacte), carte du monde (3-4 régionales fixes), expéditions (temps réel plafonné), fin du jeu (fins multiples Échiquier)
 
 - **Fusion, forme exacte TRANCHÉE** : enfant **niveau 1** ; **25 % des stats cumulées des parents, plafonné par la rareté de l'enfant** — le bonus d'héritage est borné par un % max de la base de l'enfant, défini par rareté en `data/` (une commune fusionnée à fond reste utile mais n'atteint pas objectivement une légendaire de même niveau : la rareté garde son sens de potentiel) ; **2-3 sorts hérités** (jamais le signature de l'enfant) ; rareté par **table de synthèse**. Pourcentages exacts du plafond : à définir en data à la spec fusion.
@@ -250,10 +262,3 @@ Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS a
 **ACTÉ (ce tour)** :
 
 1. **Menu du haut supprimé** : menu latéral seul ; l'Accueil devient la page par défaut (« comme retourner à la maison », toujours visible en fond) ; chaque page reçoit son propre fond ; petites interactions depuis l'Accueil vers les Terres Sauvages, la Boutique, la Guilde.
-2. **Page Donjons supprimée** : absorbée par les Terres Sauvages — on marche jusqu'au donjon, on entre, un écran affiche les paliers accessibles ; les Terres affichent l'état des donjons déjà bouclés.
-3. **Guilde : l'hôtel de génération (compagnons du jour) supprimé** ; les compagnons actuels sont jugés pas assez chers et trop forts dès le début — recalibrage à la spec.
-4. **Gating global des acquisitions par la progression** (répété trois fois : très important) : marchand, boutique et acquisitions de cartes ne proposent que ce que la progression débloque (« tu as débloqué telle zone → droit à tel type de carte »).
-5. **Équipement refondu en sets assignables** : ~7 sets nommés à affinités et capacités (set assassin, set prêtre…) ; un set assigné à une carte y reste jusqu'à désassignation (un set = une carte à la fois) ; sets par famille/biome façon panoplies Dofus/Wakfu (gobelin → gobelin royal → sauvage) ; **rareté d'équipement bornée par la rareté de la carte** (N ≈ C ; C → objets C/UC ; UC → +R ; R → +SR — extrémités hautes à préciser en spec). Révise l'ACTÉ « équipement à slots typés par classe + slots d'équipe » du 10/11 nuit ; les ~90 arts complets par objet (ACTÉ du 11/11 soir) deviennent les pièces de sets.
-6. **Boutique refondue en onglets** (potions / éclats / armes / armures / talismans…, au lieu d'une liste unique déroulante) ; **Inventaire refondu en onglets par type** (petites cases symbole + nombre + description au clic). Trop d'objets affichés aujourd'hui.
-7. **Errance : rendu à refaire** — décor jugé « vraiment moche, pas du tout détaillé », héros « assez moche » ; la démo jouable `docs/design/maquettes/errance-demo-jouable.html` (upload de Marc-Olivier, 11/11 nuit) devient le **plancher de qualité** : prairie peinte à variations organiques, chemin de terre, étang vivant (nénuphars, roseaux, reflets), arbres en couches, rochers moussus, donjon visible à porte lumineuse, maisons fumantes, autel, hautes herbes animées, lucioles, ombres de nuages, feuilles au vent, marqueur de destination. Un **point de retour ville** devient obligatoire dans chaque zone d'errance (sans menu du haut, c'est le seul moyen de rentrer).
-
