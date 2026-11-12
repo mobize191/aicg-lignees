@@ -1368,6 +1368,33 @@ async function main() {
       check('B22 c badge de niveau .lvl-chip conservé en haut-droite', /top:\s*5px/.test(lvlRule) && /right:\s*5px/.test(lvlRule), lvlRule);
     }
 
+    // ---------- B23 : correctifs v1.37 lot 3 — Tactique par défaut, choix persisté (uiPrefs.combatAuto) ----------
+    {
+      const prevAuto23 = api._autoMode();
+      check('B23 a autoMode initialisé à false (Tactique par défaut)', /let autoMode = false;/.test(html) && !/let autoMode = true;/.test(html), '');
+      api._setAuto(false);
+      api.store.uiPrefs.combatAuto = false;
+      api.save();
+      api.load();
+      check('B23 b la save sans choix Auto recharge en Tactique', api._autoMode() === false, String(api._autoMode()));
+      api.save();
+      const raw23 = JSON.parse(mem.get(api.slotKey(api._activeSlot())));
+      check('B23 c save() persiste uiPrefs.combatAuto=false', raw23.uiPrefs && raw23.uiPrefs.combatAuto === false, JSON.stringify(raw23.uiPrefs ?? null));
+      api._setAuto(true);
+      api.store.uiPrefs.combatAuto = true; // ce que fait le bouton Mode
+      api.save();
+      const raw23b = JSON.parse(mem.get(api.slotKey(api._activeSlot())));
+      check('B23 d le choix Auto est persisté dans la save', raw23b.uiPrefs && raw23b.uiPrefs.combatAuto === true, JSON.stringify(raw23b.uiPrefs ?? null));
+      api._setAuto(false);
+      api.load();
+      check('B23 e restore() resynchronise le mode depuis la save (Auto retrouvé)', api._autoMode() === true, String(api._autoMode()));
+      delete raw23b.uiPrefs;
+      mem.set(api.slotKey(api._activeSlot()), JSON.stringify(raw23b));
+      api.load();
+      check('B23 f save ancienne sans uiPrefs : rechargée en Tactique, non rejetée', api._autoMode() === false && api.store.uiPrefs.combatAuto === false, String(api._autoMode()));
+      api._setAuto(prevAuto23); // état antérieur restauré pour les sections suivantes
+    }
+
     // ---------- B19 : parties multiples — stockage par slots, migration, bascule ----------
     {
       const SK = 'fondations-cards-v1';

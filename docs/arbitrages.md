@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : EN COURS — correctifs v1.37 (ACTÉ 12/11 7e-8e tours) : lots 1-3 livrés, lots 4-7 restants
+
+- **Lot 1 — flux (LIVRÉ `e617705`)** : garde « équipe formée » sur `enterZone`/`enterAt`/`startZoneFight` (toast + redirection `#equipe`), genre de combat rattaché au run (`runState.kind` zone/donjon/defi), nettoyage des états zombies (`zoneFight` effacé à la sortie de `#combat`, `enterAt` repart propre). Module pur `src/engine/zoneflow.js` + 4 tests headless des 3 bugs.
+- **Lot 2 — boutons (LIVRÉ `4ee6d1f`)** : `.cell-actions` et `.slot .cell-btn.slot-out` en bas-droite, `.lvl-chip` conservé en haut-droite ; smoke B22 (3 checks CSS). Capture 390×844 non réalisable dans le sandbox (pas de navigateur) — limitation consignée.
+- **Lot 3 — Tactique par défaut (LIVRÉ, ACTÉ 7e tour)** : `autoMode` initialisé à `false` ; le bouton de bascule reste. Choix persisté dans la save via `uiPrefs.combatAuto` — **champ additif facultatif, pas de bump de SAVE_VERSION** : `restore()` retombe sur `{ combatAuto: false }` pour les saves anciennes (non rejetées) et resynchronise `autoMode` à chaque restauration (boot + bascule de slot). Effet récompenses existant rappelé et inchangé : prorata des tours joués en Tactique — tout en Tactique = intégral, tout en Auto = ÷2 (or, éclats, XP).
+- **Preuves (lot 3)** : 185 tests verts (4 nouveaux `tests/uiprefs.test.js`), smoke 371 checks (B23, 6 checks, 3 échecs préexistants hors périmètre), digests **inchangés `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000**.
+- **Restants** : lot 4 (Boutique : 3 offres du jour seules, verrous masqués, smoke durci), lot 5 (esquive visible + dégâts de frappe expliqués, `CLASSE_MODS.strike` affiché), lot 6 (sorts signature : `cible`/`role` en data, couverture 100 % testée), lot 7 (héros figé après combat, grâce 8 pas en data).
+
 ## 2026-11-12 : LIVRÉ — correctif errance v1.36.1 (ACTÉ 12/11 6e tour, retours terrain) : grand lac, plage, interactions, héros vectoriel
 
 - **Lot 1 — bug racine « grand lac »** : le pond peint partait de la bbox de TOUTES les tuiles EAU (ceinture comprise) → ellipse couvrant toute la carte. Corrigé : amas d'eau **intérieur uniquement**, ellipse rétrécie pour ne couvrir aucune tuile non-EAU (anneau de sable ≤ 0,25·T), toutes les tuiles EAU peintes en eau. **Garde-fou headless** (échoue sur main, passe après) : `decorOrders` sur les 5 zones.

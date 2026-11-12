@@ -213,6 +213,7 @@ const API_PAIRS = {
   addXpI: 'addXpI',
   addCardIid: 'addCardIid',
   _setAuto: '(v) => { autoMode = v; }',
+  _autoMode: '() => autoMode',
   _state: '() => state',
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   drawNaissance: 'drawNaissance', noLossPctOf: 'noLossPctOf', xpToNext: 'xpToNext',

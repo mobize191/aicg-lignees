@@ -883,6 +883,7 @@ const store = {
   defiActive: false, 
   regEclats: 0, 
   pierres: 0, 
+  uiPrefs: { combatAuto: false },
 };
 
 function resetStore() {
@@ -925,6 +926,7 @@ function resetStore() {
   store.defiActive = false;
   store.regEclats = 0;
   store.pierres = 0;
+  store.uiPrefs = { combatAuto: false };
 }
 
 function progOf(dungeonId, diff = 0) {
@@ -1016,6 +1018,7 @@ function snapshot() {
     zonesVisitees: [...(store.zonesVisitees ?? [])],
     zonesUnlocked: [...(store.zonesUnlocked ?? [])],
     errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
+    uiPrefs: { combatAuto: store.uiPrefs?.combatAuto === true },
   };
 }
 
@@ -1242,6 +1245,8 @@ function restore(data) {
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
     : null;
+  store.uiPrefs = (data.uiPrefs && typeof data.uiPrefs === 'object') ? { combatAuto: data.uiPrefs.combatAuto === true } : { combatAuto: false };
+  autoMode = store.uiPrefs.combatAuto;
   store.defiActive = false;
   sanitizeTeams();
   return true;
@@ -3926,7 +3931,7 @@ const SPEED_LABELS = ['\u00d70,5', '\u00d71', '\u00d72', '\u00d74', '\u00d78', '
 let combatApp = null;
 let state = null;
 let speedIdx = 1;
-let autoMode = true;
+let autoMode = false;
 let busy = false;
 let chainTimer = null;
 let recompOpen = false; // boucle v2 lot 4 : l'écran Récompenses bloque la chaîne d'étages jusqu'à « Tout ramasser »
@@ -5511,6 +5516,8 @@ function renderCombat(root, opts = {}) {
   });
   combatApp.querySelector('#mode').onclick = (e) => {
     autoMode = !autoMode;
+    store.uiPrefs.combatAuto = autoMode;
+    save();
     e.target.textContent = autoMode ? 'Mode : Auto' : 'Mode : Tactique';
     if (autoMode) closeActModal();
     else tacPaused = false; // retour en Tactique : le flux repart tout seul
