@@ -1,10 +1,12 @@
 # Session questions-réponses — la direction du jeu (préparée le 11/11, tranchages du 12/11 intégrés)
 
-> Objet : la grosse session de tranchage du 12/11. Chaque point se lit : **ACTÉ aujourd'hui** (arbitrages + data) → **proposition de Marc-Olivier** (retours du 11/11 soir, 2e tour) → **questions à trancher** → **mon avis**. Convention posée par Marc-Olivier : un tranchage récent prime sur un ACTÉ antérieur ; tout ce qui n'est pas tranché ici reste PROPOSÉ. Les points 1 à 3 conditionnent tous les autres : les trancher en premier. **Section 0 ajoutée le 12/11 soir (10e tour)** : les tranchages oraux de Marc-Olivier, consignés, avec l'étude de recherche demandée dans `docs/design/recherche-direction-2026-11-12.md`.
+> Objet : la grosse session de tranchage du 12/11. Chaque point se lit : **ACTÉ aujourd'hui** (arbitrages + data) → **proposition de Marc-Olivier** (retours du 11/11 soir, 2e tour) → **questions à trancher** → **mon avis**. Convention posée par Marc-Olivier : un tranchage récent prime sur un ACTÉ antérieur ; tout ce qui n'est pas tranché ici reste PROPOSÉ. Les points 1 à 3 conditionnent tous les autres : les trancher en premier. **Section 0 (10e-11e tours)** : tableau de bord consolidé des tranchages de Marc-Olivier, avec l'étude de recherche demandée dans `docs/design/recherche-direction-2026-11-12.md`.
 
-## 0. Tranchages de la session du 12/11 (10e tour) — l'état du jeu après les réponses de Marc-Olivier
+## 0. État de la session du 12/11 — ce qui est VALIDÉ, ce qui RESTE À TRANCHER
 
-**TRANCHÉ / ACTÉ ce jour** :
+> Demandé par Marc-Olivier (11e tour) : séparer clairement le validé du reste. Rien de la colonne « reste à trancher » ne bouge sans décision explicite.
+
+### ✔ VALIDÉ / TRANCHÉ (décisions de Marc-Olivier, session du 12/11)
 
 1. **Identité DQM-like ASSUMÉE** (Dragon Quest Monsters: Joker comme référence première ; Pokémon et FF en comparaison, FF moins nostalgique). 3D exclue : « si déjà on a des animations, ce serait déjà pas mal ».
 2. **Nombre d'équipes : 3 conservé** (« au pire c'est 3, on verra plus tard »).
@@ -23,14 +25,28 @@
 
 **DIFFÉRÉ** : systèmes HUR/HSR et hybrides « H » (shiny ou hybrides de fusion) — « on va déjà essayer de faire 100, sinon on va vite se perdre ». Y revenir après.
 
-**TRANCHÉ en fin de session (12/11, même soir)** :
+Suite de la session (10e-11e tours, même soir) :
 
-1. **Taille d'équipe : 3 actifs + 2 en réserve** (recommandation de l'étude acceptée ; switch en combat coûtant le tour du nouveau venu, réserve à XP réduite).
-2. **But du jeu : Le Lieur** (« l'unité des quatre races », les quatre verbes de recrutement) retenu comme colonne vertébrale ; les propositions Échiquier (multi-fins) et Silence du Zénith (reconnaissance par donjon) restent puisables pour la fin et le nommage.
-3. **Type « terre » renommé Nature.**
-4. **HP/MP TRANCHÉS** : persistance partout (errance comprise) ; **restauration gratuite en ville et à l'autel, objets en donjon** ; **aucun soin automatique post-combat** (régénération après victoire refusée).
+15. **Taille d'équipe : 3 actifs + 2 en réserve** (recommandation de l'étude acceptée ; switch en combat coûtant le tour du nouveau venu, réserve à XP réduite).
+16. **But du jeu : Le Lieur** (« l'unité des quatre races », les quatre verbes de recrutement : allégeance, pacte, énigme, consécration) retenu comme colonne vertébrale ; les propositions Échiquier (multi-fins) et Silence du Zénith (reconnaissance par donjon) restent puisables pour la fin et le nommage.
+17. **Type « terre » renommé Nature.**
+18. **HP/MP : persistance partout** (errance comprise) ; **restauration gratuite en ville et à l'autel, objets en donjon** ; **aucun soin automatique post-combat** (régénération après victoire refusée).
+19. **XP PAR COMBAT** : chaque combat distribue l'XP immédiatement (formule par étage inchangée, donjons compris — fin du modèle « XP de run » cumulée en fin de run) ; la fenêtre de fin de combat affiche **l'XP gagnée par chaque personnage, les objets trouvés et l'or gagné**. → chantier v1.39 lancé (`docs/prompt-correctifs-v1.39.md`, couloir 1).
+20. **Mode auto SUPPRIMÉ** du combat joué : boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence `combatAuto`, pénalité de récompenses des tours auto — tout disparaît ; l'auto-résolution interne du moteur reste pour le futur mode « missions spéciales » (expéditions), qui ne s'appellera pas « auto ». → chantier v1.39.
 
-**Reste à trancher** : carte régionale vs géante, forme exacte de la fusion, expéditions (temps réel), équipe de repli, choix initial de lignée exclusive, chaîne des donjons divins.
+### ⏳ RESTE À TRANCHER (rien ne bouge sans décision explicite)
+
+1. **Carte du monde** : régionale fixe (recommandé par l'étude) vs géante ; combien de cartes ; multibiomes.
+2. **Fusion, forme exacte** : plafond d'héritage des stats (25 % proposé), nombre de sorts hérités (2-3 proposé), table de synthèse (rareté de l'enfant), bonus de fusion précoce.
+3. **Expéditions / missions spéciales** : temps réel vs temps de jeu (recommandation : temps réel plafonné) ; nom du mode ; récompenses exclusives.
+4. **Équipe de repli** : réserve intégrée au combat (recommandé) vs équipe entière de substitution ; calibrage du switch (coût, conditions).
+5. **Choix initial de lignée exclusive** : combien de familles proposées, à quel moment, réversibilité exacte.
+6. **Donjons divins** : chaîne Démons, chaîne Anges, donjon de l'Équilibre (Ananke) — familles, ordre, gating.
+7. **Fin et post-fin du Lieur** : multi-fins (Échiquier) vs fin unique ; nouveau cycle ; endgame après la dernière chaîne royale.
+8. **Élément d'un sort** : lié à la famille (proposition) ou libre par carte + grimoires.
+9. **Équipement** : nombre d'emplacements par carte (6-8 proposés), panoplies par famille ou biome × classe, bonus aux paliers, où vit l'assignation.
+10. **Cohabitation fusion × familles** : (a) palier + niveau conservés (recommandé) ou (b) niveau seul.
+11. **Ops en attente** : verrouillage de la baseline courante (`c62fcbd1…`/`5059e683…`), les 3 échecs smoke préexistants (40, B1 g, B7 b), validations téléphone ET PC des lots visuels v1.37 (S24/S25), maquette habillage boucle v2 (couloir design).
 
 ## 1. Identité du jeu — recherche demandée (DQM Joker vs Pokémon vs Final Fantasy)
 
@@ -116,7 +132,7 @@
 
 **ACTÉ aujourd'hui** : paliers de famille (C→UC→R→SR→UR→L), fusion C + matériaux, XP par niveau déjà en place (XP_GROWTH 0.25), montée d'évolution sans perte nette.
 
-**TRANCHÉ (12/11)** : niveaux **1→100 ACTÉS**. La rareté = le point de départ ; une commune montant 1→100 sans fusion, avec un des meilleurs équipements du jeu, doit **rivaliser avec une légendaire** ; les légendaires commencent elles aussi **niveau 1** — l'équilibre : chaque carte gagnée se monte, aucune n'est « déjà forte ». La montée des lignées/évolutions est conservée.
+**TRANCHÉ (12/11)** : niveaux **1→100 ACTÉS**. La rareté = le point de départ ; une commune montant 1→100 sans fusion, avec un des meilleurs équipements du jeu, doit **rivaliser avec une légendaire** ; les légendaires commencent elles aussi **niveau 1** — l'équilibre : chaque carte gagnée se monte, aucune n'est « déjà forte ». La montée des lignées/évolutions est conservée. **XP PAR COMBAT TRANCHÉE (12/11, 11e tour)** : chaque combat distribue l'XP immédiatement (formule par étage inchangée, donjons compris — fin du modèle « XP de run »), la fenêtre de fin de combat affiche l'XP par personnage, les objets et l'or ; chantier v1.39 (`docs/prompt-correctifs-v1.39.md`, couloir 1).
 
 **Fusion (ADORÉE, ACTÉE en principe, forme à trancher)** — l'étude DQM est dans `recherche-direction-2026-11-12.md` section 7 :
 
@@ -165,17 +181,18 @@
 
 1. **Équipe de réserve/repli** (l'idée « switch quand l'équipe principale meurt/est affaiblie ») : étude section 5 de la recherche — recommandation **3 actifs + 2 en réserve** intégrée à l'équipe, switch coûtant un tour ; l'équipe de repli entière à réserver au mode exploration. Précéder le calibrage du niveau max (Suikoden 108 étoiles = 6 actifs : la contre-référence).
 2. **HP/MP limités entre combats** (pour forcer le choix des sorts) : recherche APPROFONDIE le 12/11 soir, après challenge de Marc-Olivier (« la majorité des jeux ne reset pas la vie entre chaque combat, à la limite le mana ») — **il a raison** : la convention du genre (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville (auberge/feu de camp/autel) et via objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary, système décrit comme « unique » par la presse ; DQM Joker probable, à confirmer). Recommandation révisée : **persistance partout, errance comprise**, points de repos en ville + consommables + sorts de soin coûteux en MP. **TRANCHÉ (12/11, fin de session) : restauration gratuite en ville et à l'autel, objets en donjon ; aucun soin automatique post-combat.**
-3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné.
+3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné. **Note 11e tour** : le mode auto du combat (supprimé en v1.39) servira CE mode — l'auto-résolution interne du moteur reste disponible pour résoudre les missions spéciales, qui ne s'appelleront pas « auto ».
 4. **Pierre d'évolution divine** (2-3 par partie, humains → divins, etc.) : ACTÉE en principe, spec à écrire ; l'inverse (divin → humain) à envisager.
 5. **Choix forcés** : lignées exclusives initiales, branches verrouillées, pierres limitées — ACTÉ en principe, répartition exacte à définir.
 
 ## 11. Ordre des chantiers proposés après la session
 
-1. **Bugs rapides** (couloir 1, dès la fin de la session) : le point 9, rien de contestable.
-2. **Specs des ACTÉS de ce soir** : sets d'équipement/panoplies, navigation/hub, Boutique + Inventaire onglets, gating des acquisitions, retour ville + état des donjons, décor d'errance au niveau maquette.
-3. **Tranchages restants de la session** (avant tout spec moteur) : taille d'équipe (3+2 recommandé), but du jeu (propositions 1-4), Nature vs Plante, carte régionale vs géante, HP/MP en donjon, forme de la fusion, expéditions, choix initial de lignée exclusive.
-4. **Selon tranchage** : architecture errance × donjons (« 25 donjons » en chaînes), oppositions au sort, niveaux 1→100 + fusion, chaîne des donjons divins — gros chantiers, avant tout contenu v4.
-5. **En parallèle (couloir design)** : arts série 3 (en cours), maquette habillage boucle v2 (en attente de validation), héros d'errance propre.
-6. **Attendent** : redesign de l'IA de combat (après errance et calibrage ; guidé par le skill `docs/skills/game-ai/`) ; calibrage (MESURE après chaque changement de maths, jamais de recalibrage sauf tranchage) ; systèmes HUR/HSR et hybrides « H » (différés après 1→100).
+1. **LANCÉ (12/11, 11e tour) : chantier v1.39** (couloir 1) — XP par combat + fenêtre de fin de combat (XP/perso, objets, or) + suppression du mode auto : `docs/prompt-correctifs-v1.39.md`, à exécuter sur main `259a530`.
+2. **Bugs rapides** (couloir 1, dès la fin de la session) : le point 9, rien de contestable.
+3. **Specs des ACTÉS de ce soir** : formation 3 actifs + 2 réserve (switch moteur), oppositions au sort + migration, restauration HP/MP (ville/autel), sets d'équipement/panoplies, navigation/hub, Boutique + Inventaire onglets, gating des acquisitions, retour ville + état des donjons, décor d'errance au niveau maquette.
+4. **Tranchages restants** (avant tout spec moteur, voir section 0 « reste à trancher ») : carte régionale vs géante, forme de la fusion, expéditions, équipe de repli, choix initial de lignée exclusive, fin du Lieur.
+5. **Selon tranchage** : architecture errance × donjons (« 25 donjons » en chaînes), niveaux 1→100 + fusion, chaîne des donjons divins — gros chantiers, avant tout contenu v4.
+6. **En parallèle (couloir design)** : arts série 3 (en cours), maquette habillage boucle v2 (en attente de validation), héros d'errance propre.
+7. **Attendent** : redesign de l'IA de combat (après errance et calibrage ; guidé par le skill `docs/skills/game-ai/`) ; calibrage (MESURE après chaque changement de maths, jamais de recalibrage sauf tranchage) ; systèmes HUR/HSR et hybrides « H » (différés après 1→100).
 
 **Validations en attente de Marc-Olivier** : v1.32 sur téléphone ET PC ; maquette habillage boucle v2 (couloir design) ; lots visuels v1.37 (S24/S25 du protocole IHM) sur téléphone ET PC.
