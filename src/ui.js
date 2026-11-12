@@ -3171,12 +3171,12 @@ function ownedOf(id) {
   return store.collection.get(id) ?? 0;
 }
 
-function ownedCell(id) {
+// correctifs lot 5 : cellule possédée unique pour toute la page Collection
+function ownedCell(id, title = 'Voir la fiche') {
   const c = byId(id);
-  const level = levelOf(id);
   const n = ownedOf(id);
-  return `<div class="fam-card owned" data-id="${id}" title="Voir la fiche">
-    ${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}
+  return `<div class="fam-card owned" data-id="${id}" title="${title}">
+    ${cardFront({ ...c, level: levelOf(id) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}
     ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}
   </div>`;
 }
@@ -3280,12 +3280,12 @@ function renderCollection(root) {
   const raceGroup = (race) => raciales.filter((c) => raceOfCard(c) === race);
   const racCells = (ids) => ids
     .map((c) => {
-      const level = levelOf(c.id);
       const n = ownedOf(c.id);
       const tg = evoTargetsOf(c.id);
       if (n === 0 && !seenCard(c.id)) return '';
       if (n === 0) return seenCell(c.id);
-      return `<div class="fam-card owned" data-id="${c.id}" title="${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — évolue ${tg.length > 1 ? 'au choix en ' : 'en '}${tg.map((t) => evoLabelOf(c.id, t) === '??' ? '??' : byId(t).name).join(' · ')}` : ''}">${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}</div>`;
+      const titre = `${RACE_GLYPH[raceOfCard(c)]} ${RACE_LABEL[raceOfCard(c)]}${tg.length ? ` — ${tg.length > 1 ? 'évolue au choix en ' : 'évolue en '}${tg.map((t) => byId(t).name).join(' · ')}` : ''} · Voir la fiche`;
+      return ownedCell(c.id, titre);
     })
     .join('');
   const raceGrid = (race) => {
@@ -3314,10 +3314,8 @@ function renderCollection(root) {
     .map((c) => {
       const level = levelOf(c.id);
       const n = ownedOf(c.id);
-      return `<div class="fam-card owned" data-id="${c.id}" title="${SOLO_STEPS[c.id] ? `Évolue en ${byId(SOLO_STEPS[c.id]).name} (niveau 10 + éclats à la Forge)` : 'Voir la fiche'}">
-        ${cardFront({ ...c, level }, { extraClass: hasArt(c) ? 'unit-art' : '' })}
-        ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}
-      </div>`;
+      const titre = `${SOLO_STEPS[c.id] ? `Évolue en ${byId(SOLO_STEPS[c.id]).name} (niveau 10 + éclats à la Guilde)` : 'Voir la fiche'}`;
+      return ownedCell(c.id, titre);
     })
     .join('') + solosSeen.map((c) => seenCell(c.id)).join('');
   root.innerHTML = `
@@ -3338,21 +3336,21 @@ function renderCollection(root) {
     </div>
     ${(() => { const arch = CATALOG.filter((c) => c.archived && ownedOf(c.id) > 0); return arch.length ? `<div class="fam"><h4>Les archives — les anciennes cartes</h4><p class="muted fam-hint">Ces cartes d’anciennes familles ne se tirent plus : elles restent jouables mais n’entrent dans aucun arbre ni aucune évolution.</p><div class="fam-chain">${arch.map((c) => ownedCell(c.id)).join('')}</div></div>` : ''; })()}
     ${dungeonFamsOfRace('humaine').length ? `<h3 class="race-band">— formes humaines du Z\u00e9nith —</h3>${dungeonFamsOfRace('humaine').map(monsterFamSection).join('')}` : ''}
-    <h3 class="race-band">${RACE_GLYPH.monstre} Race monstre — le bestial <span class="muted">stats de base +10 %</span></h3>
+    <h3 class="race-band">${RACE_GLYPH.monstre} Race monstre — le bestial <span class="muted">${raceGroup('monstre').filter((c) => ownedOf(c.id) > 0).length}/${raceGroup('monstre').length} naissances d\u00e9voil\u00e9es \u00b7 stats de base +10 %</span></h3>
     <div class="fam">
       <h4>Les 5 Embryons — les affinit\u00e9s</h4>
       <p class="muted fam-hint">Eaux, Flammes, Vivant, T\u00e9n\u00e8bres, Cieux : l\u2019affinit\u00e9 est tir\u00e9e \u00e0 la naissance, sans \u00e9l\u00e9ment. Leurs webs de biome s\u2019ouvriront avec les choix multi-voies (prochain patch).</p>
       ${raceGrid('monstre')}
     </div>
     ${dungeonFamsOfRace('monstre').map(monsterFamSection).join('')}
-    <h3 class="race-band">${RACE_GLYPH.mystique} Race mystique — la sup\u00e9rieure <span class="muted">stats de base +20 %</span></h3>
+    <h3 class="race-band">${RACE_GLYPH.mystique} Race mystique — la sup\u00e9rieure <span class="muted">${raceGroup('mystique').filter((c) => ownedOf(c.id) > 0).length}/${raceGroup('mystique').length} naissances d\u00e9voil\u00e9es \u00b7 stats de base +20 %</span></h3>
     <div class="fam">
       <h4>Les 3 Enge — les essences</h4>
       <p class="muted fam-hint">Brumes, Bois, Caveaux : l\u2019essence est tir\u00e9e \u00e0 la naissance. Les familles d\u2019accueil (Sir\u00e8nes, Gens des S\u00e8ves, lign\u00e9es de la Crypte) les re\u00e7oivent \u00e0 leur premi\u00e8re \u00e9volution.</p>
       ${raceGrid('mystique')}
     </div>
     ${dungeonFamsOfRace('mystique').map(monsterFamSection).join('')}
-    <h3 class="race-band">${RACE_GLYPH.divine} Race divine — la noble <span class="muted">stats de base +30 % · bonus d\u2019\u00e9quipe</span></h3>
+    <h3 class="race-band">${RACE_GLYPH.divine} Race divine — la noble <span class="muted">${raceGroup('divine').filter((c) => ownedOf(c.id) > 0).length}/${raceGroup('divine').length} naissances d\u00e9voil\u00e9es \u00b7 stats de base +30 % \u00b7 bonus d\u2019\u00e9quipe</span></h3>
     <div class="fam">
       <h4>Ange, D\u00e9mon, \u00c9veill\u00e9 du Seuil — les trois naissances</h4>
       <p class="muted fam-hint">Le tirage divin (5 % du d\u00e9fi du jour) tire le camp au hasard. L\u2019\u00c9veill\u00e9 du Seuil ne choisit pas de camp : hors oppositions, comme toute carte sans \u00e9l\u00e9ment.</p>

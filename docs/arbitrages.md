@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — correctifs ciblage lots 4-5 livrés (IHM seule) : digests inchangés
+
+- **Lot 4** : gestes dissociés — fiche = appui court / appui long / ℹ️ (fonctionne même équipe pleine), ajouter/retirer = boutons explicites ＋/−/✕ (plus d'ajout au double-clic) ; fiche carte complète (badge de rôle, zone vs monocible, frappe en « dégâts (%) »). **Lot 5** : page Collection mise au propre (cellules possédées unifiées, titres cohérents, compteurs de naissances par bande de race, gestes = fiche). Smoke B17/B18 verts (317 checks, 3 échecs préexistants hors périmètre). 171 tests verts.
+- **MESURE** : digests **inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000** (0 exception, 0 marathon) — chantier 100 % IHM, contrainte tenue, aucune consignation d'écart requise.
+
 ## 2026-11-12 : MESURE — refonte IA clôturée (v1.34) : digest final N = 3000 + N = 10 000, proposition de verrouillage de la nouvelle baseline
 
 - **Clôture du chantier** (spec `docs/design/refonte-ia-spec-plan.md`, audit `docs/design/refonte-ia-audit.md`) : lots 0-4 livrés, un commit FR par lot, chacun avec tests headless + MESURE N = 3000 dans la tolérance (lot 0 inchangé `f8a9f0bb…` 1359 ; lot 1 `910d3dc3…` 1337, −0,73 pt ; lot 2 `3811fda3…` 1219, −3,93 pts ; lot 3 `c62fcbd1…` 1281, +2,07 pts ; lot 4 inchangé). Prérequis correctifs ciblage livrés en amont (lots 1-3, digest inchangé). Smoke enrichi (section B16 : anti-triche par introspection + Auto/ennemi sur les 5 difficultés) : 306 checks, seuls les 3 échecs préexistants. 171 tests verts.

@@ -1279,6 +1279,28 @@ async function main() {
     }
     check('B17 g 0 exception lot 4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
 
+    // ---------- B18 : correctifs ciblage lot 5 — collection mise au propre ----------
+    api.go('#collection');
+    await wait(40);
+    const colHtml18 = els.get('app')._innerHTML ?? '';
+    const ownedCells = [...els.get('app').querySelectorAll('.fam-card')].filter((el) => el.classList.contains('owned'));
+    check('B18 a page Collection : cellules possédées unifiées (data-id + badge)', ownedCells.length > 0 && ownedCells.every((el) => el.dataset.id), `owned=${ownedCells.length}`);
+    check('B18 b bandes de race avec compteur de naissances dévoilées', /naissances d\u00e9voil\u00e9es/.test(colHtml) || colHtml.includes('naissances dévoilées'), '');
+    const owned0 = ownedCells[0];
+    if (owned0) {
+      const nB = store.team.slots.length;
+      owned0.dispatch('pointerdown', { clientX: 5, clientY: 5 });
+      owned0.dispatch('pointerup', { clientX: 5, clientY: 5 });
+      await wait(30);
+      const modalC = doc.querySelector('.modal-overlay') ? doc.querySelector('.modal') : null;
+      check('B18 c appui sur une carte de la collection = fiche (pas d’ajout implicite)', store.team.slots.length === nB && !!modalC, `slots=${store.team.slots.length} modal=${!!modalC}`);
+      modalC ? modalC.querySelector('.modal-close')?.click() : null;
+      await wait(20);
+    } else {
+      check('B18 c appui collection = fiche', false, 'pas de carte possédée');
+    }
+    check('B18 d 0 exception lot 5', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
     // ---------- B16 : refonte IA — anti-triche par introspection + Auto/ennemi sur chaque difficulté ----------
     const stripComments = (code) => code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
     const engineSrc = ['src/engine/combat.js', 'src/engine/spells.js', 'src/engine/summon.js'].map((f) => stripComments(readFileSync(f, 'utf8'))).join('\n');
