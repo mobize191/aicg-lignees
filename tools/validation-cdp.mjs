@@ -181,7 +181,7 @@ async function main() {
   await new Promise(r => setTimeout(r, 700));
   const s4 = await cdp.evaljs(`({ cards: document.querySelectorAll('.card').length, art: document.querySelectorAll('.art-img, .art img').length })`);
   log('S4 collection : cartes rendues', s4.cards > 0 ? 'OK' : 'KO', JSON.stringify(s4));
-  log('S4 illustrations chargées (assets-v3.json)', s4.art > 0 ? 'OK' : 'INFO', `art=${s4.art}`);
+  log('S4 illustrations chargées (assets-v3.json, défaut V3.0 ; assets-v3.1.json commutable 🖼️)', s4.art > 0 ? 'OK' : 'INFO', `art=${s4.art}`);
   const s4b = await cdp.evaljs(`(() => { const t = document.querySelector('#app').innerText; const heads = [...document.querySelectorAll('#app h3')].map(h => h.innerText); return { seuil: heads.some(h => /Arbitres du Seuil/i.test(h)), miroir: heads.some(h => /Chœur Miroir/i.test(h)), pont: heads.some(h => /Tisseuses du Pont/i.test(h)), compagnons: heads.some(h => /Sabre|Ombre|Aube|Bouclier|Braise|Bosquet|Eau/i.test(h)) }; })()`);
   log('S4 collection : familles divines joueur (seuil/miroir/pont) listées', s4b.seuil && s4b.miroir && s4b.pont ? 'OK' : 'KO', JSON.stringify(s4b));
   await cdp.shot('S4-collection-desktop');
@@ -414,7 +414,7 @@ async function main() {
   const rapport = [
     '# Rapport de validation IHM — AICG : Lignées (protocole v1.33, headless Chromium via CDP)',
     '',
-    `Jeu servi en staging Pages (dist.html + assets-v3.json + fx/ + errance/) sur http://localhost:8080/ · Viewports 1440×900 et 390×844 · ${shotCount} captures dans \`${OUT}/\``,
+    `Jeu servi en staging Pages (dist.html + assets-v3.json + assets-v3.1.json + fx/ + errance/) sur http://localhost:8080/ · Viewports 1440×900 et 390×844 · ${shotCount} captures dans \`${OUT}/\``,
     '',
     '## Résultats par scénario',
     '',

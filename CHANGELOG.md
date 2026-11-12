@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.33] — 2026-11-12 — Illustrations V3.1 en doublon commutable (bouton 🖼️)
+
+Relance 3.1 complète livrée (271 cartes, verrous R8/R9/R10 + anti-cadre/anti-texte renforcés, rapport `tools/out-v2/RAPPORT-v31-session.md`) et publiée en second manifeste `assets-v3.1.json` (362 arts + 8 fonds, ~30 Mo), commutable avec V3.0 via le bouton 🖼️ (`ART_MANIFESTS = { v3, v31 }` dans `src/ui.js`, source choisie persistée en localStorage `fondations-art-src`). Les assets existant uniquement en 3.1 (7 cartes série 3 g31/g32/k31/k32/p2/z31/z32 + 90 arts d'équipement série 3) sont ajoutés au manifeste par défaut `assets-v3.json` : présents par défaut partout, le switch ne les retire pas. La CI Pages publie désormais `assets-v3.json` + `assets-v3.1.json`. Moteur et data inchangés : digest inchangé `f8a9f0bb…` 1359/3000.
+
+
 ## [1.32] — 2026-11-11 — Chantier « contenu v3 » exécuté (8 lots)
 
 Spec et plan : `docs/design/contenu-v3-spec-plan.md`. **C1** : marchand de créatures v2 — 3 offres/jour (rotation `seedOfDay`), prix actés C 200 / UC 1 500 / R 4 500 / SR 8 000 / UR 10 000 or, raretés débloquées par difficulté de donjon bouclée (C, puis UC/R/SR/UR), limite 3 exemplaires. **C2** : Sirènes des Récifs auditées et verrouillées (e23-e30, L Méliane/Thalassa, vagues + errance). **C3** : gobelins régionaux — variantes C/UC au Bosquet (g31/g32), à la Crypte (k31/k32), au Zénith (z31/z32), foyer Marées ; digest re-mesuré `f8a9f0bb…` 1359/3000 (MESURE, sans recalibrage). **C4** : Clergé du Plein Jour audité (Apolline M, Justine L, Zénith à 2 M). **C5** : greffe des 31 solos archivés dans des familles d'accueil, cibles d'évolution préservées, plus d'archives. **C6** : familles compagnons — 7 voies b1-b7 → UR (c1-c7) → L nommée (c8-c14). **C7** : familles divines joueur (seuil/miroir/pont, w1-w18), maillons du Jeune Séraphin (p5 UR, p6 L), lignées d'accueil des Enge (w19-w21). **C8** : clôture — tables régénérées, protocole IHM v1.33, digest N = 10 000 `978ed44b…` 4517/10000 en MESURE. 150 tests, smoke 299 checks (2 échecs préexistants 46 g/45 e). MESURES consignées dans `docs/arbitrages.md` ; baseline verrouillée `f72106ff…`/`3f9fe198…` non touchée.

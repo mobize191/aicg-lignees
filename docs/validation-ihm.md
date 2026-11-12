@@ -14,7 +14,7 @@ node smoke-ui.mjs dist.html                   # 299 checks attendus (2 échecs p
 node combat-digest.mjs dist.html 3000         # MESURE courante : f8a9f0bb…, 1359/3000, 0 exception, 1 marathon (baseline verrouillée f72106ff…, 1379/3000)
 node combat-digest.mjs dist.html 10000        # MESURE N = 10 000 : 978ed44b…, 4517/10000 (baseline verrouillée 3f9fe198…, 4558/10000)
 # servir le jeu en reproduisant le déploiement Pages (le chargeur d'assets a besoin de http, pas de file://)
-mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance
+mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json assets-v3.1.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance
 cd .site && python3 -m http.server 8080
 # → ouvrir http://localhost:8080/  (index.html = dist.html ; fx/ et errance/ servis comme en ligne)
 # (servir la racine du dépôt à la place = comportement « assets non chargés » : le jeu doit continuer sans échouer)
@@ -31,7 +31,7 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 1. Deux viewports systématiques : desktop **1440×900** et mobile **390×844** (ajoute **360×740** pour les cas limites). Pour chaque scénario ci-dessous, captures dans les deux viewports.
 2. À chaque page : capture plein écran, puis vérifie (a) aucune erreur dans la console (écoute `page.on('console')` et `page.on('pageerror')`), (b) pas de scroll horizontal (`document.documentElement.scrollWidth <= innerWidth`), (c) aucun texte tronqué visible (ellipsis attendues ok, coupures non), (d) tous les boutons interactifs ont une taille ≥ 32 px en mobile.
 3. **Régression CSS mobile (v1.29)** : sur chaque page, fais défiler jusqu'en bas : AUCUN texte brut de type `.chip.r-C`, `.recomp-list`, `.shop-row`, `.fx-video` ne doit s'afficher (le bug « CSS visible sur téléphone » est corrigé, il ne doit jamais revenir).
-4. Les illustrations (cartes + fonds) se chargent via `assets-v3.json` (manifeste unique depuis v1.28, ~24 Mo) : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond. Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
+4. Les illustrations (cartes + fonds) se chargent via `assets-v3.json` (manifeste par défaut V3.0 depuis v1.28, ~31 Mo ; `assets-v3.1.json` en doublon commutable via 🖼️ depuis v1.33 — teste aussi le switch) : vérifie qu'au moins une image `.art-img` est présente dans la collection et qu'un combat affiche un fond. Si aucune image : NE PAS échouer, noter « assets non chargés » et continuer (le jeu marche aussi sans).
 5. Le jeu utilise localStorage : vide-le entre les scénarios qui posent une équipe ou un départ (`localStorage.clear()`), jamais pendant un combat ni pendant l'errance.
 
 ### Scénarios (dans l'ordre)

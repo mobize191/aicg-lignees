@@ -1034,7 +1034,7 @@ animation: newpulse 1.6s infinite;
 <header>
   <div class="brand">⚔ AICG : Lignées</div>
   <span class="pts-badge" id="pts">⚡ 0</span>
-  <button type="button" id="art-src-btn" aria-label="Changer la source des images" title="Source des images : DreamShaper XL">🖼️</button>
+  <button type="button" id="art-src-btn" aria-label="Changer la source des images" title="Source des images : AICG Lignées V3.0 (WAI-Illustrious v17 — vague 3)">🖼️</button>
   <button type="button" id="menu-btn" aria-label="Menu">☰</button>
 </header>
 <nav id="main-nav">
@@ -18479,10 +18479,12 @@ function updatePtsBadge() {
 
 const ART = {};
 
-// v1.28 : source d'illustrations unique = campagne AICG V3 (WAI-Illustrious v17, vague 3 validée).
+// v1.28 : campagne AICG V3 (WAI-Illustrious v17, vague 3) = source par défaut (v3.0).
+// v1.33 : la relance 3.1 (verrous R8/R9/R10) est ajoutée en doublon commutable via le bouton 🖼️ (v3.1).
 // Les anciens manifests (DreamShaper XL, WAI v2) sont archivés dans archives/assets/.
-const ART_MANIFESTS = { v3: 'assets-v3.json' };
-const ART_SRC_LABEL = { v3: 'AICG Lignées V3 (WAI-Illustrious v17)' };
+// Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 équipements) sont aussi dans v3.0 : par défaut partout.
+const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json' };
+const ART_SRC_LABEL = { v3: 'AICG Lignées V3.0 (WAI-Illustrious v17 — vague 3)', v31: 'AICG Lignées V3.1 (verrous 3.1 — relance complète)' };
 function artSrcKey() {
   try {
     const k = storage.getItem('fondations-art-src');
@@ -22353,6 +22355,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.33 : Illustrations V3.1 en doublon commutable (bouton 🖼️)', 'Relance 3.1 complète (271 cartes, verrous R8/R9/R10 + anti-cadre renforcé) publiée en second manifeste `assets-v3.1.json`, switchable avec V3.0 via le bouton 🖼️ pour comparer les cartes. Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 arts d’équipement) sont ajoutés au manifeste par défaut `assets-v3.json` : présents partout. 150 tests, smoke 299 checks, digest inchangé `f8a9f0bb…` 1359/3000.'],
   ['v1.32 : Chantier « contenu v3 » — marchand v2, gobelins régionaux, greffe des solos, familles compagnons, divines joueur', 'Marchand v2 : 3 offres du jour, prix actés, raretés débloquées en bouclant des donjons. Gobelins régionaux au Bosquet, à la Crypte et au Zénith. Les 31 anciennes cartes solos sont greffées à des familles. Sept voies de compagnons (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) mènent chacune à une UR et une L. Familles divines jouables (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont), maillons du Jeune Séraphin et lignées des Enge (Sirène, Fée, Gorgonne Nouvelles). Digest re-mesuré sans recalibrage : f8a9f0bb… 1359/3000.'],
   ['v1.31 : Chantier « reste code » — correctifs, rangs, errance 5 zones, craft, page Personnage', 'Sauvegardes réparées (migration v27 : plus aucun sort en doublon après évolution). Rangs avant/arrière actifs : l’arrière encaisse -50 % tant que l’avant tient, Guerrier/Assassin en arrière frappent à moitié, soins jamais affectés. Plus de rôle attaque/support : formation 3+2 ou 2+3 choisie avant le combat. Vidéos FX : une seule à la fois, pause hors écran, image fixe si mouvement réduit. Errance sur les 5 zones avec le héros dédié (sprite sheet du cycle de marche). Craft en ville à l’atelier de la Boutique (matériaux de zone + matière du boss), et page Personnage à onglets : Équipe + Inventaire.'],
   ['v1.29 : Correctifs terrain — CSS mobile + fluidité de l’errance', 'Le bloc CSS des écrans récents n’est plus affiché en texte brut sur téléphone (remonté dans le <style> du head). Errance : pilotage inertiel avec virages en arc et freinage (plus d’orbite), caméra fluide indépendante du framerate avec look-ahead et zoom, décor pré-rendu en un seul drawImage par frame, rendu net en haute densité (DPR ≤ 2), drag avec mémo de cible et pointerup sur window pour iOS.'],

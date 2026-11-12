@@ -6,12 +6,13 @@ Jeu de cartes solo 100% navigateur : collection, donjons et lignées qui montent
 
 ## Jouer
 
-Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (https://mobize191.github.io/aicg-lignees/ ; activez Pages avec « Source : GitHub Actions » dans les paramètres du repo). La CI (`.github/workflows/pages.yml`) enchaîne deux jobs à chaque push sur `main` : un job **test** (`node build.mjs && node --test`) puis le **déploiement Pages** qui publie `dist.html` en `index.html`, le manifeste `assets-v3.json` et les vidéos de sorts `site-assets/fx/` → `fx/`.
+Ouvrez `dist.html` dans un navigateur, ou via GitHub Pages (https://mobize191.github.io/aicg-lignees/ ; activez Pages avec « Source : GitHub Actions » dans les paramètres du repo). La CI (`.github/workflows/pages.yml`) enchaîne deux jobs à chaque push sur `main` : un job **test** (`node build.mjs && node --test`) puis le **déploiement Pages** qui publie `dist.html` en `index.html`, les manifestes `assets-v3.json` (V3.0, défaut) + `assets-v3.1.json` (V3.1, commutable via le bouton 🖼️) et les vidéos de sorts `site-assets/fx/` → `fx/`.
 
 ## Structure
 
 - `dist.html` : le jeu complet, autonome (HTML + JS + CSS, aucune dépendance).
-- `assets-v3.json` : manifeste d'illustrations unique depuis v1.28 (data-URI : 265 arts de cartes + 8 fonds de donjons, campagne AICG V3 / WAI-Illustrious v17, ~24 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne. Les anciens manifests (`assets.json`, `assets-wai.json`, `assets-v2.json`) sont archivés dans `archives/assets/`.
+- `assets-v3.json` : manifeste d'illustrations par défaut depuis v1.28 (data-URI : 265 arts de cartes vague 3 + 97 assets existant uniquement en 3.1 + 8 fonds de donjons, campagne AICG V3 / WAI-Illustrious v17, ~31 Mo ASCII pur), chargé automatiquement quand le jeu est servi en ligne.
+- `assets-v3.1.json` : doublon commutable de la relance 3.1 (verrous R8/R9/R10, 362 arts + 8 fonds, ~30 Mo), sélectionné via le bouton 🖼️ (choix persisté en localStorage `fondations-art-src`). Les anciens manifests (`assets.json`, `assets-wai.json`, `assets-v2.json`) sont archivés dans `archives/assets/`.
 - `combat-digest.mjs` : harnas d'équilibrage (3000 combats simulés, digest SHA256 de dormance).
 - `smoke-ui.mjs` : suite de fumée UI du dist publié (171 checks).
 - `tools/` : les scripts de la campagne d'illustrations ComfyUI (extraction du catalogue, génération des prompts, batch API, intégration au manifeste, planches de contrôle).

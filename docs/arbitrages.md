@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : ACTÉ — illustrations V3.1 publiées en doublon commutable (bouton 🖼️), assets 3.1-only par défaut partout
+
+- **Décision (v1.33)** : la relance 3.1 (271 cartes, verrous R8/R9/R10, rapport `tools/out-v2/RAPPORT-v31-session.md`) est publiée en second manifeste `assets-v3.1.json`, commutable avec V3.0 (`assets-v3.json`) via le bouton 🖼️ existant (`ART_MANIFESTS = { v3, v31 }`, choix persisté en localStorage `fondations-art-src`, défaut = v3). Objectif : comparer les cartes 3.0 vs 3.1 côte à côte.
+- **Assets existant uniquement en 3.1** (7 cartes série 3 g31/g32/k31/k32/p2/z31/z32 + 90 arts d'équipement série 3) : ajoutés au manifeste par défaut `assets-v3.json` → présents par défaut partout, le switch ne les retire pas.
+- **Déploiement** : la CI Pages publie `assets-v3.json` + `assets-v3.1.json`. Moteur/data inchangés : digest inchangé `f8a9f0bb…` 1359/3000 (MESURE, baseline verrouillée non touchée).
+
 > Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
 
 ## 2026-11-11 : MESURE — validation IHM réelle post-contenu v3 (protocole v1.33, headless Chromium via CDP) : VERT, 0 KO, 0 erreur console + nouveaux checks marchand v2
