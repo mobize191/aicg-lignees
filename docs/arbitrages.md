@@ -1,5 +1,20 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : ACTÉ — Léviathan des Marées : canon visuel Atlantide Disney + LoRA Leviathan XL
+
+- **Canon visuel du Léviathan (e13, seaSerpent/Léviathan des Marées, et les seaBehemoth)** : le monstre du film Disney « Atlantide, la cité perdue » (colosse à carapace de crustacé, yeux rouges luisants, gueule à tentacules, gardien antique des profondeurs). Arbitrage de Marc-Olivier après consultation des candidats Civitai.
+- **Leviathan XL** (civitai.com/models/237733, Illustrious natif, ⭐154, SFW) RETENU comme appui morphologique, en complément de la description R11 (« a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw »). Aucun LoRA dédié au design Disney n'existe sur Civitai.
+- **Tidehunter DotA2 ÉCARTÉ** (géant bleu humanoïde, pas la cible) ; candidats Krea 2 / SD 1.5 du film Atlantide incompatibles avec WAI-Illustrious. Consigné dans `docs/images/lora-candidats-v32.md`.
+
+## 2026-11-12 : CONSTAT — 38 cartes sans illustration (contenu v3) : périmètre image à étendre
+
+- **Mécanisme** : le front charge les arts depuis les manifestes `assets-v3.json`/`assets-v3.1.json` (clé = id de carte) ; toute carte absente du manifeste affiche le fallback sans image. Signalement de Marc-Olivier via « Lame Miroir » (w7).
+- **Inventaire (38, aucune n'a prompt/seed/image/manifeste)** : c1-c14 (14 compagnons évolutifs : Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve en UR puis L), p2/p5/p6 (divines : Ange Gardien C, Séraphin UR/L), w1-w6 (famille Seuil, C→L, dont Kairos), w7-w12 (famille Miroir, dont Lame Miroir), w13-w18 (famille Pont, dont Ananké), w19-w21 (Sirène/Fée/Gorgonne Nouvelle).
+- **Cause** : ces cartes viennent du chantier contenu v3 (couloir 1, lots compagnons/divines/Sirènes), codées APRÈS le gel du périmètre image (271 arts).
+- **Paradoxe à corriger** : Kairos et Ananké ont DÉJÀ leurs vidéos WAN (`site-assets/fx-wai/wan21-kairos.webm`, `wan21-ananke.webm`) mais pas d'art fixe.
+- **Décision** : étendre le pipeline image à ces 38 (nouveau lot « contenu v3 », seeds 2150000+), verrous 3.2 applicables, inventaire consigné dans `docs/images/arts-manquants-contenu-v3.md`. À intégrer à la session 3.2.
+
+
 ## 2026-11-12 : ACTÉ — vague 3.2 image (verrous R11-R14) : monstres réels, tenues correctes, pas de sang, visages au cas par cas ; LoRAs en test témoin
 
 - **Retour v3.1 de Marc-Olivier** : style, plancher de cadrage (poitrine complète) et parité VALIDÉS. Quatre défauts systémiques restants → verrous 3.2 consignés dans `docs/images/correction-prompts-v3.md` §6-7, régénération ciblée vague 3.2 (mêmes seeds, seed+1 aux retries).
@@ -269,10 +284,3 @@ Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS a
 - **Livré** : la 🛒 Boutique couvre le catalogue fixe acté — rayon potions (déjà livré lot 1), **rayon éclats bruts** (5 éléments, achat `ECLAT_BUY_PRIX` = 150 or en data, revente 100 or via l'inventaire) et **rayon équipement** (les 60 pièces `source: "boutique"` de `data/equipment.json`, 200 à 1 600 or, armes typées par classe + armures + slots d'équipe ; les 90 pièces de set restent hors Boutique : boss, craft, évolutions). Achats en or, solde persisté, aucune migration (champs existants). Les pièces achetées rejoignent l'inventaire et s'équipent depuis la fiche.
 - **Preuve** : build ok, **130 tests** verts (catalogue Boutique en data : prix, slots, sets exclus), smoke **217 checks** (7 nouveaux B6 verts ; 2 échecs préexistants hors chantier), digest **inchangé `f72106ff…` 1379/3000** (achats hors combat — mesure consignée, pas d'ajustement).
 
-## 2026-11-11 : MESURE — boucle v2 lot 6 livré, chantier clos : baseline finale au digest N = 10 000
-
-- **Livré** : digest final au pack **N = 10 000** : **`3f9fe198…` — 4558 victoires / 10000 (45,6 %), 0 exception, 1 marathon**, cohérent avec le pack 3000 (`f72106ff…` 1379/3000, 46,0 %). Nouvelle **baseline** consignée ici et dans `docs/roadmap.md`. Preuve finale : build ok, **128 tests** verts, smoke **210 checks** (2 échecs préexistants hors chantier), tableaux `docs/tables/` régénérés. `docs/regles-jeu.md` à jour (règles des 6 lots en IMPLÉMENTÉ). Rapport de clôture : `docs/historique/rapport-boucle-v2.md`. **Aucun ajustement de maths** : le digest est une mesure — les arbitrages d'équilibre (Zénith, taux global, prix des potions) restent ouverts jusqu'à la re-mesure finale après l'économie v2.
-
-## 2026-11-11 : MESURE — boucle v2 lot 5 livré (progression : XP recalibrée, palier sans perte nette, solos archivés, rang N hors drops/recrutement)
-
-- **Livré** : **courbe d'XP recalibrée sur l'échelle longue** (`moteur.XP_GROWTH = 0.25` dans `data/engine.json` : `xpToNext(lvl) = round(lvl × (1 + 0.25 × (lvl-1)))`) ; **palier d'évolution sans perte nette** : `noLossPctOf(from, to)` calcule depuis les données le bonus % garantissant que la forme suivante au niveau 1 reste au moins aussi forte (ATQ et PV) que la forme précédente au niveau 10 — calcul sur valeurs non arrondies + 1 pt de marge d'arrondi, **vérifié par simulation** (test sur toutes les cibles d'évolution + check smoke B5 c), appliqué via `inst.noLoss` dans `evolveInstance`/`applyTreeEveil` et transmis au moteur (`makeUnit`) ; **solos archivés** : 31 cartes solo marquées `archived: true` dans `data/cards.json`, exclues des tirages (`drawNaissance`, pools de naissances, `runZone`) mais toujours jouables et affichées dans « Les archives » ; **rang N achevé** : `drawNaissance` et `runZone` excluent la rareté N (les naissances viennent de l'écran de départ, des quêtes et de la Guilde ; seules les communes divines C restent la porte divine des drops), éveil N→C par la pierre d'éveil inchangé (T1.2), les naissances N restent jouables en combat. Bonus d'équipement (`card.equip`) et `noLossPct` appliqués dans `makeUnit`.
