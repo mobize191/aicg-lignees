@@ -1069,6 +1069,22 @@ async function main() {
       api._setAuto(prevAuto28);
       doc.body.querySelector('.recomp-overlay')?.remove(); // ferme la modale Récompenses ouverte par la victoire
       api.go('#accueil'); await wait(30);
+    // ---------- B29 : correctifs v1.38 lot 2 — aléatoire PAR COMBAT + waveSize en data ----------
+    {
+      check('B29 a waveSeedFor accepte un extra (seed par combat) et garde le hash historique sans extra', /waveSeedFor\(dungeonId, diff, extra = null\)/.test(html) && /extra == null \?/.test(html), '');
+      check('B29 b startZoneFight incrémente zoneFightCount (persisté)', /store\.zoneFightCount = \(store\.zoneFightCount \?\? 0\) \+ 1/.test(html), '');
+      check('B29 c zoneFightCount persisté dans la save (snapshot)', /zoneFightCount: store\.zoneFightCount \?\? 0/.test(html), '');
+      check('B29 d waveSize [2,3] en data pour les 5 zones', (api.DATA.zones ?? []).length === 5 && api.DATA.zones.every((z) => Array.isArray(z.errance?.waveSize) && z.errance.waveSize[0] === 2 && z.errance.waveSize[1] === 3), '');
+      check('B29 e makeWave accepte une plage de taille (6e param)', /makeWave\(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, waveSizeRange = null\)/.test(html), '');
+      const wA = api.makeWave(777, 1, 'marees', 1, null, [2, 2]);
+      check('B29 f makeWave respecte waveSize [2,2] (toujours 2 monstres, 0 support étage 1)', wA.avant.length === 2 && wA.arriere.length === 0, `${wA.avant.length}/${wA.arriere.length}`);
+      const ids = (c) => api.makeWave(api.waveSeedFor('marees', 1, c), 1, 'marees', 1).avant.map((m) => m.id).join(',');
+      check('B29 g deux compteurs différents -> deux vagues distinctes ; même compteur -> même vague', ids(1) !== ids(2) && ids(1) === ids(1), `${ids(1)} vs ${ids(2)}`);
+      const today = new Date().toISOString().slice(0, 10);
+      const legacy = (() => { let h = 7; for (const ch of `${today}|marees|1`) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0; return h; })();
+      check('B29 h sans extra, waveSeedFor = hash historique (donjons classiques inchangés)', api.waveSeedFor('marees', 1) === legacy, `${api.waveSeedFor('marees', 1)} vs ${legacy}`);
+    }
+
     }
 
     }

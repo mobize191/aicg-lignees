@@ -808,7 +808,7 @@ function spreadAt(stage) {
   return 3;
 }
 
-function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
+function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, waveSizeRange = null) { // v1.38 lot 2 : waveSizeRange = [min,max] en data (combats de zone)
   const rng = mulberry32(hashSeed(seed, stage));
   const dungeon = dungeonById(dungeonId);
   const DIFF = difficultyById(diff);
@@ -852,7 +852,7 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null) {
     const supports = isFinal ? [scaled(POOL), scaled(POOL)] : [scaled(POOL)];
     wave = { avant: [boss, ...minions], arriere: supports };
   } else {
-  const n = 2 + (rng() > M.WAVE_EXTRA_CHANCE ? 1 : 0);
+  const n = waveSizeRange ? Math.max(1, Math.min(waveSizeRange[1], waveSizeRange[0] + Math.floor(rng() * (waveSizeRange[1] - waveSizeRange[0] + 1)))) : 2 + (rng() > M.WAVE_EXTRA_CHANCE ? 1 : 0);
   const supCount = stage >= 2 && rng() > M.WAVE_SUP_CHANCE ? 1 : 0;
   wave = {
     avant: Array.from({ length: n }, () => scaled(POOL)),
