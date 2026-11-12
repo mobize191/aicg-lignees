@@ -4223,6 +4223,7 @@ const DATA = {
    "progressEps": 0.01
   },
   "AUTEL_SOIN_GRACE": 5,
+  "ERRANCE_GRACE_COMBAT": 8,
   "REGEN_BOSS_STAGE": 5,
   "DEPART_CHOIX": [
    "n1",
@@ -17758,6 +17759,17 @@ function quitterCombat(storeLike) {
   if (storeLike.runState) { storeLike.runState.active = false; storeLike.runState.kind = null; }
 }
 
+// correctifs v1.37 lot 7 : au lancement d'un combat depuis l'errance, le héros est figé
+// (chemin vidé) — au retour de combat il ne repart que sur un tap du joueur
+function figerHero(errance) {
+  if (!errance || !errance.hero) return false;
+  errance.hero.path = [];
+  if (errance.hero.v) { errance.hero.v.x = 0; errance.hero.v.y = 0; }
+  errance.pending = null;
+  errance.goal = null;
+  return true;
+}
+
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
 // v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
@@ -20532,6 +20544,7 @@ function startZoneFight(zoneId, { donjon = false } = {}) {
   if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.zoneFight = { zone: zoneId, donjon };
   store.runState.kind = donjon ? 'donjon' : 'zone';
+  figerHero(store.errance); // lot 7 : héros figé pendant le combat
   store.dungeon = dungeonOfZone(zoneId);
   store.stage = 1;
   store.runState = freshRunState();
@@ -23041,7 +23054,7 @@ async function animate(events, ms, gen = null) {
           // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
           if (store.zoneFight) {
             questProgress('gagnerErrance');
-            if (store.errance) store.errance.grace = 2;
+            if (store.errance) store.errance.grace = M.ERRANCE_GRACE_COMBAT; // lot 7 : grâce post-combat en data (8 pas)
             if (store.zoneFight.donjon) {
               unlockZone(store.zoneFight.zone);
               toast(`✓ Donjon de la zone vaincu — une nouvelle zone s'ouvre dans Les Terres Sauvages !`);

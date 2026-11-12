@@ -34,3 +34,14 @@ function quitterCombat(storeLike) {
   if (storeLike.zoneFight) storeLike.zoneFight = null;
   if (storeLike.runState) { storeLike.runState.active = false; storeLike.runState.kind = null; }
 }
+
+// correctifs v1.37 lot 7 : au lancement d'un combat depuis l'errance, le héros est figé
+// (chemin vidé) — au retour de combat il ne repart que sur un tap du joueur
+function figerHero(errance) {
+  if (!errance || !errance.hero) return false;
+  errance.hero.path = [];
+  if (errance.hero.v) { errance.hero.v.x = 0; errance.hero.v.y = 0; }
+  errance.pending = null;
+  errance.goal = null;
+  return true;
+}

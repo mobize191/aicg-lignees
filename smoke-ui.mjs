@@ -1033,6 +1033,23 @@ async function main() {
       const sigDmg = defDmg ? (api.byId(defDmg.id).spells ?? []).find((sp) => sp.cat === 'unique') : null;
       const metaDmg = defDmg ? api.signatureMetaOf(defDmg) : null;
       check('B26 f métadonnée d’une carte à dégâts vaut enemy', !!defDmg && !!sigDmg && metaDmg.role === 'degats' && api.spellSideOf({ ...sigDmg, ...metaDmg }) === 'enemy', defDmg ? `${defDmg.id}: ${metaDmg.role}/${metaDmg.cible}` : 'aucune');
+    // ---------- B27 : correctifs v1.37 lot 7 — héros figé après combat + grâce 8 pas (data) ----------
+    {
+      check('B27 a constante ERRANCE_GRACE_COMBAT = 8 en data', api.DATA.engine.ERRANCE_GRACE_COMBAT === 8, String(api.DATA.engine.ERRANCE_GRACE_COMBAT));
+      check('B27 b startZoneFight fige le héros (figerHero câblé)', /figerHero\(store\.errance\)/.test(html), '');
+      check('B27 c grâce post-combat lue en data (plus de grace = 2 en dur)', /grace = M\.ERRANCE_GRACE_COMBAT/.test(html) && !/grace = 2;/.test(html), '');
+      setup(['n1', 'n3'], 5);
+      api.enterZone('zone-marees');
+      const st27 = api.store.errance;
+      const okPath = api.setTarget(st27, st27.map.spawn.x + 3, st27.map.spawn.y);
+      api.startZoneFight('zone-marees', { donjon: false });
+      check('B27 d flux réel : combat lancé depuis l\u2019errance avec un chemin posé -> chemin vidé, pending/goal null', okPath && st27.hero.path.length === 0 && st27.pending === null && st27.goal === null && !!api.store.zoneFight, `path=${st27.hero.path.length} pending=${st27.pending} goal=${st27.goal}`);
+      api.stepErrance(st27, 0.05, () => 0); // enregistre la tuile de départ (lastTile)
+      let steps27 = 0, enc27 = 0;
+      for (let k = 0; k < 40; k++) { const ev = api.stepErrance(st27, 0.05, () => 0); steps27 += ev.steps; if (ev.encounter) enc27++; }
+      check('B27 e héros figé : 0 pas automatique, 0 rencontre sans input après le combat', steps27 === 0 && enc27 === 0, `steps=${steps27} enc=${enc27}`);
+    }
+
     }
 
   {

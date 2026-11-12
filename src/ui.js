@@ -2521,6 +2521,7 @@ function startZoneFight(zoneId, { donjon = false } = {}) {
   if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.zoneFight = { zone: zoneId, donjon };
   store.runState.kind = donjon ? 'donjon' : 'zone';
+  figerHero(store.errance); // lot 7 : héros figé pendant le combat
   store.dungeon = dungeonOfZone(zoneId);
   store.stage = 1;
   store.runState = freshRunState();
@@ -5030,7 +5031,7 @@ async function animate(events, ms, gen = null) {
           // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
           if (store.zoneFight) {
             questProgress('gagnerErrance');
-            if (store.errance) store.errance.grace = 2;
+            if (store.errance) store.errance.grace = M.ERRANCE_GRACE_COMBAT; // lot 7 : grâce post-combat en data (8 pas)
             if (store.zoneFight.donjon) {
               unlockZone(store.zoneFight.zone);
               toast(`✓ Donjon de la zone vaincu — une nouvelle zone s'ouvre dans Les Terres Sauvages !`);
