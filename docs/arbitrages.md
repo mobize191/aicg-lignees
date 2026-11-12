@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : SESSION — livraisons du couloir 1 mergées (PR #3 + PR #4) : correctifs lots 4-5 livrés, 4 specs des ACTÉS du 11/11 nuit PROPOSÉES
+
+- **PR #3 mergée** : correctifs ciblage lots 4-5 (gestes dissociés ℹ️/＋/−/✕, fiche carte complète avec rôle/zone/« dégâts (%) », collection au propre) — digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000, 171 tests, smoke 317 (3 échecs préexistants hors périmètre). Le chantier correctifs ciblage est donc **entièrement livré**.
+- **PR #4 mergée** : les 4 specs des ACTÉS du 11/11 nuit sont rédigées en **PROPOSÉ**, aucun code : `docs/design/spec-sets-equipement.md`, `spec-navigation-hub.md`, `spec-boutique-inventaire-onglets.md`, `spec-gating-acquisitions.md`. Chaque question non tranchée est balisée `[À TRANCHER — SESSION 12/11]` dans la section « Questions ouvertes » de chaque spec. **Rien ne se code avant la session.**
+
 ## 2026-11-12 : MESURE — correctifs ciblage lots 4-5 livrés (IHM seule) : digests inchangés
 
 - **Lot 4** : gestes dissociés — fiche = appui court / appui long / ℹ️ (fonctionne même équipe pleine), ajouter/retirer = boutons explicites ＋/−/✕ (plus d'ajout au double-clic) ; fiche carte complète (badge de rôle, zone vs monocible, frappe en « dégâts (%) »). **Lot 5** : page Collection mise au propre (cellules possédées unifiées, titres cohérents, compteurs de naissances par bande de race, gestes = fiche). Smoke B17/B18 verts (317 checks, 3 échecs préexistants hors périmètre). 171 tests verts.
