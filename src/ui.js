@@ -2640,17 +2640,9 @@ function renderErrance(root) {
   }
   let time = 0, atk = 0, lastPhase = '', smokeAcc = 0;
   const smoke = [];
-  // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
-  // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
-  const heroCfg = E.ERRANCE_HERO ?? null;
-  let heroSheet = null, heroPoster = null;
-  if (heroCfg) {
-    (async () => {
-      const [sh, po] = await Promise.all([probeImage(heroCfg.sheet), probeImage(heroCfg.poster)]);
-      if (sh) { const im = new Image(); im.onload = () => { heroSheet = im; }; im.src = sh; }
-      if (po) { const im = new Image(); im.onload = () => { heroPoster = im; }; im.src = po; }
-    })();
-  }
+  // correctif v1.36.1 lot 4 : héros vectoriel « petit bonhomme » de la maquette A+ (remplace le sprite WAN,
+  // contrainte « WAN gardé » levée par Marc-Olivier 12/11 6e tour ; l'asset reste dans les manifests)
+  const heroCfg = E.ERRANCE_HERO ?? null; // conservé pour compat, non utilisé au rendu
   const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
   const draw = (dtA) => {
     const animT = motionOK() ? time : 0; // prefers-reduced-motion : animations décoratives gelées (frame fixe), comme le héros
@@ -2772,34 +2764,31 @@ function renderErrance(root) {
       hg.addColorStop(1, 'rgba(255,224,150,0)');
       ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy - 8, 46, 0, 7); ctx.fill();
     }
-    ctx.save();
-    ctx.translate(hx, hy);
-    ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
     const hv = st.hero.v ?? { x: 0, y: 0 };
     const hsp = Math.hypot(hv.x, hv.y);
-    if (heroSheet && heroCfg) {
-      // cycle de marche : frame selon le temps, dos si le héros monte, miroir si déplacement à gauche
-      const moving = hsp > 0.15 && motionOK();
-      const back = hv.y < -0.05;
-      const cyc = heroCfg.cycle ?? 40;
-      const fi = moving ? Math.floor(performance.now() / 1000 * (heroCfg.fps ?? 16)) % cyc : 0;
-      const idx = (back ? (heroCfg.backFrom ?? 40) : 0) + fi;
-      const sx = (idx % heroCfg.cols) * heroCfg.frameW;
-      const sy = Math.floor(idx / heroCfg.cols) * heroCfg.frameH;
-      const dw = T * 0.66, dh = dw * heroCfg.frameH / heroCfg.frameW;
-      ctx.save();
-      if (hv.x < -0.05) ctx.scale(-1, 1);
-      ctx.drawImage(heroSheet, sx, sy, heroCfg.frameW, heroCfg.frameH, -dw / 2, -dh + T * 0.3, dw, dh);
-      ctx.restore();
-    } else if (heroPoster) {
-      const dw = T * 0.66, dh = dw * 560 / 400;
-      ctx.drawImage(heroPoster, -dw / 2, -dh + T * 0.3, dw, dh);
-    } else {
-      ctx.fillStyle = '#171522';
-      ctx.beginPath(); ctx.arc(0, 0, 11, 0, 7); ctx.fill();
-      ctx.fillStyle = '#f4f1ea';
-      ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
-    }
+    const moving = hsp > 0.15 && motionOK();
+    const bob = motionOK() ? (moving ? Math.sin(time * 11) * 2 : Math.sin(time * 2.4) * 1) : 0;
+    const face = hv.x < -0.05 ? -1 : 1;
+    const walkPh = moving ? time * 11 : 0;
+    ctx.save();
+    ctx.translate(hx, hy + bob);
+    ctx.rotate((st.hero.tilt ?? 0) * face); // balancement dans les virages (§5)
+    ctx.scale(face, 1);
+    // héros vectoriel de la maquette A+ : sacoche, jambes animées, tunique deux tons, ceinture, bras, tête, chapeau
+    ctx.fillStyle = '#7a5b3a'; ctx.beginPath(); ctx.ellipse(-7, -3, 4, 5.5, .3, 0, 7); ctx.fill();
+    ctx.fillStyle = '#2a3b5c';
+    ctx.fillRect(-6, 9 + (moving ? Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
+    ctx.fillRect(2, 9 + (moving ? -Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
+    ctx.fillStyle = '#3d6fa8'; ctx.beginPath(); ctx.ellipse(0, -1, 8.5, 12.5, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath(); ctx.ellipse(-2.5, -3, 5, 8.5, .2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#2c4d78'; ctx.fillRect(-8, 4, 16, 3);
+    ctx.fillStyle = '#c8a24e'; ctx.fillRect(-1.5, 3.2, 3, 4.6);
+    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.ellipse(8, -2 + (moving ? Math.sin(walkPh) * 1.2 : 0), 2.6, 5.5, .5, 0, 7); ctx.fill();
+    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(0, -19, 7.5, 0, 7); ctx.fill();
+    ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.arc(0, -21.5, 7.2, Math.PI * .95, Math.PI * 2.05); ctx.fill();
+    ctx.fillStyle = '#2a2a2a'; ctx.beginPath(); ctx.arc(2.8, -19.5, 1.2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5b4a9e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-9.5, -29, 19, 6.5, 3) : ctx.rect(-9.5, -29, 19, 6.5); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(-9.5, -29, 19, 2.2);
     ctx.restore();
     // arc de frappe doré (feedback §8, 0,35 s)
     if (atk > 0) {
