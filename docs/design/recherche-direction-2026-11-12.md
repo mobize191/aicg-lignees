@@ -72,7 +72,7 @@ Recherche web du 12/11/2026 (couloir pilotage) : 18 requêtes ciblées, wikis de
 - **HP/MP persistants partout, errance comprise** : aucun reset automatique après un combat.
 - La restauration vit aux **points de repos du monde** (ville, autel, auberge — gratuit ou payant à trancher), aux **consommables** et aux **sorts de soin** qui coûtent du MP (la boucle DQ : soigner consomme la ressource qu'on gère).
 - Le choix de sort demandé naît du **coût de restauration** et de la rareté du MP, pas d'un reset : les sorts signature chers en MP deviennent des décisions.
-- Éventuel adoucissement à trancher : petite régénération post-victoire (10-20 %) en errance seule, pour ne pas punir le farm ; jamais en donjon.
+- Adoucissement TRANCHÉ REFUSÉ (12/11, fin de session) : **aucun soin automatique post-combat, errance comprise**. Restauration TRANCHÉE : **gratuite en ville et à l'autel, objets en donjon**.
 
 ## 7. Fusion / synthèse — comment font les autres, ce qu'on en tire
 

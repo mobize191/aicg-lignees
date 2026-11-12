@@ -28,8 +28,9 @@
 1. **Taille d'équipe : 3 actifs + 2 en réserve** (recommandation de l'étude acceptée ; switch en combat coûtant le tour du nouveau venu, réserve à XP réduite).
 2. **But du jeu : Le Lieur** (« l'unité des quatre races », les quatre verbes de recrutement) retenu comme colonne vertébrale ; les propositions Échiquier (multi-fins) et Silence du Zénith (reconnaissance par donjon) restent puisables pour la fin et le nommage.
 3. **Type « terre » renommé Nature.**
+4. **HP/MP TRANCHÉS** : persistance partout (errance comprise) ; **restauration gratuite en ville et à l'autel, objets en donjon** ; **aucun soin automatique post-combat** (régénération après victoire refusée).
 
-**Reste à trancher** : persistance HP/MP (recherche approfondie le 12/11 soir, voir section 10.2 : la convention du genre penche pour la persistance partout), carte régionale vs géante, forme exacte de la fusion, expéditions (temps réel), équipe de repli, choix initial de lignée exclusive, chaîne des donjons divins.
+**Reste à trancher** : carte régionale vs géante, forme exacte de la fusion, expéditions (temps réel), équipe de repli, choix initial de lignée exclusive, chaîne des donjons divins.
 
 ## 1. Identité du jeu — recherche demandée (DQM Joker vs Pokémon vs Final Fantasy)
 
@@ -163,7 +164,7 @@
 ## 10. Nouvelles mécaniques issues de la session (12/11) — à trancher puis à spec
 
 1. **Équipe de réserve/repli** (l'idée « switch quand l'équipe principale meurt/est affaiblie ») : étude section 5 de la recherche — recommandation **3 actifs + 2 en réserve** intégrée à l'équipe, switch coûtant un tour ; l'équipe de repli entière à réserver au mode exploration. Précéder le calibrage du niveau max (Suikoden 108 étoiles = 6 actifs : la contre-référence).
-2. **HP/MP limités entre combats** (pour forcer le choix des sorts) : recherche APPROFONDIE le 12/11 soir, après challenge de Marc-Olivier (« la majorité des jeux ne reset pas la vie entre chaque combat, à la limite le mana ») — **il a raison** : la convention du genre (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville (auberge/feu de camp/autel) et via objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary, système décrit comme « unique » par la presse ; DQM Joker probable, à confirmer). Recommandation révisée : **persistance partout, errance comprise**, points de repos en ville + consommables + sorts de soin coûteux en MP. Reste à trancher : coût de la restauration (gratuit vs payant), éventuelle petite régénération post-victoire en errance.
+2. **HP/MP limités entre combats** (pour forcer le choix des sorts) : recherche APPROFONDIE le 12/11 soir, après challenge de Marc-Olivier (« la majorité des jeux ne reset pas la vie entre chaque combat, à la limite le mana ») — **il a raison** : la convention du genre (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville (auberge/feu de camp/autel) et via objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary, système décrit comme « unique » par la presse ; DQM Joker probable, à confirmer). Recommandation révisée : **persistance partout, errance comprise**, points de repos en ville + consommables + sorts de soin coûteux en MP. **TRANCHÉ (12/11, fin de session) : restauration gratuite en ville et à l'autel, objets en donjon ; aucun soin automatique post-combat.**
 3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné.
 4. **Pierre d'évolution divine** (2-3 par partie, humains → divins, etc.) : ACTÉE en principe, spec à écrire ; l'inverse (divin → humain) à envisager.
 5. **Choix forcés** : lignées exclusives initiales, branches verrouillées, pierres limitées — ACTÉ en principe, répartition exacte à définir.
