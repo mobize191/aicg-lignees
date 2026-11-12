@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA clôturée (v1.34) : digest final N = 3000 + N = 10 000, proposition de verrouillage de la nouvelle baseline
+
+- **Clôture du chantier** (spec `docs/design/refonte-ia-spec-plan.md`, audit `docs/design/refonte-ia-audit.md`) : lots 0-4 livrés, un commit FR par lot, chacun avec tests headless + MESURE N = 3000 dans la tolérance (lot 0 inchangé `f8a9f0bb…` 1359 ; lot 1 `910d3dc3…` 1337, −0,73 pt ; lot 2 `3811fda3…` 1219, −3,93 pts ; lot 3 `c62fcbd1…` 1281, +2,07 pts ; lot 4 inchangé). Prérequis correctifs ciblage livrés en amont (lots 1-3, digest inchangé). Smoke enrichi (section B16 : anti-triche par introspection + Auto/ennemi sur les 5 difficultés) : 306 checks, seuls les 3 échecs préexistants. 171 tests verts.
+- **MESURE finale** : N = 3000 **`c62fcbd1…` 1281/3000 (42,7 %, 0 exception, 0 marathon)** ; N = 10 000 **`5059e683…` 4236/10000 (42,4 %, 0 exception, 0 marathon)** — contre la mesure courante au lancement `f8a9f0bb…` 1359/3000 (45,3 %) et `978ed44b…` 4517/10000 (45,2 %) : écart total du chantier **2,6 points**, chaque lot dans la tolérance. **Aucune maths joueur touchée** — la baisse vient exclusivement de l'IA (ciblage utilité, sorts contextuels, profils de difficulté). MESURE consignsée, pas de recalibrage.
+- **PROPOSÉ (décision Marc-Olivier)** : verrouiller la nouvelle baseline **`c62fcbd1…` 1281/3000** et **`5059e683…` 4236/10000** à la validation finale (téléphone ET PC, protocole IHM v1.34). En attendant, la baseline verrouillée reste `f72106ff…`/`3f9fe198…`.
+
 ## 2026-11-12 : MESURE — refonte IA lot 4 livré (garde-fous anti-blocage de l'errance) : digest inchangé
 
 - **Livré** : dans `stepErrance`, si le héros n'avance plus vers son waypoint pendant `ERRANCE_GUARDS.stuckAfter` (2 s, data `data/engine.json`) → repath A* vers le but ; après `repathMax` (2) échecs → abandon propre (chemin vidé, but abandonné = changement d'état). Aucune omniscience ajoutée (pas de poursuivant dans l'errance aujourd'hui ; règle « dernière position connue + réaction différée » notée dans l'audit pour le futur). Ni décor ni structure des zones touchés. 2 tests headless déterministes (stagnation → repath → abandon ; marche normale → 0 repath). 171 tests verts, smoke 299 (3 échecs préexistants).

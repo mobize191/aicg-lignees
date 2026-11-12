@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.34] — 2026-11-12 — Refonte de l'IA de combat (chantier complet : audit, spec, lots 0-4)
+
+Prompt `docs/prompt-refonte-ia.md`, audit `docs/design/refonte-ia-audit.md`, spec `docs/design/refonte-ia-spec-plan.md`. Prérequis : correctifs ciblage livrés (fiche `cible` des 84 sorts de lignée, camp depuis la fiche, sorts alliés de lignée résolus par rôle en Tactique — digest inchangé). **Lot 0** : en mode 🤖 Auto, les sorts alliés de lignée (soin/boost/bouclier) depuis l'arrière font leur effet. **Lot 1** : ciblage par utilité partagée IA/Auto (kill possible, menace, ligne arrière protégée, opposition d'élément) avec hystérésis anti flip-flop. **Lot 2** : choix de sort contextuel (soin sous seuil, contrôle sur la menace, burst si kill possible, sinon efficacité au coût) avec hystérésis. **Lot 3** : profils IA par difficulté en data (Facile sous-optimal → Enfer utilité complète, graine IA dédiée déterministe). **Lot 4** : garde-fous anti-blocage de l'errance (repath après stagnation, abandon après échecs). Poids en data, anti-triche vérifié par introspection (smoke B16). 171 tests, smoke 306 checks (3 échecs préexistants). MESURES par lot dans `docs/arbitrages.md` ; digest final N = 3000 `c62fcbd1…` 1281/3000 et N = 10 000 `5059e683…` 4236/10000 — écart 2,6 pts vs mesure de lancement, aucune maths joueur touchée.
+
+
 ## [1.33] — 2026-11-12 — Illustrations V3.1 en doublon commutable (bouton 🖼️)
 
 Relance 3.1 complète livrée (271 cartes, verrous R8/R9/R10 + anti-cadre/anti-texte renforcés, rapport `tools/out-v2/RAPPORT-v31-session.md`) et publiée en second manifeste `assets-v3.1.json` (362 arts + 8 fonds, ~30 Mo), commutable avec V3.0 via le bouton 🖼️ (`ART_MANIFESTS = { v3, v31 }` dans `src/ui.js`, source choisie persistée en localStorage `fondations-art-src`). Les assets existant uniquement en 3.1 (7 cartes série 3 g31/g32/k31/k32/p2/z31/z32 + 90 arts d'équipement série 3) sont ajoutés au manifeste par défaut `assets-v3.json` : présents par défaut partout, le switch ne les retire pas. La CI Pages publie désormais `assets-v3.json` + `assets-v3.1.json`. Moteur et data inchangés : digest inchangé `f8a9f0bb…` 1359/3000.
