@@ -2568,6 +2568,7 @@ function renderErrance(root) {
         <span class="chip">🌿 ${zone?.nature ?? st.zone}</span>
         <span class="chip">🪙 ${store.gold} or</span>
         <span class="chip">🛡️ grâce ${st.grace}</span>
+        <span class="chip" id="errance-phase">☀️ Jour</span>
         <span class="spacer"></span>
         <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
       </div>
@@ -2598,6 +2599,24 @@ function renderErrance(root) {
   const repaintTile = (x, y) => {
     for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) paintTileGround(base.getContext('2d'), st.map, zone, x + dx, y + dy);
   };
+  // refonte errance lot 2 : couche d'ambiance §9bis (cycle jour/nuit, faune, traces, lames animées)
+  const pal = errancePalette(zone);
+  const amb = buildAmbiance(st.map, zone);
+  const decor = st.map.decor;
+  const cloudCv = document.createElement('canvas');
+  cloudCv.width = 520; cloudCv.height = 340;
+  {
+    const cc = cloudCv.getContext('2d');
+    const crnd = lcg((st.map.seed ^ 0x77aa11) >>> 0);
+    for (let i = 0; i < 5; i++) {
+      const x2 = 60 + crnd() * 400, y2 = 60 + crnd() * 220, r = 55 + crnd() * 75;
+      const g = cc.createRadialGradient(x2, y2, r * .15, x2, y2, r);
+      g.addColorStop(0, 'rgba(10,25,15,.17)'); g.addColorStop(1, 'rgba(10,25,15,0)');
+      cc.fillStyle = g; cc.beginPath(); cc.arc(x2, y2, r, 0, 7); cc.fill();
+    }
+  }
+  let time = 0, atk = 0, lastPhase = '', smokeAcc = 0;
+  const smoke = [];
   // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
   // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
   const heroCfg = E.ERRANCE_HERO ?? null;
@@ -2610,9 +2629,13 @@ function renderErrance(root) {
     })();
   }
   const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
-  const draw = () => {
+  const draw = (dtA) => {
+    const animT = motionOK() ? time : 0; // prefers-reduced-motion : animations décoratives gelées (frame fixe), comme le héros
+    const cyc = ((animT + 30) % amb.dayLen) / amb.dayLen;
+    const dark = cyc < .55 ? 0 : cyc < .70 ? (cyc - .55) / .15 : cyc < .90 ? 1 : 1 - (cyc - .90) / .10;
+    const duskAmt = dark * (1 - dark) * 4;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = '#0a0f0a';
+    ctx.fillStyle = pal.ground;
     ctx.fillRect(0, 0, vw, vh);
     ctx.save();
     ctx.translate(vw / 2, vh / 2);
@@ -2620,10 +2643,66 @@ function renderErrance(root) {
     ctx.translate(-cam.x, -cam.y);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(base, 0, 0); // 1 appel : plus de fillRect tuile par tuile
-    const pal = errancePalette(zone);
+    const vx0 = cam.x - vw / 2 / cam.z - 40, vx1 = cam.x + vw / 2 / cam.z + 40;
+    const vy0 = cam.y - vh / 2 / cam.z - 40, vy1 = cam.y + vh / 2 / cam.z + 40;
+    // ombres de nuages dérivantes
+    for (const c of amb.clouds) ctx.drawImage(cloudCv, c.x - 260 * c.s, c.y - 170 * c.s, 520 * c.s, 340 * c.s);
+    // traces de pas sur le chemin (fondu 5 s)
+    for (let i = amb.prints.length - 1; i >= 0; i--) {
+      const p = amb.prints[i]; p.life -= dtA;
+      if (p.life <= 0) { amb.prints.splice(i, 1); continue; }
+      if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
+      const al = Math.min(1, p.life / 5) * .28;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+      ctx.fillStyle = 'rgba(70,55,35,' + al.toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
+      ctx.restore();
+    }
+    // reflets animés + écume de l'étang
+    if (decor.pond) {
+      const pd = decor.pond;
+      for (let i = 0; i < 9; i++) {
+        const a = .5 + .5 * Math.sin(animT * 1.4 + i * 1.7);
+        ctx.strokeStyle = 'rgba(255,255,255,' + (.22 * a).toFixed(2) + ')';
+        ctx.lineWidth = 1.8; ctx.lineCap = 'round';
+        const ox = pd.cx - 70 + (i * 23) % 140, oy = pd.cy - 64 + ((i * 37) % 118);
+        ctx.beginPath(); ctx.moveTo(ox, oy + 3 * a); ctx.quadraticCurveTo(ox + 12, oy - 2, ox + 26, oy + 3 * a); ctx.stroke();
+      }
+      const br = pd.rx * .98 + Math.sin(animT * .8) * 3, kEl = pd.ry / pd.rx;
+      ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+      for (let i = 0; i < 26; i++) {
+        const a = i / 26 * 6.283 + animT * .25;
+        const al = Math.max(0, .10 + .16 * Math.sin(animT * 1.6 + i * 1.3));
+        ctx.strokeStyle = 'rgba(255,255,255,' + al.toFixed(2) + ')';
+        const rr = br + 2 + Math.sin(animT + i) * 1.5;
+        ctx.beginPath();
+        ctx.moveTo(pd.cx + Math.cos(a) * rr, pd.cy + Math.sin(a) * rr * kEl);
+        ctx.lineTo(pd.cx + Math.cos(a + .09) * (rr + 2.5), pd.cy + Math.sin(a + .09) * (rr + 2.5) * kEl);
+        ctx.stroke();
+      }
+    }
+    // lames de hautes herbes animées : 2 tracés groupés par couleur, rafale dépendante de la position, écart au passage du héros (culling viewport)
+    const hpx0 = st.hero.x * T, hpy0 = st.hero.y * T;
+    ctx.lineCap = 'round'; ctx.lineWidth = 2.4;
+    for (const col of [pal.bladeA, pal.bladeB]) {
+      ctx.strokeStyle = col; ctx.beginPath();
+      for (const b of decor.blades) {
+        if (b.c !== col || b.x < vx0 || b.x > vx1 || b.y < vy0 || b.y > vy1) continue;
+        const sw = Math.sin(animT * 2 + b.ph) * 3.5 * (1 + .5 * Math.sin(animT * .6 + b.x * .01 + b.y * .006));
+        const hd = Math.hypot(b.x - hpx0, b.y - hpy0);
+        const push = hd < 42 ? (1 - hd / 42) * 7 : 0;
+        const pdx = hd > .1 ? (b.x - hpx0) / hd : 0, pdy = hd > .1 ? (b.y - hpy0) / hd : 0;
+        ctx.moveTo(b.x, b.y);
+        ctx.quadraticCurveTo(b.x + (sw + push * pdx) * .5, b.y - b.h * .6, b.x + sw + push * pdx, b.y - b.h + push * pdy * .4);
+      }
+      ctx.stroke();
+    }
     for (const j of st.map.jarres) {
       const jid = `jarre-${j.x}-${j.y}`;
       const cx2 = j.x * T + T / 2, cy2 = j.y * T + T / 2;
+      if (cx2 < vx0 || cx2 > vx1 || cy2 < vy0 || cy2 > vy1) continue;
       if (st.broken.includes(jid)) {
         ctx.fillStyle = pal.shard;
         ctx.beginPath(); ctx.ellipse(cx2 - 8, cy2 + 6, 7, 3, .2, 0, 7); ctx.fill();
@@ -2638,6 +2717,16 @@ function renderErrance(root) {
       ctx.strokeStyle = pal.potLine; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.stroke();
     }
     const hx = st.hero.x * T, hy = st.hero.y * T;
+    // ombre portée du héros, étirée avec l'obscurité + halo nocturne
+    const shL = 1 + dark * 1.1;
+    ctx.fillStyle = 'rgba(0,0,0,' + Math.max(.12, .3 - dark * .12).toFixed(2) + ')';
+    ctx.beginPath(); ctx.ellipse(hx + 7 * shL, hy + 10 + 2 * shL, 12 * shL, 4.5, .35, 0, 7); ctx.fill();
+    if (dark > .15) {
+      const hg = ctx.createRadialGradient(hx, hy - 8, 4, hx, hy - 8, 46);
+      hg.addColorStop(0, 'rgba(255,224,150,' + (.35 * dark).toFixed(2) + ')');
+      hg.addColorStop(1, 'rgba(255,224,150,0)');
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy - 8, 46, 0, 7); ctx.fill();
+    }
     ctx.save();
     ctx.translate(hx, hy);
     ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
@@ -2667,7 +2756,99 @@ function renderErrance(root) {
       ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
     }
     ctx.restore();
+    // arc de frappe doré (feedback §8, 0,35 s)
+    if (atk > 0) {
+      const pr = 1 - atk / .35;
+      const hm = Math.hypot(hv.x, hv.y);
+      const base2 = hm > .1 ? Math.atan2(hv.y, hv.x) : 0;
+      const a = base2 - 1.2 + pr * 2.4;
+      ctx.strokeStyle = 'rgba(255,250,220,' + (.75 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 6 * (1 - pr * .5); ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(hx, hy, T * 1.15, a - .5, a + .5); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,215,110,' + (.5 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(hx, hy, T * 1.24, a - .4, a + .4); ctx.stroke();
+    }
+    // fumée des cheminées
+    for (let i = smoke.length - 1; i >= 0; i--) {
+      const sm = smoke[i];
+      sm.life -= dtA; sm.y -= 13 * dtA; sm.x += Math.sin(animT * 1.5 + sm.ph) * 9 * dtA; sm.r += 7 * dtA;
+      if (sm.life <= 0) { smoke.splice(i, 1); continue; }
+      ctx.fillStyle = 'rgba(232,230,222,' + (.15 * Math.min(1, sm.life / 1.6)).toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(sm.x, sm.y, sm.r, 0, 7); ctx.fill();
+    }
+    // feuilles au vent
+    for (const l of amb.leaves) {
+      const lx2 = l.x + Math.sin(animT * 2 + l.ph) * 7;
+      if (lx2 < vx0 || lx2 > vx1 || l.y < vy0 || l.y > vy1) continue;
+      ctx.save(); ctx.translate(lx2, l.y); ctx.rotate(l.rot);
+      ctx.fillStyle = ['#c9a24e', '#b46b3c', '#8ea84e'][Math.floor(l.ph * 10) % 3];
+      ctx.beginPath(); ctx.ellipse(0, 0, 4, 2.2, 0, 0, 7); ctx.fill();
+      ctx.restore();
+    }
+    // étincelles (jarres brisées)
+    for (let i = amb.sparkles.length - 1; i >= 0; i--) {
+      const sp = amb.sparkles[i];
+      sp.life -= dtA; sp.x += sp.vx * dtA; sp.y += sp.vy * dtA; sp.vy += 50 * dtA;
+      if (sp.life <= 0) { amb.sparkles.splice(i, 1); continue; }
+      ctx.fillStyle = (sp.c || 'rgba(190,255,200,') + Math.min(1, sp.life).toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(sp.x, sp.y, 2.2, 0, 7); ctx.fill();
+    }
+    // lucioles (montent avec l'obscurité)
+    for (const f of amb.flies) {
+      const fx = f.x + Math.cos(animT * f.sp + f.ph) * 8, fy = f.y + Math.sin(animT * f.sp * 1.3 + f.ph) * 7;
+      if (fx < vx0 || fx > vx1 || fy < vy0 || fy > vy1) continue;
+      const a = (.45 + .45 * Math.sin(animT * 2 + f.ph)) * (.2 + .8 * dark);
+      if (dark > .3) {
+        const fg = ctx.createRadialGradient(fx, fy, 0, fx, fy, f.r * 5);
+        fg.addColorStop(0, 'rgba(255,233,168,' + (.30 * dark).toFixed(2) + ')');
+        fg.addColorStop(1, 'rgba(255,233,168,0)');
+        ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(fx, fy, f.r * 5, 0, 7); ctx.fill();
+      }
+      ctx.fillStyle = 'rgba(255,233,168,' + a.toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(fx, fy, f.r, 0, 7); ctx.fill();
+    }
+    // papillons de jour (s'estompent à la nuit)
+    if (dark < .8) for (const bf of amb.butterflies) {
+      const bfx = bf.x + Math.cos(animT * bf.sp + bf.ph) * 10, bfy = bf.y + Math.sin(animT * bf.sp * 1.7 + bf.ph) * 8;
+      if (bfx < vx0 || bfx > vx1 || bfy < vy0 || bfy > vy1) continue;
+      const flap = Math.abs(Math.sin(animT * 14 + bf.fl));
+      ctx.save(); ctx.translate(bfx, bfy); ctx.rotate(Math.sin(animT + bf.ph) * .3);
+      ctx.globalAlpha = Math.min(1, (0.8 - dark) * 2.5);
+      ctx.fillStyle = bf.col;
+      ctx.beginPath(); ctx.ellipse(-2.6, 0, 2.6, 1.6 + 2.2 * flap, .5, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(2.6, 0, 2.6, 1.6 + 2.2 * flap, -.5, 0, 7); ctx.fill();
+      ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.ellipse(0, 0, .8, 1.8, 0, 0, 7); ctx.fill();
+      ctx.globalAlpha = 1; ctx.restore();
+    }
+    // graines de pissenlit portées par le vent
+    for (const sd of amb.seeds) {
+      if (sd.x < vx0 || sd.x > vx1 || sd.y < vy0 || sd.y > vy1) continue;
+      ctx.save(); ctx.translate(sd.x, sd.y);
+      ctx.strokeStyle = 'rgba(240,240,225,.6)'; ctx.lineWidth = .8;
+      for (let k = 0; k < 6; k++) { const ka = k / 6 * 6.283; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(ka) * 3.6, Math.sin(ka) * 3.6); ctx.stroke(); }
+      ctx.fillStyle = 'rgba(205,195,165,.8)'; ctx.beginPath(); ctx.arc(0, 0, 1, 0, 7); ctx.fill();
+      ctx.restore();
+    }
     ctx.restore();
+    // overlays plein écran semi-transparents (jamais opaques : les tuiles restent lisibles la nuit)
+    ctx.fillStyle = 'rgba(255,241,205,' + (.05 * (1 - dark)).toFixed(3) + ')';
+    ctx.fillRect(0, 0, vw, vh);
+    if (duskAmt > .02) { ctx.fillStyle = 'rgba(255,140,60,' + (.16 * duskAmt).toFixed(3) + ')'; ctx.fillRect(0, 0, vw, vh); }
+    if (dark > .02) { ctx.fillStyle = 'rgba(14,22,58,' + (.42 * dark).toFixed(3) + ')'; ctx.fillRect(0, 0, vw, vh); }
+    // marqueur de destination (espace écran)
+    if (st.hero.path.length) {
+      const n = st.hero.path[st.hero.path.length - 1];
+      const mpx = (n.x * T - cam.x) * cam.z + vw / 2, mpy = (n.y * T - cam.y) * cam.z + vh / 2;
+      const pulse = 6 + Math.sin(animT * 6) * 2.5;
+      ctx.strokeStyle = 'rgba(255,215,110,.9)'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(mpx, mpy, pulse, 0, 7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,215,110,.4)';
+      ctx.beginPath(); ctx.arc(mpx, mpy, pulse + 6, 0, 7); ctx.stroke();
+    }
+    // HUD phase (throttle : écrit seulement si le libellé change)
+    const ph = cyc < .55 ? '☀️ Jour' : cyc < .70 ? '🌇 Soir' : cyc < .90 ? '🌙 Nuit' : '🌅 Aube';
+    if (ph !== lastPhase) { lastPhase = ph; const el = document.getElementById('errance-phase'); if (el) el.textContent = ph; }
   };
   let last = performance.now();
   const loop = (now) => {
@@ -2675,6 +2856,29 @@ function renderErrance(root) {
     last = now;
     if (!store.errance || store.errance !== st) return;
     const ev = stepErrance(st, dt);
+    time += dt;
+    if (atk > 0) atk -= dt;
+    const dtA = motionOK() ? dt : 0; // décor gelé si prefers-reduced-motion
+    const WW = st.map.w * T, WH = st.map.h * T;
+    for (const c of amb.clouds) { c.x += c.v * dtA; if (c.x - 300 * c.s > WW + 120) { c.x = -320 * c.s; c.y = Math.random() * WH; } }
+    for (const l of amb.leaves) {
+      l.x += l.sp * 14 * dtA; l.y += l.sp * 9 * dtA; l.rot += l.rs * dtA;
+      if (l.x > WW + 20) { l.x = -20; l.y = Math.random() * WH; }
+      if (l.y > WH + 20) { l.y = -20; l.x = Math.random() * WW; }
+    }
+    const gustV = .5 + .5 * Math.sin(time * .6);
+    for (const sd of amb.seeds) { sd.x += (14 + gustV * 26) * dtA; sd.y += Math.sin(time * .9 + sd.ph) * .5 * dtA - 1.5 * dtA; if (sd.x > WW + 15) { sd.x = -15; sd.y = Math.random() * WH; } }
+    smokeAcc += dtA;
+    if (smokeAcc > .4) { smokeAcc = 0; for (const ch of amb.chimneys) smoke.push({ x: ch.x, y: ch.y, life: 2.6 + Math.random(), ph: Math.random() * 7, r: 3 }); }
+    // traces de pas sur le chemin de terre (pied gauche/droit alternés)
+    if (ev.steps) {
+      const vv = st.hero.v ?? { x: 0, y: 0 };
+      const vm = Math.hypot(vv.x, vv.y);
+      if (vm > 0.5 && st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))] === ET.CHEMIN) {
+        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5 });
+        if (amb.prints.length > 40) amb.prints.shift();
+      }
+    }
     if (ev.encounter && !store.zoneFight) {
       persistErrancePos(); save();
       startZoneFight(st.zone, { donjon: false });
@@ -2694,6 +2898,8 @@ function renderErrance(root) {
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
         const r = interactJarre(st, jid);
+        atk = 0.35; // arc de frappe doré (feedback §8)
+        for (let k = 0; k < 16; k++) amb.sparkles.push({ x: (o.x + .5) * T, y: (o.y + .5) * T, vx: (Math.random() - .5) * 160, vy: -40 - Math.random() * 120, life: .6 + Math.random() * .4, c: 'rgba(214,164,110,' });
         if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(o.x, o.y); }
         save();
       }
@@ -2709,7 +2915,7 @@ function renderErrance(root) {
     const cyT = st.hero.y * T + v.y * T * 0.12;
     cam.x += (cxT - cam.x) * Math.min(1, 4.5 * dt);
     cam.y += (cyT - cam.y) * Math.min(1, 4.5 * dt);
-    draw();
+    draw(dtA);
     erranceRAF = requestAnimationFrame(loop);
   };
   erranceRAF = requestAnimationFrame(loop);
@@ -2728,6 +2934,8 @@ function renderErrance(root) {
       const j = st.map.jarres.find((jj) => jj.x === fx && jj.y === fy && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
       if (j) {
         const r2 = interactJarre(st, `jarre-${j.x}-${j.y}`);
+        atk = 0.35;
+        for (let k = 0; k < 16; k++) amb.sparkles.push({ x: (j.x + .5) * T, y: (j.y + .5) * T, vx: (Math.random() - .5) * 160, vy: -40 - Math.random() * 120, life: .6 + Math.random() * .4, c: 'rgba(214,164,110,' });
         if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(j.x, j.y); save(); }
       }
       return;
