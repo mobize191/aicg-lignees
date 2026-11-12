@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : 12e TOUR (clôture) — FUSION × FAMILLES TRANCHÉE (table de synthèse DQM, hybrides) + LIGNÉES EXCLUSIVES INITIALES EN PRINCIPE
+
+- **Fusion × familles TRANCHÉE (en principe)** : la **famille est conservée**, le palier n'est pas automatiquement lié à la fusion. **Table de synthèse de familles** (précédé DQM : on choisit vers quelle famille va l'enfant) : certaines paires → l'une des deux **au hasard** ; d'autres → **une TROISIÈME famille désignée automatiquement** : humain + monstre aquatique → **sirène**, humain + ent → **dryade**, humain + ange → **demi-ange** (à incarner : les **éveillés**, race divine à part, ou des créatures intermédiaires/maléfiques à créer). **Les hybrides naissent dans la fusion** (table), pas comme un système séparé — les « H » différés restent en mer mais la table ouvre la voie.
+- **Lignées exclusives initiales : DIRECTION ACTÉE EN PRINCIPE** : choix initial parmi **3-4 familles uniques spéciales** (une par race, façon starter : novice, bestiole, ange, démon…), **prédominantes** (la fusion y reste) ; les non-choisies obtenables **très tard** dans le jeu (précédent Pokémon : starters non choisis récupérables en fin de partie), capture très difficile ou incapturables. À préciser en spec contenu : 3 ou 4, composition, sort des non-choisies, moment du choix. Marc-Olivier : « non, en fait, je sais pas trop » sur la forme finale — direction actée, détail ouvert.
+- Tableau de bord (`docs/design/session-qa-direction.md` section 0) : **32 points TRANCHÉS (dont 1 en principe), reste : ops (différé) + forme finale des lignées exclusives.**
+
 ## 2026-11-12 : 12e TOUR (fin) — 6 NOUVEAUX TRANCHAGES ORAUX + GRAND LANCEMENT UNIFIÉ (refonte direction + vie du jeu en une session)
 
 - **Carte du monde AFFINÉE : 4 cartes multibiomes** (le « 3-4 » tranché à 4).
@@ -253,12 +259,3 @@
 ## 2026-11-11 : MESURE — validation IHM réelle post-contenu v3 (protocole v1.33, headless Chromium via CDP) : VERT, 0 KO, 0 erreur console + nouveaux checks marchand v2
 
 - **Exécution réelle** (protocole `docs/validation-ihm.md` v1.33, driver `tools/validation-cdp.mjs` porté en v1.33) : Chromium headless (ms-playwright) piloté en CDP pur, jeu servi en staging Pages sur http://localhost:8080/ (index.html + assets-v3.json + fx/ + errance/), viewports 1440×900 et 390×844. **Résultat : 67 checks OK, 0 KO, 0 erreur console, 30 captures** dans `docs/captures-validation/v1.33/rapport-validation.md`. 3 checks INFO non bloquants, identiques à la v1.32 (bulle héroïne, gorgée de potion à confirmer visuellement, S9 Récompenses non conclu sur combat perdu au turbo).
-- **Nouveaux checks contenu v3 (tous OK)** : S4 — familles divines joueur (Arbitres du Seuil / Chœur Miroir / Tisseuses du Pont) listées dans la collection ; S10 — marchand v2 : 3 offres du jour rendues = rotation `seedOfDay` (123 monstres au catalogue, prix actés UC 1 500 / R 4 500 / SR 8 000 or visibles), seule la rareté C débloquée sans donjon bouclé avec cadenas 🔒 (102 verrous), achat d'une offre du jour débité (-200 or, +1 exemplaire), achat UC refusé tant que verrouillée (aucun or débité) ; **S21** — après `record = 10` en Facile, UC débloquée (`C,UC`) et achetée à 1 500 or.
-- **Preuve moteur maintenue** : build ok, 150 tests, smoke 299 checks (2 échecs préexistants 46 g/45 e), digest `f8a9f0bb…` 1359/3000 et `978ed44b…` 4517/10000. Validation finale téléphone ET PC par Marc-Olivier toujours en attente (cette session valide en local, deux viewports émulés).
-## 2026-11-11 (nuit, 2e tour) : SESSION — retours de jeu de Marc-Olivier : refonte de direction, questions ouvertes pour la session du 12/11
-
-Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS antérieurs ; le tranchage le plus récent prime ». Chaque point ci-dessous contredit volontairement des ACTÉS plus anciens : l'entrée du jour révisé, la session du 12/11 (doc `docs/design/session-qa-direction.md`) tranche le reste. Bugs et nettoyage : roadmap, section « Retours de session du 11/11 nuit ».
-
-**ACTÉ (ce tour)** :
-
-1. **Menu du haut supprimé** : menu latéral seul ; l'Accueil devient la page par défaut (« comme retourner à la maison », toujours visible en fond) ; chaque page reçoit son propre fond ; petites interactions depuis l'Accueil vers les Terres Sauvages, la Boutique, la Guilde.
