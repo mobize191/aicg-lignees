@@ -22749,6 +22749,18 @@ function openMilestoneModal(kind) {
   document.body.appendChild(overlay);
 }
 
+function xpRecapOf(xpEntries) { // v1.39 lot 1 : récap de l'XP déjà distribuée par combat (somme du run, affichage seul)
+  const m = new Map();
+  for (const x of xpEntries) {
+    const a = m.get(x.name) ?? { name: x.name, gain: 0, level: x.level, mult: x.mult };
+    a.gain += x.gain ?? 0;
+    a.level = x.level;
+    a.mult = x.mult;
+    m.set(x.name, a);
+  }
+  return [...m.values()];
+}
+
 function runEndModal() {
   const r = runLog ?? freshRunLog();
   const d = dungeonById(store.dungeon);
@@ -22758,7 +22770,7 @@ function runEndModal() {
   const lines = [
     `\u26a1 Points gagn\u00e9s : <b>${r.points}</b>`,
     r.stages ? `\ud83e\uddf1 \u00c9tages vaincus : <b>${r.stages}</b>` : '',
-    r.xp.length ? `\u2b50 XP d'\u00e9quipe (run) : <b>${r.xp.map((x) => `${x.name} \u2192 Nv ${x.level}${x.mult < 1 ? ` (${Math.round(x.mult * 100)} %)` : ''}`).join(' \u00b7 ')}</b>` : '',
+    r.xp.length ? `⭐ XP d'équipe (run, distribuée par combat) : <b>${xpRecapOf(r.xp).map((x) => `${x.name} → Nv ${x.level} (+${Math.round(x.gain)} XP${x.mult < 1 ? `, ${Math.round(x.mult * 100)} %` : ''})`).join(' · ')}</b>` : '',
     r.gems.length ? `\ud83d\udce0 \u00c9clats d'\u00e9volution : <b>${r.gems.join(', ')}</b>` : '',
   ].filter(Boolean);
   const overlay = document.createElement('div');
@@ -23234,12 +23246,12 @@ async function animate(events, ms, gen = null) {
         }
         
         let xpLine = '';
-        if (!store.defiActive && runLog && (!won || finalClear || !!store.zoneFight) && runLog.stages > 0) { // v1.38 lot 1 : un combat de zone terminé distribue l'XP (victoire comme défaite)
+        if (!store.defiActive && runLog && (won || !!store.zoneFight)) { // v1.39 lot 1 : l'XP est distribuée à CHAQUE combat terminé (victoire toujours ; défaite seulement en combat de zone, règle v1.38 conservée ; en donjon le combat perdu ne distribue rien)
           const DIFFX = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           
           const discOn = store.diff === 1 && dungeonById(store.dungeon).tier === 0 && (store.progress[store.dungeon]?.diffs?.[1]?.record ?? 0) < 10;
           const tactXpMult = runLog.tactTurns ? 1 - 0.5 * ((runLog.autoTurns ?? 0) / runLog.tactTurns) : 1;
-          const baseXp = runLog.stages * DIFFX.pts * (won ? 1.5 : 1) * 0.8 * (discOn ? 2 : 1) * tactXpMult;
+          const baseXp = 1 * DIFFX.pts * (won ? 1.5 : 1) * 0.8 * (discOn ? 2 : 1) * tactXpMult; // formule ramenée à UN étage : un run de N étages distribue N fois cette base
           const iids = [...new Set(store.team.slots.filter(Boolean))];
           const xpParts = [];
           for (const iid of iids) {
@@ -23249,13 +23261,13 @@ async function animate(events, ms, gen = null) {
             const r = addXpI(iid, baseXp * mult);
             const nm = byId(inst.id).name;
             xpParts.push(`${nm} → Nv ${r.level}${mult < 1 ? ` (${Math.round(mult * 100)} % XP)` : ''}`);
-            runLog.xp.push({ name: nm, level: r.level, mult });
+            runLog.xp.push({ name: nm, level: r.level, mult, gain: Math.round(baseXp * mult * 10) / 10 });
           }
-          runLog.xpBase = Math.round(baseXp * 10) / 10;
-          registerXpRun(iids);
+          runLog.xpBase = Math.round(((runLog.xpBase ?? 0) + baseXp) * 10) / 10;
+          if (finalClear || !won || !!store.zoneFight) registerXpRun(iids); // fatigue comptée une fois par run (comme avant) : le mult reste constant sur tout le run
           save();
-          xpLine = `⭐ XP de run (${runLog.stages} étage${runLog.stages > 1 ? 's' : ''} × ×${DIFFX.pts}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 🧭 XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
-          pushRecomp('xp', 'XP de run — ' + runLog.stages + ' étage(s)', xpParts.join(' | '));
+          xpLine = `⭐ XP du combat (×${DIFFX.pts}${won ? ' ×1,5 victoire' : ' ×1 défaite'}${discOn ? ' ×2 découverte' : ''}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 🧭 XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
+          pushRecomp('xp', `⭐ XP du combat — base +${Math.round(baseXp * 10) / 10}`, xpParts.join(' | '));
         }
         if (won && tactMult < 0.999) rewardLine += ` \u00b7 🧭 \u00d7${tactMult.toFixed(2)} \u2014 tours jou\u00e9s en auto : pts, \u00e9clats et XP r\u00e9duits`;
         else if (won) rewardLine += ' \u00b7 🧭 Tactique : r\u00e9compenses int\u00e9grales';

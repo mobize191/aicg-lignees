@@ -1051,7 +1051,7 @@ async function main() {
     // ---------- B28 : correctifs v1.38 lot 1 — XP distribuée à tout combat de zone terminé ----------
     {
       const prevAuto28 = api._autoMode();
-      check('B28 a la condition XP couvre le combat de zone (victoire ou défaite)', /\(!won \|\| finalClear \|\| !!store\.zoneFight\)/.test(html), '');
+      check('B28 a v1.39 : XP par combat — condition (won || zoneFight), victoire de zone comprise', /\(won \|\| !!store\.zoneFight\)/.test(html), '');
       api.go('#accueil'); await wait(30); // repartir d'une route neutre (go ne re-déclenche pas la même hash)
       setup(['n1', 'n3'], 5);
       const iid28 = store.team.slots[0];

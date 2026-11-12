@@ -215,6 +215,7 @@ const API_PAIRS = {
   _setAuto: '(v) => { autoMode = v; }',
   _autoMode: '() => autoMode',
   _state: '() => state',
+  _runLog: '() => runLog',
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
   drawNaissance: 'drawNaissance', noLossPctOf: 'noLossPctOf', xpToNext: 'xpToNext',
   EQUIPMENT: 'EQUIPMENT', EQUIP_BY_ID: 'EQUIP_BY_ID', equipBonusOfCard: 'equipBonusOfCard', equipTeamBonus: 'equipTeamBonus', bossPieceFor: 'bossPieceFor', addMateriau: 'addMateriau', materiauCount: 'materiauCount', addEquipmentPiece: 'addEquipmentPiece', equipPiece: 'equipPiece', openRecompensesModal: 'openRecompensesModal',
