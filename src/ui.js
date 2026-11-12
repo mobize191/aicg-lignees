@@ -1932,18 +1932,23 @@ function spellList(card) {
   
   const stq = statsAt(card, level, 0);
   const rows = (card.effect
-    ? [`<li class="spell"><b>\u2726 ${effetDesc(card.effect) || 'Effet sp\u00e9cial : voir le glossaire une fois cette carte rencontr\u00e9e.'}</b>
-        <span class="muted">Pouvoir \u2014 automatique \u00e0 chaque action de la carte, sans mana</span></li>`]
+    ? [`<li class="spell"><b>✦ ${effetDesc(card.effect) || 'Effet spécial : voir le glossaire une fois cette carte rencontrée.'}</b>
+        <span class="muted">Pouvoir — automatique à chaque action de la carte, sans mana</span></li>`]
     : [])
     .concat(card.spells
     .map(
-      (s) => {
+      (sp) => {
+        // correctifs lot 4 : fiche complète — rôle (grimoire), zone vs monocible, frappe en « dégâts (%) »
+        const zone = zoneLabelOf(sp);
+        const cibleLab = zone || (sp.cible ? String(sp.cible) : '1 ennemi');
+        const pct = Math.round((sp.mult ?? 1) * 100);
         const powerLine = card.effect && card.effect.kind === 'heal'
-          ? spellPowerLine(card.effect, s.mult)
-          : `frappe \u00e0 ${Math.round(s.mult * 100)} % de l\u2019ATQ (\u2248 ${Math.max(1, Math.round(stq.atk * s.mult))} d\u00e9g\u00e2ts \u00e0 ce niveau)`;
-        return `<li class="spell"><b>${s.name}</b>${s.cat ? ` <span class="spell-cat">${SPELL_CAT_LABEL[s.cat] ?? s.cat}</span>` : ''}
-        <span class="muted">\u2726 ${s.cost} mana \u00b7 ${powerLine}</span>
-        <span class="muted spell-desc">${s.desc}</span></li>`;
+          ? spellPowerLine(card.effect, sp.mult)
+          : `dégâts (${pct} % ≈ ${Math.max(1, Math.round(stq.atk * (sp.mult ?? 1)))})`;
+        const roleLab = sp.role ? (SPELL_ROLE_LABEL[sp.role] ?? sp.role) : (SPELL_CAT_LABEL[sp.cat] ?? '');
+        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">✦ ${sp.cost}</span></span>
+        <span class="muted sort-meta">${[roleLab, cibleLab, powerLine].filter(Boolean).join(' · ')}</span>
+        ${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`;
       },
     ))
     .join('');
@@ -2859,7 +2864,7 @@ function slotsHtml() {
     const inst = iid ? byIid(iid) : null;
     if (inst) {
       const c = byId(inst.id);
-      return `<div class="slot" data-idx="${i}" title="Appui court : retirer \u00b7 Appui long : fiche">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}</div>`;
+      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button>${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}</div>`;
     }
     return `<div class="slot empty" data-idx="${i}"></div>`;
   };
@@ -3041,13 +3046,13 @@ function renderEquipe(root) {
     .map((c) => instsOf(c.id)
       .map((inst) => {
         const inTeam = iidInTeam(inst.iid);
-        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="${inTeam ? 'En équipe — appui court pour retirer de la fiche' : 'Appui court : ajouter CET exemplaire · Appui long : fiche'}">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}${inTeam ? `<span class="in-team">en équipe</span>` : ''}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
+        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
       })
       .join(''))
     .join('');
   root.innerHTML = `
     <h2><button type="button" class="back" id="equipe-back" title="Retour à l'accueil">←</button> Mon équipe <span class="team-switch"><button type="button" class="btn" id="team-prev" title="Équipe précédente">◀</button><span class="muted">(Équipe ${store.activeTeam + 1}/3)</span><button type="button" class="btn" id="team-next" title="Équipe suivante">▶</button></span></h2>
-    <p class="muted"><b>Appui court</b> : ajouter une carte de votre collection, ou retirer une carte placée. <b>Appui long</b> : la fiche (sorts, évolution, autel). 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
+    <p class="muted"><b>Fiche</b> : appui court, appui long ou ℹ️ sur une carte (fonctionne même équipe pleine). <b>Ajouter / retirer</b> : boutons ＋ / − explicites — plus d’ajout au double-clic. 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
     <p class="muted">Formation (figée pendant le combat) : <button type="button" class="btn small${store.team.formation === '2-3' ? '' : ' gold'}" id="form-3-2">3 avant \u00b7 2 arri\u00e8re</button> <button type="button" class="btn small${store.team.formation === '2-3' ? ' gold' : ''}" id="form-2-3">2 avant \u00b7 3 arri\u00e8re</button></p>
     ${slotsHtml()}
     ${teamEquipHtml()}
@@ -3073,7 +3078,8 @@ function renderEquipe(root) {
   });
   const filtBtn = root.querySelector('#open-filters');
   if (filtBtn) filtBtn.onclick = () => openFiltersModal(root);
-  root.querySelectorAll('.slot[data-idx]').forEach((slot) => {
+  root.querySelectorAll('.slot').forEach((slot) => {
+    if (slot.dataset.idx === undefined) return;
     const idx = Number(slot.dataset.idx);
     slot.addEventListener('dragover', (e) => e.preventDefault());
     slot.addEventListener('drop', (e) => {
@@ -3083,18 +3089,19 @@ function renderEquipe(root) {
     });
     const card = slot.querySelector('.card');
     if (card) {
+      // correctifs lot 4 : les gestes ouvrent la fiche ; le retrait passe par le bouton ✕ explicite
       onTap(card, {
-        tap: () => {
-          const iid = store.team.slots[idx];
-          const inst = byIid(iid);
-          removeCard(idx);
-          toast(`${inst ? byId(inst.id).name : 'Carte'} retirée de l\u2019équipe`);
-          renderEquipe(root);
+        tap: (e) => {
+          if (e.target.closest('.cell-btn')) return;
+          const iid2 = store.team.slots[idx];
+          const inst2 = byIid(iid2);
+          if (inst2) openTeamModal(byId(inst2.id));
         },
-        long: () => {
-          const iid = store.team.slots[idx];
-          const inst = byIid(iid);
-          if (inst) openTeamModal(byId(inst.id));
+        long: (e) => {
+          if (e.target.closest('.cell-btn')) return;
+          const iid2 = store.team.slots[idx];
+          const inst2 = byIid(iid2);
+          if (inst2) openTeamModal(byId(inst2.id));
         },
       });
       card.addEventListener('dragstart', (e) => {
@@ -3103,24 +3110,52 @@ function renderEquipe(root) {
       });
       card.addEventListener('dragend', () => card.classList.remove('dragged'));
     }
+    const outBtn = [...slot.querySelectorAll('.cell-btn')].find((b) => b.dataset.act === 'out') ?? null;
+    if (outBtn) {
+      outBtn.addEventListener('pointerdown', (e) => e.stopPropagation());
+      outBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const iid2 = store.team.slots[idx];
+        const inst2 = byIid(iid2);
+        removeCard(idx);
+        toast(`${inst2 ? byId(inst2.id).name : 'Carte'} retirée de l’équipe`);
+        renderEquipe(root);
+      });
+    }
   });
-  root.querySelectorAll('.gcell.cat').forEach((el) => {
+  root.querySelectorAll('.gcell').forEach((el) => {
+    if (!el.classList.contains('cat')) return;
     const iid = Number(el.dataset.iid);
+    const fiche = () => { const inst = byIid(iid); if (inst) openTeamModal(byId(inst.id)); };
+    // correctifs lot 4 : les gestes ouvrent la fiche (même équipe pleine) ; l'ajout/retrait passe par les boutons explicites
     onTap(el, {
-      tap: () => {
+      tap: (e) => { if (!e.target.closest('.cell-btn')) fiche(); },
+      long: (e) => { if (!e.target.closest('.cell-btn')) fiche(); },
+    });
+    el.querySelectorAll('.cell-btn').forEach((b) => {
+      b.addEventListener('pointerdown', (e) => e.stopPropagation());
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
         const inst = byIid(iid);
         if (!inst) { toast('Exemplaire introuvable.', 'warn'); return; }
-        
-        if (iidInTeam(inst.iid)) { openTeamModal(byId(inst.id)); return; }
-        const r = addCardIid(iid);
-        if (r.ok) {
-          toast(`${inst.name || byId(inst.id).name} rejoint l\u2019équipe (${store.team.slots.length}/${TEAM_MAX})`);
-          renderEquipe(root);
+        if (b.dataset.act === 'fiche') { fiche(); return; }
+        if (b.dataset.act === 'in') {
+          const r = addCardIid(iid);
+          if (r.ok) {
+            toast(`${inst.name || byId(inst.id).name} rejoint l’équipe (${store.team.slots.length}/${TEAM_MAX})`);
+            renderEquipe(root);
+          } else {
+            toast(`✗ ${r.reason}`, 'warn');
+          }
         } else {
-          toast(`✗ ${r.reason}`, 'warn');
+          const idx = store.team.slots.indexOf(inst.iid);
+          if (idx >= 0) {
+            removeCard(idx);
+            toast(`${byId(inst.id).name} retirée de l’équipe`);
+            renderEquipe(root);
+          }
         }
-      },
-      long: () => openTeamModal(byId(byIid(iid)?.id)),
+      });
     });
   });
 }
@@ -3324,21 +3359,18 @@ function renderCollection(root) {
       ${raceGrid('divine')}
     </div>
     ${MONSTER_FAMS.divin.map(monsterFamSection).join('')}`;
-  root.querySelectorAll('.fam-card.seen').forEach((el) => {
+  root.querySelectorAll('.fam-card').forEach((el) => {
+    if (!el.classList.contains('seen')) return;
     onTap(el, {
-      tap: () => toast(`${byId(el.dataset.id).name} : plus possédée — retrouve-la pour la rejouer.`, 'warn'),
+      tap: () => openCardModal(byId(el.dataset.id)),
       long: () => openCardModal(byId(el.dataset.id)),
     });
   });
-  root.querySelectorAll('.fam-card.owned').forEach((el) => {
-    
-    
+  root.querySelectorAll('.fam-card').forEach((el) => {
+    if (!el.classList.contains('owned')) return;
+    // correctifs lot 4 : les gestes ouvrent la fiche ; l'ajout à l'équipe passe par le bouton ＋ de la fiche
     onTap(el, {
-      tap: () => {
-        const r = addCard(el.dataset.id);
-        if (r.ok) toast(`${byId(el.dataset.id).name} rejoint l\u2019équipe`);
-        else toast(`✗ ${r.reason}`, 'warn');
-      },
+      tap: () => openCardModal(byId(el.dataset.id), { onAdd: () => addCard(el.dataset.id) }),
       long: () => openCardModal(byId(el.dataset.id), { onAdd: () => addCard(el.dataset.id) }),
     });
   });
