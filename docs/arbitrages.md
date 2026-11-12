@@ -1,5 +1,14 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : ARBITRAGES Marc-Olivier (revue 4-lens, suite) : hit-stop à tester, CRITS d'agilité à créer, héros errance par code, manifeste JSON
+
+- **Hit-stop** : « pourquoi pas, à tester » — réversible (une constante pour le couper), tier large uniquement. Verdict définitif à la lecture en jeu.
+- **Coups critiques** : n'existaient PAS dans le moteur (vérifié : ni crit ni chance de crit dans `src/engine/combat.js` ; l'agi ne sert qu'à l'ordre des tours et l'esquive `DODGE_PER_AGI`). **ARBITRÉ : chance de crit tirée de l'avantage d'agilité** (proposition : 5 % base + 1 %/point d'avantage, plafond 30 %, dégâts ×1,5, frappes physiques seules en v1). Maths de combat → MESURE digest obligatoire, NOUVELLE baseline attendue à arbitrer (référence inchangée : `c62fcbd1…`/`5059e683…` tant que non arbitré).
+- **Héros d'errance** : exigence ACTÉE « pas une image rectangulaire qui bouge, un vrai personnage vivant, formes rondes, bras qui bougent, fluide, peu détaillé acceptable ». **Route : personnage peint et animé PAR CODE** (cohérent avec la DA errance peinte et l'échec i2v WAN) — femme cape noire cheveux blancs articulée en canvas, cycle de marche par membres, 4 directions. Famille de frames IPAdapter = piste ultérieure, non lotie.
+- **Manifeste d'assets = JSON** (`tools/assets-manifest.json`) : source (modèle, LoRAs Civitai id+version+trigger+licence, seed), QA, production ; rempli par la session 3.2, vérifié par le smoke. **Licences : enregistrées pour information, NON bloquantes** (arbitrage explicite).
+- Spec + plan + prompt : `docs/design/spec-vie-jeu-v1.md`, 6 lots (0 manifeste → 1 crits → 2 feedback → 3 héros → 4 UI mobile → 5 vérifs level design), à lancer APRÈS la session de génération 3.2.
+
+
 ## 2026-11-12 : 12e TOUR — BUGS D'ERRANCE DIAGNOSTIQUÉS → CHANTIER v1.40 + REFONTE DIRECTION (4 LOTS) LANCÉS (couloir 1)
 
 - **Bugs d'interactions d'errance diagnostiqués dans le code** (porte du donjon et retour ville sans effet au clic/tap) : hitbox limitée à l'unique tuile cible alors que les bâtiments sont peints plus larges ; seuil de déclenchement `hypot < 1,6` + praticable cherchée dans un carré ±2 (une cible à ~2 tuiles ne se déclenche jamais) ; silence total si A* abandonne ; retour vers `#terres` au lieu du hub-ville `#accueil` annoncé par le toast. **Correctif v1.40** : prompt `docs/prompt-correctifs-v1.40.md` (hitbox bâtiment + anneau 8-voisinage, toast de confirmation, praticable au 8-voisinage, déclenchement immédiat à portée, seuil ~1,9, toast « chemin bloqué », retour → `#accueil`, garde-fous tests génératifs sur les 5 zones). Digests inchangés attendus.
@@ -251,8 +260,4 @@ Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS a
 **Conséquences d'ordonnancement** : points 8 à 12 se tranchent AVANT les chantiers de code concernés ; le couloir 1 (libre depuis v1.32) prend d'abord les bugs rapides ; le couloir design continue arts série 3 + habillage boucle v2 (maquette n°2 toujours en attente de validation).
 
 ## 2026-11-11 : MESURE — clôture du chantier « contenu v3 » (v1.32, 8 lots C1-C8) : digest complet N = 3000 ET N = 10 000, MESURE sans recalibrage
-
-- **Clôture** (spec `docs/design/contenu-v3-spec-plan.md`) : validateur data vert (anti-doublon de noms EXI-DATA-3 inclus), tables `docs/tables/` régénérées (`node tools/gen-tables.mjs`), CHANGELOG/HISTORY/roadmap à jour (v1.32), protocole IHM `docs/validation-ihm.md` actualisé v1.33 (S1-S20, baselines 150 tests / smoke 299 / digests courants). **Digest final N = 3000 : `f8a9f0bb…` 1359/3000 (0 exception, 1 marathon)** et **N = 10 000 : `978ed44b…` 4517/10000 (45,2 %, 0 exception, 1 marathon)** — contre baseline verrouillée `f72106ff…` 1379/3000 et `3f9fe198…` 4558/10000 : l'écart vient du lot C3 (gobelins régionaux dans les vagues du Bosquet/Crypte/Zénith) ; **MESURE consignée, aucune maths d'équilibrage touchée** (baseline ACTÉ 11/11). 150 tests verts, smoke 299 checks (seuls échecs préexistants 46 g/45 e). Validation finale téléphone ET PC par Marc-Olivier toujours en attente (protocole v1.33 prêt).
-
-## 2026-11-11 : ACTÉ (exécution) + MESURE — contenu v3 lot C7 : familles divines joueur, maillons du Jeune Séraphin, lignées des Enge — digest inchangé
 
