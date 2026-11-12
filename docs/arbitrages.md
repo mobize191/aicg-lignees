@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : SESSION — PR #10 MERGÉE (main `1d1db77`) : correctifs v1.38 livrés (2 lots)
+
+- **PR #10** (`vibe/correctifs-v138-ec66f9`) mergée dans main (`1d1db77`) : lot 1 (XP des combats de zone, victoire ou défaite) + lot 2 (aléatoire PAR COMBAT via `zoneFightCount` persisté, `errance.waveSize` [2,3] en data). Merge local + push (le merge CLI/API est refusé par le dépôt) ; GitHub marque la PR MERGED.
+- **Vérification post-merge sur main** : build OK, **202 tests verts**, smoke **404 checks** (3 échecs préexistants hors périmètre : 40, B1 g, B7 b), digests **inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000**.
+
 ## 2026-11-12 : EN COURS — correctifs v1.38 (TRANCHÉ 12/11, 9e tour) : TOUS LES LOTS LIVRÉS (1-2) — chantier v1.38 clôturé
 
 - **Lot 1 — XP des combats de zone (LIVRÉ, racine diagnostiquée)** : l'XP de run exigeait `!won || finalClear` ; une victoire de zone n'étant ni l'un ni l'autre, **jamais d'XP en errance**. Correctif minimal : la condition devient `(!won || finalClear || !!store.zoneFight)` — tout combat de zone terminé (victoire OU défaite, porte du donjon de zone comprise) distribue l'XP d'un étage de run à l'écran Récompenses, **formule inchangée** (`DIFFX.pts × 1,5 × 0,8 × tactXpMult`, bonus de découverte éventuel), via le bloc existant (`runLog.stages = 1`). Runs de donjon classiques inchangés (XP cumulée en fin de run uniquement).
