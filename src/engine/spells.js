@@ -139,18 +139,19 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
   }
-  // correctifs ciblage lot 3 (Tactique uniquement, action present) : un sort allié de lignée
-  // (soin/boost/bouclier) depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant.
-  // Le chemin Auto (action null) garde le comportement historique.
-  if (action && spell && !s.effect && !foeFacingSpell(spell)) {
+  // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
+  // depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant — en Tactique
+  // (action présent, allié désigné) comme en Auto (soigne le plus blessé, buffer/bouclier l'avant).
+  if (spell && !s.effect && !foeFacingSpell(spell)) {
     const sd = spellSideOf(spell);
     const role = spell.role ?? null;
     if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
       const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
       let t = s;
-      if (sd === 'ally' && action.allyUid) t = alliesAlive.find((x) => x.uid === action.allyUid) ?? t;
-      else if (sd === 'ally') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? s;
-      else if (sd === 'team') t = allies.avant.filter((u) => u.alive)[0] ?? alliesAlive[0] ?? s;
+      if (sd === 'self') t = s;
+      else if (action && action.allyUid) t = alliesAlive.find((x) => x.uid === action.allyUid) ?? t;
+      else if (role === 'soin') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? s;
+      else t = allies.avant.filter((u) => u.alive)[0] ?? alliesAlive[0] ?? s;
       const big = !!spell.big || spell.cost >= 5;
       if (role === 'soin') {
         const amount = Math.min(Math.max(1, Math.round(statOf(s) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));

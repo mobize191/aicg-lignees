@@ -483,7 +483,7 @@ test('correctifs lot 3 (repro B) : sort de lignée dégâts depuis l\'arrière i
   assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === 'f1' && e.kind === 'special'), 'dégâts du sort sur l\'ennemi');
 });
 
-test('correctifs lot 3 : le chemin Auto (action null) est inchangé pour un sort allié de lignée', () => {
+test('refonte IA lot 0 : en Auto (action null), un sort allié de lignée soigne le plus blessé', () => {
   const E = loadEngine();
   const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
   const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 's1', 1);
@@ -495,8 +495,37 @@ test('correctifs lot 3 : le chemin Auto (action null) est inchangé pour un sort
   const st = supportState(sup, [ally], [foe]);
   E.beginRound(st);
   const r = E.stepRound(st, null);
-  assert.ok(r.events.some((e) => e.type === 'cast'), 'cast historique émis');
-  assert.ok(!r.events.some((e) => e.type === 'heal'), 'pas de soin en Auto (comportement historique, lot 0 de la refonte IA)');
+  assert.ok(r.events.some((e) => e.type === 'cast'), 'cast émis');
+  assert.ok(ally.hp > 5, 'le plus blessé est soigné en Auto (lot 0)');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'ally1'), 'événement de soin émis');
+});
+
+test('refonte IA lot 0 : en Auto, boost de lignée -> atkBuff sur la ligne avant, bouclier -> shield', () => {
+  const E = loadEngine();
+  const hymne = ligneeSpell(E, 'zele', 'Hymne du Matin'); // école ferveur, rôle boost
+  assert.equal(hymne.role, 'boost');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [hymne] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const front = E.makeUnit(E.getCard('a1'), 'f1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; front.agi = 1; foe.agi = 50;
+  const st = { turn: 0, winner: null, rng: mulberry32(1), team: { avant: [front], arriere: [sup] }, enemies: { avant: [foe], arriere: [] }, mods: {} };
+  E.beginRound(st);
+  const r = E.stepRound(st, null);
+  assert.ok((front.atkBuff ?? 0) > 0, 'la ligne avant reçoit le buff en Auto');
+  assert.ok(r.events.some((e) => e.type === 'buff' && e.targetId === 'f1'), 'événement buff émis');
+
+  const carapace = ligneeSpell(E, 'bouclier', 'Carapace Réactive'); // école rempart, rôle bouclier
+  assert.equal(carapace.role, 'bouclier');
+  const sup2 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [carapace] }, 's1', 1);
+  sup2.mana = sup2.manaMax = 10;
+  const front2 = E.makeUnit(E.getCard('a1'), 'f1', 1);
+  const st2 = { turn: 0, winner: null, rng: mulberry32(1), team: { avant: [front2], arriere: [sup2] }, enemies: { avant: [foeUnit(E)], arriere: [] }, mods: {} };
+  sup2.agi = 99; front2.agi = 1;
+  E.beginRound(st2);
+  const r2 = E.stepRound(st2, null);
+  assert.ok(front2.shield > 0, 'la ligne avant reçoit le bouclier en Auto');
+  assert.ok(r2.events.some((e) => e.type === 'shield' && e.targetId === 'f1'), 'événement shield émis');
 });
 
 test('correctifs lot 3 : depuis la ligne avant, un sort de lignée soin en Tactique soigne (pas de atkBuff)', () => {

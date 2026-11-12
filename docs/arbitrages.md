@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA lot 0 livré (chemin Auto des sorts alliés des lignées) : digest inchangé
+
+- **Livré** : en Auto (`action` null), un sort de lignée soin/boost/bouclier depuis une carte sans `effect` se résout par son rôle (soigne le plus blessé / atkBuff ligne avant / shield ligne avant, plafonds identiques au chemin Tactique). Le chemin Tactique ne bouge pas. 2 tests headless déterministes (soin, boost+bouclier). 158 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : digest **inchangé `f8a9f0bb…` 1359/3000 (0 exception, 1 marathon)** contre la mesure courante du lancement — écart 0 point, dans la tolérance (≤ 5 points). Explication : à l'heuristique `pickSpell` (sort le plus cher abordable), la ligne support en Auto caste rarement le sort allié quand le solo est abordable ; le mécanisme est prouvé par tests sur états reconstitués. MESURE consignsée, aucun recalibrage.
+
 ## 2026-11-12 : ACTÉ (Porte A refonte IA) — prérequis livré + tranchages par défaut de la session 12/11 consignés, Phase 2 lancée
 
 - **Prérequis** : le chantier correctifs ciblage (`docs/prompt-correctifs-ciblage.md`) est livré (lots 1-3 : fiche `cible` des 84 sorts de lignée, camp de ciblage depuis la fiche, sorts alliés de lignée résolus par rôle en Tactique) — digest inchangé `f8a9f0bb…` 1359/3000, 157 tests verts. Note : les lots 4-5 du prompt (bugs rapides IHM : gestes fiche/équipe, fiche carte complète) restent à faire, hors du périmètre de la refonte IA. Décision de portée : le rôle `manip` (famille vol) garde un camp non hostile (`1 allié`), cohérent avec `foeFacingSpell` et `resolveSpellEntry` — l'ensemble des sorts hostils est identique avant/après (test obligatoire vert).
