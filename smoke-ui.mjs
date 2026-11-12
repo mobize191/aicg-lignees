@@ -1393,7 +1393,13 @@ async function main() {
       api.go('#accueil');
       await wait(40);
       const homeHtml = els.get('app')._innerHTML ?? '';
-      check('B20 a panneau Parties visible sur l\'Accueil', homeHtml.includes('slots-panel') && /Parties/.test(homeHtml), '');
+      const saveBoxRule = (html.match(/\.save-box\s*\{[^}]*\}/) ?? [''])[0];
+      const hubSceneRule = (html.match(/\.hub-scene\s*\{[^}]*\}/) ?? [''])[0];
+      const hubVeilRule = (html.match(/\.hub-veil\s*\{[^}]*\}/) ?? [''])[0];
+      check('B20 a panneau Parties présent dans le DOM de l\'Accueil (branche hub)', homeHtml.includes('slots-panel') && /Parties/.test(homeHtml), '');
+      check('B20 a2 visibilité effective : .save-box en position:relative + z-index:30 (au-dessus de la scène fixe)', /position:\s*relative/.test(saveBoxRule) && /z-index:\s*30/.test(saveBoxRule), saveBoxRule);
+      check('B20 a3 clics : .hub-scene et .hub-veil en pointer-events:none', /pointer-events:\s*none/.test(hubSceneRule) && /pointer-events:\s*none/.test(hubVeilRule), hubSceneRule + ' | ' + hubVeilRule);
+      check('B20 a4 espaceur 100dvh avant les panneaux dans la branche hub (panneaux sous l\'écran plein)', homeHtml.includes('hub-spacer') && /height:\s*100dvh/.test(html), '');
       const slotCards = [...els.get('app').querySelectorAll('.slot-card')];
       check('B20 b 4 cartes d\'emplacement rendues', slotCards.length === 4, String(slotCards.length));
       check('B20 c exactement une partie marquée « en cours »', slotCards.filter((el) => el.classList.contains('active')).length === 1, String(slotCards.filter((el) => el.classList.contains('active')).length));
@@ -1417,6 +1423,12 @@ async function main() {
       check('B20 g ✨ Nouvelle partie sur slot vide : départ frais (0 carte, departFait=false, slot 2 actif)', store.instances.length === 0 && store.departFait === false && api._activeSlot() === 2, `inst=${store.instances.length} depart=${store.departFait} active=${api._activeSlot()}`);
       const depHtml = els.get('app')._innerHTML ?? '';
       check('B20 h écran de départ rejoué (4 novices proposés)', (depHtml.match(/depart-choice/g) ?? []).length === 4, String((depHtml.match(/depart-choice/g) ?? []).length));
+      check('B20 h2 branche départ : panneaux 💾/🗂 présents, pas de scène fixe ni d\'espaceur (non cassés)', depHtml.includes('slots-panel') && depHtml.includes('save-box') && !depHtml.includes('hub-spacer'), '');
+      store.departFait = true;
+      api.go('#accueil');
+      await wait(30);
+      const welHtml = els.get('app')._innerHTML ?? '';
+      check('B20 h3 branche bienvenue (équipe vide) : panneaux 💾/🗂 présents, pas d\'espaceur', welHtml.includes('slots-panel') && welHtml.includes('save-box') && !welHtml.includes('hub-spacer'), '');
 
       api.go('#accueil');
       await wait(30);

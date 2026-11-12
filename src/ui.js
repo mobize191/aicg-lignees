@@ -2897,6 +2897,7 @@ function renderHome(root) {
         <div class="row"><a class="btn ok" href="#equipe">Composer mon équipe</a><button type="button" class="btn ghost" id="hub-pop-close">Plus tard</button></div>
       </div>
     </div>
+    <div class="hub-spacer" aria-hidden="true"></div>
     ${saveBoxHtml()}
     ${slotsPanelHtml()}`;
   wireSaveBox(root);

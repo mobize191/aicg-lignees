@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : CORRIGÉ — panneaux 💾 Sauvegarde / 🗂 Parties invisibles sur l'Accueil (peints sous la scène fixe du hub) : z-index 30 + pointer-events none + espaceur 100dvh
+
+- **Diagnostic** (`docs/prompt-correctif-panneaux-accueil.md`, état post-PR #5) : `.save-box` statique sans z-index → peint sous `.hub-scene`/`.hub-veil` (`position:fixed` plein écran, fond opaque) : panneaux invisibles et incliquables sur la branche hub de l'Accueil. Le smoke B20 a testait la présence DOM, pas la visibilité (faux vert).
+- **Correctif (minimal, réversible)** : `.save-box { position: relative; z-index: 30; }` (au-dessus des couches z 20/22 du hub, sous le header z 40) ; `pointer-events:none` sur `.hub-scene` (`.hub-veil` l'avait déjà) ; espaceur `.hub-spacer { height: 100dvh }` dans le flux avant les deux panneaux de la branche hub uniquement → les panneaux se placent sous l'écran plein du hub, accessibles au défilement. Branches bienvenue et écran de départ inchangées (pas de scène fixe). Visuel du hub non modifié.
+- **Garde-fou smoke durci** : B20 a teste désormais la visibilité effective (déclarations CSS du dist : `position:relative`/`z-index:30` sur `.save-box`, `pointer-events:none` sur `.hub-scene`/`.hub-veil`, espaceur `100dvh` présent) + présence DOM, et les 3 branches de l'Accueil (hub, bienvenue, départ). 171 tests verts, smoke 352 checks (3 échecs préexistants hors périmètre). **Digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000** — correctif 100 % CSS/IHM.
 ## 2026-11-12 : ACTÉ — canon visuel du Léviathan des Marées = le Léviathan du film « Atlantide, la cité perdue » (Disney)
 
 - **Canon visuel du léviathan / seaBehemoth (Titan des Marées e14, bêtes aquatiques massives) ACTÉ par Marc-Olivier** : monstre colossal à carapace de crustacé, yeux rouges luisants, gueule à tentacules, gardien antique des profondeurs — PAS un géant humanoïde type Tidehunter DotA2 (écarté).
