@@ -1439,13 +1439,23 @@ function renameSlot(i, name) {
 function deleteSlot(i) {
   ensureSlotsIndex();
   if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  const wasActive = slotsIndex.active === i;
   storage.removeItem(slotKey(i));
   storage.removeItem(slotBak(i));
   slotsIndex.slots[i] = null;
-  if (slotsIndex.active === i) {
+  if (wasActive) {
     const next = slotsIndex.slots.findIndex((s) => !!s);
     activeSlot = next >= 0 ? next : 0;
     slotsIndex.active = activeSlot;
+    if (next >= 0) {
+      if (!tryRestoreKey(slotKey(next)) && !tryRestoreKey(slotBak(next))) {
+        resetStore();
+        store.departFait = false;
+      }
+    } else {
+      resetStore();
+      store.departFait = false;
+    }
   }
   writeSlotsIndex();
   return true;
@@ -2457,8 +2467,10 @@ function renderDepart(root) {
         </div>
       </div>
     </div>
-    ${saveBoxHtml()}`;
+    ${saveBoxHtml()}
+    ${slotsPanelHtml()}`;
   wireSaveBox(root);
+  wireSlotsPanel(root);
   root.querySelectorAll('.depart-choice').forEach((el) => {
     el.onclick = () => choisirDepart(el.dataset.id);
   });
@@ -2790,8 +2802,10 @@ function renderHome(root) {
           <a href="#forge" class="btn btn-hero">\u2694 G\u00e9n\u00e9rer mes premi\u00e8res cartes</a>
         </div>
       </div>
-      ${saveBoxHtml()}`;
+      ${saveBoxHtml()}
+      ${slotsPanelHtml()}`;
     wireSaveBox(root);
+    wireSlotsPanel(root);
     return;
   }
   
@@ -2883,8 +2897,10 @@ function renderHome(root) {
         <div class="row"><a class="btn ok" href="#equipe">Composer mon équipe</a><button type="button" class="btn ghost" id="hub-pop-close">Plus tard</button></div>
       </div>
     </div>
-    ${saveBoxHtml()}`;
+    ${saveBoxHtml()}
+    ${slotsPanelHtml()}`;
   wireSaveBox(root);
+  wireSlotsPanel(root);
   const npc = root.querySelector('#hub-npc');
   const bubble = root.querySelector('#hub-bubble');
   if (npc && bubble) npc.onclick = () => bubble.classList.toggle('on');
@@ -2979,6 +2995,64 @@ function wireSaveBox(root) {
   if (ex) ex.onclick = () => openSaveModal('export');
   const im = root.querySelector('#btn-import-save');
   if (im) im.onclick = () => openSaveModal('import');
+}
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function slotsPanelHtml() {
+  const cards = listSlots().map((s) => {
+    const sum = s.summary;
+    const dName = sum ? (dungeonById(sum.dungeon)?.name ?? sum.dungeon) : '';
+    const sumTxt = sum
+      ? `${sum.gold} or · ${dName} étage ${sum.stage} · niv. ${sum.teamLevel}`
+      : 'Emplacement vide';
+    const dateTxt = s.date ? ' · ' + new Date(s.date).toLocaleDateString('fr-FR') : '';
+    const activeBadge = s.active ? ' <span class="badge">en cours</span>' : '';
+    const actions = s.empty
+      ? `<button type="button" class="btn slot-act" data-slot-act="new" data-slot="${s.index}">✨ Nouvelle partie</button>`
+      : `<button type="button" class="btn gold slot-act" data-slot-act="play" data-slot="${s.index}">▶ Jouer</button>
+         <button type="button" class="btn slot-act" data-slot-act="rename" data-slot="${s.index}">✏️ Renommer</button>
+         <button type="button" class="btn slot-act" data-slot-act="del" data-slot="${s.index}">🗑 Supprimer</button>`;
+    return `<div class="slot-card${s.active ? ' active' : ''}${s.empty ? ' empty' : ''}">
+      <h4>${escHtml(s.name)}${activeBadge}</h4>
+      <p class="muted">${escHtml(sumTxt)}${escHtml(dateTxt)}</p>
+      <div class="actions">${actions}</div>
+    </div>`;
+  }).join('');
+  return `<div class="save-box slots-panel">
+    <h3>🗂 Parties</h3>
+    <p class="muted">${SAVE_SLOTS} parties peuvent coexister dans ce navigateur. La partie en cours est sauvegardée avant toute bascule ; l'export FCSAVE1 s'applique à la partie active.</p>
+    <div class="slots-grid">${cards}</div>
+  </div>`;
+}
+
+function wireSlotsPanel(root) {
+  root.querySelectorAll('.slot-act').forEach((el) => {
+    el.onclick = () => {
+      const i = Number(el.dataset.slot);
+      const act = el.dataset.slotAct;
+      const nameOf = (k) => listSlots()[k]?.name ?? defaultSlotName(k);
+      if (act === 'play') {
+        if (i === activeSlot) { toast('Vous jouez déjà cette partie.'); return; }
+        if (switchToSlot(i)) { toast('▶ ' + nameOf(i) + ' chargée.'); renderHome(document.getElementById('app')); }
+        else toast('✗ Impossible de charger cette partie.', 'warn');
+      } else if (act === 'new') {
+        if (newSlot(i)) { toast('✨ ' + nameOf(i) + ' : nouvelle partie.'); renderHome(document.getElementById('app')); }
+        else toast('✗ Impossible de créer cette partie.', 'warn');
+      } else if (act === 'rename') {
+        const name = prompt('Nouveau nom de la partie :', nameOf(i));
+        if (name != null && renameSlot(i, name)) { toast('✏️ Partie renommée en « ' + nameOf(i) + ' ».'); renderHome(document.getElementById('app')); }
+      } else if (act === 'del') {
+        if (!confirm('Supprimer la partie « ' + nameOf(i) + ' » ?\nCartes, or et progression de cette partie seront perdus.')) return;
+        if (!confirm('Vraiment supprimer « ' + nameOf(i) + ' » ? Cette action est définitive.')) return;
+        deleteSlot(i);
+        toast('🗑 Partie supprimée.');
+        renderHome(document.getElementById('app'));
+      }
+    };
+  });
 }
 
 function artGlyph(c) {

@@ -6,7 +6,7 @@ import { bootDist, wait } from './stub.mjs';
 const file = process.argv[2] ?? 'dist.html';
 const html = readFileSync(file, 'utf8');
 
-const { api, doc, mem, els, errors } = bootDist(file);
+const { api, doc, mem, els, errors, ctx } = bootDist(file);
 const store = api.store;
 
 let fails = 0;
@@ -1381,6 +1381,78 @@ async function main() {
 
       api.switchToSlot(0);
       check('B19 r 0 exception lot 1 (slots)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
+    // ---------- B20 : panneau « Parties » sur l'Accueil (lot 2) ----------
+    {
+      const SK = 'fondations-cards-v1';
+      api.newSlot(1, 'Partie test');
+      store.gold = 42;
+      api.save();
+      api.switchToSlot(0);
+      api.go('#accueil');
+      await wait(40);
+      const homeHtml = els.get('app')._innerHTML ?? '';
+      check('B20 a panneau Parties visible sur l\'Accueil', homeHtml.includes('slots-panel') && /Parties/.test(homeHtml), '');
+      const slotCards = [...els.get('app').querySelectorAll('.slot-card')];
+      check('B20 b 4 cartes d\'emplacement rendues', slotCards.length === 4, String(slotCards.length));
+      check('B20 c exactement une partie marquée « en cours »', slotCards.filter((el) => el.classList.contains('active')).length === 1, String(slotCards.filter((el) => el.classList.contains('active')).length));
+      const actsOf = (i) => [...slotCards[i].querySelectorAll('.slot-act')].map((el) => el.dataset.slotAct);
+      check('B20 d actions par carte : occupé = Jouer/Renommer/Supprimer, vide = Nouvelle partie',
+        actsOf(0).join(',') === 'play,rename,del' && actsOf(1).join(',') === 'play,rename,del' && actsOf(2).join(',') === 'new' && actsOf(3).join(',') === 'new',
+        [0, 1, 2, 3].map((i) => actsOf(i).join('+')).join(' | '));
+
+      const play1 = [...slotCards[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'play');
+      play1.click();
+      await wait(30);
+      check('B20 e ▶ Jouer bascule vers p1 (or 42 retrouvé, slot actif = 1)', store.gold === 42 && api._activeSlot() === 1, `gold=${store.gold} active=${api._activeSlot()}`);
+      check('B20 f la partie en cours a été sauvegardée avant la bascule (p0 intact, 777 or)', JSON.parse(mem.get(SK + '.p0')).gold === 777, String(JSON.parse(mem.get(SK + '.p0')).gold));
+
+      api.go('#accueil');
+      await wait(30);
+      const cards2 = [...els.get('app').querySelectorAll('.slot-card')];
+      const new2 = [...cards2[2].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'new');
+      new2.click();
+      await wait(30);
+      check('B20 g ✨ Nouvelle partie sur slot vide : départ frais (0 carte, departFait=false, slot 2 actif)', store.instances.length === 0 && store.departFait === false && api._activeSlot() === 2, `inst=${store.instances.length} depart=${store.departFait} active=${api._activeSlot()}`);
+      const depHtml = els.get('app')._innerHTML ?? '';
+      check('B20 h écran de départ rejoué (4 novices proposés)', (depHtml.match(/depart-choice/g) ?? []).length === 4, String((depHtml.match(/depart-choice/g) ?? []).length));
+
+      api.go('#accueil');
+      await wait(30);
+      const origPrompt = ctx.prompt;
+      ctx.prompt = () => 'Ma quête';
+      const cards3 = [...els.get('app').querySelectorAll('.slot-card')];
+      const ren0 = [...cards3[0].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'rename');
+      ren0.click();
+      await wait(30);
+      ctx.prompt = origPrompt;
+      check('B20 i ✏️ Renommer persiste dans l\'index', JSON.parse(mem.get(SK + '.slots')).slots[0].name === 'Ma quête', JSON.parse(mem.get(SK + '.slots')).slots[0]?.name);
+
+      api.go('#accueil');
+      await wait(30);
+      const origConfirm = ctx.confirm;
+      let nConf = 0;
+      ctx.confirm = () => { nConf++; return false; };
+      const cards4 = [...els.get('app').querySelectorAll('.slot-card')];
+      const del1 = [...cards4[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'del');
+      del1.click();
+      await wait(20);
+      check('B20 j Supprimer : 1re confirmation refusée = rien n\'est effacé', nConf === 1 && mem.has(SK + '.p1'), `conf=${nConf} hasP1=${mem.has(SK + '.p1')}`);
+      ctx.confirm = () => true;
+      const cards5 = [...els.get('app').querySelectorAll('.slot-card')];
+      const del1b = [...cards5[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'del');
+      const p0Before = mem.get(SK + '.p0');
+      del1b.click();
+      await wait(20);
+      check('B20 k Supprimer : double confirmation acceptée = slot effacé, autres slots intacts', !mem.has(SK + '.p1') && !mem.has(SK + '.p1.bak') && mem.get(SK + '.p0') === p0Before, [...mem.keys()].join(','));
+      ctx.confirm = origConfirm;
+
+      check('B20 l 0 exception lot 2 (panneau Parties)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
+      api.switchToSlot(0);
+      api.go('#accueil');
+      await wait(30);
     }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
