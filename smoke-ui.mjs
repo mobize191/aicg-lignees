@@ -1376,7 +1376,9 @@ async function main() {
     api.go('#personnage');
     await wait(30);
     check('B15 g page Personnage : onglets Équipe + Inventaire + bouton retour', !!els.get('app').querySelector('#tab-equipe') && !!els.get('app').querySelector('#tab-inventaire') && !!els.get('app').querySelector('#perso-back'), '');
-    check('B15 h onglet Équipe actif rend la formation 3+2/2+3', !!els.get('app').querySelector('#form-3-2') && !!els.get('app').querySelector('#form-2-3'), '');
+    check('B15 h onglet Équipe actif : 3 actifs + 2 réserve, plus de boutons 3+2/2+3',
+      !els.get('app').querySelector('#form-3-2') && !els.get('app').querySelector('#form-2-3')
+      && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('r' + chr(233) + 'serve'), '');
     els.get('app').querySelector('#tab-inventaire').click();
     await wait(20);
     check('B15 i onglet Inventaire rend potions/matériaux/équipement', !!els.get('app').querySelector('#inv-back') && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('Potions'), '');

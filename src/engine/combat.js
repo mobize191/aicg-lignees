@@ -71,10 +71,14 @@ function levelFor(levels, id, i) {
 // opts.difficulty : profil IA de la difficulté (data/difficulties.json, champ ia) — lot 3 refonte IA
 function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   const iaProfile = (opts.difficulty != null ? difficultyById(opts.difficulty) : null)?.ia ?? { suboptimal: 0 };
+  // Lot A (refonte direction, TRANCHÉ 12/11) : 3 actifs + 2 réserve — l'arrière joueur disparaît du plateau,
+  // les slots 3-4 partent en state.reserve (hors ciblage, hors dégâts de zone, ne jouent pas)
+  const mkUnit = (c, i, tag) => { const u = makeUnit(c, `${c.id}.${tag}${i}`, c.level ?? levelFor(levels, c.id, i)); u.iid = c.iid ?? null; return u; };
   const team = {
-    avant: (teamCards.avant ?? teamCards.avant ?? []).map((c, i) => makeUnit(c, `${c.id}.a${i}`, c.level ?? levelFor(levels, c.id, i))),
-    arriere: (teamCards.arriere ?? teamCards.arriere ?? []).map((c, i) => makeUnit(c, `${c.id}.s${i}`, c.level ?? levelFor(levels, c.id, i))),
+    avant: (teamCards.avant ?? []).map((c, i) => mkUnit(c, i, 'a')),
+    arriere: [],
   };
+  const reserve = (teamCards.reserve ?? teamCards.arriere ?? []).map((c, i) => mkUnit(c, i, 'r'));
   const flat = Array.isArray(enemyCards)
     ? enemyCards
     : [...(enemyCards.avant ?? enemyCards.avant ?? []), ...(enemyCards.arriere ?? enemyCards.arriere ?? [])];
@@ -86,9 +90,10 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   // tant que le champ role existe (supprimé au lot B) ; les monstres suivent les mêmes règles
   for (const u of team.avant) u.rang = 'avant';
   for (const u of team.arriere) u.rang = 'arriere';
+  for (const u of reserve) u.rang = 'reserve';
   for (const u of enemies.avant) u.rang = 'avant';
   for (const u of enemies.arriere) u.rang = 'arriere';
-  const all = [...team.avant, ...team.arriere];
+  const all = [...team.avant]; // synergies de combat calculées sur les actifs seuls (réserve hors combat) [À TRANCHER si synergies sur les 5]
   const mods = teamModifiers(all);
   if (mods.hpPct) {
     for (const u of all) {
@@ -102,7 +107,7 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
     if (u.gimmick === 'cale') u.shield += Math.round(u.maxHp * M.GIMMICK_CALE_SHIELD);
     if (u.gimmick === 'litiere') for (const a of all) a.shield += Math.round(a.maxHp * M.GIMMICK_LITIERE_SHIELD);
   }
-  return { rng: mulberry32(seed), iaRng: mulberry32((Math.imul(seed >>> 0, 31) ^ 7) >>> 0), iaProfile, turn: 0, team, enemies, mods, winner: null };
+  return { rng: mulberry32(seed), iaRng: mulberry32((Math.imul(seed >>> 0, 31) ^ 7) >>> 0), iaProfile, turn: 0, team, enemies, reserve, mods, winner: null };
 }
 
 // chantier lignes (Option A) : l'avant tient = au moins un vivant dans la ligne avant du camp
@@ -268,7 +273,30 @@ function beginRound(state) {
   enemies.arriere.forEach((es, si) => { if (es.alive) items.push({ u: es, side: 'enemies', kind: 'support', idx: si }); });
   items.sort((a, b) => (b.u.agi - a.u.agi) || (a.side === b.side ? 0 : (a.side === 'team' ? -1 : 1)));
   state.round = { items, i: 0, ctx };
+  replaceKoTeam(state, ctx); // Lot A : K.O. -> remplaçant automatique (hors items de ce tour : il ne jouera qu'au suivant)
   return events;
+}
+
+// Lot A : remplacement automatique sur K.O. — la première réserve vivante entre GRATUITEMENT dans la place du K.O.
+// L'entrant n'est pas dans les items du tour courant : il ne joue qu'au tour suivant. Sans réserve, le combat continue.
+function replaceKoTeam(state, ctx) {
+  const team = state.team;
+  if (!team || !Array.isArray(team.avant)) return;
+  const reserve = state.reserve ?? (state.reserve = []);
+  for (let i = 0; i < team.avant.length; i++) {
+    const u = team.avant[i];
+    if (!u || u.alive) continue;
+    const ri = reserve.findIndex((r) => r && r.alive);
+    if (ri < 0) continue;
+    const r = reserve[ri];
+    reserve.splice(ri, 1);
+    team.avant[i] = r;
+    r.rang = 'avant';
+    r.benched = false;
+    u.rang = 'reserve';
+    reserve.push(u);
+    if (ctx) ctx.events.push({ type: 'swap', out: u.uid, in: r.uid, outName: u.name, inName: r.name, voluntary: false });
+  }
 }
 
 function peekRound(state) {
@@ -277,7 +305,7 @@ function peekRound(state) {
   const ctx = r.ctx;
   while (r.i < r.items.length) {
     const it = r.items[r.i];
-    if (!it.u.alive) { r.i += 1; continue; }
+    if (!it.u.alive || it.u.benched) { r.i += 1; continue; } // v1.40 Lot A : une carte échangée en cours de tour ne joue plus
     if (it.side === 'team' && it.kind === 'strike' && !ctx.enemyAll().length) { r.i += 1; continue; }
     if (it.side === 'enemies' && it.kind === 'strike' && !ctx.teamAll().length) { r.i += 1; continue; }
     return it;
@@ -691,7 +719,7 @@ function stepRound(state, stepChoice = null) {
   let targetIdx = null;
   if (stepChoice) {
     // retour terrain : la designation d'ennemi voyage jusqu'a la resolution (frappe et sorts hostils des supports)
-    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null, potion: stepChoice.potion ?? null };
+    tacAct = { kind: stepChoice.kind, idx: stepChoice.idx, allyUid: stepChoice.allyUid, targetUid: stepChoice.targetUid ?? null, potion: stepChoice.potion ?? null, reserveIdx: stepChoice.reserveIdx ?? null };
     if (stepChoice.targetIdx !== null && stepChoice.targetIdx !== undefined) targetIdx = stepChoice.targetIdx;
     else if (stepChoice.targetUid != null) {
       const ti = [...state.enemies.avant, ...state.enemies.arriere].findIndex((x) => x.uid === stepChoice.targetUid);
@@ -700,10 +728,24 @@ function stepRound(state, stepChoice = null) {
   }
   const step = { tacAct, targetIdx };
   let done = false;
-  if (it.side === 'team' && it.kind === 'strike') done = actTeamStriker(it.u, it.idx, ctx, step);
+  // Lot A : switch volontaire « Échanger » — l'entrant dépense le tour (le sortant est benché, l'entrant n'est pas dans items)
+  if (tacAct && tacAct.kind === 'swap' && it.side === 'team') {
+    const ri = tacAct.reserveIdx ?? 0;
+    const r = (state.reserve ?? [])[ri];
+    if (r && r.alive) {
+      const out = it.u;
+      state.team.avant[it.idx] = r;
+      r.rang = 'avant';
+      out.rang = 'reserve';
+      out.benched = true;
+      state.reserve[ri] = out;
+      ctx.events.push({ type: 'swap', out: out.uid, in: r.uid, outName: out.name, inName: r.name, voluntary: true });
+    }
+  } else if (it.side === 'team' && it.kind === 'strike') done = actTeamStriker(it.u, it.idx, ctx, step);
   else if (it.side === 'team' && it.kind === 'support') actTeamSupport(it.u, ctx, step);
   else if (it.side === 'enemies' && it.kind === 'strike') done = actEnemyStriker(it.u, ctx);
   else actEnemySupport(it.u, ctx);
+  replaceKoTeam(state, ctx); // Lot A : remplacement automatique des K.O. du camp joueur, sans consommer de tour
   if (state.winner) done = true;
   if (r.i >= r.items.length) {
     done = true;

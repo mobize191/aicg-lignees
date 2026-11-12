@@ -1,3 +1,12 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 2 (Lot A refonte) LIVRÉE : FORMATION 3 ACTIFS + 2 RÉSERVE (v1.41)
+
+- **Moteur** (`src/engine/combat.js`) : `initCombat` prend `{avant, reserve}` — slots 0-2 en avant, 3-4 en `state.reserve` (l'arrière joueur disparaît du plateau). La réserve est hors ciblage, hors dégâts de zone, hors items de tour. `peekRound` saute les unités `benched`.
+- **« Échanger » volontaire** (`stepRound` kind `swap`) : consomme le tour — le sortant est benché, l'entrante occupe la place mais n'est pas dans les items du tour (elle joue au suivant). Événement `swap` `voluntary: true`. PV/mana conservés (mêmes objets).
+- **K.O. → remplacement automatique GRATUIT** (`replaceKoTeam`, appelé dans `beginRound` et après chaque action de `stepRound`) : la première réserve vivante entre sans consommer de tour, joue au tour suivant. Événement `swap` `voluntary: false`. Sans réserve, le combat continue/se perd normalement.
+- **Réserve à 50 % d'XP** : constante `engine.reserveXpMult = 0.5` en data, appliquée côté UI (index de slot >= 3). Synergies de combat calculées sur les 3 actifs seuls [À TRANCHER si synergies sur les 5]. Pas de bump de save (les sauvegardes à 5 cartes se chargent telles quelles).
+- **UI** : rail « réserve » visible sous l'équipe en combat, bouton « ⇄ Échanger » (coûte le tour), modale de choix de la réserve, bouton d'annulation, événement `swap` animé. Onglet Équipe : libellés « 3 actifs · 2 réserve », boutons 3+2/2+3 supprimés (smoke B15 h adapté).
+- **IA moteur inchangée** (elle ne switch pas, comme tranché). Tests : 6 headless (`tests/formation-3-2.test.js`). 220 tests verts (1 échec préexistant lié au changement de jour). **DIGEST CHANGÉ (attendu, maths) : MESURÉ `5bdb0c6d…` 822/3000 et `1122225c…` 2787/10000** vs baseline `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000. Écart expliqué : les équipes du harnais (2 avant + 1 arrière) passent à 2 actifs + 1 réserve, donc 2 combattants actifs au lieu de 3.
+
 ## 2026-11-12 : 12e TOUR (clôture) — FUSION × FAMILLES TRANCHÉE (table de synthèse DQM, hybrides) + LIGNÉES EXCLUSIVES INITIALES EN PRINCIPE
 
 ## 2026-11-12 (nuit) : v1.40 LIVRÉE (couloir 1) — interactions d'errance robustes

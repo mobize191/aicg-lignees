@@ -693,27 +693,24 @@ function autelDeSoin() {
 // applique l'état de run persisté aux unités du combat (PV/mana conservés d'un étage à l'autre)
 function applyRunStateTo(state) {
   if (!store.runState.active) return;
-  const iids = [...store.team.slots].filter(Boolean);
-  const units = [...state.team.avant, ...state.team.arriere];
-  iids.forEach((iid, k) => {
-    const u = units[k];
-    const mem = store.runState.units[iid];
-    if (!u || !mem) return;
+  const units = [...state.team.avant, ...(state.reserve ?? []), ...state.team.arriere];
+  for (const u of units) { // Lot A : indexé par iid (les échanges actif <-> réserve ne perdent pas le PV/mana)
+    if (!u || !u.iid) continue;
+    const mem = store.runState.units[u.iid];
+    if (!mem) continue;
     if (Number.isFinite(mem.hp)) u.hp = Math.max(1, Math.min(u.maxHp, Math.round(mem.hp)));
     if (Number.isFinite(mem.mana)) u.mana = Math.max(0, Math.min(u.manaMax, Math.round(mem.mana)));
-  });
+  }
 }
 
 // persiste les PV/mana restants à la fin d'un combat gagné (effets temporaires dissous au passage)
 function persistRunStateFrom(state) {
   store.runState.active = true;
-  const iids = [...store.team.slots].filter(Boolean);
-  const units = [...state.team.avant, ...state.team.arriere];
-  iids.forEach((iid, k) => {
-    const u = units[k];
-    if (!u) return;
-    store.runState.units[iid] = { hp: u.hp, mana: u.mana };
-  });
+  const units = [...state.team.avant, ...(state.reserve ?? []), ...state.team.arriere];
+  for (const u of units) { // Lot A : persisté par iid, y compris la réserve
+    if (!u || !u.iid) continue;
+    store.runState.units[u.iid] = { hp: u.hp, mana: u.mana };
+  }
 }
 
 let uiSeq = (Date.now() & 0x7fffffff) >>> 0;
@@ -3409,7 +3406,7 @@ function switchTeam(dir) {
 
 function slotsHtml() {
   const ids = store.team.slots;
-  const nAvant = (store.team.formation === '2-3') ? 2 : 3;
+  const nAvant = 3; // Lot A : slots 0-2 = actifs, 3-4 = réserve
   const cell = (i) => {
     const iid = ids[i];
     const inst = iid ? byIid(iid) : null;
@@ -3420,9 +3417,9 @@ function slotsHtml() {
     return `<div class="slot empty" data-idx="${i}"></div>`;
   };
   const rowCells = (from, to) => Array.from({ length: Math.max(0, to - from) }, (_, k) => cell(from + k)).join('');
-  return `<div class="line team"><h3>\u00c9quipe (${ids.length}/${TEAM_MAX}) \u2014 formation ${store.team.formation === '2-3' ? '2 avant \u00b7 3 arri\u00e8re' : '3 avant \u00b7 2 arri\u00e8re'}</h3>
-    <div class="row-lab">avant</div><div class="row">${rowCells(0, nAvant)}</div>
-    <div class="row-lab">arri\u00e8re</div><div class="row back">${rowCells(nAvant, TEAM_MAX)}</div></div>`;
+  return `<div class="line team"><h3>\u00c9quipe (${ids.length}/${TEAM_MAX}) \u2014 3 actifs \u00b7 2 r\u00e9serve</h3>
+    <div class="row-lab">actifs</div><div class="row">${rowCells(0, nAvant)}</div>
+    <div class="row-lab">r\u00e9serve</div><div class="row back">${rowCells(nAvant, TEAM_MAX)}</div></div>`;
 }
 
 function synPanel() {
@@ -3604,7 +3601,7 @@ function renderEquipe(root) {
   root.innerHTML = `
     <h2><button type="button" class="back" id="equipe-back" title="Retour à l'accueil">←</button> Mon équipe <span class="team-switch"><button type="button" class="btn" id="team-prev" title="Équipe précédente">◀</button><span class="muted">(Équipe ${store.activeTeam + 1}/3)</span><button type="button" class="btn" id="team-next" title="Équipe suivante">▶</button></span></h2>
     <p class="muted"><b>Fiche</b> : appui court, appui long ou ℹ️ sur une carte (fonctionne même équipe pleine). <b>Ajouter / retirer</b> : boutons ＋ / − explicites — plus d’ajout au double-clic. 5 emplacements libres, dans n'importe quel ordre : les cartes font tout (frapper et soigner selon leurs sorts). Les cartes non possédées restent à dévoiler : voir l'onglet Collection.</p>
-    <p class="muted">Formation (figée pendant le combat) : <button type="button" class="btn small${store.team.formation === '2-3' ? '' : ' gold'}" id="form-3-2">3 avant \u00b7 2 arri\u00e8re</button> <button type="button" class="btn small${store.team.formation === '2-3' ? ' gold' : ''}" id="form-2-3">2 avant \u00b7 3 arri\u00e8re</button></p>
+    <p class="muted">Composition : <b>3 actifs</b> (slots du haut) + <b>2 r\u00e9serve</b> (slots du bas, hors combat, rempla\u00e7ables en combat via \u21c4 \u00c9changer, ou automatiquement sur K.O.).</p>
     ${slotsHtml()}
     ${teamEquipHtml()}
     ${synPanel()}
@@ -3621,8 +3618,7 @@ function renderEquipe(root) {
   });
   root.querySelector('#team-prev')?.addEventListener('click', () => switchTeam(-1));
   root.querySelector('#team-next')?.addEventListener('click', () => switchTeam(1));
-  root.querySelector('#form-3-2')?.addEventListener('click', () => { store.team.formation = '3-2'; save(); renderEquipe(root); });
-  root.querySelector('#form-2-3')?.addEventListener('click', () => { store.team.formation = '2-3'; save(); renderEquipe(root); });
+  // Lot A : plus de bascule 2-3/3-2 (3 actifs + 2 réserve) ; le champ formation reste en save pour compatibilité
   root.querySelector('#reset-filters')?.addEventListener('click', () => {
     filters = { classe: null, element: null, niv: null, rar: null };
     renderEquipe(root);
@@ -4232,6 +4228,28 @@ function askPotionChoice(u) {
   });
 }
 
+// Lot A : choix de la carte de réserve pour l'échange volontaire (coûte le tour du sortant)
+function askSwapChoice(u) {
+  if (!promptState || !actBox) return;
+  promptState.phase = 'swap';
+  const zoneEl = actBox.querySelector('.act-zone');
+  if (!zoneEl) return;
+  const rows = (state?.reserve ?? []).map((r, i) => (r && r.alive)
+    ? `<button type="button" class="btn tac-btn act-swap-pick" data-i="${i}">\u21c4 <b>${r.name}</b> <span class="muted">Nv ${r.level ?? '?'} \u00b7 \u2665${Math.max(0, Math.round(r.hp))}/${r.maxHp} \u00b7 \u2726${r.mana}/${r.manaMax}</span></button>`
+    : '').join(' ');
+  zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Quelle carte de réserve entre ? <span class="muted">(l'échange coûte le tour de ${u.name} — l'entrante n'agit pas ce tour)</span></p>`
+    + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
+    + (rows || '<p class="muted">Réserve vide.</p>');
+  const cancelBtn = zoneEl.querySelector('.act-cancel');
+  if (cancelBtn) cancelBtn.onclick = () => { if (promptState && promptState.showActions) promptState.showActions(); };
+  zoneEl.querySelectorAll('.act-swap-pick').forEach((b) => {
+    b.onclick = () => {
+      if (!promptState || promptState.phase !== 'swap') return;
+      promptState.pick({ kind: 'swap', reserveIdx: Number(b.dataset.i) });
+    };
+  });
+}
+
 function actionButtonsHtml(u, kind) {
   const isStrike = kind === 'strike';
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
@@ -4263,6 +4281,15 @@ function actionButtonsHtml(u, kind) {
       + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
+  // Lot A : switch volontaire — l'entrant dépense le tour (n'agit pas ce tour-ci)
+  const resAlive = (state?.reserve ?? []).filter((r) => r && r.alive).length;
+  if (resAlive > 0) {
+    parts.push(row(
+      top('\u21c4 \u00c9changer',
+        `<span class="sort-badge b-objet">Switch</span>`, 'coûte le tour')
+      + `<span class="sort-meta">${resAlive} carte${resAlive > 1 ? 's' : ''} en réserve — l'entrante n'agit pas ce tour, PV/mana conservés des deux côtés</span>`,
+      'act-swap'));
+  }
   parts.push(row(
     top('\u23f8 Attendre', '', 'gratuit')
     + `<span class="sort-meta">la carte passe son tour et garde son mana</span>`,
@@ -4273,6 +4300,10 @@ function actionButtonsHtml(u, kind) {
 function bindActionButtons(box, u, kind) {
   const isStrike = kind === 'strike';
   box.querySelector('.act-pass').onclick = () => { if (promptState) promptState.pick({ kind: 'pass' }); };
+  const bSwap = box.querySelector('.act-swap');
+  if (bSwap) {
+    bSwap.onclick = () => { if (promptState) askSwapChoice(u); };
+  }
   const bAtk = box.querySelector('.act-attack');
   if (bAtk) {
     bAtk.onclick = () => {
@@ -4546,6 +4577,23 @@ function drawBoard() {
   line(enemyZone, [...state.enemies.arriere], 'arrière');
   line(teamZone, [...state.team.avant], 'avant');
   line(teamZone, [...state.team.arriere], 'arrière');
+  const resZone = combatApp.querySelector('#reserve-zone'); // Lot A : rail de réserve visible (2 emplacements)
+  if (resZone) {
+    resZone.innerHTML = '';
+    const row = document.createElement('div');
+    row.className = 'row back';
+    const labEl = document.createElement('div');
+    labEl.className = 'row-lab';
+    labEl.textContent = 'réserve';
+    row.appendChild(labEl);
+    for (const u of (state.reserve ?? [])) {
+      const c = unitEl(u);
+      if (!u.alive) c.classList.add('ko');
+      hpShown.set(u.uid, u.hp);
+      row.appendChild(c);
+    }
+    resZone.appendChild(row);
+  }
   
   
   if (promptState && promptState.phase === 'target') {
@@ -5194,10 +5242,12 @@ async function animate(events, ms, gen = null) {
           const baseXp = 1 * DIFFX.pts * (won ? 1.5 : 1) * 0.8 * (discOn ? 2 : 1); // v1.39 : formule ramenée à UN étage, sans facteur tactique (plus de mode auto) : un run de N étages distribue N fois cette base
           const iids = [...new Set(store.team.slots.filter(Boolean))];
           const xpParts = [];
+          const slotsNow = store.team.slots.filter(Boolean);
           for (const iid of iids) {
             const inst = byIid(iid);
             if (!inst) continue;
-            const mult = xpMultFor(iid);
+            const isReserve = slotsNow.indexOf(iid) >= 3; // Lot A : la réserve gagne reserveXpMult × l'XP
+            const mult = xpMultFor(iid) * (isReserve ? (DATA.engine.reserveXpMult ?? 0.5) : 1);
             const r = addXpI(iid, baseXp * mult);
             const nm = byId(inst.id).name;
             xpParts.push(`${nm} → Nv ${r.level}${mult < 1 ? ` (${Math.round(mult * 100)} % XP)` : ''}`);
@@ -5277,6 +5327,15 @@ async function animate(events, ms, gen = null) {
         } else {
           save();
         }
+        break;
+      }
+      case 'swap': { // Lot A : échange actif <-> réserve (volontaire ou K.O. automatique)
+        const elIn = elOf(ev.in);
+        if (elIn) { burst(elIn); floatText(elIn, `\u271a ${ev.inName} entre en jeu`, 'buff'); }
+        const elOut = elOf(ev.out);
+        if (elOut) floatText(elOut, `${ev.outName} \u2192 réserve`, 'buff');
+        drawBoard();
+        await sleep(ms * 0.3);
         break;
       }
       default: {
@@ -5445,6 +5504,7 @@ function renderCombat(root, opts = {}) {
     }
     return {
       ...base,
+      iid: inst.iid, // Lot A : persistance PV/mana par iid (survit aux échanges actif <-> réserve)
       level: inst.lvl,
       atk: Math.max(1, Math.round(base.atk * ascM)),
       hp: Math.max(1, Math.round(base.hp * ascM)),
@@ -5453,21 +5513,21 @@ function renderCombat(root, opts = {}) {
       ...(instSpells.length ? { spells: instSpells } : {}),
     };
   }).filter(Boolean);
-  const nAvant = (store.team.formation === '2-3') ? 2 : 3;
+  const nAvant = 3; // Lot A : slots 0-2 = actifs, 3-4 = réserve (la formation 2-3 n'a plus de sens en combat)
   state = initCombat(
     {
       avant: cards.slice(0, nAvant),
-      arriere: cards.slice(nAvant),
+      reserve: cards.slice(nAvant),
     },
     wave,
     wseed ^ (store.stage * 2654435761),
     {},
     { difficulty: store.diff }, // refonte IA lot 3 : profil IA de la difficulté
   );
-  const teamEmpty = state.team.avant.length === 0 && state.team.arriere.length === 0;
+  const teamEmpty = state.team.avant.length === 0 && (state.reserve ?? []).length === 0;
   
   if (!defi && store.runMod === 'sterile') {
-    for (const u of [...state.team.avant, ...state.team.arriere]) u.manaRegen = Math.max(1, u.manaRegen - 1);
+    for (const u of [...state.team.avant, ...(state.reserve ?? [])]) u.manaRegen = Math.max(1, u.manaRegen - 1);
   }
   // boucle v2 lot 1 : persistance — PV/mana du run repris tels quels (pas de régén entre combats)
   if (!defi) applyRunStateTo(state);
@@ -5491,6 +5551,7 @@ function renderCombat(root, opts = {}) {
     <div class="rail-wrap"><div class="rail" id="rail"></div></div>
     <div class="enemy-zone" id="enemy-zone"></div>
     <div class="team-zone" id="team-zone"></div>
+    <div class="reserve-zone" id="reserve-zone"></div>
     <div id="log"></div>
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
@@ -6031,6 +6092,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.41 : Formation 3 actifs + 2 réserve', 'Chaque combat aligne 3 cartes actives et garde 2 cartes en réserve (bandeau d\u2019dié sous l\u2019équipe, hors ciblage). Nouvelle action \u21c4 Échanger : la carte de réserve entre immédiatement mais son tour est consommé (elle n\u2019agit qu\u2019au tour suivant), PV et mana conservés des deux côtés. Si une carte active tombe K.O., la réserve entre automatiquement et GRATUITEMENT (aucun tour consommé, elle joue au tour suivant). La réserve gagne 50 % d\u2019XP (`reserveXpMult`). 220 tests, digest MESURÉ `5bdb0c6d\u2026` 822/3000 et `1122225c\u2026` 2787/10000 (formation 3+2 : les équipes du harnais combattent à 2 actifs au lieu de 3).'],
   ['v1.40 : Les interactions d’errance répondent au clic', 'Porte du donjon cliquable sur tout le bâtiment (plus l’anneau), autel/retour/huttes au 8-voisinage, toast de confirmation au clic. Arrivée garantie : tuile praticable recherchée à côté de la cible, déclenchement immédiat si vous y êtes déjà, et « ✗ Chemin bloqué » explicite si le chemin échoue. Le retour à la ville renvoie au hub-ville (Accueil). 214 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.39 : XP par combat + fin du mode Auto', 'L’XP est distribuée à CHAQUE combat terminé (même formule, ramenée à un étage : un run de 5 étages donne le même total, mais au fil des combats) et l’écran Récompenses l’affiche par personnage, avec l’or et les objets. En défaite de donjon, l’XP des combats gagnés reste acquise. Le mode Auto disparaît du combat joué (boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence persistée, pénalités de récompenses) : les récompenses sont toujours intégrales. L’auto-résolution interne du moteur reste intacte pour les futures missions spéciales. 209 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.36 : Refonte visuelle de l’errance (maquette A+)', 'Peinture organique en pré-rendu unique (étang, chemin texturé, arbres en couches, donjon peint), ambiance jour/nuit avec faune et lames animées, layout v2 des Marées + point de retour ville dans chaque zone, palettes des 5 zones en data. 175 tests, smoke 355 checks, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
