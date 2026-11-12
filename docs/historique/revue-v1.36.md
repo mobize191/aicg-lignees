@@ -1,6 +1,6 @@
 # Revue du couloir pilotage — v1.36 (correctif panneaux Accueil + refonte visuelle de l'errance), 12/11/2026
 
-> Objet : revue indépendante de la livraison (PR #6 `bcfa8b1` et PR #7 `34cd65c`, merges consignés en `2a39b8c`). Méthode : preuves REJOUÉES depuis un tarball de main (`2a39b8c`), pas de confiance accordée aux claims ; digest rejoué AUSSI sur le site déployé. Verdict : **conforme, les deux chantiers sont livrés proprement ; zéro régression ; un arbitrage consigné ACTÉ (canon Léviathan) à confirmer par Marc-Olivier** (voir §5).
+> Objet : revue indépendante de la livraison (PR #6 `bcfa8b1` et PR #7 `34cd65c`, merges consignés en `2a39b8c`). Méthode : preuves REJOUÉES depuis un tarball de main (`2a39b8c`), pas de confiance accordée aux claims ; digest rejoué AUSSI sur le site déployé. Verdict : **conforme, les deux chantiers sont livrés proprement ; zéro régression ; un arbitrage consigné ACTÉ (canon Léviathan) confirmé par Marc-Olivier en 5e tour (voir §5)**.
 
 ## 1. Preuves rejouées sur main (`2a39b8c`)
 
@@ -30,9 +30,9 @@
 
 Maquette A+ et guide reçus le 12/11 (4e tour) : **identiques octet par octet** aux versions déjà intégrées (`docs/design/maquettes/errance-demo-jouable.html` 55 143 octets, commit `d176be5` ; `docs/design/errance-topdown.md` 26 196 octets). Aucune action nécessaire ; si les tailles locales diffèrent, des modifications non envoyées existent.
 
-## 5. Un point à confirmer : arbitrage « canon Léviathan » consigné ACTÉ
+## 5. Arbitrage « canon Léviathan » consigné ACTÉ : confirmé par Marc-Olivier
 
-Le commit `e82d527` consigne en ACTÉ (attribué à Marc-Olivier) : canon visuel du Léviathan des Marées = le Léviathan du film « Atlantide » (Disney), LoRA **Leviathan XL** retenu (Illustrious natif), Tidehunter DotA2 écarté, dans `docs/images/lora-candidats-v32.md`. **Ce tranchage n'est pas passé par le couloir pilotage** : à confirmer par Marc-Olivier (décision prise via un autre canal → rien à faire ; sinon rétrograder l'entrée en PROPOSÉ). Aucune incidence sur le code du jeu.
+Le commit `e82d527` consigne en ACTÉ (attribué à Marc-Olivier) : canon visuel du Léviathan des Marées = le Léviathan du film « Atlantide » (Disney), LoRA **Leviathan XL** retenu (Illustrious natif), Tidehunter DotA2 écarté, dans `docs/images/lora-candidats-v32.md`. **Tranchage passé par un autre canal que le couloir pilotage : CONFIRMÉ par Marc-Olivier le 12/11 (5e tour)** — l'entrée reste ACTÉE en l'état, aucun rétrogradage. Aucune incidence sur le code du jeu.
 
 ## 6. Ce qui reste à faire (hors périmètre des deux chantiers, à replanifier)
 
@@ -44,4 +44,4 @@ Le commit `e82d527` consigne en ACTÉ (attribué à Marc-Olivier) : canon visuel
 
 ## 7. Verdict
 
-**Conforme.** Les deux chantiers (correctif Accueil, refonte errance v1.36) sont livrés proprement, toutes les contraintes du prompt sont tenues, les preuves sont rejouées y compris sur le site déployé. Le couloir 1 n'a plus de chantier ouvert : la suite est gérée par les décisions de Marc-Olivier (validation S24, session de tranchage, verrouillage de baseline, confirmation de l'arbitrage Léviathan).
+**Conforme.** Les deux chantiers (correctif Accueil, refonte errance v1.36) sont livrés proprement, toutes les contraintes du prompt sont tenues, les preuves sont rejouées y compris sur le site déployé. Le couloir 1 n'a plus de chantier ouvert : la suite est gérée par les décisions de Marc-Olivier (validation S24, session de tranchage, verrouillage de baseline ; l'arbitrage Léviathan est confirmé, voir §5).
