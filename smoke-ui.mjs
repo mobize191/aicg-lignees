@@ -476,7 +476,7 @@ async function main() {
     turns++;
   }
   check('40 victoire pas-à-pas 100 % manuelle (Nv20, étage 1)', stT && stT.winner === 'team', `winner=${stT && stT.winner} en ${turns} tours`);
-  check('40 récompense tactique intégrale', api._lastTactMult() >= 0.999, String(api._lastTactMult()));
+  check('40 v1.39 : plus de pénalité tactique (aucun tactMult dans le dist)', !/tactMult/.test(html), '');
 
   const mkSt46 = () => {
     const wave = api.makeWave(77, 2, 'marees', 1);
@@ -1056,13 +1056,23 @@ async function main() {
       setup(['n1', 'n3'], 5);
       const iid28 = store.team.slots[0];
       const xp028 = api.byIid(iid28).xp;
-      api._setAuto(true); api._tacPause(false); api._speed(6); // mode Auto + pas de pause : le combat démarre seul
+      api._tacPause(false); api._speed(6); // pas de pause : le combat démarre seul (v1.39 : plus de mode auto, on clique)
       api.store.errance = api.createErranceState('zone-marees');
       api.startZoneFight('zone-marees', { donjon: false });
       const st28 = api._state();
       for (const e of [...st28.enemies.avant, ...st28.enemies.arriere]) { e.hp = 1; e.maxHp = 1; } // victoire rapide
       let w28 = null;
-      for (let k = 0; k < 250 && !w28; k++) { await wait(60); const s2 = api._state(); if (s2 && s2.winner) w28 = s2.winner; }
+      for (let k = 0; k < 250 && !w28; k++) { // v1.39 lot 2 : on joue le combat en Tactique (attaque la cible illuminée, sinon attendre)
+        await wait(60);
+        const s2 = api._state();
+        if (s2 && s2.winner) { w28 = s2.winner; break; }
+        const am = api._actEl();
+        if (am) {
+          const atk = am.querySelector('.act-attack');
+          if (atk) { atk.click(); await wait(30); const tg = [...els.get('app').querySelectorAll('.unit')].find((el) => el.classList.contains('targeted')); if (tg) { tg.click(); continue; } }
+          const pb = am.querySelector('.act-pass'); if (pb) { pb.click(); continue; }
+        }
+      }
       await wait(500); // laisse le handler de fin (XP) s'exécuter
       check('B28 b victoire de zone : XP distribuée à l\u2019équipe (avant/après sur inst.xp)', w28 === 'team' && api.byIid(iid28).xp > xp028, `winner=${w28} xp=${xp028}->${api.byIid(iid28).xp}`);
       api.store.errance = null; // stoppe la boucle rAF d'errance
@@ -1479,31 +1489,26 @@ async function main() {
       check('B22 c badge de niveau .lvl-chip conservé en haut-droite', /top:\s*5px/.test(lvlRule) && /right:\s*5px/.test(lvlRule), lvlRule);
     }
 
-    // ---------- B23 : correctifs v1.37 lot 3 — Tactique par défaut, choix persisté (uiPrefs.combatAuto) ----------
+    // ---------- B23 : correctifs v1.39 lot 2 — mode auto supprimé du combat joué ----------
     {
-      const prevAuto23 = api._autoMode();
-      check('B23 a autoMode initialisé à false (Tactique par défaut)', /let autoMode = false;/.test(html) && !/let autoMode = true;/.test(html), '');
-      api._setAuto(false);
-      api.store.uiPrefs.combatAuto = false;
-      api.save();
-      api.load();
-      check('B23 b la save sans choix Auto recharge en Tactique', api._autoMode() === false, String(api._autoMode()));
+      check('B23 a plus aucune référence autoMode / #auto-turn dans le dist', !/autoMode/.test(html) && !/auto-turn/.test(html) && !/id="mode"/.test(html), '');
       api.save();
       const raw23 = JSON.parse(mem.get(api.slotKey(api._activeSlot())));
-      check('B23 c save() persiste uiPrefs.combatAuto=false', raw23.uiPrefs && raw23.uiPrefs.combatAuto === false, JSON.stringify(raw23.uiPrefs ?? null));
-      api._setAuto(true);
-      api.store.uiPrefs.combatAuto = true; // ce que fait le bouton Mode
-      api.save();
-      const raw23b = JSON.parse(mem.get(api.slotKey(api._activeSlot())));
-      check('B23 d le choix Auto est persisté dans la save', raw23b.uiPrefs && raw23b.uiPrefs.combatAuto === true, JSON.stringify(raw23b.uiPrefs ?? null));
-      api._setAuto(false);
-      api.load();
-      check('B23 e restore() resynchronise le mode depuis la save (Auto retrouvé)', api._autoMode() === true, String(api._autoMode()));
-      delete raw23b.uiPrefs;
-      mem.set(api.slotKey(api._activeSlot()), JSON.stringify(raw23b));
-      api.load();
-      check('B23 f save ancienne sans uiPrefs : rechargée en Tactique, non rejetée', api._autoMode() === false && api.store.uiPrefs.combatAuto === false, String(api._autoMode()));
-      api._setAuto(prevAuto23); // état antérieur restauré pour les sections suivantes
+      check('B23 b save() ne persiste plus uiPrefs.combatAuto', !!raw23.uiPrefs && !('combatAuto' in raw23.uiPrefs), JSON.stringify(raw23.uiPrefs ?? null));
+      raw23.uiPrefs = { combatAuto: true }; // vieille sauvegarde v1.37 avec le champ
+      mem.set(api.slotKey(api._activeSlot()), JSON.stringify(raw23));
+      const ok23 = api.load();
+      check('B23 c save avec uiPrefs.combatAuto:true recharge sans erreur (migration passive)', ok23 === true, String(ok23));
+      check('B23 d le champ combatAuto est ignoré au chargement', api.store.uiPrefs && !('combatAuto' in api.store.uiPrefs), JSON.stringify(api.store.uiPrefs ?? null));
+      check('B23 e plus de boucle d’auto-enchaînement dans run() (pas de while autoMode)', !/while \([^)]*autoMode/.test(html) && !/autoFight: autoMode/.test(html), '');
+      setup(['n1', 'n3'], 5);
+      api._tacPause(false); api._speed(6);
+      api.go('#combat');
+      await wait(700);
+      const st23 = api._state();
+      check('B23 f combat démarré attend l’action du joueur (fenêtre d’action ouverte, aucun vainqueur)', !!st23 && !st23.winner && !!api._actEl(), `winner=${st23 && st23.winner} act=${!!api._actEl()}`);
+      doc.body.querySelector('#recomp-all')?.click();
+      api.go('#accueil'); api.store.errance = null;
     }
 
     // ---------- B19 : parties multiples — stockage par slots, migration, bascule ----------

@@ -212,8 +212,8 @@ const API_PAIRS = {
   newInst: 'newInst', addGem: 'addGem', spendGems: 'spendGems',
   addXpI: 'addXpI',
   addCardIid: 'addCardIid',
-  _setAuto: '(v) => { autoMode = v; }',
-  _autoMode: '() => autoMode',
+  _setAuto: '() => {}', // v1.39 lot 2 : le mode auto n'existe plus, no-op pour les appels de test
+  _autoMode: '() => false',
   _state: '() => state',
   _runLog: '() => runLog',
   beginRound: 'beginRound', peekRound: 'peekRound', stepRound: 'stepRound', drinkPotion: 'drinkPotion', recrutableMonsters: 'recrutableMonsters', choisirDepart: 'choisirDepart', DEPART_CHOIX: 'DEPART_CHOIX', RECRUTE_TAUX: 'RECRUTE_TAUX',
@@ -224,7 +224,6 @@ const API_PAIRS = {
   _prompt: '() => promptState',
   _busy: '() => busy',
   _speed: '(v) => { speedIdx = Math.max(0, Math.min(SPEEDS.length - 1, Number(v) || 0)); }',
-  _lastTactMult: '() => lastTactMult',
   _zoneWidthOf: '(name) => zoneWidthOf({ name })',
   _previewZone: '(uid) => { const el = elOf(uid); if (el) previewZone(el); }',
   _clearZone: '() => clearZonePreview()',

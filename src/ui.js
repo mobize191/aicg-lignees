@@ -883,7 +883,7 @@ const store = {
   defiActive: false, 
   regEclats: 0, 
   pierres: 0, 
-  uiPrefs: { combatAuto: false },
+  uiPrefs: {},
   zoneFightCount: 0,
 };
 
@@ -927,7 +927,7 @@ function resetStore() {
   store.defiActive = false;
   store.regEclats = 0;
   store.pierres = 0;
-  store.uiPrefs = { combatAuto: false };
+  store.uiPrefs = {};
   store.zoneFightCount = 0;
 }
 
@@ -1020,7 +1020,7 @@ function snapshot() {
     zonesVisitees: [...(store.zonesVisitees ?? [])],
     zonesUnlocked: [...(store.zonesUnlocked ?? [])],
     errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
-    uiPrefs: { combatAuto: store.uiPrefs?.combatAuto === true },
+    uiPrefs: {}, // v1.39 lot 2 : plus de préférence de mode (le mode auto est supprimé)
     zoneFightCount: store.zoneFightCount ?? 0,
   };
 }
@@ -1248,9 +1248,8 @@ function restore(data) {
   store.dailyLevel = data.dailyLevel && typeof data.dailyLevel === 'object' && Number.isFinite(data.dailyLevel.lvl)
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
     : null;
-  store.uiPrefs = (data.uiPrefs && typeof data.uiPrefs === 'object') ? { combatAuto: data.uiPrefs.combatAuto === true } : { combatAuto: false };
+  store.uiPrefs = {}; // v1.39 lot 2 : uiPrefs.combatAuto d'une vieille sauvegarde est ignoré (migration passive, pas de bump de version)
   store.zoneFightCount = Number.isInteger(data.zoneFightCount) && data.zoneFightCount >= 0 ? data.zoneFightCount : 0;
-  autoMode = store.uiPrefs.combatAuto;
   store.defiActive = false;
   sanitizeTeams();
   return true;
@@ -3938,14 +3937,11 @@ const SPEED_LABELS = ['\u00d70,5', '\u00d71', '\u00d72', '\u00d74', '\u00d78', '
 let combatApp = null;
 let state = null;
 let speedIdx = 1;
-let autoMode = false;
 let busy = false;
 let chainTimer = null;
 let recompOpen = false; // boucle v2 lot 4 : l'écran Récompenses bloque la chaîne d'étages jusqu'à « Tout ramasser »
 let reduceFlashes = false; 
 
-let combatTally = { auto: 0, manual: 0 };
-let lastTactMult = 1;
 
 let runLog = null;
 function freshRunLog() { return { points: 0, cards: [], monsters: [], shards: [], stages: 0, guaranteed: 0, xp: [], tokens: [], gems: [], xpBase: 0 }; }
@@ -3980,7 +3976,6 @@ function renderRail(actorUid = null) {
 }
 
 function fightLabel() {
-  if (autoMode) return 'Combattre';
   return tacPaused ? '\u25b6 Lancer le tour' : '\u23f8 Pause';
 }
 function syncFightBtn() {
@@ -5023,14 +5018,7 @@ async function animate(events, ms, gen = null) {
       case 'end': {
         const won = ev.winner === 'team';
         
-        const tactTotal = combatTally.auto + combatTally.manual;
-        const tactMult = tactTotal ? 1 - 0.5 * (combatTally.auto / tactTotal) : 1;
-        lastTactMult = tactMult;
-        const loot = runModLootMult(store.defiActive ? null : store.runMod);
-        if (runLog) {
-          runLog.autoTurns = (runLog.autoTurns ?? 0) + combatTally.auto;
-          runLog.tactTurns = (runLog.tactTurns ?? 0) + tactTotal;
-        }
+        const loot = runModLootMult(store.defiActive ? null : store.runMod); // v1.39 lot 2 : plus de mode auto, les récompenses sont toujours intégrales
         const finalClear = won && !store.defiActive && store.stage >= dungeonById(store.dungeon).floors;
         let rewardLine = '';
         let pts = 0;
@@ -5061,14 +5049,14 @@ async function animate(events, ms, gen = null) {
           const stage = store.stage;
           const DIFF = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           rewards = stageRewards(store.seed, stage, 0, store.dungeon, store.diff);
-          pts = Math.round((15 + 5 * stage) * (rewards.boss ? 2 : 1) * DIFF.pts * tactMult * loot.pts);
+          pts = Math.round((15 + 5 * stage) * (rewards.boss ? 2 : 1) * DIFF.pts * loot.pts);
           addGold(pts);
-          pushRecomp('or', `+${pts} 🪙 or`, `étage ${stage} × mode ${DIFF.name} × tactique ×${Math.round(tactMult * 100) / 100}`);
+          pushRecomp('or', `+${pts} 🪙 or`, `étage ${stage} × mode ${DIFF.name} `);
           store.record = Math.max(store.record, stage);
           save();
           updatePtsBadge();
           rewardLine = `+${pts} 🪙 or — les cartes naissent à la Guilde (compagnons, autel), au marchand et en quêtes`;
-          if (maybeDropRegEclat(uiRand, tactMult * loot.drop)) {
+          if (maybeDropRegEclat(uiRand, loot.drop)) {
             pushRecomp('drop', '🌀 Éclat de régression', 'réserve de la Forge', 'SR');
             rewardLine += ' · 🌀 Éclat de régression trouvé ! (réserve de la Forge)';
             if (runLog) runLog.gems.push('Éclat de régression');
@@ -5076,7 +5064,7 @@ async function animate(events, ms, gen = null) {
           
           const dg = dungeonById(store.dungeon);
           const rollGem = (tier) => {
-            if (uiRand() < dropChance(dg.id) * tactMult * loot.drop) {
+            if (uiRand() < dropChance(dg.id) * loot.drop) {
               const best = monstersOf(dg.id);
               const pool = [...(best?.avant ?? []), ...(best?.arriere ?? [])];
               const elt = pool.length ? pool[Math.floor(uiRand() * pool.length)].element : 'Eau';
@@ -5085,7 +5073,7 @@ async function animate(events, ms, gen = null) {
               if (runLog) runLog.gems.push(`${GEM_LABEL[tier]} ${elt}`);
             }
           };
-          if (stage !== 5 && stage !== dg.floors && uiRand() < dropChance(dg.id + ':stg') * 0.35 * tactMult * loot.drop) {
+          if (stage !== 5 && stage !== dg.floors && uiRand() < dropChance(dg.id + ':stg') * 0.35 * loot.drop) {
             const best = monstersOf(dg.id);
             const pool = [...(best?.avant ?? []), ...(best?.arriere ?? [])];
             const elt = pool.length ? pool[Math.floor(uiRand() * pool.length)].element : 'Eau';
@@ -5108,12 +5096,12 @@ async function animate(events, ms, gen = null) {
               rewardLine += ` · 📠 Éclat brut (${e}) !`;
             }
           };
-          if (stage % 5 === 0 && uiRand() < PIERRE_DROP_RATE * tactMult * loot.drop) {
+          if (stage % 5 === 0 && uiRand() < PIERRE_DROP_RATE * loot.drop) {
             addPierres(1);
             pushRecomp('drop', '💎 Pierre d’éveil', 'éveille une naissance (rang N → C)', 'SR');
             rewardLine += ` · 💎 Pierre d’éveil !`;
           }
-          if (uiRand() < N_DROP_RATE * tactMult * loot.drop) {
+          if (uiRand() < N_DROP_RATE * loot.drop) {
             const oeuf = drawNaissance(uiRand, cardAvailable);
             if (oeuf) {
               grantCards([oeuf.id]);
@@ -5126,7 +5114,7 @@ async function animate(events, ms, gen = null) {
           const zoneRec = getZone(`zone-${store.dungeon}`);
           const tauxRec = zoneRec?.recrute?.taux ?? RECRUTE_TAUX;
           for (const m of recrutableMonsters(state)) {
-            if (uiRand() >= tauxRec * tactMult * loot.drop) continue;
+            if (uiRand() >= tauxRec * loot.drop) continue;
             if (instsOf(m.cardId).length >= 3) continue; // limite de 3 exemplaires par carte
             newInst(m.cardId);
             markSeen(m.cardId);
@@ -5139,7 +5127,7 @@ async function animate(events, ms, gen = null) {
           const zoneMat = getZone(`zone-${store.dungeon}`);
           if (zoneMat?.materiau) {
             for (const m of [...state.enemies.avant, ...state.enemies.arriere]) {
-              if (uiRand() < (zoneMat.materiau.taux ?? 0) * tactMult * loot.drop) {
+              if (uiRand() < (zoneMat.materiau.taux ?? 0) * loot.drop) {
                 addMateriau(zoneMat.materiau.id, 1);
                 pushRecomp('drop', `🧪 ${zoneMat.materiau.nom}`, `matériau de ${dungeonById(store.dungeon).name}`, 'C');
                 rewardLine += ` · 🧪 ${zoneMat.materiau.nom}`;
@@ -5161,7 +5149,7 @@ async function animate(events, ms, gen = null) {
             }
           }
           // équipement à taux très faible partout ailleurs
-          if (uiRand() < EQUIP_DROP_RATE * tactMult * loot.drop) {
+          if (uiRand() < EQUIP_DROP_RATE * loot.drop) {
             const pool = EQUIPMENT.filter((p) => p.source === 'boutique');
             const piece = pool[Math.floor(uiRand() * pool.length)];
             if (piece) {
@@ -5207,8 +5195,7 @@ async function animate(events, ms, gen = null) {
           const DIFFX = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           
           const discOn = store.diff === 1 && dungeonById(store.dungeon).tier === 0 && (store.progress[store.dungeon]?.diffs?.[1]?.record ?? 0) < 10;
-          const tactXpMult = runLog.tactTurns ? 1 - 0.5 * ((runLog.autoTurns ?? 0) / runLog.tactTurns) : 1;
-          const baseXp = 1 * DIFFX.pts * (won ? 1.5 : 1) * 0.8 * (discOn ? 2 : 1) * tactXpMult; // formule ramenée à UN étage : un run de N étages distribue N fois cette base
+          const baseXp = 1 * DIFFX.pts * (won ? 1.5 : 1) * 0.8 * (discOn ? 2 : 1); // v1.39 : formule ramenée à UN étage, sans facteur tactique (plus de mode auto) : un run de N étages distribue N fois cette base
           const iids = [...new Set(store.team.slots.filter(Boolean))];
           const xpParts = [];
           for (const iid of iids) {
@@ -5223,11 +5210,9 @@ async function animate(events, ms, gen = null) {
           runLog.xpBase = Math.round(((runLog.xpBase ?? 0) + baseXp) * 10) / 10;
           if (finalClear || !won || !!store.zoneFight) registerXpRun(iids); // fatigue comptée une fois par run (comme avant) : le mult reste constant sur tout le run
           save();
-          xpLine = `⭐ XP du combat (×${DIFFX.pts}${won ? ' ×1,5 victoire' : ' ×1 défaite'}${discOn ? ' ×2 découverte' : ''}) : ${xpParts.join(' · ')}${tactXpMult < 0.999 ? ` \u00b7 🧭 XP \u00d7${Math.round(tactXpMult * 100) / 100}` : ''}`;
+          xpLine = `⭐ XP du combat (×${DIFFX.pts}${won ? ' ×1,5 victoire' : ' ×1 défaite'}${discOn ? ' ×2 découverte' : ''}) : ${xpParts.join(' · ')}`;
           pushRecomp('xp', `⭐ XP du combat — base +${Math.round(baseXp * 10) / 10}`, xpParts.join(' | '));
         }
-        if (won && tactMult < 0.999) rewardLine += ` \u00b7 🧭 \u00d7${tactMult.toFixed(2)} \u2014 tours jou\u00e9s en auto : pts, \u00e9clats et XP r\u00e9duits`;
-        else if (won) rewardLine += ' \u00b7 🧭 Tactique : r\u00e9compenses int\u00e9grales';
         if (won && (loot.pts > 1 || loot.drop > 1)) rewardLine += ` \u00b7 🎰 ${runModById(store.defiActive ? null : store.runMod)?.name ?? ''} : butin major\u00e9`;
         drawBoard();
         const banner = document.createElement('div');
@@ -5290,7 +5275,7 @@ async function animate(events, ms, gen = null) {
             if (!document.body.classList.contains('in-combat')) return;
             store.stage += 1;
             save();
-            renderCombat(combatApp, { autoFight: autoMode });
+            renderCombat(combatApp);
           };
           chainTimer = setTimeout(chainNext, instant() ? 90 : turbo() ? 250 : 2100);
         } else {
@@ -5359,46 +5344,11 @@ async function animate(events, ms, gen = null) {
   drawBoard();
 }
 
-async function run(autoTurn = false) {
+async function run() { // v1.39 lot 2 : plus de mode auto — chaque tour se joue en Tactique, avec la fenêtre d'action
   if (busy || !state || state.winner) return;
   busy = true;
   const myGen = combatGen;
-  // un tour de jeu, pas a pas : le rail d'ordre suit chaque acteur (chemin evenementiel identique a resolveTurn)
-  const runOneTurn = async () => {
-    const myState = state;
-    const pre = beginRound(state);
-    state._events = [...(state._events ?? []), ...pre];
-    await animate(pre, SPEEDS[speedIdx], myGen);
-    renderRail();
-    let guard = 0;
-    while (guard++ < 200) {
-      if (state !== myState || myGen !== combatGen || !document.body.classList.contains('in-combat')) return false;
-      const nxt = peekRound(state);
-      renderRail(nxt ? nxt.u.uid : null);
-      const r = stepRound(state, null);
-      state._events = [...(state._events ?? []), ...r.events];
-      await animate(r.events, SPEEDS[speedIdx], myGen);
-      if (r.done) break;
-    }
-    if (state === myState && state.round) state.round = null;
-    renderRail();
-    return true;
-  };
-  if (autoMode) {
-    while (!state.winner && state.turn < 60 && autoMode && myGen === combatGen && document.body.classList.contains('in-combat')) {
-      combatTally.auto += 1;
-      const ok = await runOneTurn();
-      if (!ok) break;
-    }
-  } else {
-    if (autoTurn) {
-      combatTally.auto += 1;
-      await runOneTurn();
-    } else {
-      combatTally.manual += 1;
-      await runTacTurn();
-    }
-  }
+  await runTacTurn();
   if (myGen !== combatGen) { closeActModal(); return; }
   
   
@@ -5413,13 +5363,13 @@ async function run(autoTurn = false) {
   }
   busy = false;
   // en mode Tactique le flux repart tout seul : le prochain tour se lance apres une courte pause (sauf pause demandee)
-  if (myGen === combatGen && !autoMode && !tacPaused && state && !state.winner && state.turn < 60
+  if (myGen === combatGen && !tacPaused && state && !state.winner && state.turn < 60
       && document.body.classList.contains('in-combat') && !actBox) {
     if (tacChainTimer) clearTimeout(tacChainTimer);
     const tg = combatGen;
     tacChainTimer = setTimeout(() => {
       tacChainTimer = null;
-      if (tg === combatGen && !autoMode && !tacPaused && !busy) run();
+      if (tg === combatGen && !tacPaused && !busy) run();
     }, instant() ? 120 : 450);
   }
 }
@@ -5437,8 +5387,6 @@ function renderCombat(root, opts = {}) {
   busy = false;
   combatGen += 1;
   closeActModal();
-  combatTally = { auto: 0, manual: 0 };
-  lastTactMult = 1;
   const defi = !!store.defiActive;
   if (defi) runLog = null;
   else if (store.stage === 1) runLog = freshRunLog();
@@ -5538,11 +5486,9 @@ function renderCombat(root, opts = {}) {
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
       ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
-      <button class="btn ctrl" id="mode">${autoMode ? 'Mode : Auto' : 'Mode : Tactique'}</button>
       <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
-      <button class="btn ctrl" id="auto-turn">🤖 Auto ce tour</button>
       <button class="btn ctrl" id="bag" title="Boire une potion hors combat (entre les étages)">🧪 Objets (${totalPotions()})</button>
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
@@ -5563,16 +5509,6 @@ function renderCombat(root, opts = {}) {
       else if (kind === 'disc') openInfoModal('Bonus de découverte', `<p class="muted">${discovery}</p>`);
     };
   });
-  combatApp.querySelector('#mode').onclick = (e) => {
-    autoMode = !autoMode;
-    store.uiPrefs.combatAuto = autoMode;
-    save();
-    e.target.textContent = autoMode ? 'Mode : Auto' : 'Mode : Tactique';
-    if (autoMode) closeActModal();
-    else tacPaused = false; // retour en Tactique : le flux repart tout seul
-    syncFightBtn();
-    if (autoMode && !busy && state && !state.winner) { const tg = combatGen; setTimeout(() => { if (tg === combatGen) run(); }, 120); }
-  };
   combatApp.querySelector('#speed').onclick = (e) => {
     speedIdx = (speedIdx + 1) % SPEEDS.length;
     e.target.textContent = `Vitesse : ${SPEED_LABELS[speedIdx]}`;
@@ -5588,17 +5524,14 @@ function renderCombat(root, opts = {}) {
     e.target.textContent = `🎬 FX : ${on ? 'on' : 'off'}`;
   };
   combatApp.querySelector('#fight').onclick = () => {
-    if (!autoMode) {
-      if (!tacPaused && busy) { tacPaused = true; syncFightBtn(); return; } // pause : le tour en cours finit, le suivant attend
-      tacPaused = false;
-    }
+    if (!tacPaused && busy) { tacPaused = true; syncFightBtn(); return; } // pause : le tour en cours finit, le suivant attend
+    tacPaused = false;
     run();
   };
-  combatApp.querySelector('#auto-turn').onclick = () => run(true);
   combatApp.querySelector('#bag').onclick = () => openBagModal();
   drawBoard();
   renderRail();
-  if (!teamEmpty && state && !state.winner && (autoMode || !tacPaused)) {
+  if (!teamEmpty && state && !state.winner && !tacPaused) {
     const tg = combatGen;
     setTimeout(() => { if (tg === combatGen) run(); }, instant() ? 120 : 450);
   }
@@ -6102,6 +6035,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.39 : XP par combat + fin du mode Auto', 'L’XP est distribuée à CHAQUE combat terminé (même formule, ramenée à un étage : un run de 5 étages donne le même total, mais au fil des combats) et l’écran Récompenses l’affiche par personnage, avec l’or et les objets. En défaite de donjon, l’XP des combats gagnés reste acquise. Le mode Auto disparaît du combat joué (boutons « Mode : Auto » et « 🤖 Auto ce tour », préférence persistée, pénalités de récompenses) : les récompenses sont toujours intégrales. L’auto-résolution interne du moteur reste intacte pour les futures missions spéciales. 209 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.36 : Refonte visuelle de l’errance (maquette A+)', 'Peinture organique en pré-rendu unique (étang, chemin texturé, arbres en couches, donjon peint), ambiance jour/nuit avec faune et lames animées, layout v2 des Marées + point de retour ville dans chaque zone, palettes des 5 zones en data. 175 tests, smoke 355 checks, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.35 : Parties multiples (4 slots de sauvegarde)', 'Jusqu’à 4 parties coexistent dans le navigateur (clés `fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie). Migration sans perte : l’ancienne sauvegarde devient la Partie 1. Panneau « Parties » sur l’Accueil : ▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer (double confirmation) ; la partie en cours est sauvegardée avant toute bascule, la partie active est mémorisée. Export FCSAVE1 inchangé (partie active). 171 tests, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.34 : Refonte de l’IA de combat', 'Ciblage par utilité (kill, menace, ligne, élément) avec hystérésis, sorts contextuels (soin/contrôle/burst), profils IA par difficulté (Facile sous-optimal → Enfer complet), sorts alliés de lignée actifs en mode Auto, garde-fous anti-blocage de l’errance. 171 tests, smoke 306 checks, digest final c62fcbd1… 1281/3000 et 5059e683… 4236/10000 (MESURES, aucune maths joueur touchée).'],
@@ -6305,7 +6239,7 @@ function renderGlossaire(root) {
         <li><b>Autel 5-pour-1</b> : la chaîne mène à la Légendaire (5 UR = 1 L) ; la M ne passe jamais par l’autel.</li>
         <li><b>Jalons</b> : premier donjon terminé = jeton humain raffiné + jeton de race ; premier boss d’étage 5 = jeton humain raffiné ; première Difficile = jeton d’évolution (Super Rare).</li>
         <li><b>Jetons de départ</b> : 5 jetons communs offerts au premier lancement — 2 humains, 1 humain raffiné (Peu commune garantie), et 2 races au tirage.</li>
-        <li><b>Mode Tactique</b> : en combat, basculez en Tactique — le combat démarre et s'enchaîne tout seul, et quand vient le tour d'une de vos cartes, sa fenêtre d'action surgit : ⚔ attaque simple (gratuite), ✦ un de ses sorts avec son type, son coût et sa zone (le mana décide, soins et invocations compris : un sort est un sort), ➕ le soin croisé des attaquants, ou ⏸ attendre pour économiser le mana. Désignez la cible sur le plateau (les cibles s'illuminent, le bouton Annuler ramène à la fenêtre). Le rail au-dessus du plateau montre l'ordre du tour (agilité) ; ⏸ Pause fige le flux, ▶ Lancer le tour le relance. « Auto ce tour » laisse l'IA jouer un tour. Les récompenses suivent le prorata : tout en Tactique = intégrales, tout en auto = ÷ 2 (pts, éclats et XP), au fil des tours entre les deux.</li>
+        <li><b>Tour par tour</b> : en combat, le combat démarre et s'enchaîne tout seul ; quand vient le tour d'une de vos cartes, sa fenêtre d'action surgit : ⚔ attaque simple (gratuite), ✦ un de ses sorts avec son type, son coût et sa zone (le mana décide, soins et invocations compris : un sort est un sort), ➕ le soin croisé des attaquants, ou ⏸ attendre pour économiser le mana. Désignez la cible sur le plateau (les cibles s'illuminent, le bouton Annuler ramène à la fenêtre). Le rail au-dessus du plateau montre l'ordre du tour (agilité) ; ⏸ Pause fige le flux, ▶ Lancer le tour le relance. Après CHAQUE combat, l'écran Récompenses détaille l'or gagné, l'XP gagnée par chaque personnage et les objets trouvés — toujours en intégralité.</li>
         <li><b>Modificateurs de run (v0.42)</b> : chaque exploration tire un modificateur, montré AVANT d'entrer — 🐗 la Horde (+1 ennemi par vague, butin +20 %), 🕯 le Mana Stérile (régénération de mana −1 pendant chaque combat, points +25 %), 🛡 la Muraille (ennemis +25 % PV, chances d'éclats +50 %), ⚔ la Rage Partagée (ennemis +15 % ATQ, points +40 %). La face rude paie la face compense : accepter le modificateur majore le butin du run. Le refuser est gratuit — le run se joue alors sans modificateur ; seul le relancement du tirage coûte 1 éclat brut. Il tient du premier étage jusqu'à la fin du run (défaite ou donjon bouclé).</li>
         <li><b>La grammaire des sorts (v0.43)</b> : chaque carte connaît ses sorts par couches, du plus universel au plus personnel — un sort COMMUN (Frappe Précise / Premiers Soins, 2✦), un sort DE RACE (Discipline de Ligne, Instinct Sauvage, Vol en Rase-Mottes, Ferveur Céleste), un sort DE CLASSE (Brise-Garde, Décharge Arcanique, Onde Consacrée, Frappe dans le Dos, Œil du Malheur) et sa SIGNATURE (le geste unique de la carte, 5✦). Les maillons des familles empilent le commun et les sorts de leur LIGNÉE, tier après tier. Côté soigneurs, le rang du sort décide du soin : plus le sort est cher, plus il soigne. Le Souffle Croisé, lui, n'est pas un sort : c'est l'action d'équipe des attaquants (voir Soins croisés).</li>
         <li><b>L'indice de force (v0.43)</b> : le niveau moyen ne dit pas si une équipe est faite de légendaires ou de communes. L'indice pondère l'ATQ et les PV au niveau courant (le cœur), la rareté (multiplicateur : elle capte la qualité des stats et la profondeur du grimoire) et le nombre de sorts (versatilité). Le seuil conseillé d'un donjon est calculé sur le boss final RÉEL de la difficulté courante : l'indice compare votre équipe à ce qu'elle affrontera.</li>
