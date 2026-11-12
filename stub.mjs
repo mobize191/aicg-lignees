@@ -235,6 +235,9 @@ const API_PAIRS = {
   save: 'save', load: 'load', listSlots: 'listSlots', switchToSlot: 'switchToSlot', newSlot: 'newSlot', renameSlot: 'renameSlot', deleteSlot: 'deleteSlot', resetStore: 'resetStore',
   _activeSlot: '() => activeSlot', _slotsIndex: '() => slotsIndex', SLOTS_KEY: 'SLOTS_KEY', slotKey: 'slotKey', slotBak: 'slotBak',
   errancePalette: 'errancePalette', decorOrders: 'decorOrders', buildAmbiance: 'buildAmbiance', rescueHeroPos: 'rescueHeroPos',
+  signatureMetaOf: 'signatureMetaOf', signatureMetaOfUnit: 'signatureMetaOfUnit',
+  allMonsters: 'allMonsters',
+  spellSideOf: 'spellSideOf',
 };
 
 export function bootDist(file, extraPairs = {}) {

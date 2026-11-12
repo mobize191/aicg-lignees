@@ -1019,6 +1019,22 @@ async function main() {
       check('B25 f fenêtre de désignation : esquive de la cible rappelée (DODGE_CAP/AGI en data)', /M\.DODGE_CAP/.test(html) && /M\.DODGE_PER_AGI/.test(html), '');
     }
 
+    // ---------- B26 : correctifs v1.37 lot 6 — sorts signature : fiche rôle·cible·puissance, ciblage selon la fiche ----------
+    {
+      check('B26 a signatureMetaOf présent dans le dist (dérivation data)', /function signatureMetaOf\(/.test(html), '');
+      check('B26 b uiSpellMeta câblé dans le ciblage (fallback fiche signature)', /spellSideOf\(sp\) \?\? spellSideOf\(uiSpellMeta/.test(html), '');
+      check('B26 c les objets runtime des monstres n’embarquent pas role/cible (digest Auto inchangé)', api.allMonsters().every((m) => (m.spells ?? []).filter((sp) => sp.cat === 'unique').every((sp) => sp.role === undefined && sp.cible === undefined)), '');
+      const sigDefs = [...(api.DATA.cards ?? []), ...(api.DATA.monsters ?? [])].filter((d) => d.soloSpell);
+      const withMeta = sigDefs.filter((d) => { const m = api.signatureMetaOf(d); return m.cible && api.spellSideOf({ ...m }) !== null; });
+      check('B26 d 100 % des signatures ont une cible valide via la métadonnée dérivée', withMeta.length === sigDefs.length && sigDefs.length > 200, `${withMeta.length}/${sigDefs.length}`);
+      const hostileBad = sigDefs.filter((d) => ['degats', 'controle', 'malus'].includes(api.signatureMetaOf(d).role) && !['enemy', 'zone', 'all'].includes(api.spellSideOf({ ...api.signatureMetaOf(d) })));
+      check('B26 e aucun sort de dégâts/contrôle/malus ne cible un allié', hostileBad.length === 0, hostileBad.map((d) => d.id).join(','));
+      const defDmg = (api.DATA.cards ?? []).find((c) => c.soloSpell && api.signatureMetaOf(c).role === 'degats');
+      const sigDmg = defDmg ? (api.byId(defDmg.id).spells ?? []).find((sp) => sp.cat === 'unique') : null;
+      const metaDmg = defDmg ? api.signatureMetaOf(defDmg) : null;
+      check('B26 f métadonnée d’une carte à dégâts vaut enemy', !!defDmg && !!sigDmg && metaDmg.role === 'degats' && api.spellSideOf({ ...sigDmg, ...metaDmg }) === 'enemy', defDmg ? `${defDmg.id}: ${metaDmg.role}/${metaDmg.cible}` : 'aucune');
+    }
+
   {
     // lot E3a économie v2 — Guilde : compagnons du jour (rotation seed de la date)
     api.go('#forge');

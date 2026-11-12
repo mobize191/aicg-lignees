@@ -14789,6 +14789,30 @@ function spellSideOf(sp) {
   return null;
 }
 
+// correctifs v1.37 lot 6 : métadonnées (role/cible) du sort signature, dérivées des champs data
+// (soloMult/soloDot/effect.kind), surchargeables en data par soloRole/soloCible
+function signatureMetaOf(def) {
+  if (def.soloRole || def.soloCible) return { role: def.soloRole ?? null, cible: def.soloCible ?? null };
+  if (def.soloMult != null || def.soloDot) return { role: 'degats', cible: '1 ennemi' };
+  switch (def.effect?.kind ?? null) {
+    case 'heal': case 'revive': return { role: 'soin', cible: '1 allié' };
+    case 'shield': case 'reflect': return { role: 'bouclier', cible: 'l\u2019équipe' };
+    case 'atkBuff': case 'warcry': return { role: 'boost', cible: 'l\u2019équipe' };
+    case 'summon': return { role: 'invocation', cible: 'les renforts' };
+    case 'stun': case 'slow': return { role: 'controle', cible: '1 ennemi' };
+    case 'curse': case 'dot': return { role: 'malus', cible: '1 ennemi' };
+    case 'link': return { role: 'manip', cible: 'l\u2019équipe' };
+    case 'copy': return { role: 'manip', cible: 'soi' };
+    default: return { role: 'degats', cible: '1 ennemi' }; // mult par défaut -> dégâts sur 1 ennemi
+  }
+}
+
+// métadonnées du sort signature d'une unité (résolution Tactique uniquement, jamais en Auto)
+function signatureMetaOfUnit(u) {
+  const def = (DATA.cards ?? []).find((c) => c.id === u?.cardId) ?? (DATA.monsters ?? []).find((m) => m.id === u?.cardId) ?? null;
+  return def ? signatureMetaOf(def) : {};
+}
+
 const MONSTERS = RAW.map((m) => ({
   ...m,
   spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
@@ -15336,8 +15360,14 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     spell = pickSpell(s, { state: st, allies, foes, side });
   }
   if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
+  // correctifs v1.37 lot 6 : sort signature (cat 'unique') — en Tactique (action avec désignation),
+  // la métadonnée dérivée des data pilote le camp ; en Auto (pas d'action) le comportement historique est conservé
+  const sigMeta = (spell && spell.cat === 'unique' && action) ? signatureMetaOfUnit(s) : null;
+  const sigSide = sigMeta && sigMeta.cible ? spellSideOf({ ...spell, ...sigMeta }) : null;
+  const sigRole = sigMeta && sigMeta.role ? sigMeta.role : null;
+  const hostileSig = sigSide === 'enemy' || sigSide === 'zone' || sigSide === 'all' || sigRole === 'degats' || sigRole === 'controle' || sigRole === 'malus';
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
-  if (spell && foes.length && foeFacingSpell(spell)) {
+  if (spell && foes.length && (foeFacingSpell(spell) || (hostileSig && action.targetUid != null))) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
@@ -15345,9 +15375,9 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
   // depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant — en Tactique
   // (action présent, allié désigné) comme en Auto (soigne le plus blessé, buffer/bouclier l'avant).
-  if (spell && !s.effect && !foeFacingSpell(spell)) {
-    const sd = spellSideOf(spell);
-    const role = spell.role ?? null;
+  if (spell && !s.effect && !foeFacingSpell(spell) && !hostileSig) {
+    const sd = spellSideOf(spell) ?? sigSide;
+    const role = spell.role ?? sigRole;
     if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
       const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
       let t = s;
@@ -20145,14 +20175,15 @@ function spellList(card) {
     .map(
       (sp) => {
         // correctifs lot 4 : fiche complète — rôle (grimoire), zone vs monocible, frappe en « dégâts (%) »
-        const zone = zoneLabelOf(sp);
-        const cibleLab = zone || (sp.cible ? String(sp.cible) : '1 ennemi');
+        const spx = uiSpellMeta(sp, card);
+        const zone = zoneLabelOf(spx);
+        const cibleLab = zone || (spx.cible ? String(spx.cible) : '1 ennemi');
         const pct = Math.round((sp.mult ?? 1) * 100);
         const powerLine = card.effect && card.effect.kind === 'heal'
           ? spellPowerLine(card.effect, sp.mult)
           : `dégâts (${pct} % ≈ ${Math.max(1, Math.round(stq.atk * (sp.mult ?? 1)))})`;
-        const roleLab = sp.role ? (SPELL_ROLE_LABEL[sp.role] ?? sp.role) : (SPELL_CAT_LABEL[sp.cat] ?? '');
-        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">✦ ${sp.cost}</span></span>
+        const roleLab = spx.role ? (SPELL_ROLE_LABEL[spx.role] ?? spx.role) : (SPELL_CAT_LABEL[spx.cat] ?? '');
+        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">✦ ${sp.cost}</span></span>
         <span class="muted sort-meta">${[roleLab, cibleLab, powerLine].filter(Boolean).join(' · ')}</span>
         ${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`;
       },
@@ -21989,6 +22020,13 @@ function zoneWidthOf(sp) {
 }
 
 // detail d'un sort : badge de type (le libelle vient du role d'ecole, data/engine.json)
+// correctifs v1.37 lot 6 : métadonnées d'affichage/ciblage d'un sort signature (dérivées des data,
+// sans toucher à l'objet runtime lu par le moteur — le digest Auto reste inchangé)
+function uiSpellMeta(sp, ownerDef) {
+  if (!sp || sp.role || sp.cible) return sp;
+  if (sp.cat === 'unique' && ownerDef) return { ...sp, ...signatureMetaOf(ownerDef) };
+  return sp;
+}
 function spellBadgeHtml(sp) {
   const role = sp?.role ?? null;
   if (role) return `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
@@ -22234,8 +22272,8 @@ function actionButtonsHtml(u, kind) {
     // T4.2 : le résultat calculé (mult × stat principale) affiché avec le sort
     const prevu = sp.mult ? ` \u2192 ~${Math.round(sp.mult * statOf(u))}` : '';
     parts.push(row(
-      top('\u2726 ' + sp.name, spellBadgeHtml(sp), '\u2726' + sp.cost)
-      + `<span class="sort-meta">${spellMetaHtml(sp)}${prevu}</span>`
+      top('\u2726 ' + sp.name, spellBadgeHtml(uiSpellMeta(sp, byIdSoft(u.cardId))), '\u2726' + sp.cost)
+      + `<span class="sort-meta">${spellMetaHtml(uiSpellMeta(sp, byIdSoft(u.cardId)))}${prevu}</span>`
       + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
@@ -22268,7 +22306,7 @@ function bindActionButtons(box, u, kind) {
       if (!promptState || b.classList.contains('off')) return;
       const k = Number(b.dataset.k);
       const sp = (u.spells ?? [])[k];
-      const side = spellSideOf(sp);
+      const side = spellSideOf(sp) ?? spellSideOf(uiSpellMeta(sp, byIdSoft(u.cardId)));
       const kind = isStrike ? 'spell' : 'cast';
       // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
       // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
@@ -22427,7 +22465,7 @@ function openUnitModal(u) {
     ${card?.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
-    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(sp)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => { const spx = uiSpellMeta(sp, card); return `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(spx)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`; }).join('')}</ul>` : ''}
     <div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
   overlay.appendChild(box);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });

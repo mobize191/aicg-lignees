@@ -2164,14 +2164,15 @@ function spellList(card) {
     .map(
       (sp) => {
         // correctifs lot 4 : fiche complète — rôle (grimoire), zone vs monocible, frappe en « dégâts (%) »
-        const zone = zoneLabelOf(sp);
-        const cibleLab = zone || (sp.cible ? String(sp.cible) : '1 ennemi');
+        const spx = uiSpellMeta(sp, card);
+        const zone = zoneLabelOf(spx);
+        const cibleLab = zone || (spx.cible ? String(spx.cible) : '1 ennemi');
         const pct = Math.round((sp.mult ?? 1) * 100);
         const powerLine = card.effect && card.effect.kind === 'heal'
           ? spellPowerLine(card.effect, sp.mult)
           : `dégâts (${pct} % ≈ ${Math.max(1, Math.round(stq.atk * (sp.mult ?? 1)))})`;
-        const roleLab = sp.role ? (SPELL_ROLE_LABEL[sp.role] ?? sp.role) : (SPELL_CAT_LABEL[sp.cat] ?? '');
-        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">✦ ${sp.cost}</span></span>
+        const roleLab = spx.role ? (SPELL_ROLE_LABEL[spx.role] ?? spx.role) : (SPELL_CAT_LABEL[spx.cat] ?? '');
+        return `<li class="spell"><span class="sort-top"><b>✦ ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">✦ ${sp.cost}</span></span>
         <span class="muted sort-meta">${[roleLab, cibleLab, powerLine].filter(Boolean).join(' · ')}</span>
         ${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`;
       },
@@ -4008,6 +4009,13 @@ function zoneWidthOf(sp) {
 }
 
 // detail d'un sort : badge de type (le libelle vient du role d'ecole, data/engine.json)
+// correctifs v1.37 lot 6 : métadonnées d'affichage/ciblage d'un sort signature (dérivées des data,
+// sans toucher à l'objet runtime lu par le moteur — le digest Auto reste inchangé)
+function uiSpellMeta(sp, ownerDef) {
+  if (!sp || sp.role || sp.cible) return sp;
+  if (sp.cat === 'unique' && ownerDef) return { ...sp, ...signatureMetaOf(ownerDef) };
+  return sp;
+}
 function spellBadgeHtml(sp) {
   const role = sp?.role ?? null;
   if (role) return `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
@@ -4253,8 +4261,8 @@ function actionButtonsHtml(u, kind) {
     // T4.2 : le résultat calculé (mult × stat principale) affiché avec le sort
     const prevu = sp.mult ? ` \u2192 ~${Math.round(sp.mult * statOf(u))}` : '';
     parts.push(row(
-      top('\u2726 ' + sp.name, spellBadgeHtml(sp), '\u2726' + sp.cost)
-      + `<span class="sort-meta">${spellMetaHtml(sp)}${prevu}</span>`
+      top('\u2726 ' + sp.name, spellBadgeHtml(uiSpellMeta(sp, byIdSoft(u.cardId))), '\u2726' + sp.cost)
+      + `<span class="sort-meta">${spellMetaHtml(uiSpellMeta(sp, byIdSoft(u.cardId)))}${prevu}</span>`
       + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
@@ -4287,7 +4295,7 @@ function bindActionButtons(box, u, kind) {
       if (!promptState || b.classList.contains('off')) return;
       const k = Number(b.dataset.k);
       const sp = (u.spells ?? [])[k];
-      const side = spellSideOf(sp);
+      const side = spellSideOf(sp) ?? spellSideOf(uiSpellMeta(sp, byIdSoft(u.cardId)));
       const kind = isStrike ? 'spell' : 'cast';
       // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
       // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
@@ -4446,7 +4454,7 @@ function openUnitModal(u) {
     ${card?.element ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
     <h4>Effets actifs sur cette carte</h4>
     ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
-    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(sp)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(sp)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`).join('')}</ul>` : ''}
+    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => { const spx = uiSpellMeta(sp, card); return `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(spx)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`; }).join('')}</ul>` : ''}
     <div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
   overlay.appendChild(box);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
