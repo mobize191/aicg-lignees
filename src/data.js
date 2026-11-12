@@ -101,7 +101,6 @@ const OR_PER_POINT = E.OR_PER_POINT;
 
 const AUTEL_SOIN_GRACE = E.AUTEL_SOIN_GRACE;
 
-const REGEN_BOSS_STAGE = E.REGEN_BOSS_STAGE;
 
 // boucle v2 lot 3 : départ à 2 cartes (4 propositions, une par race) + recrutement naturel (taux par zone)
 const DEPART_CHOIX = E.DEPART_CHOIX ?? [];

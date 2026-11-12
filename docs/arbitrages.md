@@ -1,3 +1,12 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 5 (Lot C refonte) LIVRÉE : POINTS DE REPOS, PERSISTANCE PARTOUT (v1.44)
+
+- **Plus aucun soin automatique** : `REGEN_BOSS_STAGE` supprimé (data + code + ligne de récompense), plus de reset du pool à l'entrée de zone (`startZoneFight`), au nouveau run (`enterAt`) ni en fin de run (victoire finale comme défaite : `persistRunStateFrom` systématique, `runState.active` conservé). Le pool PV/mana persiste partout (donjons, errance, combats de zone).
+- **K.O. persistants** : `curHpManaOf`/`applyRunStateTo` propagent hp=0 (alive=false) — une carte K.O. reste K.O. jusqu'au soin explicite.
+- **Restauration gratuite** : retour au hub-ville (Accueil) depuis une autre page = `healRunComplet()` + toast « ⛲ Repos en ville » (le boot ne soigne pas : garde `lastHash`); autel d'errance inchangé (soin complet + grâce, toast existant) — **choix documenté : l'autel relève aussi les K.O.** (comportement existant conservé). Potions via 🧪 en donjon (inchangé), pas de vente de soins en errance.
+- **UI** : hub-ville affiche l'effet de repos ; page Équipe affiche déjà PV/mana réels (`curHpManaOf`).
+- Tests : 4 headless UI (`tests/repos-v144.test.js`) : victoire sans reset auto, retour ville restaure + K.O. relevé, K.O. persistant entre combats, constante supprimée. 234 tests verts (1 échec préexistant date). **DIGEST INCHANGÉ constaté : `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000** (flux hors combat).
+- **Courbe de difficulté signalée à Marc-Olivier (PAS de recalibrage dans ce lot)** : 3 actifs + survie persistante = difficulté perçue en hausse ; le taux de victoires du digest est stable (838/3000) mais le harnais ne mesure pas la survie inter-combats.
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 4 (spec vie-jeu Lot 1) LIVRÉE : COUPS CRITIQUES D'AGILITÉ (v1.43)
 
 - **Moteur** : `critChanceOf`/`rollCrit` (`src/engine/stats.js`), constantes en data `moteur` : `CRIT_BASE 0.05`, `CRIT_PER_AGI 0.01`, `CRIT_CAP 0.30`, `CRIT_MULT 1.5`. Chance = 5 % + 1 %/point d'avantage d'agi positif, plafonnée 30 % ; dégâts ×1,5 après buffs/malus.
