@@ -231,6 +231,8 @@ const API_PAIRS = {
   _tacPause: '(v) => { tacPaused = !!v; syncFightBtn(); }',
   _tacPaused: '() => tacPaused',
   _rail: '() => (combatApp ? combatApp.querySelector("#rail") : null)',
+  save: 'save', load: 'load', listSlots: 'listSlots', switchToSlot: 'switchToSlot', newSlot: 'newSlot', renameSlot: 'renameSlot', deleteSlot: 'deleteSlot', resetStore: 'resetStore',
+  _activeSlot: '() => activeSlot', _slotsIndex: '() => slotsIndex', SLOTS_KEY: 'SLOTS_KEY', slotKey: 'slotKey', slotBak: 'slotBak',
 };
 
 export function bootDist(file, extraPairs = {}) {

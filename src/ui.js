@@ -282,6 +282,11 @@ function runModLootMult(id) {
 
 
 const BAK_KEY = SAVE_KEY + '.bak';
+const SLOTS_KEY = SAVE_KEY + '.slots';
+const slotKey = (i) => SAVE_KEY + '.p' + i;
+const slotBak = (i) => slotKey(i) + '.bak';
+let slotsIndex = null;
+let activeSlot = 0;
 
 function makeSafeStorage() {
   const mem = new Map();
@@ -880,6 +885,48 @@ const store = {
   pierres: 0, 
 };
 
+function resetStore() {
+  store.teams = [
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
+  ];
+  store.activeTeam = 0;
+  store.grimoire = [];
+  store.zonesVisitees = [];
+  store.zonesUnlocked = [];
+  store.errance = null;
+  store.dungeon = 'marees';
+  store.runMod = null;
+  store.progress = Object.fromEntries(DUNGEONS.map((d) => [d.id, freshProg()]));
+  store.seed = 42;
+  store.gold = 0;
+  store.potions = freshPotions();
+  store.runState = freshRunState();
+  store.departFait = false;
+  store.materiaux = {};
+  store.equipment = {};
+  store.equip = {};
+  store.equipTeam = [null, null];
+  store.collection = new Map();
+  store.instances = [];
+  store.instanceSeq = 1;
+  store.gems = freshGems();
+  store.tokens = [];
+  store.fatigue = { day: '', runs: {} };
+  store.dropFat = { day: '', dg: {} };
+  store.milestones = { clear1: false, boss5: false, diff3: false };
+  store.seen = [];
+  store.shards = {};
+  store.saveBroken = false;
+  store.dailyDone = '';
+  store.quetes = { day: '', list: [], bonusDone: false };
+  store.dailyLevel = null;
+  store.defiActive = false;
+  store.regEclats = 0;
+  store.pierres = 0;
+}
+
 function progOf(dungeonId, diff = 0) {
   const p = store.progress[dungeonId];
   return p.diffs[diff >= 1 && diff <= 5 ? diff : p.diff];
@@ -1220,33 +1267,188 @@ function sanitizeTeams() {
   }
 }
 
+function defaultSlotName(i) {
+  return 'Partie ' + (i + 1);
+}
+
+function freshSlotsIndex(active) {
+  return { active, slots: Array.from({ length: SAVE_SLOTS }, () => null) };
+}
+
+function readSlotsIndex() {
+  try {
+    const raw = storage.getItem(SLOTS_KEY);
+    if (!raw) return null;
+    const idx = JSON.parse(raw);
+    if (!idx || typeof idx !== 'object' || !Array.isArray(idx.slots) || idx.slots.length !== SAVE_SLOTS) return null;
+    idx.slots = idx.slots.map((s) => (s && typeof s === 'object' ? s : null));
+    idx.active = Number.isInteger(idx.active) && idx.active >= 0 && idx.active < SAVE_SLOTS ? idx.active : 0;
+    return idx;
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeSlotsIndex() {
+  try { storage.setItem(SLOTS_KEY, JSON.stringify(slotsIndex)); } catch (e) {  }
+}
+
+function ensureSlotsIndex() {
+  if (!slotsIndex) slotsIndex = readSlotsIndex() || freshSlotsIndex(activeSlot);
+  if (!Number.isInteger(activeSlot) || activeSlot < 0 || activeSlot >= SAVE_SLOTS) activeSlot = 0;
+}
+
+function slotSummary() {
+  let lvl = 0;
+  try { lvl = teamLevel(); } catch (e) {  }
+  return { gold: store.gold | 0, dungeon: store.dungeon, stage: store.stage, teamLevel: lvl };
+}
+
+function updateSlotEntry(i) {
+  const prev = slotsIndex.slots[i];
+  slotsIndex.slots[i] = {
+    name: (prev && prev.name) || defaultSlotName(i),
+    version: SAVE_VERSION,
+    date: new Date().toISOString(),
+    summary: slotSummary(),
+  };
+}
+
 function save() {
   try {
-    const prev = storage.getItem(SAVE_KEY);
+    ensureSlotsIndex();
+    const key = slotKey(activeSlot);
+    const prev = storage.getItem(key);
     const raw = JSON.stringify(snapshot());
     if (prev && prev !== raw) {
-      try { storage.setItem(BAK_KEY, prev); } catch (e2) {  }
+      try { storage.setItem(slotBak(activeSlot), prev); } catch (e2) {  }
     }
-    storage.setItem(SAVE_KEY, raw);
+    storage.setItem(key, raw);
+    updateSlotEntry(activeSlot);
+    writeSlotsIndex();
     store.saveBroken = false;
   } catch (e) {
-    
     store.saveBroken = true;
   }
 }
 
-function load() {
-  for (const key of [SAVE_KEY, BAK_KEY]) {
-    try {
-      const raw = storage.getItem(key);
-      if (!raw) continue;
-      // flux reel : une sauvegarde v8 traverse les migrations v9 -> v12 avant restauration (EXI-SAVE-1)
-      if (restore(migrate(JSON.parse(raw)))) return true;
-    } catch (e) {
-      
-    }
+function tryRestoreKey(key) {
+  try {
+    const raw = storage.getItem(key);
+    if (!raw) return false;
+    // flux reel : une sauvegarde v8 traverse les migrations v9 -> v12 avant restauration (EXI-SAVE-1)
+    return restore(migrate(JSON.parse(raw)));
+  } catch (e) {
+    return false;
   }
+}
+
+function load() {
+  const idx = readSlotsIndex();
+  if (idx) {
+    slotsIndex = idx;
+    activeSlot = idx.active;
+    const order = [idx.active];
+    for (let i = 0; i < SAVE_SLOTS; i++) if (i !== idx.active) order.push(i);
+    for (const i of order) {
+      if (tryRestoreKey(slotKey(i)) || tryRestoreKey(slotBak(i))) {
+        activeSlot = i;
+        slotsIndex.active = i;
+        writeSlotsIndex();
+        return true;
+      }
+    }
+    // repli securite : index present mais aucun slot lisible -> cles historiques
+    if (tryRestoreKey(SAVE_KEY) || tryRestoreKey(BAK_KEY)) {
+      writeSlotsIndex();
+      return true;
+    }
+    return false;
+  }
+  // migration sans perte : pas d'index + cle historique -> la sauvegarde actuelle devient la Partie 1 (p0)
+  for (const key of [SAVE_KEY, BAK_KEY]) {
+    const raw = storage.getItem(key);
+    if (!raw) continue;
+    if (!tryRestoreKey(key)) continue;
+    activeSlot = 0;
+    slotsIndex = freshSlotsIndex(0);
+    storage.setItem(slotKey(0), raw);
+    const bakRaw = storage.getItem(BAK_KEY);
+    if (bakRaw && bakRaw !== raw) {
+      try { storage.setItem(slotBak(0), bakRaw); } catch (e2) {  }
+    }
+    updateSlotEntry(0);
+    slotsIndex.slots[0].name = 'Partie 1';
+    writeSlotsIndex();
+    return true;
+  }
+  slotsIndex = freshSlotsIndex(0);
+  activeSlot = 0;
+  writeSlotsIndex();
   return false;
+}
+
+function listSlots() {
+  ensureSlotsIndex();
+  return slotsIndex.slots.map((s, i) => ({
+    index: i,
+    active: i === activeSlot,
+    empty: !s,
+    name: (s && s.name) || defaultSlotName(i),
+    version: s ? s.version ?? null : null,
+    date: s ? s.date ?? null : null,
+    summary: s ? s.summary ?? null : null,
+  }));
+}
+
+function switchToSlot(i) {
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  save();
+  ensureSlotsIndex();
+  if (!tryRestoreKey(slotKey(i)) && !tryRestoreKey(slotBak(i))) return false;
+  activeSlot = i;
+  slotsIndex.active = i;
+  writeSlotsIndex();
+  return true;
+}
+
+function newSlot(i, name) {
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  save();
+  ensureSlotsIndex();
+  activeSlot = i;
+  slotsIndex.active = i;
+  slotsIndex.slots[i] = { name: String(name ?? '').trim().slice(0, 24) || defaultSlotName(i) };
+  writeSlotsIndex();
+  resetStore();
+  store.departFait = false;
+  save();
+  return true;
+}
+
+function renameSlot(i, name) {
+  ensureSlotsIndex();
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS || !slotsIndex.slots[i]) return false;
+  const n = String(name ?? '').trim().slice(0, 24);
+  if (!n) return false;
+  slotsIndex.slots[i].name = n;
+  writeSlotsIndex();
+  return true;
+}
+
+function deleteSlot(i) {
+  ensureSlotsIndex();
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  storage.removeItem(slotKey(i));
+  storage.removeItem(slotBak(i));
+  slotsIndex.slots[i] = null;
+  if (slotsIndex.active === i) {
+    const next = slotsIndex.slots.findIndex((s) => !!s);
+    activeSlot = next >= 0 ? next : 0;
+    slotsIndex.active = activeSlot;
+  }
+  writeSlotsIndex();
+  return true;
 }
 
 function usedInTeam(id) {
