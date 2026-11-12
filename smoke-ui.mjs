@@ -1194,6 +1194,34 @@ async function main() {
   }
 
   {
+    // ---------- B21 : refonte errance — palettes/ambiance par zone, layout v2, retour ville, HUD phase ----------
+    const zones = api.DATA.zones;
+    const palOf = (zid) => api.errancePalette(zones.find((z) => z.id === zid));
+    check('B21 a les 5 zones ont une palette en data, toutes distinctes', zones.every((z) => z.errance?.paint) && new Set(zones.map((z) => palOf(z.id).grassTop)).size === 5, zones.map((z) => palOf(z.id).grassTop).join());
+    check('B21 b Forge = braises (eau orangée), Crypte = froide, Zénith = doré', palOf('zone-forge').water0 === '#ffb050' && palOf('zone-crypte').grassTop === '#7a8a99' && palOf('zone-zenith').grassTop === '#d4b96a', '');
+    check('B21 c ambiance par zone : DAY_LEN en data (défaut 100)', zones.every((z) => api.buildAmbiance(api.genZoneMap(z), z).dayLen >= 90), zones.map((z) => api.buildAmbiance(api.genZoneMap(z), z).dayLen).join());
+    let retourOk = true, mareesLayout = false;
+    for (const z of zones) {
+      const m = api.genZoneMap(z);
+      if (!m.retour || m.terr[m.idx(m.retour.x, m.retour.y)] !== 11) retourOk = false;
+      if (z.id === 'zone-marees' && m.huttes.length === 2 && m.donjon.w === 3) mareesLayout = true;
+    }
+    check('B21 d point de retour ville posé dans les 5 zones', retourOk, '');
+    check('B21 e layout v2 appliqué aux Marées (donjon 3x2, 2 huttes)', mareesLayout, '');
+    // UI : entrée en zone, HUD phase + décor construit
+    mem.clear();
+    store.zonesUnlocked = ['zone-marees']; store.errance = null;
+    api.go('#terres');
+    await wait(30);
+    els.get('app').querySelectorAll('.enter-zone')[0].click();
+    await wait(80);
+    const st21 = store.errance;
+    check('B21 f entrée en zone Marées, décor A+ construit (lames, étang, socles)', !!st21 && st21.map.decor && st21.map.decor.blades.length > 0 && !!st21.map.decor.pond && st21.map.decor.herbSocles.length > 0, `blades=${st21?.map.decor?.blades?.length}`);
+    check('B21 g HUD : puce de phase jour/nuit présente dans la barre d\'errance', !!els.get('app').querySelector('#errance-phase'), '');
+    check('B21 h 0 exception B21 (refonte errance)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
+  {
     // ---------- B15 : lot 7 — craft en ville (atelier Boutique) + page Personnage à onglets ----------
     mem.clear();
     store.instances = []; store.collection = new Map(); store.departFait = true;

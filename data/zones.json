@@ -311,7 +311,37 @@
     "h": 32,
     "t": 36
    },
-   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+   "paint": {
+    "grassTop": "#8a6248",
+    "grassBottom": "#54382a",
+    "blotchDark": "rgba(40,18,10,.10)",
+    "blotchMid": "rgba(150,80,40,.07)",
+    "pathBase": "#9a7a58",
+    "pathCore": "#c09a6a",
+    "sand": "#7a5a40",
+    "sandDark": "#5c4230",
+    "water0": "#ffb050",
+    "water1": "#e06a28",
+    "water2": "#8a3012",
+    "waterDeep": "rgba(60,20,5,.30)",
+    "waterGlint": "rgba(255,230,180,.5)",
+    "bladeA": "#7a9a42",
+    "bladeB": "#5c7a34",
+    "leafDark": "#5c4028",
+    "leafMid": "#7a5c38",
+    "leafLight": "#9a7a48",
+    "leafGlow": "rgba(255,200,150,.35)",
+    "rock": "#7a6a60",
+    "rockLight": "#9a8a7c",
+    "rockDark": "#5c4c44",
+    "donjonWall": "#5c4a40",
+    "donjonRoof": "#40342c"
+   },
+   "ambiance": {
+    "dayLen": 110,
+    "note": "cycle un peu plus long, ciel de braises"
+   }
   }
  },
  {
@@ -405,7 +435,30 @@
     "h": 32,
     "t": 36
    },
-   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+   "paint": {
+    "grassTop": "#4a8a52",
+    "grassBottom": "#26502f",
+    "blotchDark": "rgba(10,40,20,.10)",
+    "blotchMid": "rgba(40,100,50,.07)",
+    "pathBase": "#8a7a55",
+    "pathCore": "#b09a6a",
+    "sand": "#a89468",
+    "sandDark": "#84744c",
+    "water0": "#4fa8b8",
+    "water1": "#357a90",
+    "water2": "#1c4a5f",
+    "bladeA": "#3f8a42",
+    "bladeB": "#2a6b34",
+    "leafDark": "#1f4a2e",
+    "leafMid": "#2a6b3f",
+    "leafLight": "#3f8a52",
+    "leafGlow": "rgba(180,255,190,.3)",
+    "moss": "rgba(60,130,70,.6)"
+   },
+   "ambiance": {
+    "dayLen": 100
+   }
   }
  },
  {
@@ -508,7 +561,38 @@
     "h": 32,
     "t": 36
    },
-   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+   "paint": {
+    "grassTop": "#7a8a99",
+    "grassBottom": "#46586a",
+    "blotchDark": "rgba(20,30,50,.10)",
+    "blotchMid": "rgba(90,110,140,.07)",
+    "pathBase": "#8a8a94",
+    "pathCore": "#aaaab4",
+    "sand": "#6a7480",
+    "sandDark": "#505a66",
+    "water0": "#9ac8e8",
+    "water1": "#5a8db0",
+    "water2": "#2a4a68",
+    "bladeA": "#6a8a9a",
+    "bladeB": "#4a6a7a",
+    "leafDark": "#3a4a5c",
+    "leafMid": "#4a5c70",
+    "leafLight": "#5c7288",
+    "leafGlow": "rgba(190,220,255,.3)",
+    "rock": "#8a8a99",
+    "rockLight": "#a8a8b5",
+    "rockDark": "#606068",
+    "stone": "#9a9aa8",
+    "donjonWall": "#5c5a68",
+    "donjonRoof": "#403e4c",
+    "autelGlow": "rgba(180,160,255,.85)",
+    "autelRing": "rgba(200,180,255,.9)"
+   },
+   "ambiance": {
+    "dayLen": 120,
+    "note": "nuit plus longue en crypte"
+   }
   }
  },
  {
@@ -611,7 +695,37 @@
     "h": 32,
     "t": 36
    },
-   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+   "paint": {
+    "grassTop": "#d4b96a",
+    "grassBottom": "#a8873c",
+    "blotchLight": "rgba(255,250,210,.08)",
+    "blotchDark": "rgba(120,90,30,.08)",
+    "blotchMid": "rgba(200,170,90,.07)",
+    "pathBase": "#c4a86a",
+    "pathCore": "#e8d9a0",
+    "sand": "#e0cf9a",
+    "sandDark": "#bca86a",
+    "water0": "#a8e0f0",
+    "water1": "#6ab0d0",
+    "water2": "#3a7a9a",
+    "bladeA": "#b8a44e",
+    "bladeB": "#948538",
+    "leafDark": "#8a7434",
+    "leafMid": "#a8904a",
+    "leafLight": "#c8b060",
+    "leafGlow": "rgba(255,250,210,.4)",
+    "flowerCols": [
+     "#ff9a5a",
+     "#ffd76e",
+     "#ffffff",
+     "#f0a0c8"
+    ]
+   },
+   "ambiance": {
+    "dayLen": 90,
+    "note": "journées dorées plus courtes au Zénith"
+   }
   }
  }
 ]

@@ -169,7 +169,7 @@ test('refonte errance lot 1 : decorOrders/ambiance déterministes depuis le seed
   assert.ok(d1.blades.length > 0 && d1.pond && d1.herbSocles.length > 0 && d1.details.length > 0, 'décor présent (lames, étang, socles, détails)');
   const pal = E.errancePalette(z);
   assert.equal(pal.water0, '#78c2de', 'override zone-marees lu depuis zones.json');
-  assert.equal(E.errancePalette(E.DATA.zones[1]).water0, '#78c2de', 'défaut intégré pour les zones non paramétrées');
+  assert.equal(E.errancePalette({ id: 'zone-test', errance: { seed: 1 } }).water0, '#78c2de', 'défaut intégré pour les zones non paramétrées');
   const amb = E.buildAmbiance(m1, z);
   assert.ok(amb.dayLen === 100 && amb.flies.length === 42 && amb.clouds.length === 3 && Array.isArray(amb.prints), 'ambiance construite');
 });
@@ -190,7 +190,7 @@ test('refonte errance lot 3 : layout v2 data-driven (Marées) — retour ville, 
   // repli : les 4 autres zones (sans layout) utilisent le générateur historique
   for (const z of D.zones.slice(1)) {
     const m = E.genZoneMap(z);
-    assert.ok(!m.retour && !z.errance.layout, `repli générateur pour ${z.id}`);
+    assert.ok(!z.errance.layout && m.retour, `repli générateur pour ${z.id}, retour ville posé`);
     assert.ok(m.donjon && m.autel && m.spawn, 'objets présents');
   }
 });

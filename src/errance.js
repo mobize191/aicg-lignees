@@ -130,6 +130,12 @@ function genZoneMap(zone) {
     }
     spawn = { x: cx + 0.5, y: cy + 1.5 };
     terr[idx(cx, cy + 1)] = ET.CHEMIN;
+    // point de retour ville dans chaque zone (ACTÉ 11/11 nuit, point 7), même en repli
+    const rx = 3, ry = h - 3;
+    if (inb(rx, ry) && terr[idx(rx, ry)] === ET.PRAIRIE) {
+      retour = { x: rx, y: ry };
+      terr[idx(rx, ry)] = ET.RETOUR;
+    }
   }
   return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, retour, huttes, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
 }
