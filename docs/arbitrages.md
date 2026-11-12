@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : LIVRÉ — correctif errance v1.36.1 (ACTÉ 12/11 6e tour, retours terrain) : grand lac, plage, interactions, héros vectoriel
+
+- **Lot 1 — bug racine « grand lac »** : le pond peint partait de la bbox de TOUTES les tuiles EAU (ceinture comprise) → ellipse couvrant toute la carte. Corrigé : amas d'eau **intérieur uniquement**, ellipse rétrécie pour ne couvrir aucune tuile non-EAU (anneau de sable ≤ 0,25·T), toutes les tuiles EAU peintes en eau. **Garde-fou headless** (échoue sur main, passe après) : `decorOrders` sur les 5 zones.
+- **Lot 2 — plage + eau profonde/peu profonde (TRANCHÉ)** : layout v3 des Marées en data (bande de mer au sud : `EAU_PROFONDE` 12 infranchissable > `EAU_PEU_PROFONDE` 13 praticable en liseré > `SABLE` 14), config `errance.water.liseré` pour les 5 zones (Forge/Crypte entièrement profondes, Bosquet/Zénith avec liseré). Rendu distinct, éclaboussures en eau peu profonde, `rescueHeroPos` couvre l'eau profonde. ENC_RATE inchangé.
+- **Lot 3 — interactions/feedbacks** : tap hutte → dialogue en encart (textes en data), halo pulsé autel/retour/porte au passage, marqueur de destination, enseignes « ↩ Ville » / « ⚔ Donjon » peintes, retour ville à ≤ 6 tuiles du spawn (data, smoke B21 d2).
+- **Lot 4 — héros vectoriel** de la maquette A+ à la place du sprite WAN (**contrainte « WAN gardé » LEVÉE**, asset conservé dans les manifests) : bob, jambes animées, tilt, miroir, ombre/halo, `prefers-reduced-motion` gelé.
+- **Preuves** : 177 tests verts, smoke 362 checks (B21 durci), digests **inchangés `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000**. **Captures S24 non réalisées dans le sandbox** (chromium installé mais deps système manquantes, pas de root) — limitation consignée dans les commits, à valider par Marc-Olivier en IHM réelle (protocole v1.36.1).
+
 ## 2026-11-12 : SIGNALÉ (8e tour, retours terrain de Marc-Olivier) — esquive invisible en combat, sorts signature incohérents, héros errant après combat → intégrés aux correctifs v1.37 (lots 5-7)
 
 - **Esquive invisible (6 combats, 6 fois le même bug au tour 2)** : l'attaque de l'Ange contre le Pillard des Récifs était **esquivée** (Assassin : 15 % + 1 %/AGI d'écart, plafond 30 % → ~22 % contre l'Ange), mais le feedback de l'UI est un `floatText('💨 Esquive')` fugace, invisible en jeu. Le « 5 au lieu de 7 » s'explique aussi : l'Ange est **Prêtre**, frappe à **70 %** (`CLASSE_MODS.Prêtre.strike = 0.7`), rien ne l'affiche. Les 6 combats identiques viennent du seed de vague **identique toute la journée** (`waveSeedFor` = hash `jour|donjon|diff`). Diagnostic vérifié sur main par le couloir pilotage.
