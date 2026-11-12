@@ -17686,6 +17686,43 @@ function paintTileGround(bx, map, zone, x, y) {
   }
 }
 
+// src/engine/zoneflow.js — garde « équipe formée » + cycle de vie des combats de zone/donjon (correctifs v1.37 lot 1)
+// Pur et testable headless : aucune valeur de design en dur (EXI-MOD-1).
+
+// au moins 1 carte en équipe active
+function equipeFormee(team) {
+  return !!(team && Array.isArray(team.slots) && team.slots.filter(Boolean).length > 0);
+}
+
+// garde d'entrée (Terres Sauvages, donjons, startZoneFight) : { ok, reason? }
+function gardeEquipe(storeLike) {
+  if (equipeFormee(storeLike?.team)) return { ok: true };
+  return { ok: false, reason: 'equipe' };
+}
+
+// genre du run en cours : 'zone' | 'donjon' | 'defi' | null
+function genreRun(runState) {
+  return runState && runState.active ? (runState.kind ?? null) : null;
+}
+
+// un combat de zone (errance) est-il en cours ? (ne sert plus de drapeau global zombie)
+function combatZoneEnCours(storeLike) {
+  return genreRun(storeLike?.runState) === 'zone' && !!storeLike?.zoneFight;
+}
+
+// démarre un run propre : aucun état résiduel de combat de zone
+function initRun(storeLike, kind) {
+  if (storeLike.zoneFight) storeLike.zoneFight = null;
+  storeLike.runState = { active: true, kind };
+  return storeLike.runState;
+}
+
+// sortie du combat par navigation (sans victoire) : nettoyage systématique, plus d'état zombie
+function quitterCombat(storeLike) {
+  if (storeLike.zoneFight) storeLike.zoneFight = null;
+  if (storeLike.runState) { storeLike.runState.active = false; storeLike.runState.kind = null; }
+}
+
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
 // chaque migration est pure et bump la version ; aucune ne saute de palier.
 // v8 -> v9 (arbres de race, EXI-P1-6) : les exemplaires évolués restent jouables dans le
@@ -18354,7 +18391,7 @@ function bossPieceFor(dungeonId, diff) {
 // boucle v2 lot 1 : stock de potions et état de run (PV/mana persistants au sein d'un run)
 const freshPotions = () => Object.fromEntries(Object.keys(POTIONS).map((k) => [k, 0]));
 
-const freshRunState = () => ({ active: false, units: {} });
+const freshRunState = () => ({ active: false, units: {}, kind: null }); // kind: 'zone' | 'donjon' | 'defi' (v1.37 lot 1)
 
 const potionCount = (id) => Math.max(0, store.potions[id] ?? 0);
 
@@ -19597,7 +19634,11 @@ function registerRoute(hash, fn) {
 
 let suppressHash = false; 
 
+let lastHash = '';
 function go(hash) {
+  // correctifs v1.37 lot 1 : sortie de #combat par navigation => plus d'état zombie (zoneFight nettoyé)
+  if (lastHash === '#combat' && hash !== '#combat' && store.zoneFight) { store.zoneFight = null; save(); }
+  lastHash = hash;
   (routes[hash] || routes['#accueil'])(document.getElementById('app'));
   document.body.classList.toggle('in-combat', hash === '#combat');
   if (hash !== '#combat') closeActModal();
@@ -20445,7 +20486,11 @@ function dungeonOfZone(zoneId) {
 }
 
 function startZoneFight(zoneId, { donjon = false } = {}) {
+  // correctifs v1.37 lot 1 : garde équipe (défensif) + genre de combat rattaché au run
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.zoneFight = { zone: zoneId, donjon };
+  store.runState.kind = donjon ? 'donjon' : 'zone';
   store.dungeon = dungeonOfZone(zoneId);
   store.stage = 1;
   store.runState = freshRunState();
@@ -20457,6 +20502,9 @@ function startZoneFight(zoneId, { donjon = false } = {}) {
 }
 
 function enterZone(zoneId) {
+  // correctifs v1.37 lot 1 : garde « équipe formée » avant d'entrer dans les Terres Sauvages
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
   store.errance = createErranceState(zoneId);
   if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
@@ -20853,7 +20901,7 @@ function renderErrance(root) {
         if (amb.prints.length > 40) amb.prints.shift();
       }
     }
-    if (ev.encounter && !store.zoneFight) {
+    if (ev.encounter && !combatZoneEnCours(store)) {
       persistErrancePos(); save();
       startZoneFight(st.zone, { donjon: false });
       return;
@@ -23493,7 +23541,11 @@ function teamLevel() {
 }
 
 function enterAt(stage, dungeonId) {
+  // correctifs v1.37 lot 1 : garde équipe + état propre (plus de zoneFight résiduel => étages enchaînés)
+  const g = gardeEquipe(store);
+  if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.defiActive = false;
+  store.zoneFight = null;
   const d = DUNGEONS.find((x) => x.id === dungeonId) ?? DUNGEONS[0];
   if (!dungeonUnlocked(d)) {
     const req = DUNGEONS.find((x) => x.id === d.req);
@@ -23505,6 +23557,7 @@ function enterAt(stage, dungeonId) {
   // boucle v2 lot 1 : un nouveau run repart à plein (soins complets entre deux runs distincts)
   store.runState = freshRunState();
   store.runState.active = true;
+  store.runState.kind = 'donjon';
   store.runMod = RUN_MODS[Math.floor(uiRand() * RUN_MODS.length)].id;
   save();
   updatePtsBadge();

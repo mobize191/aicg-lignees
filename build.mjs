@@ -10,6 +10,7 @@ const ENGINE_ORDER = [
   'src/engine/progression.js',
   'src/errance.js',
   'src/errance-paint.js',
+  'src/engine/zoneflow.js',
   'src/engine/migrate.js',
 ];
 
