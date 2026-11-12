@@ -1,6 +1,6 @@
 # Validation IHM locale — protocole et prompt
 
-Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.33** (contenu v3 : marchand v2 — 3 offres/jour et raretés débloquées par donjon bouclé, gobelins régionaux, greffe des 31 solos, familles compagnons 7 UR + 7 L, familles divines joueur + maillons du Jeune Séraphin + lignées des Enge). Baselines : 150 tests, smoke 299 checks, digest `f8a9f0bb…` 1359/3000 et `978ed44b…` 4517/10000 (MESURE post-contenu v3, sans recalibrage).
+Ce document fournit un **prompt prêt à copier** dans un agent local équipé d'un navigateur automatisé (Claude Code, Cursor, Playwright MCP, ou tout agent capable de piloter Chromium et de prendre des captures d'écran). Il valide le jeu de bout en bout : alignement, rien de coupé, tout au bon endroit, console propre. Version du protocole : **v1.34** (refonte de l'IA de combat : ciblage par utilité + hystérésis, sorts contextuels, profils IA par difficulté, sorts alliés de lignée en Auto, garde-fous anti-blocage de l'errance — voir scénario S22). Baselines : 171 tests, smoke 306 checks (3 échecs préexistants connus), digest `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000 (MESURE finale v1.34, proposition de verrouillage de baseline en attente de Marc-Olivier ; baseline verrouillée courante `f72106ff…` 1379/3000 / `3f9fe198…` 4558/10000).
 
 ## Préparation (une fois)
 
@@ -9,10 +9,10 @@ git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
 node build.mjs                                # build déterministe : dist.html régénéré
-node --test                                   # 150 tests verts attendus
-node smoke-ui.mjs dist.html                   # 299 checks attendus (2 échecs préexistants connus : 46 g / 45 e, moteur)
-node combat-digest.mjs dist.html 3000         # MESURE courante : f8a9f0bb…, 1359/3000, 0 exception, 1 marathon (baseline verrouillée f72106ff…, 1379/3000)
-node combat-digest.mjs dist.html 10000        # MESURE N = 10 000 : 978ed44b…, 4517/10000 (baseline verrouillée 3f9fe198…, 4558/10000)
+node --test                                   # 171 tests verts attendus
+node smoke-ui.mjs dist.html                   # 306 checks attendus (3 échecs préexistants connus, moteur)
+node combat-digest.mjs dist.html 3000         # MESURE courante v1.34 : c62fcbd1…, 1281/3000, 0 exception, 0 marathon (baseline verrouillée f72106ff…, 1379/3000)
+node combat-digest.mjs dist.html 10000        # MESURE N = 10 000 v1.34 : 5059e683…, 4236/10000 (baseline verrouillée 3f9fe198…, 4558/10000)
 # servir le jeu en reproduisant le déploiement Pages (le chargeur d'assets a besoin de http, pas de file://)
 mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json assets-v3.1.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance
 cd .site && python3 -m http.server 8080
@@ -75,6 +75,8 @@ Tu es un agent de validation UI pour **AICG : Lignées**, un jeu de cartes solo 
 **S19 — Anti-doublons de sorts + sauvegarde (migration v27).** Setup console : faire évoluer deux fois une carte de famille (ou poser `inst.acc` avec doublons + recharger). En combat, ouvre la fenêtre d'action de la carte évoluée : capture. Vérifie : **aucun sort affiché en doublon** (noms de sorts uniques dans la liste), aucune ligne « ✦ undefined ». Recharge la page : vérifie `store.version === 27` et que `inst.acc` est dédoublonné (clé = nom ou sort+cran), la collection intacte.
 
 **S20 — Fenêtre d'action : réduire + Objet (rappel v1.31).** En combat tactique : ouvre la fenêtre d'action d'une carte, capture, clique **▾ réduire** → la fenêtre se replie (classe `.reduced`) sans masquer le plateau, **▴ ouvrir** la rouvre ; rouvre l'action 🧪 Objet, bois une potion (setup : `store.potions.soin30 = 1`) → PV restaurés, stock décrémenté, 1 tour consommé.
+
+**S22 — Combats contre l'IA améliorée (v1.34).** Pour CHAQUE difficulté (Facile → Enfer) : lance un combat en mode 🤖 Auto et un en Tactique, capture à mi-combat. Vérifie : (a) en Tactique, depuis la ligne arrière, un sort de lignée soin propose un ALLIÉ et soigne (événement de soin dans le journal), un sort de dégâts propose un ENNEMI ; (b) en Auto, le journal montre des soins/buffs de lignée quand la ligne arrière caste (lot 0) ; (c) l'IA ennemie cible prioritairement les unités killables et évite l'arrière protégé quand l'avant tient (observer 2-3 tours de journal) ; (d) en Facile l'IA fait parfois des choix sous-optimaux visibles (sort moins cher, cible non killable), en Enfer non ; (e) aucune régression du mode Auto (plateau, rail, journal, vitesse comme S6) ; (f) errance : si le héros se coince contre un obstacle, il repathe puis abandonne proprement (pas d'orbite infinie). 0 erreur console attendue.
 
 ### Rapport final
 

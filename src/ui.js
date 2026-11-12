@@ -3701,9 +3701,11 @@ function bindActionButtons(box, u, kind) {
       const sp = (u.spells ?? [])[k];
       const side = spellSideOf(sp);
       const kind = isStrike ? 'spell' : 'cast';
-      // T0.2 : le camp de ciblage vient de la fiche du sort ; sans fiche, le role de l'unite garde l'ancien comportement
+      // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
+      // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
       if (side === 'self' || side === 'team' || side === 'all') { promptState.pick({ kind, idx: k }); return; }
-      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
+      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy'
+        : ((sp.role === 'degats' || sp.role === 'controle' || sp.role === 'malus') ? 'enemy' : 'ally');
       askActTarget(mode, { kind, idx: k });
     };
   });
@@ -4888,6 +4890,7 @@ function renderCombat(root, opts = {}) {
     wave,
     wseed ^ (store.stage * 2654435761),
     {},
+    { difficulty: store.diff }, // refonte IA lot 3 : profil IA de la difficulté
   );
   const teamEmpty = state.team.avant.length === 0 && state.team.arriere.length === 0;
   
@@ -5485,6 +5488,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.34 : Refonte de l’IA de combat', 'Ciblage par utilité (kill, menace, ligne, élément) avec hystérésis, sorts contextuels (soin/contrôle/burst), profils IA par difficulté (Facile sous-optimal → Enfer complet), sorts alliés de lignée actifs en mode Auto, garde-fous anti-blocage de l’errance. 171 tests, smoke 306 checks, digest final c62fcbd1… 1281/3000 et 5059e683… 4236/10000 (MESURES, aucune maths joueur touchée).'],
   ['v1.33 : Illustrations V3.1 en doublon commutable (bouton 🖼️)', 'Relance 3.1 complète (271 cartes, verrous R8/R9/R10 + anti-cadre renforcé) publiée en second manifeste `assets-v3.1.json`, switchable avec V3.0 via le bouton 🖼️ pour comparer les cartes. Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 arts d’équipement) sont ajoutés au manifeste par défaut `assets-v3.json` : présents partout. 150 tests, smoke 299 checks, digest inchangé `f8a9f0bb…` 1359/3000.'],
   ['v1.32 : Chantier « contenu v3 » — marchand v2, gobelins régionaux, greffe des solos, familles compagnons, divines joueur', 'Marchand v2 : 3 offres du jour, prix actés, raretés débloquées en bouclant des donjons. Gobelins régionaux au Bosquet, à la Crypte et au Zénith. Les 31 anciennes cartes solos sont greffées à des familles. Sept voies de compagnons (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) mènent chacune à une UR et une L. Familles divines jouables (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont), maillons du Jeune Séraphin et lignées des Enge (Sirène, Fée, Gorgonne Nouvelles). Digest re-mesuré sans recalibrage : f8a9f0bb… 1359/3000.'],
   ['v1.31 : Chantier « reste code » — correctifs, rangs, errance 5 zones, craft, page Personnage', 'Sauvegardes réparées (migration v27 : plus aucun sort en doublon après évolution). Rangs avant/arrière actifs : l’arrière encaisse -50 % tant que l’avant tient, Guerrier/Assassin en arrière frappent à moitié, soins jamais affectés. Plus de rôle attaque/support : formation 3+2 ou 2+3 choisie avant le combat. Vidéos FX : une seule à la fois, pause hors écran, image fixe si mouvement réduit. Errance sur les 5 zones avec le héros dédié (sprite sheet du cycle de marche). Craft en ville à l’atelier de la Boutique (matériaux de zone + matière du boss), et page Personnage à onglets : Équipe + Inventaire.'],

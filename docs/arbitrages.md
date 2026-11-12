@@ -1,5 +1,43 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA clôturée (v1.34) : digest final N = 3000 + N = 10 000, proposition de verrouillage de la nouvelle baseline
+
+- **Clôture du chantier** (spec `docs/design/refonte-ia-spec-plan.md`, audit `docs/design/refonte-ia-audit.md`) : lots 0-4 livrés, un commit FR par lot, chacun avec tests headless + MESURE N = 3000 dans la tolérance (lot 0 inchangé `f8a9f0bb…` 1359 ; lot 1 `910d3dc3…` 1337, −0,73 pt ; lot 2 `3811fda3…` 1219, −3,93 pts ; lot 3 `c62fcbd1…` 1281, +2,07 pts ; lot 4 inchangé). Prérequis correctifs ciblage livrés en amont (lots 1-3, digest inchangé). Smoke enrichi (section B16 : anti-triche par introspection + Auto/ennemi sur les 5 difficultés) : 306 checks, seuls les 3 échecs préexistants. 171 tests verts.
+- **MESURE finale** : N = 3000 **`c62fcbd1…` 1281/3000 (42,7 %, 0 exception, 0 marathon)** ; N = 10 000 **`5059e683…` 4236/10000 (42,4 %, 0 exception, 0 marathon)** — contre la mesure courante au lancement `f8a9f0bb…` 1359/3000 (45,3 %) et `978ed44b…` 4517/10000 (45,2 %) : écart total du chantier **2,6 points**, chaque lot dans la tolérance. **Aucune maths joueur touchée** — la baisse vient exclusivement de l'IA (ciblage utilité, sorts contextuels, profils de difficulté). MESURE consignsée, pas de recalibrage.
+- **PROPOSÉ (décision Marc-Olivier)** : verrouiller la nouvelle baseline **`c62fcbd1…` 1281/3000** et **`5059e683…` 4236/10000** à la validation finale (téléphone ET PC, protocole IHM v1.34). En attendant, la baseline verrouillée reste `f72106ff…`/`3f9fe198…`.
+
+## 2026-11-12 : MESURE — refonte IA lot 4 livré (garde-fous anti-blocage de l'errance) : digest inchangé
+
+- **Livré** : dans `stepErrance`, si le héros n'avance plus vers son waypoint pendant `ERRANCE_GUARDS.stuckAfter` (2 s, data `data/engine.json`) → repath A* vers le but ; après `repathMax` (2) échecs → abandon propre (chemin vidé, but abandonné = changement d'état). Aucune omniscience ajoutée (pas de poursuivant dans l'errance aujourd'hui ; règle « dernière position connue + réaction différée » notée dans l'audit pour le futur). Ni décor ni structure des zones touchés. 2 tests headless déterministes (stagnation → repath → abandon ; marche normale → 0 repath). 171 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : digest **inchangé `c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** — l'errance n'entre pas dans le digest ; la non-régression est couverte par les tests d'errance. MESURE consignsée.
+
+## 2026-11-12 : MESURE — refonte IA lot 3 livré (graduation de l'intelligence par difficulté) : dans la tolérance
+
+- **Livré** : profil `ia.suboptimal` par difficulté en data (`data/difficulties.json` : Facile 0,5 → Normal 0,3 → Difficile 0,15 → Très difficile 0,05 → Enfer 0) ; `initCombat(..., { difficulty })` porte le profil + une graine IA dédiée (`iaRng`, déterministe, distincte du RNG de combat) ; à chaque décision (sort, cible), une part `suboptimal` des choix prend la deuxième meilleure option. Sans difficulté passée : utilité complète (rétro-compat). Le harnais digest et l'UI passent la difficulté de la marche. Défaut 12/11 appliqué : **pas d'IA par étage**, version difficultés actuelles. 2 tests headless déterministes. 169 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** contre `3811fda3…` 1219/3000 (lot 2) — écart **2,07 points ≤ 5 points** : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
+## 2026-11-12 : MESURE — refonte IA lot 2 livré (choix de sort contextuel) : dans la tolérance
+
+- **Livré** : `pickSpell(u, ctx)` lit l'état public — soin si un allié est sous `SPELL_HEAL_THRESHOLD` (0,35), contrôle/malus sur la menace (`SPELL_CONTROL_BONUS`), burst si un kill est possible (`SPELL_KILL_BONUS`), sinon le plus efficace au coût (mult/coût) ; hystérésis `SPELL_HYSTERESIS` (sort en cours conservé dans la marge, mémorisé par unité). Poids en data (`data/engine.json`). S'applique aux deux camps (même fonction). Sans contexte : chemin historique inchangé. Règle d'économie « save for top » conservée. 4 tests headless déterministes. 167 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`3811fda3…` 1219/3000 (0 exception, 0 marathon)** contre `910d3dc3…` 1337/3000 (lot 1) — écart **3,93 points ≤ 5 points**, 0 exception, 0 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
+## 2026-11-12 : MESURE — refonte IA lot 1 livré (utilité de ciblage + hystérésis) : dans la tolérance
+
+- **Livré** : `pickTargetByUtility` — score d'utilité partagé IA ennemie et Auto joueur (kill possible, opposition d'élément, menace = ATQ × `TARGET_THREAT_WEIGHT`, pénalité arrière protégé `TARGET_BACK_PENALTY`, − PV), poids en data (`data/engine.json`) ; hystérésis anti flip-flop `TARGET_HYSTERESIS` (cible en cours conservée dans la marge, mémorisée par camp dans l'état). Le chemin Auto joueur cesse de frapper `foes[0]`. 5 tests headless déterministes. 163 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`910d3dc3…` 1337/3000 (0 exception, 1 marathon)** contre `f8a9f0bb…` 1359/3000 (lot 0) — écart **0,73 point ≤ 5 points**, 0 exception, 1 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
+## 2026-11-12 : MESURE — refonte IA lot 0 livré (chemin Auto des sorts alliés des lignées) : digest inchangé
+
+- **Livré** : en Auto (`action` null), un sort de lignée soin/boost/bouclier depuis une carte sans `effect` se résout par son rôle (soigne le plus blessé / atkBuff ligne avant / shield ligne avant, plafonds identiques au chemin Tactique). Le chemin Tactique ne bouge pas. 2 tests headless déterministes (soin, boost+bouclier). 158 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : digest **inchangé `f8a9f0bb…` 1359/3000 (0 exception, 1 marathon)** contre la mesure courante du lancement — écart 0 point, dans la tolérance (≤ 5 points). Explication : à l'heuristique `pickSpell` (sort le plus cher abordable), la ligne support en Auto caste rarement le sort allié quand le solo est abordable ; le mécanisme est prouvé par tests sur états reconstitués. MESURE consignsée, aucun recalibrage.
+
+## 2026-11-12 : ACTÉ (Porte A refonte IA) — prérequis livré + tranchages par défaut de la session 12/11 consignés, Phase 2 lancée
+
+- **Prérequis** : le chantier correctifs ciblage (`docs/prompt-correctifs-ciblage.md`) est livré (lots 1-3 : fiche `cible` des 84 sorts de lignée, camp de ciblage depuis la fiche, sorts alliés de lignée résolus par rôle en Tactique) — digest inchangé `f8a9f0bb…` 1359/3000, 157 tests verts. Note : les lots 4-5 du prompt (bugs rapides IHM : gestes fiche/équipe, fiche carte complète) restent à faire, hors du périmètre de la refonte IA. Décision de portée : le rôle `manip` (famille vol) garde un camp non hostile (`1 allié`), cohérent avec `foeFacingSpell` et `resolveSpellEntry` — l'ensemble des sorts hostils est identique avant/après (test obligatoire vert).
+- **Phase 1 livrée** : `docs/design/refonte-ia-audit.md` + `docs/design/refonte-ia-spec-plan.md` (docs uniquement, build/tests/smoke/digest inchangés).
+- **Tranches de la session du 12/11 non tranchées explicitement** → **défauts appliqués et consignés ici** (Porte A du prompt) : (a) **variante (a) statu quo raretés/paliers** — l'IA optimise la victoire avec les paliers actuels, pas les niveaux 1→100 ; (b) **pas d'IA par étage** — le lot 3 reste en version difficultés actuelles (Facile → Enfer) ; (c) **go digest = OUI**, sous la tolérance du §4 du prompt (écart ≤ 5 points, 0 exception, ≤ 1 marathon à chaque MESURE N = 3000 ; N = 10 000 à la clôture).
+- **Règle du chantier** : chaque changement de mesure est une MESURE consignée ici, jamais un recalibrage caché ; les maths du côté joueur ne bougent pas ; l'IA ne lit que l'état public. Baseline de comparaison du chantier : la mesure courante au lancement de chaque lot (`f8a9f0bb…` 1359/3000, `978ed44b…` 4517/10000).
+
 ## 2026-11-12 : ACTÉ — illustrations V3.1 publiées en doublon commutable (bouton 🖼️), assets 3.1-only par défaut partout
 
 - **Décision (v1.33)** : la relance 3.1 (271 cartes, verrous R8/R9/R10, rapport `tools/out-v2/RAPPORT-v31-session.md`) est publiée en second manifeste `assets-v3.1.json`, commutable avec V3.0 (`assets-v3.json`) via le bouton 🖼️ existant (`ART_MANIFESTS = { v3, v31 }`, choix persisté en localStorage `fondations-art-src`, défaut = v3). Objectif : comparer les cartes 3.0 vs 3.1 côte à côte.

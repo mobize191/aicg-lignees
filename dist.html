@@ -3313,7 +3313,10 @@ const DATA = {
    "bande": [
     "C",
     "R"
-   ]
+   ],
+   "ia": {
+    "suboptimal": 0.5
+   }
   },
   {
    "id": 2,
@@ -3329,7 +3332,10 @@ const DATA = {
    "bande": [
     "UC",
     "SR"
-   ]
+   ],
+   "ia": {
+    "suboptimal": 0.3
+   }
   },
   {
    "id": 3,
@@ -3345,7 +3351,10 @@ const DATA = {
    "bande": [
     "R",
     "UR"
-   ]
+   ],
+   "ia": {
+    "suboptimal": 0.15
+   }
   },
   {
    "id": 4,
@@ -3361,7 +3370,10 @@ const DATA = {
    "bande": [
     "SR",
     "L"
-   ]
+   ],
+   "ia": {
+    "suboptimal": 0.05
+   }
   },
   {
    "id": 5,
@@ -3377,7 +3389,10 @@ const DATA = {
    "bande": [
     "UR",
     "M"
-   ]
+   ],
+   "ia": {
+    "suboptimal": 0
+   }
   }
  ],
  "dungeons": [
@@ -4026,6 +4041,14 @@ const DATA = {
    "DOT_DEFAULT_PCT": 0.3,
    "TARGET_KILL_BONUS": 1000,
    "ELEMENT_ADVANTAGE_BONUS": 100,
+   "TARGET_THREAT_WEIGHT": 2,
+   "TARGET_BACK_PENALTY": 50,
+   "TARGET_HYSTERESIS": 150,
+   "SPELL_HEAL_THRESHOLD": 0.35,
+   "SPELL_HEAL_BONUS": 1000,
+   "SPELL_CONTROL_BONUS": 200,
+   "SPELL_KILL_BONUS": 1000,
+   "SPELL_HYSTERESIS": 30,
    "VOILE_CHANCE": 0.25,
    "REFLECT_SHARE": 0.2,
    "BENEDICTION_HEAL": 0.2,
@@ -4172,6 +4195,11 @@ const DATA = {
    "fps": 16,
    "cycle": 40,
    "backFrom": 40
+  },
+  "ERRANCE_GUARDS": {
+   "stuckAfter": 2,
+   "repathMax": 2,
+   "progressEps": 0.01
   },
   "AUTEL_SOIN_GRACE": 5,
   "REGEN_BOSS_STAGE": 5,
@@ -9480,40 +9508,46 @@ const DATA = {
     "name": "Taillade du Mat",
     "cost": 2,
     "mult": 1.4,
-    "desc": "Une frappe rapide portée au lever du jour."
+    "desc": "Une frappe rapide portée au lever du jour.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Lame Vive",
     "cost": 3,
     "mult": 1.6,
-    "desc": "Une coupe sèche qui cherche la jointure de l’armure."
+    "desc": "Une coupe sèche qui cherche la jointure de l’armure.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Lame Éclair",
     "cost": 5,
     "mult": 1.9,
-    "desc": "Un sabre si rapide qu’on ne voit que la traînée."
+    "desc": "Un sabre si rapide qu’on ne voit que la traînée.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Millième Taillade",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Mille coupes en un seul geste."
+    "desc": "Mille coupes en un seul geste.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Kenji : Zénith Tranchant",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Le sabre atteint le sommet du ciel et retombe en éclair."
+    "desc": "Le sabre atteint le sommet du ciel et retombe en éclair.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Tranche-Monde",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Une constellation de lames s’abat sur l’ennemi."
+    "desc": "Une constellation de lames s’abat sur l’ennemi.",
+    "cible": "1 ennemi"
    }
   ],
   "ombre": [
@@ -9521,40 +9555,46 @@ const DATA = {
     "name": "Poigne du Silence",
     "cost": 2,
     "mult": 1.4,
-    "desc": "Une attaque sournoise sur les points faibles."
+    "desc": "Une attaque sournoise sur les points faibles.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Pas de l’Ombre",
     "cost": 3,
     "mult": 1.6,
-    "desc": "Un déplacement imperceptible, puis la morsure."
+    "desc": "Un déplacement imperceptible, puis la morsure.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Faux du Croissant",
     "cost": 5,
     "mult": 1.9,
-    "desc": "Une faux qui ne luit que les nuits sans lune."
+    "desc": "Une faux qui ne luit que les nuits sans lune.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Danse des Cent Lames",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Cent ombres frappent là où une seule semble passer."
+    "desc": "Cent ombres frappent là où une seule semble passer.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Kira : Voile Déchiré",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "L’ombre elle-même est une arme entre ses mains."
+    "desc": "L’ombre elle-même est une arme entre ses mains.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Nuit Éternelle",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Le combat continue dans une nuit qui ne se lève plus."
+    "desc": "Le combat continue dans une nuit qui ne se lève plus.",
+    "cible": "1 ennemi"
    }
   ],
   "eau": [
@@ -9562,40 +9602,46 @@ const DATA = {
     "name": "Goutte Percutante",
     "cost": 2,
     "mult": 1.4,
-    "desc": "Une goutte lancée à la vitesse d’une flèche."
+    "desc": "Une goutte lancée à la vitesse d’une flèche.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Brume Mordante",
     "cost": 3,
     "mult": 1.6,
-    "desc": "Un brouillard salé qui ronge armor et peau."
+    "desc": "Un brouillard salé qui ronge armor et peau.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Courant Battant",
     "cost": 5,
     "mult": 1.9,
-    "desc": "Le fleuve répond à son appel et charge l’ennemi."
+    "desc": "Le fleuve répond à son appel et charge l’ennemi.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Marée Ascendante",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Une vague montante qui emporte tout sur son passage."
+    "desc": "Une vague montante qui emporte tout sur son passage.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Raz-de-Marée",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "L’océan entier se soulève d’un seul geste d’Alix."
+    "desc": "L’océan entier se soulève d’un seul geste d’Alix.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Colère de l’Océan",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "La déesse de l’eau réveille le gouffre des abysses."
+    "desc": "La déesse de l’eau réveille le gouffre des abysses.",
+    "cible": "1 ennemi"
    }
   ],
   "aube": [
@@ -9603,40 +9649,46 @@ const DATA = {
     "name": "Étreinte Matinale",
     "cost": 2,
     "mult": 1.5,
-    "desc": "La première lumière du jour referme les plaies."
+    "desc": "La première lumière du jour referme les plaies.",
+    "cible": "1 allié"
    },
    {
     "name": "Rayon Matinal",
     "cost": 3,
     "mult": 1.7,
-    "desc": "Un rayon oblique qui caresse la blessure."
+    "desc": "Un rayon oblique qui caresse la blessure.",
+    "cible": "1 allié"
    },
    {
     "name": "Lumière Réconfortante",
     "cost": 5,
     "mult": 2.2,
-    "desc": "Un rayon chaud qui chasse fatigue et blessures."
+    "desc": "Un rayon chaud qui chasse fatigue et blessures.",
+    "cible": "1 allié"
    },
    {
     "name": "Bénédiction de l’Aurore",
     "cost": 9,
     "mult": 3.2,
     "big": true,
-    "desc": "Le soleil levant bénit l’équipe d’un souffle doré."
+    "desc": "Le soleil levant bénit l’équipe d’un souffle doré.",
+    "cible": "1 allié"
    },
    {
     "name": "Aurore Radieuse",
     "cost": 14,
     "mult": 4.4,
     "big": true,
-    "desc": "La lumière de Léna coule comme une marée dorée."
+    "desc": "La lumière de Léna coule comme une marée dorée.",
+    "cible": "1 allié"
    },
    {
     "name": "Aube Éternelle",
     "cost": 20,
     "mult": 6,
     "big": true,
-    "desc": "Un nouveau matin se lève et efface la nuit."
+    "desc": "Un nouveau matin se lève et efface la nuit.",
+    "cible": "1 allié"
    }
   ],
   "bouclier": [
@@ -9644,40 +9696,46 @@ const DATA = {
     "name": "Carapace Réactive",
     "cost": 2,
     "mult": 1.5,
-    "desc": "Son blindage se raffermit au moment de l’impact."
+    "desc": "Son blindage se raffermit au moment de l’impact.",
+    "cible": "l’équipe"
    },
    {
     "name": "Égide Renforcée",
     "cost": 3,
     "mult": 1.7,
-    "desc": "Une plaque de plus entre le coup et la ligne."
+    "desc": "Une plaque de plus entre le coup et la ligne.",
+    "cible": "l’équipe"
    },
    {
     "name": "Mur Inflexible",
     "cost": 5,
     "mult": 2.2,
-    "desc": "Là où elle se tient, la ligne ne cède jamais."
+    "desc": "Là où elle se tient, la ligne ne cède jamais.",
+    "cible": "l’équipe"
    },
    {
     "name": "Barrière Runique",
     "cost": 9,
     "mult": 3.2,
     "big": true,
-    "desc": "Des runes gravées dans l’acier dévient les coups."
+    "desc": "Des runes gravées dans l’acier dévient les coups.",
+    "cible": "l’équipe"
    },
    {
     "name": "Argus : Rempart Éveillé",
     "cost": 14,
     "mult": 4.4,
     "big": true,
-    "desc": "La forteresse s’éveille et couvre toute l’équipe."
+    "desc": "La forteresse s’éveille et couvre toute l’équipe.",
+    "cible": "l’équipe"
    },
    {
     "name": "Argus : Forteresse Vivante",
     "cost": 20,
     "mult": 6,
     "big": true,
-    "desc": "Le mur devient montagne, la montagne devient garde."
+    "desc": "Le mur devient montagne, la montagne devient garde.",
+    "cible": "l’équipe"
    }
   ],
   "braise": [
@@ -9685,40 +9743,46 @@ const DATA = {
     "name": "Étincelle Filante",
     "cost": 2,
     "mult": 1.4,
-    "desc": "Une étincelle qui court plus vite que la flamme."
+    "desc": "Une étincelle qui court plus vite que la flamme.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Flèche de Feu",
     "cost": 3,
     "mult": 1.6,
-    "desc": "Une flèche enflammée qui accroche l’air."
+    "desc": "Une flèche enflammée qui accroche l’air.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Jet de Braise",
     "cost": 5,
     "mult": 1.9,
-    "desc": "Un souffle de braises brûlantes arraché au foyer."
+    "desc": "Un souffle de braises brûlantes arraché au foyer.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Fournaise",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Le sol s’ouvre et crache un cercle de feu."
+    "desc": "Le sol s’ouvre et crache un cercle de feu.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Solen : Couronne de Feu",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Une couronne de flammes consume les rangs adverses."
+    "desc": "Une couronne de flammes consume les rangs adverses.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Solen : Braise Éternelle",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie."
+    "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie.",
+    "cible": "1 ennemi"
    }
   ],
   "bosquet": [
@@ -9726,40 +9790,46 @@ const DATA = {
     "name": "Trait d’Épine",
     "cost": 2,
     "mult": 1.4,
-    "desc": "Une épine sèche lancée du creux d’un fourré."
+    "desc": "Une épine sèche lancée du creux d’un fourré.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Lance d’Aubier",
     "cost": 3,
     "mult": 1.6,
-    "desc": "Un éclat de bois vert durci par la sève."
+    "desc": "Un éclat de bois vert durci par la sève.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Épine Vengeresse",
     "cost": 5,
     "mult": 1.9,
-    "desc": "La forêt rend coup pour coup à qui la blesse."
+    "desc": "La forêt rend coup pour coup à qui la blesse.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Rafale d’Épines",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Une tempête de ronces ferme l’horizon."
+    "desc": "Une tempête de ronces ferme l’horizon.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Maïa : Danse des Feuilles",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Ses feuilles dansent autour de la proie, puis tombent."
+    "desc": "Ses feuilles dansent autour de la proie, puis tombent.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Maïa : Cœur du Bosquet",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Le bosquet entier se lève et marche au combat."
+    "desc": "Le bosquet entier se lève et marche au combat.",
+    "cible": "1 ennemi"
    }
   ],
   "crepuscule": [
@@ -9768,42 +9838,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignage Famille du Crépuscule, palier C."
+    "desc": "Sort de lignage Famille du Crépuscule, palier C.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Voile d’Ombre",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignage Famille du Crépuscule, palier UC."
+    "desc": "Sort de lignage Famille du Crépuscule, palier UC.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Malédiction du Soir",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignage Famille du Crépuscule, palier R."
+    "desc": "Sort de lignage Famille du Crépuscule, palier R.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Danse des Ombres",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignage Famille du Crépuscule, palier SR."
+    "desc": "Sort de lignage Famille du Crépuscule, palier SR.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Oubli Éternel",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignage Famille du Crépuscule, palier UR."
+    "desc": "Sort de lignage Famille du Crépuscule, palier UR.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Nuit Sans Fin",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignage Famille du Crépuscule, palier L."
+    "desc": "Sort de lignage Famille du Crépuscule, palier L.",
+    "cible": "1 ennemi"
    }
   ],
   "vol": [
@@ -9812,42 +9888,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignage Famille du Vol, palier C."
+    "desc": "Sort de lignage Famille du Vol, palier C.",
+    "cible": "1 allié"
    },
    {
     "name": "Coup de Jarnac",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignage Famille du Vol, palier UC."
+    "desc": "Sort de lignage Famille du Vol, palier UC.",
+    "cible": "1 allié"
    },
    {
     "name": "Dague dans le Dos",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignage Famille du Vol, palier R."
+    "desc": "Sort de lignage Famille du Vol, palier R.",
+    "cible": "1 allié"
    },
    {
     "name": "Fauchage",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignage Famille du Vol, palier SR."
+    "desc": "Sort de lignage Famille du Vol, palier SR.",
+    "cible": "1 allié"
    },
    {
     "name": "Embuscade",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignage Famille du Vol, palier UR."
+    "desc": "Sort de lignage Famille du Vol, palier UR.",
+    "cible": "1 allié"
    },
    {
     "name": "Coup de Grâce",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignage Famille du Vol, palier L."
+    "desc": "Sort de lignage Famille du Vol, palier L.",
+    "cible": "1 allié"
    }
   ],
   "zele": [
@@ -9856,42 +9938,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignage Famille du Zèle, palier C."
+    "desc": "Sort de lignage Famille du Zèle, palier C.",
+    "cible": "1 allié"
    },
    {
     "name": "Hymne du Matin",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignage Famille du Zèle, palier UC."
+    "desc": "Sort de lignage Famille du Zèle, palier UC.",
+    "cible": "1 allié"
    },
    {
     "name": "Bénédiction du Jour",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignage Famille du Zèle, palier R."
+    "desc": "Sort de lignage Famille du Zèle, palier R.",
+    "cible": "1 allié"
    },
    {
     "name": "Croisade",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignage Famille du Zèle, palier SR."
+    "desc": "Sort de lignage Famille du Zèle, palier SR.",
+    "cible": "1 allié"
    },
    {
     "name": "Aurore Radieuse",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignage Famille du Zèle, palier UR."
+    "desc": "Sort de lignage Famille du Zèle, palier UR.",
+    "cible": "1 allié"
    },
    {
     "name": "Lumière Éternelle",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignage Famille du Zèle, palier L."
+    "desc": "Sort de lignage Famille du Zèle, palier L.",
+    "cible": "1 allié"
    }
   ],
   "appel": [
@@ -9900,42 +9988,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignage École des Invocations, palier C."
+    "desc": "Sort de lignage École des Invocations, palier C.",
+    "cible": "les renforts"
    },
    {
     "name": "Élémentaire de Braise",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignage École des Invocations, palier UC."
+    "desc": "Sort de lignage École des Invocations, palier UC.",
+    "cible": "les renforts"
    },
    {
     "name": "Meute Spirituelle",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignage École des Invocations, palier R."
+    "desc": "Sort de lignage École des Invocations, palier R.",
+    "cible": "les renforts"
    },
    {
     "name": "Portail",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignage École des Invocations, palier SR."
+    "desc": "Sort de lignage École des Invocations, palier SR.",
+    "cible": "les renforts"
    },
    {
     "name": "Légion Céleste",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignage École des Invocations, palier UR."
+    "desc": "Sort de lignage École des Invocations, palier UR.",
+    "cible": "les renforts"
    },
    {
     "name": "Appel Suprême",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignage École des Invocations, palier L."
+    "desc": "Sort de lignage École des Invocations, palier L.",
+    "cible": "les renforts"
    }
   ],
   "seuil": [
@@ -9944,42 +10038,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignée Arbitres du Seuil, palier C."
+    "desc": "Sort de lignée Arbitres du Seuil, palier C.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Sablier II",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignée Arbitres du Seuil, palier UC."
+    "desc": "Sort de lignée Arbitres du Seuil, palier UC.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Sablier III",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignée Arbitres du Seuil, palier R."
+    "desc": "Sort de lignée Arbitres du Seuil, palier R.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Sablier IV",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignée Arbitres du Seuil, palier SR."
+    "desc": "Sort de lignée Arbitres du Seuil, palier SR.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Sablier V",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignée Arbitres du Seuil, palier UR."
+    "desc": "Sort de lignée Arbitres du Seuil, palier UR.",
+    "cible": "1 ennemi"
    },
    {
     "name": "Sablier VI",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignée Arbitres du Seuil, palier L."
+    "desc": "Sort de lignée Arbitres du Seuil, palier L.",
+    "cible": "1 ennemi"
    }
   ],
   "miroir": [
@@ -9988,42 +10088,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignée Chœur Miroir, palier C."
+    "desc": "Sort de lignée Chœur Miroir, palier C.",
+    "cible": "l’équipe"
    },
    {
     "name": "Reflet II",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignée Chœur Miroir, palier UC."
+    "desc": "Sort de lignée Chœur Miroir, palier UC.",
+    "cible": "l’équipe"
    },
    {
     "name": "Reflet III",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignée Chœur Miroir, palier R."
+    "desc": "Sort de lignée Chœur Miroir, palier R.",
+    "cible": "l’équipe"
    },
    {
     "name": "Reflet IV",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignée Chœur Miroir, palier SR."
+    "desc": "Sort de lignée Chœur Miroir, palier SR.",
+    "cible": "l’équipe"
    },
    {
     "name": "Reflet V",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignée Chœur Miroir, palier UR."
+    "desc": "Sort de lignée Chœur Miroir, palier UR.",
+    "cible": "l’équipe"
    },
    {
     "name": "Reflet VI",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignée Chœur Miroir, palier L."
+    "desc": "Sort de lignée Chœur Miroir, palier L.",
+    "cible": "l’équipe"
    }
   ],
   "pont": [
@@ -10032,42 +10138,48 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "big": false,
-    "desc": "Sort de lignée Tisseuses du Pont, palier C."
+    "desc": "Sort de lignée Tisseuses du Pont, palier C.",
+    "cible": "les renforts"
    },
    {
     "name": "Fil II",
     "cost": 3,
     "mult": 1.6,
     "big": false,
-    "desc": "Sort de lignée Tisseuses du Pont, palier UC."
+    "desc": "Sort de lignée Tisseuses du Pont, palier UC.",
+    "cible": "les renforts"
    },
    {
     "name": "Fil III",
     "cost": 5,
     "mult": 1.9,
     "big": false,
-    "desc": "Sort de lignée Tisseuses du Pont, palier R."
+    "desc": "Sort de lignée Tisseuses du Pont, palier R.",
+    "cible": "les renforts"
    },
    {
     "name": "Fil IV",
     "cost": 9,
     "mult": 2.6,
     "big": true,
-    "desc": "Sort de lignée Tisseuses du Pont, palier SR."
+    "desc": "Sort de lignée Tisseuses du Pont, palier SR.",
+    "cible": "les renforts"
    },
    {
     "name": "Fil V",
     "cost": 14,
     "mult": 3.4,
     "big": true,
-    "desc": "Sort de lignée Tisseuses du Pont, palier UR."
+    "desc": "Sort de lignée Tisseuses du Pont, palier UR.",
+    "cible": "les renforts"
    },
    {
     "name": "Fil VI",
     "cost": 20,
     "mult": 4.5,
     "big": true,
-    "desc": "Sort de lignée Tisseuses du Pont, palier L."
+    "desc": "Sort de lignée Tisseuses du Pont, palier L.",
+    "cible": "les renforts"
    }
   ]
  },
@@ -14397,8 +14509,9 @@ function spellSideOf(sp) {
   if (c === 'soi') return 'self';
   if (c.includes('alli')) return 'ally';
   if (c.includes('quipe')) return 'team';
-  if (c === 'zone') return 'zone';       // lot 3 : la zone désigne un ancrage sur la ligne
-  if (c === 'tous' || c.includes('tous')) return 'all'; // lot 3 : aucune désignation
+  if (c === 'les renforts') return 'team'; // correctifs ciblage lot 1 : invocation
+  if (c === 'zone' || c === 'la zone') return 'zone'; // la zone désigne un ancrage sur la ligne
+  if (c === 'tous' || c.includes('tous')) return 'all'; // aucune désignation
   if (c.includes('ennemi')) return 'enemy';
   return null;
 }
@@ -14774,17 +14887,60 @@ function seuilOf(u) {
 
 // src/engine/spells.js : extrait du monolithe (phase 0, comportement inchange)
 
-function pickSpell(u) {
+// refonte IA lot 2 : avec un contexte (état public : alliés, ennemis), le choix de sort lit la situation
+// (soin si un allié est sous le seuil, contrôle/malus sur la menace, burst si un kill est possible,
+// sinon le plus efficace au coût) avec hystérésis anti flip-flop. Sans contexte : chemin historique.
+function pickSpell(u, ctx = null) {
   u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-  let best = null;
-  for (const s of u.spells) {
-    if (s.cost <= u.mana && (!best || s.cost > best.cost)) best = s;
+  const affordable = (u.spells ?? []).filter((s) => s.cost <= u.mana);
+  if (!affordable.length) return null;
+  if (!ctx) {
+    let best = null;
+    for (const s of affordable) if (!best || s.cost > best.cost) best = s;
+    if (u.spells.length > 1) {
+      const top = u.spells[u.spells.length - 1];
+      if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
+        return null;
+      }
+    }
+    u.mana -= best.cost;
+    return best;
   }
-  if (!best) return null;
+  const foes = (ctx.foes ?? []).filter((f) => f && f.alive);
+  const allies = [...((ctx.allies ?? {}).avant ?? []), ...((ctx.allies ?? {}).arriere ?? [])].filter((x) => x && x.alive);
+  const stat = statOf(u);
+  const seuil = M.SPELL_HEAL_THRESHOLD;
+  const hurtAlly = allies.some((a) => a.hp < a.maxHp * seuil);
+  const killable = (s) => !!s.mult && foes.some((f) => f.hp <= Math.max(1, Math.round(stat * s.mult)));
+  const score = (s) => {
+    let sc = ((s.mult ?? 1) / s.cost) * 100;
+    if (s.role === 'soin' && hurtAlly) sc += M.SPELL_HEAL_BONUS;
+    if ((s.role === 'controle' || s.role === 'malus') && foes.length) sc += M.SPELL_CONTROL_BONUS;
+    if (killable(s)) sc += M.SPELL_KILL_BONUS;
+    return sc;
+  };
+  const ranked = affordable
+    .map((s) => ({ item: s, score: score(s) }))
+    .sort((a, b) => b.score - a.score);
+  let best = ranked[0].item;
+  const bestScore = ranked[0].score;
+  const st = ctx.state ?? null;
+  if (st) {
+    const last = st.lastSpell ? st.lastSpell[u.uid] : null;
+    const prev = last ? affordable.find((s) => s.name === last) : null;
+    if (prev && score(prev) >= bestScore - M.SPELL_HYSTERESIS) best = prev;
+    // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
+    const sub = st.iaProfile ? st.iaProfile.suboptimal ?? 0 : 0;
+    if (sub > 0 && st.iaRng && ranked.length > 1 && st.iaRng() < sub) {
+      best = ranked[1].item;
+    }
+    st.lastSpell = st.lastSpell ?? {};
+    st.lastSpell[u.uid] = best.name;
+  }
   if (u.spells.length > 1) {
     const top = u.spells[u.spells.length - 1];
     if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
-      return null; 
+      return null;
     }
   }
   u.mana -= best.cost;
@@ -14904,7 +15060,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
       s.mana -= cand.cost;
     }
   } else {
-    spell = pickSpell(s);
+    spell = pickSpell(s, { state: st, allies, foes, side });
   }
   if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
@@ -14912,6 +15068,41 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
+  }
+  // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
+  // depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant — en Tactique
+  // (action présent, allié désigné) comme en Auto (soigne le plus blessé, buffer/bouclier l'avant).
+  if (spell && !s.effect && !foeFacingSpell(spell)) {
+    const sd = spellSideOf(spell);
+    const role = spell.role ?? null;
+    if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
+      const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
+      let t = s;
+      if (sd === 'self') t = s;
+      else if (action && action.allyUid) t = alliesAlive.find((x) => x.uid === action.allyUid) ?? t;
+      else if (role === 'soin') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? s;
+      else t = allies.avant.filter((u) => u.alive)[0] ?? alliesAlive[0] ?? s;
+      const big = !!spell.big || spell.cost >= 5;
+      if (role === 'soin') {
+        const amount = Math.min(Math.max(1, Math.round(statOf(s) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'heal', mana: s.mana });
+        if (amount > 0) {
+          t.hp += amount;
+          events.push({ type: 'heal', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+        }
+      } else if (role === 'bouclier') {
+        const amount = Math.min(Math.round(statOf(s) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.shield += amount;
+        events.push({ type: 'shield', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+      } else {
+        const value = Math.max(0, (spell.mult ?? 1) - 1);
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.atkBuff = (t.atkBuff ?? 0) + value;
+        events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+      }
+      return;
+    }
   }
   const fx = s.effect ? s.effect.kind : 'heal';
   if (spell) {
@@ -15242,7 +15433,9 @@ function levelFor(levels, id, i) {
   return Number.isFinite(lv) && lv >= 1 ? Math.floor(lv) : 1;
 }
 
-function initCombat(teamCards, enemyCards, seed, levels = {}) {
+// opts.difficulty : profil IA de la difficulté (data/difficulties.json, champ ia) — lot 3 refonte IA
+function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
+  const iaProfile = (opts.difficulty != null ? difficultyById(opts.difficulty) : null)?.ia ?? { suboptimal: 0 };
   const team = {
     avant: (teamCards.avant ?? teamCards.avant ?? []).map((c, i) => makeUnit(c, `${c.id}.a${i}`, c.level ?? levelFor(levels, c.id, i))),
     arriere: (teamCards.arriere ?? teamCards.arriere ?? []).map((c, i) => makeUnit(c, `${c.id}.s${i}`, c.level ?? levelFor(levels, c.id, i))),
@@ -15274,7 +15467,7 @@ function initCombat(teamCards, enemyCards, seed, levels = {}) {
     if (u.gimmick === 'cale') u.shield += Math.round(u.maxHp * M.GIMMICK_CALE_SHIELD);
     if (u.gimmick === 'litiere') for (const a of all) a.shield += Math.round(a.maxHp * M.GIMMICK_LITIERE_SHIELD);
   }
-  return { rng: mulberry32(seed), turn: 0, team, enemies, mods, winner: null };
+  return { rng: mulberry32(seed), iaRng: mulberry32((Math.imul(seed >>> 0, 31) ^ 7) >>> 0), iaProfile, turn: 0, team, enemies, mods, winner: null };
 }
 
 // chantier lignes (Option A) : l'avant tient = au moins un vivant dans la ligne avant du camp
@@ -15502,15 +15695,36 @@ function actTeamStriker(u, i, ctx, step) {
       if (cand && cand.cost <= u.mana) {
         u.mana -= cand.cost;
         const side = spellSideOf(cand);
-        // T0.2 : un sort de boost vise son camp (soi / 1 allie), pas l'ennemi ; en auto le chemin historique reste un coup
-        if (side === 'self' || side === 'ally') {
+        // T0.2 + correctifs ciblage lot 3 : un sort allié vise son camp (soi / 1 allié / l'équipe),
+        // résolu par son rôle (soin -> heal, boost/bouclier -> buff/bouclier) ; en auto le chemin historique reste un coup
+        if (side === 'self' || side === 'ally' || side === 'team') {
+          const role = cand.role ?? null;
           const t = side === 'ally' && tacAct.allyUid
             ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? u)
-            : u;
-          const value = Math.max(0, (cand.mult ?? 1) - 1);
-          t.atkBuff = (t.atkBuff ?? 0) + value;
-          ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
-          ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            : side === 'team'
+              ? (ctx.teamAll().filter((a) => a.rang === 'avant' && a.alive)[0] ?? ctx.teamAll()[0] ?? u)
+              : u;
+          if (role === 'soin') {
+            const cible = tacAct.allyUid
+              ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
+              : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
+            const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'heal', mana: u.mana });
+            if (amount > 0) {
+              cible.hp += amount;
+              ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' });
+            }
+          } else if (role === 'bouclier') {
+            const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            t.shield += amount;
+            ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+          } else {
+            const value = Math.max(0, (cand.mult ?? 1) - 1);
+            t.atkBuff = (t.atkBuff ?? 0) + value;
+            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+          }
           ctx.firstAttack = false;
           return false;
         }
@@ -15531,7 +15745,7 @@ function actTeamStriker(u, i, ctx, step) {
         spell = cp.spell;
         cp.spell = null;
       } else {
-        spell = pickSpell(u);
+        spell = pickSpell(u, { state: ctx.state, allies: team, foes, side: 'team' });
       }
     }
   }
@@ -15580,7 +15794,8 @@ function actTeamStriker(u, i, ctx, step) {
   }
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
   const foeLineOf = (t) => (t && t.rang === 'arriere' ? enemies.arriere : enemies.avant);
-  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : foes[0];
+  // refonte IA lot 1 : en Auto sans désignation, même utilité de ciblage que l'IA ennemie (avec hystérésis)
+  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : pickTargetByUtility(u, foes, dmg, ctx.state, 'team');
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
@@ -15662,7 +15877,47 @@ function actTeamSupport(s, ctx, step) {
   applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
 
-function enemyPickTarget(e, targets, dmgBase) {
+// refonte IA lot 1 : score d'utilité de ciblage partagé IA ennemie / Auto joueur
+// (kill possible, opposition d'élément, menace, ligne arrière protégée, fragilité) — poids en data
+function targetUtilityScore(attacker, t, dmgBase, st, side) {
+  const dmg = Math.max(1, Math.round(dmgBase * elementMult(attacker.element, t.element)));
+  let s = 0;
+  if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
+  if (elementTag(attacker.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
+  s += M.TARGET_THREAT_WEIGHT * (t.atk ?? 0);
+  if (st && backProtected(st, side, t, false)) s -= M.TARGET_BACK_PENALTY;
+  return s - t.hp;
+}
+
+// sélection argmax + hystérésis anti flip-flop : la cible en cours est conservée si elle
+// reste vivante et dans la marge TARGET_HYSTERESIS du meilleur score (skill utility-ai : inertie)
+function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
+  if (!targets.length) return null;
+  const ranked = targets
+    .map((t) => ({ item: t, score: targetUtilityScore(attacker, t, dmgBase, st, side) }))
+    .sort((a, b) => b.score - a.score);
+  let best = ranked[0].item;
+  const bestScore = ranked[0].score;
+  if (st) {
+    const last = st.lastTarget ? st.lastTarget[side] : null;
+    const prev = last ? targets.find((t) => t.uid === last) : null;
+    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - M.TARGET_HYSTERESIS) {
+      best = prev;
+    }
+    // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
+    // (graine IA dédiée, déterministe, jamais le RNG de combat)
+    const sub = st.iaProfile ? st.iaProfile.suboptimal ?? 0 : 0;
+    if (sub > 0 && st.iaRng && ranked.length > 1 && st.iaRng() < sub) {
+      best = ranked[1].item;
+    }
+    st.lastTarget = st.lastTarget ?? {};
+    st.lastTarget[side] = best.uid;
+  }
+  return best;
+}
+
+function enemyPickTarget(e, targets, dmgBase, st = null) {
+  if (st) return pickTargetByUtility(e, targets, dmgBase, st, 'enemies');
   const score = (t) => {
     const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
     let s = 0;
@@ -15683,7 +15938,7 @@ function actEnemyStriker(e, ctx) {
   }
   const targets = ctx.teamAll(); // Option A : l'arrière est ciblable tant que des cibles vivent
   if (!targets.length) return false;
-  const spell = pickSpell(e);
+  const spell = pickSpell(e, { state: ctx.state, allies: enemies, foes: targets, side: 'enemies' });
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big: !!spell.big, fx: 'atk', mana: e.mana });
     ctx.state.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
@@ -15699,7 +15954,7 @@ function actEnemyStriker(e, ctx) {
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
   const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
-  const target = enemyPickTarget(e, targets, dmgBase);
+  const target = enemyPickTarget(e, targets, dmgBase, ctx.state);
   const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
   const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
   const redFactor = gRed >= DMG_REDUCTION_MAX ? 1
@@ -16521,6 +16776,7 @@ function createErranceState(zoneId) {
     grace: 2, lastTile: -1, steps: 0,
     looted: [], broken: [], // ids d'objets persistés
     pending: null,
+    goal: null, stuckTime: 0, repaths: 0, lastDist: null, // refonte IA lot 4 : anti-blocage
   };
 }
 
@@ -16530,6 +16786,8 @@ function setTarget(st, tx, ty) {
   if (!path) return false;
   st.hero.path = smoothPath(st.map, path);
   st.pending = null;
+  st.goal = { x: tx, y: ty };
+  st.stuckTime = 0; st.repaths = 0; st.lastDist = null;
   return true;
 }
 
@@ -16582,6 +16840,36 @@ function stepErrance(st, dt, rng = Math.random) {
     const t = st.map.terr[st.map.idx(Math.floor(hero.x), Math.floor(hero.y))];
     if (st.grace > 0) st.grace--;
     else if (t === ET.HERBES && rng() < st.map.encRate) ev.encounter = true;
+  }
+  // refonte IA lot 4 : anti-blocage — stagnation => repath, puis abandon après échecs répétés
+  const GUARDS = DATA.engine.ERRANCE_GUARDS;
+  if (hero.path.length && st.goal) {
+    const w = hero.path[0];
+    const d = Math.hypot(w.x - hero.x, w.y - hero.y);
+    if (st.lastDist == null || d < st.lastDist - GUARDS.progressEps) {
+      st.lastDist = d;
+      st.stuckTime = 0;
+    } else {
+      st.stuckTime += dt;
+      if (st.stuckTime >= GUARDS.stuckAfter) {
+        st.stuckTime = 0;
+        st.repaths += 1;
+        ev.repath = true;
+        const p = astar(st.map, hero.x, hero.y, st.goal.x, st.goal.y);
+        if (p) {
+          hero.path = smoothPath(st.map, p);
+        }
+        st.lastDist = null;
+        if (st.repaths > GUARDS.repathMax) {
+          // changement d'état après échecs : abandon du but, arrêt propre
+          hero.path = [];
+          hero.v.x = 0; hero.v.y = 0;
+          st.goal = null;
+          st.repaths = 0;
+          ev.abandoned = true;
+        }
+      }
+    }
   }
   // arrivée sur une cible d'interaction
   if (st.pending && !hero.path.length) {
@@ -20571,9 +20859,11 @@ function bindActionButtons(box, u, kind) {
       const sp = (u.spells ?? [])[k];
       const side = spellSideOf(sp);
       const kind = isStrike ? 'spell' : 'cast';
-      // T0.2 : le camp de ciblage vient de la fiche du sort ; sans fiche, le role de l'unite garde l'ancien comportement
+      // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
+      // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
       if (side === 'self' || side === 'team' || side === 'all') { promptState.pick({ kind, idx: k }); return; }
-      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
+      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy'
+        : ((sp.role === 'degats' || sp.role === 'controle' || sp.role === 'malus') ? 'enemy' : 'ally');
       askActTarget(mode, { kind, idx: k });
     };
   });
@@ -21758,6 +22048,7 @@ function renderCombat(root, opts = {}) {
     wave,
     wseed ^ (store.stage * 2654435761),
     {},
+    { difficulty: store.diff }, // refonte IA lot 3 : profil IA de la difficulté
   );
   const teamEmpty = state.team.avant.length === 0 && state.team.arriere.length === 0;
   
@@ -22355,6 +22646,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.34 : Refonte de l’IA de combat', 'Ciblage par utilité (kill, menace, ligne, élément) avec hystérésis, sorts contextuels (soin/contrôle/burst), profils IA par difficulté (Facile sous-optimal → Enfer complet), sorts alliés de lignée actifs en mode Auto, garde-fous anti-blocage de l’errance. 171 tests, smoke 306 checks, digest final c62fcbd1… 1281/3000 et 5059e683… 4236/10000 (MESURES, aucune maths joueur touchée).'],
   ['v1.33 : Illustrations V3.1 en doublon commutable (bouton 🖼️)', 'Relance 3.1 complète (271 cartes, verrous R8/R9/R10 + anti-cadre renforcé) publiée en second manifeste `assets-v3.1.json`, switchable avec V3.0 via le bouton 🖼️ pour comparer les cartes. Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 arts d’équipement) sont ajoutés au manifeste par défaut `assets-v3.json` : présents partout. 150 tests, smoke 299 checks, digest inchangé `f8a9f0bb…` 1359/3000.'],
   ['v1.32 : Chantier « contenu v3 » — marchand v2, gobelins régionaux, greffe des solos, familles compagnons, divines joueur', 'Marchand v2 : 3 offres du jour, prix actés, raretés débloquées en bouclant des donjons. Gobelins régionaux au Bosquet, à la Crypte et au Zénith. Les 31 anciennes cartes solos sont greffées à des familles. Sept voies de compagnons (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) mènent chacune à une UR et une L. Familles divines jouables (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont), maillons du Jeune Séraphin et lignées des Enge (Sirène, Fée, Gorgonne Nouvelles). Digest re-mesuré sans recalibrage : f8a9f0bb… 1359/3000.'],
   ['v1.31 : Chantier « reste code » — correctifs, rangs, errance 5 zones, craft, page Personnage', 'Sauvegardes réparées (migration v27 : plus aucun sort en doublon après évolution). Rangs avant/arrière actifs : l’arrière encaisse -50 % tant que l’avant tient, Guerrier/Assassin en arrière frappent à moitié, soins jamais affectés. Plus de rôle attaque/support : formation 3+2 ou 2+3 choisie avant le combat. Vidéos FX : une seule à la fois, pause hors écran, image fixe si mouvement réduit. Errance sur les 5 zones avec le héros dédié (sprite sheet du cycle de marche). Craft en ville à l’atelier de la Boutique (matériaux de zone + matière du boss), et page Personnage à onglets : Équipe + Inventaire.'],

@@ -119,3 +119,43 @@ test('errance : collision par axe — le héros glisse le long d’un mur sans j
   assert.ok(st.hero.x >= 0.99, `jamais entré dans le mur (x=${st.hero.x.toFixed(2)})`);
   assert.ok(st.hero.x < 1.6, 'le héros a bien tenté de traverser');
 });
+
+// ---------- refonte IA lot 4 : garde-fous anti-blocage de l'errance ----------
+test('refonte IA lot 4 : stagnation -> repath après ~2 s, puis abandon propre après échecs répétés', () => {
+  const E = loadEngine();
+  const st = E.createErranceState('zone-marees');
+  // héros enfermé dans une couronne d'arbres : aucun chemin ne sort, mais un chemin est posé
+  const m = st.map;
+  const hx = Math.floor(st.hero.x), hy = Math.floor(st.hero.y);
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    if (dx || dy) m.terr[m.idx(hx + dx, hy + dy)] = E.ET.ARBRE;
+  }
+  st.hero.path = [{ x: hx + 3.5, y: hy + 0.5 }]; // waypoint inatteignable (mur entre les deux)
+  st.goal = { x: hx + 3, y: hy };
+  st.lastDist = null; st.stuckTime = 0; st.repaths = 0;
+  let repaths = 0, abandoned = false;
+  for (let i = 0; i < 200 && !abandoned; i++) {
+    const ev = E.stepErrance(st, 0.05, () => 0);
+    if (ev.repath) repaths++;
+    if (ev.abandoned) abandoned = true;
+  }
+  assert.ok(repaths > 0, 'au moins un repath tenté après stagnation');
+  assert.ok(abandoned, 'abandon après échecs répétés (changement d\'état)');
+  assert.equal(st.hero.path.length, 0, 'chemin vidé à l\'abandon');
+  assert.equal(st.goal, null, 'but abandonné');
+});
+
+test('refonte IA lot 4 : marche normale sans stagnation -> aucun repath, arrivée conservée', () => {
+  const E = loadEngine();
+  const st = E.createErranceState('zone-marees');
+  const m = st.map;
+  const ok = E.setTarget(st, m.donjon.x, m.donjon.y + 2); // la porte
+  assert.ok(ok, 'cible posée');
+  let repaths = 0, arrived = false;
+  for (let i = 0; i < 2000 && !arrived; i++) {
+    const ev = E.stepErrance(st, 0.05, () => 0);
+    if (ev.repath) repaths++;
+  }
+  assert.equal(repaths, 0, 'aucun repath en marche normale');
+  assert.ok(Math.hypot(st.hero.x - (m.donjon.x + 0.5), st.hero.y - (m.donjon.y + 2.5)) < 1, 'le héros a atteint la porte');
+});

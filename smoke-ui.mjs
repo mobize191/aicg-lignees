@@ -1228,6 +1228,28 @@ async function main() {
     check('B15 k 0 exception lot 7', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+    // ---------- B16 : refonte IA — anti-triche par introspection + Auto/ennemi sur chaque difficulté ----------
+    const stripComments = (code) => code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+    const engineSrc = ['src/engine/combat.js', 'src/engine/spells.js', 'src/engine/summon.js'].map((f) => stripComments(readFileSync(f, 'utf8'))).join('\n');
+    const hiddenRefs = ['store', 'localStorage', 'sessionStorage', 'promptState', 'store\.']
+      .filter((k) => new RegExp(`\\b${k.replace('.', '\\.')}\\b`).test(engineSrc));
+    check('B16 a anti-triche : le moteur de décision ne lit aucune info hors état public (introspection source)', hiddenRefs.length === 0, hiddenRefs.join(','));
+    for (let diff = 1; diff <= 5; diff++) {
+      let exc = 0, wins = 0;
+      for (let n = 0; n < 40; n++) {
+        try {
+          const wave = api.makeWave(1000 + n * 7, 1 + (n % 3), 'marees', diff);
+          const team = { avant: [{ ...api.byId('n1'), level: 5 }, { ...api.byId('n2'), level: 5 }], arriere: [{ ...api.byId('n3'), level: 5 }] };
+          const st = api.initCombat(team, wave, 500 + n, {}, { difficulty: diff });
+          let g = 0;
+          while (!st.winner && g++ < 150) api.resolveTurn(st);
+          if (st.winner === 'team') wins++;
+        } catch (e) { exc++; }
+      }
+      check(`B16 b ${api.DATA.difficulties[diff - 1].name} (diff ${diff}) : 40 combats Auto/ennemi au profil IA, 0 exception`, exc === 0, `exc=${exc} wins=${wins}/40`);
+    }
+    check('B16 c 0 exception smoke (section IA incluse)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

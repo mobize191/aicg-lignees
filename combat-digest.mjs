@@ -37,7 +37,7 @@ for (let n = 0; n < N; n++) {
       avant: team.avant.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
       arriere: team.arriere.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
     };
-    const state = api.initCombat(teamCards, wave, seed);
+    const state = api.initCombat(teamCards, wave, seed, {}, { difficulty: diff }); // lot 3 refonte IA : profil par difficulté
     while (!state.winner && tours < GARDE) { api.resolveTurn(state); tours++; }
     if (state.winner === 'team') { res = 'W'; wins++; }
     else if (state.winner === 'enemies') res = 'L';

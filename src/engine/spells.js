@@ -1,16 +1,59 @@
 // src/engine/spells.js : extrait du monolithe (phase 0, comportement inchange)
 
-function pickSpell(u) {
+// refonte IA lot 2 : avec un contexte (état public : alliés, ennemis), le choix de sort lit la situation
+// (soin si un allié est sous le seuil, contrôle/malus sur la menace, burst si un kill est possible,
+// sinon le plus efficace au coût) avec hystérésis anti flip-flop. Sans contexte : chemin historique.
+function pickSpell(u, ctx = null) {
   u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-  let best = null;
-  for (const s of u.spells) {
-    if (s.cost <= u.mana && (!best || s.cost > best.cost)) best = s;
+  const affordable = (u.spells ?? []).filter((s) => s.cost <= u.mana);
+  if (!affordable.length) return null;
+  if (!ctx) {
+    let best = null;
+    for (const s of affordable) if (!best || s.cost > best.cost) best = s;
+    if (u.spells.length > 1) {
+      const top = u.spells[u.spells.length - 1];
+      if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
+        return null;
+      }
+    }
+    u.mana -= best.cost;
+    return best;
   }
-  if (!best) return null;
+  const foes = (ctx.foes ?? []).filter((f) => f && f.alive);
+  const allies = [...((ctx.allies ?? {}).avant ?? []), ...((ctx.allies ?? {}).arriere ?? [])].filter((x) => x && x.alive);
+  const stat = statOf(u);
+  const seuil = M.SPELL_HEAL_THRESHOLD;
+  const hurtAlly = allies.some((a) => a.hp < a.maxHp * seuil);
+  const killable = (s) => !!s.mult && foes.some((f) => f.hp <= Math.max(1, Math.round(stat * s.mult)));
+  const score = (s) => {
+    let sc = ((s.mult ?? 1) / s.cost) * 100;
+    if (s.role === 'soin' && hurtAlly) sc += M.SPELL_HEAL_BONUS;
+    if ((s.role === 'controle' || s.role === 'malus') && foes.length) sc += M.SPELL_CONTROL_BONUS;
+    if (killable(s)) sc += M.SPELL_KILL_BONUS;
+    return sc;
+  };
+  const ranked = affordable
+    .map((s) => ({ item: s, score: score(s) }))
+    .sort((a, b) => b.score - a.score);
+  let best = ranked[0].item;
+  const bestScore = ranked[0].score;
+  const st = ctx.state ?? null;
+  if (st) {
+    const last = st.lastSpell ? st.lastSpell[u.uid] : null;
+    const prev = last ? affordable.find((s) => s.name === last) : null;
+    if (prev && score(prev) >= bestScore - M.SPELL_HYSTERESIS) best = prev;
+    // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
+    const sub = st.iaProfile ? st.iaProfile.suboptimal ?? 0 : 0;
+    if (sub > 0 && st.iaRng && ranked.length > 1 && st.iaRng() < sub) {
+      best = ranked[1].item;
+    }
+    st.lastSpell = st.lastSpell ?? {};
+    st.lastSpell[u.uid] = best.name;
+  }
   if (u.spells.length > 1) {
     const top = u.spells[u.spells.length - 1];
     if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
-      return null; 
+      return null;
     }
   }
   u.mana -= best.cost;
@@ -130,7 +173,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
       s.mana -= cand.cost;
     }
   } else {
-    spell = pickSpell(s);
+    spell = pickSpell(s, { state: st, allies, foes, side });
   }
   if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
@@ -138,6 +181,41 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
     return;
+  }
+  // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
+  // depuis une carte sans effet se résout par son rôle, comme le T0.2 côté avant — en Tactique
+  // (action présent, allié désigné) comme en Auto (soigne le plus blessé, buffer/bouclier l'avant).
+  if (spell && !s.effect && !foeFacingSpell(spell)) {
+    const sd = spellSideOf(spell);
+    const role = spell.role ?? null;
+    if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
+      const alliesAlive = [...allies.avant, ...allies.arriere].filter((u) => u.alive);
+      let t = s;
+      if (sd === 'self') t = s;
+      else if (action && action.allyUid) t = alliesAlive.find((x) => x.uid === action.allyUid) ?? t;
+      else if (role === 'soin') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? s;
+      else t = allies.avant.filter((u) => u.alive)[0] ?? alliesAlive[0] ?? s;
+      const big = !!spell.big || spell.cost >= 5;
+      if (role === 'soin') {
+        const amount = Math.min(Math.max(1, Math.round(statOf(s) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'heal', mana: s.mana });
+        if (amount > 0) {
+          t.hp += amount;
+          events.push({ type: 'heal', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+        }
+      } else if (role === 'bouclier') {
+        const amount = Math.min(Math.round(statOf(s) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.shield += amount;
+        events.push({ type: 'shield', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
+      } else {
+        const value = Math.max(0, (spell.mult ?? 1) - 1);
+        events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
+        t.atkBuff = (t.atkBuff ?? 0) + value;
+        events.push({ type: 'buff', side, sourceId: s.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+      }
+      return;
+    }
   }
   const fx = s.effect ? s.effect.kind : 'heal';
   if (spell) {

@@ -142,6 +142,7 @@ function createErranceState(zoneId) {
     grace: 2, lastTile: -1, steps: 0,
     looted: [], broken: [], // ids d'objets persistés
     pending: null,
+    goal: null, stuckTime: 0, repaths: 0, lastDist: null, // refonte IA lot 4 : anti-blocage
   };
 }
 
@@ -151,6 +152,8 @@ function setTarget(st, tx, ty) {
   if (!path) return false;
   st.hero.path = smoothPath(st.map, path);
   st.pending = null;
+  st.goal = { x: tx, y: ty };
+  st.stuckTime = 0; st.repaths = 0; st.lastDist = null;
   return true;
 }
 
@@ -203,6 +206,36 @@ function stepErrance(st, dt, rng = Math.random) {
     const t = st.map.terr[st.map.idx(Math.floor(hero.x), Math.floor(hero.y))];
     if (st.grace > 0) st.grace--;
     else if (t === ET.HERBES && rng() < st.map.encRate) ev.encounter = true;
+  }
+  // refonte IA lot 4 : anti-blocage — stagnation => repath, puis abandon après échecs répétés
+  const GUARDS = DATA.engine.ERRANCE_GUARDS;
+  if (hero.path.length && st.goal) {
+    const w = hero.path[0];
+    const d = Math.hypot(w.x - hero.x, w.y - hero.y);
+    if (st.lastDist == null || d < st.lastDist - GUARDS.progressEps) {
+      st.lastDist = d;
+      st.stuckTime = 0;
+    } else {
+      st.stuckTime += dt;
+      if (st.stuckTime >= GUARDS.stuckAfter) {
+        st.stuckTime = 0;
+        st.repaths += 1;
+        ev.repath = true;
+        const p = astar(st.map, hero.x, hero.y, st.goal.x, st.goal.y);
+        if (p) {
+          hero.path = smoothPath(st.map, p);
+        }
+        st.lastDist = null;
+        if (st.repaths > GUARDS.repathMax) {
+          // changement d'état après échecs : abandon du but, arrêt propre
+          hero.path = [];
+          hero.v.x = 0; hero.v.y = 0;
+          st.goal = null;
+          st.repaths = 0;
+          ev.abandoned = true;
+        }
+      }
+    }
   }
   // arrivée sur une cible d'interaction
   if (st.pending && !hero.path.length) {

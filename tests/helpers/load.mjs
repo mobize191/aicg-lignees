@@ -16,7 +16,7 @@ const NAMES = ['DATA', 'errors', 'validate', 'getCard', 'getMonster', 'getSpell'
   'treeOfRace', 'cranPctOfRace', 'noLossPctOf', 'eveilsOf', 'eveilOf', 'applyTreeEveil', 'applyRemplace', 'raceOfCard', 'classeMods',
   'getSpellDef', 'getSchoolSpell', 'getEntree', 'cranOf', 'castSpell', 'largeurCibles', 'resolveSignature',
   'profilSchools', 'openSchools', 'canCast', 'sortsDeDepart', 'ecolesOfInstance',
-  'resolveSpellEntry', 'drinkPotion', 'recrutableMonsters', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf', 'genZoneMap', 'astar', 'smoothPath', 'createErranceState', 'setTarget', 'stepErrance', 'interactAutel', 'interactJarre', 'zoneUnlocked', 'unlockZone', 'spellKeyOf', 'unknownSpellsOf', 'ET'];
+  'resolveSpellEntry', 'drinkPotion', 'recrutableMonsters', 'foeFacingSpell', 'strikeFoe', 'castFoeSpell', 'pickTargetByUtility', 'targetUtilityScore', 'enemyPickTarget', 'statPrincipaleOf', 'statOf', 'seuilOf', 'pickZoneTargets', 'largeurOfSpellName', 'runZone', 'learnCran', 'isLearned', 'canCastLearned', 'evoEntryOf', 'conditionOk', 'applySpecialEvo', 'evoLabelOf', 'genZoneMap', 'astar', 'smoothPath', 'createErranceState', 'setTarget', 'stepErrance', 'interactAutel', 'interactJarre', 'zoneUnlocked', 'unlockZone', 'spellKeyOf', 'unknownSpellsOf', 'ET'];
 export function loadEngine(dataDir = 'data') {
   const data = loadData(dataDir);
   const files = ['src/validate.js', 'src/data.js', 'src/engine/stats.js', 'src/engine/spells.js',

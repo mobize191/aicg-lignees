@@ -4,40 +4,46 @@
    "name": "Taillade du Mat",
    "cost": 2,
    "mult": 1.4,
-   "desc": "Une frappe rapide portée au lever du jour."
+   "desc": "Une frappe rapide portée au lever du jour.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Lame Vive",
    "cost": 3,
    "mult": 1.6,
-   "desc": "Une coupe sèche qui cherche la jointure de l’armure."
+   "desc": "Une coupe sèche qui cherche la jointure de l’armure.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Lame Éclair",
    "cost": 5,
    "mult": 1.9,
-   "desc": "Un sabre si rapide qu’on ne voit que la traînée."
+   "desc": "Un sabre si rapide qu’on ne voit que la traînée.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Millième Taillade",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Mille coupes en un seul geste."
+   "desc": "Mille coupes en un seul geste.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Kenji : Zénith Tranchant",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Le sabre atteint le sommet du ciel et retombe en éclair."
+   "desc": "Le sabre atteint le sommet du ciel et retombe en éclair.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Tranche-Monde",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Une constellation de lames s’abat sur l’ennemi."
+   "desc": "Une constellation de lames s’abat sur l’ennemi.",
+   "cible": "1 ennemi"
   }
  ],
  "ombre": [
@@ -45,40 +51,46 @@
    "name": "Poigne du Silence",
    "cost": 2,
    "mult": 1.4,
-   "desc": "Une attaque sournoise sur les points faibles."
+   "desc": "Une attaque sournoise sur les points faibles.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Pas de l’Ombre",
    "cost": 3,
    "mult": 1.6,
-   "desc": "Un déplacement imperceptible, puis la morsure."
+   "desc": "Un déplacement imperceptible, puis la morsure.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Faux du Croissant",
    "cost": 5,
    "mult": 1.9,
-   "desc": "Une faux qui ne luit que les nuits sans lune."
+   "desc": "Une faux qui ne luit que les nuits sans lune.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Danse des Cent Lames",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Cent ombres frappent là où une seule semble passer."
+   "desc": "Cent ombres frappent là où une seule semble passer.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Kira : Voile Déchiré",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "L’ombre elle-même est une arme entre ses mains."
+   "desc": "L’ombre elle-même est une arme entre ses mains.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Nuit Éternelle",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Le combat continue dans une nuit qui ne se lève plus."
+   "desc": "Le combat continue dans une nuit qui ne se lève plus.",
+   "cible": "1 ennemi"
   }
  ],
  "eau": [
@@ -86,40 +98,46 @@
    "name": "Goutte Percutante",
    "cost": 2,
    "mult": 1.4,
-   "desc": "Une goutte lancée à la vitesse d’une flèche."
+   "desc": "Une goutte lancée à la vitesse d’une flèche.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Brume Mordante",
    "cost": 3,
    "mult": 1.6,
-   "desc": "Un brouillard salé qui ronge armor et peau."
+   "desc": "Un brouillard salé qui ronge armor et peau.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Courant Battant",
    "cost": 5,
    "mult": 1.9,
-   "desc": "Le fleuve répond à son appel et charge l’ennemi."
+   "desc": "Le fleuve répond à son appel et charge l’ennemi.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Marée Ascendante",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Une vague montante qui emporte tout sur son passage."
+   "desc": "Une vague montante qui emporte tout sur son passage.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Raz-de-Marée",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "L’océan entier se soulève d’un seul geste d’Alix."
+   "desc": "L’océan entier se soulève d’un seul geste d’Alix.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Colère de l’Océan",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "La déesse de l’eau réveille le gouffre des abysses."
+   "desc": "La déesse de l’eau réveille le gouffre des abysses.",
+   "cible": "1 ennemi"
   }
  ],
  "aube": [
@@ -127,40 +145,46 @@
    "name": "Étreinte Matinale",
    "cost": 2,
    "mult": 1.5,
-   "desc": "La première lumière du jour referme les plaies."
+   "desc": "La première lumière du jour referme les plaies.",
+   "cible": "1 allié"
   },
   {
    "name": "Rayon Matinal",
    "cost": 3,
    "mult": 1.7,
-   "desc": "Un rayon oblique qui caresse la blessure."
+   "desc": "Un rayon oblique qui caresse la blessure.",
+   "cible": "1 allié"
   },
   {
    "name": "Lumière Réconfortante",
    "cost": 5,
    "mult": 2.2,
-   "desc": "Un rayon chaud qui chasse fatigue et blessures."
+   "desc": "Un rayon chaud qui chasse fatigue et blessures.",
+   "cible": "1 allié"
   },
   {
    "name": "Bénédiction de l’Aurore",
    "cost": 9,
    "mult": 3.2,
    "big": true,
-   "desc": "Le soleil levant bénit l’équipe d’un souffle doré."
+   "desc": "Le soleil levant bénit l’équipe d’un souffle doré.",
+   "cible": "1 allié"
   },
   {
    "name": "Aurore Radieuse",
    "cost": 14,
    "mult": 4.4,
    "big": true,
-   "desc": "La lumière de Léna coule comme une marée dorée."
+   "desc": "La lumière de Léna coule comme une marée dorée.",
+   "cible": "1 allié"
   },
   {
    "name": "Aube Éternelle",
    "cost": 20,
    "mult": 6,
    "big": true,
-   "desc": "Un nouveau matin se lève et efface la nuit."
+   "desc": "Un nouveau matin se lève et efface la nuit.",
+   "cible": "1 allié"
   }
  ],
  "bouclier": [
@@ -168,40 +192,46 @@
    "name": "Carapace Réactive",
    "cost": 2,
    "mult": 1.5,
-   "desc": "Son blindage se raffermit au moment de l’impact."
+   "desc": "Son blindage se raffermit au moment de l’impact.",
+   "cible": "l’équipe"
   },
   {
    "name": "Égide Renforcée",
    "cost": 3,
    "mult": 1.7,
-   "desc": "Une plaque de plus entre le coup et la ligne."
+   "desc": "Une plaque de plus entre le coup et la ligne.",
+   "cible": "l’équipe"
   },
   {
    "name": "Mur Inflexible",
    "cost": 5,
    "mult": 2.2,
-   "desc": "Là où elle se tient, la ligne ne cède jamais."
+   "desc": "Là où elle se tient, la ligne ne cède jamais.",
+   "cible": "l’équipe"
   },
   {
    "name": "Barrière Runique",
    "cost": 9,
    "mult": 3.2,
    "big": true,
-   "desc": "Des runes gravées dans l’acier dévient les coups."
+   "desc": "Des runes gravées dans l’acier dévient les coups.",
+   "cible": "l’équipe"
   },
   {
    "name": "Argus : Rempart Éveillé",
    "cost": 14,
    "mult": 4.4,
    "big": true,
-   "desc": "La forteresse s’éveille et couvre toute l’équipe."
+   "desc": "La forteresse s’éveille et couvre toute l’équipe.",
+   "cible": "l’équipe"
   },
   {
    "name": "Argus : Forteresse Vivante",
    "cost": 20,
    "mult": 6,
    "big": true,
-   "desc": "Le mur devient montagne, la montagne devient garde."
+   "desc": "Le mur devient montagne, la montagne devient garde.",
+   "cible": "l’équipe"
   }
  ],
  "braise": [
@@ -209,40 +239,46 @@
    "name": "Étincelle Filante",
    "cost": 2,
    "mult": 1.4,
-   "desc": "Une étincelle qui court plus vite que la flamme."
+   "desc": "Une étincelle qui court plus vite que la flamme.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Flèche de Feu",
    "cost": 3,
    "mult": 1.6,
-   "desc": "Une flèche enflammée qui accroche l’air."
+   "desc": "Une flèche enflammée qui accroche l’air.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Jet de Braise",
    "cost": 5,
    "mult": 1.9,
-   "desc": "Un souffle de braises brûlantes arraché au foyer."
+   "desc": "Un souffle de braises brûlantes arraché au foyer.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Fournaise",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Le sol s’ouvre et crache un cercle de feu."
+   "desc": "Le sol s’ouvre et crache un cercle de feu.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Solen : Couronne de Feu",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Une couronne de flammes consume les rangs adverses."
+   "desc": "Une couronne de flammes consume les rangs adverses.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Solen : Braise Éternelle",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie."
+   "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie.",
+   "cible": "1 ennemi"
   }
  ],
  "bosquet": [
@@ -250,40 +286,46 @@
    "name": "Trait d’Épine",
    "cost": 2,
    "mult": 1.4,
-   "desc": "Une épine sèche lancée du creux d’un fourré."
+   "desc": "Une épine sèche lancée du creux d’un fourré.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Lance d’Aubier",
    "cost": 3,
    "mult": 1.6,
-   "desc": "Un éclat de bois vert durci par la sève."
+   "desc": "Un éclat de bois vert durci par la sève.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Épine Vengeresse",
    "cost": 5,
    "mult": 1.9,
-   "desc": "La forêt rend coup pour coup à qui la blesse."
+   "desc": "La forêt rend coup pour coup à qui la blesse.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Rafale d’Épines",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Une tempête de ronces ferme l’horizon."
+   "desc": "Une tempête de ronces ferme l’horizon.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Maïa : Danse des Feuilles",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Ses feuilles dansent autour de la proie, puis tombent."
+   "desc": "Ses feuilles dansent autour de la proie, puis tombent.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Maïa : Cœur du Bosquet",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Le bosquet entier se lève et marche au combat."
+   "desc": "Le bosquet entier se lève et marche au combat.",
+   "cible": "1 ennemi"
   }
  ],
  "crepuscule": [
@@ -292,42 +334,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignage Famille du Crépuscule, palier C."
+   "desc": "Sort de lignage Famille du Crépuscule, palier C.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Voile d’Ombre",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignage Famille du Crépuscule, palier UC."
+   "desc": "Sort de lignage Famille du Crépuscule, palier UC.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Malédiction du Soir",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignage Famille du Crépuscule, palier R."
+   "desc": "Sort de lignage Famille du Crépuscule, palier R.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Danse des Ombres",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignage Famille du Crépuscule, palier SR."
+   "desc": "Sort de lignage Famille du Crépuscule, palier SR.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Oubli Éternel",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignage Famille du Crépuscule, palier UR."
+   "desc": "Sort de lignage Famille du Crépuscule, palier UR.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Nuit Sans Fin",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignage Famille du Crépuscule, palier L."
+   "desc": "Sort de lignage Famille du Crépuscule, palier L.",
+   "cible": "1 ennemi"
   }
  ],
  "vol": [
@@ -336,42 +384,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignage Famille du Vol, palier C."
+   "desc": "Sort de lignage Famille du Vol, palier C.",
+   "cible": "1 allié"
   },
   {
    "name": "Coup de Jarnac",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignage Famille du Vol, palier UC."
+   "desc": "Sort de lignage Famille du Vol, palier UC.",
+   "cible": "1 allié"
   },
   {
    "name": "Dague dans le Dos",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignage Famille du Vol, palier R."
+   "desc": "Sort de lignage Famille du Vol, palier R.",
+   "cible": "1 allié"
   },
   {
    "name": "Fauchage",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignage Famille du Vol, palier SR."
+   "desc": "Sort de lignage Famille du Vol, palier SR.",
+   "cible": "1 allié"
   },
   {
    "name": "Embuscade",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignage Famille du Vol, palier UR."
+   "desc": "Sort de lignage Famille du Vol, palier UR.",
+   "cible": "1 allié"
   },
   {
    "name": "Coup de Grâce",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignage Famille du Vol, palier L."
+   "desc": "Sort de lignage Famille du Vol, palier L.",
+   "cible": "1 allié"
   }
  ],
  "zele": [
@@ -380,42 +434,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignage Famille du Zèle, palier C."
+   "desc": "Sort de lignage Famille du Zèle, palier C.",
+   "cible": "1 allié"
   },
   {
    "name": "Hymne du Matin",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignage Famille du Zèle, palier UC."
+   "desc": "Sort de lignage Famille du Zèle, palier UC.",
+   "cible": "1 allié"
   },
   {
    "name": "Bénédiction du Jour",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignage Famille du Zèle, palier R."
+   "desc": "Sort de lignage Famille du Zèle, palier R.",
+   "cible": "1 allié"
   },
   {
    "name": "Croisade",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignage Famille du Zèle, palier SR."
+   "desc": "Sort de lignage Famille du Zèle, palier SR.",
+   "cible": "1 allié"
   },
   {
    "name": "Aurore Radieuse",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignage Famille du Zèle, palier UR."
+   "desc": "Sort de lignage Famille du Zèle, palier UR.",
+   "cible": "1 allié"
   },
   {
    "name": "Lumière Éternelle",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignage Famille du Zèle, palier L."
+   "desc": "Sort de lignage Famille du Zèle, palier L.",
+   "cible": "1 allié"
   }
  ],
  "appel": [
@@ -424,42 +484,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignage École des Invocations, palier C."
+   "desc": "Sort de lignage École des Invocations, palier C.",
+   "cible": "les renforts"
   },
   {
    "name": "Élémentaire de Braise",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignage École des Invocations, palier UC."
+   "desc": "Sort de lignage École des Invocations, palier UC.",
+   "cible": "les renforts"
   },
   {
    "name": "Meute Spirituelle",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignage École des Invocations, palier R."
+   "desc": "Sort de lignage École des Invocations, palier R.",
+   "cible": "les renforts"
   },
   {
    "name": "Portail",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignage École des Invocations, palier SR."
+   "desc": "Sort de lignage École des Invocations, palier SR.",
+   "cible": "les renforts"
   },
   {
    "name": "Légion Céleste",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignage École des Invocations, palier UR."
+   "desc": "Sort de lignage École des Invocations, palier UR.",
+   "cible": "les renforts"
   },
   {
    "name": "Appel Suprême",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignage École des Invocations, palier L."
+   "desc": "Sort de lignage École des Invocations, palier L.",
+   "cible": "les renforts"
   }
  ],
  "seuil": [
@@ -468,42 +534,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignée Arbitres du Seuil, palier C."
+   "desc": "Sort de lignée Arbitres du Seuil, palier C.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Sablier II",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignée Arbitres du Seuil, palier UC."
+   "desc": "Sort de lignée Arbitres du Seuil, palier UC.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Sablier III",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignée Arbitres du Seuil, palier R."
+   "desc": "Sort de lignée Arbitres du Seuil, palier R.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Sablier IV",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignée Arbitres du Seuil, palier SR."
+   "desc": "Sort de lignée Arbitres du Seuil, palier SR.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Sablier V",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignée Arbitres du Seuil, palier UR."
+   "desc": "Sort de lignée Arbitres du Seuil, palier UR.",
+   "cible": "1 ennemi"
   },
   {
    "name": "Sablier VI",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignée Arbitres du Seuil, palier L."
+   "desc": "Sort de lignée Arbitres du Seuil, palier L.",
+   "cible": "1 ennemi"
   }
  ],
  "miroir": [
@@ -512,42 +584,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignée Chœur Miroir, palier C."
+   "desc": "Sort de lignée Chœur Miroir, palier C.",
+   "cible": "l’équipe"
   },
   {
    "name": "Reflet II",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignée Chœur Miroir, palier UC."
+   "desc": "Sort de lignée Chœur Miroir, palier UC.",
+   "cible": "l’équipe"
   },
   {
    "name": "Reflet III",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignée Chœur Miroir, palier R."
+   "desc": "Sort de lignée Chœur Miroir, palier R.",
+   "cible": "l’équipe"
   },
   {
    "name": "Reflet IV",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignée Chœur Miroir, palier SR."
+   "desc": "Sort de lignée Chœur Miroir, palier SR.",
+   "cible": "l’équipe"
   },
   {
    "name": "Reflet V",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignée Chœur Miroir, palier UR."
+   "desc": "Sort de lignée Chœur Miroir, palier UR.",
+   "cible": "l’équipe"
   },
   {
    "name": "Reflet VI",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignée Chœur Miroir, palier L."
+   "desc": "Sort de lignée Chœur Miroir, palier L.",
+   "cible": "l’équipe"
   }
  ],
  "pont": [
@@ -556,42 +634,48 @@
    "cost": 2,
    "mult": 1.4,
    "big": false,
-   "desc": "Sort de lignée Tisseuses du Pont, palier C."
+   "desc": "Sort de lignée Tisseuses du Pont, palier C.",
+   "cible": "les renforts"
   },
   {
    "name": "Fil II",
    "cost": 3,
    "mult": 1.6,
    "big": false,
-   "desc": "Sort de lignée Tisseuses du Pont, palier UC."
+   "desc": "Sort de lignée Tisseuses du Pont, palier UC.",
+   "cible": "les renforts"
   },
   {
    "name": "Fil III",
    "cost": 5,
    "mult": 1.9,
    "big": false,
-   "desc": "Sort de lignée Tisseuses du Pont, palier R."
+   "desc": "Sort de lignée Tisseuses du Pont, palier R.",
+   "cible": "les renforts"
   },
   {
    "name": "Fil IV",
    "cost": 9,
    "mult": 2.6,
    "big": true,
-   "desc": "Sort de lignée Tisseuses du Pont, palier SR."
+   "desc": "Sort de lignée Tisseuses du Pont, palier SR.",
+   "cible": "les renforts"
   },
   {
    "name": "Fil V",
    "cost": 14,
    "mult": 3.4,
    "big": true,
-   "desc": "Sort de lignée Tisseuses du Pont, palier UR."
+   "desc": "Sort de lignée Tisseuses du Pont, palier UR.",
+   "cible": "les renforts"
   },
   {
    "name": "Fil VI",
    "cost": 20,
    "mult": 4.5,
    "big": true,
-   "desc": "Sort de lignée Tisseuses du Pont, palier L."
+   "desc": "Sort de lignée Tisseuses du Pont, palier L.",
+   "cible": "les renforts"
   }
  ]
 }

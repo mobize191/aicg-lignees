@@ -396,3 +396,319 @@ test('boucle v2 lot 5 : courbe XP échelle longue — xpToNext croît avec le ni
   assert.ok(xp(10) > xp(5) && xp(5) > xp(2) && xp(2) > xp(1), 'strictement croissante');
   assert.ok(xp(19) >= 4 * 19, 'les hauts niveaux demandent bien plus (échelle longue 25 marches)');
 });
+
+test('correctifs ciblage lot 1 (repro A) : les 84 sorts de lign\u00e9e ont une fiche de camp (assembl\u00e9s comme ui.js)', () => {
+  const E = loadEngine();
+  const FAMILY_SPELLS = E.DATA['lineage-spells'];
+  const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
+  const SCHOOLS = E.DATA.schools;
+  let n = 0;
+  for (const [fam, arr] of Object.entries(FAMILY_SPELLS)) {
+    const role = (SCHOOLS[FAM_SCHOOL[fam]] ?? {}).role;
+    for (const sp of arr) {
+      const assembled = { ...sp, cat: 'lign\u00e9e', ecole: FAM_SCHOOL[fam], role };
+      assert.ok(typeof sp.cible === 'string' && sp.cible.length > 0, `${sp.name} a un champ cible`);
+      assert.notEqual(E.spellSideOf(assembled), null, `${sp.name} : camp non null`);
+      n++;
+    }
+  }
+  assert.equal(n, 84, '84 sorts de lign\u00e9e couverts');
+});
+
+test('correctifs ciblage lot 1 : foeFacingSpell vrai pour exactement les m\u00eames sorts (r\u00f4les hostils inchang\u00e9s)', () => {
+  const E = loadEngine();
+  const FAMILY_SPELLS = E.DATA['lineage-spells'];
+  const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
+  const SCHOOLS = E.DATA.schools;
+  const HOSTILE = new Set(['degats', 'controle', 'malus']);
+  for (const [fam, arr] of Object.entries(FAMILY_SPELLS)) {
+    const role = (SCHOOLS[FAM_SCHOOL[fam]] ?? {}).role;
+    for (const sp of arr) {
+      const assembled = { ...sp, cat: 'lign\u00e9e', ecole: FAM_SCHOOL[fam], role };
+      assert.equal(E.foeFacingSpell(assembled), HOSTILE.has(role), `${sp.name} (${role}) : foeFacingSpell = ${HOSTILE.has(role)}`);
+    }
+  }
+});
+
+test('correctifs ciblage lot 1 : spellSideOf reconna\u00eet \u00ab la zone \u00bb et \u00ab les renforts \u00bb', () => {
+  const E = loadEngine();
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'la zone' }), 'zone');
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'les renforts' }), 'team');
+  assert.equal(E.spellSideOf({ name: 'x', cible: 'zone' }), 'zone');
+});
+
+// ---------- correctifs ciblage lot 3 (moteur, Tactique uniquement) ----------
+const ligneeSpell = (E, fam, nom) => {
+  const sp = E.DATA['lineage-spells'][fam].find((x) => x.name === nom);
+  const role = (E.DATA.schools[E.DATA.engine.FAM_SCHOOL[fam]] ?? {}).role;
+  return { ...sp, cat: 'lignée', ecole: E.DATA.engine.FAM_SCHOOL[fam], role };
+};
+
+test('correctifs lot 3 (repro C) : sort de lignée soin depuis l\'arrière en Tactique soigne l\'allié désigné', () => {
+  const E = loadEngine();
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  assert.equal(rayon.role, 'soin');
+  assert.equal(E.spellSideOf(rayon), 'ally');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  ally.hp = 5;
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'cast', idx: 0, allyUid: 'ally1' });
+  assert.ok(ally.hp > 5, 'l\'allié désigné est soigné');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'ally1'), 'événement de soin émis');
+  assert.ok(r.events.some((e) => e.type === 'cast' && e.name === 'Rayon Matinal'), 'événement cast émis');
+  assert.equal(foe.hp, foe.maxHp, 'aucun dégât ennemi');
+});
+
+test('correctifs lot 3 (repro B) : sort de lignée dégâts depuis l\'arrière ignore la désignation alliée et frappe l\'ennemi', () => {
+  const E = loadEngine();
+  const taillade = ligneeSpell(E, 'lame', 'Millième Taillade');
+  assert.equal(E.spellSideOf(taillade), 'enemy');
+  assert.ok(E.foeFacingSpell(taillade));
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [taillade] }, 's1', 1);
+  sup.mana = sup.manaMax = 20;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const hpFoe = foe.hp, hpAlly = ally.hp;
+  const r = E.stepRound(st, { kind: 'cast', idx: 0, allyUid: 'ally1' });
+  assert.ok(foe.hp < hpFoe, 'l\'ennemi le plus faible est frappé');
+  assert.equal(ally.hp, hpAlly, 'l\'allié désigné n\'est pas touché');
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === 'f1' && e.kind === 'special'), 'dégâts du sort sur l\'ennemi');
+});
+
+test('refonte IA lot 0 : en Auto (action null), un sort allié de lignée soigne le plus blessé', () => {
+  const E = loadEngine();
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'ally1', 1);
+  ally.hp = 5;
+  const foe = foeUnit(E);
+  sup.agi = 99; ally.agi = 1; foe.agi = 50;
+  const st = supportState(sup, [ally], [foe]);
+  E.beginRound(st);
+  const r = E.stepRound(st, null);
+  assert.ok(r.events.some((e) => e.type === 'cast'), 'cast émis');
+  assert.ok(ally.hp > 5, 'le plus blessé est soigné en Auto (lot 0)');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'ally1'), 'événement de soin émis');
+});
+
+test('refonte IA lot 0 : en Auto, boost de lignée -> atkBuff sur la ligne avant, bouclier -> shield', () => {
+  const E = loadEngine();
+  const hymne = ligneeSpell(E, 'zele', 'Hymne du Matin'); // école ferveur, rôle boost
+  assert.equal(hymne.role, 'boost');
+  const sup = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [hymne] }, 's1', 1);
+  sup.mana = sup.manaMax = 10;
+  const front = E.makeUnit(E.getCard('a1'), 'f1', 1);
+  const foe = foeUnit(E);
+  sup.agi = 99; front.agi = 1; foe.agi = 50;
+  const st = { turn: 0, winner: null, rng: mulberry32(1), team: { avant: [front], arriere: [sup] }, enemies: { avant: [foe], arriere: [] }, mods: {} };
+  E.beginRound(st);
+  const r = E.stepRound(st, null);
+  assert.ok((front.atkBuff ?? 0) > 0, 'la ligne avant reçoit le buff en Auto');
+  assert.ok(r.events.some((e) => e.type === 'buff' && e.targetId === 'f1'), 'événement buff émis');
+
+  const carapace = ligneeSpell(E, 'bouclier', 'Carapace Réactive'); // école rempart, rôle bouclier
+  assert.equal(carapace.role, 'bouclier');
+  const sup2 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [carapace] }, 's1', 1);
+  sup2.mana = sup2.manaMax = 10;
+  const front2 = E.makeUnit(E.getCard('a1'), 'f1', 1);
+  const st2 = { turn: 0, winner: null, rng: mulberry32(1), team: { avant: [front2], arriere: [sup2] }, enemies: { avant: [foeUnit(E)], arriere: [] }, mods: {} };
+  sup2.agi = 99; front2.agi = 1;
+  E.beginRound(st2);
+  const r2 = E.stepRound(st2, null);
+  assert.ok(front2.shield > 0, 'la ligne avant reçoit le bouclier en Auto');
+  assert.ok(r2.events.some((e) => e.type === 'shield' && e.targetId === 'f1'), 'événement shield émis');
+});
+
+test('correctifs lot 3 : depuis la ligne avant, un sort de lignée soin en Tactique soigne (pas de atkBuff)', () => {
+  const E = loadEngine();
+  globalThis.__E = E;
+  const rayon = ligneeSpell(E, 'aube', 'Rayon Matinal');
+  const u1 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [rayon] }, 'u1', 1);
+  const u2 = E.makeUnit(E.getCard('a1'), 'u2', 1);
+  u2.hp = 5;
+  u1.mana = u1.manaMax = 10;
+  const st = boostState([u1, u2]);
+  u1.agi = 20; u2.agi = 10;
+  E.beginRound(st);
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, allyUid: 'u2' });
+  assert.ok(u2.hp > 5, 'l\'allié est soigné depuis la ligne avant');
+  assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'u2'), 'événement heal');
+  assert.ok(!r.events.some((e) => e.type === 'buff'), 'pas de atkBuff pour un sort de soin');
+});
+
+// ---------- refonte IA lot 1 : utilité de ciblage + hystérésis ----------
+const targetUnit = (uid, hp, atk, rang = 'avant', element = 'eau') => ({ uid, hp, maxHp: 200, alive: true, shield: 0, status: {}, atk, element, rang });
+const targetState = (teamAvant, enemyAvant) => ({
+  turn: 1, winner: null, rng: mulberry32(1), lastTarget: null,
+  team: { avant: teamAvant, arriere: [] },
+  enemies: { avant: enemyAvant, arriere: [] },
+  mods: {},
+});
+
+test('refonte IA lot 1 : le kill possible prime sur la menace', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const weak = targetUnit('e1', 5, 2);   // killable à dmgBase 10
+  const strong = targetUnit('e2', 90, 40); // grosse menace mais pas killable
+  const st = targetState([targetUnit('t1', 100, 10)], [weak, strong]);
+  const t = E.pickTargetByUtility(atk, [weak, strong], 10, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'la cible killable est choisie');
+});
+
+test('refonte IA lot 1 : la menace (ATQ) départage à PV égaux', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const low = targetUnit('e1', 80, 5);
+  const high = targetUnit('e2', 80, 30);
+  const st = targetState([targetUnit('t1', 100, 10)], [low, high]);
+  const t = E.pickTargetByUtility(atk, [low, high], 1, st, 'enemies');
+  assert.equal(t.uid, 'e2', 'la plus grosse menace est ciblée');
+});
+
+test('refonte IA lot 1 : la ligne arrière protégée est pénalisée tant que l\'avant tient', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const front = targetUnit('e1', 100, 10, 'avant');
+  const back = targetUnit('e2', 60, 10, 'arriere'); // sans la pénalité, l'arrière gagnerait (-40 vs -80)
+  const st = targetState([targetUnit('t1', 100, 10)], [front, back]);
+  st.enemies.arriere = [back];
+  const t = E.pickTargetByUtility(atk, [front, back], 1, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'l\'arrière protégé n\'est pas choisi malgré ses PV plus bas');
+});
+
+test('refonte IA lot 1 : hystérésis anti flip-flop — la cible en cours tient dans la marge', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const e1 = targetUnit('e1', 80, 5);
+  const e2 = targetUnit('e2', 79, 5); // meilleur score de peu (< marge 150)
+  const st = targetState([targetUnit('t1', 100, 10)], [e1, e2]);
+  st.lastTarget = { enemies: 'e1' };
+  const t = E.pickTargetByUtility(atk, [e1, e2], 1, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'pas de changement au bord du seuil sans raison (marge)');
+  // au-delà de la marge, le meilleur score gagne
+  const e1b = targetUnit('e1', 190, 5); // score -180, à plus de la marge (150) de e3 (0)
+  const e3 = targetUnit('e3', 10, 5);
+  const st2 = targetState([targetUnit('t1', 100, 10)], [e1b, e3]);
+  st2.lastTarget = { enemies: 'e1' };
+  const t2 = E.pickTargetByUtility(atk, [e1b, e3], 1, st2, 'enemies');
+  assert.equal(t2.uid, 'e3', 'au-delà de la marge le meilleur score prend le relais');
+});
+
+test('refonte IA lot 1 : enemyPickTarget avec état délègue à l\'utilité (rétro-compat sans état : score historique)', () => {
+  const E = loadEngine();
+  const e = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const weak = targetUnit('e1', 5, 2);
+  const strong = targetUnit('e2', 90, 40);
+  assert.equal(E.enemyPickTarget(e, [weak, strong], 10).uid, 'e1', 'sans état : kill bonus historique');
+  const st = targetState([targetUnit('t1', 100, 10)], [weak, strong]);
+  assert.equal(E.enemyPickTarget(e, [weak, strong], 10, st).uid, 'e1', 'avec état : utilité + hystérésis');
+});
+
+// ---------- refonte IA lot 2 : choix de sort contextuel ----------
+const spellCtx = (E, u, allies, foes) => ({ state: { turn: 1, rng: mulberry32(1), team: { avant: allies, arriere: [] }, enemies: { avant: foes, arriere: [] }, mods: {} }, allies: { avant: allies, arriere: [] }, foes, side: 'team' });
+
+test('refonte IA lot 2 : soin prioritaire quand un allié est sous le seuil', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Frappe', cost: 3, mult: 1.6, role: 'degats', cible: '1 ennemi' },
+    { name: 'Soin', cost: 2, mult: 1.2, role: 'soin', cible: '1 allié' },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'a1', 1);
+  ally.hp = Math.floor(ally.maxHp * 0.1); // sous le seuil 0.35
+  const foe = foeUnit(E);
+  const s = E.pickSpell(u, spellCtx(E, u, [ally], [foe]));
+  assert.equal(s.name, 'Soin', 'le sort de soin est choisi');
+  // sans allié blessé : retour à l\'efficacité au coût (Frappe 1.6/3 > Soin 1.2/2 ? non : 0.53 < 0.6 -> Soin)
+  const u2 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Frappe', cost: 3, mult: 2.2, role: 'degats', cible: '1 ennemi' },
+    { name: 'Soin', cost: 2, mult: 1.2, role: 'soin', cible: '1 allié' },
+  ] }, 'u2', 1);
+  u2.mana = u2.manaMax = 10;
+  const allyFull = E.makeUnit(E.getCard('a1'), 'a2', 1);
+  const s2 = E.pickSpell(u2, spellCtx(E, u2, [allyFull], [foe]));
+  assert.equal(s2.name, 'Frappe', 'sans soin nécessaire : le plus efficace au coût (2.2/3 > 1.2/2)');
+});
+
+test('refonte IA lot 2 : burst si un kill est possible', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Petit', cost: 2, mult: 1.0, role: 'degats', cible: '1 ennemi' },
+    { name: 'Gros', cost: 5, mult: 3.0, role: 'degats', cible: '1 ennemi' },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  const foe = foeUnit(E);
+  foe.hp = 5; // killable par Gros (stat*mult >= 5) mais pas par Petit
+  const s = E.pickSpell(u, spellCtx(E, u, [E.makeUnit(E.getCard('a1'), 'a1', 1)], [foe]));
+  assert.equal(s.name, 'Gros', 'le sort qui tue est choisi');
+});
+
+test('refonte IA lot 2 : hystérésis — le sort en cours tient dans la marge entre tours', () => {
+  const E = loadEngine();
+  const mk = () => E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'A', cost: 2, mult: 1.5, role: 'degats', cible: '1 ennemi' },
+    { name: 'B', cost: 3, mult: 2.0, role: 'degats', cible: '1 ennemi' },
+  ] }, 'u1', 1);
+  const st = { turn: 1, rng: mulberry32(1), lastSpell: { u1: 'A' }, team: { avant: [], arriere: [] }, enemies: { avant: [], arriere: [] }, mods: {} };
+  const u = mk();
+  u.mana = u.manaMax = 10;
+  const foe = foeUnit(E);
+  const ctx = { state: st, allies: { avant: [], arriere: [] }, foes: [foe], side: 'team' };
+  const s = E.pickSpell(u, ctx);
+  // scores : A = 75, B = 66.7 -> B meilleur de 8.3 < marge 30, mais A est le sort en cours -> A conservé
+  assert.equal(s.name, 'A', 'pas de flip-flop au bord du seuil');
+});
+
+test('refonte IA lot 2 : sans contexte, pickSpell garde le comportement historique (plus cher abordable)', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'A', cost: 2, mult: 1.5 },
+    { name: 'B', cost: 5, mult: 3.0 },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  assert.equal(E.pickSpell(u).name, 'B', 'plus cher abordable');
+  assert.equal(u.mana, 5, 'coût déduit');
+});
+
+// ---------- refonte IA lot 3 : graduation par difficulté ----------
+test('refonte IA lot 3 : profil de difficulté en data + initCombat le porte (défaut = utilité complète)', () => {
+  const E = loadEngine();
+  const profs = E.DATA.difficulties.map((d) => d.ia.suboptimal);
+  assert.deepEqual(profs, [0.5, 0.3, 0.15, 0.05, 0], 'Facile sous-optimal -> Enfer utilité complète');
+  const st = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 42, {}, { difficulty: 1 });
+  assert.equal(st.iaProfile.suboptimal, 0.5, 'profil Facile porté par l\'état');
+  const stDef = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 42);
+  assert.equal(stDef.iaProfile.suboptimal, 0, 'sans difficulté : utilité complète (rétro-compat)');
+});
+
+test('refonte IA lot 3 : choix sous-optimal déterministe (graine IA dédiée) en Facile, jamais en Enfer', () => {
+  const E = loadEngine();
+  const spells = [
+    { name: 'A', cost: 2, mult: 1.0, role: 'degats', cible: '1 ennemi' },
+    { name: 'B', cost: 3, mult: 3.0, role: 'degats', cible: '1 ennemi' },
+  ];
+  const run = (diff) => {
+    const st = E.initCombat({ avant: [{ ...E.getCard('n1'), level: 5 }], arriere: [] }, [{ ...E.getMonster('e1') }], 7, {}, { difficulty: diff });
+    const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells }, 'u1', 1);
+    u.mana = u.manaMax = 10;
+    const foe = E.makeUnit(E.getCard('a1'), 'f1', 1);
+    const ctx = { state: st, allies: st.team, foes: [foe], side: 'team' };
+    return E.pickSpell(u, ctx).name;
+  };
+  // même seed, profil Facile (0.5) : suite déterministe de tirages sous-optimaux possibles
+  const picks = [run(1), run(1), run(1)];
+  assert.ok(picks.every((p) => p === 'A' || p === 'B'), 'choix valides');
+  assert.ok(picks.includes('A'), 'en Facile le choix sous-optimal (A au lieu de B) sort parfois');
+  assert.equal(run(5), 'B', 'en Enfer : toujours le meilleur (utilité complète)');
+  // déterminisme : deux exécutions identiques -> mêmes choix
+  assert.deepEqual([run(1), run(1)], [run(1), run(1)], 'déterministe au seed près');
+});
