@@ -4,8 +4,9 @@
 // Guide : docs/design/errance-topdown.md
 
 // codes terrain
-const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11 };
-const SOLID = new Set([ET.EAU, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
+const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11, EAU_PROFONDE: 12, EAU_PEU_PROFONDE: 13, SABLE: 14 };
+// correctif v1.36.1 lot 2 : EAU (2) et EAU_PROFONDE (12) = infranchissables ; EAU_PEU_PROFONDE (13) et SABLE (14) = praticables (TRANCHÉ)
+const SOLID = new Set([ET.EAU, ET.EAU_PROFONDE, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -23,12 +24,23 @@ function genZoneMap(zone) {
   const terr = new Uint8Array(w * h);
   const idx = (x, y) => y * w + x;
   const inb = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
-  // ceinture d'eau + arbres en bordure (commun aux deux générateurs)
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    if (x === 0 || y === 0 || x === w - 1 || y === h - 1) terr[idx(x, y)] = (rnd() < 0.6 ? ET.EAU : ET.ARBRE);
-    else terr[idx(x, y)] = ET.PRAIRIE;
-  }
+  // ceinture de bord (commun aux deux générateurs) — correctif v1.36.1 lot 2 : thème plage/eau profonde-peu profonde en data
+  // anneau externe = EAU_PROFONDE (infranchissable), anneau interne = liseré EAU_PEU_PROFONDE (praticable) selon errance.water.liseré ;
+  // si la zone porte layout.sea (Marées), bande de mer au sud : profonde > peu profonde > sable, autres bords en sable/rochers
+  const water = zone.errance?.water ?? { liseré: 1 };
   const layout = zone.errance?.layout;
+  const sea = layout?.sea ?? null;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const edge = (x === 0 || y === 0 || x === w - 1 || y === h - 1);
+    const ring1 = (x === 1 || y === 1 || x === w - 2 || y === h - 2);
+    if (!edge && !ring1) { terr[idx(x, y)] = ET.PRAIRIE; continue; }
+    if (sea && y >= h - 1 - (sea.deep ?? 2)) { terr[idx(x, y)] = ET.EAU_PROFONDE; continue; }
+    if (sea && y >= h - 1 - (sea.deep ?? 2) - (sea.shallow ?? 2)) { terr[idx(x, y)] = ET.EAU_PEU_PROFONDE; continue; }
+    if (sea && y === h - 1 - (sea.deep ?? 2) - (sea.shallow ?? 2) - (sea.sand ?? 1)) { terr[idx(x, y)] = ET.SABLE; continue; }
+    if (sea && edge) { terr[idx(x, y)] = rnd() < 0.7 ? ET.SABLE : ET.ROCHER; continue; } // plage : sable + rochers, plus d'arbres dans l'eau
+    if (edge) { terr[idx(x, y)] = ET.EAU_PROFONDE; continue; }
+    terr[idx(x, y)] = (water.liseré ?? 1) >= 1 ? ET.EAU_PEU_PROFONDE : (rnd() < 0.6 ? ET.ARBRE : ET.ROCHER);
+  }
   let donjon, autel, spawn, jarres = [], retour = null, huttes = [];
   if (layout) {
     // chemin sinueux par waypoints (largeur ~3 tuiles, style maquette)

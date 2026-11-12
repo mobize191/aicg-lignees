@@ -1207,6 +1207,12 @@ async function main() {
       if (z.id === 'zone-marees' && m.huttes.length === 2 && m.donjon.w === 3) mareesLayout = true;
     }
     check('B21 d point de retour ville posé dans les 5 zones', retourOk, '');
+    {
+      const mm = api.genZoneMap(zones[0]);
+      const dRet = Math.hypot(mm.retour.x + .5 - mm.spawn.x, mm.retour.y + .5 - mm.spawn.y);
+      const hasDeep = mm.terr.includes(12), hasShallow = mm.terr.includes(13);
+      check('B21 d2 Marées : retour ville à ≤ 6 tuiles du spawn + EAU_PROFONDE et EAU_PEU_PROFONDE présents', dRet <= 6 && hasDeep && hasShallow, `dRet=${dRet.toFixed(1)} deep=${hasDeep} shallow=${hasShallow}`);
+    }
     check('B21 e layout v2 appliqué aux Marées (donjon 3x2, 2 huttes)', mareesLayout, '');
     // UI : entrée en zone, HUD phase + décor construit
     mem.clear();

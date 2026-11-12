@@ -2660,7 +2660,7 @@ function renderErrance(root) {
       if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
       const al = Math.min(1, p.life / 5) * .28;
       ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-      ctx.fillStyle = 'rgba(70,55,35,' + al.toFixed(3) + ')';
+      ctx.fillStyle = p.wet ? 'rgba(200,235,255,' + al.toFixed(3) + ')' : 'rgba(70,55,35,' + al.toFixed(3) + ')';
       ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
@@ -2880,8 +2880,9 @@ function renderErrance(root) {
     if (ev.steps) {
       const vv = st.hero.v ?? { x: 0, y: 0 };
       const vm = Math.hypot(vv.x, vv.y);
-      if (vm > 0.5 && st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))] === ET.CHEMIN) {
-        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5 });
+      const tileNow = st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))];
+      if (vm > 0.5 && (tileNow === ET.CHEMIN || tileNow === ET.EAU_PEU_PROFONDE)) { // éclaboussures en eau peu profonde (praticable)
+        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5, wet: tileNow === ET.EAU_PEU_PROFONDE });
         if (amb.prints.length > 40) amb.prints.shift();
       }
     }

@@ -13991,47 +13991,53 @@ const DATA = {
      "pathCore": "#d3b285"
     },
     "layout": {
-     "note": "layout v2 data-driven (style maquette A+) : chemin sinueux par waypoints, etang a l'echelle, 2 huttes avec dialogues, point de retour ville (ACTÉ 11/11 nuit, point 7)",
+     "note": "layout v3 plage (correctif v1.36.1 lot 2) : mer en bande de bord sud (profonde > peu profonde > sable), petit étang intérieur, chemin sinueux, 2 huttes, retour ville à ≤ 6 tuiles du spawn",
+     "sea": {
+      "side": "south",
+      "deep": 2,
+      "shallow": 2,
+      "sand": 1
+     },
      "waypoints": [
-      [
-       23,
-       29
-      ],
       [
        23,
        25
       ],
       [
+       23,
+       22
+      ],
+      [
        19,
-       21
+       18
       ],
       [
        20,
-       15
+       13
       ],
       [
        25,
-       11
+       9
       ],
       [
        25,
-       6
+       5
       ],
       [
        22,
-       4
+       3
       ]
      ],
      "pond": {
       "x": 37,
-      "y": 22,
-      "rx": 5,
-      "ry": 5
+      "y": 20,
+      "rx": 3,
+      "ry": 2
      },
      "patches": [
       [
        12,
-       17,
+       15,
        7,
        6
       ],
@@ -14049,24 +14055,24 @@ const DATA = {
       ],
       [
        36,
-       26,
+       24,
        4,
        3
       ]
      ],
-     "trees": 30,
+     "trees": 26,
      "rocks": 8,
      "jarres": 6,
      "huttes": [
       {
        "x": 10,
-       "y": 25,
+       "y": 23,
        "title": "Hutte du Garde-Motte",
        "text": "« Méfie-toi des hautes herbes, voyageur. Les monstres y sommeillent — marche vite ou contourne. »"
       },
       {
        "x": 30,
-       "y": 28,
+       "y": 24,
        "title": "Cabane de l'Herboriste",
        "text": "« Ces herbes brillantes qui parsèment la prairie ? Cueille-les en passant, elles soignent… un jour. »"
       }
@@ -14079,16 +14085,20 @@ const DATA = {
      },
      "autel": {
       "x": 31,
-      "y": 19
+      "y": 16
      },
      "retour": {
-      "x": 6,
-      "y": 29
+      "x": 20,
+      "y": 26
      },
      "spawn": {
       "x": 23.5,
-      "y": 29.5
+      "y": 25.5
      }
+    },
+    "water": {
+     "liseré": 2,
+     "note": "plage des Marées : bande de mer au sud (layout.sea), liseré peu profond praticable"
     }
    }
   },
@@ -14214,6 +14224,10 @@ const DATA = {
     "ambiance": {
      "dayLen": 110,
      "note": "cycle un peu plus long, ciel de braises"
+    },
+    "water": {
+     "liseré": 0,
+     "note": "lave/fond profond : pas de liseré praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
     }
    }
   },
@@ -14331,6 +14345,10 @@ const DATA = {
     },
     "ambiance": {
      "dayLen": 100
+    },
+    "water": {
+     "liseré": 1,
+     "note": "marigots peu profonds praticables en liseré — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
     }
    }
   },
@@ -14465,6 +14483,10 @@ const DATA = {
     "ambiance": {
      "dayLen": 120,
      "note": "nuit plus longue en crypte"
+    },
+    "water": {
+     "liseré": 0,
+     "note": "eau entièrement profonde (infranchissable) — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
     }
    }
   },
@@ -14598,6 +14620,10 @@ const DATA = {
     "ambiance": {
      "dayLen": 90,
      "note": "journées dorées plus courtes au Zénith"
+    },
+    "water": {
+     "liseré": 1,
+     "note": "liseré peu profond praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
     }
    }
   }
@@ -16880,8 +16906,9 @@ function evoLabelOf(from, to) {
 // Guide : docs/design/errance-topdown.md
 
 // codes terrain
-const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11 };
-const SOLID = new Set([ET.EAU, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
+const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11, EAU_PROFONDE: 12, EAU_PEU_PROFONDE: 13, SABLE: 14 };
+// correctif v1.36.1 lot 2 : EAU (2) et EAU_PROFONDE (12) = infranchissables ; EAU_PEU_PROFONDE (13) et SABLE (14) = praticables (TRANCHÉ)
+const SOLID = new Set([ET.EAU, ET.EAU_PROFONDE, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
 
 function lcg(seed) {
   let s = seed >>> 0;
@@ -16899,12 +16926,23 @@ function genZoneMap(zone) {
   const terr = new Uint8Array(w * h);
   const idx = (x, y) => y * w + x;
   const inb = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
-  // ceinture d'eau + arbres en bordure (commun aux deux générateurs)
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    if (x === 0 || y === 0 || x === w - 1 || y === h - 1) terr[idx(x, y)] = (rnd() < 0.6 ? ET.EAU : ET.ARBRE);
-    else terr[idx(x, y)] = ET.PRAIRIE;
-  }
+  // ceinture de bord (commun aux deux générateurs) — correctif v1.36.1 lot 2 : thème plage/eau profonde-peu profonde en data
+  // anneau externe = EAU_PROFONDE (infranchissable), anneau interne = liseré EAU_PEU_PROFONDE (praticable) selon errance.water.liseré ;
+  // si la zone porte layout.sea (Marées), bande de mer au sud : profonde > peu profonde > sable, autres bords en sable/rochers
+  const water = zone.errance?.water ?? { liseré: 1 };
   const layout = zone.errance?.layout;
+  const sea = layout?.sea ?? null;
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const edge = (x === 0 || y === 0 || x === w - 1 || y === h - 1);
+    const ring1 = (x === 1 || y === 1 || x === w - 2 || y === h - 2);
+    if (!edge && !ring1) { terr[idx(x, y)] = ET.PRAIRIE; continue; }
+    if (sea && y >= h - 1 - (sea.deep ?? 2)) { terr[idx(x, y)] = ET.EAU_PROFONDE; continue; }
+    if (sea && y >= h - 1 - (sea.deep ?? 2) - (sea.shallow ?? 2)) { terr[idx(x, y)] = ET.EAU_PEU_PROFONDE; continue; }
+    if (sea && y === h - 1 - (sea.deep ?? 2) - (sea.shallow ?? 2) - (sea.sand ?? 1)) { terr[idx(x, y)] = ET.SABLE; continue; }
+    if (sea && edge) { terr[idx(x, y)] = rnd() < 0.7 ? ET.SABLE : ET.ROCHER; continue; } // plage : sable + rochers, plus d'arbres dans l'eau
+    if (edge) { terr[idx(x, y)] = ET.EAU_PROFONDE; continue; }
+    terr[idx(x, y)] = (water.liseré ?? 1) >= 1 ? ET.EAU_PEU_PROFONDE : (rnd() < 0.6 ? ET.ARBRE : ET.ROCHER);
+  }
   let donjon, autel, spawn, jarres = [], retour = null, huttes = [];
   if (layout) {
     // chemin sinueux par waypoints (largeur ~3 tuiles, style maquette)
@@ -17263,6 +17301,7 @@ function errancePalette(zone) {
     pathBase: '#b3945f', pathCore: '#d3b285', pathRut: 'rgba(120,95,60,.35)', pathStone: 'rgba(90,75,50,.5)',
     sand: '#c9b083', sandDark: '#a8926b',
     water0: '#78c2de', water1: '#4b8db0', water2: '#27556f', waterDeep: 'rgba(20,50,70,.25)', waterGlint: 'rgba(255,255,255,.35)',
+    waterShallow0: 'rgba(170,225,240,.8)', waterShallow1: 'rgba(110,185,210,.6)', waterShallowGlint: 'rgba(255,255,255,.5)',
     reed: '#5e8a4a', reedTip: '#7a5b3a', lily: '#4c8a4f', lilyCut: '#2b5f80', lilyFlower: '#ffd76e',
     herbSocleDark: 'rgba(24,62,32,.85)', herbSocle: 'rgba(46,104,50,.5)',
     bladeA: '#3f8a42', bladeB: '#2e6b34',
@@ -17321,8 +17360,24 @@ function decorOrders(map, zone) {
       n++; if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
     }
     if (n > 0) {
-      const M = T * 0.25; // marge max de débordement hors tuiles EAU
-      pond = { cx: (minx + maxx) / 2 * T + T / 2, cy: (miny + maxy) / 2 * T + T / 2, rx: (maxx - minx + 1) / 2 * T + M, ry: (maxy - miny + 1) / 2 * T + M };
+      // aucun débordement d'eau hors tuiles EAU (garde-fou v1.36.1) : on rétrécit l'ellipse tant qu'une
+      // tuile non-EAU a son centre dans (rx + 0,25·T, ry + 0,25·T) — l'anneau de sable peint prend +0,25·T max
+      let rx = (maxx - minx + 1) / 2 * T, ry = (maxy - miny + 1) / 2 * T;
+      const cx = (minx + maxx) / 2 * T + T / 2, cy = (miny + maxy) / 2 * T + T / 2;
+      let guard = 0;
+      while (guard++ < 40) {
+        let bad = false;
+        for (let y = 1; y < map.h - 1 && !bad; y++) for (let x = 1; x < map.w - 1; x++) {
+          if (terr[idx(x, y)] === ET.EAU) continue;
+          const dxn = (x * T + T / 2 - cx) / rx;
+          const dyn = (y * T + T / 2 - cy) / ry;
+          if (dxn * dxn + dyn * dyn < 1) { bad = true; break; }
+        }
+        if (!bad) break;
+        rx = Math.max(T * .5, rx - T * .25);
+        ry = Math.max(T * .5, ry - T * .25);
+      }
+      pond = { cx, cy, rx, ry };
     }
   }
   const pondDeep = [], pondGlints = [], lilies = [], reeds = [];
@@ -17419,12 +17474,25 @@ function paintZoneBase(bx, map, zone) {
   for (const r of decor.pathRuts) { bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
   bx.fillStyle = pal.pathStone;
   for (const s of decor.pathStones) { bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  // 4. eau : toutes les tuiles EAU peintes en eau (ceinture de mer comprise), puis l'étang intérieur en dégradé
+  // 4. eau : EAU/EAU_PROFONDE = sombre opaque (infranchissable) ; EAU_PEU_PROFONDE = claire translucide avec reflets (praticable) ; SABLE = plage
   for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
-    if (terr[idx(x, y)] !== ET.EAU) continue;
-    const gw0 = bx.createRadialGradient(x * T + T / 2 - 6, y * T + T / 2 - 8, 2, x * T + T / 2, y * T + T / 2, T * .9);
-    gw0.addColorStop(0, pal.water0); gw0.addColorStop(1, pal.water2);
-    bx.fillStyle = gw0; bx.fillRect(x * T, y * T, T, T);
+    const tt = terr[idx(x, y)];
+    if (tt === ET.EAU || tt === ET.EAU_PROFONDE) {
+      const gw0 = bx.createRadialGradient(x * T + T / 2 - 6, y * T + T / 2 - 8, 2, x * T + T / 2, y * T + T / 2, T * .9);
+      gw0.addColorStop(0, pal.water0); gw0.addColorStop(1, pal.water2);
+      bx.fillStyle = gw0; bx.fillRect(x * T, y * T, T, T);
+    } else if (tt === ET.EAU_PEU_PROFONDE) {
+      bx.fillStyle = pal.sand; bx.fillRect(x * T, y * T, T, T);
+      const gw1 = bx.createRadialGradient(x * T + T / 2 - 4, y * T + T / 2 - 5, 2, x * T + T / 2, y * T + T / 2, T * .95);
+      gw1.addColorStop(0, pal.waterShallow0); gw1.addColorStop(1, pal.waterShallow1);
+      bx.fillStyle = gw1; bx.fillRect(x * T, y * T, T, T);
+      bx.strokeStyle = pal.waterShallowGlint; bx.lineWidth = 1.4; bx.lineCap = 'round';
+      bx.beginPath(); bx.moveTo(x * T + 6 + (x * 7 + y * 13) % 10, y * T + T * .62); bx.quadraticCurveTo(x * T + T / 2, y * T + T * .55, x * T + T - 6 - (x * 5 + y * 11) % 8, y * T + T * .66); bx.stroke();
+    } else if (tt === ET.SABLE) {
+      bx.fillStyle = pal.sand; bx.fillRect(x * T, y * T, T, T);
+      bx.fillStyle = pal.sandDark;
+      for (let k = 0; k < 5; k++) { bx.beginPath(); bx.arc(x * T + ((k * 29 + x * 17 + y * 7) % 31) + 2, y * T + ((k * 19 + x * 11 + y * 23) % 29) + 2, 1 + (k % 2), 0, 7); bx.fill(); }
+    }
   }
   if (decor.pond) {
     const p = decor.pond;
@@ -17564,10 +17632,19 @@ function paintTileGround(bx, map, zone, x, y) {
     for (const r of decor.pathRuts) { if (r.x < px || r.x > px + T || r.y < py || r.y > py + T) continue; bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
     bx.fillStyle = pal.pathStone;
     for (const s of decor.pathStones) { if (s.x < px || s.x > px + T || s.y < py || s.y > py + T) continue; bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
-  } else if (t === ET.EAU) {
+  } else if (t === ET.EAU || t === ET.EAU_PROFONDE) {
     const gw = bx.createRadialGradient(px + T / 2 - 6, py + T / 2 - 8, 2, px + T / 2, py + T / 2, T * .9);
     gw.addColorStop(0, pal.water0); gw.addColorStop(1, pal.water2);
     bx.fillStyle = gw; bx.fillRect(px, py, T, T);
+  } else if (t === ET.EAU_PEU_PROFONDE) {
+    bx.fillStyle = pal.sand; bx.fillRect(px, py, T, T);
+    const gw = bx.createRadialGradient(px + T / 2 - 4, py + T / 2 - 5, 2, px + T / 2, py + T / 2, T * .95);
+    gw.addColorStop(0, pal.waterShallow0); gw.addColorStop(1, pal.waterShallow1);
+    bx.fillStyle = gw; bx.fillRect(px, py, T, T);
+  } else if (t === ET.SABLE) {
+    bx.fillStyle = pal.sand; bx.fillRect(px, py, T, T);
+    bx.fillStyle = pal.sandDark;
+    for (let k = 0; k < 5; k++) { bx.beginPath(); bx.arc(px + ((k * 29 + x * 17 + y * 7) % 31) + 2, py + ((k * 19 + x * 11 + y * 23) % 29) + 2, 1 + (k % 2), 0, 7); bx.fill(); }
   } else if (t === ET.HERBES) {
     bx.fillStyle = pal.herbSocleDark; bx.beginPath(); bx.ellipse(px + T / 2, py + T / 2, T * .62, T * .55, 0, 0, 7); bx.fill();
     bx.fillStyle = pal.herbSocle; bx.beginPath(); bx.ellipse(px + T / 2 + 3, py + T / 2 + 2, T * .4, T * .3, 0, 0, 7); bx.fill();
@@ -20512,7 +20589,7 @@ function renderErrance(root) {
       if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
       const al = Math.min(1, p.life / 5) * .28;
       ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
-      ctx.fillStyle = 'rgba(70,55,35,' + al.toFixed(3) + ')';
+      ctx.fillStyle = p.wet ? 'rgba(200,235,255,' + al.toFixed(3) + ')' : 'rgba(70,55,35,' + al.toFixed(3) + ')';
       ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
       ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
@@ -20732,8 +20809,9 @@ function renderErrance(root) {
     if (ev.steps) {
       const vv = st.hero.v ?? { x: 0, y: 0 };
       const vm = Math.hypot(vv.x, vv.y);
-      if (vm > 0.5 && st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))] === ET.CHEMIN) {
-        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5 });
+      const tileNow = st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))];
+      if (vm > 0.5 && (tileNow === ET.CHEMIN || tileNow === ET.EAU_PEU_PROFONDE)) { // éclaboussures en eau peu profonde (praticable)
+        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5, wet: tileNow === ET.EAU_PEU_PROFONDE });
         if (amb.prints.length > 40) amb.prints.shift();
       }
     }
