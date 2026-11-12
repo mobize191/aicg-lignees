@@ -80,7 +80,7 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
   const rage = st && st.turn > M.RAGE_TURN ? 1 + M.RAGE_RATE * (st.turn - M.RAGE_TURN) : 1;
   const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
   if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
-    events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+    events.push({ type: 'dodge', side: foeSide, sourceId: s.uid, targetId: t.uid });
     return;
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
@@ -122,7 +122,7 @@ function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
     if (!t.alive) continue;
     const dodgeT = Math.min(M.DODGE_CAP, (classeMods(t).dodge || 0) + Math.max(0, (s.agi - t.agi)) * M.DODGE_PER_AGI);
     if (st && st.rng && dodgeT > 0 && st.rng() < dodgeT) {
-      events.push({ type: 'dodge', side: foeSide, targetId: t.uid });
+      events.push({ type: 'dodge', side: foeSide, sourceId: s.uid, targetId: t.uid });
       continue;
     }
     if (spell.mult) {

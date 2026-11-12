@@ -1008,6 +1008,17 @@ async function main() {
     api.store.progress.marees.diffs[1].record = 0;
   }
 
+    // ---------- B25 : correctifs v1.37 lot 5 — esquive visible + dégâts de frappe expliqués ----------
+    {
+      check('B25 a CSS feedback esquive dans le dist (.float.dodge + dodgePose + .logline.dodge)', /\.float\.dodge/.test(html) && /@keyframes dodgePose/.test(html) && /\.logline\.dodge/.test(html), '');
+      check('B25 b feedback esquive dans le bundle (Esquivé ! proéminent + journal)', /Esquivé !/.test(html) && /logline dodge/.test(html) && /dodge-pose/.test(html), '');
+      const dodgePushes = html.match(/type: 'dodge'[^}]*sourceId/g) ?? [];
+      check('B25 c les 4 sites moteur poussent un dodge avec sourceId (journal « esquive la frappe de »)', dodgePushes.length === 4, String(dodgePushes.length));
+      check('B25 d fenêtre d’action : frappe avec dégâts effectifs + % de classe', /frappe de \$\{u\.classe\}/.test(html) && /strikePct/.test(html), '');
+      check('B25 e fiche carte : % de frappe depuis CLASSE_MODS.strike (data)', /CLASSE_MODS\[card\.classe\]\?\.strike/.test(html), '');
+      check('B25 f fenêtre de désignation : esquive de la cible rappelée (DODGE_CAP/AGI en data)', /M\.DODGE_CAP/.test(html) && /M\.DODGE_PER_AGI/.test(html), '');
+    }
+
   {
     // lot E3a économie v2 — Guilde : compagnons du jour (rotation seed de la date)
     api.go('#forge');

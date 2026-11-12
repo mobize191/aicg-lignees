@@ -2355,7 +2355,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         <p class="muted">${card.rarity} \u00b7 ${card.classe} \u00b7 ${card.element ?? 'Neutre'}${owned ? ` \u00b7 poss\u00e9d\u00e9e \u00d7${owned}${placed ? ` (${usedInTeam(card.id)} en \u00e9quipe)` : ''}` : wasSeen ? ' \u00b7 plus poss\u00e9d\u00e9e' : ' \u00b7 pas encore d\u00e9voil\u00e9e'}</p>
         ${mystery
           ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel, au marchand ou \u00e0 la Guilde pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
-          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
+          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> <span class="muted">(\u00b7 frappe de ${card.classe} \u00e0 ${Math.round((CLASSE_MODS[card.classe]?.strike ?? 1) * 100)} %)</span> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
         ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
@@ -4134,7 +4134,13 @@ function askActTarget(mode, pending) {
   const hint = mode === 'zone' ? 'posez le centre de la zone sur un ennemi' : 'ou touchez un pion illumin\u00e9';
   zoneEl.innerHTML = `<div class="act-targetbar"><p class="act-lab">Choisissez votre cible — ${lab} <span class="muted">(${hint})</span></p>`
     + `<button type="button" class="btn tac-btn act-cancel">\u21a9 Annuler</button></div>`
-    + list.map((t) => `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}</span></button>`).join(' ');
+    + list.map((t) => {
+    const actor = promptState.unit;
+    const dp = (mode === 'enemy' || mode === 'zone')
+      ? Math.min(M.DODGE_CAP ?? 0.3, (CLASSE_MODS[t.classe]?.dodge || 0) + Math.max(0, (actor?.agi ?? 0) - (t.agi ?? 0)) * (M.DODGE_PER_AGI ?? 0.01))
+      : 0;
+    return `<button type="button" class="btn tac-btn act-target" data-uid="${t.uid}"><b>${t.name}</b> <span class="muted">\u2665 ${t.hp}/${t.maxHp}${dp > 0 ? ` \u00b7 \ud83d\udca8 ${Math.round(dp * 100)} %` : ''}</span></button>`;
+  }).join(' ');
   const cancelBtn = zoneEl.querySelector('.act-cancel');
   if (cancelBtn) cancelBtn.onclick = () => { if (promptState && promptState.showActions) promptState.showActions(); };
   zoneEl.querySelectorAll('.act-target').forEach((b) => {
@@ -4226,11 +4232,14 @@ function actionButtonsHtml(u, kind) {
   const row = (inner, cls, extra = '') => `<button type="button" class="btn tac-btn act-row ${cls}"${extra}>${inner}</button>`;
   const top = (nm, badge, cost) => `<span class="sort-top"><span class="sort-nm">${nm}</span>${badge ?? ''}<span class="sort-cost">${cost}</span></span>`;
   const parts = [];
+  const cmU = CLASSE_MODS[u.classe] ?? {};
+  const strikePct = Math.round((cmU.strike ?? 1) * 100);
+  const atkEff = Math.max(0, Math.round(u.atk * (1 + (u.atkBuff ?? 0)) * (cmU.strike ?? 1)));
   // retour terrain : la frappe simple (gratuite) est la premiere action de TOUTE carte, support compris
   parts.push(row(
     top('\u2694 Attaque',
       `<span class="sort-badge b-degats">D\u00e9g\u00e2ts</span>`, 'gratuit')
-    + `<span class="sort-meta">la frappe simple de la carte : d\u00e9g\u00e2ts normaux sur 1 ennemi, sans mana</span>`,
+    + `<span class="sort-meta">frappe simple : ~${atkEff} d\u00e9g\u00e2ts sur 1 ennemi \u00b7 frappe de ${u.classe} \u00e0 ${strikePct} % \u00b7 sans mana</span>`,
     'act-attack'));
   // boucle v2 lot 1 : action Objet — boire une potion (soin/mana), chaque gorgée coûte le tour
   const potN = totalPotions();
@@ -5300,8 +5309,20 @@ async function animate(events, ms, gen = null) {
           el.classList.add('ko');
           floatText(el, '⌛', 'dmg');
         } else if (ev.type === 'dodge') {
-          floatText(el, '💨 Esquive', 'buff');
-          await sleep(ms * 0.15);
+          const srcU = ev.sourceId ? findUnit(ev.sourceId) : null;
+          const tgtU = findUnit(ev.targetId);
+          floatText(el, '💨 Esquivé !', 'dodge fx-special');
+          el.classList.add('dodge-pose');
+          setTimeout(() => el.classList.remove('dodge-pose'), 520);
+          const logEl = combatApp ? combatApp.querySelector('#log') : null;
+          if (logEl) {
+            const p = document.createElement('p');
+            p.className = 'logline dodge';
+            p.textContent = `${tgtU ? tgtU.name : 'La cible'} esquive${srcU ? ` la frappe de ${srcU.name}` : ' l’attaque'}.`;
+            logEl.appendChild(p);
+            while (logEl.children.length > 30) logEl.firstChild.remove();
+          }
+          await sleep(ms * 0.3);
         } else if (ev.type === 'link') {
           floatText(el, `🔗 ${ev.amount}`, 'buff');
         }
