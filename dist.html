@@ -20656,9 +20656,11 @@ function bindActionButtons(box, u, kind) {
       const sp = (u.spells ?? [])[k];
       const side = spellSideOf(sp);
       const kind = isStrike ? 'spell' : 'cast';
-      // T0.2 : le camp de ciblage vient de la fiche du sort ; sans fiche, le role de l'unite garde l'ancien comportement
+      // T0.2 + correctifs ciblage lot 2 : le camp vient de la fiche du sort, jamais de la ligne ;
+      // filet de securite si camp null : role hostile -> 'enemy', sinon 'ally' (la frappe simple reste 'enemy')
       if (side === 'self' || side === 'team' || side === 'all') { promptState.pick({ kind, idx: k }); return; }
-      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy' : (isStrike ? 'enemy' : 'ally');
+      const mode = side === 'ally' ? 'ally' : side === 'zone' ? 'zone' : side === 'enemy' ? 'enemy'
+        : ((sp.role === 'degats' || sp.role === 'controle' || sp.role === 'malus') ? 'enemy' : 'ally');
       askActTarget(mode, { kind, idx: k });
     };
   });
