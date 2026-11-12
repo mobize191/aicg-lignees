@@ -685,6 +685,11 @@
   "cycle": 40,
   "backFrom": 40
  },
+ "ERRANCE_GUARDS": {
+  "stuckAfter": 2,
+  "repathMax": 2,
+  "progressEps": 0.01
+ },
  "AUTEL_SOIN_GRACE": 5,
  "REGEN_BOSS_STAGE": 5,
  "DEPART_CHOIX": [

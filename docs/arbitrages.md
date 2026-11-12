@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA lot 4 livré (garde-fous anti-blocage de l'errance) : digest inchangé
+
+- **Livré** : dans `stepErrance`, si le héros n'avance plus vers son waypoint pendant `ERRANCE_GUARDS.stuckAfter` (2 s, data `data/engine.json`) → repath A* vers le but ; après `repathMax` (2) échecs → abandon propre (chemin vidé, but abandonné = changement d'état). Aucune omniscience ajoutée (pas de poursuivant dans l'errance aujourd'hui ; règle « dernière position connue + réaction différée » notée dans l'audit pour le futur). Ni décor ni structure des zones touchés. 2 tests headless déterministes (stagnation → repath → abandon ; marche normale → 0 repath). 171 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : digest **inchangé `c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** — l'errance n'entre pas dans le digest ; la non-régression est couverte par les tests d'errance. MESURE consignsée.
+
 ## 2026-11-12 : MESURE — refonte IA lot 3 livré (graduation de l'intelligence par difficulté) : dans la tolérance
 
 - **Livré** : profil `ia.suboptimal` par difficulté en data (`data/difficulties.json` : Facile 0,5 → Normal 0,3 → Difficile 0,15 → Très difficile 0,05 → Enfer 0) ; `initCombat(..., { difficulty })` porte le profil + une graine IA dédiée (`iaRng`, déterministe, distincte du RNG de combat) ; à chaque décision (sort, cible), une part `suboptimal` des choix prend la deuxième meilleure option. Sans difficulté passée : utilité complète (rétro-compat). Le harnais digest et l'UI passent la difficulté de la marche. Défaut 12/11 appliqué : **pas d'IA par étage**, version difficultés actuelles. 2 tests headless déterministes. 169 tests verts, smoke 299 (3 échecs préexistants).
