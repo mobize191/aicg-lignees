@@ -226,7 +226,11 @@
    "water": {
     "liseré": 2,
     "note": "plage des Marées : bande de mer au sud (layout.sea), liseré peu profond praticable"
-   }
+   },
+   "waveSize": [
+    2,
+    3
+   ]
   }
  },
  {
@@ -355,7 +359,11 @@
    "water": {
     "liseré": 0,
     "note": "lave/fond profond : pas de liseré praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
-   }
+   },
+   "waveSize": [
+    2,
+    3
+   ]
   }
  },
  {
@@ -476,7 +484,11 @@
    "water": {
     "liseré": 1,
     "note": "marigots peu profonds praticables en liseré — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
-   }
+   },
+   "waveSize": [
+    2,
+    3
+   ]
   }
  },
  {
@@ -614,7 +626,11 @@
    "water": {
     "liseré": 0,
     "note": "eau entièrement profonde (infranchissable) — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
-   }
+   },
+   "waveSize": [
+    2,
+    3
+   ]
   }
  },
  {
@@ -751,7 +767,11 @@
    "water": {
     "liseré": 1,
     "note": "liseré peu profond praticable — TRANCHÉ 12/11 : profond infranchissable, peu profond praticable"
-   }
+   },
+   "waveSize": [
+    2,
+    3
+   ]
   }
  }
 ]

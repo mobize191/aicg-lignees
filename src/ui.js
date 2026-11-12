@@ -884,6 +884,7 @@ const store = {
   regEclats: 0, 
   pierres: 0, 
   uiPrefs: { combatAuto: false },
+  zoneFightCount: 0,
 };
 
 function resetStore() {
@@ -927,6 +928,7 @@ function resetStore() {
   store.regEclats = 0;
   store.pierres = 0;
   store.uiPrefs = { combatAuto: false };
+  store.zoneFightCount = 0;
 }
 
 function progOf(dungeonId, diff = 0) {
@@ -1019,6 +1021,7 @@ function snapshot() {
     zonesUnlocked: [...(store.zonesUnlocked ?? [])],
     errance: store.errance ? { zone: store.errance.zone, x: store.errance.hero?.x, y: store.errance.hero?.y, grace: store.errance.grace, steps: store.errance.steps, looted: [...(store.errance.looted ?? [])], broken: [...(store.errance.broken ?? [])] } : null,
     uiPrefs: { combatAuto: store.uiPrefs?.combatAuto === true },
+    zoneFightCount: store.zoneFightCount ?? 0,
   };
 }
 
@@ -1246,6 +1249,7 @@ function restore(data) {
     ? { day: String(data.dailyLevel.day ?? ''), lvl: Math.max(1, Math.round(data.dailyLevel.lvl)) }
     : null;
   store.uiPrefs = (data.uiPrefs && typeof data.uiPrefs === 'object') ? { combatAuto: data.uiPrefs.combatAuto === true } : { combatAuto: false };
+  store.zoneFightCount = Number.isInteger(data.zoneFightCount) && data.zoneFightCount >= 0 ? data.zoneFightCount : 0;
   autoMode = store.uiPrefs.combatAuto;
   store.defiActive = false;
   sanitizeTeams();
@@ -1645,8 +1649,8 @@ function dailySeed() {
   return h;
 }
 
-function waveSeedFor(dungeonId, diff) {
-  const k = `${todayKey()}|${dungeonId}|${diff}`;
+function waveSeedFor(dungeonId, diff, extra = null) {
+  const k = extra == null ? `${todayKey()}|${dungeonId}|${diff}` : `${todayKey()}|${dungeonId}|${diff}|${extra}`; // v1.38 lot 2 : seed PAR COMBAT pour les zones
   let h = 7;
   for (const ch of k) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0;
   return h;
@@ -2519,6 +2523,7 @@ function startZoneFight(zoneId, { donjon = false } = {}) {
   // correctifs v1.37 lot 1 : garde équipe (défensif) + genre de combat rattaché au run
   const g = gardeEquipe(store);
   if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
+  store.zoneFightCount = (store.zoneFightCount ?? 0) + 1; // v1.38 lot 2 : compteur persisté, intégré au seed de la vague
   store.zoneFight = { zone: zoneId, donjon };
   store.runState.kind = donjon ? 'donjon' : 'zone';
   figerHero(store.errance); // lot 7 : héros figé pendant le combat
@@ -5186,7 +5191,7 @@ async function animate(events, ms, gen = null) {
         }
         
         let xpLine = '';
-        if (!store.defiActive && runLog && (!won || finalClear) && runLog.stages > 0) {
+        if (!store.defiActive && runLog && (!won || finalClear || !!store.zoneFight) && runLog.stages > 0) { // v1.38 lot 1 : un combat de zone terminé distribue l'XP (victoire comme défaite)
           const DIFFX = DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0];
           
           const discOn = store.diff === 1 && dungeonById(store.dungeon).tier === 0 && (store.progress[store.dungeon]?.diffs?.[1]?.record ?? 0) < 10;
@@ -5426,9 +5431,11 @@ function renderCombat(root, opts = {}) {
   if (defi) runLog = null;
   else if (store.stage === 1) runLog = freshRunLog();
   const d = defi ? { name: 'Défi du jour', floors: 1 } : dungeonById(store.dungeon);
-  const wseed = defi ? dailySeed() : waveSeedFor(store.dungeon, store.diff);
+  const zfCount = (store.zoneFight && !store.zoneFight.donjon) ? (store.zoneFightCount ?? 0) : null; // v1.38 lot 2 : rencontres = seed par combat
+  const zoneWaveSize = zfCount != null ? (getZone(store.zoneFight.zone)?.errance?.waveSize ?? [2, 3]) : null; // taille de vague en data
+  const wseed = defi ? dailySeed() : waveSeedFor(store.dungeon, store.diff, zfCount);
   const defiLvl = store.dailyLevel && store.dailyLevel.day === todayKey() ? store.dailyLevel.lvl : teamLevel();
-  const wave = defi ? makeDailyWave(wseed, defiLvl) : makeWave(wseed, store.stage, store.dungeon, store.diff, defi ? null : store.runMod);
+  const wave = defi ? makeDailyWave(wseed, defiLvl) : makeWave(wseed, store.stage, store.dungeon, store.diff, defi ? null : store.runMod, zoneWaveSize);
   
   let discovery = '';
   if (!defi && store.diff === 1 && dungeonById(store.dungeon).tier === 0

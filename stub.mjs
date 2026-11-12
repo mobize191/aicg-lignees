@@ -238,6 +238,7 @@ const API_PAIRS = {
   signatureMetaOf: 'signatureMetaOf', signatureMetaOfUnit: 'signatureMetaOfUnit',
   allMonsters: 'allMonsters',
   spellSideOf: 'spellSideOf',
+  waveSeedFor: 'waveSeedFor',
 };
 
 export function bootDist(file, extraPairs = {}) {
