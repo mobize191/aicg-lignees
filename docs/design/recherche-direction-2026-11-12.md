@@ -12,7 +12,7 @@ Comment calibrer les systèmes fondamentaux de Lignées (équipe, fusion, donjon
 2. **Fusion** : la synthèse DQM (The Dark Prince) consomme les parents et produit un enfant **niveau 1** qui hérite **1/4 des stats cumulées** des parents et jusqu'à 3 talents (moitié des points investis conservés). Transposition directe recommandée pour Lignées : enfant niveau 1, héritage de stats plafonné + sorts des parents, rareté de l'enfant par table de synthèse.
 3. **Donjons** : le modèle visé existe déjà chez Ankama — chaînes de donjons par famille (version « royale » ~10 niveaux au-dessus), **drops uniques du boss qui servent au craft des panoplies** (7-8 pièces, bonus par palier de pièces), et **deux difficultés par donjon** (Wakfu Stasis : niveaux de difficulté 1-20 sélectionnés à l'entrée, récompenses accrues).
 4. **Expéditions** : deux précédents solides — Dragon Quest Treasures (missions d'envoi de monstres pour matériaux et trésors exclusifs) et Poké Jobs d'Épée/Bouclier (envoi des Pokémon de boîte sur des missions de plusieurs heures, XP + récompenses). L'idée de Marc-Olivier est validée par l'industrie ; c'est la réponse au « que font mes 300 cartes quand je ne les joue pas ».
-5. **HP/MP entre combats** : Etrian Odyssey (TP persistant dans le donjon, restauré en ville) et Darkest Dungeon (HP + stress persistants) prouvent que la gestion de ressource rend chaque sortie pesée. **Recommandation : persistance dans le run de donjon uniquement**, récupération hors combat en errance.
+5. **HP/MP entre combats** : la convention du genre JRPG (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville via auberges/objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary). **Recommandation révisée : persistance partout, errance comprise** — l'intuition de Marc-Olivier confirmée par la recherche approfondie (section 6).
 6. **Éléments** : Dofus a un élément **Neutre** à côté de Terre/Eau/Air/Feu — précédent direct pour des humains neutres. Renommer « terre » : **Nature recommandé** (couvre ent, champignons, spores ; « Plante » trop botanique, « Terre » confond avec la roche).
 7. **Carte du monde** : les références (Dofus, Wakfu, Pokémon, DQ Treasures) utilisent toutes des **cartes fixes** régionalisées, pas une carte géante générée. **Recommandation : 3-4 cartes régionales fixes** de 4-5 biomes, errance intérieure des donjons générée par seed comme aujourd'hui.
 8. **But du jeu** : quatre propositions de lore bâties sur les quatre races (section 13), aucune n'est « tuer le grand méchant démon » ni « gérant de compagnie ».
@@ -59,18 +59,20 @@ Recherche web du 12/11/2026 (couloir pilotage) : 18 requêtes ciblées, wikis de
   1. **Réserve intégrée (recommandé)** : les 2 slots de réserve se substituent à un membre K.O. ou affaibli, en dépensant le tour du nouveau venu. Pas de téléportation gratuite, pas d'équipe B entière : le donjon garde sa pression.
   2. **Équipe de repli entière** : si l'équipe tombe, l'équipe 2 prend la suite. Plus généreux, risque d'annuler la tension de ressources ; à réserver à un mode « exploration » et jamais au mode « course ».
 
-## 6. HP/MP entre les combats
+## 6. HP/MP entre les combats (approfondi le 12/11 soir, après challenge de Marc-Olivier)
 
-- **Etrian Odyssey** : les TP ne se régénèrent qu'en ville ; chaque plongée de donjon est un budget. La sortie se décide avant d'entrer.
-- **Darkest Dungeon** : HP et stress persistent du début à la fin de l'expédition ; le ravitaillement se prépare en ville.
-- **Monster Sanctuary** : soin complet après chaque combat (comparaison utile : le jeu reste léger, aucune gestion de budget).
-- **Série DQM (Joker)** : récupération de quasiment complète entre les combats — la ressource gérée y est le temps d'équipe, pas les MP. (Détail non re-sourcé à la lettre ; à confirmer sur un test de Joker si on veut le chiffrer.)
+**Première recommandation corrigée** : ma première piste (persistance en donjon seul, récupération en errance) a été challengée par Marc-Olivier (« la majorité des jeux que je connais ne reset pas la vie entre chaque combat, à la limite le mana selon les jeux »). La recherche approfondie lui donne raison : **c'est la convention du genre JRPG**.
 
-**Recommandation pour Lignées** (l'idée « vies et mana limités pour forcer le choix des sorts ») : deux couches.
+- **La convention (cas majoritaire)** : un fil RPG Maker constate que le standard des JRPG est précisément que « HP et mana ne se restaurent pas après les combats » ; le fil r/JRPG équivalent confirme que les DQ et FF classiques ont ancré cette attente chez les joueurs. **DQ mainline (XI)** : HP/MP persistent entre les combats, l'auberge et le feu de camp restaurent tout, le MP se garde précieusement en donjon. **Pokémon** : HP et PP persistent, soins aux Centres Pokémon et potions. **SMT V** : HP/MP persistent, restauration payante aux fontaines Leyline (macca), objets, cristaux. **Etrian Odyssey** : les TP persistent dans tout le labyrinthe et ne reviennent qu'en ville ; **Darkest Dungeon** : HP et stress persistent sur toute l'expédition (cas extrême).
+- **Les exceptions (reset après combat)** : **Monster Sanctuary** — soin complet après chaque combat, décrit par la presse comme un système « unique » ; **DQM (Joker)** : récupération quasi complète entre les combats (à confirmer à la lettre), cohérent avec son rythme d'enchaînement rapide.
+- **Lecture** : les références de feeling de Marc-Olivier (DQ, Pokémon) **persistent la vie** ; les resets appartiennent aux creature-collecters modernes à rythme très rapide.
 
-- **En donjon (mode course)** : HP/MP **persistants du premier au dernier étage** ; on récupère en sortant (ville/autel) ou avec des consommables. C'est Etrian : chaque porte de donjon devient une décision de composition et de potions.
-- **En errance (Terres Sauvages)** : récupération hors combat complète ou quasi complète. L'errance est la zone de farm tranquille et d'expérimentation ; la y soumettre à la pénurie tuerait le flow.
-- Les sorts signature deviennent chers en MP : c'est là que « quel sort je choisis » devient un vrai choix.
+**Recommandation révisée pour Lignées** (l'idée « vies et mana limités pour forcer le choix des sorts ») :
+
+- **HP/MP persistants partout, errance comprise** : aucun reset automatique après un combat.
+- La restauration vit aux **points de repos du monde** (ville, autel, auberge — gratuit ou payant à trancher), aux **consommables** et aux **sorts de soin** qui coûtent du MP (la boucle DQ : soigner consomme la ressource qu'on gère).
+- Le choix de sort demandé naît du **coût de restauration** et de la rareté du MP, pas d'un reset : les sorts signature chers en MP deviennent des décisions.
+- Éventuel adoucissement à trancher : petite régénération post-victoire (10-20 %) en errance seule, pour ne pas punir le farm ; jamais en donjon.
 
 ## 7. Fusion / synthèse — comment font les autres, ce qu'on en tire
 
@@ -176,8 +178,8 @@ Après la Grande Interdiction qui a interdit de lier des êtres d'une autre race
 
 ## 14. Ce que la recherche tranche ou laisse ouvert
 
-- **Tranché par Marc-Olivier ce jour** (consigné dans `session-qa-direction.md` et `arbitrages.md`) : modèle DQM-like assuré, 3 équipes conservées, éléments gardés sur les monstres + humains Neutres + sorts typés, renommage de « terre » (à choisir : Nature ou Plante), progression 1→100, fusion DQM en principe, chaînes de donjons + drops uniques → craft panoplies, capture en errance + un vendeur à jetons, mystère des lignées dans la collection.
-- **Reste à trancher** (questions posées en fin de tour) : taille d'équipe (recommandation 3+2), forme exacte de la fusion, but du jeu (propositions 1-4), Nature vs Plante, carte régionale vs géante, persistance HP/MP (recommandation : donjon seul), expéditions (temps réel), chaîne des donjons divins.
+- **Tranché par Marc-Olivier ce jour** (consigné dans `session-qa-direction.md` et `arbitrages.md`) : modèle DQM-like assuré, 3 équipes conservées, éléments gardés sur les monstres + humains Neutres + sorts typés, progression 1→100, fusion DQM en principe, chaînes de donjons + drops uniques → craft panoplies, capture en errance + un vendeur à jetons, mystère des lignées dans la collection — et en fin de session : **taille d'équipe 3 actifs + 2 réserve**, **but du jeu : Le Lieur**, **« terre » renommé Nature**.
+- **Reste à trancher** (questions posées en fin de tour) : persistance HP/MP (recommandation révisée : **partout**, restauration aux points de repos ; coût et régén post-victoire à trancher), carte régionale vs géante, forme exacte de la fusion, expéditions (temps réel), chaîne des donjons divins, choix initial de lignée exclusive.
 
 ## 15. Notes de sources
 
@@ -203,5 +205,11 @@ Après la Grande Interdiction qui a interdit de lier des êtres d'une autre race
 | [Darkest Dungeon Wiki — Stress (persistance, expéditions)](https://darkestdungeon.fandom.com/wiki/Stress) | 4/5 | - |
 | [TheGamer — Monster Sanctuary : team building (équipe de 3)](https://www.thegamer.com/monster-sanctuary-team-building-tips/) | 3/5 | - |
 | [r/JRPG + forums RPG Maker — discussions taille d'équipe (avis de concepteurs)](https://www.reddit.com/r/JRPG/comments/3t8k7o/why_is_the_maximum_party_for_most_games_3_or_4/) | 2/5 | - |
+| [RPG Maker Forums — « full restoration after each battle » (la convention JRPG constatée)](https://forums.rpgmakerweb.com/threads/designing-a-game-with-full-restoration-after-each-battle.90167/#post-835658) | 2/5 | - |
+| [r/JRPG — Games where your HP and MP reset after every battle (l'exception discutée)](https://www.reddit.com/r/JRPG/comments/fle2ta/games_where_your_hp_and_mp_reset_after_every/) | 2/5 | - |
+| [Dragon Quest Wiki — Inn (restauration HP/MP à l'auberge)](https://dragon-quest.org/wiki/Inn) | 4/5 | - |
+| [Bulbapedia — PP (persistance entre combats, Centres Pokémon)](https://bulbapedia.bulbagarden.net/wiki/PP) | 4/5 | - |
+| [RPG Site — SMT V : save and recover (Leyline Fount, restauration payante)](https://www.rpgsite.net/feature/11953-shin-megami-tensei-v-how-to-save-your-game-and-recover) | 4/5 | - |
+| [GameGrin — Monster Sanctuary Review (soin complet après combat, système « unique »)](https://www.gamegrin.com/reviews/monster-sanctuary-review/) | 3/5 | - |
 
 Conflits et réserves : les règles de synthèse citées sont celles de The Dark Prince ; Joker (DS) différait sur les détails (talents vs compétences, % d'héritage). La récupération HP/MP de la série Joker n'est pas sourcée à la lettre ici (section 6, marquée « à confirmer »). Les chiffres « Suikoden 6 actifs / FFVI 14 personnages / Octopath 4 sur 8 » relèvent de la connaissance générale des jeux, non de la présente recherche.

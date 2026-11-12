@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : SESSION DE DIRECTION — SUITE (10e tour, même soir) : 3 tranchages de Marc-Olivier + recherche HP/MP approfondie
+
+- **Taille d'équipe TRANCHÉE : 3 actifs + 2 en réserve** (recommandation de l'étude acceptée) : switch en combat coûtant le tour du nouveau venu, réserve à XP réduite (30-50 %), les combats passent de ~10 à ~6 unités par tour. La formation 3+2/2+3 actuelle évolue vers cette structure ; à spec moteur avant contenu v4.
+- **But du jeu TRANCHÉ : Le Lieur** (« l'unité des quatre races ») : le joueur lie les humains par **allégeance**, les monstres par **pacte de force**, les mystiques par **énigme**, les divins par **consécration** ; but : retisser le Serment des Quatre Races et rouvrir l'Ascendance. Les propositions Échiquier (fins multiples) et Silence du Zénith (reconnaissance par donjon) restent puisables pour la fin, le post-fin et le nommage des paliers.
+- **Type « terre » RENOMMÉ Nature** (ents, champignons, spores, végétation).
+- **HP/MP : recherche APPROFONDIE après challenge de Marc-Olivier — il a raison**. La convention du genre (DQ XI : HP/MP persistants, auberge/feu de camp ; Pokémon : HP et PP persistants ; SMT V : restauration payante aux fontaines ; FF classiques) est que **HP et MP persistent entre les combats** ; le reset complet après combat est l'exception (Monster Sanctuary, « unique » selon la presse ; DQM Joker probable mais non confirmé à la lettre). Recommandation révisée : **persistance partout, errance comprise**, restauration aux points de repos + objets + sorts de soin coûteux en MP. Reste à trancher : restauration gratuite vs payante, éventuelle petite régén post-victoire (10-20 %) en errance seule.
+- Docs : `recherche-direction-2026-11-12.md` (section 6 réécrite + 6 sources ajoutées), `session-qa-direction.md` (sections 0, 1, 2, 4 et 10.2 mises à jour avec les TRANCHÉ).
+
 ## 2026-11-12 : SESSION DE DIRECTION (10e tour) — tranchages de Marc-Olivier sur la Q&A + étude de recherche livrée
 
 - **Identité DQM-like ASSUMÉE** ; Final Fantasy écartée comme référence de feeling (Pokémon et Dofus restent des comparatifs de systèmes). **Nombre d'équipes : 3 conservé** (défait aucun jour : « au pire c'est 3 »). Collection visée : ~330 cartes jouables (150 personnages + 180 monstres env.), question large vs profondeur différée.
@@ -252,12 +260,3 @@ Marc-Olivier pose la convention : « ces points peuvent bouleverser des ACTÉS a
 ## 2026-11-11 : MESURE — contenu v3 lot C4 (Clergé du Plein Jour) audité et verrouillé : digest inchangé depuis C3
 
 - **Audit de conformité** : le Clergé du Plein Jour est posé en data depuis le lot 6 du grand chantier — **z30 Apolline, Prophétesse du Jour en M** (fusion Célestin + Justine), **z29 L Justine, Justicière du Jour** (nouvelle L), z28 UR Justicière du Jour, z26 L Célestin conservé ; le Zénith porte **2 M** (z8 Astre Capiteux + z30 Apolline). Famille « Clergé du Plein Jour » déclarée dans `monster-families.zenith` (10 cartes, mythique z30). Test de régression ajouté. Renommages/fusions d'affichage seuls : ids, stats, courbes inchangés, aucune migration nécessaire.
-- **Preuve** : build ok, **148 tests** verts (1 nouveau), smoke **300 checks** (seuls échecs préexistants 46 g/45 e), digest **inchangé `f8a9f0bb…` 1359/3000** (aucune vague modifiée depuis C3 — MESURE consignée, pas de recalibrage).
-
-## 2026-11-11 : MESURE — contenu v3 lot C3 (gobelins régionaux) livré : digest re-mesuré, MESURE consignée sans recalibrage
-
-- **Livré** : famille gobeline unique, foyer aux Marées (« Gobelins des Écumes », 8 cartes e1-e19) ; **variantes régionales de 2 cartes (C + UC) par donjon** — Forge (déjà posée : f2 Gobelin des Fumées, f24 Gobelin de Suie), **Bosquet (g31 Gobelin des Mousses, g32 Gobelin des Racines), Crypte (k31 Gobelin des Caveaux, k32 Gobelin des Ossements), Zénith (z31 Gobelin des Nuages, z32 Gobelin du Soleil)**. Pas de M gobelin, pas de nommé. Intégration : pool des vagues (`dungeon`), familles déclarées dans `monster-families`, rencontres d'errance des zones, signatures de fusion vers des crans pleins (biomes triés). Stats agi/int dérivées des `STAT_RATIOS` (invariant T4.3).
-- **Preuve** : build ok, **147 tests** verts (1 nouveau C3 + compteurs de tri T2.2/T2.3/T2.4 relevés à 23/32/32 signatures), smoke **300 checks** (seuls échecs préexistants 46 g/45 e), digest re-mesuré **`f8a9f0bb…` 1359/3000** (0 exception, 1 marathon) contre baseline verrouillée `f72106ff…` 1379/3000 — les vagues du Bosquet/Crypte/Zénith accueillent les nouveaux gobelins. **MESURE consignée, aucune maths d'équilibrage touchée** (baseline verrouillée ACTÉ 11/11).
-
-## 2026-11-11 : MESURE — contenu v3 lot C2 (Sirènes des Récifs) audité et verrouillé : digest re-mesuré, inchangé
-

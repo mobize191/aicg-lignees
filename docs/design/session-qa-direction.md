@@ -23,7 +23,13 @@
 
 **DIFFÉRÉ** : systèmes HUR/HSR et hybrides « H » (shiny ou hybrides de fusion) — « on va déjà essayer de faire 100, sinon on va vite se perdre ». Y revenir après.
 
-**À TRANCHER EN SUITE** (recherche livrée, questions posées) : taille d'équipe (3+2 recommandé vs garder 5), but du jeu (4 propositions), Nature vs Plante, carte régionale vs géante, persistance HP/MP, expéditions (validées par précédents, calibrage à trancher), équipe de repli.
+**TRANCHÉ en fin de session (12/11, même soir)** :
+
+1. **Taille d'équipe : 3 actifs + 2 en réserve** (recommandation de l'étude acceptée ; switch en combat coûtant le tour du nouveau venu, réserve à XP réduite).
+2. **But du jeu : Le Lieur** (« l'unité des quatre races », les quatre verbes de recrutement) retenu comme colonne vertébrale ; les propositions Échiquier (multi-fins) et Silence du Zénith (reconnaissance par donjon) restent puisables pour la fin et le nommage.
+3. **Type « terre » renommé Nature.**
+
+**Reste à trancher** : persistance HP/MP (recherche approfondie le 12/11 soir, voir section 10.2 : la convention du genre penche pour la persistance partout), carte régionale vs géante, forme exacte de la fusion, expéditions (temps réel), équipe de repli, choix initial de lignée exclusive, chaîne des donjons divins.
 
 ## 1. Identité du jeu — recherche demandée (DQM Joker vs Pokémon vs Final Fantasy)
 
@@ -39,7 +45,7 @@
 
 **TRANCHÉ (12/11)** : le modèle **DQM-like est ASSUMÉ** ; FF est écarté comme référence de feeling (« pas beaucoup joué, pas nostalgique ») mais reste utile en comparaison de systèmes ; la collection vise ~330 cartes jouables (150 persos + 180 monstres env.), la question « large vs profondeur » est reportée.
 
-**Question restante (étude livrée le 12/11)** : taille de l'équipe — garder 5 (3+2 / 2+3) ou resserrer vers 3 (DQM) ? L'étude comparative demandée est dans `recherche-direction-2026-11-12.md` section 4 : **aucun jeu à grande collection ne met 5 actifs** (DQM 3+3 réserve, Monster Sanctuary 3, Clair Obscur 3 sur 6, FFX 3 sur 7, Suikoden 6 sur 108 = l'exception à combats plats) ; recommandation : **3 actifs + 2 en réserve** (switch coûtant un tour, réserve à XP réduite), combats ~2× plus rapides. **Nombre d'équipes : 3, TRANCHÉ.**
+**Question restante (étude livrée le 12/11)** : taille de l'équipe — garder 5 (3+2 / 2+3) ou resserrer vers 3 (DQM) ? L'étude comparative demandée est dans `recherche-direction-2026-11-12.md` section 4 : **aucun jeu à grande collection ne met 5 actifs** (DQM 3+3 réserve, Monster Sanctuary 3, Clair Obscur 3 sur 6, FFX 3 sur 7, Suikoden 6 sur 108 = l'exception à combats plats) ; recommandation : **3 actifs + 2 en réserve** (switch coûtant un tour, réserve à XP réduite), combats ~2× plus rapides. **Nombre d'équipes : 3, TRANCHÉ. Taille d'équipe TRANCHÉE (12/11, fin de session) : 3 actifs + 2 en réserve** — à spec moteur (la formation 3+2/2+3 actuelle évolue vers cette structure).
 
 ## 2. Lore et but du jeu — « le jeu manque énormément de lore »
 
@@ -56,7 +62,7 @@
 
 **Questions à trancher** :
 
-1. **Le BUT du jeu** : quelle proposition (ou quelle combinaison) ?
+1. **Le BUT du jeu** : **TRANCHÉ (12/11, fin de session) : Le Lieur** (« l'unité des quatre races »). La combinaison avec l'Échiquier (fins à choix) et la reconnaissance par donjon (Silence du Zénith) reste ouverte pour la fin et le post-fin.
 2. **Fin et post-fin** : multi-fins ? nouveau cycle ? endgame après la dernière chaîne royale ?
 3. **Une histoire écrite** : oui/non ; si oui, sous quelle forme (un doc lore court, intros de zones, PNJ de l'errance) ?
 4. **Nommage lore des 5 paliers** (Facile → Enfer aujourd'hui ; étages 1→5 demain) : noms thématiques à définir.
@@ -103,7 +109,7 @@
 
 **Impact** : le moteur d'oppositions doit calculer au sort (plus au porteur) ; l'affichage carte montre l'élément inné (monstres) ou Neutre (humains) ; l'affichage sort montre l'élément du sort. La migration reste un chantier moteur, mais moins destructeur que le retrait total (les familles élémentaires restent valables).
 
-**Questions restantes** : (1) Nature ou Plante ? ; (2) l'élément d'un sort vient-il de la famille ou est-il libre par carte (proposition : lié à la famille + grimoires pour sortir du schéma) ? ; (3) migration de sauvegarde et digest (les maths de résistance changent → re-mesure documentée).
+**Questions restantes** : (1) **Nature TRANCHÉ (12/11, fin de session)** ; (2) l'élément d'un sort vient-il de la famille ou est-il libre par carte (proposition : lié à la famille + grimoires pour sortir du schéma) ? ; (3) migration de sauvegarde et digest (les maths de résistance changent → re-mesure documentée).
 
 ## 5. Progression des cartes : niveaux 1→100 + fusions (challenge demandé)
 
@@ -157,7 +163,7 @@
 ## 10. Nouvelles mécaniques issues de la session (12/11) — à trancher puis à spec
 
 1. **Équipe de réserve/repli** (l'idée « switch quand l'équipe principale meurt/est affaiblie ») : étude section 5 de la recherche — recommandation **3 actifs + 2 en réserve** intégrée à l'équipe, switch coûtant un tour ; l'équipe de repli entière à réserver au mode exploration. Précéder le calibrage du niveau max (Suikoden 108 étoiles = 6 actifs : la contre-référence).
-2. **HP/MP limités entre combats** (à la DQM/DQ, pour forcer le choix des sorts) : recommandation — **persistance dans le run de donjon uniquement** (Etrian Odyssey : chaque sortie est un budget), récupération hors combat en errance. À trancher.
+2. **HP/MP limités entre combats** (pour forcer le choix des sorts) : recherche APPROFONDIE le 12/11 soir, après challenge de Marc-Olivier (« la majorité des jeux ne reset pas la vie entre chaque combat, à la limite le mana ») — **il a raison** : la convention du genre (DQ XI, Pokémon, SMT V, FF classiques) est que **HP et MP persistent entre les combats**, restaurés en ville (auberge/feu de camp/autel) et via objets ; le reset complet après chaque combat est l'exception (Monster Sanctuary, système décrit comme « unique » par la presse ; DQM Joker probable, à confirmer). Recommandation révisée : **persistance partout, errance comprise**, points de repos en ville + consommables + sorts de soin coûteux en MP. Reste à trancher : coût de la restauration (gratuit vs payant), éventuelle petite régénération post-victoire en errance.
 3. **Expéditions/patrouilles** (envoyer des cartes en quêtes 4/8/12/24 h, drops exclusifs + XP) : validée par les précédents (DQ Treasures, Poké Jobs) ; à trancher : temps réel vs temps de jeu ; recommandation temps réel plafonné.
 4. **Pierre d'évolution divine** (2-3 par partie, humains → divins, etc.) : ACTÉE en principe, spec à écrire ; l'inverse (divin → humain) à envisager.
 5. **Choix forcés** : lignées exclusives initiales, branches verrouillées, pierres limitées — ACTÉ en principe, répartition exacte à définir.
