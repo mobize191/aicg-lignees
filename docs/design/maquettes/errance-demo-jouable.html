@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Errance A — Démo jouable</title>
+<title>Errance A+ — Démo jouable</title>
 <style>
   html,body{margin:0;height:100%;overflow:hidden;background:#0d1410;font-family:Segoe UI,system-ui,sans-serif;}
   #game{position:fixed;inset:0;cursor:crosshair;touch-action:none;}
@@ -48,8 +48,9 @@
   <div class="chip">🌱 Récoltes : <b id="herbs">0</b></div>
   <div class="chip">Zoom ×<b id="zoomv">1.00</b></div>
   <div class="chip">FPS : <b id="fps">–</b></div>
+  <div class="chip"><b id="phase">☀️ Jour</b></div>
 </div>
-<div id="hint" class="chip">🖱️ Maintiens pour marcher · 📱 touche le héros pour frapper, une jarre pour aller la briser, un coffre/maison/autel pour interagir</div>
+<div id="hint" class="chip">🖱️ Maintiens pour marcher · cycle jour/nuit automatique (~100 s) · 📱 touche le héros pour frapper, une jarre pour aller la briser, un coffre/maison/autel pour interagir</div>
 <div id="flash"></div><div id="iris"></div>
 <div id="combat">
   <div id="combatBox">
@@ -273,6 +274,16 @@ for (const p of patches) {
   for (let i = 0; i < p[2]*p[3]; i++) {
     bx.beginPath(); bx.ellipse((p[0]+rnd()*p[2])*T, (p[1]+rnd()*p[3])*T, 9 + rnd()*8, 6 + rnd()*5, rnd()*3, 0, 7); bx.fill();
   }
+  // bordure de fleurs sauvages autour du patch (lecture visuelle de la zone à monstres)
+  const cx3 = (p[0]+p[2]/2)*T, cy3 = (p[1]+p[3]/2)*T, rx = p[2]*T*.62, ry = p[3]*T*.62;
+  for (let i = 0; i < p[2]*4; i++) {
+    const a = rnd()*7;
+    const fx = cx3 + Math.cos(a)*(rx + 4 + rnd()*8), fy = cy3 + Math.sin(a)*(ry + 4 + rnd()*8);
+    if (terr[idx(Math.floor(fx/T), Math.floor(fy/T))] !== 0) continue;
+    bx.fillStyle = ["#ffd76e","#e8a4c8","#ffffff"][Math.floor(rnd()*3)];
+    for (let q = 0; q < 4; q++) { const qa = q/4*7 + rnd()*.4; bx.beginPath(); bx.arc(fx + Math.cos(qa)*1.8, fy + Math.sin(qa)*1.8, 1.3, 0, 7); bx.fill(); }
+    bx.fillStyle = "#ffe9a8"; bx.beginPath(); bx.arc(fx, fy, 1, 0, 7); bx.fill();
+  }
 }
 // arbres : canopées en couches avec lumière
 for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (terr[idx(x,y)] === 3) {
@@ -373,6 +384,11 @@ for (const p of patches) for (let y = p[1]-1; y < p[1]+p[3]+1; y++) for (let x =
 // ---------- Lucioles ----------
 const flies = [];
 for (let i = 0; i < 42; i++) flies.push({ x: rnd()*WORLD_W, y: rnd()*WORLD_H, ph: rnd()*7, sp: .4 + rnd()*.8, r: 1.4 + rnd()*1.6 });
+// ---------- Papillons (jour) et graines de pissenlit (vent) ----------
+const butterflies = [];
+for (let i = 0; i < 6; i++) butterflies.push({ x: rnd()*WORLD_W, y: rnd()*WORLD_H, ph: rnd()*7, sp: .6 + rnd()*.5, fl: rnd()*7, col: ["#ffd76e","#e8a4c8","#c9a0f0"][i%3] });
+const seeds = [];
+for (let i = 0; i < 10; i++) seeds.push({ x: rnd()*WORLD_W, y: rnd()*WORLD_H, ph: rnd()*7 });
 
 // ---------- Herbes-de-Lignée récoltables + étincelles ----------
 const herbs = [];
@@ -467,7 +483,9 @@ const hero = { x: 23.5, y: 30.5, path: [], face: 1, moving: false, speed: 0, til
 const cam = { x: hero.x*T, y: hero.y*T, z: 1.05 };
 const start = { x: hero.x, y: hero.y };
 let steps = 0, grace = GRACE_STEPS, encs = 0, hcount = 0, lastTile = 23*100+30;
-let busy = false, time = 0, fpsN = 0, fpsT = 0, lastZs = "";
+let busy = false, time = 0, fpsN = 0, fpsT = 0, lastZs = "", lastPh = "";
+const prints = [];          // traces de pas (fondu)
+const DAY_LEN = 100;        // durée du cycle jour/nuit en secondes
 
 const $ = id => document.getElementById(id);
 const toast = (msg, ms = 2200) => { const t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("show"), ms); };
@@ -628,6 +646,11 @@ let prev = performance.now();
 function frame(now) {
   const dt = Math.min(.05, (now - prev)/1000); prev = now; time += dt;
 
+  // cycle jour/nuit : ~55 s de jour, crépuscule, nuit, aube (offset 30 s pour démarrer le jour)
+  const cyc = ((time + 30) % DAY_LEN) / DAY_LEN;
+  const dark = cyc < .55 ? 0 : cyc < .70 ? (cyc-.55)/.15 : cyc < .90 ? 1 : 1-(cyc-.90)/.10;
+  const duskAmt = dark*(1-dark)*4; // teinte orangée aux transitions (pic à mi-chemin)
+
   // déplacement inertiel : le vecteur vitesse tourne progressivement (arcs courbes)
   if (hero.atk > 0) hero.atk -= dt;
   if (hero.atkCd > 0) hero.atkCd -= dt;
@@ -679,6 +702,12 @@ function frame(now) {
   if (tk !== lastTile) {
     lastTile = tk; steps++; $("steps").textContent = steps;
     const t = terr[idx(Math.floor(hero.x), Math.floor(hero.y))];
+    // traces de pas sur le chemin de terre (pied gauche/droit alternés)
+    if (t === 1 && hero.moving) {
+      const pxp = -hero.diry, pyp = hero.dirx;
+      prints.push({ x: hero.x*T + pxp*(steps%2 ? 4.5 : -4.5), y: hero.y*T + pyp*(steps%2 ? 4.5 : -4.5) + 8, a: hero.dirx ? Math.atan2(hero.diry, hero.dirx) : 0, life: 5 });
+      if (prints.length > 40) prints.shift();
+    }
     if (t === 5) { hero.path = []; v.x = 0; v.y = 0; toast("🚪 Le donjon ouvre ses portes… (démo : intégration dungeons.json)"); }
     else if (grace > 0) grace--;
     else if (t === 6 && Math.random() < ENC_RATE) startEncounter();
@@ -727,11 +756,28 @@ function frame(now) {
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
   ctx.drawImage(base, 0, 0);
 
+  // viewport monde (culling des entités)
+  const vx0 = cam.x - VW/2/cam.z - 40, vx1 = cam.x + VW/2/cam.z + 40;
+  const vy0 = cam.y - VH/2/cam.z - 40, vy1 = cam.y + VH/2/cam.z + 40;
+
   // ombres de nuages dérivantes (donnent la vie au paysage)
   for (const c of clouds) {
     c.x += c.v*dt;
     if (c.x - 300*c.s > WORLD_W + 120) { c.x = -320*c.s; c.y = rnd()*WORLD_H; }
     ctx.drawImage(cloudCv, c.x - 260*c.s, c.y - 170*c.s, 520*c.s, 340*c.s);
+  }
+  // traces de pas (fondu sur 5 s)
+  for (let i = prints.length - 1; i >= 0; i--) {
+    const p = prints[i]; p.life -= dt;
+    if (p.life <= 0) { prints.splice(i, 1); continue; }
+    if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
+    const al = Math.min(1, p.life/5) * .28;
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+    ctx.fillStyle = "rgba(70,55,35," + al.toFixed(3) + ")";
+    ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
+    ctx.restore();
   }
   // reflets animés de l'étang + écume au bord
   for (let i = 0; i < 9; i++) {
@@ -742,20 +788,33 @@ function frame(now) {
     ctx.beginPath(); ctx.moveTo(ox, oy + 3*a); ctx.quadraticCurveTo(ox + 12, oy - 2, ox + 26, oy + 3*a); ctx.stroke();
   }
   const br = 5.35*T + Math.sin(time*.8)*3;
-  ctx.strokeStyle = "rgba(255,255,255,.22)"; ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.ellipse(px, py, br, br, 0, 0, 7); ctx.stroke();
+  // écume : segments qui léchent le pourtour, phases décalées
+  ctx.lineWidth = 2.2; ctx.lineCap = "round";
+  for (let i = 0; i < 26; i++) {
+    const a = i/26*6.283 + time*.25;
+    const al = .10 + .16*Math.sin(time*1.6 + i*1.3);
+    ctx.strokeStyle = "rgba(255,255,255," + al.toFixed(2) + ")";
+    const rr = br + 2 + Math.sin(time + i)*1.5;
+    ctx.beginPath();
+    ctx.moveTo(px + Math.cos(a)*rr, py + Math.sin(a)*rr);
+    ctx.lineTo(px + Math.cos(a+.09)*(rr+2.5), py + Math.sin(a+.09)*(rr+2.5));
+    ctx.stroke();
+  }
 
-  // herbes animées (uniquement visibles)
-  const vx0 = cam.x - VW/2/cam.z - 40, vx1 = cam.x + VW/2/cam.z + 40;
-  const vy0 = cam.y - VH/2/cam.z - 40, vy1 = cam.y + VH/2/cam.z + 40;
+  // herbes animées (uniquement visibles) + réaction au passage du héros
+  const hpx0 = hero.x*T, hpy0 = hero.y*T;
   ctx.lineCap = "round"; ctx.lineWidth = 2.4;
   for (const col of ["#3f8a42", "#2e6b34"]) { // 2 tracés groupés au lieu de ~600 appels
     ctx.strokeStyle = col; ctx.beginPath();
     for (const b of blades) {
       if (b.c !== col || b.x < vx0 || b.x > vx1 || b.y < vy0 || b.y > vy1) continue;
-      const sw = Math.sin(time*2 + b.ph) * 3.5;
+      const sw = Math.sin(time*2 + b.ph) * 3.5 * (1 + .5*Math.sin(time*.6 + b.x*.01 + b.y*.006)); // rafale ondulante qui traverse la carte
+      // les lames s'écartent quand le héros marche à proximité
+      const hd = Math.hypot(b.x - hpx0, b.y - hpy0);
+      const push = hd < 42 ? (1 - hd/42) * 7 : 0;
+      const pdx = hd > .1 ? (b.x - hpx0)/hd : 0, pdy = hd > .1 ? (b.y - hpy0)/hd : 0;
       ctx.moveTo(b.x, b.y);
-      ctx.quadraticCurveTo(b.x + sw*.5, b.y - b.h*.6, b.x + sw, b.y - b.h);
+      ctx.quadraticCurveTo(b.x + (sw+push*pdx)*.5, b.y - b.h*.6, b.x + sw + push*pdx, b.y - b.h + push*pdy*.4);
     }
     ctx.stroke();
   }
@@ -815,11 +874,20 @@ function frame(now) {
     }
   }
 
-  // héros (peint, ombre, balancement)
+  // héros (peint, ombre directionnelle du soleil, halo nocturne, balancement)
   const hx = hero.x*T, hy = hero.y*T;
   const bob = hero.moving ? Math.sin(time*11)*2 : Math.sin(time*2.4)*1;
-  ctx.fillStyle = "rgba(0,0,0,.3)";
-  ctx.beginPath(); ctx.ellipse(hx, hy + 11, 12, 4.5, 0, 0, 7); ctx.fill();
+  // ombre portée étirée dans la direction opposée au soleil (soleil au NO -> ombre au SE)
+  const shL = 1 + dark*1.1; // l'ombre s'allonge au soir
+  ctx.fillStyle = "rgba(0,0,0," + (0.3 - dark*0.12).toFixed(2) + ")";
+  ctx.beginPath(); ctx.ellipse(hx + 7*shL, hy + 10 + 2*shL, 12*shL, 4.5, .35, 0, 7); ctx.fill();
+  // halo chaleureux autour du héros (visible surtout la nuit)
+  if (dark > .15) {
+    const hg = ctx.createRadialGradient(hx, hy - 8, 4, hx, hy - 8, 46);
+    hg.addColorStop(0, "rgba(255,224,150," + (0.35*dark).toFixed(2) + ")");
+    hg.addColorStop(1, "rgba(255,224,150,0)");
+    ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy - 8, 46, 0, 7); ctx.fill();
+  }
   ctx.save(); ctx.translate(hx, hy + bob); ctx.rotate(hero.tilt * hero.face); ctx.scale(hero.face, 1);
   // sacoche de voyage
   ctx.fillStyle = "#7a5b3a"; ctx.beginPath(); ctx.ellipse(-7, -3, 4, 5.5, .3, 0, 7); ctx.fill();
@@ -889,18 +957,58 @@ function frame(now) {
     ctx.beginPath(); ctx.arc(s.x, s.y, 2.2, 0, 7); ctx.fill();
   }
 
-  // lucioles
+  // lucioles (plus lumineuses et halo bokeh la nuit)
   for (const f of flies) {
     f.x += Math.cos(time*f.sp + f.ph) * .35; f.y += Math.sin(time*f.sp*1.3 + f.ph) * .3;
-    const a = .45 + .45 * Math.sin(time*2 + f.ph);
+    const a = (.45 + .45 * Math.sin(time*2 + f.ph)) * (.2 + .8*dark);
+    if (dark > .3) {
+      const fg = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r*5);
+      fg.addColorStop(0, "rgba(255,233,168," + (0.30*dark).toFixed(2) + ")");
+      fg.addColorStop(1, "rgba(255,233,168,0)");
+      ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(f.x, f.y, f.r*5, 0, 7); ctx.fill();
+    }
     ctx.fillStyle = "rgba(255,233,168," + a.toFixed(2) + ")";
     ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill();
   }
+  // papillons de jour : vol erratique, ailes qui battent (s'estompent à la nuit)
+  if (dark < .8) for (const bf of butterflies) {
+    bf.x += Math.cos(time*bf.sp + bf.ph)*.8 + 14*dt; bf.y += Math.sin(time*bf.sp*1.7 + bf.ph)*.6;
+    if (bf.x > WORLD_W + 10) { bf.x = -10; bf.y = rnd()*WORLD_H; }
+    if (bf.x < vx0 || bf.x > vx1 || bf.y < vy0 || bf.y > vy1) continue;
+    const flap = Math.abs(Math.sin(time*14 + bf.fl));
+    ctx.save(); ctx.translate(bf.x, bf.y); ctx.rotate(Math.sin(time + bf.ph)*.3);
+    ctx.globalAlpha = Math.min(1, (0.8 - dark)*2.5);
+    ctx.fillStyle = bf.col;
+    ctx.beginPath(); ctx.ellipse(-2.6, 0, 2.6, 1.6 + 2.2*flap, .5, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(2.6, 0, 2.6, 1.6 + 2.2*flap, -.5, 0, 7); ctx.fill();
+    ctx.fillStyle = "#3a2a20"; ctx.beginPath(); ctx.ellipse(0, 0, .8, 1.8, 0, 0, 7); ctx.fill();
+    ctx.globalAlpha = 1; ctx.restore();
+  }
+  // graines de pissenlit portées par le vent (plus rapides pendant les rafales)
+  const gustV = .5 + .5*Math.sin(time*.6);
+  for (const s of seeds) {
+    s.x += (14 + gustV*26)*dt; s.y += Math.sin(time*.9 + s.ph)*.5 - 1.5*dt;
+    if (s.x > WORLD_W + 15) { s.x = -15; s.y = rnd()*WORLD_H; }
+    if (s.x < vx0 || s.x > vx1 || s.y < vy0 || s.y > vy1) continue;
+    ctx.save(); ctx.translate(s.x, s.y);
+    ctx.strokeStyle = "rgba(240,240,225,.6)"; ctx.lineWidth = .8;
+    for (let k = 0; k < 6; k++) { const ka = k/6*6.283; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(ka)*3.6, Math.sin(ka)*3.6); ctx.stroke(); }
+    ctx.fillStyle = "rgba(205,195,165,.8)"; ctx.beginPath(); ctx.arc(0, 0, 1, 0, 7); ctx.fill();
+    ctx.restore();
+  }
   ctx.restore();
 
-  // lumière chaude du jour (léger étalonnage)
-  ctx.fillStyle = "rgba(255,241,205,.05)";
+  // étalonnage lumière : teinte chaude le jour, orangée aux crépuscules, bleutée la nuit
+  ctx.fillStyle = "rgba(255,241,205," + (0.05*(1-dark)).toFixed(3) + ")";
   ctx.fillRect(0, 0, VW, VH);
+  if (duskAmt > 0.02) {
+    ctx.fillStyle = "rgba(255,140,60," + (0.16*duskAmt).toFixed(3) + ")";
+    ctx.fillRect(0, 0, VW, VH);
+  }
+  if (dark > 0.02) {
+    ctx.fillStyle = "rgba(14,22,58," + (0.42*dark).toFixed(3) + ")";
+    ctx.fillRect(0, 0, VW, VH);
+  }
 
   // marqueur de destination
   if (hero.path.length) {
@@ -916,6 +1024,8 @@ function frame(now) {
 
   const zs = cam.z.toFixed(2);
   if (zs !== lastZs) { lastZs = zs; $("zoomv").textContent = zs; }
+  const ph = cyc < .55 ? "☀️ Jour" : cyc < .70 ? "🌇 Soir" : cyc < .90 ? "🌙 Nuit" : "🌅 Aube";
+  if (ph !== lastPh) { lastPh = ph; $("phase").textContent = ph; }
   fpsN++; fpsT += dt;
   if (fpsT >= .5) { $("fps").textContent = Math.round(fpsN/fpsT); fpsN = 0; fpsT = 0; }
   requestAnimationFrame(frame);

@@ -1,6 +1,6 @@
 # Système d'errance top-down — Guide d'implémentation
 
-Référence : démo A jouable (canvas « Errance A — démo jouable »). Ce document reprend les mécanismes exacts de la démo, avec extraits de code, points d'attention et conseils d'intégration dans le repo `aicg-lignees`.
+Référence : démos jouables « Errance A — démo jouable » (base) et « Errance A+ — démo jouable » (couche d'ambiance). Ce document reprend les mécanismes exacts des démos, avec extraits de code, points d'attention et conseils d'intégration dans le repo `aicg-lignees`.
 
 ---
 
@@ -70,7 +70,7 @@ Ordre des passes (importante, chaque couche recouvre la précédente) :
 
 1. **Fond** : dégradé vertical global, puis ~1500 taches organiques semi-transparentes (`ellipse` avec opacité 5-8 %) pour casser l'aplat.
 2. **Micro-détails** : touffes (quadratic curves), fleurs à pétales, cailloux, seulement sur tuiles `0`.
-3. **Chemin** : cercles larges ton foncé, puis cercles clairs décalés, puis taches d'ornières et cailloux, seulement sur tuiles `1`.
+3. **Chemin** : cercles larges ton foncé, puis cercurs clairs décalés, puis taches d'ornières et cailloux, seulement sur tuiles `1`.
 4. **Étang** : rive sablonneuse (2 ellipses), eau en dégradé radial, ombres de profondeur, reflets statiques, nénuphars, roseaux.
 5. **Socles de hautes herbes** : 2 couches (masque sombre + touffes claires).
 6. **Arbres, rochers, donjon, maisons, autel** : avec ombre portée elliptique au sol peinte *sous* chaque objet.
@@ -96,7 +96,7 @@ const DIRS = [[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,1.42],[1,-1,1.42],[-1,1,1.4
 function astar(sx, sy, tx, ty) {
   if (!inb(tx, ty) || solid(terr[idx(tx,ty)])) return null;
   const key = (x,y) => y*MW + x, open = [{x:sx,y:sy,g:0,f:0,p:null}], seen = new Map();
-  seen.set(key(sx, sy), 0);
+  seen.set(key(sx,sy), 0);
   while (open.length) {
     open.sort((a,b) => a.f - b.f); const cur = open.shift();
     if (cur.x === tx && cur.y === ty) { const path = []; let n = cur; while (n) { path.unshift(n); n = n.p; } return path; }
@@ -321,6 +321,106 @@ for (const col of ["#3f8a42", "#2e6b34"]) {
 
 ---
 
+## 9 bis. Couche d'ambiance (cycle jour/nuit, faune, météo)
+
+En provenance de la démo A+. Toutes ces pièces restent dans le budget perf du style A : zéro `ctx.filter`, zéro flou plein écran, tout est either pré-rendu (coût nul par frame) soit une entité animée cullée comme les autres.
+
+### Cycle jour/nuit doux
+
+Un seul paramètre `dark` (0 jour → 1 nuit), piloté par un cycle de 100 s : 55 % jour, 15 % crépuscule, 20 % nuit, 10 % aube.
+
+```js
+const DAY_LEN = 100;
+const cyc = ((time + 30) % DAY_LEN) / DAY_LEN;   // offset pour démarrer en journée
+const dark = cyc < .55 ? 0
+           : cyc < .70 ? (cyc-.55)/.15
+           : cyc < .90 ? 1
+           : 1-(cyc-.90)/.10;
+const duskAmt = dark*(1-dark)*4;                  // pic orange aux transitions
+```
+
+Trois rectangles plein écran **après** `ctx.restore()` (espace écran, 1 fillRect chacun) :
+
+```js
+ctx.fillStyle = "rgba(255,241,205," + (0.05*(1-dark)).toFixed(3) + ")";  // chaude le jour
+ctx.fillRect(0, 0, VW, VH);
+if (duskAmt > .02) { /* rgba(255,140,60, 0.16*duskAmt) */ }               // orangée crépuscule
+if (dark > .02)   { /* rgba(14,22,58, 0.42*dark) */ }                    // bleutée nuit
+```
+
+Dérivés gratuits :
+- **Ombre du héros étirée** dans la direction opposée au soleil, qui s'allonge avec `dark` :
+```js
+const shL = 1 + dark*1.1;
+ctx.beginPath(); ctx.ellipse(hx + 7*shL, hy + 10 + 2*shL, 12*shL, 4.5, .35, 0, 7); ctx.fill();
+```
+- **Halo nocturne** autour du héros : un seul `createRadialGradient`, alpha proportionnel à `dark` (visible à partir de `dark > .15`).
+- **Phase affichée dans le HUD** (Jour/Soir/Nuit/Aube), écrite seulement si le libellé change (même patron throttle que le HUD principal).
+
+**Point d'attention :** ne teinte **jamais** le monde en dessinant un rect par-dessus les entités interactives au-dessus du héros avec une couleur pleine : toujours des overlays semi-transparents en espace écran, après le rendu monde. La lisibilité des tuiles (chemin, herbes, eau) doit survivre à la nuit, sinon le gameplay se dégrade avec la lumière.
+
+### Faune : papillons le jour, lucioles la nuit
+
+Même patron pour les deux, symétrie jour/nuit :
+
+```js
+// lucioles : intensité et halo bokeh montent avec l'obscurité
+const a = (.45 + .45*Math.sin(time*2 + f.ph)) * (.2 + .8*dark);
+if (dark > .3) { /* halo radial rgba(255,233,168, .30*dark), rayon f.r*5 */ }
+// papillons : alpha s'effondre à la nuit tombée
+ctx.globalAlpha = Math.min(1, (0.8 - dark)*2.5);
+```
+
+**Point d'attention :** le battement d'ailes (`Math.abs(Math.sin(time*14 + fl))` modulant la hauteur des deux ellipses) doit être rapide (~14 Hz) sinon le papillon semble cligner au lieu de voler. Reset `globalAlpha = 1` après le dessin.
+
+### Traces de pas (feedback de déplacement)
+
+Empreintes alternées gauche/droite, orientées selon la direction, posées au changement de tuile sur le chemin uniquement :
+
+```js
+if (t === 1 && hero.moving) {
+  const pxp = -hero.diry, pyp = hero.dirx;                    // perpendiculaire au mouvement
+  prints.push({ x: hero.x*T + pxp*(steps%2 ? 4.5 : -4.5),
+                y: hero.y*T + pyp*(steps%2 ? 4.5 : -4.5) + 8,
+                a: Math.atan2(hero.diry, hero.dirx), life: 5 });
+  if (prints.length > 40) prints.shift();                    // borne mémoire
+}
+// rendu : 3 petites ellipses sombres, alpha = min(1, life/5)*.28
+```
+
+**Point d'attention :** borne le tableau (ici 40) et décrémente la vie dans la boucle de rendu, comme la fumée et les étincelles. Ce sont les mêmes 20 lignes pour toute particule temporaire.
+
+### Herbes réactives et rafales
+
+Deux effets, une seule boucle (celle des lames groupées par couleur, cf. §9) :
+
+```js
+// rafale ondulante : la même vague traverse toute la carte
+const sw = Math.sin(time*2 + b.ph) * 3.5 * (1 + .5*Math.sin(time*.6 + b.x*.01 + b.y*.006));
+// poussée du héros : les lames s'écartent quand il passe à moins de 42 px
+const hd = Math.hypot(b.x - hpx0, b.y - hpy0);
+const push = hd < 42 ? (1 - hd/42) * 7 : 0;
+ctx.quadraticCurveTo(b.x + (sw+push*pdx)*.5, b.y - b.h*.6, b.x + sw + push*pdx, b.y - b.h + push*pdy*.4);
+```
+
+**Point d'attention :** la rafale doit dépendre de la position (`b.x*.01 + b.y*.006`) et non du seul temps, sinon tout le pré frémit en bloc et l'effet casse l'illusion d'un souffle traversant.
+
+### Graines de pissenlit (vent visible)
+
+Une dizaine de duvets blancs qui dérivent vers l'est, vitesse modulée par la rafale (`gustV = .5 + .5*Math.sin(time*.6)`), wrap horizontal. Renforcent la direction du vent suggérée par les herbes, coût quasi nul.
+
+### Bordures de fleurs autour des patchs de hautes herbes
+
+Cuites dans le pré-rendu (coût nul par frame) : des fleurs échantillonnées sur l'ellipse de contour de chaque patch, uniquement sur tuiles `0`.
+
+**Intérêt gameplay :** marque visuellement les zones à rencontres sans un mot d'UI. Combines-y une légère teinte de socle plus sombre (déjà présente) : le joueur apprend le danger en une partie de seconde.
+
+### Écume animée de l'étang
+
+Segments courts (`moveTo`/`lineTo`) qui parcourent l'ellipse du bord avec phases décalées, alpha oscillant, remplaçant le cercle statique. Le rayon « respire » déjà via `br = 5.35*T + Math.sin(time*.8)*3`.
+
+**Point d'attention :** autour d'un point d'eau, trois signaux suffisent à « vendre » le liquide : reflets scintillants (ondes courtes), écume au bord (phases décalées), respiration du contour. Plus coûteux (vagues simulées) n'apporte rien à cette échelle de zoom.
+
 ## 10. Entrées : souris ET tactile
 
 ```js
@@ -350,11 +450,12 @@ if (matchMedia("(pointer: coarse)").matches || "ontouchstart" in window) documen
 
 1. Extraire la boucle de rendu de `dist.html` (monolithe) vers `src/ui.js` + modules `errance/*`, reconstruire via le build `shell.html` + `ui.js`.
 2. Piloter la carte depuis `zones.json` : grille, seed décor, `enc_rate`, objets, spawns, sortie(s) de zone.
-3. Brancher la transition de combat sur `engine/combat.js` : contrat d'entrée (monstre tiré selon la zone/niveau), contrat de sortie (résultat, position tuiles restaurée, `grace >= 2`).
+3. Brancher la transition de combat sur `engine/combat.js` : contrat d'entrée (monstre tiré selon la zone/niveau), contrat de sortie (résultat, position tuiles restaurée, `grace ≥ 2`).
 4. Brancher tuile `5` (porte donjon) sur `dungeons.json` et tuile `10`/coffres sur l'inventaire.
 5. Persistance : position tuiles, coffres/jarres/herbes pris, `steps`, buffs.
 6. Test mobile réel (Safari iOS) : dt borné, pointer events, `touch-action`, boutons visibles.
 7. Budget perf mesuré : compteur FPS, `performance.mark` sur le pré-rendu de zone.
+8. Couche d'ambiance (§9 bis) : décide tôt si le cycle jour/nuit est global au jeu ou par zone (la longueur du cycle, `DAY_LEN`, peut vivre dans `zones.json`).
 
 ---
 
@@ -368,11 +469,14 @@ if (matchMedia("(pointer: coarse)").matches || "ontouchstart" in window) documen
 | Pas de grâce post-combat | rencontres en boucle à la sortie | `GRACE_STEPS` + autel |
 | Waypoints sans test « dépassé » | le héros orbite autour du point | produit scalaire avec le segment suivant |
 | Objets cassables cuits dans le pré-rendu | visuel incohérent après bris | dessiner entités à part de `base` |
-| Écran -> monde sans zoom | cliquabilité fausse dès que `cam.z != 1` | toujours diviser par `cam.z` (cf. §10) |
+| Écran -> monde sans zoom | cliquabilité fausse dès que `cam.z ≠ 1` | toujours diviser par `cam.z` (cf. §10) |
 | DPR non plafonné | 5-10 fps sur mobiles récents | `min(2, devicePixelRatio)` |
 | Grille en objets JS | mémoire ×20 et cache-hostile | `Uint8Array` plat |
 | HUD écrit à chaque frame | jank GC sur mobile | écrire seulement si la valeur change |
+| Tintée de nuit opaque par-dessus le monde | tuiles illisibles la nuit | overlays semi-transparents ≤ ~0.45 alpha |
+| Rafale liée au temps seul | tout le pré frémit en bloc | onde dépendante de la position (`b.x*.01`) |
+| Particules sans borne mémoire | fuite lente sur session longue | cap + décrément de vie dans la boucle de rendu |
 
 ---
 
-*Source : démo A « Errance A — démo jouable », code complet révisé. Paramètres numériques (ENC_RATE 0.16, GRACE_STEPS 2, T=36, WALK_SPEED 4.4 tuiles/s, lerp cam 4.5, look-ahead 0.12 s, zoom 1.05→1.7) : valeurs validées en jeu, à affiner par zone.*
+*Source : démos « Errance A » et « Errance A+ », code complet révisé. Paramètres numériques (ENC_RATE 0.16, GRACE_STEPS 2, T=36, WALK_SPEED 4.4 tuiles/s, lerp cam 4.5, look-ahead 0.12 s, zoom 1.05→1.7, DAY_LEN 100 s) : valeurs validées en jeu, à affiner par zone.*
