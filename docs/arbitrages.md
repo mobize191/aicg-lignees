@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA lot 2 livré (choix de sort contextuel) : dans la tolérance
+
+- **Livré** : `pickSpell(u, ctx)` lit l'état public — soin si un allié est sous `SPELL_HEAL_THRESHOLD` (0,35), contrôle/malus sur la menace (`SPELL_CONTROL_BONUS`), burst si un kill est possible (`SPELL_KILL_BONUS`), sinon le plus efficace au coût (mult/coût) ; hystérésis `SPELL_HYSTERESIS` (sort en cours conservé dans la marge, mémorisé par unité). Poids en data (`data/engine.json`). S'applique aux deux camps (même fonction). Sans contexte : chemin historique inchangé. Règle d'économie « save for top » conservée. 4 tests headless déterministes. 167 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`3811fda3…` 1219/3000 (0 exception, 0 marathon)** contre `910d3dc3…` 1337/3000 (lot 1) — écart **3,93 points ≤ 5 points**, 0 exception, 0 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
 ## 2026-11-12 : MESURE — refonte IA lot 1 livré (utilité de ciblage + hystérésis) : dans la tolérance
 
 - **Livré** : `pickTargetByUtility` — score d'utilité partagé IA ennemie et Auto joueur (kill possible, opposition d'élément, menace = ATQ × `TARGET_THREAT_WEIGHT`, pénalité arrière protégé `TARGET_BACK_PENALTY`, − PV), poids en data (`data/engine.json`) ; hystérésis anti flip-flop `TARGET_HYSTERESIS` (cible en cours conservée dans la marge, mémorisée par camp dans l'état). Le chemin Auto joueur cesse de frapper `foes[0]`. 5 tests headless déterministes. 163 tests verts, smoke 299 (3 échecs préexistants).

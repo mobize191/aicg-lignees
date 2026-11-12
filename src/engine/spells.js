@@ -1,16 +1,55 @@
 // src/engine/spells.js : extrait du monolithe (phase 0, comportement inchange)
 
-function pickSpell(u) {
+// refonte IA lot 2 : avec un contexte (état public : alliés, ennemis), le choix de sort lit la situation
+// (soin si un allié est sous le seuil, contrôle/malus sur la menace, burst si un kill est possible,
+// sinon le plus efficace au coût) avec hystérésis anti flip-flop. Sans contexte : chemin historique.
+function pickSpell(u, ctx = null) {
   u.mana = Math.min(u.manaMax, u.mana + u.manaRegen);
-  let best = null;
-  for (const s of u.spells) {
-    if (s.cost <= u.mana && (!best || s.cost > best.cost)) best = s;
+  const affordable = (u.spells ?? []).filter((s) => s.cost <= u.mana);
+  if (!affordable.length) return null;
+  if (!ctx) {
+    let best = null;
+    for (const s of affordable) if (!best || s.cost > best.cost) best = s;
+    if (u.spells.length > 1) {
+      const top = u.spells[u.spells.length - 1];
+      if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
+        return null;
+      }
+    }
+    u.mana -= best.cost;
+    return best;
   }
-  if (!best) return null;
+  const foes = (ctx.foes ?? []).filter((f) => f && f.alive);
+  const allies = [...((ctx.allies ?? {}).avant ?? []), ...((ctx.allies ?? {}).arriere ?? [])].filter((x) => x && x.alive);
+  const stat = statOf(u);
+  const seuil = M.SPELL_HEAL_THRESHOLD;
+  const hurtAlly = allies.some((a) => a.hp < a.maxHp * seuil);
+  const killable = (s) => !!s.mult && foes.some((f) => f.hp <= Math.max(1, Math.round(stat * s.mult)));
+  const score = (s) => {
+    let sc = ((s.mult ?? 1) / s.cost) * 100;
+    if (s.role === 'soin' && hurtAlly) sc += M.SPELL_HEAL_BONUS;
+    if ((s.role === 'controle' || s.role === 'malus') && foes.length) sc += M.SPELL_CONTROL_BONUS;
+    if (killable(s)) sc += M.SPELL_KILL_BONUS;
+    return sc;
+  };
+  let best = affordable[0];
+  let bestScore = -Infinity;
+  for (const s of affordable) {
+    const sc = score(s);
+    if (sc > bestScore) { best = s; bestScore = sc; }
+  }
+  const st = ctx.state ?? null;
+  if (st) {
+    const last = st.lastSpell ? st.lastSpell[u.uid] : null;
+    const prev = last ? affordable.find((s) => s.name === last) : null;
+    if (prev && score(prev) >= bestScore - M.SPELL_HYSTERESIS) best = prev;
+    st.lastSpell = st.lastSpell ?? {};
+    st.lastSpell[u.uid] = best.name;
+  }
   if (u.spells.length > 1) {
     const top = u.spells[u.spells.length - 1];
     if (top.cost > u.mana && top.cost <= u.manaMax && top.cost <= u.mana + 2 * u.manaRegen) {
-      return null; 
+      return null;
     }
   }
   u.mana -= best.cost;
@@ -130,7 +169,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
       s.mana -= cand.cost;
     }
   } else {
-    spell = pickSpell(s);
+    spell = pickSpell(s, { state: st, allies, foes, side });
   }
   if (st && spell && side === 'enemies') st.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance

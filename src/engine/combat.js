@@ -378,7 +378,7 @@ function actTeamStriker(u, i, ctx, step) {
         spell = cp.spell;
         cp.spell = null;
       } else {
-        spell = pickSpell(u);
+        spell = pickSpell(u, { state: ctx.state, allies: team, foes, side: 'team' });
       }
     }
   }
@@ -517,8 +517,8 @@ function targetUtilityScore(attacker, t, dmgBase, st, side) {
   let s = 0;
   if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
   if (elementTag(attacker.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
-  s += (M.TARGET_THREAT_WEIGHT ?? 0) * (t.atk ?? 0);
-  if (st && backProtected(st, side, t, false)) s -= (M.TARGET_BACK_PENALTY ?? 0);
+  s += M.TARGET_THREAT_WEIGHT * (t.atk ?? 0);
+  if (st && backProtected(st, side, t, false)) s -= M.TARGET_BACK_PENALTY;
   return s - t.hp;
 }
 
@@ -535,7 +535,7 @@ function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
   if (st) {
     const last = st.lastTarget ? st.lastTarget[side] : null;
     const prev = last ? targets.find((t) => t.uid === last) : null;
-    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - (M.TARGET_HYSTERESIS ?? 0)) {
+    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - M.TARGET_HYSTERESIS) {
       best = prev;
     }
     st.lastTarget = st.lastTarget ?? {};
@@ -566,7 +566,7 @@ function actEnemyStriker(e, ctx) {
   }
   const targets = ctx.teamAll(); // Option A : l'arrière est ciblable tant que des cibles vivent
   if (!targets.length) return false;
-  const spell = pickSpell(e);
+  const spell = pickSpell(e, { state: ctx.state, allies: enemies, foes: targets, side: 'enemies' });
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big: !!spell.big, fx: 'atk', mana: e.mana });
     ctx.state.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };

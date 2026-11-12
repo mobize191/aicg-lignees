@@ -612,3 +612,69 @@ test('refonte IA lot 1 : enemyPickTarget avec état délègue à l\'utilité (r�
   const st = targetState([targetUnit('t1', 100, 10)], [weak, strong]);
   assert.equal(E.enemyPickTarget(e, [weak, strong], 10, st).uid, 'e1', 'avec état : utilité + hystérésis');
 });
+
+// ---------- refonte IA lot 2 : choix de sort contextuel ----------
+const spellCtx = (E, u, allies, foes) => ({ state: { turn: 1, rng: mulberry32(1), team: { avant: allies, arriere: [] }, enemies: { avant: foes, arriere: [] }, mods: {} }, allies: { avant: allies, arriere: [] }, foes, side: 'team' });
+
+test('refonte IA lot 2 : soin prioritaire quand un allié est sous le seuil', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Frappe', cost: 3, mult: 1.6, role: 'degats', cible: '1 ennemi' },
+    { name: 'Soin', cost: 2, mult: 1.2, role: 'soin', cible: '1 allié' },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  const ally = E.makeUnit(E.getCard('a1'), 'a1', 1);
+  ally.hp = Math.floor(ally.maxHp * 0.1); // sous le seuil 0.35
+  const foe = foeUnit(E);
+  const s = E.pickSpell(u, spellCtx(E, u, [ally], [foe]));
+  assert.equal(s.name, 'Soin', 'le sort de soin est choisi');
+  // sans allié blessé : retour à l\'efficacité au coût (Frappe 1.6/3 > Soin 1.2/2 ? non : 0.53 < 0.6 -> Soin)
+  const u2 = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Frappe', cost: 3, mult: 2.2, role: 'degats', cible: '1 ennemi' },
+    { name: 'Soin', cost: 2, mult: 1.2, role: 'soin', cible: '1 allié' },
+  ] }, 'u2', 1);
+  u2.mana = u2.manaMax = 10;
+  const allyFull = E.makeUnit(E.getCard('a1'), 'a2', 1);
+  const s2 = E.pickSpell(u2, spellCtx(E, u2, [allyFull], [foe]));
+  assert.equal(s2.name, 'Frappe', 'sans soin nécessaire : le plus efficace au coût (2.2/3 > 1.2/2)');
+});
+
+test('refonte IA lot 2 : burst si un kill est possible', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'Petit', cost: 2, mult: 1.0, role: 'degats', cible: '1 ennemi' },
+    { name: 'Gros', cost: 5, mult: 3.0, role: 'degats', cible: '1 ennemi' },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  const foe = foeUnit(E);
+  foe.hp = 5; // killable par Gros (stat*mult >= 5) mais pas par Petit
+  const s = E.pickSpell(u, spellCtx(E, u, [E.makeUnit(E.getCard('a1'), 'a1', 1)], [foe]));
+  assert.equal(s.name, 'Gros', 'le sort qui tue est choisi');
+});
+
+test('refonte IA lot 2 : hystérésis — le sort en cours tient dans la marge entre tours', () => {
+  const E = loadEngine();
+  const mk = () => E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'A', cost: 2, mult: 1.5, role: 'degats', cible: '1 ennemi' },
+    { name: 'B', cost: 3, mult: 2.0, role: 'degats', cible: '1 ennemi' },
+  ] }, 'u1', 1);
+  const st = { turn: 1, rng: mulberry32(1), lastSpell: { u1: 'A' }, team: { avant: [], arriere: [] }, enemies: { avant: [], arriere: [] }, mods: {} };
+  const u = mk();
+  u.mana = u.manaMax = 10;
+  const foe = foeUnit(E);
+  const ctx = { state: st, allies: { avant: [], arriere: [] }, foes: [foe], side: 'team' };
+  const s = E.pickSpell(u, ctx);
+  // scores : A = 75, B = 66.7 -> B meilleur de 8.3 < marge 30, mais A est le sort en cours -> A conservé
+  assert.equal(s.name, 'A', 'pas de flip-flop au bord du seuil');
+});
+
+test('refonte IA lot 2 : sans contexte, pickSpell garde le comportement historique (plus cher abordable)', () => {
+  const E = loadEngine();
+  const u = E.makeUnit({ ...E.getCard('n1'), effect: undefined, spells: [
+    { name: 'A', cost: 2, mult: 1.5 },
+    { name: 'B', cost: 5, mult: 3.0 },
+  ] }, 'u1', 1);
+  u.mana = u.manaMax = 10;
+  assert.equal(E.pickSpell(u).name, 'B', 'plus cher abordable');
+  assert.equal(u.mana, 5, 'coût déduit');
+});
