@@ -1,5 +1,9 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : SESSION — PR #5 mergée (main `eeea5d5`) : parties multiples livrées en v1.35
+
+- **PR #5 mergée** : 4 slots de sauvegarde (`fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie), migration sans perte de la sauvegarde historique vers la Partie 1, panneau « Parties » sur l'Accueil (▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer à double confirmation), partie active mémorisée, FCSAVE1 inchangé. 171 tests verts, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000. Documentation à jour : CHANGELOG v1.35, HISTORY, roadmap, protocole IHM v1.35 (S23). Questions ouvertes restant balisées `[À TRANCHER — SESSION 12/11]` (4 slots / noms libres / active mémorisée).
+
 ## 2026-11-12 : LIVRÉ — parties multiples (4 slots de sauvegarde), v1.35 : digests inchangés, défauts 12/11 appliqués
 
 - **Chantier exécuté** selon `docs/prompt-parties-multiples.md`, un commit FR par lot. **Lot 1 (stockage + migration)** : clés `fondations-cards-v1.p0`…`.p3` + index `.slots` + `.bak` par partie ; migration sans perte (sauvegarde historique → Partie 1, clés historiques conservées en repli de sécurité) ; flux réel v8 → v27 rejoué en smoke (B19). **Lot 2 (UI)** : panneau « Parties » sur l'Accueil (Jouer / Nouvelle partie / Renommer / Supprimer à double confirmation), sauvegarde de la partie en cours avant toute bascule, partie active mémorisée. Export FCSAVE1 inchangé (partie active). **Lot 3 (preuves)** : smoke enrichi B19 (18 checks stockage/migration/bascule) + B20 (12 checks panneau) = 347 checks, 171 tests verts.
