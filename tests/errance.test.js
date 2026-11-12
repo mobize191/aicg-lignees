@@ -159,3 +159,17 @@ test('refonte IA lot 4 : marche normale sans stagnation -> aucun repath, arrivé
   assert.equal(repaths, 0, 'aucun repath en marche normale');
   assert.ok(Math.hypot(st.hero.x - (m.donjon.x + 0.5), st.hero.y - (m.donjon.y + 2.5)) < 1, 'le héros a atteint la porte');
 });
+
+test('refonte errance lot 1 : decorOrders/ambiance déterministes depuis le seed, palette zone en data avec défauts', () => {
+  const E = loadEngine();
+  const z = E.DATA.zones[0];
+  const m1 = E.genZoneMap(z), m2 = E.genZoneMap(z);
+  const d1 = E.decorOrders(m1, z), d2 = E.decorOrders(m2, z);
+  assert.equal(JSON.stringify(d1), JSON.stringify(d2), 'même seed => mêmes ordres de décor');
+  assert.ok(d1.blades.length > 0 && d1.pond && d1.herbSocles.length > 0 && d1.details.length > 0, 'décor présent (lames, étang, socles, détails)');
+  const pal = E.errancePalette(z);
+  assert.equal(pal.water0, '#78c2de', 'override zone-marees lu depuis zones.json');
+  assert.equal(E.errancePalette(E.DATA.zones[1]).water0, '#78c2de', 'défaut intégré pour les zones non paramétrées');
+  const amb = E.buildAmbiance(m1, z);
+  assert.ok(amb.dayLen === 100 && amb.flies.length === 42 && amb.clouds.length === 3 && Array.isArray(amb.prints), 'ambiance construite');
+});

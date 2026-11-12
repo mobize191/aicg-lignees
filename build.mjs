@@ -9,6 +9,7 @@ const ENGINE_ORDER = [
   'src/engine/summon.js',
   'src/engine/progression.js',
   'src/errance.js',
+  'src/errance-paint.js',
   'src/engine/migrate.js',
 ];
 

@@ -2592,22 +2592,12 @@ function renderErrance(root) {
   const base = document.createElement('canvas');
   base.width = st.map.w * T;
   base.height = st.map.h * T;
-  const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
-  const paintTile = (bx, x, y) => {
-    const t = st.map.terr[st.map.idx(x, y)];
-    bx.fillStyle = cols[t] ?? '#333';
-    bx.fillRect(x * T, y * T, T, T);
-    if (t === 6) { bx.fillStyle = '#3c6b31'; bx.fillRect(x * T + 6, y * T + 8, 4, 14); bx.fillRect(x * T + 16, y * T + 4, 4, 18); }
+  // refonte errance lot 1 : peinture style A+ en pré-rendu unique (src/errance-paint.js, palette en data) ;
+  // jarres et objets cassables restent dessinés par frame (jamais cuits dans le pré-rendu, guide §8)
+  paintZoneBase(base.getContext('2d'), st.map, zone);
+  const repaintTile = (x, y) => {
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) paintTileGround(base.getContext('2d'), st.map, zone, x + dx, y + dy);
   };
-  {
-    const bx = base.getContext('2d');
-    for (let y = 0; y < st.map.h; y++) for (let x = 0; x < st.map.w; x++) paintTile(bx, x, y);
-    bx.fillStyle = '#5a4632';
-    bx.fillRect(st.map.donjon.x * T, st.map.donjon.y * T, st.map.donjon.w * T, st.map.donjon.h * T);
-    bx.fillStyle = '#e8e8f2';
-    bx.fillRect(st.map.autel.x * T + 8, st.map.autel.y * T + 8, T - 16, T - 16);
-  }
-  const repaintTile = (x, y) => { if (x >= 0 && y >= 0 && x < st.map.w && y < st.map.h) paintTile(base.getContext('2d'), x, y); };
   // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
   // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
   const heroCfg = E.ERRANCE_HERO ?? null;
@@ -2630,13 +2620,22 @@ function renderErrance(root) {
     ctx.translate(-cam.x, -cam.y);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(base, 0, 0); // 1 appel : plus de fillRect tuile par tuile
+    const pal = errancePalette(zone);
     for (const j of st.map.jarres) {
       const jid = `jarre-${j.x}-${j.y}`;
-      if (st.broken.includes(jid)) continue;
-      ctx.fillStyle = '#a8763e';
-      ctx.beginPath();
-      ctx.arc(j.x * T + T / 2, j.y * T + T / 2, 9, 0, 7);
-      ctx.fill();
+      const cx2 = j.x * T + T / 2, cy2 = j.y * T + T / 2;
+      if (st.broken.includes(jid)) {
+        ctx.fillStyle = pal.shard;
+        ctx.beginPath(); ctx.ellipse(cx2 - 8, cy2 + 6, 7, 3, .2, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx2 + 8, cy2 + 4, 5, 2.5, -.3, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx2 + 2, cy2 + 9, 6, 2.6, .1, 0, 7); ctx.fill();
+        continue;
+      }
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(cx2 + 2, cy2 + 11, 12, 4.5, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potBody; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potLight; ctx.beginPath(); ctx.ellipse(cx2 - 3, cy2 - 3, 7, 9, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potDark; ctx.beginPath(); ctx.ellipse(cx2, cy2 - 11, 6.5, 3, 0, 0, 7); ctx.fill();
+      ctx.strokeStyle = pal.potLine; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.stroke();
     }
     const hx = st.hero.x * T, hy = st.hero.y * T;
     ctx.save();

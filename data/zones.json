@@ -105,7 +105,18 @@
     "h": 32,
     "t": 36
    },
-   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+   "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+   "paint": {
+    "note": "palette peinture A+ zone temoin (Marées) ; defauts intégrés dans src/errance-paint.js pour les autres zones",
+    "grassTop": "#82b96b",
+    "grassBottom": "#4f8c4b",
+    "water0": "#78c2de",
+    "water1": "#4b8db0",
+    "water2": "#27556f",
+    "sand": "#c9b083",
+    "pathBase": "#b3945f",
+    "pathCore": "#d3b285"
+   }
   }
  },
  {
