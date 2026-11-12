@@ -4982,9 +4982,9 @@ async function animate(events, ms, gen = null) {
         updateMana(ev.sourceId, ev.mana);
         if (ev.targetId !== 'all' && dstEl) {
           lastSingle = ev;
-          shake(dstEl, special);
-          if (special) burst(dstEl);
-          floatText(dstEl, `-${ev.amount}${tag}${special ? ' !' : ''}`, special ? 'dmg fx-special' : 'dmg');
+          shake(dstEl, special || !!ev.crit); // Lot 1 : un crit secoue fort
+          if (special || ev.crit) burst(dstEl);
+          floatText(dstEl, `${ev.crit ? 'CRIT ' : ''}-${ev.amount}${tag}${special ? ' !' : ''}`, (special ? 'dmg fx-special' : 'dmg') + (ev.crit ? ' fx-crit' : '')); // Lot 1 : flag crit lu depuis l'event
           if (special) await hitStop();
         } else if (ev.targetId === 'all') {
           
@@ -6097,6 +6097,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.43 : Coups critiques d\u2019agilité', 'Chaque frappe physique a une chance de coup critique tirée de l\u2019agilité : 5 % de base + 1 % par point d\u2019agilité d\u2019avantage sur la cible, plafonné à 30 %, pour des dégâts ×1,5. L\u2019esquive se résout d\u2019abord ; les sorts ne critiquent pas (v1). Symétrique : les ennemis et l\u2019auto-résolution aussi. Un « CRIT » s\u2019affiche sur la frappe. 230 tests, digest MESURÉ `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.42 : Oppositions au sort + Nature', 'Le bonus d\u2019opposition (+25 %) se calcule désormais entre l\u2019élément de l\u2019école du SORT (badge \u2192 sur chaque sort) et l\u2019élément inné de la cible ; la frappe simple garde l\u2019élément de la carte. Les cartes humaines sont Neutres (hors oppositions), les monstres et divins gardent leur élément inné. L\u2019élément « Terre » s\u2019appelle désormais « Nature » (mêmes oppositions). 225 tests, digest MESURÉ `daef2bca\u2026` 835/3000 et `883c1c18\u2026` 2797/10000.'],
   ['v1.41 : Formation 3 actifs + 2 réserve', 'Chaque combat aligne 3 cartes actives et garde 2 cartes en réserve (bandeau d\u2019dié sous l\u2019équipe, hors ciblage). Nouvelle action \u21c4 Échanger : la carte de réserve entre immédiatement mais son tour est consommé (elle n\u2019agit qu\u2019au tour suivant), PV et mana conservés des deux côtés. Si une carte active tombe K.O., la réserve entre automatiquement et GRATUITEMENT (aucun tour consommé, elle joue au tour suivant). La réserve gagne 50 % d\u2019XP (`reserveXpMult`). 220 tests, digest MESURÉ `5bdb0c6d\u2026` 822/3000 et `1122225c\u2026` 2787/10000 (formation 3+2 : les équipes du harnais combattent à 2 actifs au lieu de 3).'],
   ['v1.40 : Les interactions d’errance répondent au clic', 'Porte du donjon cliquable sur tout le bâtiment (plus l’anneau), autel/retour/huttes au 8-voisinage, toast de confirmation au clic. Arrivée garantie : tuile praticable recherchée à côté de la cible, déclenchement immédiat si vous y êtes déjà, et « ✗ Chemin bloqué » explicite si le chemin échoue. Le retour à la ville renvoie au hub-ville (Accueil). 214 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],

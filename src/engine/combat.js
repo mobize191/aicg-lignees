@@ -142,7 +142,7 @@ function applyDamage(target, dmg, events, side, reviveCtx = null, isHit = false,
     if (absorbed > 0) events.push({ type: 'block', side, targetId: target.uid, amount: absorbed });
   }
   target.hp -= rest;
-  events.push({ type: 'damage', side, targetId: target.uid, amount: rest });
+  events.push({ type: 'damage', side, targetId: target.uid, amount: rest, ...(opts && opts.crit ? { crit: true } : {}) }); // Lot 1 : flag crit sur l'event damage
   if (rest <= 0) return false;
   if (isHit && target.alive) {
     const shieldOnHit = classeMods(target).shieldOnHit;
@@ -434,7 +434,11 @@ function actTeamStriker(u, i, ctx, step) {
   if (mods.aoe && ctx.firstAttack) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
+      const crit = !spell && rollCrit(u, f, ctx.state.rng); // Lot 1 : crit d'agilite, frappes physiques seules
+      const baseF = Math.max(1, Math.round(dmg * mods.aoe * elementMult(atkEl, f.element)));
+      const dC = crit ? Math.max(1, Math.round(baseF * M.CRIT_MULT)) : baseF;
+      if (crit) ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: dC, kind, mana: u.mana, elem: null, side: 'team', crit: true });
+      applyDamage(f, dC, ctx.events, 'enemies', null, false, { state: ctx.state, zone: true, crit });
     }
     ctx.firstAttack = false;
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -450,7 +454,11 @@ function actTeamStriker(u, i, ctx, step) {
   if (!spell && classeMods(u).wave) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state, zone: true });
+      const crit = rollCrit(u, f, ctx.state.rng); // Lot 1 (branche basic uniquement)
+      const baseF = Math.max(1, Math.round(dmg * elementMult(atkEl, f.element)));
+      const dC = crit ? Math.max(1, Math.round(baseF * M.CRIT_MULT)) : baseF;
+      if (crit) ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: dC, kind, mana: u.mana, elem: null, side: 'team', crit: true });
+      applyDamage(f, dC, ctx.events, 'enemies', null, true, { state: ctx.state, zone: true, crit });
     }
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
@@ -492,8 +500,10 @@ function actTeamStriker(u, i, ctx, step) {
         if (tgt === target && hitList.length === 1) { dodged = true; break; }
         continue;
       }
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
-      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1 });
+      const crit = !spell && rollCrit(u, tgt, ctx.state.rng); // Lot 1 : apres l'esquive, frappes physiques seules
+      const dmgC = crit ? Math.max(1, Math.round(dmgT * M.CRIT_MULT)) : dmgT;
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgC, kind, mana: u.mana, elem: elemT, side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(tgt, dmgC, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1, crit });
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
@@ -511,8 +521,10 @@ function actTeamStriker(u, i, ctx, step) {
     const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
     for (const f of others) {
       const half = Math.max(1, Math.round(dmg * ratio));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, f.element), side: 'team' });
-      applyDamage(f, Math.max(1, Math.round(half * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state });
+      const crit = rollCrit(u, f, ctx.state.rng); // Lot 1
+      const halfC = crit ? Math.max(1, Math.round(half * elementMult(atkEl, f.element) * M.CRIT_MULT)) : Math.max(1, Math.round(half * elementMult(atkEl, f.element)));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: halfC, kind, mana: u.mana, elem: elementTag(atkEl, f.element), side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(f, halfC, ctx.events, 'enemies', null, true, { state: ctx.state, crit });
     }
   }
   if (u.gimmick === 'volee') {
@@ -520,8 +532,10 @@ function actTeamStriker(u, i, ctx, step) {
     if (others.length) {
       const t2 = others[0];
       const half = Math.max(1, Math.round(dmg * M.BELIER_SPLASH));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, t2.element), side: 'team' });
-      applyDamage(t2, Math.max(1, Math.round(half * elementMult(atkEl, t2.element))), ctx.events, 'enemies', null, false, { state: ctx.state });
+      const crit = rollCrit(u, t2, ctx.state.rng); // Lot 1
+      const halfC = crit ? Math.max(1, Math.round(half * elementMult(atkEl, t2.element) * M.CRIT_MULT)) : Math.max(1, Math.round(half * elementMult(atkEl, t2.element)));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: halfC, kind, mana: u.mana, elem: elementTag(atkEl, t2.element), side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(t2, halfC, ctx.events, 'enemies', null, false, { state: ctx.state, crit });
     }
   }
   if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -634,9 +648,10 @@ function actEnemyStriker(e, ctx) {
       const tRed2 = t.status && t.status.dmgRed ? t.status.dmgRed.pct : 0;
       const rf2 = gRed >= DMG_REDUCTION_MAX ? 1
         : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
-      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element)));
-      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies' });
-      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
+      const critW = rollCrit(e, t, ctx.state.rng); // Lot 1 (branche basic)
+      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element) * (critW ? M.CRIT_MULT : 1)));
+      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies', ...(critW ? { crit: true } : {}) });
+      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit: critW }) || died;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
@@ -654,7 +669,9 @@ function actEnemyStriker(e, ctx) {
       ctx.events.push({ type: 'dodge', side: 'team', sourceId: e.uid, targetId: target.uid });
       break;
     }
-    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(eAtkEl, target.element), side: 'enemies' });
+    const crit = !spell && rollCrit(e, target, ctx.state.rng); // Lot 1 : apres l'esquive, frappes physiques seules
+    if (crit) dmgFinal = Math.max(1, Math.round(dmgFinal * M.CRIT_MULT));
+    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(eAtkEl, target.element), side: 'enemies', ...(crit ? { crit: true } : {}) });
     if (target.gimmick === 'voile' && ctx.state.rng() < M.VOILE_CHANCE) {
       ctx.events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
     } else {
@@ -665,7 +682,7 @@ function actEnemyStriker(e, ctx) {
         died = applyDamage(target, dmgFinal - half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
         applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state });
       } else {
-        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
+        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit }) || died;
       }
       if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
         const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));

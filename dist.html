@@ -273,6 +273,7 @@ animation: floatup 1.5s ease-out forwards;
 .float.block { color: #40c4ff; font-size: 1rem; }
 .float.cast { color: #b39dff; }
 .float.fx-special { font-size: 1.5rem; color: #ffe082; text-shadow: 0 0 14px rgba(255, 213, 79, .95), 0 2px 6px rgba(0,0,0,.85); }
+.float.fx-crit { font-size: 1.7rem; color: #ffb300; text-shadow: 0 0 16px rgba(255, 179, 0, .95), 0 2px 6px rgba(0,0,0,.9); }
 .float.dodge { font-size: 1.3rem; font-weight: 700; color: #b3e5fc; text-shadow: 0 0 12px rgba(179,229,252,.9), 0 2px 6px rgba(0,0,0,.85); }
 @keyframes dodgePose { 30% { transform: translateX(-14px) rotate(-6deg); } 60% { transform: translateX(8px); } }
 .unit.dodge-pose { animation: dodgePose .5s ease; }
@@ -4162,7 +4163,11 @@ const DATA = {
    "SEUIL_PER_INT": 0.5,
    "REG_STATS_BONUS": 0.1,
    "RECO_LEVEL_RATIO": 0.8,
-   "XP_GROWTH": 0.25
+   "XP_GROWTH": 0.25,
+   "CRIT_BASE": 0.05,
+   "CRIT_PER_AGI": 0.01,
+   "CRIT_CAP": 0.3,
+   "CRIT_MULT": 1.5
   },
   "profils": {
    "Guerrier": {
@@ -15170,6 +15175,16 @@ function schoolElementOf(spell) {
   return (E.SCHOOL_ELEMENT ?? {})[spell.ecole] ?? null;
 }
 function atkElementOf(u, spell) { return spell ? (schoolElementOf(spell) ?? u.element) : u.element; }
+// Lot 1 (vie du jeu, TRANCHE 12/11) : coup critique d'agilite — frappes physiques seules (sorts exclus en v1),
+// l'esquive se resout d'abord ; chance = CRIT_BASE + CRIT_PER_AGI x avantage d'agi positif, plafonnee CRIT_CAP ; degats x CRIT_MULT.
+function critChanceOf(attacker, target) {
+  const adv = Math.max(0, (attacker?.agi ?? 0) - (target?.agi ?? 0));
+  return Math.min(M.CRIT_CAP, M.CRIT_BASE + adv * M.CRIT_PER_AGI);
+}
+function rollCrit(attacker, target, rng) {
+  const c = critChanceOf(attacker, target);
+  return !!(rng && c > 0 && rng() < c);
+}
 
 function cardPower(card, lvl) {
   const st = statsAt(card, lvl, 0);
@@ -15315,9 +15330,10 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
     * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage * rangAtkMult(st, side, s)));
-  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
-  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
-  applyDamage(t, dmg, events, foeSide, null, true, { state: st });
+  const crit = rollCrit(s, t, st && st.rng); // Lot 1 : apres l'esquive, frappe physique
+  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element) * (crit ? M.CRIT_MULT : 1)));
+  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side, ...(crit ? { crit: true } : {}) });
+  applyDamage(t, dmg, events, foeSide, null, true, { state: st, crit });
   s.atkBuff = 0;
 }
 // le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
@@ -15857,7 +15873,7 @@ function applyDamage(target, dmg, events, side, reviveCtx = null, isHit = false,
     if (absorbed > 0) events.push({ type: 'block', side, targetId: target.uid, amount: absorbed });
   }
   target.hp -= rest;
-  events.push({ type: 'damage', side, targetId: target.uid, amount: rest });
+  events.push({ type: 'damage', side, targetId: target.uid, amount: rest, ...(opts && opts.crit ? { crit: true } : {}) }); // Lot 1 : flag crit sur l'event damage
   if (rest <= 0) return false;
   if (isHit && target.alive) {
     const shieldOnHit = classeMods(target).shieldOnHit;
@@ -16149,7 +16165,11 @@ function actTeamStriker(u, i, ctx, step) {
   if (mods.aoe && ctx.firstAttack) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * mods.aoe * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, false, { state: ctx.state, zone: true });
+      const crit = !spell && rollCrit(u, f, ctx.state.rng); // Lot 1 : crit d'agilite, frappes physiques seules
+      const baseF = Math.max(1, Math.round(dmg * mods.aoe * elementMult(atkEl, f.element)));
+      const dC = crit ? Math.max(1, Math.round(baseF * M.CRIT_MULT)) : baseF;
+      if (crit) ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: dC, kind, mana: u.mana, elem: null, side: 'team', crit: true });
+      applyDamage(f, dC, ctx.events, 'enemies', null, false, { state: ctx.state, zone: true, crit });
     }
     ctx.firstAttack = false;
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -16165,7 +16185,11 @@ function actTeamStriker(u, i, ctx, step) {
   if (!spell && classeMods(u).wave) {
     ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: 'all', amount: dmg, kind, mana: u.mana, elem: null, side: 'team' });
     for (const f of [...foes]) {
-      applyDamage(f, Math.max(1, Math.round(dmg * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state, zone: true });
+      const crit = rollCrit(u, f, ctx.state.rng); // Lot 1 (branche basic uniquement)
+      const baseF = Math.max(1, Math.round(dmg * elementMult(atkEl, f.element)));
+      const dC = crit ? Math.max(1, Math.round(baseF * M.CRIT_MULT)) : baseF;
+      if (crit) ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: dC, kind, mana: u.mana, elem: null, side: 'team', crit: true });
+      applyDamage(f, dC, ctx.events, 'enemies', null, true, { state: ctx.state, zone: true, crit });
     }
     if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
     ctx.firstAttack = false;
@@ -16207,8 +16231,10 @@ function actTeamStriker(u, i, ctx, step) {
         if (tgt === target && hitList.length === 1) { dodged = true; break; }
         continue;
       }
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgT, kind, mana: u.mana, elem: elemT, side: 'team' });
-      applyDamage(tgt, dmgT, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1 });
+      const crit = !spell && rollCrit(u, tgt, ctx.state.rng); // Lot 1 : apres l'esquive, frappes physiques seules
+      const dmgC = crit ? Math.max(1, Math.round(dmgT * M.CRIT_MULT)) : dmgT;
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgC, kind, mana: u.mana, elem: elemT, side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(tgt, dmgC, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1, crit });
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
@@ -16226,8 +16252,10 @@ function actTeamStriker(u, i, ctx, step) {
     const others = ctx.enemyAll().filter((f) => f !== target && f.alive);
     for (const f of others) {
       const half = Math.max(1, Math.round(dmg * ratio));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, f.element), side: 'team' });
-      applyDamage(f, Math.max(1, Math.round(half * elementMult(atkEl, f.element))), ctx.events, 'enemies', null, true, { state: ctx.state });
+      const crit = rollCrit(u, f, ctx.state.rng); // Lot 1
+      const halfC = crit ? Math.max(1, Math.round(half * elementMult(atkEl, f.element) * M.CRIT_MULT)) : Math.max(1, Math.round(half * elementMult(atkEl, f.element)));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: f.uid, amount: halfC, kind, mana: u.mana, elem: elementTag(atkEl, f.element), side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(f, halfC, ctx.events, 'enemies', null, true, { state: ctx.state, crit });
     }
   }
   if (u.gimmick === 'volee') {
@@ -16235,8 +16263,10 @@ function actTeamStriker(u, i, ctx, step) {
     if (others.length) {
       const t2 = others[0];
       const half = Math.max(1, Math.round(dmg * M.BELIER_SPLASH));
-      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: half, kind, mana: u.mana, elem: elementTag(atkEl, t2.element), side: 'team' });
-      applyDamage(t2, Math.max(1, Math.round(half * elementMult(atkEl, t2.element))), ctx.events, 'enemies', null, false, { state: ctx.state });
+      const crit = rollCrit(u, t2, ctx.state.rng); // Lot 1
+      const halfC = crit ? Math.max(1, Math.round(half * elementMult(atkEl, t2.element) * M.CRIT_MULT)) : Math.max(1, Math.round(half * elementMult(atkEl, t2.element)));
+      ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: t2.uid, amount: halfC, kind, mana: u.mana, elem: elementTag(atkEl, t2.element), side: 'team', ...(crit ? { crit: true } : {}) });
+      applyDamage(t2, halfC, ctx.events, 'enemies', null, false, { state: ctx.state, crit });
     }
   }
   if (!ctx.enemyAll().length) { ctx.finish('team'); return true; }
@@ -16349,9 +16379,10 @@ function actEnemyStriker(e, ctx) {
       const tRed2 = t.status && t.status.dmgRed ? t.status.dmgRed.pct : 0;
       const rf2 = gRed >= DMG_REDUCTION_MAX ? 1
         : Math.max(0, (1 - Math.min(DMG_REDUCTION_MAX, gRed + tRed2)) / (1 - gRed));
-      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element)));
-      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies' });
-      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
+      const critW = rollCrit(e, t, ctx.state.rng); // Lot 1 (branche basic)
+      const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element) * (critW ? M.CRIT_MULT : 1)));
+      ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies', ...(critW ? { crit: true } : {}) });
+      died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit: critW }) || died;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
@@ -16369,7 +16400,9 @@ function actEnemyStriker(e, ctx) {
       ctx.events.push({ type: 'dodge', side: 'team', sourceId: e.uid, targetId: target.uid });
       break;
     }
-    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(eAtkEl, target.element), side: 'enemies' });
+    const crit = !spell && rollCrit(e, target, ctx.state.rng); // Lot 1 : apres l'esquive, frappes physiques seules
+    if (crit) dmgFinal = Math.max(1, Math.round(dmgFinal * M.CRIT_MULT));
+    ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: target.uid, amount: dmgFinal, kind, mana: e.mana, elem: elementTag(eAtkEl, target.element), side: 'enemies', ...(crit ? { crit: true } : {}) });
     if (target.gimmick === 'voile' && ctx.state.rng() < M.VOILE_CHANCE) {
       ctx.events.push({ type: 'cast', side: 'team', sourceId: target.uid, name: 'Voile de Brume', fx: 'heal', mana: target.mana });
     } else {
@@ -16380,7 +16413,7 @@ function actEnemyStriker(e, ctx) {
         died = applyDamage(target, dmgFinal - half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
         applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state });
       } else {
-        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state }) || died;
+        died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit }) || died;
       }
       if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
         const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
@@ -23137,9 +23170,9 @@ async function animate(events, ms, gen = null) {
         updateMana(ev.sourceId, ev.mana);
         if (ev.targetId !== 'all' && dstEl) {
           lastSingle = ev;
-          shake(dstEl, special);
-          if (special) burst(dstEl);
-          floatText(dstEl, `-${ev.amount}${tag}${special ? ' !' : ''}`, special ? 'dmg fx-special' : 'dmg');
+          shake(dstEl, special || !!ev.crit); // Lot 1 : un crit secoue fort
+          if (special || ev.crit) burst(dstEl);
+          floatText(dstEl, `${ev.crit ? 'CRIT ' : ''}-${ev.amount}${tag}${special ? ' !' : ''}`, (special ? 'dmg fx-special' : 'dmg') + (ev.crit ? ' fx-crit' : '')); // Lot 1 : flag crit lu depuis l'event
           if (special) await hitStop();
         } else if (ev.targetId === 'all') {
           
@@ -24252,6 +24285,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.43 : Coups critiques d\u2019agilité', 'Chaque frappe physique a une chance de coup critique tirée de l\u2019agilité : 5 % de base + 1 % par point d\u2019agilité d\u2019avantage sur la cible, plafonné à 30 %, pour des dégâts ×1,5. L\u2019esquive se résout d\u2019abord ; les sorts ne critiquent pas (v1). Symétrique : les ennemis et l\u2019auto-résolution aussi. Un « CRIT » s\u2019affiche sur la frappe. 230 tests, digest MESURÉ `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.42 : Oppositions au sort + Nature', 'Le bonus d\u2019opposition (+25 %) se calcule désormais entre l\u2019élément de l\u2019école du SORT (badge \u2192 sur chaque sort) et l\u2019élément inné de la cible ; la frappe simple garde l\u2019élément de la carte. Les cartes humaines sont Neutres (hors oppositions), les monstres et divins gardent leur élément inné. L\u2019élément « Terre » s\u2019appelle désormais « Nature » (mêmes oppositions). 225 tests, digest MESURÉ `daef2bca\u2026` 835/3000 et `883c1c18\u2026` 2797/10000.'],
   ['v1.41 : Formation 3 actifs + 2 réserve', 'Chaque combat aligne 3 cartes actives et garde 2 cartes en réserve (bandeau d\u2019dié sous l\u2019équipe, hors ciblage). Nouvelle action \u21c4 Échanger : la carte de réserve entre immédiatement mais son tour est consommé (elle n\u2019agit qu\u2019au tour suivant), PV et mana conservés des deux côtés. Si une carte active tombe K.O., la réserve entre automatiquement et GRATUITEMENT (aucun tour consommé, elle joue au tour suivant). La réserve gagne 50 % d\u2019XP (`reserveXpMult`). 220 tests, digest MESURÉ `5bdb0c6d\u2026` 822/3000 et `1122225c\u2026` 2787/10000 (formation 3+2 : les équipes du harnais combattent à 2 actifs au lieu de 3).'],
   ['v1.40 : Les interactions d’errance répondent au clic', 'Porte du donjon cliquable sur tout le bâtiment (plus l’anneau), autel/retour/huttes au 8-voisinage, toast de confirmation au clic. Arrivée garantie : tuile praticable recherchée à côté de la cible, déclenchement immédiat si vous y êtes déjà, et « ✗ Chemin bloqué » explicite si le chemin échoue. Le retour à la ville renvoie au hub-ville (Accueil). 214 tests, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],

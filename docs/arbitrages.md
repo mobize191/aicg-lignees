@@ -1,3 +1,11 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 4 (spec vie-jeu Lot 1) LIVRÉE : COUPS CRITIQUES D'AGILITÉ (v1.43)
+
+- **Moteur** : `critChanceOf`/`rollCrit` (`src/engine/stats.js`), constantes en data `moteur` : `CRIT_BASE 0.05`, `CRIT_PER_AGI 0.01`, `CRIT_CAP 0.30`, `CRIT_MULT 1.5`. Chance = 5 % + 1 %/point d'avantage d'agi positif, plafonnée 30 % ; dégâts ×1,5 après buffs/malus.
+- **Ordre** : l'esquive existante se résout d'abord (inchangé), le tirage crit n'a lieu que sur la frappe qui touche. **Sorts exclus en v1** (kind `special` jamais crit). Symétrique : frappes équipe (cible, zone aoe/wave, splash, volée), frappes ennemies (principale + wave), frappe support `strikeFoe` — l'auto-résolution critique aussi.
+- **Événement** : l'event `damage` existant gagne `crit: true` (via `opts.crit` d'`applyDamage`) ; l'event `attack` porte aussi le flag. UI : floatText « CRIT -X » + classe `fx-crit` + shake/burst renforcés.
+- Tests : 5 headless semés (`tests/crit-v143.test.js`) : bornes 5-30 %, monotone, cap, fréquence ~25 % sur 20 000 tirages, esquive prioritaire, sorts jamais crit, `damage.crit`. 230 tests verts (1 échec préexistant date). **DIGEST CHANGÉ (attendu) : MESURÉ `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000**.
+- **Écart cumulé étapes 2+3+4 vs baseline verrouillée** (`c62fcbd1…` 1281/3000, `5059e683…` 4236/10000) : étape 2 `5bdb0c6d…` 822/3000 + `1122225c…` 2787/10000 (formation 3+2 : équipes du harnais à 2 actifs) ; étape 3 `daef2bca…` 835/3000 + `883c1c18…` 2797/10000 (oppositions au sort) ; étape 4 `9faff1b9…` 838/3000 + `6103e7b0…` 2795/10000 (crits). Cumul final : −443/3000 et −1441/10000 de victoires, principalement l'effet 3+2 (un combattant de moins) ; les crits seuls déplacent peu le taux (838 vs 835, 2795 vs 2797). Nouvelle baseline PROPOSÉE en clôture, jamais appliquée sans arbitrage.
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 3 (Lot B refonte) LIVRÉE : OPPOSITIONS AU SORT + NATURE (v1.42)
 
 - **Renommage** : l'élément « Terre » devient « Nature » partout en data (ELEMENTS, BEATS/BEATEN_BY, cartes, monstres, donjons, synergies, arbres, keywords, textes) — topologie inchangée. Changelog in-game historique NON réécrit. 137 cartes humaines passent à l'élément « Neutre ».

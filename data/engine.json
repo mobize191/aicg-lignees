@@ -627,7 +627,11 @@
   "SEUIL_PER_INT": 0.5,
   "REG_STATS_BONUS": 0.1,
   "RECO_LEVEL_RATIO": 0.8,
-  "XP_GROWTH": 0.25
+  "XP_GROWTH": 0.25,
+  "CRIT_BASE": 0.05,
+  "CRIT_PER_AGI": 0.01,
+  "CRIT_CAP": 0.3,
+  "CRIT_MULT": 1.5
  },
  "profils": {
   "Guerrier": {

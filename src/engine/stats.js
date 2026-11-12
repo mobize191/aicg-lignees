@@ -67,6 +67,16 @@ function schoolElementOf(spell) {
   return (E.SCHOOL_ELEMENT ?? {})[spell.ecole] ?? null;
 }
 function atkElementOf(u, spell) { return spell ? (schoolElementOf(spell) ?? u.element) : u.element; }
+// Lot 1 (vie du jeu, TRANCHE 12/11) : coup critique d'agilite — frappes physiques seules (sorts exclus en v1),
+// l'esquive se resout d'abord ; chance = CRIT_BASE + CRIT_PER_AGI x avantage d'agi positif, plafonnee CRIT_CAP ; degats x CRIT_MULT.
+function critChanceOf(attacker, target) {
+  const adv = Math.max(0, (attacker?.agi ?? 0) - (target?.agi ?? 0));
+  return Math.min(M.CRIT_CAP, M.CRIT_BASE + adv * M.CRIT_PER_AGI);
+}
+function rollCrit(attacker, target, rng) {
+  const c = critChanceOf(attacker, target);
+  return !!(rng && c > 0 && rng() < c);
+}
 
 function cardPower(card, lvl) {
   const st = statsAt(card, lvl, 0);

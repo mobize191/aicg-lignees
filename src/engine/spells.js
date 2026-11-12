@@ -85,9 +85,10 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
   }
   const base = Math.max(1, Math.round(statOf(s) * (1 + (side === 'team' ? mods.atkPct || 0 : 0) + s.atkBuff)
     * (1 + (side === 'team' ? mods.dmgPct || 0 : 0)) * classeMods(s).strike * (1 - curse) * rage * rangAtkMult(st, side, s)));
-  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element)));
-  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side });
-  applyDamage(t, dmg, events, foeSide, null, true, { state: st });
+  const crit = rollCrit(s, t, st && st.rng); // Lot 1 : apres l'esquive, frappe physique
+  const dmg = Math.max(1, Math.round(base * elementMult(s.element, t.element) * (crit ? M.CRIT_MULT : 1)));
+  events.push({ type: 'attack', sourceId: s.uid, targetId: t.uid, amount: dmg, kind: 'basic', mana: s.mana, elem: elementTag(s.element, t.element), side, ...(crit ? { crit: true } : {}) });
+  applyDamage(t, dmg, events, foeSide, null, true, { state: st, crit });
   s.atkBuff = 0;
 }
 // le sort hostile lance depuis une ligne support : la fiche du sort (largeur, mult,
