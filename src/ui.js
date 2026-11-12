@@ -282,6 +282,11 @@ function runModLootMult(id) {
 
 
 const BAK_KEY = SAVE_KEY + '.bak';
+const SLOTS_KEY = SAVE_KEY + '.slots';
+const slotKey = (i) => SAVE_KEY + '.p' + i;
+const slotBak = (i) => slotKey(i) + '.bak';
+let slotsIndex = null;
+let activeSlot = 0;
 
 function makeSafeStorage() {
   const mem = new Map();
@@ -880,6 +885,48 @@ const store = {
   pierres: 0, 
 };
 
+function resetStore() {
+  store.teams = [
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
+    { slots: [], formation: '3-2' },
+  ];
+  store.activeTeam = 0;
+  store.grimoire = [];
+  store.zonesVisitees = [];
+  store.zonesUnlocked = [];
+  store.errance = null;
+  store.dungeon = 'marees';
+  store.runMod = null;
+  store.progress = Object.fromEntries(DUNGEONS.map((d) => [d.id, freshProg()]));
+  store.seed = 42;
+  store.gold = 0;
+  store.potions = freshPotions();
+  store.runState = freshRunState();
+  store.departFait = false;
+  store.materiaux = {};
+  store.equipment = {};
+  store.equip = {};
+  store.equipTeam = [null, null];
+  store.collection = new Map();
+  store.instances = [];
+  store.instanceSeq = 1;
+  store.gems = freshGems();
+  store.tokens = [];
+  store.fatigue = { day: '', runs: {} };
+  store.dropFat = { day: '', dg: {} };
+  store.milestones = { clear1: false, boss5: false, diff3: false };
+  store.seen = [];
+  store.shards = {};
+  store.saveBroken = false;
+  store.dailyDone = '';
+  store.quetes = { day: '', list: [], bonusDone: false };
+  store.dailyLevel = null;
+  store.defiActive = false;
+  store.regEclats = 0;
+  store.pierres = 0;
+}
+
 function progOf(dungeonId, diff = 0) {
   const p = store.progress[dungeonId];
   return p.diffs[diff >= 1 && diff <= 5 ? diff : p.diff];
@@ -1220,33 +1267,198 @@ function sanitizeTeams() {
   }
 }
 
+function defaultSlotName(i) {
+  return 'Partie ' + (i + 1);
+}
+
+function freshSlotsIndex(active) {
+  return { active, slots: Array.from({ length: SAVE_SLOTS }, () => null) };
+}
+
+function readSlotsIndex() {
+  try {
+    const raw = storage.getItem(SLOTS_KEY);
+    if (!raw) return null;
+    const idx = JSON.parse(raw);
+    if (!idx || typeof idx !== 'object' || !Array.isArray(idx.slots) || idx.slots.length !== SAVE_SLOTS) return null;
+    idx.slots = idx.slots.map((s) => (s && typeof s === 'object' ? s : null));
+    idx.active = Number.isInteger(idx.active) && idx.active >= 0 && idx.active < SAVE_SLOTS ? idx.active : 0;
+    return idx;
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeSlotsIndex() {
+  try { storage.setItem(SLOTS_KEY, JSON.stringify(slotsIndex)); } catch (e) {  }
+}
+
+function ensureSlotsIndex() {
+  if (!slotsIndex) slotsIndex = readSlotsIndex() || freshSlotsIndex(activeSlot);
+  if (!Number.isInteger(activeSlot) || activeSlot < 0 || activeSlot >= SAVE_SLOTS) activeSlot = 0;
+}
+
+function slotSummary() {
+  let lvl = 0;
+  try { lvl = teamLevel(); } catch (e) {  }
+  return { gold: store.gold | 0, dungeon: store.dungeon, stage: store.stage, teamLevel: lvl };
+}
+
+function updateSlotEntry(i) {
+  const prev = slotsIndex.slots[i];
+  slotsIndex.slots[i] = {
+    name: (prev && prev.name) || defaultSlotName(i),
+    version: SAVE_VERSION,
+    date: new Date().toISOString(),
+    summary: slotSummary(),
+  };
+}
+
 function save() {
   try {
-    const prev = storage.getItem(SAVE_KEY);
+    ensureSlotsIndex();
+    const key = slotKey(activeSlot);
+    const prev = storage.getItem(key);
     const raw = JSON.stringify(snapshot());
     if (prev && prev !== raw) {
-      try { storage.setItem(BAK_KEY, prev); } catch (e2) {  }
+      try { storage.setItem(slotBak(activeSlot), prev); } catch (e2) {  }
     }
-    storage.setItem(SAVE_KEY, raw);
+    storage.setItem(key, raw);
+    updateSlotEntry(activeSlot);
+    writeSlotsIndex();
     store.saveBroken = false;
   } catch (e) {
-    
     store.saveBroken = true;
   }
 }
 
+function tryRestoreKey(key) {
+  try {
+    const raw = storage.getItem(key);
+    if (!raw) return false;
+    // flux reel : une sauvegarde v8 traverse les migrations v9 -> v12 avant restauration (EXI-SAVE-1)
+    return restore(migrate(JSON.parse(raw)));
+  } catch (e) {
+    return false;
+  }
+}
+
 function load() {
+  const idx = readSlotsIndex();
+  if (idx) {
+    slotsIndex = idx;
+    activeSlot = idx.active;
+    const order = [idx.active];
+    for (let i = 0; i < SAVE_SLOTS; i++) if (i !== idx.active) order.push(i);
+    for (const i of order) {
+      if (tryRestoreKey(slotKey(i)) || tryRestoreKey(slotBak(i))) {
+        activeSlot = i;
+        slotsIndex.active = i;
+        writeSlotsIndex();
+        return true;
+      }
+    }
+    // repli securite : index present mais aucun slot lisible -> cles historiques
+    if (tryRestoreKey(SAVE_KEY) || tryRestoreKey(BAK_KEY)) {
+      writeSlotsIndex();
+      return true;
+    }
+    return false;
+  }
+  // migration sans perte : pas d'index + cle historique -> la sauvegarde actuelle devient la Partie 1 (p0)
   for (const key of [SAVE_KEY, BAK_KEY]) {
-    try {
-      const raw = storage.getItem(key);
-      if (!raw) continue;
-      // flux reel : une sauvegarde v8 traverse les migrations v9 -> v12 avant restauration (EXI-SAVE-1)
-      if (restore(migrate(JSON.parse(raw)))) return true;
-    } catch (e) {
-      
+    const raw = storage.getItem(key);
+    if (!raw) continue;
+    if (!tryRestoreKey(key)) continue;
+    activeSlot = 0;
+    slotsIndex = freshSlotsIndex(0);
+    storage.setItem(slotKey(0), raw);
+    const bakRaw = storage.getItem(BAK_KEY);
+    if (bakRaw && bakRaw !== raw) {
+      try { storage.setItem(slotBak(0), bakRaw); } catch (e2) {  }
+    }
+    updateSlotEntry(0);
+    slotsIndex.slots[0].name = 'Partie 1';
+    writeSlotsIndex();
+    return true;
+  }
+  slotsIndex = freshSlotsIndex(0);
+  activeSlot = 0;
+  writeSlotsIndex();
+  return false;
+}
+
+function listSlots() {
+  ensureSlotsIndex();
+  return slotsIndex.slots.map((s, i) => ({
+    index: i,
+    active: i === activeSlot,
+    empty: !s,
+    name: (s && s.name) || defaultSlotName(i),
+    version: s ? s.version ?? null : null,
+    date: s ? s.date ?? null : null,
+    summary: s ? s.summary ?? null : null,
+  }));
+}
+
+function switchToSlot(i) {
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  save();
+  ensureSlotsIndex();
+  if (!tryRestoreKey(slotKey(i)) && !tryRestoreKey(slotBak(i))) return false;
+  activeSlot = i;
+  slotsIndex.active = i;
+  writeSlotsIndex();
+  return true;
+}
+
+function newSlot(i, name) {
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  save();
+  ensureSlotsIndex();
+  activeSlot = i;
+  slotsIndex.active = i;
+  slotsIndex.slots[i] = { name: String(name ?? '').trim().slice(0, 24) || defaultSlotName(i) };
+  writeSlotsIndex();
+  resetStore();
+  store.departFait = false;
+  save();
+  return true;
+}
+
+function renameSlot(i, name) {
+  ensureSlotsIndex();
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS || !slotsIndex.slots[i]) return false;
+  const n = String(name ?? '').trim().slice(0, 24);
+  if (!n) return false;
+  slotsIndex.slots[i].name = n;
+  writeSlotsIndex();
+  return true;
+}
+
+function deleteSlot(i) {
+  ensureSlotsIndex();
+  if (!Number.isInteger(i) || i < 0 || i >= SAVE_SLOTS) return false;
+  const wasActive = slotsIndex.active === i;
+  storage.removeItem(slotKey(i));
+  storage.removeItem(slotBak(i));
+  slotsIndex.slots[i] = null;
+  if (wasActive) {
+    const next = slotsIndex.slots.findIndex((s) => !!s);
+    activeSlot = next >= 0 ? next : 0;
+    slotsIndex.active = activeSlot;
+    if (next >= 0) {
+      if (!tryRestoreKey(slotKey(next)) && !tryRestoreKey(slotBak(next))) {
+        resetStore();
+        store.departFait = false;
+      }
+    } else {
+      resetStore();
+      store.departFait = false;
     }
   }
-  return false;
+  writeSlotsIndex();
+  return true;
 }
 
 function usedInTeam(id) {
@@ -2255,8 +2467,10 @@ function renderDepart(root) {
         </div>
       </div>
     </div>
-    ${saveBoxHtml()}`;
+    ${saveBoxHtml()}
+    ${slotsPanelHtml()}`;
   wireSaveBox(root);
+  wireSlotsPanel(root);
   root.querySelectorAll('.depart-choice').forEach((el) => {
     el.onclick = () => choisirDepart(el.dataset.id);
   });
@@ -2588,8 +2802,10 @@ function renderHome(root) {
           <a href="#forge" class="btn btn-hero">\u2694 G\u00e9n\u00e9rer mes premi\u00e8res cartes</a>
         </div>
       </div>
-      ${saveBoxHtml()}`;
+      ${saveBoxHtml()}
+      ${slotsPanelHtml()}`;
     wireSaveBox(root);
+    wireSlotsPanel(root);
     return;
   }
   
@@ -2681,8 +2897,10 @@ function renderHome(root) {
         <div class="row"><a class="btn ok" href="#equipe">Composer mon équipe</a><button type="button" class="btn ghost" id="hub-pop-close">Plus tard</button></div>
       </div>
     </div>
-    ${saveBoxHtml()}`;
+    ${saveBoxHtml()}
+    ${slotsPanelHtml()}`;
   wireSaveBox(root);
+  wireSlotsPanel(root);
   const npc = root.querySelector('#hub-npc');
   const bubble = root.querySelector('#hub-bubble');
   if (npc && bubble) npc.onclick = () => bubble.classList.toggle('on');
@@ -2777,6 +2995,64 @@ function wireSaveBox(root) {
   if (ex) ex.onclick = () => openSaveModal('export');
   const im = root.querySelector('#btn-import-save');
   if (im) im.onclick = () => openSaveModal('import');
+}
+
+function escHtml(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function slotsPanelHtml() {
+  const cards = listSlots().map((s) => {
+    const sum = s.summary;
+    const dName = sum ? (dungeonById(sum.dungeon)?.name ?? sum.dungeon) : '';
+    const sumTxt = sum
+      ? `${sum.gold} or · ${dName} étage ${sum.stage} · niv. ${sum.teamLevel}`
+      : 'Emplacement vide';
+    const dateTxt = s.date ? ' · ' + new Date(s.date).toLocaleDateString('fr-FR') : '';
+    const activeBadge = s.active ? ' <span class="badge">en cours</span>' : '';
+    const actions = s.empty
+      ? `<button type="button" class="btn slot-act" data-slot-act="new" data-slot="${s.index}">✨ Nouvelle partie</button>`
+      : `<button type="button" class="btn gold slot-act" data-slot-act="play" data-slot="${s.index}">▶ Jouer</button>
+         <button type="button" class="btn slot-act" data-slot-act="rename" data-slot="${s.index}">✏️ Renommer</button>
+         <button type="button" class="btn slot-act" data-slot-act="del" data-slot="${s.index}">🗑 Supprimer</button>`;
+    return `<div class="slot-card${s.active ? ' active' : ''}${s.empty ? ' empty' : ''}">
+      <h4>${escHtml(s.name)}${activeBadge}</h4>
+      <p class="muted">${escHtml(sumTxt)}${escHtml(dateTxt)}</p>
+      <div class="actions">${actions}</div>
+    </div>`;
+  }).join('');
+  return `<div class="save-box slots-panel">
+    <h3>🗂 Parties</h3>
+    <p class="muted">${SAVE_SLOTS} parties peuvent coexister dans ce navigateur. La partie en cours est sauvegardée avant toute bascule ; l'export FCSAVE1 s'applique à la partie active.</p>
+    <div class="slots-grid">${cards}</div>
+  </div>`;
+}
+
+function wireSlotsPanel(root) {
+  root.querySelectorAll('.slot-act').forEach((el) => {
+    el.onclick = () => {
+      const i = Number(el.dataset.slot);
+      const act = el.dataset.slotAct;
+      const nameOf = (k) => listSlots()[k]?.name ?? defaultSlotName(k);
+      if (act === 'play') {
+        if (i === activeSlot) { toast('Vous jouez déjà cette partie.'); return; }
+        if (switchToSlot(i)) { toast('▶ ' + nameOf(i) + ' chargée.'); renderHome(document.getElementById('app')); }
+        else toast('✗ Impossible de charger cette partie.', 'warn');
+      } else if (act === 'new') {
+        if (newSlot(i)) { toast('✨ ' + nameOf(i) + ' : nouvelle partie.'); renderHome(document.getElementById('app')); }
+        else toast('✗ Impossible de créer cette partie.', 'warn');
+      } else if (act === 'rename') {
+        const name = prompt('Nouveau nom de la partie :', nameOf(i));
+        if (name != null && renameSlot(i, name)) { toast('✏️ Partie renommée en « ' + nameOf(i) + ' ».'); renderHome(document.getElementById('app')); }
+      } else if (act === 'del') {
+        if (!confirm('Supprimer la partie « ' + nameOf(i) + ' » ?\nCartes, or et progression de cette partie seront perdus.')) return;
+        if (!confirm('Vraiment supprimer « ' + nameOf(i) + ' » ? Cette action est définitive.')) return;
+        deleteSlot(i);
+        toast('🗑 Partie supprimée.');
+        renderHome(document.getElementById('app'));
+      }
+    };
+  });
 }
 
 function artGlyph(c) {
@@ -5518,6 +5794,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.35 : Parties multiples (4 slots de sauvegarde)', 'Jusqu’à 4 parties coexistent dans le navigateur (clés `fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie). Migration sans perte : l’ancienne sauvegarde devient la Partie 1. Panneau « Parties » sur l’Accueil : ▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer (double confirmation) ; la partie en cours est sauvegardée avant toute bascule, la partie active est mémorisée. Export FCSAVE1 inchangé (partie active). 171 tests, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.34 : Refonte de l’IA de combat', 'Ciblage par utilité (kill, menace, ligne, élément) avec hystérésis, sorts contextuels (soin/contrôle/burst), profils IA par difficulté (Facile sous-optimal → Enfer complet), sorts alliés de lignée actifs en mode Auto, garde-fous anti-blocage de l’errance. 171 tests, smoke 306 checks, digest final c62fcbd1… 1281/3000 et 5059e683… 4236/10000 (MESURES, aucune maths joueur touchée).'],
   ['v1.33 : Illustrations V3.1 en doublon commutable (bouton 🖼️)', 'Relance 3.1 complète (271 cartes, verrous R8/R9/R10 + anti-cadre renforcé) publiée en second manifeste `assets-v3.1.json`, switchable avec V3.0 via le bouton 🖼️ pour comparer les cartes. Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 arts d’équipement) sont ajoutés au manifeste par défaut `assets-v3.json` : présents partout. 150 tests, smoke 299 checks, digest inchangé `f8a9f0bb…` 1359/3000.'],
   ['v1.32 : Chantier « contenu v3 » — marchand v2, gobelins régionaux, greffe des solos, familles compagnons, divines joueur', 'Marchand v2 : 3 offres du jour, prix actés, raretés débloquées en bouclant des donjons. Gobelins régionaux au Bosquet, à la Crypte et au Zénith. Les 31 anciennes cartes solos sont greffées à des familles. Sept voies de compagnons (Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve) mènent chacune à une UR et une L. Familles divines jouables (Arbitres du Seuil, Chœur Miroir, Tisseuses du Pont), maillons du Jeune Séraphin et lignées des Enge (Sirène, Fée, Gorgonne Nouvelles). Digest re-mesuré sans recalibrage : f8a9f0bb… 1359/3000.'],

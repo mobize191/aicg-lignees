@@ -6,7 +6,7 @@ import { bootDist, wait } from './stub.mjs';
 const file = process.argv[2] ?? 'dist.html';
 const html = readFileSync(file, 'utf8');
 
-const { api, doc, mem, els, errors } = bootDist(file);
+const { api, doc, mem, els, errors, ctx } = bootDist(file);
 const store = api.store;
 
 let fails = 0;
@@ -1322,6 +1322,138 @@ async function main() {
       check(`B16 b ${api.DATA.difficulties[diff - 1].name} (diff ${diff}) : 40 combats Auto/ennemi au profil IA, 0 exception`, exc === 0, `exc=${exc} wins=${wins}/40`);
     }
     check('B16 c 0 exception smoke (section IA incluse)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
+    // ---------- B19 : parties multiples — stockage par slots, migration, bascule ----------
+    {
+      const SK = 'fondations-cards-v1';
+      const slotsKey = SK + '.slots';
+      const p0 = SK + '.p0', p1 = SK + '.p1';
+
+      api.resetStore();
+      setup(['a1', 'n3'], 5);
+      store.gold = 321;
+      api.save();
+      check('B19 a save() écrit le slot actif p0 + l\'index .slots', mem.has(p0) && mem.has(slotsKey), [...mem.keys()].join(','));
+      const idx1 = JSON.parse(mem.get(slotsKey));
+      check('B19 b index : 4 slots, active 0, entrée p0 « Partie 1 » avec version/date/résumé', idx1.slots.length === 4 && idx1.active === 0 && idx1.slots[0] && idx1.slots[0].name === 'Partie 1' && idx1.slots[0].version === 27 && !!idx1.slots[0].date && idx1.slots[0].summary && idx1.slots[0].summary.gold === 321, JSON.stringify(idx1.slots[0] ?? null).slice(0, 140));
+      check('B19 c slot actif exposé = 0', api._activeSlot() === 0, String(api._activeSlot()));
+
+      // migration sans perte depuis la clé historique (flux réel v8 -> v27)
+      const rawV8 = readFileSync('tests/fixtures/save-v8.json', 'utf8');
+      mem.set(SK, rawV8);
+      mem.set(SK + '.bak', rawV8);
+      mem.delete(p0); mem.delete(SK + '.p0.bak'); mem.delete(slotsKey);
+      const okMig = api.load();
+      const idxMig = JSON.parse(mem.get(slotsKey));
+      check('B19 d migration : load() depuis la clé historique réussit', okMig === true, '');
+      check('B19 e migration : la sauvegarde v8 copiée telle quelle vers p0 (sans perte)', mem.get(p0) === rawV8, String(mem.get(p0)).slice(0, 60));
+      check('B19 f migration : index créé, « Partie 1 » active en p0, clés historiques conservées', idxMig.active === 0 && idxMig.slots[0] && idxMig.slots[0].name === 'Partie 1' && mem.has(SK) && mem.has(SK + '.bak'), JSON.stringify(idxMig.slots[0]).slice(0, 140));
+      check('B19 g migration : la progression v8 survit (équipe de 5 restaurée via v9 -> v27)', store.teams[0].slots.length === 5, String(store.teams[0].slots.length));
+
+      // bascule p0 <-> p1 sans perte ni mélange
+      store.gold = 777;
+      api.save();
+      check('B19 h nouvelle partie en p1 : départ frais (0 or, departFait=false, slot 1 actif)', api.newSlot(1) === true && store.gold === 0 && store.departFait === false && api._activeSlot() === 1, `gold=${store.gold} depart=${store.departFait} active=${api._activeSlot()}`);
+      store.gold = 55;
+      api.save();
+      check('B19 i bascule vers p0 : or de la Partie 1 retrouvé (777)', api.switchToSlot(0) === true && store.gold === 777, `gold=${store.gold}`);
+      check('B19 j bascule vers p1 : or de la seconde partie retrouvé (55), pas de mélange', api.switchToSlot(1) === true && store.gold === 55 && api._activeSlot() === 1, `gold=${store.gold}`);
+      check('B19 k index : partie active mémorisée = 1', JSON.parse(mem.get(slotsKey)).active === 1, String(JSON.parse(mem.get(slotsKey)).active));
+
+      // rotation .bak par partie
+      store.gold = 56;
+      api.save();
+      const bak1 = mem.get(SK + '.p1.bak');
+      check('B19 l rotation .bak par slot : p1.bak = sauvegarde précédente de p1 (55 or)', !!bak1 && JSON.parse(bak1).gold === 55, String(bak1).slice(0, 80));
+      check('B19 m p0 intact après les saves de p1 (777 or)', JSON.parse(mem.get(p0)).gold === 777, String(JSON.parse(mem.get(p0)).gold));
+
+      // renommer persiste
+      check('B19 n renommer p1 persiste dans l\'index', api.renameSlot(1, 'Partie test') === true && JSON.parse(mem.get(slotsKey)).slots[1].name === 'Partie test', JSON.parse(mem.get(slotsKey)).slots[1]?.name);
+
+      // suppression isolée
+      const p0Before = mem.get(p0);
+      check('B19 o suppression du slot 1 : p1/p1.bak effacés, p0 intact', api.deleteSlot(1) === true && !mem.has(p1) && !mem.has(SK + '.p1.bak') && mem.get(p0) === p0Before, [...mem.keys()].join(','));
+      const idx3 = JSON.parse(mem.get(slotsKey));
+      check('B19 p après suppression : slot 1 vide, active retombe sur un slot vivant (0)', idx3.slots[1] === null && idx3.active === 0, JSON.stringify(idx3).slice(0, 160));
+
+      const ls = api.listSlots();
+      check('B19 q listSlots : 4 entrées, noms par défaut, active marquée', ls.length === 4 && ls[0].name === 'Partie 1' && ls[1].name === 'Partie 2' && ls[0].active === true && ls[1].empty === true, ls.map((s) => s.name + ':' + s.empty + ':' + s.active).join('|'));
+
+      api.switchToSlot(0);
+      check('B19 r 0 exception lot 1 (slots)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
+    // ---------- B20 : panneau « Parties » sur l'Accueil (lot 2) ----------
+    {
+      const SK = 'fondations-cards-v1';
+      api.newSlot(1, 'Partie test');
+      store.gold = 42;
+      api.save();
+      api.switchToSlot(0);
+      api.go('#accueil');
+      await wait(40);
+      const homeHtml = els.get('app')._innerHTML ?? '';
+      check('B20 a panneau Parties visible sur l\'Accueil', homeHtml.includes('slots-panel') && /Parties/.test(homeHtml), '');
+      const slotCards = [...els.get('app').querySelectorAll('.slot-card')];
+      check('B20 b 4 cartes d\'emplacement rendues', slotCards.length === 4, String(slotCards.length));
+      check('B20 c exactement une partie marquée « en cours »', slotCards.filter((el) => el.classList.contains('active')).length === 1, String(slotCards.filter((el) => el.classList.contains('active')).length));
+      const actsOf = (i) => [...slotCards[i].querySelectorAll('.slot-act')].map((el) => el.dataset.slotAct);
+      check('B20 d actions par carte : occupé = Jouer/Renommer/Supprimer, vide = Nouvelle partie',
+        actsOf(0).join(',') === 'play,rename,del' && actsOf(1).join(',') === 'play,rename,del' && actsOf(2).join(',') === 'new' && actsOf(3).join(',') === 'new',
+        [0, 1, 2, 3].map((i) => actsOf(i).join('+')).join(' | '));
+
+      const play1 = [...slotCards[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'play');
+      play1.click();
+      await wait(30);
+      check('B20 e ▶ Jouer bascule vers p1 (or 42 retrouvé, slot actif = 1)', store.gold === 42 && api._activeSlot() === 1, `gold=${store.gold} active=${api._activeSlot()}`);
+      check('B20 f la partie en cours a été sauvegardée avant la bascule (p0 intact, 777 or)', JSON.parse(mem.get(SK + '.p0')).gold === 777, String(JSON.parse(mem.get(SK + '.p0')).gold));
+
+      api.go('#accueil');
+      await wait(30);
+      const cards2 = [...els.get('app').querySelectorAll('.slot-card')];
+      const new2 = [...cards2[2].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'new');
+      new2.click();
+      await wait(30);
+      check('B20 g ✨ Nouvelle partie sur slot vide : départ frais (0 carte, departFait=false, slot 2 actif)', store.instances.length === 0 && store.departFait === false && api._activeSlot() === 2, `inst=${store.instances.length} depart=${store.departFait} active=${api._activeSlot()}`);
+      const depHtml = els.get('app')._innerHTML ?? '';
+      check('B20 h écran de départ rejoué (4 novices proposés)', (depHtml.match(/depart-choice/g) ?? []).length === 4, String((depHtml.match(/depart-choice/g) ?? []).length));
+
+      api.go('#accueil');
+      await wait(30);
+      const origPrompt = ctx.prompt;
+      ctx.prompt = () => 'Ma quête';
+      const cards3 = [...els.get('app').querySelectorAll('.slot-card')];
+      const ren0 = [...cards3[0].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'rename');
+      ren0.click();
+      await wait(30);
+      ctx.prompt = origPrompt;
+      check('B20 i ✏️ Renommer persiste dans l\'index', JSON.parse(mem.get(SK + '.slots')).slots[0].name === 'Ma quête', JSON.parse(mem.get(SK + '.slots')).slots[0]?.name);
+
+      api.go('#accueil');
+      await wait(30);
+      const origConfirm = ctx.confirm;
+      let nConf = 0;
+      ctx.confirm = () => { nConf++; return false; };
+      const cards4 = [...els.get('app').querySelectorAll('.slot-card')];
+      const del1 = [...cards4[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'del');
+      del1.click();
+      await wait(20);
+      check('B20 j Supprimer : 1re confirmation refusée = rien n\'est effacé', nConf === 1 && mem.has(SK + '.p1'), `conf=${nConf} hasP1=${mem.has(SK + '.p1')}`);
+      ctx.confirm = () => true;
+      const cards5 = [...els.get('app').querySelectorAll('.slot-card')];
+      const del1b = [...cards5[1].querySelectorAll('.slot-act')].find((el) => el.dataset.slotAct === 'del');
+      const p0Before = mem.get(SK + '.p0');
+      del1b.click();
+      await wait(20);
+      check('B20 k Supprimer : double confirmation acceptée = slot effacé, autres slots intacts', !mem.has(SK + '.p1') && !mem.has(SK + '.p1.bak') && mem.get(SK + '.p0') === p0Before, [...mem.keys()].join(','));
+      ctx.confirm = origConfirm;
+
+      check('B20 l 0 exception lot 2 (panneau Parties)', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
+      api.switchToSlot(0);
+      api.go('#accueil');
+      await wait(30);
+    }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);

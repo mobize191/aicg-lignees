@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : LIVRÉ — parties multiples (4 slots de sauvegarde), v1.35 : digests inchangés, défauts 12/11 appliqués
+
+- **Chantier exécuté** selon `docs/prompt-parties-multiples.md`, un commit FR par lot. **Lot 1 (stockage + migration)** : clés `fondations-cards-v1.p0`…`.p3` + index `.slots` + `.bak` par partie ; migration sans perte (sauvegarde historique → Partie 1, clés historiques conservées en repli de sécurité) ; flux réel v8 → v27 rejoué en smoke (B19). **Lot 2 (UI)** : panneau « Parties » sur l'Accueil (Jouer / Nouvelle partie / Renommer / Supprimer à double confirmation), sauvegarde de la partie en cours avant toute bascule, partie active mémorisée. Export FCSAVE1 inchangé (partie active). **Lot 3 (preuves)** : smoke enrichi B19 (18 checks stockage/migration/bascule) + B20 (12 checks panneau) = 347 checks, 171 tests verts.
+- **Défauts du 12/11 appliqués (aucun tranchage explicite)** : **4 emplacements** ; **noms libres**, défaut « Partie N » ; **partie active mémorisée** et rechargée au lancement. Questions ouvertes conservées : `[À TRANCHER — SESSION 12/11]` — nombre d'emplacements (défaut 4) ; noms libres vs fixes (défaut libres) ; active mémorisée vs choix à chaque lancement (défaut mémorisée).
+- **MESURE** : digests **inchangés `c62fcbd1…` 1281/3000 (0 exception, 0 marathon) et `5059e683…` 4236/10000** — chantier 100 % stockage/IHM, aucune maths de combat, équilibrage, économie ou contenu touché. Aucune consignation d'écart requise.
+
 ## 2026-11-12 : SESSION — livraisons du couloir 1 mergées (PR #3 + PR #4) : correctifs lots 4-5 livrés, 4 specs des ACTÉS du 11/11 nuit PROPOSÉES
 
 - **PR #3 mergée** : correctifs ciblage lots 4-5 (gestes dissociés ℹ️/＋/−/✕, fiche carte complète avec rôle/zone/« dégâts (%) », collection au propre) — digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000, 171 tests, smoke 317 (3 échecs préexistants hors périmètre). Le chantier correctifs ciblage est donc **entièrement livré**.
