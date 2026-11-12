@@ -45,6 +45,7 @@ Rédiger QUATRE specs de design. Chacune contient : le périmètre ACTÉ (déjà
 ## Interdits (coordination)
 
 - Aucune refonte de fond de `src/ui.js` ni de l'errance et de son décor : la session de tranchage tranche l'architecture (points 3 à 5 du doc de session). Les lots 4-5 de la Phase 1 sont des correctifs ciblés, pas une refonte.
+- **LEVÉE PARTIELLE (12/11, 4e tour, ACTÉ)** : la refonte visuelle de l'errance (peinture, ambiance, layout de zone) est lancée AVANT la session — `docs/prompt-refonte-errance.md`. L'interdit reste pour tout le reste, notamment l'architecture donjons × errance (points 3 à 5 du doc de session).
 - Aucun changement de data d'équilibrage, aucun nouveau contenu : le contenu v3 est clos en v1.32.
 - Les lots de la Phase 1 restent soumis à la contrainte digest inchangé du prompt de correctifs (baseline v1.34).
 - Couloir design : hors de ce prompt, il continue selon `docs/images/spec-arts-serie3.md` (campagne d'arts série 3).

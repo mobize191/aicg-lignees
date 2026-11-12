@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : ACTÉ — refonte visuelle de l'errance lancée AVANT la session (décision de Marc-Olivier, 4e tour)
+
+- **Décision de Marc-Olivier** : appliquer MAINTENANT la maquette A+ et le guide à l'errance en jeu, « zone témoin Marées d'abord, puis les 5 zones ». L'interdit de coordination « pas d'errance avant la session » est **levé pour le périmètre rendu / pilotage / ambiance / layout de zone** : le guide est conçu indépendant de l'architecture (modules + zones.json), le travail survit aux tranchages de la session.
+- **Restent à la session du 12/11** : architecture donjons × errance (« 25 donjons », profondeurs, grandes zones), élément des cartes, niveaux 1→100, gating, identité, lore. Le **point de retour ville** (ACTÉ 11/11 nuit point 7) est inclus au chantier (tuile de retour dans chaque zone).
+- **Docs de référence verrouillées** : `docs/design/maquettes/errance-demo-jouable.html` (plancher de qualité, A+ de Marc-Olivier) et `docs/design/errance-topdown.md` (guide §1-§12). Les fichiers reçus de Marc-Olivier (12/11) sont **identiques octet par octet** aux versions du repo (vérifié par le couloir pilotage, 55 143 / 26 196 octets, diff vide) : déjà intégrés, rien à re-pousser.
+- **Prompt de lancement** : `docs/prompt-refonte-errance.md` (lots 1-4 : peinture style A+, ambiance §9bis, layout v2 + sûreté des sauvegardes, généralisation 5 zones ; digests inchangés exigés).
+
 ## 2026-11-12 : ACTÉ — Léviathan des Marées : canon visuel Atlantide Disney + LoRA Leviathan XL
 
 - **Canon visuel du Léviathan (e13, seaSerpent/Léviathan des Marées, et les seaBehemoth)** : le monstre du film Disney « Atlantide, la cité perdue » (colosse à carapace de crustacé, yeux rouges luisants, gueule à tentacules, gardien antique des profondeurs). Arbitrage de Marc-Olivier après consultation des candidats Civitai.
