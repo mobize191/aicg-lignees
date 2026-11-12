@@ -159,3 +159,63 @@ test('refonte IA lot 4 : marche normale sans stagnation -> aucun repath, arrivé
   assert.equal(repaths, 0, 'aucun repath en marche normale');
   assert.ok(Math.hypot(st.hero.x - (m.donjon.x + 0.5), st.hero.y - (m.donjon.y + 2.5)) < 1, 'le héros a atteint la porte');
 });
+
+test('refonte errance lot 1 : decorOrders/ambiance déterministes depuis le seed, palette zone en data avec défauts', () => {
+  const E = loadEngine();
+  const z = E.DATA.zones[0];
+  const m1 = E.genZoneMap(z), m2 = E.genZoneMap(z);
+  const d1 = E.decorOrders(m1, z), d2 = E.decorOrders(m2, z);
+  assert.equal(JSON.stringify(d1), JSON.stringify(d2), 'même seed => mêmes ordres de décor');
+  assert.ok(d1.blades.length > 0 && d1.pond && d1.herbSocles.length > 0 && d1.details.length > 0, 'décor présent (lames, étang, socles, détails)');
+  const pal = E.errancePalette(z);
+  assert.equal(pal.water0, '#78c2de', 'override zone-marees lu depuis zones.json');
+  assert.equal(E.errancePalette({ id: 'zone-test', errance: { seed: 1 } }).water0, '#78c2de', 'défaut intégré pour les zones non paramétrées');
+  const amb = E.buildAmbiance(m1, z);
+  assert.ok(amb.dayLen === 100 && amb.flies.length === 42 && amb.clouds.length === 3 && Array.isArray(amb.prints), 'ambiance construite');
+});
+
+test('refonte errance lot 3 : layout v2 data-driven (Marées) — retour ville, huttes, étang à l\u2019échelle, déterministe', () => {
+  const E = loadEngine();
+  const D = loadData();
+  const zone = D.zones[0];
+  assert.ok(zone.errance.layout, 'layout présent en data pour la zone témoin');
+  const m1 = E.genZoneMap(zone), m2 = E.genZoneMap(zone);
+  assert.equal(JSON.stringify([...m1.terr]), JSON.stringify([...m2.terr]), 'déterministe depuis le seed');
+  assert.ok(m1.retour && m1.terr[m1.idx(m1.retour.x, m1.retour.y)] === E.ET.RETOUR, 'point de retour ville posé');
+  assert.ok(m1.huttes.length === 2 && m1.huttes.every((h) => h.title && h.text), '2 huttes avec dialogues');
+  assert.ok(m1.terr[m1.idx(m1.donjon.x + 1, m1.donjon.y + m1.donjon.h)] === E.ET.PORTE, 'porte au sud du donjon');
+  // spawn praticable, chemin atteignable vers la porte
+  const p = E.astar(m1, m1.spawn.x, m1.spawn.y, m1.donjon.x + 1, m1.donjon.y + m1.donjon.h);
+  assert.ok(p && p.length > 1, 'chemin vers la porte');
+  // repli : les 4 autres zones (sans layout) utilisent le générateur historique
+  for (const z of D.zones.slice(1)) {
+    const m = E.genZoneMap(z);
+    assert.ok(!z.errance.layout && m.retour, `repli générateur pour ${z.id}, retour ville posé`);
+    assert.ok(m.donjon && m.autel && m.spawn, 'objets présents');
+  }
+});
+
+test('refonte errance lot 3 : rescueHeroPos — position valide inchangée, position solide/orpheline secourue près du spawn', () => {
+  const E = loadEngine();
+  const D = loadData();
+  const m = E.genZoneMap(D.zones[0]);
+  const ok = E.rescueHeroPos(m, m.spawn.x, m.spawn.y);
+  assert.equal(ok.x, m.spawn.x, 'position valide renvoyée telle quelle');
+  const wall = E.rescueHeroPos(m, m.donjon.x, m.donjon.y); // mur du donjon = solide
+  assert.ok(![2, 3, 4, 7, 8, 9, 10].includes(m.terr[m.idx(Math.floor(wall.x), Math.floor(wall.y))]), 'secouru sur tuile praticable');
+  const d = Math.hypot(wall.x - m.spawn.x, wall.y - m.spawn.y);
+  assert.ok(d <= 15, `secours proche du spawn (d=${d.toFixed(1)})`);
+  const nul = E.rescueHeroPos(m, null, undefined);
+  assert.ok(Number.isFinite(nul.x) && Number.isFinite(nul.y), 'position nulle secourue');
+});
+
+test('refonte errance lot 3 : migration v27 -> v28 normalise errance (non destructive)', () => {
+  const E = loadEngine();
+  const out = E.migrate({ version: 27, errance: { zone: 'zone-marees', x: 3, y: 4, grace: 2, steps: 10 } });
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.deepEqual(out.errance.looted, []);
+  assert.deepEqual(out.errance.broken, []);
+  assert.equal(out.errance.x, 3, 'position conservée');
+  const bad = E.migrate({ version: 27, errance: { zone: 'zone-marees' } });
+  assert.equal(bad.errance.x, null, 'position absente normalisée en null (secourue au chargement)');
+});

@@ -225,7 +225,19 @@ function v26to27(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27 };
+// v27 -> v28 (refonte errance lot 3) : sûreté des saves — schéma errance normalisé ; la position
+// persistée est secourue à l'entrée de zone si le layout a bougé (rescueHeroPos). Non destructif.
+function v27to28(s) {
+  s.version = 28;
+  if (s.errance && typeof s.errance === 'object') {
+    if (!Array.isArray(s.errance.looted)) s.errance.looted = [];
+    if (!Array.isArray(s.errance.broken)) s.errance.broken = [];
+    if (!Number.isFinite(s.errance.x) || !Number.isFinite(s.errance.y)) { s.errance.x = null; s.errance.y = null; }
+  }
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;

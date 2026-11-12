@@ -14,8 +14,8 @@ Journal complet : arbitrages du 11/11 nuit (2e tour). Session de tranchage prép
 - Voir les détails d'une carte (double-clic / appui long) ne marche pas si l'équipe est pleine.
 - Le double-clic / appui long ajoute la carte à l'équipe alors qu'on ne voulait que voir ses stats.
 - Fiche carte : afficher tous les sorts avec leur rôle (grimoire : dégâts, invocation…), zone vs monocible, et la frappe en « dégâts (pourcentage) » ; les détails des sorts ne s'affichent pas toujours.
-- Héros d'errance plus propre (rendu jugé moche) ; décor d'errance refait au niveau de la maquette.
-- Pas de retour ville depuis l'errance ; le donjon n'est pas visible/marchable dans les Terres Sauvages.
+- ~~Héros d'errance plus propre (rendu jugé moche) ; décor d'errance refait au niveau de la maquette.~~ **FAIT en v1.36** (peinture A+ `src/errance-paint.js`, ambiance §9bis, layout v2 + retour ville, palettes 5 zones — digests inchangés `c62fcbd1…`/`5059e683…`, smoke B21 ; validation IHM S24).
+- ~~Pas de retour ville depuis l'errance~~ **FAIT en v1.36** (tuile de retour ville dans chaque zone) ; le donjon n'est pas visible/marchable dans les Terres Sauvages.
 - Collections : mise au propre générale.
 - **Échecs smoke préexistants** (présents depuis au moins v1.32, confirmés identiques par comparaison de versions lors de la revue du 12/11, `docs/historique/revue-v1.34.md`) : la gorgée ne soigne pas le porteur (B1 g) ; l'achat de monstre C à la Guilde échoue (B7 b — à réévaluer avec la spec gating, l'hôtel de génération étant ACTÉ supprimé) ; la victoire pas-à-pas 100 % manuelle n'aboutit pas en 40 tours (40).
 

@@ -3881,10 +3881,10 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 27,
+  "SAVE_VERSION": 28,
   "SAVE_KEY": "fondations-cards-v1",
   "SAVE_SLOTS": 4,
-  "CURRENT_VERSION": 27,
+  "CURRENT_VERSION": 28,
   "RACE_DIVINE_IDS": [
    "d1",
    "d2",
@@ -13978,7 +13978,118 @@ const DATA = {
      "h": 32,
      "t": 36
     },
-    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+    "paint": {
+     "note": "palette peinture A+ zone temoin (Marées) ; defauts intégrés dans src/errance-paint.js pour les autres zones",
+     "grassTop": "#82b96b",
+     "grassBottom": "#4f8c4b",
+     "water0": "#78c2de",
+     "water1": "#4b8db0",
+     "water2": "#27556f",
+     "sand": "#c9b083",
+     "pathBase": "#b3945f",
+     "pathCore": "#d3b285"
+    },
+    "layout": {
+     "note": "layout v2 data-driven (style maquette A+) : chemin sinueux par waypoints, etang a l'echelle, 2 huttes avec dialogues, point de retour ville (ACTÉ 11/11 nuit, point 7)",
+     "waypoints": [
+      [
+       23,
+       29
+      ],
+      [
+       23,
+       25
+      ],
+      [
+       19,
+       21
+      ],
+      [
+       20,
+       15
+      ],
+      [
+       25,
+       11
+      ],
+      [
+       25,
+       6
+      ],
+      [
+       22,
+       4
+      ]
+     ],
+     "pond": {
+      "x": 37,
+      "y": 22,
+      "rx": 5,
+      "ry": 5
+     },
+     "patches": [
+      [
+       12,
+       17,
+       7,
+       6
+      ],
+      [
+       28,
+       7,
+       6,
+       5
+      ],
+      [
+       14,
+       7,
+       6,
+       5
+      ],
+      [
+       36,
+       26,
+       4,
+       3
+      ]
+     ],
+     "trees": 30,
+     "rocks": 8,
+     "jarres": 6,
+     "huttes": [
+      {
+       "x": 10,
+       "y": 25,
+       "title": "Hutte du Garde-Motte",
+       "text": "« Méfie-toi des hautes herbes, voyageur. Les monstres y sommeillent — marche vite ou contourne. »"
+      },
+      {
+       "x": 30,
+       "y": 28,
+       "title": "Cabane de l'Herboriste",
+       "text": "« Ces herbes brillantes qui parsèment la prairie ? Cueille-les en passant, elles soignent… un jour. »"
+      }
+     ],
+     "donjon": {
+      "x": 20,
+      "y": 1,
+      "w": 3,
+      "h": 2
+     },
+     "autel": {
+      "x": 31,
+      "y": 19
+     },
+     "retour": {
+      "x": 6,
+      "y": 29
+     },
+     "spawn": {
+      "x": 23.5,
+      "y": 29.5
+     }
+    }
    }
   },
   {
@@ -14073,7 +14184,37 @@ const DATA = {
      "h": 32,
      "t": 36
     },
-    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+    "paint": {
+     "grassTop": "#8a6248",
+     "grassBottom": "#54382a",
+     "blotchDark": "rgba(40,18,10,.10)",
+     "blotchMid": "rgba(150,80,40,.07)",
+     "pathBase": "#9a7a58",
+     "pathCore": "#c09a6a",
+     "sand": "#7a5a40",
+     "sandDark": "#5c4230",
+     "water0": "#ffb050",
+     "water1": "#e06a28",
+     "water2": "#8a3012",
+     "waterDeep": "rgba(60,20,5,.30)",
+     "waterGlint": "rgba(255,230,180,.5)",
+     "bladeA": "#7a9a42",
+     "bladeB": "#5c7a34",
+     "leafDark": "#5c4028",
+     "leafMid": "#7a5c38",
+     "leafLight": "#9a7a48",
+     "leafGlow": "rgba(255,200,150,.35)",
+     "rock": "#7a6a60",
+     "rockLight": "#9a8a7c",
+     "rockDark": "#5c4c44",
+     "donjonWall": "#5c4a40",
+     "donjonRoof": "#40342c"
+    },
+    "ambiance": {
+     "dayLen": 110,
+     "note": "cycle un peu plus long, ciel de braises"
+    }
    }
   },
   {
@@ -14167,7 +14308,30 @@ const DATA = {
      "h": 32,
      "t": 36
     },
-    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+    "paint": {
+     "grassTop": "#4a8a52",
+     "grassBottom": "#26502f",
+     "blotchDark": "rgba(10,40,20,.10)",
+     "blotchMid": "rgba(40,100,50,.07)",
+     "pathBase": "#8a7a55",
+     "pathCore": "#b09a6a",
+     "sand": "#a89468",
+     "sandDark": "#84744c",
+     "water0": "#4fa8b8",
+     "water1": "#357a90",
+     "water2": "#1c4a5f",
+     "bladeA": "#3f8a42",
+     "bladeB": "#2a6b34",
+     "leafDark": "#1f4a2e",
+     "leafMid": "#2a6b3f",
+     "leafLight": "#3f8a52",
+     "leafGlow": "rgba(180,255,190,.3)",
+     "moss": "rgba(60,130,70,.6)"
+    },
+    "ambiance": {
+     "dayLen": 100
+    }
    }
   },
   {
@@ -14270,7 +14434,38 @@ const DATA = {
      "h": 32,
      "t": 36
     },
-    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+    "paint": {
+     "grassTop": "#7a8a99",
+     "grassBottom": "#46586a",
+     "blotchDark": "rgba(20,30,50,.10)",
+     "blotchMid": "rgba(90,110,140,.07)",
+     "pathBase": "#8a8a94",
+     "pathCore": "#aaaab4",
+     "sand": "#6a7480",
+     "sandDark": "#505a66",
+     "water0": "#9ac8e8",
+     "water1": "#5a8db0",
+     "water2": "#2a4a68",
+     "bladeA": "#6a8a9a",
+     "bladeB": "#4a6a7a",
+     "leafDark": "#3a4a5c",
+     "leafMid": "#4a5c70",
+     "leafLight": "#5c7288",
+     "leafGlow": "rgba(190,220,255,.3)",
+     "rock": "#8a8a99",
+     "rockLight": "#a8a8b5",
+     "rockDark": "#606068",
+     "stone": "#9a9aa8",
+     "donjonWall": "#5c5a68",
+     "donjonRoof": "#403e4c",
+     "autelGlow": "rgba(180,160,255,.85)",
+     "autelRing": "rgba(200,180,255,.9)"
+    },
+    "ambiance": {
+     "dayLen": 120,
+     "note": "nuit plus longue en crypte"
+    }
    }
   },
   {
@@ -14373,7 +14568,37 @@ const DATA = {
      "h": 32,
      "t": 36
     },
-    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes"
+    "note": "errance top-down : seed déterministe (terrain + décor + positions donjon/autel/collectables), encRate = rencontres/pas dans les hautes herbes",
+    "paint": {
+     "grassTop": "#d4b96a",
+     "grassBottom": "#a8873c",
+     "blotchLight": "rgba(255,250,210,.08)",
+     "blotchDark": "rgba(120,90,30,.08)",
+     "blotchMid": "rgba(200,170,90,.07)",
+     "pathBase": "#c4a86a",
+     "pathCore": "#e8d9a0",
+     "sand": "#e0cf9a",
+     "sandDark": "#bca86a",
+     "water0": "#a8e0f0",
+     "water1": "#6ab0d0",
+     "water2": "#3a7a9a",
+     "bladeA": "#b8a44e",
+     "bladeB": "#948538",
+     "leafDark": "#8a7434",
+     "leafMid": "#a8904a",
+     "leafLight": "#c8b060",
+     "leafGlow": "rgba(255,250,210,.4)",
+     "flowerCols": [
+      "#ff9a5a",
+      "#ffd76e",
+      "#ffffff",
+      "#f0a0c8"
+     ]
+    },
+    "ambiance": {
+     "dayLen": 90,
+     "note": "journées dorées plus courtes au Zénith"
+    }
    }
   }
  ]
@@ -16655,7 +16880,7 @@ function evoLabelOf(from, to) {
 // Guide : docs/design/errance-topdown.md
 
 // codes terrain
-const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10 };
+const ET = { PRAIRIE: 0, CHEMIN: 1, EAU: 2, ARBRE: 3, MUR_DONJON: 4, PORTE: 5, HERBES: 6, MAISON: 7, AUTEL: 8, ROCHER: 9, JARRE: 10, RETOUR: 11 };
 const SOLID = new Set([ET.EAU, ET.ARBRE, ET.MUR_DONJON, ET.MAISON, ET.AUTEL, ET.ROCHER, ET.JARRE]);
 
 function lcg(seed) {
@@ -16664,6 +16889,8 @@ function lcg(seed) {
 }
 
 // génère la carte d'une zone : Uint8Array + objets interactifs, déterministe (seed de la zone)
+// refonte errance lot 3 : si la zone porte un errance.layout en data (style maquette), il est consommé
+// (chemin sinueux par waypoints, étang à l'échelle, huttes, point de retour ville) ; sinon repli sur le générateur historique.
 function genZoneMap(zone) {
   const w = zone.errance?.map?.w ?? 46;
   const h = zone.errance?.map?.h ?? 32;
@@ -16672,49 +16899,136 @@ function genZoneMap(zone) {
   const terr = new Uint8Array(w * h);
   const idx = (x, y) => y * w + x;
   const inb = (x, y) => x >= 0 && y >= 0 && x < w && y < h;
-  // ceinture d'eau + arbres en bordure
+  // ceinture d'eau + arbres en bordure (commun aux deux générateurs)
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     if (x === 0 || y === 0 || x === w - 1 || y === h - 1) terr[idx(x, y)] = (rnd() < 0.6 ? ET.EAU : ET.ARBRE);
     else terr[idx(x, y)] = ET.PRAIRIE;
   }
-  // un étang
-  const ex = 6 + Math.floor(rnd() * (w - 12)), ey = 5 + Math.floor(rnd() * (h - 10));
-  for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) if (inb(ex + dx, ey + dy)) terr[idx(ex + dx, ey + dy)] = ET.EAU;
-  // chemins croisés
-  const cy = Math.floor(h / 2), cx = Math.floor(w / 2);
-  for (let x = 2; x < w - 2; x++) terr[idx(x, cy)] = ET.CHEMIN;
-  for (let y = 2; y < h - 2; y++) terr[idx(cx, y)] = ET.CHEMIN;
-  // patchs de hautes herbes
-  const nPatch = 8 + Math.floor(rnd() * 5);
-  for (let p = 0; p < nPatch; p++) {
-    const px = 3 + Math.floor(rnd() * (w - 8)), py = 3 + Math.floor(rnd() * (h - 8));
-    const pw = 3 + Math.floor(rnd() * 4), ph = 2 + Math.floor(rnd() * 3);
-    for (let dy = 0; dy < ph; dy++) for (let dx = 0; dx < pw; dx++) {
-      const x = px + dx, y = py + dy;
-      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+  const layout = zone.errance?.layout;
+  let donjon, autel, spawn, jarres = [], retour = null, huttes = [];
+  if (layout) {
+    // chemin sinueux par waypoints (largeur ~3 tuiles, style maquette)
+    const wp = layout.waypoints ?? [[Math.floor(w / 2), h - 3], [Math.floor(w / 2), Math.floor(h / 2)], [Math.floor(w / 2), 3]];
+    const line = (a, b) => {
+      const steps = Math.max(Math.abs(b[0] - a[0]), Math.abs(b[1] - a[1])) + 1;
+      for (let s = 0; s <= steps; s++) {
+        const cx = Math.round(a[0] + (b[0] - a[0]) * s / steps), cy = Math.round(a[1] + (b[1] - a[1]) * s / steps);
+        for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++)
+          if (inb(cx + dx, cy + dy) && terr[idx(cx + dx, cy + dy)] === ET.PRAIRIE) terr[idx(cx + dx, cy + dy)] = ET.CHEMIN;
+      }
+    };
+    for (let i = 0; i < wp.length - 1; i++) line(wp[i], wp[i + 1]);
+    // étang à l'échelle (ellipse en tuiles)
+    if (layout.pond) {
+      const p = layout.pond;
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const dxn = (x - p.x) / p.rx, dyn = (y - p.y) / p.ry;
+        if (dxn * dxn + dyn * dyn < 1 && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.EAU;
+      }
+    }
+    // patchs de hautes herbes
+    for (const p of layout.patches ?? []) {
+      for (let y = p[1]; y < p[1] + p[3]; y++) for (let x = p[0]; x < p[0] + p[2]; x++)
+        if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+    }
+    // arbres épars puis rochers
+    let placed = 0, tries = 0;
+    while (placed < (layout.trees ?? 30) && tries++ < 600) {
+      const x = 1 + Math.floor(rnd() * (w - 2)), y = 1 + Math.floor(rnd() * (h - 2));
+      if (terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.ARBRE; placed++; }
+    }
+    let rocks = 0; tries = 0;
+    while (rocks < (layout.rocks ?? 8) && tries++ < 600) {
+      const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
+      if (terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.ROCHER; rocks++; }
+    }
+    // huttes décoratives (dialogues)
+    for (const hu of layout.huttes ?? []) {
+      if (inb(hu.x, hu.y) && terr[idx(hu.x, hu.y)] === ET.PRAIRIE) {
+        terr[idx(hu.x, hu.y)] = ET.MAISON;
+        huttes.push({ x: hu.x, y: hu.y, type: 'maison', title: hu.title ?? 'Hutte', text: hu.text ?? '' });
+      }
+    }
+    // bâtiment donjon (murs + porte au sud), autel, point de retour ville
+    donjon = { x: layout.donjon?.x ?? w - 8, y: layout.donjon?.y ?? 3, w: layout.donjon?.w ?? 2, h: layout.donjon?.h ?? 2 };
+    for (let dy = 0; dy < donjon.h; dy++) for (let dx = 0; dx < donjon.w; dx++) if (inb(donjon.x + dx, donjon.y + dy)) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
+    terr[idx(donjon.x + Math.floor(donjon.w / 2), donjon.y + donjon.h)] = ET.PORTE;
+    autel = { x: layout.autel?.x ?? 5, y: layout.autel?.y ?? h - 6 };
+    if (inb(autel.x, autel.y) && terr[idx(autel.x, autel.y)] === ET.PRAIRIE) terr[idx(autel.x, autel.y)] = ET.AUTEL;
+    if (layout.retour && inb(layout.retour.x, layout.retour.y) && terr[idx(layout.retour.x, layout.retour.y)] === ET.PRAIRIE) {
+      retour = { x: layout.retour.x, y: layout.retour.y };
+      terr[idx(retour.x, retour.y)] = ET.RETOUR;
+    }
+    // jarres
+    let nj = 0; tries = 0;
+    while (nj < (layout.jarres ?? 6) && tries++ < 300) {
+      const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
+      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); nj++; }
+    }
+    // spawn : praticable, sinon premier waypoint praticable
+    spawn = { x: layout.spawn?.x ?? wp[0][0] + .5, y: layout.spawn?.y ?? wp[0][1] + .5 };
+    const probe = { terr, idx, inb, w, h };
+    if (solidT(probe, Math.floor(spawn.x), Math.floor(spawn.y))) {
+      for (const wpt of wp) {
+        const wx = Math.min(w - 1, Math.max(0, wpt[0])), wy = Math.min(h - 1, Math.max(0, wpt[1]));
+        if (!SOLID.has(terr[idx(wx, wy)])) { spawn = { x: wx + .5, y: wy + .5 }; break; }
+      }
+    }
+  } else {
+    // générateur historique (repli) : étang 4x3, chemins en croix, patchs, rochers/arbres épars
+    const ex = 6 + Math.floor(rnd() * (w - 12)), ey = 5 + Math.floor(rnd() * (h - 10));
+    for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 4; dx++) if (inb(ex + dx, ey + dy)) terr[idx(ex + dx, ey + dy)] = ET.EAU;
+    const cy = Math.floor(h / 2), cx = Math.floor(w / 2);
+    for (let x = 2; x < w - 2; x++) terr[idx(x, cy)] = ET.CHEMIN;
+    for (let y = 2; y < h - 2; y++) terr[idx(cx, y)] = ET.CHEMIN;
+    const nPatch = 8 + Math.floor(rnd() * 5);
+    for (let p = 0; p < nPatch; p++) {
+      const px = 3 + Math.floor(rnd() * (w - 8)), py = 3 + Math.floor(rnd() * (h - 8));
+      const pw = 3 + Math.floor(rnd() * 4), ph = 2 + Math.floor(rnd() * 3);
+      for (let dy = 0; dy < ph; dy++) for (let dx = 0; dx < pw; dx++) {
+        const x = px + dx, y = py + dy;
+        if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = ET.HERBES;
+      }
+    }
+    const nRock = 10 + Math.floor(rnd() * 8);
+    for (let i = 0; i < nRock; i++) {
+      const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
+      if (terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = rnd() < 0.5 ? ET.ROCHER : ET.ARBRE;
+    }
+    donjon = { x: w - 8, y: 3, w: 2, h: 2 };
+    for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
+    terr[idx(donjon.x, donjon.y + 2)] = ET.PORTE; // porte au sud
+    autel = { x: 5, y: h - 6 };
+    terr[idx(autel.x, autel.y)] = ET.AUTEL;
+    for (let i = 0; i < 6; i++) {
+      const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
+      if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); }
+    }
+    spawn = { x: cx + 0.5, y: cy + 1.5 };
+    terr[idx(cx, cy + 1)] = ET.CHEMIN;
+    // point de retour ville dans chaque zone (ACTÉ 11/11 nuit, point 7), même en repli
+    const rx = 3, ry = h - 3;
+    if (inb(rx, ry) && terr[idx(rx, ry)] === ET.PRAIRIE) {
+      retour = { x: rx, y: ry };
+      terr[idx(rx, ry)] = ET.RETOUR;
     }
   }
-  // rochers et arbres épars
-  const nRock = 10 + Math.floor(rnd() * 8);
-  for (let i = 0; i < nRock; i++) {
-    const x = 2 + Math.floor(rnd() * (w - 4)), y = 2 + Math.floor(rnd() * (h - 4));
-    if (terr[idx(x, y)] === ET.PRAIRIE) terr[idx(x, y)] = rnd() < 0.5 ? ET.ROCHER : ET.ARBRE;
+  return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, retour, huttes, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
+}
+
+// sûreté des saves (refonte errance lot 3) : si la position persistée est solide ou orpheline (le layout a bougé),
+// secourir vers la tuile praticable la plus proche du spawn (ordre déterministe)
+function rescueHeroPos(map, x, y) {
+  if (Number.isFinite(x) && Number.isFinite(y) && !solidT(map, Math.floor(x), Math.floor(y))) return { x, y };
+  const sx = Math.floor(map.spawn.x), sy = Math.floor(map.spawn.y);
+  for (let r = 0; r <= 14; r++) {
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+      const tx = sx + dx, ty = sy + dy;
+      if (!solidT(map, tx, ty)) return { x: tx + .5, y: ty + .5 };
+    }
   }
-  // bâtiment donjon (mur 2x2 + porte au sud), autel, jarres — positions dérivées du seed, ordre fixe
-  const donjon = { x: w - 8, y: 3, w: 2, h: 2 };
-  for (let dy = 0; dy < 2; dy++) for (let dx = 0; dx < 2; dx++) terr[idx(donjon.x + dx, donjon.y + dy)] = ET.MUR_DONJON;
-  terr[idx(donjon.x, donjon.y + 2)] = ET.PORTE; // porte au sud
-  const autel = { x: 5, y: h - 6 };
-  terr[idx(autel.x, autel.y)] = ET.AUTEL;
-  const jarres = [];
-  for (let i = 0; i < 6; i++) {
-    const x = 3 + Math.floor(rnd() * (w - 6)), y = 3 + Math.floor(rnd() * (h - 6));
-    if (inb(x, y) && terr[idx(x, y)] === ET.PRAIRIE) { terr[idx(x, y)] = ET.JARRE; jarres.push({ x, y, type: 'jarre' }); }
-  }
-  // spawn héros sur le chemin central, dégagé
-  const spawn = { x: cx + 0.5, y: cy + 1.5 };
-  terr[idx(cx, cy + 1)] = ET.CHEMIN;
-  return { w, h, t, terr, idx, inb, donjon, autel, jarres, spawn, encRate: zone.errance?.encRate ?? 0.16, seed: zone.errance?.seed ?? 1 };
+  return { x: map.spawn.x, y: map.spawn.y };
 }
 
 const solidT = (m, x, y) => !m.inb(x, y) || SOLID.has(m.terr[m.idx(x, y)]);
@@ -16932,6 +17246,347 @@ function unlockZone(zoneId, st) {
   const s = erranceStore(st);
   s.zonesUnlocked = s.zonesUnlocked ?? [];
   if (!s.zonesUnlocked.includes(zoneId)) s.zonesUnlocked.push(zoneId);
+}
+
+// src/errance-paint.js — peinture de l'errance, style maquette A+ (docs/design/maquettes/errance-demo-jouable.html)
+// Partie pure testable : errancePalette (data/zones.json, clé errance.paint, défauts intégrés),
+// decorOrders + buildAmbiance (RNG déterministe dérivé du seed de zone, ordre d'appel fixe — guide §2).
+// Partie canvas : paintZoneBase (pré-rendu offscreen unique, guide §3) + paintTileGround (re-peinture locale,
+// ex. jarre cassée — les objets cassables restent dessinés par frame, jamais cuits, guide §8).
+// Guide : docs/design/errance-topdown.md
+
+function errancePalette(zone) {
+  const p = (zone && zone.errance && zone.errance.paint) || {};
+  const d = {
+    grassTop: '#82b96b', grassBottom: '#4f8c4b',
+    blotchLight: 'rgba(255,255,200,.05)', blotchDark: 'rgba(18,66,32,.08)', blotchMid: 'rgba(62,122,56,.06)',
+    pathBase: '#b3945f', pathCore: '#d3b285', pathRut: 'rgba(120,95,60,.35)', pathStone: 'rgba(90,75,50,.5)',
+    sand: '#c9b083', sandDark: '#a8926b',
+    water0: '#78c2de', water1: '#4b8db0', water2: '#27556f', waterDeep: 'rgba(20,50,70,.25)', waterGlint: 'rgba(255,255,255,.35)',
+    reed: '#5e8a4a', reedTip: '#7a5b3a', lily: '#4c8a4f', lilyCut: '#2b5f80', lilyFlower: '#ffd76e',
+    herbSocleDark: 'rgba(24,62,32,.85)', herbSocle: 'rgba(46,104,50,.5)',
+    bladeA: '#3f8a42', bladeB: '#2e6b34',
+    flowerCols: ['#ffd76e', '#e8a4c8', '#ffffff', '#c9a0f0'],
+    borderFlowerCols: ['#ffd76e', '#e8a4c8', '#ffffff'],
+    tuftDark: 'rgba(40,92,46,.55)', tuftLight: 'rgba(76,132,62,.5)', stem: '#3d7a41', petalCore: '#ffe9a8',
+    stone: '#8d9188', stoneLight: 'rgba(255,255,255,.35)', stoneShadow: 'rgba(0,0,0,.22)',
+    trunk: '#4a3527', trunkDark: 'rgba(0,0,0,.25)',
+    leafDark: '#295c3b', leafMid: '#33704a', leafLight: '#3f8253', leafGlow: 'rgba(210,255,195,.3)', leafShade: 'rgba(20,50,30,.3)',
+    rock: '#8d9188', rockLight: '#a3a89e', rockDark: '#6f7268', moss: 'rgba(70,120,70,.55)',
+    donjonWall: '#6b5a49', donjonRoof: '#4c4036', donjonRoofLight: 'rgba(255,255,255,.12)', donjonTrim: '#57503f', donjonBrick: 'rgba(0,0,0,.16)', donjonMoss: 'rgba(70,120,65,.5)', donjonDoor: '#241c15', donjonGlow: 'rgba(255,215,110,.85)',
+    autelBase: '#7a7468', autelTop: '#918a7c', autelGlow: 'rgba(140,220,255,.8)', autelRing: 'rgba(160,235,255,.9)',
+    houseWall: '#8a6f56', houseRoof: '#6d4a3a', houseRoofLight: 'rgba(255,255,255,.13)', housePlanks: 'rgba(60,40,25,.3)', houseChimney: '#8a8378', houseChimneyTop: '#6d675e', houseDoor: '#241c15', houseWindow: '#3a2c20', houseGlow: 'rgba(255,215,110,.95)',
+    retourWall: '#6f6a80', retourRoof: '#4a4660', retourGlow: 'rgba(160,235,255,.8)', retourDoor: '#1c2030',
+    shadow: 'rgba(0,0,0,.3)',
+    potBody: '#b5714a', potLight: '#cf8a5c', potDark: '#8a4f33', potLine: 'rgba(90,45,25,.5)', shard: '#a06a48',
+    ground: '#0d1410',
+  };
+  return Object.assign({}, d, p);
+}
+
+// ordres de décor déterministes (seed de zone), ordre d'appel fixe — reproductibles à l'identique
+function decorOrders(map, zone) {
+  const T = map.t, W = map.w * T, H = map.h * T;
+  const rnd = lcg((map.seed ^ 0x9e3779b9) >>> 0);
+  const pal = errancePalette(zone);
+  const terr = map.terr, idx = map.idx;
+  const at = (px, py) => terr[idx(Math.floor(px / T), Math.floor(py / T))];
+  const blotches = [];
+  for (let i = 0; i < 1500; i++) {
+    const x = rnd() * W, y = rnd() * H, r = 12 + rnd() * 55, q = rnd();
+    blotches.push({ x, y, r, rot: rnd() * 3, c: q < .3 ? pal.blotchLight : q < .55 ? pal.blotchDark : pal.blotchMid });
+  }
+  const details = [];
+  for (let i = 0; i < 1500; i++) {
+    const x = rnd() * W, y = rnd() * H;
+    if (at(x, y) !== ET.PRAIRIE) continue;
+    const r = rnd();
+    if (r < .07) details.push({ x, y, kind: 'flower', col: pal.flowerCols[Math.floor(rnd() * pal.flowerCols.length)] });
+    else if (r < .12) details.push({ x, y, kind: 'stone', s: rnd() });
+    else details.push({ x, y, kind: 'tuft', n: 2 + Math.floor(rnd() * 3), dark: rnd() < .5 });
+  }
+  const pathCircles = [], pathRuts = [], pathStones = [];
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) if (terr[idx(x, y)] === ET.CHEMIN) {
+    pathCircles.push({ cx: x * T + T / 2, cy: y * T + T / 2, r: T * (.85 + rnd() * .15), coreDx: (rnd() - .5) * 6, coreDy: (rnd() - .5) * 6, coreR: T * (.52 + rnd() * .2) });
+  }
+  for (let i = 0; i < 900; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathRuts.push({ x, y, rx: 2 + rnd() * 4, ry: 1 + rnd() * 2, rot: rnd() * 3 }); }
+  for (let i = 0; i < 260; i++) { const x = rnd() * W, y = rnd() * H; if (at(x, y) === ET.CHEMIN) pathStones.push({ x, y, r: 1 + rnd() * 1.6 }); }
+  // étang : centroïde + rayons depuis l'emprise des tuiles EAU
+  let pond = null;
+  {
+    let n = 0, minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+    for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) if (terr[idx(x, y)] === ET.EAU) {
+      n++; if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
+    }
+    if (n > 0) {
+      pond = { cx: (minx + maxx) / 2 * T + T / 2, cy: (miny + maxy) / 2 * T + T / 2, rx: (maxx - minx + 1) / 2 * T + T * .4, ry: (maxy - miny + 1) / 2 * T + T * .4 };
+    }
+  }
+  const pondDeep = [], pondGlints = [], lilies = [], reeds = [];
+  if (pond) {
+    for (let i = 0; i < 6; i++) pondDeep.push({ x: pond.cx + (rnd() - .5) * pond.rx * 1.6, y: pond.cy + (rnd() - .5) * pond.ry * 1.4, rx: 20 + rnd() * 30, ry: 8 + rnd() * 14, rot: rnd() * 3 });
+    for (let i = 0; i < 9; i++) pondGlints.push({ x: pond.cx - 62 + i * 7 + rnd() * 8, y: pond.cy - 78 + i * 20, w: 48 + i * 5 + rnd() * 10 });
+    const lilyOff = [[-.7, -.3], [.45, .1], [-.25, .58], [.2, -.58]];
+    for (const o of lilyOff) lilies.push({ x: pond.cx + o[0] * pond.rx * .8, y: pond.cy + o[1] * pond.ry * .8 });
+    for (let i = 0; i < 9; i++) {
+      const a = -2.4 + i * .6;
+      reeds.push({ x: pond.cx + Math.cos(a) * (pond.rx + T * .25), y: pond.cy + Math.sin(a) * (pond.ry + T * .25), h: 22 + rnd() * 8 });
+    }
+  }
+  // hautes herbes : socles par tuile, lames animées, bordure de fleurs sur les tuiles en lisière
+  const herbSocles = [], blades = [], borderFlowers = [];
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
+    if (terr[idx(x, y)] !== ET.HERBES) continue;
+    const cx = x * T + T / 2, cy = y * T + T / 2;
+    herbSocles.push({ cx, cy });
+    for (let k = 0; k < 6; k++) {
+      blades.push({ x: (x + .12 + rnd() * .76) * T, y: (y + .25 + rnd() * .7) * T, h: 12 + rnd() * 11, ph: rnd() * 7, c: rnd() < .5 ? pal.bladeA : pal.bladeB });
+    }
+    const edge = (terr[idx(Math.max(0, x - 1), y)] === ET.PRAIRIE) || (terr[idx(Math.min(map.w - 1, x + 1), y)] === ET.PRAIRIE)
+      || (terr[idx(x, Math.max(0, y - 1))] === ET.PRAIRIE) || (terr[idx(x, Math.min(map.h - 1, y + 1))] === ET.PRAIRIE);
+    if (edge) {
+      for (let k = 0; k < 4; k++) {
+        const fx = cx + (rnd() - .5) * T * 1.7, fy = cy + (rnd() - .5) * T * 1.7;
+        if (at(fx, fy) !== ET.PRAIRIE) continue;
+        borderFlowers.push({ x: fx, y: fy, col: pal.borderFlowerCols[Math.floor(rnd() * pal.borderFlowerCols.length)] });
+      }
+    }
+  }
+  return { blotches, details, pathCircles, pathRuts, pathStones, pond, pondDeep, pondGlints, lilies, reeds, herbSocles, blades, borderFlowers };
+}
+
+// couche d'ambiance (guide §9bis) : entités animées, RNG déterministe dérivé du seed
+function buildAmbiance(map, zone) {
+  const T = map.t, W = map.w * T, H = map.h * T;
+  const rnd = lcg((map.seed ^ 0x51ab3f) >>> 0);
+  const amb = (zone && zone.errance && zone.errance.ambiance) || {};
+  const N = (n) => Array.from({ length: n }, () => 0);
+  return {
+    dayLen: amb.dayLen ?? 100,
+    flies: N(42).map(() => ({ x: rnd() * W, y: rnd() * H, ph: rnd() * 7, sp: .4 + rnd() * .8, r: 1.4 + rnd() * 1.6 })),
+    butterflies: N(6).map((_, i) => ({ x: rnd() * W, y: rnd() * H, ph: rnd() * 7, sp: .6 + rnd() * .5, fl: rnd() * 7, col: ['#ffd76e', '#e8a4c8', '#c9a0f0'][i % 3] })),
+    seeds: N(10).map(() => ({ x: rnd() * W, y: rnd() * H, ph: rnd() * 7 })),
+    leaves: N(14).map(() => ({ x: rnd() * W, y: rnd() * H, ph: rnd() * 7, sp: .5 + rnd() * .7, rot: rnd() * 7, rs: (rnd() - .5) * 2.5 })),
+    clouds: N(3).map(() => ({ x: rnd() * W, y: rnd() * H, s: 1 + rnd() * .4, v: 5 + rnd() * 6 })),
+    chimneys: (map.huttes ?? []).map((h) => ({ x: (h.x + .4) * T, y: h.y * T })),
+    prints: [], sparkles: [],
+  };
+}
+
+function paintZoneBase(bx, map, zone) {
+  const T = map.t, W = map.w * T, H = map.h * T;
+  const pal = errancePalette(zone);
+  const decor = map.decor ?? (map.decor = decorOrders(map, zone));
+  const terr = map.terr, idx = map.idx;
+  bx.imageSmoothingEnabled = true;
+  if (bx.imageSmoothingQuality) bx.imageSmoothingQuality = 'high';
+  // 1. fond : dégradé vertical + taches organiques
+  const g = bx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, pal.grassTop); g.addColorStop(1, pal.grassBottom);
+  bx.fillStyle = g; bx.fillRect(0, 0, W, H);
+  for (const b of decor.blotches) { bx.fillStyle = b.c; bx.beginPath(); bx.ellipse(b.x, b.y, b.r, b.r * .55, b.rot, 0, 7); bx.fill(); }
+  // 2. micro-détails de prairie
+  for (const d of decor.details) {
+    if (d.kind === 'flower') {
+      bx.strokeStyle = pal.stem; bx.lineWidth = 1.3;
+      bx.beginPath(); bx.moveTo(d.x, d.y); bx.lineTo(d.x, d.y - 5); bx.stroke();
+      bx.fillStyle = d.col;
+      for (let p = 0; p < 4; p++) { const a = p / 4 * 7; bx.beginPath(); bx.arc(d.x + Math.cos(a) * 2.3, d.y - 6 + Math.sin(a) * 2.3, 1.5, 0, 7); bx.fill(); }
+      bx.fillStyle = pal.petalCore; bx.beginPath(); bx.arc(d.x, d.y - 6, 1.2, 0, 7); bx.fill();
+    } else if (d.kind === 'stone') {
+      bx.fillStyle = pal.stoneShadow; bx.beginPath(); bx.ellipse(d.x + .6, d.y + 1.2, 2.7, 1.4, 0, 0, 7); bx.fill();
+      bx.fillStyle = pal.stone; bx.beginPath(); bx.ellipse(d.x, d.y, 2.4 + d.s * 2, 1.8 + d.s * 1.4, d.s * 3, 0, 7); bx.fill();
+      bx.fillStyle = pal.stoneLight; bx.beginPath(); bx.ellipse(d.x - .8, d.y - .8, 1.1, .7, 0, 0, 7); bx.fill();
+    } else {
+      bx.strokeStyle = d.dark ? pal.tuftDark : pal.tuftLight;
+      bx.lineWidth = 1.4; bx.beginPath();
+      for (let k = 0; k < d.n; k++) { const ox = (k - d.n / 2) * 2.6; bx.moveTo(d.x + ox, d.y); bx.quadraticCurveTo(d.x + ox + 1.5, d.y - 3.5, d.x + ox, d.y - 6 - ((k * 7919) % 10) / 10 * 3); }
+      bx.stroke();
+    }
+  }
+  // 3. chemin de terre : base large, cœur clair, ornières, cailloux
+  bx.fillStyle = pal.pathBase;
+  for (const c of decor.pathCircles) { bx.beginPath(); bx.arc(c.cx, c.cy, c.r, 0, 7); bx.fill(); }
+  bx.fillStyle = pal.pathCore;
+  for (const c of decor.pathCircles) { bx.beginPath(); bx.arc(c.cx + c.coreDx, c.cy + c.coreDy, c.coreR, 0, 7); bx.fill(); }
+  bx.fillStyle = pal.pathRut;
+  for (const r of decor.pathRuts) { bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
+  bx.fillStyle = pal.pathStone;
+  for (const s of decor.pathStones) { bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
+  // 4. étang : rive, eau en dégradé radial, profondeur, reflets, nénuphars, roseaux
+  if (decor.pond) {
+    const p = decor.pond;
+    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.sandDark; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .3, p.ry + T * .3, 0, 0, 7); bx.fill();
+    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
+    gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
+    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.waterDeep;
+    for (const d of decor.pondDeep) { bx.beginPath(); bx.ellipse(d.x, d.y, d.rx, d.ry, d.rot, 0, 7); bx.fill(); }
+    bx.strokeStyle = pal.waterGlint; bx.lineWidth = 2;
+    for (const gl of decor.pondGlints) { bx.beginPath(); bx.moveTo(gl.x, gl.y); bx.quadraticCurveTo(gl.x + 38, gl.y + 4, gl.x + gl.w, gl.y); bx.stroke(); }
+    for (const li of decor.lilies) {
+      bx.fillStyle = pal.waterDeep; bx.beginPath(); bx.ellipse(li.x + 2, li.y + 2, 14, 10, .3, 0, 7); bx.fill();
+      bx.fillStyle = pal.lily; bx.beginPath(); bx.ellipse(li.x, li.y, 13, 9.5, .3, 0, 7); bx.fill();
+      bx.fillStyle = pal.lilyCut; bx.beginPath(); bx.moveTo(li.x, li.y); bx.lineTo(li.x + 10, li.y + 4); bx.lineTo(li.x + 2, li.y + 8); bx.closePath(); bx.fill();
+      bx.fillStyle = pal.lilyFlower; bx.beginPath(); bx.arc(li.x + 3, li.y - 1, 2.4, 0, 7); bx.fill();
+    }
+    for (const r of decor.reeds) {
+      bx.strokeStyle = pal.reed; bx.lineWidth = 2.2;
+      bx.beginPath(); bx.moveTo(r.x, r.y); bx.quadraticCurveTo(r.x + 3, r.y - 12, r.x + 1, r.y - r.h); bx.stroke();
+      bx.fillStyle = pal.reedTip; bx.beginPath(); bx.ellipse(r.x + 1, r.y - r.h - 4, 2, 4.5, .2, 0, 7); bx.fill();
+    }
+  }
+  // 5. socles des hautes herbes + bordure de fleurs (lecture visuelle des zones à rencontres)
+  bx.fillStyle = pal.herbSocleDark;
+  for (const s of decor.herbSocles) { bx.beginPath(); bx.ellipse(s.cx, s.cy, T * .62, T * .55, 0, 0, 7); bx.fill(); }
+  bx.fillStyle = pal.herbSocle;
+  for (const s of decor.herbSocles) { bx.beginPath(); bx.ellipse(s.cx + 3, s.cy + 2, T * .4, T * .3, 0, 0, 7); bx.fill(); }
+  for (const f of decor.borderFlowers) {
+    bx.fillStyle = f.col;
+    for (let q = 0; q < 4; q++) { const qa = q / 4 * 7; bx.beginPath(); bx.arc(f.x + Math.cos(qa) * 1.8, f.y + Math.sin(qa) * 1.8, 1.3, 0, 7); bx.fill(); }
+    bx.fillStyle = pal.petalCore; bx.beginPath(); bx.arc(f.x, f.y, 1, 0, 7); bx.fill();
+  }
+  // 6. objets : arbres en couches, rochers moussus, maisons, donjon peint, autel avec halo, porte de ville — ombre sous chaque objet
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
+    if (terr[idx(x, y)] !== ET.ARBRE) continue;
+    const cx = x * T + T / 2, cy = y * T + T / 2, R = 18 + ((x * 31 + y * 17) % 8);
+    bx.fillStyle = pal.shadow; bx.beginPath(); bx.ellipse(cx + 4, cy + 10, R * 1.05, R * .42, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.trunk; bx.fillRect(cx - 3.5, cy, 7, 13);
+    bx.fillStyle = pal.trunkDark; bx.fillRect(cx + .5, cy, 3, 13);
+    bx.fillStyle = pal.leafDark; bx.beginPath(); bx.arc(cx, cy - 8, R, 0, 7); bx.fill();
+    bx.fillStyle = pal.leafMid;
+    for (let b = 0; b < 3; b++) { bx.beginPath(); bx.arc(cx + ((b * 37 + x * 13 + y * 7) % 19) / 19 * R - R / 2, cy - 10 - (b * 11 % 10) / 10 * R * .5, R * .5, 0, 7); bx.fill(); }
+    bx.fillStyle = pal.leafLight;
+    for (let b = 0; b < 3; b++) { bx.beginPath(); bx.arc(cx - R * .25 + (b * 29 % 13) / 13 * R * .5, cy - 12 - (b * 7 % 10) / 10 * R * .4, R * .32, 0, 7); bx.fill(); }
+    bx.fillStyle = pal.leafGlow; bx.beginPath(); bx.arc(cx - R * .3, cy - 8 - R * .45, R * .22, 0, 7); bx.fill();
+    bx.fillStyle = pal.leafShade;
+    for (let d2 = 0; d2 < 5; d2++) { bx.beginPath(); bx.arc(cx + ((d2 * 23 + x * 7) % 17) / 17 * R * 1.4 - R * .7, cy - 6 + (d2 * 13 % 10) / 10 * R * .7, 1.5, 0, 7); bx.fill(); }
+  }
+  for (let y = 0; y < map.h; y++) for (let x = 0; x < map.w; x++) {
+    if (terr[idx(x, y)] !== ET.ROCHER) continue;
+    const cx = x * T + T / 2, cy = y * T + T / 2, R = 11 + ((x * 13 + y * 29) % 9);
+    bx.fillStyle = 'rgba(0,0,0,.28)'; bx.beginPath(); bx.ellipse(cx + 3, cy + R * .55, R * 1.1, R * .4, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.rock; bx.beginPath(); bx.ellipse(cx, cy, R, R * .75, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.rockLight; bx.beginPath(); bx.ellipse(cx - R * .25, cy - R * .25, R * .6, R * .4, -.4, 0, 7); bx.fill();
+    bx.fillStyle = pal.rockDark; bx.beginPath(); bx.ellipse(cx + R * .4, cy + R * .3, R * .45, R * .3, .3, 0, 7); bx.fill();
+    bx.fillStyle = pal.moss;
+    for (let m = 0; m < 4; m++) { bx.beginPath(); bx.arc(cx + ((m * 17 + x * 5) % 13) / 13 * R * 1.2 - R * .6, cy + ((m * 11 + y * 3) % 9) / 9 * R * .8 - R * .4, 2 + (m % 3), 0, 7); bx.fill(); }
+  }
+  for (const h of map.huttes ?? []) {
+    const X = h.x * T, Y = h.y * T, Wd = 2 * T + 12, Hd = T + 22;
+    bx.fillStyle = pal.shadow; bx.beginPath(); bx.ellipse(X + Wd / 2, Y + Hd + 2, Wd * .58, 12, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.houseWall; bx.fillRect(X - 4, Y - 10, Wd, Hd);
+    bx.fillStyle = pal.houseRoof; bx.beginPath(); bx.moveTo(X - 14, Y - 8); bx.lineTo(X + Wd / 2, Y - 40); bx.lineTo(X + Wd + 14, Y - 8); bx.closePath(); bx.fill();
+    bx.fillStyle = pal.houseRoofLight; bx.beginPath(); bx.moveTo(X - 14, Y - 8); bx.lineTo(X + Wd / 2, Y - 40); bx.lineTo(X + Wd * .34, Y - 40); bx.lineTo(X - 14 + Wd * .2, Y - 8); bx.closePath(); bx.fill();
+    bx.strokeStyle = pal.housePlanks; bx.lineWidth = 1;
+    for (let yy = Y - 6; yy < Y + Hd - 26; yy += 6) { bx.beginPath(); bx.moveTo(X - 3, yy); bx.lineTo(X + Wd + 3, yy); bx.stroke(); }
+    bx.fillStyle = pal.houseChimney; bx.fillRect(X + Wd * .68, Y - 26, 12, 22);
+    bx.fillStyle = pal.houseChimneyTop; bx.fillRect(X + Wd * .68 - 2, Y - 28, 16, 5);
+    bx.fillStyle = pal.houseDoor; bx.fillRect(X + Wd / 2 - 9, Y + Hd - 26, 18, 26);
+    const wg = bx.createRadialGradient(X + 18, Y + 16, 1, X + 18, Y + 16, 15);
+    wg.addColorStop(0, pal.houseGlow); wg.addColorStop(1, 'rgba(255,215,110,0)');
+    bx.fillStyle = pal.houseWindow; bx.fillRect(X + 10, Y + 8, 14, 13);
+    bx.fillStyle = wg; bx.beginPath(); bx.arc(X + 17, Y + 14, 15, 0, 7); bx.fill();
+  }
+  if (map.donjon) {
+    const X = map.donjon.x * T, Y = map.donjon.y * T, Wd = map.donjon.w * T, Hd = map.donjon.h * T + 14;
+    bx.fillStyle = 'rgba(0,0,0,.35)'; bx.beginPath(); bx.ellipse(X + Wd / 2, Y + Hd + 4, Wd * .62, 14, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.donjonWall; bx.fillRect(X, Y + 20, Wd, Hd - 20);
+    bx.fillStyle = pal.donjonRoof; bx.beginPath(); bx.moveTo(X - 8, Y + 22); bx.lineTo(X + Wd / 2, Y - 14); bx.lineTo(X + Wd + 8, Y + 22); bx.closePath(); bx.fill();
+    bx.fillStyle = pal.donjonRoofLight; bx.beginPath(); bx.moveTo(X - 8, Y + 22); bx.lineTo(X + Wd / 2, Y - 14); bx.lineTo(X + Wd * .36, Y - 14); bx.lineTo(X - 8 + Wd * .22, Y + 22); bx.closePath(); bx.fill();
+    bx.fillStyle = pal.donjonTrim; for (let i = 0; i < 4; i++) bx.fillRect(X + 8 + i * 57, Y + 30, 42, 7);
+    bx.strokeStyle = pal.donjonBrick; bx.lineWidth = 1;
+    for (let yy = Y + 42; yy < Y + Hd - 4; yy += 9) { bx.beginPath(); bx.moveTo(X, yy); bx.lineTo(X + Wd, yy); bx.stroke(); }
+    bx.fillStyle = pal.donjonMoss;
+    for (let i = 0; i < 16; i++) { bx.beginPath(); bx.arc(X + 6 + ((i * 41 + 13) % 97) / 97 * (Wd - 12), Y + 34 + ((i * 23 + 7) % 89) / 89 * (Hd - 40), 1.5 + (i % 4), 0, 7); bx.fill(); }
+    const dX = X + Wd / 2 - 16;
+    bx.fillStyle = pal.donjonDoor; bx.beginPath();
+    bx.moveTo(dX, Y + Hd); bx.lineTo(dX, Y + 42); bx.arc(dX + 16, Y + 42, 16, Math.PI, 0); bx.lineTo(dX + 32, Y + Hd); bx.closePath(); bx.fill();
+    const gg = bx.createRadialGradient(dX + 16, Y + 52, 2, dX + 16, Y + 52, 34);
+    gg.addColorStop(0, pal.donjonGlow); gg.addColorStop(1, 'rgba(255,215,110,0)');
+    bx.fillStyle = gg; bx.beginPath(); bx.arc(dX + 16, Y + 52, 34, 0, 7); bx.fill();
+  }
+  if (map.autel) {
+    const X = map.autel.x * T, Y = map.autel.y * T;
+    bx.fillStyle = 'rgba(0,0,0,.32)'; bx.beginPath(); bx.ellipse(X + T / 2, Y + T + 4, 26, 10, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.autelBase; bx.fillRect(X - 2, Y + 2, T + 4, T + 4);
+    bx.fillStyle = pal.autelTop; bx.fillRect(X + 2, Y - 6, T - 4, 10);
+    const ga = bx.createRadialGradient(X + T / 2, Y, 2, X + T / 2, Y, 30);
+    ga.addColorStop(0, pal.autelGlow); ga.addColorStop(1, 'rgba(140,220,255,0)');
+    bx.fillStyle = ga; bx.beginPath(); bx.arc(X + T / 2, Y, 30, 0, 7); bx.fill();
+    bx.strokeStyle = pal.autelRing; bx.lineWidth = 2;
+    bx.beginPath(); bx.arc(X + T / 2, Y - 2, 8, 0, 7); bx.stroke();
+  }
+  if (map.retour) {
+    const X = map.retour.x * T, Y = map.retour.y * T;
+    bx.fillStyle = 'rgba(0,0,0,.32)'; bx.beginPath(); bx.ellipse(X + T / 2, Y + T + 4, 24, 9, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.retourWall; bx.fillRect(X + 2, Y - 4, T - 4, T + 4);
+    bx.fillStyle = pal.retourRoof; bx.beginPath(); bx.moveTo(X - 4, Y); bx.lineTo(X + T / 2, Y - 16); bx.lineTo(X + T + 4, Y); bx.closePath(); bx.fill();
+    bx.fillStyle = pal.retourDoor; bx.beginPath(); bx.arc(X + T / 2, Y + T, 7, Math.PI, 0); bx.fill();
+    const gr = bx.createRadialGradient(X + T / 2, Y + T - 4, 2, X + T / 2, Y + T - 4, 26);
+    gr.addColorStop(0, pal.retourGlow); gr.addColorStop(1, 'rgba(160,235,255,0)');
+    bx.fillStyle = gr; bx.beginPath(); bx.arc(X + T / 2, Y + T - 4, 26, 0, 7); bx.fill();
+  }
+}
+
+// re-peinture locale d'une tuile (ex. jarre redevenue hautes herbes) : fond + détails de la tuile uniquement
+function paintTileGround(bx, map, zone, x, y) {
+  if (x < 0 || y < 0 || x >= map.w || y >= map.h) return;
+  const T = map.t, W = map.w * T, H = map.h * T;
+  const pal = errancePalette(zone);
+  const decor = map.decor ?? (map.decor = decorOrders(map, zone));
+  const t = map.terr[map.idx(x, y)];
+  const px = x * T, py = y * T;
+  const g = bx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, pal.grassTop); g.addColorStop(1, pal.grassBottom);
+  bx.fillStyle = g; bx.fillRect(px, py, T, T);
+  for (const b of decor.blotches) {
+    if (b.x < px - b.r || b.x > px + T + b.r || b.y < py - b.r || b.y > py + T + b.r) continue;
+    bx.fillStyle = b.c; bx.beginPath(); bx.ellipse(b.x, b.y, b.r, b.r * .55, b.rot, 0, 7); bx.fill();
+  }
+  if (t === ET.CHEMIN) {
+    bx.fillStyle = pal.pathBase; bx.beginPath(); bx.arc(px + T / 2, py + T / 2, T * .9, 0, 7); bx.fill();
+    bx.fillStyle = pal.pathCore; bx.beginPath(); bx.arc(px + T / 2, py + T / 2, T * .6, 0, 7); bx.fill();
+    bx.fillStyle = pal.pathRut;
+    for (const r of decor.pathRuts) { if (r.x < px || r.x > px + T || r.y < py || r.y > py + T) continue; bx.beginPath(); bx.ellipse(r.x, r.y, r.rx, r.ry, r.rot, 0, 7); bx.fill(); }
+    bx.fillStyle = pal.pathStone;
+    for (const s of decor.pathStones) { if (s.x < px || s.x > px + T || s.y < py || s.y > py + T) continue; bx.beginPath(); bx.arc(s.x, s.y, s.r, 0, 7); bx.fill(); }
+  } else if (t === ET.EAU && decor.pond) {
+    const p = decor.pond;
+    bx.fillStyle = pal.sand; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx + T * .7, p.ry + T * .7, 0, 0, 7); bx.fill();
+    const gw = bx.createRadialGradient(p.cx - 40, p.cy - 60, 10, p.cx, p.cy, Math.max(p.rx, p.ry) + 30);
+    gw.addColorStop(0, pal.water0); gw.addColorStop(.55, pal.water1); gw.addColorStop(1, pal.water2);
+    bx.fillStyle = gw; bx.beginPath(); bx.ellipse(p.cx, p.cy, p.rx, p.ry, 0, 0, 7); bx.fill();
+  } else if (t === ET.HERBES) {
+    bx.fillStyle = pal.herbSocleDark; bx.beginPath(); bx.ellipse(px + T / 2, py + T / 2, T * .62, T * .55, 0, 0, 7); bx.fill();
+    bx.fillStyle = pal.herbSocle; bx.beginPath(); bx.ellipse(px + T / 2 + 3, py + T / 2 + 2, T * .4, T * .3, 0, 0, 7); bx.fill();
+  }
+  for (const d of decor.details) {
+    if (d.x < px || d.x > px + T || d.y < py || d.y > py + T) continue;
+    if (d.kind === 'flower') {
+      bx.strokeStyle = pal.stem; bx.lineWidth = 1.3;
+      bx.beginPath(); bx.moveTo(d.x, d.y); bx.lineTo(d.x, d.y - 5); bx.stroke();
+      bx.fillStyle = d.col;
+      for (let p2 = 0; p2 < 4; p2++) { const a = p2 / 4 * 7; bx.beginPath(); bx.arc(d.x + Math.cos(a) * 2.3, d.y - 6 + Math.sin(a) * 2.3, 1.5, 0, 7); bx.fill(); }
+      bx.fillStyle = pal.petalCore; bx.beginPath(); bx.arc(d.x, d.y - 6, 1.2, 0, 7); bx.fill();
+    } else if (d.kind === 'stone') {
+      bx.fillStyle = pal.stoneShadow; bx.beginPath(); bx.ellipse(d.x + .6, d.y + 1.2, 2.7, 1.4, 0, 0, 7); bx.fill();
+      bx.fillStyle = pal.stone; bx.beginPath(); bx.ellipse(d.x, d.y, 2.4 + d.s * 2, 1.8 + d.s * 1.4, d.s * 3, 0, 7); bx.fill();
+      bx.fillStyle = pal.stoneLight; bx.beginPath(); bx.ellipse(d.x - .8, d.y - .8, 1.1, .7, 0, 0, 7); bx.fill();
+    } else {
+      bx.strokeStyle = d.dark ? pal.tuftDark : pal.tuftLight;
+      bx.lineWidth = 1.4; bx.beginPath();
+      for (let k = 0; k < d.n; k++) { const ox = (k - d.n / 2) * 2.6; bx.moveTo(d.x + ox, d.y); bx.quadraticCurveTo(d.x + ox + 1.5, d.y - 3.5, d.x + ox, d.y - 6 - ((k * 7919) % 10) / 10 * 3); }
+      bx.stroke();
+    }
+  }
+  for (const f of decor.borderFlowers) {
+    if (f.x < px || f.x > px + T || f.y < py || f.y > py + T) continue;
+    bx.fillStyle = f.col;
+    for (let q = 0; q < 4; q++) { const qa = q / 4 * 7; bx.beginPath(); bx.arc(f.x + Math.cos(qa) * 1.8, f.y + Math.sin(qa) * 1.8, 1.3, 0, 7); bx.fill(); }
+    bx.fillStyle = pal.petalCore; bx.beginPath(); bx.arc(f.x, f.y, 1, 0, 7); bx.fill();
+  }
 }
 
 // src/engine/migrate.js : la chaine de migrations v8 -> version courante (EXI-SAVE-1)
@@ -17161,7 +17816,19 @@ function v26to27(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27 };
+// v27 -> v28 (refonte errance lot 3) : sûreté des saves — schéma errance normalisé ; la position
+// persistée est secourue à l'entrée de zone si le layout a bougé (rescueHeroPos). Non destructif.
+function v27to28(s) {
+  s.version = 28;
+  if (s.errance && typeof s.errance === 'object') {
+    if (!Array.isArray(s.errance.looted)) s.errance.looted = [];
+    if (!Array.isArray(s.errance.broken)) s.errance.broken = [];
+    if (!Number.isFinite(s.errance.x) || !Number.isFinite(s.errance.y)) { s.errance.x = null; s.errance.y = null; }
+  }
+  return s;
+}
+
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28 };
 function migrate(save) {
   let s = save;
   const target = DATA.engine.CURRENT_VERSION;
@@ -18270,6 +18937,10 @@ function restore(data) {
   store.zonesUnlocked = Array.isArray(data.zonesUnlocked) ? data.zonesUnlocked.filter((z) => typeof z === 'string') : [];
 
   store.errance = null; // reconstruit à l'entrée de la zone (la carte est régénérée depuis le seed)
+  // refonte errance lot 3 : position héros persistée rechargée (secourue à l'entrée de zone si besoin)
+  store.erranceSavedPos = (data.errance && typeof data.errance === 'object' && typeof data.errance.zone === 'string'
+    && Number.isFinite(data.errance.x) && Number.isFinite(data.errance.y))
+    ? { zone: data.errance.zone, x: data.errance.x, y: data.errance.y } : null;
 
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
@@ -19692,8 +20363,10 @@ function enterZone(zoneId) {
   if (!zoneUnlocked(zoneId)) { toast('✗ Zone verrouillée — vainquez le donjon de la zone précédente.', 'warn'); return; }
   store.errance = createErranceState(zoneId);
   if (store.erranceSavedPos && store.erranceSavedPos.zone === zoneId) {
-    store.errance.hero.x = store.erranceSavedPos.x;
-    store.errance.hero.y = store.erranceSavedPos.y;
+    // sûreté des saves (lot 3) : position secourue vers le spawn si le layout a rendu la tuile solide
+    const p = rescueHeroPos(store.errance.map, store.erranceSavedPos.x, store.erranceSavedPos.y);
+    store.errance.hero.x = p.x;
+    store.errance.hero.y = p.y;
   }
   if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
   save();
@@ -19743,6 +20416,7 @@ function renderErrance(root) {
         <span class="chip">🌿 ${zone?.nature ?? st.zone}</span>
         <span class="chip">🪙 ${store.gold} or</span>
         <span class="chip">🛡️ grâce ${st.grace}</span>
+        <span class="chip" id="errance-phase">☀️ Jour</span>
         <span class="spacer"></span>
         <button type="button" class="back" id="errance-back" title="Retour aux Terres Sauvages">←</button>
       </div>
@@ -19767,22 +20441,30 @@ function renderErrance(root) {
   const base = document.createElement('canvas');
   base.width = st.map.w * T;
   base.height = st.map.h * T;
-  const cols = { 0: '#5d8a4a', 1: '#b9a06a', 2: '#3f7fb8', 3: '#2e5b2e', 4: '#6b5b45', 5: '#8a6b3a', 6: '#4a7a3c', 7: '#7a5b3a', 8: '#c9c9d9', 9: '#777', 10: '#a8763e' };
-  const paintTile = (bx, x, y) => {
-    const t = st.map.terr[st.map.idx(x, y)];
-    bx.fillStyle = cols[t] ?? '#333';
-    bx.fillRect(x * T, y * T, T, T);
-    if (t === 6) { bx.fillStyle = '#3c6b31'; bx.fillRect(x * T + 6, y * T + 8, 4, 14); bx.fillRect(x * T + 16, y * T + 4, 4, 18); }
+  // refonte errance lot 1 : peinture style A+ en pré-rendu unique (src/errance-paint.js, palette en data) ;
+  // jarres et objets cassables restent dessinés par frame (jamais cuits dans le pré-rendu, guide §8)
+  paintZoneBase(base.getContext('2d'), st.map, zone);
+  const repaintTile = (x, y) => {
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) paintTileGround(base.getContext('2d'), st.map, zone, x + dx, y + dy);
   };
+  // refonte errance lot 2 : couche d'ambiance §9bis (cycle jour/nuit, faune, traces, lames animées)
+  const pal = errancePalette(zone);
+  const amb = buildAmbiance(st.map, zone);
+  const decor = st.map.decor;
+  const cloudCv = document.createElement('canvas');
+  cloudCv.width = 520; cloudCv.height = 340;
   {
-    const bx = base.getContext('2d');
-    for (let y = 0; y < st.map.h; y++) for (let x = 0; x < st.map.w; x++) paintTile(bx, x, y);
-    bx.fillStyle = '#5a4632';
-    bx.fillRect(st.map.donjon.x * T, st.map.donjon.y * T, st.map.donjon.w * T, st.map.donjon.h * T);
-    bx.fillStyle = '#e8e8f2';
-    bx.fillRect(st.map.autel.x * T + 8, st.map.autel.y * T + 8, T - 16, T - 16);
+    const cc = cloudCv.getContext('2d');
+    const crnd = lcg((st.map.seed ^ 0x77aa11) >>> 0);
+    for (let i = 0; i < 5; i++) {
+      const x2 = 60 + crnd() * 400, y2 = 60 + crnd() * 220, r = 55 + crnd() * 75;
+      const g = cc.createRadialGradient(x2, y2, r * .15, x2, y2, r);
+      g.addColorStop(0, 'rgba(10,25,15,.17)'); g.addColorStop(1, 'rgba(10,25,15,0)');
+      cc.fillStyle = g; cc.beginPath(); cc.arc(x2, y2, r, 0, 7); cc.fill();
+    }
   }
-  const repaintTile = (x, y) => { if (x >= 0 && y >= 0 && x < st.map.w && y < st.map.h) paintTile(base.getContext('2d'), x, y); };
+  let time = 0, atk = 0, lastPhase = '', smokeAcc = 0;
+  const smoke = [];
   // héros d'errance dédié (art livré vague 3) : sprite sheet extraite du cycle de marche WAN,
   // servie en ligne (site-assets/errance/) ; repli = poster jpg, puis dessin procédural hors ligne
   const heroCfg = E.ERRANCE_HERO ?? null;
@@ -19795,9 +20477,13 @@ function renderErrance(root) {
     })();
   }
   const cam = { x: st.hero.x * T, y: st.hero.y * T, z: 1.05 };
-  const draw = () => {
+  const draw = (dtA) => {
+    const animT = motionOK() ? time : 0; // prefers-reduced-motion : animations décoratives gelées (frame fixe), comme le héros
+    const cyc = ((animT + 30) % amb.dayLen) / amb.dayLen;
+    const dark = cyc < .55 ? 0 : cyc < .70 ? (cyc - .55) / .15 : cyc < .90 ? 1 : 1 - (cyc - .90) / .10;
+    const duskAmt = dark * (1 - dark) * 4;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = '#0a0f0a';
+    ctx.fillStyle = pal.ground;
     ctx.fillRect(0, 0, vw, vh);
     ctx.save();
     ctx.translate(vw / 2, vh / 2);
@@ -19805,15 +20491,90 @@ function renderErrance(root) {
     ctx.translate(-cam.x, -cam.y);
     ctx.imageSmoothingEnabled = true;
     ctx.drawImage(base, 0, 0); // 1 appel : plus de fillRect tuile par tuile
+    const vx0 = cam.x - vw / 2 / cam.z - 40, vx1 = cam.x + vw / 2 / cam.z + 40;
+    const vy0 = cam.y - vh / 2 / cam.z - 40, vy1 = cam.y + vh / 2 / cam.z + 40;
+    // ombres de nuages dérivantes
+    for (const c of amb.clouds) ctx.drawImage(cloudCv, c.x - 260 * c.s, c.y - 170 * c.s, 520 * c.s, 340 * c.s);
+    // traces de pas sur le chemin (fondu 5 s)
+    for (let i = amb.prints.length - 1; i >= 0; i--) {
+      const p = amb.prints[i]; p.life -= dtA;
+      if (p.life <= 0) { amb.prints.splice(i, 1); continue; }
+      if (p.x < vx0 || p.x > vx1 || p.y < vy0 || p.y > vy1) continue;
+      const al = Math.min(1, p.life / 5) * .28;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a);
+      ctx.fillStyle = 'rgba(70,55,35,' + al.toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(0, 0, 2.6, 4.6, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(-4.2, 1.5, 1.7, 2.6, 0, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(3.6, -1.8, 1.7, 2.6, 0, 0, 7); ctx.fill();
+      ctx.restore();
+    }
+    // reflets animés + écume de l'étang
+    if (decor.pond) {
+      const pd = decor.pond;
+      for (let i = 0; i < 9; i++) {
+        const a = .5 + .5 * Math.sin(animT * 1.4 + i * 1.7);
+        ctx.strokeStyle = 'rgba(255,255,255,' + (.22 * a).toFixed(2) + ')';
+        ctx.lineWidth = 1.8; ctx.lineCap = 'round';
+        const ox = pd.cx - 70 + (i * 23) % 140, oy = pd.cy - 64 + ((i * 37) % 118);
+        ctx.beginPath(); ctx.moveTo(ox, oy + 3 * a); ctx.quadraticCurveTo(ox + 12, oy - 2, ox + 26, oy + 3 * a); ctx.stroke();
+      }
+      const br = pd.rx * .98 + Math.sin(animT * .8) * 3, kEl = pd.ry / pd.rx;
+      ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+      for (let i = 0; i < 26; i++) {
+        const a = i / 26 * 6.283 + animT * .25;
+        const al = Math.max(0, .10 + .16 * Math.sin(animT * 1.6 + i * 1.3));
+        ctx.strokeStyle = 'rgba(255,255,255,' + al.toFixed(2) + ')';
+        const rr = br + 2 + Math.sin(animT + i) * 1.5;
+        ctx.beginPath();
+        ctx.moveTo(pd.cx + Math.cos(a) * rr, pd.cy + Math.sin(a) * rr * kEl);
+        ctx.lineTo(pd.cx + Math.cos(a + .09) * (rr + 2.5), pd.cy + Math.sin(a + .09) * (rr + 2.5) * kEl);
+        ctx.stroke();
+      }
+    }
+    // lames de hautes herbes animées : 2 tracés groupés par couleur, rafale dépendante de la position, écart au passage du héros (culling viewport)
+    const hpx0 = st.hero.x * T, hpy0 = st.hero.y * T;
+    ctx.lineCap = 'round'; ctx.lineWidth = 2.4;
+    for (const col of [pal.bladeA, pal.bladeB]) {
+      ctx.strokeStyle = col; ctx.beginPath();
+      for (const b of decor.blades) {
+        if (b.c !== col || b.x < vx0 || b.x > vx1 || b.y < vy0 || b.y > vy1) continue;
+        const sw = Math.sin(animT * 2 + b.ph) * 3.5 * (1 + .5 * Math.sin(animT * .6 + b.x * .01 + b.y * .006));
+        const hd = Math.hypot(b.x - hpx0, b.y - hpy0);
+        const push = hd < 42 ? (1 - hd / 42) * 7 : 0;
+        const pdx = hd > .1 ? (b.x - hpx0) / hd : 0, pdy = hd > .1 ? (b.y - hpy0) / hd : 0;
+        ctx.moveTo(b.x, b.y);
+        ctx.quadraticCurveTo(b.x + (sw + push * pdx) * .5, b.y - b.h * .6, b.x + sw + push * pdx, b.y - b.h + push * pdy * .4);
+      }
+      ctx.stroke();
+    }
     for (const j of st.map.jarres) {
       const jid = `jarre-${j.x}-${j.y}`;
-      if (st.broken.includes(jid)) continue;
-      ctx.fillStyle = '#a8763e';
-      ctx.beginPath();
-      ctx.arc(j.x * T + T / 2, j.y * T + T / 2, 9, 0, 7);
-      ctx.fill();
+      const cx2 = j.x * T + T / 2, cy2 = j.y * T + T / 2;
+      if (cx2 < vx0 || cx2 > vx1 || cy2 < vy0 || cy2 > vy1) continue;
+      if (st.broken.includes(jid)) {
+        ctx.fillStyle = pal.shard;
+        ctx.beginPath(); ctx.ellipse(cx2 - 8, cy2 + 6, 7, 3, .2, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx2 + 8, cy2 + 4, 5, 2.5, -.3, 0, 7); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx2 + 2, cy2 + 9, 6, 2.6, .1, 0, 7); ctx.fill();
+        continue;
+      }
+      ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.beginPath(); ctx.ellipse(cx2 + 2, cy2 + 11, 12, 4.5, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potBody; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potLight; ctx.beginPath(); ctx.ellipse(cx2 - 3, cy2 - 3, 7, 9, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = pal.potDark; ctx.beginPath(); ctx.ellipse(cx2, cy2 - 11, 6.5, 3, 0, 0, 7); ctx.fill();
+      ctx.strokeStyle = pal.potLine; ctx.lineWidth = 1.6; ctx.beginPath(); ctx.ellipse(cx2, cy2, 11, 13, 0, 0, 7); ctx.stroke();
     }
     const hx = st.hero.x * T, hy = st.hero.y * T;
+    // ombre portée du héros, étirée avec l'obscurité + halo nocturne
+    const shL = 1 + dark * 1.1;
+    ctx.fillStyle = 'rgba(0,0,0,' + Math.max(.12, .3 - dark * .12).toFixed(2) + ')';
+    ctx.beginPath(); ctx.ellipse(hx + 7 * shL, hy + 10 + 2 * shL, 12 * shL, 4.5, .35, 0, 7); ctx.fill();
+    if (dark > .15) {
+      const hg = ctx.createRadialGradient(hx, hy - 8, 4, hx, hy - 8, 46);
+      hg.addColorStop(0, 'rgba(255,224,150,' + (.35 * dark).toFixed(2) + ')');
+      hg.addColorStop(1, 'rgba(255,224,150,0)');
+      ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(hx, hy - 8, 46, 0, 7); ctx.fill();
+    }
     ctx.save();
     ctx.translate(hx, hy);
     ctx.rotate(st.hero.tilt ?? 0); // balancement dans les virages (§5)
@@ -19843,7 +20604,99 @@ function renderErrance(root) {
       ctx.beginPath(); ctx.arc(0, -4, 6, 0, 7); ctx.fill();
     }
     ctx.restore();
+    // arc de frappe doré (feedback §8, 0,35 s)
+    if (atk > 0) {
+      const pr = 1 - atk / .35;
+      const hm = Math.hypot(hv.x, hv.y);
+      const base2 = hm > .1 ? Math.atan2(hv.y, hv.x) : 0;
+      const a = base2 - 1.2 + pr * 2.4;
+      ctx.strokeStyle = 'rgba(255,250,220,' + (.75 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 6 * (1 - pr * .5); ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(hx, hy, T * 1.15, a - .5, a + .5); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,215,110,' + (.5 * (1 - pr)).toFixed(2) + ')';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(hx, hy, T * 1.24, a - .4, a + .4); ctx.stroke();
+    }
+    // fumée des cheminées
+    for (let i = smoke.length - 1; i >= 0; i--) {
+      const sm = smoke[i];
+      sm.life -= dtA; sm.y -= 13 * dtA; sm.x += Math.sin(animT * 1.5 + sm.ph) * 9 * dtA; sm.r += 7 * dtA;
+      if (sm.life <= 0) { smoke.splice(i, 1); continue; }
+      ctx.fillStyle = 'rgba(232,230,222,' + (.15 * Math.min(1, sm.life / 1.6)).toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(sm.x, sm.y, sm.r, 0, 7); ctx.fill();
+    }
+    // feuilles au vent
+    for (const l of amb.leaves) {
+      const lx2 = l.x + Math.sin(animT * 2 + l.ph) * 7;
+      if (lx2 < vx0 || lx2 > vx1 || l.y < vy0 || l.y > vy1) continue;
+      ctx.save(); ctx.translate(lx2, l.y); ctx.rotate(l.rot);
+      ctx.fillStyle = ['#c9a24e', '#b46b3c', '#8ea84e'][Math.floor(l.ph * 10) % 3];
+      ctx.beginPath(); ctx.ellipse(0, 0, 4, 2.2, 0, 0, 7); ctx.fill();
+      ctx.restore();
+    }
+    // étincelles (jarres brisées)
+    for (let i = amb.sparkles.length - 1; i >= 0; i--) {
+      const sp = amb.sparkles[i];
+      sp.life -= dtA; sp.x += sp.vx * dtA; sp.y += sp.vy * dtA; sp.vy += 50 * dtA;
+      if (sp.life <= 0) { amb.sparkles.splice(i, 1); continue; }
+      ctx.fillStyle = (sp.c || 'rgba(190,255,200,') + Math.min(1, sp.life).toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(sp.x, sp.y, 2.2, 0, 7); ctx.fill();
+    }
+    // lucioles (montent avec l'obscurité)
+    for (const f of amb.flies) {
+      const fx = f.x + Math.cos(animT * f.sp + f.ph) * 8, fy = f.y + Math.sin(animT * f.sp * 1.3 + f.ph) * 7;
+      if (fx < vx0 || fx > vx1 || fy < vy0 || fy > vy1) continue;
+      const a = (.45 + .45 * Math.sin(animT * 2 + f.ph)) * (.2 + .8 * dark);
+      if (dark > .3) {
+        const fg = ctx.createRadialGradient(fx, fy, 0, fx, fy, f.r * 5);
+        fg.addColorStop(0, 'rgba(255,233,168,' + (.30 * dark).toFixed(2) + ')');
+        fg.addColorStop(1, 'rgba(255,233,168,0)');
+        ctx.fillStyle = fg; ctx.beginPath(); ctx.arc(fx, fy, f.r * 5, 0, 7); ctx.fill();
+      }
+      ctx.fillStyle = 'rgba(255,233,168,' + a.toFixed(2) + ')';
+      ctx.beginPath(); ctx.arc(fx, fy, f.r, 0, 7); ctx.fill();
+    }
+    // papillons de jour (s'estompent à la nuit)
+    if (dark < .8) for (const bf of amb.butterflies) {
+      const bfx = bf.x + Math.cos(animT * bf.sp + bf.ph) * 10, bfy = bf.y + Math.sin(animT * bf.sp * 1.7 + bf.ph) * 8;
+      if (bfx < vx0 || bfx > vx1 || bfy < vy0 || bfy > vy1) continue;
+      const flap = Math.abs(Math.sin(animT * 14 + bf.fl));
+      ctx.save(); ctx.translate(bfx, bfy); ctx.rotate(Math.sin(animT + bf.ph) * .3);
+      ctx.globalAlpha = Math.min(1, (0.8 - dark) * 2.5);
+      ctx.fillStyle = bf.col;
+      ctx.beginPath(); ctx.ellipse(-2.6, 0, 2.6, 1.6 + 2.2 * flap, .5, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(2.6, 0, 2.6, 1.6 + 2.2 * flap, -.5, 0, 7); ctx.fill();
+      ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.ellipse(0, 0, .8, 1.8, 0, 0, 7); ctx.fill();
+      ctx.globalAlpha = 1; ctx.restore();
+    }
+    // graines de pissenlit portées par le vent
+    for (const sd of amb.seeds) {
+      if (sd.x < vx0 || sd.x > vx1 || sd.y < vy0 || sd.y > vy1) continue;
+      ctx.save(); ctx.translate(sd.x, sd.y);
+      ctx.strokeStyle = 'rgba(240,240,225,.6)'; ctx.lineWidth = .8;
+      for (let k = 0; k < 6; k++) { const ka = k / 6 * 6.283; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(ka) * 3.6, Math.sin(ka) * 3.6); ctx.stroke(); }
+      ctx.fillStyle = 'rgba(205,195,165,.8)'; ctx.beginPath(); ctx.arc(0, 0, 1, 0, 7); ctx.fill();
+      ctx.restore();
+    }
     ctx.restore();
+    // overlays plein écran semi-transparents (jamais opaques : les tuiles restent lisibles la nuit)
+    ctx.fillStyle = 'rgba(255,241,205,' + (.05 * (1 - dark)).toFixed(3) + ')';
+    ctx.fillRect(0, 0, vw, vh);
+    if (duskAmt > .02) { ctx.fillStyle = 'rgba(255,140,60,' + (.16 * duskAmt).toFixed(3) + ')'; ctx.fillRect(0, 0, vw, vh); }
+    if (dark > .02) { ctx.fillStyle = 'rgba(14,22,58,' + (.42 * dark).toFixed(3) + ')'; ctx.fillRect(0, 0, vw, vh); }
+    // marqueur de destination (espace écran)
+    if (st.hero.path.length) {
+      const n = st.hero.path[st.hero.path.length - 1];
+      const mpx = (n.x * T - cam.x) * cam.z + vw / 2, mpy = (n.y * T - cam.y) * cam.z + vh / 2;
+      const pulse = 6 + Math.sin(animT * 6) * 2.5;
+      ctx.strokeStyle = 'rgba(255,215,110,.9)'; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.arc(mpx, mpy, pulse, 0, 7); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,215,110,.4)';
+      ctx.beginPath(); ctx.arc(mpx, mpy, pulse + 6, 0, 7); ctx.stroke();
+    }
+    // HUD phase (throttle : écrit seulement si le libellé change)
+    const ph = cyc < .55 ? '☀️ Jour' : cyc < .70 ? '🌇 Soir' : cyc < .90 ? '🌙 Nuit' : '🌅 Aube';
+    if (ph !== lastPhase) { lastPhase = ph; const el = document.getElementById('errance-phase'); if (el) el.textContent = ph; }
   };
   let last = performance.now();
   const loop = (now) => {
@@ -19851,6 +20704,29 @@ function renderErrance(root) {
     last = now;
     if (!store.errance || store.errance !== st) return;
     const ev = stepErrance(st, dt);
+    time += dt;
+    if (atk > 0) atk -= dt;
+    const dtA = motionOK() ? dt : 0; // décor gelé si prefers-reduced-motion
+    const WW = st.map.w * T, WH = st.map.h * T;
+    for (const c of amb.clouds) { c.x += c.v * dtA; if (c.x - 300 * c.s > WW + 120) { c.x = -320 * c.s; c.y = Math.random() * WH; } }
+    for (const l of amb.leaves) {
+      l.x += l.sp * 14 * dtA; l.y += l.sp * 9 * dtA; l.rot += l.rs * dtA;
+      if (l.x > WW + 20) { l.x = -20; l.y = Math.random() * WH; }
+      if (l.y > WH + 20) { l.y = -20; l.x = Math.random() * WW; }
+    }
+    const gustV = .5 + .5 * Math.sin(time * .6);
+    for (const sd of amb.seeds) { sd.x += (14 + gustV * 26) * dtA; sd.y += Math.sin(time * .9 + sd.ph) * .5 * dtA - 1.5 * dtA; if (sd.x > WW + 15) { sd.x = -15; sd.y = Math.random() * WH; } }
+    smokeAcc += dtA;
+    if (smokeAcc > .4) { smokeAcc = 0; for (const ch of amb.chimneys) smoke.push({ x: ch.x, y: ch.y, life: 2.6 + Math.random(), ph: Math.random() * 7, r: 3 }); }
+    // traces de pas sur le chemin de terre (pied gauche/droit alternés)
+    if (ev.steps) {
+      const vv = st.hero.v ?? { x: 0, y: 0 };
+      const vm = Math.hypot(vv.x, vv.y);
+      if (vm > 0.5 && st.map.terr[st.map.idx(Math.floor(st.hero.x), Math.floor(st.hero.y))] === ET.CHEMIN) {
+        amb.prints.push({ x: st.hero.x * T + (-vv.y / vm) * (st.steps % 2 ? 4.5 : -4.5), y: st.hero.y * T + (vv.x / vm) * (st.steps % 2 ? 4.5 : -4.5) + 8, a: Math.atan2(vv.y, vv.x), life: 5 });
+        if (amb.prints.length > 40) amb.prints.shift();
+      }
+    }
     if (ev.encounter && !store.zoneFight) {
       persistErrancePos(); save();
       startZoneFight(st.zone, { donjon: false });
@@ -19867,9 +20743,16 @@ function renderErrance(root) {
         persistErrancePos(); save();
         startZoneFight(st.zone, { donjon: true });
         return;
+      } else if (o.type === 'retour') {
+        persistErrancePos(); save();
+        toast('✨ Retour à la ville.');
+        go('#terres');
+        return;
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
         const r = interactJarre(st, jid);
+        atk = 0.35; // arc de frappe doré (feedback §8)
+        for (let k = 0; k < 16; k++) amb.sparkles.push({ x: (o.x + .5) * T, y: (o.y + .5) * T, vx: (Math.random() - .5) * 160, vy: -40 - Math.random() * 120, life: .6 + Math.random() * .4, c: 'rgba(214,164,110,' });
         if (r?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(o.x, o.y); }
         save();
       }
@@ -19885,7 +20768,7 @@ function renderErrance(root) {
     const cyT = st.hero.y * T + v.y * T * 0.12;
     cam.x += (cxT - cam.x) * Math.min(1, 4.5 * dt);
     cam.y += (cyT - cam.y) * Math.min(1, 4.5 * dt);
-    draw();
+    draw(dtA);
     erranceRAF = requestAnimationFrame(loop);
   };
   erranceRAF = requestAnimationFrame(loop);
@@ -19904,6 +20787,8 @@ function renderErrance(root) {
       const j = st.map.jarres.find((jj) => jj.x === fx && jj.y === fy && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
       if (j) {
         const r2 = interactJarre(st, `jarre-${j.x}-${j.y}`);
+        atk = 0.35;
+        for (let k = 0; k < 16; k++) amb.sparkles.push({ x: (j.x + .5) * T, y: (j.y + .5) * T, vx: (Math.random() - .5) * 160, vy: -40 - Math.random() * 120, life: .6 + Math.random() * .4, c: 'rgba(214,164,110,' });
         if (r2?.loot === 'eclat') { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); questProgress('recolter'); toast(`🫙 Jarre brisée : +1 éclat brut (${el}).`); repaintTile(j.x, j.y); save(); }
       }
       return;
@@ -19911,7 +20796,8 @@ function renderErrance(root) {
     const tx = Math.floor(px / T), ty = Math.floor(py / T);
     const m = st.map;
     if (tx === m.autel.x && ty === m.autel.y) { st.pending = { type: 'autel', x: m.autel.x, y: m.autel.y }; }
-    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + 2) { st.pending = { type: 'porte', x: m.donjon.x, y: m.donjon.y + 2 }; }
+    else if (tx >= m.donjon.x && tx < m.donjon.x + m.donjon.w && ty === m.donjon.y + m.donjon.h) { st.pending = { type: 'porte', x: tx, y: ty }; }
+    else if (m.retour && tx === m.retour.x && ty === m.retour.y) { st.pending = { type: 'retour', x: m.retour.x, y: m.retour.y }; }
     else {
       const j = m.jarres.find((jj) => jj.x === tx && jj.y === ty && !st.broken.includes(`jarre-${jj.x}-${jj.y}`));
       if (j) st.pending = { type: 'jarre', x: j.x, y: j.y };
@@ -22970,6 +23856,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.36 : Refonte visuelle de l’errance (maquette A+)', 'Peinture organique en pré-rendu unique (étang, chemin texturé, arbres en couches, donjon peint), ambiance jour/nuit avec faune et lames animées, layout v2 des Marées + point de retour ville dans chaque zone, palettes des 5 zones en data. 175 tests, smoke 355 checks, digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.35 : Parties multiples (4 slots de sauvegarde)', 'Jusqu’à 4 parties coexistent dans le navigateur (clés `fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie). Migration sans perte : l’ancienne sauvegarde devient la Partie 1. Panneau « Parties » sur l’Accueil : ▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer (double confirmation) ; la partie en cours est sauvegardée avant toute bascule, la partie active est mémorisée. Export FCSAVE1 inchangé (partie active). 171 tests, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.'],
   ['v1.34 : Refonte de l’IA de combat', 'Ciblage par utilité (kill, menace, ligne, élément) avec hystérésis, sorts contextuels (soin/contrôle/burst), profils IA par difficulté (Facile sous-optimal → Enfer complet), sorts alliés de lignée actifs en mode Auto, garde-fous anti-blocage de l’errance. 171 tests, smoke 306 checks, digest final c62fcbd1… 1281/3000 et 5059e683… 4236/10000 (MESURES, aucune maths joueur touchée).'],
   ['v1.33 : Illustrations V3.1 en doublon commutable (bouton 🖼️)', 'Relance 3.1 complète (271 cartes, verrous R8/R9/R10 + anti-cadre renforcé) publiée en second manifeste `assets-v3.1.json`, switchable avec V3.0 via le bouton 🖼️ pour comparer les cartes. Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 arts d’équipement) sont ajoutés au manifeste par défaut `assets-v3.json` : présents partout. 150 tests, smoke 299 checks, digest inchangé `f8a9f0bb…` 1359/3000.'],
