@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-12 : MESURE — refonte IA lot 1 livré (utilité de ciblage + hystérésis) : dans la tolérance
+
+- **Livré** : `pickTargetByUtility` — score d'utilité partagé IA ennemie et Auto joueur (kill possible, opposition d'élément, menace = ATQ × `TARGET_THREAT_WEIGHT`, pénalité arrière protégé `TARGET_BACK_PENALTY`, − PV), poids en data (`data/engine.json`) ; hystérésis anti flip-flop `TARGET_HYSTERESIS` (cible en cours conservée dans la marge, mémorisée par camp dans l'état). Le chemin Auto joueur cesse de frapper `foes[0]`. 5 tests headless déterministes. 163 tests verts, smoke 299 (3 échecs préexistants).
+- **MESURE N = 3000** : **`910d3dc3…` 1337/3000 (0 exception, 1 marathon)** contre `f8a9f0bb…` 1359/3000 (lot 0) — écart **0,73 point ≤ 5 points**, 0 exception, 1 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
+
 ## 2026-11-12 : MESURE — refonte IA lot 0 livré (chemin Auto des sorts alliés des lignées) : digest inchangé
 
 - **Livré** : en Auto (`action` null), un sort de lignée soin/boost/bouclier depuis une carte sans `effect` se résout par son rôle (soigne le plus blessé / atkBuff ligne avant / shield ligne avant, plafonds identiques au chemin Tactique). Le chemin Tactique ne bouge pas. 2 tests headless déterministes (soin, boost+bouclier). 158 tests verts, smoke 299 (3 échecs préexistants).

@@ -4026,6 +4026,9 @@ const DATA = {
    "DOT_DEFAULT_PCT": 0.3,
    "TARGET_KILL_BONUS": 1000,
    "ELEMENT_ADVANTAGE_BONUS": 100,
+   "TARGET_THREAT_WEIGHT": 2,
+   "TARGET_BACK_PENALTY": 50,
+   "TARGET_HYSTERESIS": 150,
    "VOILE_CHANCE": 0.25,
    "REFLECT_SHARE": 0.2,
    "BENEDICTION_HEAL": 0.2,
@@ -15721,7 +15724,8 @@ function actTeamStriker(u, i, ctx, step) {
   }
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
   const foeLineOf = (t) => (t && t.rang === 'arriere' ? enemies.arriere : enemies.avant);
-  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : foes[0];
+  // refonte IA lot 1 : en Auto sans désignation, même utilité de ciblage que l'IA ennemie (avec hystérésis)
+  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : pickTargetByUtility(u, foes, dmg, ctx.state, 'team');
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
@@ -15803,7 +15807,42 @@ function actTeamSupport(s, ctx, step) {
   applySupport(s, ctx.state.team, ctx.state.mods, ctx.events, 'team', ctx.enemyAll(), ctx.state, supAct);
 }
 
-function enemyPickTarget(e, targets, dmgBase) {
+// refonte IA lot 1 : score d'utilité de ciblage partagé IA ennemie / Auto joueur
+// (kill possible, opposition d'élément, menace, ligne arrière protégée, fragilité) — poids en data
+function targetUtilityScore(attacker, t, dmgBase, st, side) {
+  const dmg = Math.max(1, Math.round(dmgBase * elementMult(attacker.element, t.element)));
+  let s = 0;
+  if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
+  if (elementTag(attacker.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
+  s += (M.TARGET_THREAT_WEIGHT ?? 0) * (t.atk ?? 0);
+  if (st && backProtected(st, side, t, false)) s -= (M.TARGET_BACK_PENALTY ?? 0);
+  return s - t.hp;
+}
+
+// sélection argmax + hystérésis anti flip-flop : la cible en cours est conservée si elle
+// reste vivante et dans la marge TARGET_HYSTERESIS du meilleur score (skill utility-ai : inertie)
+function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
+  if (!targets.length) return null;
+  let best = targets[0];
+  let bestScore = -Infinity;
+  for (const t of targets) {
+    const sc = targetUtilityScore(attacker, t, dmgBase, st, side);
+    if (sc > bestScore) { best = t; bestScore = sc; }
+  }
+  if (st) {
+    const last = st.lastTarget ? st.lastTarget[side] : null;
+    const prev = last ? targets.find((t) => t.uid === last) : null;
+    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - (M.TARGET_HYSTERESIS ?? 0)) {
+      best = prev;
+    }
+    st.lastTarget = st.lastTarget ?? {};
+    st.lastTarget[side] = best.uid;
+  }
+  return best;
+}
+
+function enemyPickTarget(e, targets, dmgBase, st = null) {
+  if (st) return pickTargetByUtility(e, targets, dmgBase, st, 'enemies');
   const score = (t) => {
     const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
     let s = 0;
@@ -15840,7 +15879,7 @@ function actEnemyStriker(e, ctx) {
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
   const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
-  const target = enemyPickTarget(e, targets, dmgBase);
+  const target = enemyPickTarget(e, targets, dmgBase, ctx.state);
   const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
   const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
   const redFactor = gRed >= DMG_REDUCTION_MAX ? 1

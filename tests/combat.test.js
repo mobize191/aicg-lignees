@@ -544,3 +544,71 @@ test('correctifs lot 3 : depuis la ligne avant, un sort de lignée soin en Tacti
   assert.ok(r.events.some((e) => e.type === 'heal' && e.targetId === 'u2'), 'événement heal');
   assert.ok(!r.events.some((e) => e.type === 'buff'), 'pas de atkBuff pour un sort de soin');
 });
+
+// ---------- refonte IA lot 1 : utilité de ciblage + hystérésis ----------
+const targetUnit = (uid, hp, atk, rang = 'avant', element = 'eau') => ({ uid, hp, maxHp: 200, alive: true, shield: 0, status: {}, atk, element, rang });
+const targetState = (teamAvant, enemyAvant) => ({
+  turn: 1, winner: null, rng: mulberry32(1), lastTarget: null,
+  team: { avant: teamAvant, arriere: [] },
+  enemies: { avant: enemyAvant, arriere: [] },
+  mods: {},
+});
+
+test('refonte IA lot 1 : le kill possible prime sur la menace', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const weak = targetUnit('e1', 5, 2);   // killable à dmgBase 10
+  const strong = targetUnit('e2', 90, 40); // grosse menace mais pas killable
+  const st = targetState([targetUnit('t1', 100, 10)], [weak, strong]);
+  const t = E.pickTargetByUtility(atk, [weak, strong], 10, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'la cible killable est choisie');
+});
+
+test('refonte IA lot 1 : la menace (ATQ) départage à PV égaux', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const low = targetUnit('e1', 80, 5);
+  const high = targetUnit('e2', 80, 30);
+  const st = targetState([targetUnit('t1', 100, 10)], [low, high]);
+  const t = E.pickTargetByUtility(atk, [low, high], 1, st, 'enemies');
+  assert.equal(t.uid, 'e2', 'la plus grosse menace est ciblée');
+});
+
+test('refonte IA lot 1 : la ligne arrière protégée est pénalisée tant que l\'avant tient', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const front = targetUnit('e1', 100, 10, 'avant');
+  const back = targetUnit('e2', 60, 10, 'arriere'); // sans la pénalité, l'arrière gagnerait (-40 vs -80)
+  const st = targetState([targetUnit('t1', 100, 10)], [front, back]);
+  st.enemies.arriere = [back];
+  const t = E.pickTargetByUtility(atk, [front, back], 1, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'l\'arrière protégé n\'est pas choisi malgré ses PV plus bas');
+});
+
+test('refonte IA lot 1 : hystérésis anti flip-flop — la cible en cours tient dans la marge', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const e1 = targetUnit('e1', 80, 5);
+  const e2 = targetUnit('e2', 79, 5); // meilleur score de peu (< marge 150)
+  const st = targetState([targetUnit('t1', 100, 10)], [e1, e2]);
+  st.lastTarget = { enemies: 'e1' };
+  const t = E.pickTargetByUtility(atk, [e1, e2], 1, st, 'enemies');
+  assert.equal(t.uid, 'e1', 'pas de changement au bord du seuil sans raison (marge)');
+  // au-delà de la marge, le meilleur score gagne
+  const e1b = targetUnit('e1', 190, 5); // score -180, à plus de la marge (150) de e3 (0)
+  const e3 = targetUnit('e3', 10, 5);
+  const st2 = targetState([targetUnit('t1', 100, 10)], [e1b, e3]);
+  st2.lastTarget = { enemies: 'e1' };
+  const t2 = E.pickTargetByUtility(atk, [e1b, e3], 1, st2, 'enemies');
+  assert.equal(t2.uid, 'e3', 'au-delà de la marge le meilleur score prend le relais');
+});
+
+test('refonte IA lot 1 : enemyPickTarget avec état délègue à l\'utilité (rétro-compat sans état : score historique)', () => {
+  const E = loadEngine();
+  const e = targetUnit('a1', 100, 10, 'avant', 'feu');
+  const weak = targetUnit('e1', 5, 2);
+  const strong = targetUnit('e2', 90, 40);
+  assert.equal(E.enemyPickTarget(e, [weak, strong], 10).uid, 'e1', 'sans état : kill bonus historique');
+  const st = targetState([targetUnit('t1', 100, 10)], [weak, strong]);
+  assert.equal(E.enemyPickTarget(e, [weak, strong], 10, st).uid, 'e1', 'avec état : utilité + hystérésis');
+});
