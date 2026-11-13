@@ -155,38 +155,54 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 - [ ] table de synthèse fusion couvrant les nouvelles familles (§7) ;
 - [ ] lignées uniques tranchées (§8).
 
-## 7. La fusion DQM v4 : la table de synthèse des familles (PROPOSITION d'arborescence de règles)
+## 7. La fusion DQM v4 : la couche race, puis la couche famille (TRANCHÉ le 13/11, suite 8 ; détails spec `docs/design/spec-fusion-v4.md`)
 
-Rappel des tranchages (spec `docs/design/spec-fusion-v4.md`) : enfant niveau 1, 25 % des stats cumulées plafonnées par rareté (C +20 % → L +50 %), 2-3 sorts hérités choisis (jamais le signature), famille par **table de synthèse** (`data/fusion-synthese.json`, clé = paire triée), mystère de la descendance, l'Autel des Lignées. Le défaut des paires non listées : `A`. Ce qui suit propose le CONTENU de la table, à trancher.
+Rappel des tranchages de forme (spec fusion v4) : enfant niveau 1, 25 % des stats cumulées plafonnées par rareté, 2-3 sorts hérités (jamais le signature), mystère de la descendance, l'Autel des Lignées. La grammaire est désormais DEUX-ÉTAGES (tranchée le 13/11, suite 8) : **la couche RACE décide du type d'enfant (saut ou lignée parentale), la couche FAMILLE désigne la lignée d'accueil**.
 
-### 7.1 Catégories de règles (défaut proposé)
+### 7.1 La couche race (TRANCHÉE)
 
-| Paire | Famille de l'enfant (proposition) | Statut |
+| Paire de races | Race de l'enfant | Statut |
 | --- | --- | --- |
+| deux mêmes races (2×H, 2×Mo, 2×My, 2×D) | pas de saut : lignée d'un des parents, 50/50 | TRANCHÉ |
+| humaine + monstre | **mystique** (saut) | TRANCHÉ |
+| humaine + mystique | **divine** (saut) | TRANCHÉ |
+| humaine + divin | **monstre** (saut) — le vrai monstre (gobelin, aquatique, feu…) **+ une chance de démon** (taux dédié à caler, ex. 15-20 %) | TRANCHÉ (calage du taux démon À FAIRE) |
+| sans humain (Mo+My, Mo+D, My+D) | **pas de saut** : lignée d'un des parents, 50/50 | TRANCHÉ |
+
+- **Taux de saut : 55 % uniforme**, en data (`fusion.sautRate`), ajustable. Échec → règle des mêmes races (lignée d'un parent 50/50, sauf lignée prédominante qui s'impose).
+- **Le cycle** : monstre → mystique → divine → monstre ; l'humain est le catalyseur (le Lieur : seul l'humain crée du neuf). Chaque saut réussi = +1 cran de `RACE_MOD` (+10/+20/+30 %), cohérent avec la hiérarchie de stats existante.
+- **Les Embryons (n7-n11)**, seules cartes monstre jouables aujourd'hui, sont les ingrédients naturels du premier saut : humaine + Embryon des Eaux → sirène.
+- **N et M inchangés** : deux naissances N → fusion refusée ; N + famille → la lignée de l'autre parent (palier bas) ; paire avec un M → refusée.
+
+### 7.2 La couche famille : la table de synthèse (lignées d'accueil des paires désignées)
+
+Quand le saut réussit (ou pour les paires sans saut), la table désigne la famille/lignée d'accueil (clé = paire triée, `data/fusion-synthese.json`) :
+
+| Paire | Lignée d'accueil de l'enfant | Statut |
+| --- | --- | --- |
+| humaine + monstre aquatique (Embryon des Eaux, webs des Marées, Naufragés ?) | **sirène**, entrée w19 Sirène Nouvelle (famille eau) | cible ACTÉE (12/11), réconciliée avec le cycle |
+| humaine + ent (Bêtes du Fougeron, Gens des Sèves, Gobelins des Mousses) | **dryade**, entrée p3 Pousse des Sèves (famille bosquet) | cible ACTÉE, réconciliée |
+| humaine + divin (seuil/miroir/pont, Séraphin, anges dévoyés) | **monstre du biome** (par paire, à caler en spec) **+ chance de DÉMON** (famille démon du gel §6.1) | cycle TRANCHÉ, biomes et taux À CALER |
+| humaine + mystique (Enge, w19-w21, gorgones/fées du gel) | famille divine (seuil/miroir/pont, hasard, plafonnée) | PROPOSÉ |
 | même famille | la même famille | PROPOSÉ |
-| deux familles humaines (les 11) | hasard A/B — SAUF paire avec la lignée prédominante du joueur : elle s'impose (« A » forcé) | PROPOSÉ (la marge prédominante est actée dans la spec) |
-| humaine + monstre aquatique (webs des Marées ; Naufragés de la Crypte ?) | **sirène**, entrée par la lignée d'accueil : Sirène Nouvelle (w19) | cible ACTÉE (12/11), entrée PROPOSÉE |
-| humaine + ent du Bosquet (Bêtes du Fougeron, Gens des Sèves, Gobelins des Mousses) | **dryade**, entrée par Pousse des Sèves (p3) | cible ACTÉE, entrée PROPOSÉE |
-| humaine + ange (Arbitres du Seuil, p-series Séraphin) | **demi-ange** (à créer, contenu v4 ; interim : Éveillé du Seuil n15) | ACTÉ « à incarner », interim PROPOSÉ |
-| humaine + démon (voies du gel §6.1, Chœur Miroir) | **à trancher** : piste — un hybride diable (la symétrie du demi-ange) ou la famille démon au hasard | À TRANCHER (nouveau, ouvert par le gel) |
-| deux familles divines (seuil/miroir/pont) | hasard A/B, enfant plafonné (aucune L divine créée ex nihilo) | PROPOSÉ (le plafond divine est un défaut à trancher de la spec) |
-| divine + humaine | hasard A/B plafonné ; la divine ne s'impose pas | PROPOSÉ |
-| mystique (Enge, w19-w21, gorgones/fées du gel) + X | la famille d'accueil du tag (w19 → eau, w20 → bosquet, w21 → ombre aujourd'hui ; gorgones/fées une fois posées) | PROPOSÉ (dépend du §5/§6.5) |
-| deux naissances N | **fusion refusée** (le N n'a pas de lignée à transmettre ; l'éveil d'abord) | PROPOSÉ |
-| N + famille | la famille de l'autre parent (l'enfant naît dans sa lignée, palier C/UC selon plafond) | PROPOSÉ |
-| paire avec un M (mythique) | **fusion refusée** (boss, unique de collection) | PROPOSÉ |
+| deux familles humaines (les 11) | hasard A/B — SAUF paire avec la lignée prédominante du joueur : elle s'impose (« A » forcé) | PROPOSÉ (marge prédominante actée dans la spec) |
+| deux familles divines | hasard A/B, enfant plafonné (aucune L divine créée ex nihilo) | PROPOSÉ |
 
-### 7.2 Ce que le gel v1 ajoute à la table
+- **Le demi-ange est RETIRÉ** (révision datée du tranchage du 12/11, suite 8) : humaine + ange suit le cycle (→ monstre du biome + chance de démon).
+- L'ascension des héros par fusion : §8 point 3.
 
-Le camp démon ouvre les paires démon (règle « à trancher » ci-dessus) et les gorgones/fées deviennent des cibles hybrides naturelles des Enge (mystique + humaine → gorgonne/fée ?). **Recommandation** : ne pas toucher ces paires au lot 1 de la fusion (défaut `A`), et les poser en même temps que le lot d'arts du gel — la table est en data, elle se met à jour sans migration.
+### 7.3 Ce que le gel v1 ajoute
 
-## 8. Les lignées uniques du début de jeu (PROPOSITION, à trancher avec le lore du Lieur)
+Le camp démon devient une CIBLE de fusion (la chance de démon de humaine + divin) ; les gorgones/fées du gel sont des mystiques jouables, donc des parents de paires humaine + mystique (vers le divin). Recommandation inchangée : paires désignées posées en même temps que le lot d'arts du gel — la table est en data, elle se met à jour sans migration.
 
-Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters prédominantes, les non-choisies très tard en fin de jeu ». La spec fusion réserve déjà la marge (paire avec la prédominante → « A » forcé). Proposition v18 :
+## 8. Les lignées uniques du début de jeu (proposition VALIDÉE dans l'esprit par Marc-Olivier le 13/11 ; questions restantes à trancher)
+
+Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters prédominantes, les non-choisies très tard en fin de jeu ». La spec fusion réserve déjà la marge (paire avec la prédominante → « A » forcé).
 
 1. **Les 4 candidates : lame, eau, aube, ombre** — une par novice (l'Épéiste → Kenji, le Mage → Alix, le Prêtre → Léna, le Voleur → Kira). Argument : le choix de lignée chevauche le choix de carte de départ déjà acté (4 propositions, une par race), et chaque candidate porte un sommet iconique.
 2. **La mécanique** : à la création de partie, le joueur choisit SA lignée (elle suit sa carte de départ ou s'affirme au premier éveil) ; tant que les non-choisies ne sont pas débloquées : (a) toute fusion impliquant la lignée choisie reste dans la lignée choisie ; (b) les 10 autres familles humaines sont gated très tard (fin de jeu, déblocage lié au lore du Lieur) ; (c) les monstres recrutés et les races supérieures (mystique/divine) ne sont PAS gated : le recrutement naturel ~1 % et la capture restent la porte de sortie de la lignée unique.
-3. **Questions ouvertes** : (a) la prédominance s'arrête-t-elle à l'ouverture des non-choisies ou plus tôt (premier donjon bouclé) ? (b) la 2e carte de départ (aléatoire) peut-elle sortir de la lignée choisie ? (défaut proposé : oui, c'est la première divergence offerte) ; (c) la L du starter choisie a-t-elle un rôle narratif (le Lieur, la fin de jeu) ?
+3. **Les formes supérieures du starter PAR FUSION (TRANCHÉ le 13/11, suite 8)** : la L humaine du starter n'est plus une impasse — c'est le ticket d'ascension : **L humaine + monstre → forme MYSTIQUE du starter ; forme mystique + humaine → forme DIVINE.** La prédominance capture le saut (la famille s'impose, la race suit le cycle du §7) : les formes supérieures sont les seules issues des sauts pour le starter. Cartes à créer au contenu v4, arts au backlog série 3 après les ids définitifs. **Les régressions MEURENT** (« toutes les régressions meurent et passent par la fusion », Marc-Olivier) : le type d'évolution « regression » et l'Éclat de régression disparaissent au lot fusion v4 (l'entrée vivante a17 Kenji, Sabre Céleste → a20 Mage de la Fournaise est retirée ; migration des éclats en stock à caler en spec).
+4. **Questions ouvertes restantes** : (a) la prédominance s'arrête-t-elle à l'ouverture des non-choisies ou plus tôt (premier donjon bouclé) ? (b) la 2e carte de départ (aléatoire) peut-elle sortir de la lignée choisie ? (défaut proposé : oui, c'est la première divergence offerte) ; (c) la forme divine du starter a-t-elle un rôle narratif (le Lieur, la fin de jeu) — et le cycle peut-il aller jusqu'à la chute (forme divine + humaine → le starter devient monstre/démon) ?
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 

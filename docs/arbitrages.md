@@ -1,5 +1,18 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 8) : FUSION — LA COUCHE RACE TRANCHÉE (cycle humain-catalyseur, 55 %) + DEMI-ANGE RETIRÉ + RÉGRESSIONS MORTES
+
+> Réponse de Marc-Olivier aux §7-§8 du v18. La fusion DQM v4 gagne une couche RACE au-dessus de la couche famille : **la race décide du type d'enfant, la table famille désigne la lignée.** Le moteur a déjà les 4 races (`RACE_MOD` humaine +0 %, monstre +10 %, mystique +20 %, divine +30 %) : aucun changement de maths, implémentable en data. Spec amendée : `docs/design/spec-fusion-v4.md` §2 ; v18 §7 réécrit.
+
+- **Le cycle (TRANCHÉ)** : deux mêmes races → carte de la lignée d'un des parents, 50/50 (sauf prédominante : elle s'impose). **Humain = le catalyseur** : humaine + monstre → **mystique** ; humaine + mystique → **divine** ; humaine + divin → **monstre**. Chaque saut = +1 cran de `RACE_MOD` dans le cycle monstre → mystique → divine → monstre. Le lore du Lieur s'écrit tout seul : seul l'humain crée du neuf.
+- **Taux : 55 % uniforme (TRANCHÉ), en data** (`fusion.sautRate`, ajustable). Échec du saut → règle des mêmes races (lignée d'un parent 50/50).
+- **Paires sans humain (TRANCHÉ) : PAS de saut** — Mo+My, Mo+D, My+D → lignée d'un des parents, 50/50. L'humain reste le seul catalyseur.
+- **Le demi-ange RETIRÉ (révision datée du tranchage du 12/11)** : humaine + divin ne donne plus de demi-ange. Le saut réussi donne un **VRAI monstre** (gobelin, aquatique, feu, etc. — biome cible par paire dans `fusion-synthese.json`, défaut à caler en spec) ET **une chance de DÉMON est conservée** (taux dédié à caler, ex. 15-20 %) : l'union interdite de l'humain et du divin peut engendrer un diable — porte d'entrée naturelle vers la famille démon du gel. [À TRANCHER au calage : le taux démon et les biomes par paire.]
+- **Les régressions MORTES (TRANCHÉ : « toutes les régressions meurent et passent par la fusion »)** : le type d'évolution « regression » et l'Éclat de régression disparaissent au lot 1 de la fusion v4 (l'entrée vivante a17 Kenji, Sabre Céleste → a20 Mage de la Fournaise est retirée ; migration des éclats en stock à caler). Les **HÉROS** atteignent leur état supérieur PAR FUSION : L humaine du starter + monstre → forme MYSTIQUE ; forme mystique + humaine → forme DIVINE. La prédominance capture le saut (la famille s'impose, la race suit le cycle) : formes supérieures à créer au contenu v4, arts après ids définitifs.
+- **Les cibles hybrides du 12/11 se réconcilient avec le cycle** : sirène = l'issue mystique de humaine + monstre aquatique ; dryade = l'issue mystique de humaine + ent. Les Embryons (n7-n11), seules cartes monstre jouables, deviennent les ingrédients naturels du premier saut.
+- **Lignées uniques** : la proposition v18 §8 (4 starters lame/eau/aube/ombre) est VALIDÉE dans l'esprit ; restent 3 questions ouvertes (fin de la prédominance, 2e carte de départ, rôle narratif de la forme divine — et le cycle peut-il aller jusqu'à la chute : forme divine + humaine → starter démon ?).
+- **Repère technique** : commit de docs seul → digest inchangé attendu (baseline verrouillée `9faff1b9…`/`6103e7b0…`).
+
 ## 2026-11-13 (suite 7) : ARBRES V18 — document de référence livré (inventaire exhaustif design vs jeu)
 
 > `docs/design/design-arbres-v18.md` devient la référence courante des arbres (remplace le v17 archivé comme document de repérage), établi depuis les data v1.51 : 150 cartes, 159 monstres, 14 familles, 15 naissances, 6 biomes. Quatre usages : (1) localiser chaque carte par famille/race/biome ; (2) voir les trous restants pour valider la v1 (anges et démons en tête) ; (3) poser la table de synthèse de la fusion DQM v4 ; (4) trancher les lignées uniques du début de jeu.
