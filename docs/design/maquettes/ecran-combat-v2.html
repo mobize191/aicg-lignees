@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maquette : écran de combat v2 (positionnement cible)</title>
+<style>
+  :root{
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color:#e8e4d8; background:#0b0e18; margin:0;
+  }
+  body{margin:0; padding:24px;}
+  h1{font-size:22px; margin:0 0 6px; color:#d8b45a;}
+  h2{font-size:16px; margin:28px 0 12px; color:#d8b45a; border-bottom:1px solid #2a3350; padding-bottom:6px;}
+  p.intro{max-width:900px; color:#b8b2a0; font-size:13px; margin:0 0 18px; line-height:1.5;}
+  .legend{display:flex; flex-wrap:wrap; gap:8px 18px; max-width:940px; font-size:12px; color:#b8b2a0; margin-bottom:20px;}
+  .legend b{color:#e8e4d8;}
+  .zoneA{color:#e05252;} .zoneV{color:#4cc47c;}
+  .row{display:flex; gap:28px; flex-wrap:wrap; align-items:flex-start;}
+  .frame{flex:0 0 auto;}
+  .frame h3{font-size:13px; margin:0 0 8px; font-weight:600;}
+  .frame .sub{font-size:11px; color:#8a8574; margin:-4px 0 10px;}
+  /* le "téléphone" */
+  .phone{width:390px; height:844px; background:#0e1220; border:3px solid #2a3350; border-radius:18px;
+    position:relative; overflow:hidden; transform:scale(.86); transform-origin:top left;}
+  .phone.land{width:844px; height:390px; transform:scale(.86); transform-origin:top left;}
+  .phone-wrap{width:336px; height:726px;}
+  .phone-wrap.land{width:726px; height:336px;}
+  /* badges d'annotation sur les maquettes */
+  .pin{position:absolute; width:20px; height:20px; border-radius:50%; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; z-index:50; box-shadow:0 0 0 3px rgba(0,0,0,.4);}
+  .pin.bad{background:#e05252; color:#fff;}
+  .pin.good{background:#4cc47c; color:#06120a;}
+  /* ============ COMMUN : terrain ============ */
+  .terrain{position:absolute; background:linear-gradient(180deg,#1a2438 0%,#22304a 45%,#1c2a18 55%,#24361f 100%);}
+  .terrain .ground-line{position:absolute; left:8%; right:8%; top:50%; height:2px;
+    background:repeating-linear-gradient(90deg,#3a4a30 0 14px,transparent 14px 24px); opacity:.5;}
+  .unit{position:absolute; width:76px; cursor:pointer; text-align:center; z-index:5;}
+  .unit .art{width:56px; height:56px; margin:0 auto; border-radius:10px; border:2px solid #555;
+    display:flex; align-items:center; justify-content:center; font-size:22px; background:#0b0e18; position:relative;}
+  .unit.enemy .art{border-color:#a84a4a;}
+  .unit.ally .art{border-color:#4a6ea8;}
+  .unit.active .art{border-color:#d8b45a; box-shadow:0 0 10px #d8b45a88;}
+  .unit.targetable .art{border-color:#ffcf5a; box-shadow:0 0 0 3px #ffcf5a66; animation:pulse 1s infinite;}
+  .unit.dimmed .art{filter:grayscale(1) brightness(.5);}
+  .unit.dimmed{opacity:.55;}
+  @keyframes pulse{50%{box-shadow:0 0 0 6px #ffcf5a33;}}
+  .unit .nm{font-size:9px; margin-top:2px; color:#d8d4c4; white-space:nowrap; overflow:hidden;}
+  .bars{margin-top:2px;}
+  .hp{height:5px; background:#3a1216; border-radius:3px; overflow:hidden;}
+  .hp i{display:block; height:100%; background:#e05252;}
+  .mp{height:4px; margin-top:1px; background:#12203a; border-radius:3px; overflow:hidden;}
+  .mp i{display:block; height:100%; background:#5aa2e8;}
+  .fx{font-size:8px; margin-top:1px; color:#ffd27a;}
+  .fx s{text-decoration:none; background:#3a3040; border-radius:4px; padding:0 3px; margin-right:2px; display:inline-block;}
+  .dmg-float{position:absolute; left:50%; transform:translateX(-50%); top:-14px; background:#7a1e26; color:#ffe;
+    font-weight:700; font-size:13px; padding:2px 8px; border-radius:6px; z-index:40; animation:floatup 1.6s forwards;}
+  @keyframes floatup{0%{opacity:0; top:10px;}15%{opacity:1;}80%{opacity:1;}100%{opacity:0; top:-22px;}}
+  /* rail d'ordre du tour */
+  .turnrail{display:flex; align-items:center; gap:5px; overflow:hidden;}
+  .turnchip{min-width:26px; height:26px; border-radius:50%; background:#171d2e; border:2px solid #4a6ea8;
+    color:#cfd8e8; font-size:10px; display:flex; align-items:center; justify-content:center; flex:none;}
+  .turnchip.enemy{border-color:#a84a4a;}
+  .turnchip.now{border-color:#d8b45a; background:#2a2410; box-shadow:0 0 8px #d8b45a66;}
+  .turnsep{color:#5a5a4a; font-size:10px; flex:none;}
+  /* mini-log */
+  .minilog{background:#0b0e18e6; border-top:1px solid #2a3350; font-size:10.5px; color:#a8a290;
+    padding:4px 10px; line-height:1.45;}
+  .minilog b{color:#d8cfa8; font-weight:600;}
+  /* barre de vitesse/pause persistante */
+  .speedgrp{display:flex; gap:6px; align-items:center;}
+  .speedgrp button{background:#171d2e; border:1px solid #3a4a6a; color:#cfd8e8; border-radius:6px;
+    font-size:11px; padding:3px 8px; cursor:pointer;}
+  /* fiche flottante */
+  .fiche{position:absolute; width:210px; background:#141927f2; border:1px solid #d8b45a; border-radius:10px;
+    padding:10px; z-index:60; font-size:11px; box-shadow:0 8px 24px rgba(0,0,0,.6);}
+  .fiche h4{margin:0 0 4px; font-size:13px; color:#d8b45a;}
+  .fiche .close{position:absolute; top:6px; right:8px; cursor:pointer; color:#888;}
+  .fiche table{width:100%; border-collapse:collapse; color:#c8c4b4;}
+  .fiche td{padding:1px 0;}
+  /* ============ AVANT (portrait actuel) ============ */
+  .avant-top{position:absolute; top:0; left:0; right:0; height:34px; display:flex; align-items:center;
+    justify-content:space-between; padding:0 12px; font-size:11px; color:#8a8574;}
+  .avant-rail{position:absolute; left:0; right:0; top:34px; height:34px; background:#12182a;
+    border-top:1px solid #2a3350; border-bottom:1px solid #2a3350; padding:0 10px;}
+  .avant-terrain{left:0; right:0; top:68px; height:316px;}
+  .avant-win{position:absolute; left:0; right:0; bottom:0; height:320px; background:#141927f5;
+    border-top:2px solid #3a4a6a; padding:10px 12px; box-sizing:border-box;}
+  .avant-win .head{display:flex; gap:10px; align-items:center; margin-bottom:8px;}
+  .avant-win .port{width:46px; height:46px; border-radius:8px; border:2px solid #d8b45a; background:#0b0e18;
+    display:flex; align-items:center; justify-content:center; font-size:20px;}
+  .avant-win .stats{font-size:11px; color:#c8c4b4; line-height:1.5;}
+  .avant-win .speedrow{display:flex; gap:4px; margin:8px 0; flex-wrap:wrap;}
+  .avant-win .speedrow button{background:#1d2438; border:1px solid #3a4a6a; color:#cfd8e8; border-radius:6px;
+    font-size:10px; padding:3px 7px;}
+  .avant-win .spells{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+  .avant-win .spells button{background:#1d2438; border:1px solid #3a4a6a; color:#e8e4d8; border-radius:8px;
+    padding:6px 8px; font-size:11px; text-align:left;}
+  .avant-win .spells button small{display:block; color:#8a8574; font-size:9px; margin-top:2px;}
+  .avant-win .reserve{margin-top:8px; font-size:10px; color:#8a8574;}
+  /* ============ APRÈS (portrait cible) ============ */
+  .apres-top{position:absolute; top:0; left:0; right:0; height:52px; background:#12182add;
+    border-bottom:1px solid #2a3350; padding:7px 10px; box-sizing:border-box;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .apres-top .left{display:flex; align-items:center; gap:8px; min-width:0;}
+  .wave{font-size:10px; color:#8a8574; flex:none;}
+  .apres-terrain{left:0; right:0; top:52px; bottom:170px;}
+  .apres-log{position:absolute; left:0; right:0; bottom:118px; height:52px;}
+  .apres-bar{position:absolute; left:0; right:0; bottom:0; height:118px; background:#141927f6;
+    border-top:2px solid #d8b45a; padding:8px 10px; box-sizing:border-box;}
+  .apres-bar .who{font-size:11px; color:#d8cfa8; margin-bottom:7px; display:flex; justify-content:space-between;}
+  .apres-bar .who b{color:#d8b45a;}
+  .cmdrow{display:grid; grid-template-columns:repeat(3,1fr); gap:6px;}
+  .cmdrow button{min-height:44px; background:#1d2438; border:1px solid #3a4a6a; color:#e8e4d8; border-radius:10px;
+    font-size:11.5px; padding:4px 2px; cursor:pointer; line-height:1.2;}
+  .cmdrow button small{display:block; color:#8a8574; font-size:9px; margin-top:1px;}
+  .cmdrow button.off{opacity:.4; pointer-events:none;}
+  .cmdrow button.pick{border-color:#d8b45a; background:#2a2410;}
+  .reservecue{position:absolute; right:10px; bottom:6px; font-size:9.5px; color:#8a8574;}
+  .hint{position:absolute; left:50%; transform:translateX(-50%); bottom:126px; background:#2a2410;
+    border:1px solid #d8b45a; color:#ffe9b0; font-size:11px; padding:3px 10px; border-radius:8px; z-index:45; display:none;}
+  /* ============ APRÈS paysage ============ */
+  .land-terrain{left:0; top:0; bottom:0; width:484px;}
+  .land-rail{position:absolute; right:0; top:0; bottom:0; width:360px; background:#12182add;
+    border-left:1px solid #2a3350; display:flex; flex-direction:column;}
+  .land-rail .top{padding:8px 10px; border-bottom:1px solid #2a3350; display:flex; gap:8px; align-items:center;}
+  .land-rail .turncol{display:flex; flex-wrap:wrap; gap:4px; padding:8px 10px; max-width:180px;}
+  .land-rail .cmd{margin-top:auto; padding:8px 10px; border-top:2px solid #d8b45a;}
+  .land-rail .cmd .cmdrow{grid-template-columns:1fr 1fr 1fr;}
+  .land-rail .who{font-size:11px; color:#d8cfa8; margin-bottom:6px;}
+  /* légende des changements */
+  table.changes{border-collapse:collapse; font-size:12.5px; max-width:940px; margin-bottom:8px;}
+  table.changes th, table.changes td{border:1px solid #2a3350; padding:6px 10px; text-align:left; vertical-align:top;}
+  table.changes th{background:#171d2e; color:#d8b45a;}
+  td.b{color:#ff9d9d;} td.g{color:#7ee0a5;}
+  .notes{max-width:940px; font-size:12px; color:#b8b2a0; line-height:1.55;}
+  .notes li{margin-bottom:4px;}
+</style>
+</head>
+<body>
+<h1>Écran de combat : maquette comparative (v2, positionnement cible)</h1>
+<p class="intro">Demande de Marc-Olivier du 14/11 : le front UX (PR #12) est livré mais le rendu reste mauvais ; tranchage B acté : maquette d'abord, chantier ensuite. Référence : <b>docs/design/recherche-ecran-combat-2026-11-14.md</b>. La maquette APRÈS est interactive : clique une unité (fiche flottante), puis un sort d'attaque, puis une cible (illumination + confirmation au-dessus du point de contact + mini-log).</p>
+<div class="legend">
+  <span><b class="zoneA">Pastilles rouges</b> : écarts du positionnement actuel</span>
+  <span><b class="zoneV">Pastilles vertes</b> : positionnement cible justifié par le genre</span>
+</div>
+
+<table class="changes">
+  <tr><th>#</th><th>Actuel (AVANT)</th><th>Cible (APRÈS)</th></tr>
+  <tr><td>1</td><td class="b">Ordre du tour en bande médiane, au-dessus du plateau</td><td class="g">En haut de l'écran : statut, deux camps, ennemis inclus (Star Rail, Epic Seven)</td></tr>
+  <tr><td>2</td><td class="b">Vitesse ×0,5→×32 et pause dans la fenêtre d'action</td><td class="g">Haut-droite persistant : action rare, zone de statut, un geste de moins à chaque tour</td></tr>
+  <tr><td>3</td><td class="b">Fenêtre d'action 38 % : fiche + stats + sorts mélangés</td><td class="g">Barre de commandes compacte ≤ 30 % : nom + PV/MP + boutons (≥ 44 px) ; fiche flottante à la demande</td></tr>
+  <tr><td>4</td><td class="b">Terrain réduit par le rail et la fenêtre</td><td class="g">Bande médiane intégrale au terrain, stats portées par les unités</td></tr>
+  <tr><td>5</td><td class="b">Feedback au point de contact</td><td class="g">Confirmation et dégâts affichés AU-DESSUS de la cible, jamais sous le pouce (règle d'occlusion)</td></tr>
+</table>
+
+<h2>Portrait 390×844 : AVANT (positionnement actuel) vs APRÈS (cible)</h2>
+<div class="row">
+
+  <!-- ================= AVANT ================= -->
+  <div class="frame">
+    <h3 class="zoneA">AVANT : actuel</h3>
+    <div class="sub">fenêtre 38 %, rail médian, vitesse dans la fenêtre</div>
+    <div class="phone-wrap"><div class="phone" id="phAvant">
+      <div class="avant-top"><span>Terres Sauvages · combat</span><span>Pause auto : off</span></div>
+      <div class="avant-rail">
+        <div class="turnrail">
+          <div class="turnchip now">As</div><div class="turnchip enemy">GA</div><div class="turnchip">Pr</div>
+          <div class="turnchip enemy">Pi</div><div class="turnchip">Ch</div><div class="turnchip enemy">AD</div>
+          <div class="turnsep">›</div><div class="turnchip">As</div>
+        </div>
+      </div>
+      <div class="terrain avant-terrain">
+        <div class="ground-line"></div>
+        <div class="unit enemy" style="top:16px; left:44px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div></div>
+        <div class="unit enemy" style="top:22px; left:160px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div><div class="fx"><s>🛡 bouclier</s></div></div></div>
+        <div class="unit enemy" style="top:16px; left:276px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div></div></div>
+        <div class="unit ally" style="bottom:22px; left:44px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div></div></div>
+        <div class="unit ally active" style="bottom:16px; left:160px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
+        <div class="unit ally" style="bottom:22px; left:276px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div><div class="mp"><i style="width:11%"></i></div></div></div>
+      </div>
+      <div class="minilog" style="position:absolute; left:0; right:0; top:384px; height:56px;">
+        <div><b>Assassin</b> frappe : −14 Gobelin Archer</div>
+        <div><b>Ange Déchu</b> lance Châtiment : −18 Prêtre de l'Aube</div>
+        <div>Poison lent se dissipe sur Gobelin Archer</div>
+      </div>
+      <div class="avant-win">
+        <div class="head">
+          <div class="port">🗡</div>
+          <div class="stats"><b style="color:#d8b45a">Assassin</b> (UR) · Ombre<br>PV 68/92 · MP 24/40 · AGI 14<br>ATQ 31 · DÉF 18 · Élément : Neutre</div>
+        </div>
+        <div class="speedrow">
+          <button>×0,5</button><button>×1</button><button style="border-color:#d8b45a">×2</button><button>×4</button><button>×8</button><button>×16</button><button>×32</button><button>⏸ Pause</button>
+        </div>
+        <div class="spells">
+          <button>Lame Dansante<small>Attaque · 1 ennemi · MP 8</small></button>
+          <button>Poison Lent<small>Malus · 1 ennemi · MP 6</small></button>
+          <button>Pas de l'Ombre<small>Buff · soi · MP 10</small></button>
+          <button>Éclipse<small>Attaque · zone · MP 40</small></button>
+          <button>Défendre<small>Buff · soi · gratuit</small></button>
+          <button>🧪 Objet<small>Potion, fiole…</small></button>
+        </div>
+        <div class="reserve">Réserve : Grande Dryade (50 % PV) · Garde du Seuil</div>
+      </div>
+      <div class="pin bad" style="top:26px; left:8px;">1</div>
+      <div class="pin bad" style="top:96px; left:8px;">2</div>
+      <div class="pin bad" style="bottom:300px; left:8px;">3</div>
+      <div class="pin bad" style="top:150px; left:8px;">4</div>
+    </div></div>
+  </div>
+
+  <!-- ================= APRÈS ================= -->
+  <div class="frame">
+    <h3 class="zoneV">APRÈS : cible (interactive)</h3>
+    <div class="sub">ordre du tour + vitesse en haut · barre compacte ≤ 30 % · fiche flottante</div>
+    <div class="phone-wrap"><div class="phone" id="phApres">
+      <div class="apres-top">
+        <div class="left">
+          <div class="turnrail" style="flex:1;">
+            <div class="turnchip now" title="Assassin">As</div><div class="turnchip enemy" title="Gobelin Archer">GA</div><div class="turnchip" title="Prêtre">Pr</div>
+            <div class="turnchip enemy" title="Pillard">Pi</div><div class="turnchip" title="Chevalière">Ch</div><div class="turnchip enemy" title="Ange Déchu">AD</div>
+            <div class="turnsep">›</div><div class="turnchip">As</div><div class="turnsep">tour 3</div>
+          </div>
+        </div>
+        <div class="wave">Vague 2/3</div>
+        <div class="speedgrp"><button>×2 ▾</button><button>⏸</button></div>
+      </div>
+      <div class="terrain apres-terrain" id="terrainApres">
+        <div class="ground-line"></div>
+        <div class="unit enemy" data-name="Gobelin Archer" data-fiche="Commune · Archer · Feu" style="top:34px; left:40px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div><div class="fx"><s>☠ poison ×2</s></div></div>
+        <div class="unit enemy" data-name="Pillard des Récifs" data-fiche="Rare · Guerrier · Eau" style="top:48px; left:158px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div></div><div class="fx"><s>🛡 bouclier</s></div></div>
+        <div class="unit enemy" data-name="Ange Déchu" data-fiche="Super Rare · Mage · Lumière" style="top:34px; left:274px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div><div class="mp"><i style="width:45%"></i></div></div></div>
+        <div class="unit ally" data-name="Chevalière Isaure" data-fiche="Super Rare · Guerrier · Aube" style="bottom:64px; left:40px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div><div class="mp"><i style="width:33%"></i></div><div class="fx"><s>🛡 rempart</s></div></div></div>
+        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31 · DÉF 18" style="bottom:48px; left:158px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
+        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:64px; left:274px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div><div class="mp"><i style="width:11%"></i></div></div></div>
+      </div>
+      <div class="minilog apres-log" id="logApres">
+        <div><b>Assassin</b> frappe : −14 Gobelin Archer</div>
+        <div><b>Ange Déchu</b> lance Châtiment : −18 Prêtre de l'Aube</div>
+        <div>Poison lent se dissipe sur Gobelin Archer</div>
+      </div>
+      <div class="hint" id="hintApres">Choisis une cible</div>
+      <div class="apres-bar">
+        <div class="who"><span><b>Assassin</b> · PV 68/92 · MP 24/40</span><span style="color:#8a8574">Tactique</span></div>
+        <div class="cmdrow" id="cmdApres">
+          <button data-attack="1">⚔ Attaque<small>gratuit</small></button>
+          <button data-attack="1" data-mp="8">🗡 Lame Dansante<small>1 ennemi · MP 8</small></button>
+          <button data-buff="1">☠ Poison Lent<small>malus · MP 6</small></button>
+          <button data-buff="1">👣 Pas de l'Ombre<small>buff · MP 10</small></button>
+          <button class="off">🌑 Éclipse<small>MP 40</small></button>
+          <button>🧪 Objet<small>potion…</small></button>
+        </div>
+        <div class="reservecue">⇄ réserve (2) · Grand Brigand en attente</div>
+      </div>
+      <div class="pin good" style="top:8px; left:8px;">1</div>
+      <div class="pin good" style="top:8px; right:8px;">2</div>
+      <div class="pin good" style="bottom:60px; left:8px;">3</div>
+      <div class="pin good" style="top:180px; left:8px;">4</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>Paysage 844×390 : cible (rail latéral, commandes en bas du rail)</h2>
+<div class="row">
+  <div class="frame">
+    <div class="phone-wrap land"><div class="phone land">
+      <div class="terrain land-terrain">
+        <div class="ground-line"></div>
+        <div class="unit enemy" style="top:26px; left:60px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div></div>
+        <div class="unit enemy" style="top:36px; left:210px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div></div></div>
+        <div class="unit enemy" style="top:26px; left:360px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div></div></div>
+        <div class="unit ally" style="bottom:34px; left:60px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div></div></div>
+        <div class="unit ally active" style="bottom:26px; left:210px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
+        <div class="unit ally" style="bottom:34px; left:360px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div></div></div>
+      </div>
+      <div class="land-rail">
+        <div class="top">
+          <div class="turncol">
+            <div class="turnchip now">As</div><div class="turnchip enemy">GA</div><div class="turnchip">Pr</div>
+            <div class="turnchip enemy">Pi</div><div class="turnchip">Ch</div><div class="turnchip enemy">AD</div>
+          </div>
+          <div class="speedgrp" style="margin-left:auto;"><button>×2 ▾</button><button>⏸</button></div>
+        </div>
+        <div class="minilog" style="flex:1; border-top:none;">
+          <div><b>Assassin</b> frappe : −14 Gobelin Archer</div>
+          <div><b>Ange Déchu</b> lance Châtiment : −18 Prêtre de l'Aube</div>
+          <div>Poison lent se dissipe sur Gobelin Archer</div>
+          <div>Vague 2/3 · tour 3</div>
+        </div>
+        <div class="cmd">
+          <div class="who"><b>Assassin</b> · PV 68/92 · MP 24/40 · ⇄ réserve (2)</div>
+          <div class="cmdrow">
+            <button>⚔ Attaque<small>gratuit</small></button>
+            <button>🗡 Lame Dansante<small>MP 8</small></button>
+            <button>☠ Poison Lent<small>MP 6</small></button>
+            <button>👣 Pas de l'Ombre<small>MP 10</small></button>
+            <button class="off">🌑 Éclipse<small>MP 40</small></button>
+            <button>🧪 Objet<small>—</small></button>
+          </div>
+        </div>
+      </div>
+      <div class="pin good" style="top:8px; right:368px;">1·2</div>
+      <div class="pin good" style="bottom:8px; right:8px;">3</div>
+    </div></div>
+  </div>
+</div>
+
+<h2>Notes d'implémentation (pour le prompt couloir 1)</h2>
+<ul class="notes">
+  <li><b>Invariant conservé</b> : la fenêtre ne recouvre jamais le terrain ; la barre compacte réduit encore l'emprise (38 % → ~28 % en portrait).</li>
+  <li><b>Pure UI</b> : HTML/CSS uniquement, aucun changement moteur ni data : digest inchangé attendu.</li>
+  <li><b>Cibles tactiles ≥ 44 px</b> (WCAG 2.5.5) ; sort indisponible = grisé, jamais masqué (contrainte visible, leçon TCG Pocket).</li>
+  <li><b>Feedback d'occlusion</b> : la confirmation de ciblage et les dégâts flottent au-dessus de l'unité, jamais sous le pouce ; le mini-log (3 lignes) reste juste au-dessus de la barre.</li>
+  <li><b>Ordre du tour</b> : les deux camps, ennemis inclus, actif surligné, sélecteur de vitesse persistant en haut-droite (plus de manipulation à chaque tour).</li>
+  <li><b>À trancher ensuite</b> : vitesses par contexte (§0 n°5, après test terrain de cette maquette).</li>
+</ul>
+
+<script>
+(function(){
+  var terrain = document.getElementById('terrainApres');
+  var log = document.getElementById('logApres');
+  var hint = document.getElementById('hintApres');
+  var cmd = document.getElementById('cmdApres');
+  var spell = null, fiche = null;
+  var units = terrain.querySelectorAll('.unit');
+
+  function clearFiche(){ if(fiche){ fiche.remove(); fiche = null; } }
+  function resetTargets(){
+    spell = null;
+    hint.style.display = 'none';
+    units.forEach(function(u){ u.classList.remove('targetable','dimmed'); });
+    cmd.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick'); });
+  }
+  function addLog(html){
+    var d = document.createElement('div'); d.innerHTML = html;
+    log.appendChild(d);
+    while(log.children.length > 3) log.removeChild(log.firstChild);
+  }
+
+  cmd.addEventListener('click', function(e){
+    var b = e.target.closest('button');
+    if(!b || b.classList.contains('off')) return;
+    resetTargets(); clearFiche();
+    if(b.dataset.attack){
+      spell = {name: b.textContent.replace(/\s+/g,' ').trim().split(' ').slice(0,2).join(' '), dmg: b.dataset.mp ? 24 : 16};
+      b.classList.add('pick');
+      units.forEach(function(u){
+        if(u.classList.contains('enemy')) u.classList.add('targetable');
+        else u.classList.add('dimmed');
+      });
+      hint.style.display = 'block';
+      addLog('<b>Assassin</b> prépare ' + spell.name);
+    }
+  });
+
+  terrain.addEventListener('click', function(e){
+    var u = e.target.closest('.unit');
+    if(!u){ clearFiche(); return; }
+    if(spell && u.classList.contains('enemy')){
+      var dmg = document.createElement('div');
+      dmg.className = 'dmg-float';
+      dmg.textContent = '−' + spell.dmg;
+      u.appendChild(dmg);
+      setTimeout(function(){ dmg.remove(); }, 1700);
+      addLog('<b>Assassin</b> : ' + spell.name + ' → ' + u.dataset.name + ' : −' + spell.dmg);
+      resetTargets();
+      return;
+    }
+    // fiche flottante ancrée au-dessus de la barre, côté opposé au clic
+    clearFiche();
+    fiche = document.createElement('div');
+    fiche.className = 'fiche';
+    var rect = u.getBoundingClientRect();
+    var host = u.closest('.phone').getBoundingClientRect();
+    var left = (rect.left - host.left) > 195 ? (rect.left - host.left - 220) : (rect.left - host.left + 86);
+    fiche.style.left = Math.max(8, Math.min(left, 172)) + 'px';
+    fiche.style.bottom = '132px';
+    fiche.innerHTML = '<span class="close">✕</span><h4>' + u.dataset.name + '</h4>'
+      + '<table><tr><td>' + (u.dataset.fiche || '') + '</td></tr>'
+      + '<tr><td style="color:#8a8574">' + (u.classList.contains('enemy') ? 'camp ennemi' : 'camp allié') + ' · PV/MP ci-dessus, effets en badges</td></tr></table>';
+    document.getElementById('phApres').appendChild(fiche);
+    fiche.querySelector('.close').addEventListener('click', clearFiche);
+  });
+})();
+</script>
+</body>
+</html>

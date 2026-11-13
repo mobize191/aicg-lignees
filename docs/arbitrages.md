@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 19) : POSITIONNEMENT ÉCRAN DE COMBAT — TRANCHAGE B ACTÉ (« Plutôt une maquette »), MAQUETTE COMPARATIVE LIVRÉE
+
+- **Tranchage de Marc-Olivier (14/11, sur les options A/B de la suite 18)** : **B — d'abord une maquette**, puis le chantier couloir 1.
+- **Maquette livrée** : `docs/design/maquettes/ecran-combat-v2.html` (autonome, zéro dépendance) : **AVANT vs APRÈS en portrait 390×844** + **paysage 844×390**, les 5 écarts numérotés (rail médian, vitesse dans la fenêtre, fenêtre 38 %, terrain réduit, feedback sous le pouce) vs positionnement cible (ordre du tour en haut, vitesse/pause haut-droite persistants, barre compacte ≤ 30 % avec cibles ≥ 44 px, stats sur les unités, fiche flottante à la demande).
+- **Interactive** (pour valider le ressenti) : clic sur une unité → fiche flottante ancrée au-dessus de la barre ; clic sur un sort d'attaque → cibles ennemies illuminées + zones invalides grisées (contrainte visible, leçon TCG Pocket) ; clic sur une cible → dégâts flottants AU-DESSUS de l'unité + ligne au mini-log (règle d'occlusion).
+- **Reste** : validation de la maquette par Marc-Olivier (aperçu dans le chat, fichier dans le repo), ajustements éventuels, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts pour ne pas croiser les branches).
+
 ## 2026-11-14 (suite 18) : RECHERCHE ÉCRAN DE COMBAT MOBILE — conventions du genre consignées (Hearthstone, TCG Pocket, Marvel Snap, LoR, Star Rail, Epic Seven), positionnement cible proposé, tranchage A/B demandé (§0 n°8)
 
 - **Déclencheur** : retour terrain de Marc-Olivier après la PR #12 (UX combat adaptatif livrée) : « le travail sur le front est terminé mais je trouve cela encore mauvais… faire une recherche sur les jeux mobiles de combat en tour par tour et de cartes (MTG, Hearthstone, etc.) pour analyser l'écran de combat et voir comment bien positionner les différents éléments ».
@@ -265,11 +272,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 9 (spec vie-jeu Lot 3) LIVRÉE : HÉROS D'ERRANCE PAR CODE (v1.48)
 
-- **`src/errance-hero.js`** (chemin adapté à l'arborescence plate du dépôt ; la spec disait `errance/hero.js`) : `drawHero(ctx, x, y, opts)` peint et anime le héros PAR CODE — femme cape noire cheveux blancs : tête ellipse peau en dégradé, mèches blanches en courbes (retard de phase), cape noire polygone souple qui ondule à l'opposé du mouvement, bras/jambes capsules arrondies, ombre elliptique au sol. Cycle de marche sin(phase) + bob, idle respiration ; 4 directions (dos = chevelure blanche couvrante). **Aucune image, aucun rectangle** (testé : zero fillRect). Remplace le dessin inline rectangle de `src/ui.js` ; branché dans la boucle de rendu errance.
-- Tests : 3 headless (`tests/hero-errance-v148.test.js`) : 4 directions × marche/idle tracés sans erreur, animation temporelle effective, silhouette ≤ 36×50 px + ombre au sol. 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (présentation errance).
-- QA visuelle (captures marche/virage/idle sur Marées) à faire via le protocole IHM — captures non produites dans ce run headless.
-- Tenue sous la cape [À TRANCHER] : défaut proposé = cuir sombre + liseré doré (non peint en dur, la cape couvre).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 8 (spec vie-jeu Lot 2) LIVRÉE : FEEDBACK 3 TIERS + HIT-STOP (v1.47)
-
-- **Routeur unique `feedback(tier, anchor)`** (`src/ui.js`) : small = tick SFX (WebAudio, sans asset) ; medium = flash léger + shake ~0,3 + pop overshoot (ease-out back) sur les floatText ; large (crit, K.O., boss, drops UR) = flash + shake ~0,7 + zoom léger + **hit-stop 80-100 ms**. Branché dans l'animateur de combat (attaque medium/large si crit, K.O. large, soin medium) et l'errance (autel medium).
