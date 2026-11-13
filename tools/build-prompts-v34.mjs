@@ -153,8 +153,34 @@ for (const p of base) {
   addSeed(p.id + '-o.jpg', obscuresSeed);
 }
 
-// Nouvelles cartes gel v18 (si présentes dans data) — seeds à partir de 2150037
-// (actuellement absentes de data/cards.json et data/monsters.json, aucune génération)
+// --- Merge gel v1 (tools/prompts-gel-v1.json : 54 cartes × 3 thèmes, spec gelée suite 39) ---
+// Les cartes gel remplacent les entrées existantes (p1, p5, p6, n14, z8 = re-arts) et ajoutent les nouvelles (d19-d40, p7-p8, a50-a53, s15-s18, k33-k40, g33-g39, e31-e32)
+let gelPrompts = [];
+try {
+  gelPrompts = read('tools/prompts-gel-v1.json');
+  if (!Array.isArray(gelPrompts)) gelPrompts = gelPrompts.prompts || [];
+} catch (e) {
+  console.log('NOTE: tools/prompts-gel-v1.json absent, gel non mergé');
+}
+if (gelPrompts.length) {
+  const gelIds = new Set(gelPrompts.map(p => p.id.replace(/-[ro]$/, '')));
+  // Retirer les anciennes entrées des cartes gel (seront remplacées)
+  for (let i = out.length - 1; i >= 0; i--) {
+    if (!out[i].bg && gelIds.has(out[i].id)) out.splice(i, 1);
+  }
+  // Ajouter les prompts gel (déjà en 3 thèmes avec seeds +5M/+10M)
+  // Normaliser : id sans suffixe, theme explicite (cohérence avec le reste du fichier)
+  for (const g of gelPrompts) {
+    const baseId = g.id.replace(/-[ro]$/, '');
+    const normalized = { ...g, id: baseId };
+    out.push(normalized);
+    if (g.seed != null) seedRows.push(g.file + ',' + g.seed);
+    if (g.theme === 'classique') countClassique++;
+    else if (g.theme === 'repos') countRepos++;
+    else if (g.theme === 'obscures') countObscures++;
+  }
+  console.log('Gel v1 mergé :', gelPrompts.length, 'prompts (', gelIds.size, 'cartes)');
+}
 
 // --- Fix gorgon: négatif jellyfish obligatoire (spec §1.3), plafonné à 20 tags ---
 for (const p of out) {

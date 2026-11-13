@@ -7,11 +7,12 @@
 
 | Catégorie | Nombre |
 |---|---|
-| Classique (repris v3.3) | 302 |
-| Repos (`-r`, seed +5 000 000) | 302 |
-| Obscures (`-o`, seed +10 000 000) | 302 |
+| Classique (302 v3.3 + 54 gel v1) | 356 |
+| Repos (`-r`, seed +5 000 000) | 356 |
+| Obscures (`-o`, seed +10 000 000) | 356 |
 | Fonds (repris tels quels) | 6 |
-| **Total prompts** | **912** |
+| **Total prompts** | **1 059** |
+| **Cartes uniques** | **351** |
 
 ## Species-map v3.4
 
@@ -34,9 +35,9 @@
 | LoRAs branchés | 75 (3 LoRAs autorisés uniquement) |
 | Thème Crépuscule | hors périmètre (0 détecté) |
 
-## Note prérequis data
+## Note prérequis data — RÉSOLU (suite 39, gel v1 déclaré)
 
-**Le gel v18 (cartes d19-d40, nouveaux p-series, hydra/merSovereign) est ABSENT de `data/cards.json` et `data/monsters.json`** au moment du build. p2 (Ange Gardien) et p4 (Fidèle du Jour) sont encore présents. Le build couvre les 302 cartes existantes × 3 thèmes. Les nouvelles cartes du gel devront être ajoutées aux data par Marc-Olivier, puis le builder relancé pour générer leurs prompts (seeds à partir de 2 150 037).
+Le gel v1 est récupéré depuis `tools/prompts-gel-v1.json` (54 cartes × 3 thèmes, spec gelée suite 39) : d19-d40 (camp démon 18 + anges déchus 4 + anges 2), a50-a53 (paladins), s15-s18 (chevaliers), k33-k40 (gorgones), g33-g39 (fées), e31-e32 (boss Marées), re-arts p1/p5/p6/n14/z8. **Total : 351 cartes uniques × 3 thèmes = 1 053 prompts personnages + 6 fonds.** p2 absent des prompts (retiré), p4 encore présent dans data mais hors périmètre arts.
 
 ## Fichiers générés
 
@@ -47,7 +48,7 @@
 
 ## Durée estimée génération
 
-~912 images × ~45 s/image ≈ **11,5 heures** de génération ComfyUI (hors retries)
+~1 053 images × ~45 s/image ≈ **13,2 heures** de génération ComfyUI (hors retries)
 
 ---
 
