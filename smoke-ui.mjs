@@ -259,7 +259,8 @@ async function main() {
         check('52 d invocation en PREMIÈRE LIGNE', false, `u52=${!!u52} am=${!!am52} prompt=${api._prompt() ? api._prompt().unit?.cardId : '?'}`);
       }
       check('52 e ciblage : pulse cibles valides + zones invalides grisées (CSS targeting)', html.includes('body.in-combat.targeting .unit:not(.targeted):not(.ko)') && html.includes('@keyframes targetpulse'), '');
-      check('52 f barre compacte 30dvh + boutons 44px + off grisé avec raison', html.includes('max-height: 30dvh') && html.includes('min-height: 44px') && html.includes('.off-reason'), '');
+      // correctifs v3 lot 2 (tranchage 15/11, terrain stable) : la zone de commandement a une hauteur FIXE min(30dvh,320px), le max-height:30dvh propre de la barre est parti
+      check('52 f zone de commandement permanente bornée à 30dvh + boutons 44px + off grisé avec raison', html.includes('height: min(30dvh, 320px)') && html.includes('min-height: 44px') && html.includes('.off-reason'), '');
     }
     check('52 z 0 exception repositionnement', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
@@ -306,7 +307,27 @@ async function main() {
     check('54 a grand format constant : unité clamp(104px,30vw,132px), boss ~1,4x clamp(146px,42vw,185px)', html.includes('body.in-combat .unit { width: clamp(104px, 30vw, 132px); }') && html.includes('body.in-combat .unit.boss { width: clamp(146px, 42vw, 185px); }'), '');
     check('54 b camps face à face au CENTRE : #board en safe center, ancrage bas v2 parti', html.includes('body.in-combat #board { justify-content: safe center; }') && html.includes('body.in-combat #team-zone { margin: 8px 0 0; }') && !html.includes('margin: auto 0 0'), '');
     check('54 c paysage téléphone : taille bornée par la hauteur (19dvh / 27dvh)', html.includes('body.in-combat .unit { width: clamp(76px, 19dvh, 120px); }') && html.includes('body.in-combat .unit.boss { width: clamp(106px, 27dvh, 168px); }'), '');
-    check('54 z 0 exception correctifs v3 lot 1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    check('54 d lot 2 terrain STABLE : plus aucun resize act-open .unit/.boss', !html.includes('act-open .unit { width') && !html.includes('act-open .unit.boss { width'), '');
+    check('54 e lot 2 : zone de commandement permanente hauteur fixe, plus de :empty display:none', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(30dvh, 320px); min-height: 128px; }') && !html.includes('#act-slot:empty'), '');
+    check('54 f lot 2 paysage : rail act en stretch sur la ligne 1fr (hauteur fixe)', html.includes('body.in-combat #act-slot { grid-area: act; align-self: stretch; height: auto; max-height: none;'), '');
+    // structure live : le mini-log vit DANS #act-slot, la fenêtre s'insère avant lui
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(200);
+    const st54 = api._state();
+    check('54 g lot 2 combat lancé pour vérif structure', !!st54, '');
+    if (st54) {
+      const slot = appEl.querySelector('#act-slot');
+      check('54 h lot 2 : #log DANS #act-slot (zone permanente)', !!slot && !!slot.querySelector('#log'), '');
+      api._speed(6);
+      els.get('fight').click();
+      let am54 = null;
+      for (let w = 0; w < 120 && !am54; w++) { await wait(25); am54 = api._actEl(); }
+      const slot2 = appEl.querySelector('#act-slot');
+      const kids = slot2 ? [...slot2.children].map((c) => c.className || c.id) : [];
+      check('54 i lot 2 : fenêtre .act-modal insérée AVANT #log dans la zone fixe', !!am54 && slot2 && kids[0] === 'act-modal' && kids[kids.length - 1] === 'log', `kids=${kids.join(',')}`);
+    }
+    check('54 z 0 exception correctifs v3 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
 
@@ -742,7 +763,8 @@ async function main() {
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
   check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
   // UX combat adaptatif 13/11 lot 1 : la fenêtre d'action est DANS le flux (#act-slot, borné 30dvh), jamais en surimpression ; les recouvrements 78dvh/56dvh sont partis
-  check('45 b invariant : barre de commandes dans le flux, fenêtre d’action dans le flux (#act-slot borné 30dvh), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel') && !html.includes('max-height: 38dvh'), '');
+  // correctifs v3 lot 2 : #act-slot a une hauteur FIXE permanente (min(30dvh,320px)), la fenêtre reste dans le flux, aucun recouvrement
+  check('45 b invariant : zone de commandement permanente dans le flux (#act-slot hauteur fixe min(30dvh,320px)), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(30dvh, 320px); min-height: 128px; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel') && !html.includes('max-height: 38dvh'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
   // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
     // correctifs v3 lot 1 (tranchage 15/11) : grand format constant 104-132px / boss 146-185px, les anciens clamps sont remplacés

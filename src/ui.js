@@ -4193,7 +4193,7 @@ function renderActModal(u, zoneHtml) {
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
   const actSlot = combatApp ? combatApp.querySelector('#act-slot') : null;
-  (actSlot ?? document.body).appendChild(actBox); // UX 13/11 lot 1 : la fenêtre vit DANS #act-slot, le terrain reste visible
+  const slot = actSlot ?? document.body; slot.insertBefore(actBox, slot.querySelector('#log') ?? null); // UX 13/11 lot 1 + correctifs v3 lot 2 : fenêtre DANS #act-slot, AVANT le mini-log (zone permanente)
   document.body.classList.add('act-open');
   const redBtn = actBox.querySelector('.act-reduce');
   if (redBtn) redBtn.onclick = () => {
@@ -5845,9 +5845,8 @@ function renderCombat(root, opts = {}) {
     <div class="team-zone" id="team-zone"></div>
     <div class="reserve-zone" id="reserve-zone"></div>
     </div>
-    <div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div>
     </div>
-    <div id="act-slot"></div>
+    <div id="act-slot"><div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div></div> <!-- correctifs v3 lot 2 : le mini-log vit DANS la zone de commandement permanente -->
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
   combatApp.style.background = d.art

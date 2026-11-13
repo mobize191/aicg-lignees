@@ -119,7 +119,7 @@ export function makeEl(tag = 'div') {
       }
     },
     appendChild(c) { c.parentNode?.removeChild?.(c); c.parentNode = this; this.children.push(c); return c; },
-    insertBefore(c) { return this.appendChild(c); },
+    insertBefore(c, ref) { c.parentNode?.removeChild?.(c); c.parentNode = this; const k = ref ? this.children.indexOf(ref) : -1; if (k >= 0) this.children.splice(k, 0, c); else this.children.push(c); return c; }, // conforme au DOM réel (référence honorée)
     removeChild(c) { const k = this.children.indexOf(c); if (k >= 0) this.children.splice(k, 1); return c; },
     remove() { this.parentNode?.removeChild?.(this); },
     setAttribute(n, v) {
