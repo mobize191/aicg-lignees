@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 22) : MAQUETTE ÉCRAN DE COMBAT v2.3 — invocations déplacées en PREMIÈRE LIGNE (retour de Marc-Olivier)
+
+- **Demande de Marc-Olivier (14/11, sur la v2.2)** : « Fais des petits carrés pour les invocations et mets-les devant, en première ligne, ça évitera de tout décaler ou de mettre par-dessus ».
+- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.3)** : les petits carrés d'invocation ne sont plus rattachés sous l'icône du lanceur ; ils vivent dans une **RANGÉE DÉDIÉE « première ligne » devant chaque camp** (vers le centre du terrain) : **rien à décaler, rien par-dessus les unités**. Chaque camp a sa rangée : « ▲ ligne avant » alliée (au-dessus des alliés) et « ▼ avant ennemi » (sous les ennemis), de part et d'autre de la ligne de sol.
+- **Cohérence avec le tranchage 7-b** : « un esprit rejoint l'avant » — la première ligne est la position canonique des invocations dans le moteur.
+- **Exemples dans le module boss** : Lame Ardente du Roi en avant ennemi (⏳ 4, bordure rouge pointillée) ; côté allié, Lanterne Sacrée du Prêtre visible et Esprit de l'Ombre de l'Assassin qui apparaît dans la ligne avant au clic sur le bouton de la barre (+ chip pointillé 👁 dans le rail d'ordre). Les carrés restent cliquables (fiche, PV mini, badge ⏳) ; géométrie vérifiée : aucune rangée ne se touche (ennemis < avant ennemi < ligne de sol < ligne avant < alliés).
+- **Reste** : validation de la v2.3 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
+
 ## 2026-11-14 (suite 21) : MAQUETTE ÉCRAN DE COMBAT v2.2 — chevauchements du module boss corrigés + invocations en petits carrés (retours de Marc-Olivier)
 
 - **Demandes de Marc-Olivier (14/11, sur la v2.1)** : (1) « attention avec le boss, tu as des icônes qui se chevauchent » ; (2) « un exemple avec des invocations, c'est-à-dire qu'on ajoute des petits carrés en plus ».
@@ -243,19 +251,3 @@
 ## 2026-11-13 : ARBITRÉ — vague 3.3 : relance complète base 3.1 + couche monstres, 3 LoRAs seulement, « enlève juste le sang »
 
 - **Verdict comparatif 3.1 vs 3.2 (Marc-Olivier, 13/11)** : la 3.1 a de meilleurs résultats GLOBAUX, sauf la génération de monstres (meilleure en 3.2). Diagnostic probable du rendu 3.2 : le positif R12 (« fully clothed, modest attire ») a uniformisé les costumes et le cumul négatif R12+R13 a explosé le canon « négatif court ~20 tags » (flou global).
-- **V3.3 ACTÉE** : (1) relance COMPLETE des 271 depuis les prompts v3.1, mêmes seeds ; (2) couche monstres 3.2 conservée : descriptions R11 + **3 LoRAs uniquement** — Leviathan XL, Golems, Forest Guardians (arbitrage : « les 3 que j'ai trouvés les meilleurs ») ; les autres LoRAs (goblin, wow-undead, banshee, cordyceps, creepy wolf, mermaid) sont ABANDONNÉS, leurs espèces passent en description R11 seule ; (3) tenues : PAS de R12 en 3.3 (ni positif ni négatif revealing) — arbitrage explicite « enlève juste le sang » ; (4) R13 anti-sang conservé (4 tags, budget négatif court à respecter) ; (5) durcissement prompt sirène (queue, anti-pieds) sans LoRA ; (6) crop signatures 4 % conservé.
-- Spéc : `docs/images/spec-arts-v33.md`. Rapport attendu : `tools/out-v2/RAPPORT-vague3-3.md` + remplissage du manifeste assets (civitaiId/version/seed/poids des 3 LoRAs).
-
-
-**Par étape** (un commit FR chacune, preuves : build + `node --test tests/*.test.js` + smoke + digests) :
-
-| Étape | Lot | Commit | Tests | Digest |
-|---|---|---|---|---|
-| 1 | v1.40 errance | `c03210a` | 214 verts (1 préexistant date) | inchangé `c62fcbd1…`/`5059e683…` |
-| 2 | A : formation 3+2 | `207044a` | 220 | MESURÉ `5bdb0c6d…` 822/3000, `1122225c…` 2787/10000 |
-| 3 | B : oppositions au sort + Nature | `5796663` | 225 | MESURÉ `daef2bca…` 835/3000, `883c1c18…` 2797/10000 |
-| 4 | Lot 1 : crits d'agilité | `60c6f7e` | 230 | MESURÉ `9faff1b9…` 838/3000, `6103e7b0…` 2795/10000 |
-| 5 | C : points de repos | `348d0de` | 234 | inchangé `9faff1b9…`/`6103e7b0…` |
-| 6 | D : capture + jetons | `aa513ea` | 240 | inchangé |
-| 7 | Lot 0 : manifeste assets | `67000b3` | 242 | inchangé |
-| 8 | Lot 2 : feedback 3 tiers + hit-stop | `82adef5` | 246 | inchangé |

@@ -54,8 +54,9 @@
     box-shadow:0 0 18px #c23a3a66;}
   .unit.boss .nm{font-size:12px; color:#ffb0b0; font-weight:700;}
   .unit.boss .n{font-size:10px;}
-  /* invocations : petits carrés rattachés au lanceur */
-  .unit .minis{display:flex; gap:3px; justify-content:center; margin-top:3px;}
+  /* invocations : petits carrés en première ligne (rangée dédiée devant chaque camp) */
+  .front{position:absolute; left:0; right:0; display:flex; justify-content:center; align-items:flex-start; gap:8px; z-index:6;}
+  .front .lbl{font-size:8.5px; color:#6a6455; align-self:center; white-space:nowrap;}
   .sq{width:40px; cursor:pointer;}
   .sq .art{width:40px; height:40px; border-radius:8px; border:2px dashed #9a6ad8; font-size:20px;
     background:#140f1e; display:flex; align-items:center; justify-content:center;}
@@ -165,7 +166,7 @@
 </head>
 <body>
 <h1>Écran de combat : maquette comparative (v2, positionnement cible)</h1>
-<p class="intro">Demande de Marc-Olivier du 14/11 : le front UX (PR #12) est livré mais le rendu reste mauvais ; tranchage B acté : maquette d'abord, chantier ensuite. Référence : <b>docs/design/recherche-ecran-combat-2026-11-14.md</b>. Les maquettes APRÈS sont interactives : clique une unité (fiche flottante), puis un sort d'attaque, puis une cible (illumination + confirmation au-dessus du point de contact + mini-log). Ajouts v2.1 : chiffres PV/PVmax, MP et bouclier sur les unités ; icônes agrandies (74 px, boss 118 px). Ajouts v2.2 : module boss sans chevauchement (sbires écartés du boss) ; invocations = petits carrés (40 px) rattachés au lanceur sous son icône, cliquables (fiche, PV mini, badge ⏳ ttl) ; chip pointillé 👁 dans le rail d'ordre.</p>
+<p class="intro">Demande de Marc-Olivier du 14/11 : le front UX (PR #12) est livré mais le rendu reste mauvais ; tranchage B acté : maquette d'abord, chantier ensuite. Référence : <b>docs/design/recherche-ecran-combat-2026-11-14.md</b>. Les maquettes APRÈS sont interactives : clique une unité (fiche flottante), puis un sort d'attaque, puis une cible (illumination + confirmation au-dessus du point de contact + mini-log). Ajouts v2.1 : chiffres PV/PVmax, MP et bouclier sur les unités ; icônes agrandies (74 px, boss 118 px). Ajouts v2.2 : module boss sans chevauchement (sbires écartés du boss) ; invocations = petits carrés (40 px) en PREMIÈRE LIGNE, rangée dédiée devant chaque camp (rien à décaler, rien par-dessus), cliquables (fiche, PV mini, badge ⏳ ttl) ; chip pointillé 👁 dans le rail d'ordre.</p>
 <div class="legend">
   <span><b class="zoneA">Pastilles rouges</b> : écarts du positionnement actuel</span>
   <span><b class="zoneV">Pastilles vertes</b> : positionnement cible justifié par le genre</span>
@@ -286,11 +287,11 @@
   </div>
 </div>
 
-<h2>Portrait : combat de BOSS (icône XL) + invocations en petits carrés</h2>
+<h2>Portrait : combat de BOSS (icône XL) + invocations en première ligne (petits carrés)</h2>
 <div class="row">
   <div class="frame">
     <h3 class="zoneV">APRÈS : boss + invocations (interactive)</h3>
-    <div class="sub">aucun chevauchement : sbires écartés du boss · chaque lanceur porte ses invocations (petits carrés cliquables sous son icône, PV mini + ⏳) · clique « Esprit de l'Ombre » pour invoquer</div>
+    <div class="sub">aucun chevauchement : sbires écartés du boss · les invocations vivent en PREMIÈRE LIGNE (rangée dédiée devant chaque camp : rien à décaler, rien par-dessus) · clique « Esprit de l'Ombre » pour invoquer</div>
     <div class="phone-wrap"><div class="phone">
       <div class="apres-top">
         <div class="left">
@@ -310,18 +311,21 @@
       </div>
       <div class="terrain apres-terrain" data-terrain="2">
         <div class="ground-line"></div>
-        <div class="unit enemy" data-name="Aiguillon du Désir" data-fiche="Rare · Démon · Charme" style="top:104px; left:8px;"><div class="art">😈</div><div class="nm">Aiguillon du Désir</div><div class="bars"><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">95/95</span></div></div></div>
-        <div class="unit enemy boss" data-name="Roi des Démons" data-fiche="Boss · Prince des Démons · Feu · ATQ 58 · courroux ×3" style="top:22px; left:120px;"><div class="art">👑</div><div class="nm">Roi des Démons</div><div class="bars"><div class="sh"><i style="width:10%"></i></div><div class="bar"><div class="hp"><i style="width:71%"></i></div><span class="n">850/1200</span></div><div class="bar"><div class="mp"><i style="width:75%"></i></div><span class="n m">300/400</span></div></div><div class="fx"><s>🛡 120</s><s>🔥 courroux ×3</s></div>
-          <div class="minis"><div class="sq enemy" data-name="Lame Ardente" data-fiche="Invocation du Roi des Démons · stats dérivées · expire dans 4 tours · un actif max par lanceur"><div class="art">🗡</div><div class="hp"><i style="width:80%"></i></div><div class="ttl">⏳ 4</div></div></div>
+        <div class="front" style="top:252px;">
+          <div class="lbl">▼ avant ennemi</div>
+          <div class="sq enemy" data-name="Lame Ardente" data-fiche="Invocation du Roi des Démons · stats dérivées · expire dans 4 tours · un actif max par lanceur"><div class="art">🗡</div><div class="hp"><i style="width:80%"></i></div><div class="ttl">⏳ 4</div></div>
         </div>
+        <div class="front" style="bottom:196px;">
+          <div class="lbl">▲ ligne avant</div>
+          <div class="sq" data-name="Lanterne Sacrée" data-fiche="Invocation du Prêtre de l'Aube · expire au prochain tour · un actif max par lanceur (7-b)"><div class="art">🏮</div><div class="hp"><i style="width:100%"></i></div><div class="ttl">⏳ 1</div></div>
+          <div class="sq hidden" data-name="Esprit de l'Ombre" data-fiche="Invocation de l'Assassin · stats dérivées du lanceur · expire dans 2 tours · un actif max par lanceur (7-b)"><div class="art">👁</div><div class="hp"><i style="width:67%"></i></div><div class="ttl">⏳ 2</div></div>
+        </div>
+        <div class="unit enemy" data-name="Aiguillon du Désir" data-fiche="Rare · Démon · Charme" style="top:104px; left:8px;"><div class="art">😈</div><div class="nm">Aiguillon du Désir</div><div class="bars"><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">95/95</span></div></div></div>
+        <div class="unit enemy boss" data-name="Roi des Démons" data-fiche="Boss · Prince des Démons · Feu · ATQ 58 · courroux ×3" style="top:22px; left:120px;"><div class="art">👑</div><div class="nm">Roi des Démons</div><div class="bars"><div class="sh"><i style="width:10%"></i></div><div class="bar"><div class="hp"><i style="width:71%"></i></div><span class="n">850/1200</span></div><div class="bar"><div class="mp"><i style="width:75%"></i></div><span class="n m">300/400</span></div></div><div class="fx"><s>🛡 120</s><s>🔥 courroux ×3</s></div></div>
         <div class="unit enemy" data-name="Brute des Fosses" data-fiche="Rare · Démon · Tank" style="top:104px; left:286px;"><div class="art">👹</div><div class="nm">Brute des Fosses</div><div class="bars"><div class="bar"><div class="hp"><i style="width:88%"></i></div><span class="n">140/160</span></div></div></div>
         <div class="unit ally" data-name="Chevalière Isaure" data-fiche="Super Rare · Guerrier · Aube · bouclier 32 · rempart" style="bottom:36px; left:8px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="sh"><i style="width:23%"></i></div><div class="bar"><div class="hp"><i style="width:64%"></i></div><span class="n">90/140</span></div><div class="bar"><div class="mp"><i style="width:33%"></i></div><span class="n m">10/30</span></div></div><div class="fx"><s>🛡 32</s><s>🪨 rempart</s></div></div>
-        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31" style="bottom:30px; left:116px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div>
-          <div class="minis"><div class="sq hidden" data-name="Esprit de l'Ombre" data-fiche="Invocation de l'Assassin · stats dérivées du lanceur · expire dans 2 tours · un actif max par lanceur (7-b)"><div class="art">👁</div><div class="hp"><i style="width:67%"></i></div><div class="ttl">⏳ 2</div></div></div>
-        </div>
-        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:36px; left:244px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div><div class="bar"><div class="mp"><i style="width:11%"></i></div><span class="n m">5/45</span></div></div>
-          <div class="minis"><div class="sq" data-name="Lanterne Sacrée" data-fiche="Invocation du Prêtre de l'Aube · expire au prochain tour · un actif max par lanceur (7-b)"><div class="art">🏮</div><div class="hp"><i style="width:100%"></i></div><div class="ttl">⏳ 1</div></div></div>
-        </div>
+        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31" style="bottom:30px; left:116px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div></div>
+        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:36px; left:244px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div><div class="bar"><div class="mp"><i style="width:11%"></i></div><span class="n m">5/45</span></div></div></div>
       </div>
       <div class="minilog apres-log" data-log="2">
         <div><b>Roi des Démons</b> : Écrasement → −34 Chevalière Isaure (🛡 absorbe 32)</div>
@@ -343,7 +347,7 @@
       </div>
       <div class="pin good" style="top:8px; left:8px;">1·2</div>
       <div class="pin good label" style="top:60px; left:8px;">boss : icône XL, sbires écartés</div>
-      <div class="pin good label" style="bottom:200px; left:8px;">invocations : petits carrés cliquables</div>
+      <div class="pin good label" style="bottom:200px; left:8px;">invocations : première ligne, petits carrés cliquables</div>
       <div class="pin good" style="bottom:96px; left:8px;">3</div>
     </div></div>
   </div>
@@ -399,7 +403,7 @@
   <li><b>Invariant conservé</b> : la fenêtre ne recouvre jamais le terrain ; la barre compacte réduit encore l'emprise (38 % → ~28 % en portrait).</li>
   <li><b>Chiffres sur les unités</b> : PV/PVmax et MP/MPmax en clair à côté des barres (lisible sans fiche) ; bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré (le bouclier s'affiche avant les PV dans l'ordre de lecture).</li>
   <li><b>Tailles d'icônes</b> : unités 74 px, boss 118 px + nom en gras + chip élargi (👑 36 px) dans le rail d'ordre ; dans le module boss, sbires écartés du boss : aucun chevauchement.</li>
-  <li><b>Invocations = petits carrés (tranchage 7-b)</b> : carré 40 px à bordure pointillée, rattaché au lanceur SOUS son icône ; cliquable → fiche de l'invocation (stats dérivées, ttl) ; PV mini + badge ⏳ tours restants sur le carré ; un actif max par lanceur ; le bouton d'invocation vit dans la barre de commandes, et le chip pointillé 👁 rejoint le rail d'ordre du tour.</li>
+  <li><b>Invocations = petits carrés en première ligne (tranchage 7-b)</b> : carré 40 px à bordure pointillée, placé dans une RANGÉE DÉDIÉE devant le camp (l'« avant » de la formation, vers le centre du terrain) : rien à décaler, rien par-dessus les unités ; cliquable → fiche de l'invocation (stats dérivées, ttl) ; PV mini + badge ⏳ tours restants sur le carré ; un actif max par lanceur ; le bouton d'invocation vit dans la barre de commandes, et le chip pointillé 👁 rejoint le rail d'ordre du tour.</li>
   <li><b>Pure UI</b> : HTML/CSS uniquement, aucun changement moteur ni data : digest inchangé attendu (les invocations elles-mêmes relèvent du chantier sorts en cours).</li>
   <li><b>Cibles tactiles ≥ 44 px</b> (WCAG 2.5.5) ; sort indisponible = grisé, jamais masqué (contrainte visible, leçon TCG Pocket).</li>
   <li><b>Feedback d'occlusion</b> : la confirmation de ciblage et les dégâts flottent au-dessus de l'unité, jamais sous le pouce ; le mini-log (3 lignes) reste juste au-dessus de la barre.</li>
@@ -439,7 +443,7 @@
         if(s){ s.classList.remove('hidden'); }
         var chip = phone.querySelector('.turnchip.summon');
         if(chip){ chip.style.display = ''; }
-        addLog('<b>Assassin</b> invoque l\'Esprit de l\'Ombre : petit carré sous son icône (2 tours)');
+        addLog('<b>Assassin</b> invoque l\'Esprit de l\'Ombre : petit carré en première ligne (2 tours)');
         return;
       }
       if(b.dataset.attack){
