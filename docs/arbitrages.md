@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 18) : TEST DES THÈMES D'ALT-ART — « Lignées au Repos » vs « Lignées au Crépuscule »
+
+- **CHOISI par Marc-Olivier pour test comparatif** : thème A « Lignées au Repos » (scène de vie hors combat, canon Pokémon illustration rare) et thème B « Lignées au Crépuscule » (heure inversée du biome, canon MTG showcase). Le thème « Lignées en Rite » reste en réserve.
+- **Protocole témoin poussé** : `docs/images/test-themes-exception.md` — 12 cartes témoins (e1, e13, e17 Zikka, g21 Vesna, g8, k16, k2, z6, f21, n14, un compagnon, la Gorgonne), ~24 images, ~10-15 min ComfyUI, seeds +5 000 000, critères de verdict en 5 points (lisibilité sans légende, identité des nommées, espèce lisible, style sans dérive, viabilité sur non-humanoïdes).
+- Témoins visuels Mistral générés côté Vibe (gobelin Repos/Crépuscule, Vesna Repos/Crépuscule, liche Repos/Crépuscule) — aperçus de direction, pas de la DA WAI.
+- Le choix du thème gagnant (ou thème A en 3.4 + thème B en « 3.4 bis » du grand tableau) revient à Marc-Olivier après lecture des témoins.
+
+
 ## 2026-11-15 (suite 28) : « REMETS TOUS LES SCHÉMAS » — les 5 webs de biomes RESTAURÉS dans le v18 (10.11-10.15) ; web des Flots : QUESTION Léviathan en M, Pontos à retirer (trop humanoïde), les 2 boss du Donjon des Marées à créer (Hydre, Souverain) ; voie du zèle CONFIRMÉE au palier R (10.2 corrigé) ; enquête round 2 : Maïa et les Nécromanciens localisés, rien n'est perdu — digest INCHANGÉ (commit docs seul)
 
 - **Leçon de méthode CONSIGNÉE (Marc-Olivier, mot pour mot)** : « les schémas, c'est vraiment ça qui me permet de voir où on est, ce qui se passe, ce qu'il faut valider » — les DIAGRAMMES sont son outil de repérage premier, AVANT les textes et les tableaux. Règle : toute évolution du design se reporte TOUJOURS sur les diagrammes du v18 §10 ; aucun schéma d'une version ne reste au fond de l'historique de la suivante.
@@ -241,26 +249,3 @@
 
 - **Correctif** : `targetUtilityScore` / `pickTargetByUtility` / `enemyPickTarget` (`src/engine/combat.js`) scoraient avec l'élément de la **carte** ; elles recoivent désormais l'élément **effectif du coup** (`atkElementOf` : école du sort joué, frappe simple = élément de la carte), transmis depuis `strikeFoe` et `actEnemyStriker`. Les dégâts étaient déjà école-du-sort depuis l'étape 3 ; seul le choix de cible était faussé. Aucun changement des maths de combat, pas de recalibrage.
 - **Tests headless semés** (3 nouveaux, `tests/combat.test.js`) : sort d'école Eau (ruse) lancé depuis une carte Feu cible la cible **Feu** (vulnérable à l'Eau), pas la Nature (vulnérable à la carte) ; idem côté `enemyPickTarget` ; frappe simple = élément de la carte (Eau vs cible Feu préférée).
-- **MESURE** : build OK, **255 tests verts**, smoke **412 checks TOUT PASSE**, digests **MESURÉS `63d6edb4…` 833/3000 et `25e5316b…` 2787/10000** (0 exception, 0 marathon) vs baseline PROPOSÉE `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000 → écart **−5/3000 (−0,17 pt) et −8/10000 (−0,08 pt)**, dans la tolérance. **Aucune baseline appliquée** (verrouillage toujours en attente de Marc-Olivier), **pas de recalibrage**.
-
-## 2026-11-13 : LOT 1 LIVRÉ — smoke robuste (script de test uniquement, jeu inchangé) — prompt `docs/prompt-correctifs-smoke-ia.md`
-
-- **B9 c crash selon la date** : `list.find(x => x.type === 'tuer')` plantait quand la petite quête du jour n'est pas « tuer ». Corrigé : la section progresse la **première quête non faite, quel que soit son type**, et vérifie **sa** récompense. Garde-fou ajouté (B9 h) : **7 dates simulées** (même seed FNV-1a que `seedOfDay`, même tirage que `quetesDuJour`) sans crash.
-- **Échecs préexistants traités, chacun justifié en commentaire** : « 43 B » attendu à jour (depuis v1.41 : 3 actifs + 2 réserve, seules les 3 actives sur le plateau) ; « B1 c » aligné sur le comportement réel (prix 50 or débité + récompense de la quête « acheter » du jour si elle tombe dessus — le jeu n'est pas en faute) ; « B11 l » aligné sur l'économie v2 (recrutement Guilde en **jetons**, jamais en or) ; « B29 h » rendu robuste au fuseau (même construction de date locale que `todayKey()`) ; « 45 e » passé en assertions sémantiques (pointer-events none, pas de fond sur `.special-overlay`) au lieu d'une chaîne CSS exacte. Bonus : `chr(233)` non défini dans le script (crash B15 h) → littéral « réserve ».
-- **Preuve** : build OK, 252 tests verts, smoke **412 checks TOUT PASSE sans crash**, digests **inchangés `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000**.
-## 2026-11-13 (suite 6) : VARIANTES — MARQUEUR VISUEL = SURCOUCHE CSS (l'accent chromatique dans le prompt devient optionnel)
-
-- **TRANCHÉ par Marc-Olivier** : la reconnaissance immédiate d'une carte « Lignée d'Exception » passe par une **surcouche CSS** — reflet brillant dans l'esprit des cartes rares existantes mais « légèrement différent pour qu'on le distingue ». Spéc v3.4 mise à jour : classe `exception` = sweep doré croisé (60° vs 105° des rares) + halo discret permanent + liseré or ; l'accent chromatique alternatif dans le prompt n'est plus obligatoire (flavor libre, surtout nommées). Avantage consigné : le marqueur est garanti à 100 % sur toutes les cartes, indépendant de ce que le modèle image produit.
-
-
-## 2026-11-13 (suite 5) : VAGUE 3.4 TRANCHÉE — correctifs espèces + VARIANTES « Lignées d'Exception » (2 images par carte)
-
-- **Variantes ACTÉES dans la 3.4** (idée Marc-Olivier, type Pokémon chromatiques) : chaque carte obtient une 2e illustration. **Génération = légère variation de prompt sur la position, l'habit ou l'environnement** (pas un simple reseed, pas de prompt entièrement différent) ; espèce/genre/magie/biome inchangés ; accent chromatique alternatif par biome comme marqueur visuel. Nommées : même personnage (character_dna + IPAdapter conservés). Seeds variantes = classique + 5 000 000. Fichiers `<id>-v.jpg`, clé `"<id>-v"` au manifeste.
-- **Bonus en jeu = petit bonus statistique OU titre** [À TRANCHER avant codage : +5 % PV max vs titre seul « d'Exception » ; défaut balisé = titre seul (digest inchangé)]. Taux d'obtention 1/50 par défaut [À TRANCHER].
-- **Retrait confirmé de l'Ange Gardien (p2)** par Marc-Olivier (mise à jour des cartes en cours, oublis corrigés) : le builder 3.4 partira de `data/cards.json` mis à jour ; p2 sans art dans `assets-v33.json` = désormais cohérent.
-- **Switch 5 versions** (V3 → V3.4) en 3.4, + déploiement Pages avec `assets-v34.json` (le correctif de déploiement des manifestes 3.2/3.3, commit `af71eae`, a montré le point faible du workflow).
-- Spéc complète : `docs/images/spec-arts-v34.md`. Point d'arrêt après build conservé.
-
-
-## 2026-11-13 (suite 8) : FUSION — LA COUCHE RACE TRANCHÉE (cycle humain-catalyseur, 55 %) + DEMI-ANGE RETIRÉ + RÉGRESSIONS MORTES
-
