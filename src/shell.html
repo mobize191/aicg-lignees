@@ -263,6 +263,21 @@ font-size: .95rem; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
 animation: bop .6s ease infinite alternate;
 }
 @keyframes bop { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+/* correctifs v2 lot 1 : QUI joue lisible en 1 s — unité active surlignée SUR le terrain (deux camps, tours auto compris), badge ▶ AU-DESSUS de la vignette */
+.unit.acting { z-index: 6; }
+.unit.acting .card { animation: actingPulse 1.1s ease-in-out infinite; border-color: #ffd54f; }
+@keyframes actingPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 213, 79, .95), 0 0 14px rgba(255, 213, 79, .55); }
+  50% { box-shadow: 0 0 0 5px #ffe082, 0 0 30px rgba(255, 213, 79, .95); }
+}
+.unit.acting::after {
+  content: "\25B6"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 7;
+  color: #241303; background: linear-gradient(135deg, #ffe082, #ffd54f); border-radius: 999px;
+  font-size: .7rem; font-weight: 900; padding: 2px 7px; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .65), 0 0 12px rgba(255, 213, 79, .8);
+  animation: bop .6s ease infinite alternate;
+}
+.unit.sq.acting::after { top: -10px; font-size: .55rem; padding: 1px 5px; }
 
 .float {
 position: absolute; top: -4px; left: 50%; transform: translateX(-50%); z-index: 8;
@@ -276,6 +291,8 @@ animation: floatup 1.5s ease-out forwards;
 .float.shield { color: #40c4ff; }
 .float.block { color: #40c4ff; font-size: 1rem; }
 .float.cast { color: #b39dff; }
+/* correctifs v2 lot 1 : étiquette du nom de l'unité active, TOUJOURS au-dessus des dégâts flottants (jamais cumulée) */
+.float.who { top: -30px; font-size: .78rem; font-weight: 800; color: #241303; background: linear-gradient(135deg, #ffe082, #ffd54f); padding: 2px 9px; border-radius: 999px; text-shadow: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .6); }
 .float.fx-special { font-size: 1.5rem; color: #ffe082; text-shadow: 0 0 14px rgba(255, 213, 79, .95), 0 2px 6px rgba(0,0,0,.85); }
 .float.fx-crit { font-size: 1.7rem; color: #ffb300; text-shadow: 0 0 16px rgba(255, 179, 0, .95), 0 2px 6px rgba(0,0,0,.9); }
 /* Lot 2 : feedback 3 tiers */
@@ -879,6 +896,9 @@ body.in-combat .act-modal { max-height: 30dvh; }
 .act-art .art-img { width: 100%; height: 100%; object-fit: contain; }
 .act-art .glyph { font-size: 2.4rem; }
 .act-title { font-size: .92rem; line-height: 1.3; }
+/* correctifs v2 lot 1 : nom du combattant actif en gras +1 cran, « à vous d'agir » en badge or */
+.act-name { font-size: 1.05rem; font-weight: 900; }
+.acting-badge { background: linear-gradient(135deg, #ffe082, #ffd54f); color: #241303; border-color: transparent; font-weight: 900; }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
@@ -1061,8 +1081,9 @@ body.in-combat #speedbar { flex: 0 0 auto; display: flex; align-items: center; g
 .rail-chip.mine { border-color: rgba(77, 208, 225, .55); box-shadow: 0 0 8px rgba(77, 208, 225, .2); }
 .rail-chip.foe { color: #ffb3bd; }
 .rail-chip.ko { opacity: .35; filter: grayscale(.7); }
-.rail-chip.acting { border-color: #ffd54f; background: rgba(255, 213, 79, .13); box-shadow: 0 0 12px rgba(255, 213, 79, .55); }
-.rail-chip.acting::before { content: "\25B6"; color: #ffd54f; font-size: .55rem; }
+.rail-chip.acting { border-color: #ffd54f; background: rgba(255, 213, 79, .34); color: #ffe9b0; font-size: .84rem; box-shadow: 0 0 16px rgba(255, 213, 79, .8); }
+.rail-chip.acting::before { content: "\25B6"; color: #ffd54f; font-size: .82rem; }
+.rail-chip.acting .rc-nm { max-width: 160px; }
 /* repositionnement 14/11 lot 3 : barres + chiffres sur les pions (bouclier doré AU-DESSUS de la barre PV + badge) */
 body.in-combat .pied .bars { display: flex; flex-direction: column; gap: 1px; margin-bottom: 2px; }
 body.in-combat .pied .bsh { position: relative; height: 5px; background: rgba(216, 180, 90, .25); border-radius: 3px; }
