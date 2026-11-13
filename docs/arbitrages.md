@@ -1,16 +1,5 @@
 # Journal des arbitrages et décisions
 
-## 2026-11-13 (suite 17) : CANON TRANCHÉ — MTG pour mystiques/fongiques, D&D pour le divin
-
-- **TRANCHÉ par Marc-Olivier : MTG = canon de référence** (« un des très bons canons de jeu qui existe ») pour dryades, luciole/esprits, nymphes et créations fongiques ; **D&D** pour l'Astre Capiteux (solar = ange solaire AILÉ, ajout des ailes acté).
-- **Dryades** : canon MTG — femme-esprit d'arbre, peau d'écorce, cheveux de feuilles ; **bois de cerf RETIRÉS** (non-canon). **Nymphe croupie** : nymphe MTG (esprit féminin gracieux de l'eau) + corruption croupie conservée. **Adriel/luciole** : esprit de lumière MTG.
-- **Gorgone = Méduse MTG, PRÉCISION CRITIQUE** : une FEMME aux CHEVEUX DE SERPENTS — **pas la méduse-animale (jellyfish), qu'il est interdit de représenter**.
-- **Mycola + toutes les créations fongiques** : canon MTG fungus NON-HUMANOÏDE (le « mushroom girl » du prompt était une contradiction avec species-map ; Mycola régénérée en 3.4).
-- **f13 Seigneur des Cendres** : canon efreet HUMANOÏDE (fini le « beast-like ») ; régénéré en 3.4.
-- **Bug bosses + 2 cartes Marées** (hydre 3 têtes, souverain) : intégré à la spec 3.4, impact digest balisé.
-- **Annonce Marc-Olivier** : il ajoute les cartes manquantes en masse (la liste était très incomplète) ; ensuite préparation des prompts 3.4 (normales + spéciales), puis il construira un GRAND TABLEAU comparatif des versions 3 → 3.4 (+ 3.4 bis…) indiquant pour chaque version quelle image est la normale et laquelle est la spéciale → source de vérité pour le choix d'art par version.
-
-
 ## 2026-11-14 (suite 22) : RETOUR TERRAIN PC — combat trop petit sur grand écran, espace perdu → CORRIGÉ (pure UI, digest inchangé)
 
 - **Signalement Marc-Olivier (PC, écran large ~2551px)** : « tout petit, beaucoup d'espace perdu » (capture fournie). Cause : en paysage, #app remplissait la largeur mais les unités restaient cappées (120-160px) et les rangées centrées → grand vide autour.
@@ -25,6 +14,18 @@
 - **Reco pour le camp démon (gel v1)** : succube = femme démone humanoïde ailée (canon D&D/MTG), grammaire identique à n14 reclassé ; fées = petits humanoïdes ailés.
 - **Hydre des Marées** : espèce `hydra` canon = LE trait distinctif est les TÊTES MULTIPLES (3 par défaut [À TRANCHER]) sur des cous serpentins — sans ça c'est un sea serpent, pas une hydre.
 
+
+## 2026-11-14 (suite 26) : RELECTURE DE L'ARBRE PAR MARC-OLIVIER — Famine et Peste NOMMÉES, direction ESPÈCES du camp divin (Diablotin, Chérubin/Séraphin), question du ROI DÉMON, n15 l'aînée commune des trois familles (proposition accès Chœur), coloration confirmée, ENQUÊTE CARTES LIVRÉE (rien n'est perdu) — digest INCHANGÉ (commit docs seul)
+
+- **Noms TRANCHÉS** : la L de la trappe du Gouffre des Vices s'appelle **Famine** (ex-« La Faim », titre à caler) ; la L de la trappe du Fléau s'appelle **Peste, Mère des Fléaux** (ex-Pestis). Spec trappes, v18, audit mis à jour.
+- **Confirmation n14** : le Démon C perd bien le Chœur (suite 25 reconfirmée) ; choix 1 = Aiguillon du Désir (la voie des succubes) OU Brute des Fosses (la voie des monstres des gouffres).
+- **QUESTION OUVERTE (posée par Marc-Olivier, À TRANCHER)** : le sommet de la voie de la puissance — **un roi démon seul, ou une reine ET un roi** (le doublon de L est permis, précédent Jeanne/Siegfried ; Lilith reste la reine, le roi serait un nommé à créer).
+- **DIRECTION REÇUE : le camp divin travaille par ESPÈCES, pas par créatures uniques**. Côté ange : « pourquoi on ne travaille pas chérubin puis séraphin » — voie céleste relue (Jeune Séraphin → Séraphin Porteur de Lumière → p6, renommage « Séraphin Éblouissant » proposé à voir) ; piste d'une chaîne **Ange → Ange de Lumière → Archange**, sommet proposé « Luz, l'Archange » — **ATTENTION : Luz figure déjà dans la lignée déchue v2**. Côté démon : un **Diablotin** C « qui devient quelque chose d'autre ». Questions de structuration : Diablotin = renommage de n14 ou commune supplémentaire ; où s'attache la chaîne Ange → Archange. La structure §2.1 de la spec trappes se reprend.
+- **n15 Éveillé du Seuil — « c'est quoi ce lien ? » avec d14 Aiguille du Pont RÉPONDU** : le câblage actuel (n15 → d14) est mécanique, posé au patch 3.3 du 09/11 « sans trous cachés » ; le v17 en avait fait « la commune du Pont ». **Vision d'origine de Marc-Olivier consignée : n15 est l'AÎNÉE COMMUNE des trois familles divines joueur** (Garde du Seuil, Lame Miroir, Fileuse du Pont). **PROPOSITION : recâbler l'éveil de n15 vers les trois familles au choix (d1/d7/d13)** — résout AUSSI l'accès Chœur (option d de la spec §4, RECOMMANDÉE). Détail : enquête §3.
+- **Coloration CONFIRMÉE différée telle que définie** (v14/v17 §3.1 : l'eau → Calypso et Alix, Déesse de l'Eau ; l'aube → Léna ; le sabre → Kenji) — l'option « coloration-eau » pour l'accès Chœur est ÉCARTÉE.
+- **L'équilibre / Kairos : OUVERT** (« je ne sais pas trop comment mettre ça »). Scories corrigées dans le v18 : le jeu dit d6 = « Kairos, Arbitre du Seuil » (L, Occultiste, Lumière) ; le « Juge Éternel » n'existait ni en jeu ni au v17 ; l'étiquette « M monstre » du diagramme 10.6 était fausse. La M de l'Équilibre et l'événement restent v2.
+- **ENQUÊTE « CARTES PERDUES » LIVRÉE : `docs/design/enquete-cartes-2026-11-14.md` — VERDICT : rien n'a disparu du jeu.** Nymphe Croupie (k2) et la famille des nymphes = DANS LE JEU (famille des Naufragés, Crypte) ; quais (a34→a40→a41) et fête (a37→a45→a46) = DANS LE JEU ; les 6 mini-lignées = DANS LE JEU ; la garde du rempart des prêtres = DANS LE JEU (voie « la garde » de n3 → s14) ; les SOMMETS UR/L des mini-lignées (Brumaire, Colombine, Ombre des Quais, Virtuose de Fête) = PROPOSITIONS v17 volontairement différées v2. Rapatriement possible mais tranchage de périmètre à prendre.
+- **Reste à trancher pour lancer le lot démon+ange** : la structure espèces, le roi démon seul ou doublé, l'accès Chœur (option n15 recommandée), les écoles (Vice/Fureur/Orgueil) et les sorts.
 
 ## 2026-11-14 (suite 25) : n14 SANS ACCÈS CHŒUR (TRANCHÉ) + LES TRAPPES DÉMON ET ANGE DÉBLOQUÉES AVANT D'AVANCER (priorité de Marc-Olivier) — spec du lot prioritaire RÉDIGÉE — digest INCHANGÉ (commit docs seul)
 
@@ -258,3 +259,14 @@
 > Diagnostics vérifiés dans le code par le couloir pilotage ; prompt pour le couloir 1 : `docs/prompt-correctifs-v1.51.md` (3 lots). Ordre couloir 1 : lots 1-3 du prompt smoke/IA (en cours), PUIS ce chantier, PUIS fusion DQM v4.
 
 - **Sorts signature des soigneurs (confirmé, systémique)** : les soloSpells sont construits SANS `kind` (`src/ui.js:100`, `src/data.js:182`) → défaut moteur = dégâts. Les 15 cartes Prêtre à `effect.kind === "heal"` (dont l'Ange « Éclat d'Aube » signalé) attaquent au lieu de soigner. **Correction tranchée : la signature d'un soigneur soigne** (kind heal, cible = allié le plus blessé) ; MESURE digest obligatoire (les maths changent). [À TRANCHER] si une signature doit rester offensive, Marc-Olivier la nomme.
+- **ASCENDANCE RETIRÉE (tranchage oral de Marc-Olivier rappelé le 13/11)** : plus de bonus « +X % Ascendance » gravé à l'évolution — mécanique supprimée, affichages retirés, migration des saves, les évolutions restent. Le tranchage oral datait d'hier ; la trace écrite manquait, le rappel fait foi.
+- **Défaite en Terres Sauvages → écran de défaite du DONJON (confirmé, capture à l'appui)** : le flux de défaite (~`src/ui.js:5385-5401`) affiche toujours « La prochaine exploration repart de l'étage 1 » + boutons « Relancer l'exploration (étage 1) » / « Retour au donjon », même pour un combat de zone. **Défaut balisé** : écran de défaite dédié en errance (« Vos cartes sont à bout — retour au Port des Brumes »), retour ville, aucune mention d'étage/donjon.
+- **Mana « se régénère à chaque combat » (à prouver)** : `MANA_START_RATIO 0.6` + `applyRunStateTo` existent, la persistance est branchée (v1.44). Tests headless exigés : entre deux combats de zone sans passage par l'Accueil/autel, le mana de départ = restant persisté. Toute restauration cachée sera traquée ; le repos complet en ville/autel reste VOULU (tranché).
+- **Fiche carte : UNIFIÉE entre menu équipe et combat (tranché par Marc-Olivier)** : une seule base de rendu (stats complètes PV/ATQ/AGI/INT, sorts), la combat ajoute les effets actuels ; modifier l'un modifie l'autre. Corrige : stats absentes au menu équipe + illustration coupée en combat.
+- **Badge `(EL_GLYPH[el] ?? '')` affiché en littéral sur tous les sorts (confirmé)** : interpolation manquante `src/ui.js:4056`.
+- **Splash Mage (EXPLIQUÉ, pas un bug) — TRANCHÉ par Marc-Olivier (13/11)** : la frappe des Mages touche la cible + 50 % sur les autres (`CLASSE_MODS.Mage` splash 0.4/strike 0.8) — voulu et conservé ; la fiche l'explicite dès le lot 2 de v1.51 (« cible + éclats à 50 % sur les autres », constat sur Nymphe Croupie et Souffle-Mèche, toutes deux Mages). Aucun changement de maths. **Le retrait éventuel du splash (calibrage) est DIFFÉRÉ en point à trancher** (tableau de bord §0, reste n°3).
+- **Taille des cartes en combat (tranché)** : 3 actifs → cartes plus grandes ; à faire avec le Lot 3 « réserve cachée » du prompt smoke/IA (un seul passage sur le layout).
+- **Achat de cartes à l'or SUPPRIMÉ (conformité au tranchage Lot D du 12/11)** : le marchand de créatures (Boutique, 3 offres/jour en OR) doit disparaître ; recrutement UNIQUEMENT par la Guilde en jetons 🎫 ; la Boutique ne garde que l'équipement (or, inchangé). Au passage : le texte Guilde dit encore « UR 2 000 or » → jetons.
+
+## 2026-11-13 (suite 5) : GEL DE L'ARBRE V1 TRANCHÉ — le camp démon réintégré en familles jouables, anges dévoyés + paladin + chevalier + gorgones/fées dans v1 (retour de Marc-Olivier)
+

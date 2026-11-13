@@ -16,7 +16,7 @@
 
 ## 2. Le cas succube et le camp démon : l'historique complet
 
-1. **Définie v14** (ordre acté) : la voie du désir du camp démon — Aiguillon du Désir UC → Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** ; en parallèle la voie de la puissance (Brute des Fosses UC → Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L**, nommée actée v14) ; deux trappes (Gouffre des Vices, qui mange La Faim ; Fléau Démoniaque).
+1. **Définie v14** (ordre acté) : la voie du désir du camp démon — Aiguillon du Désir UC → Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** ; en parallèle la voie de la puissance (Brute des Fosses UC → Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L**, nommée actée v14) ; deux trappes (Gouffre des Vices, qui mange Famine ; Fléau Démoniaque).
 2. **Tuée côté joueur par le verdict 11.4 de l'audit v17** : « les colorations divines du design (5) meurent : chaque naissance divine a sa famille » — les noms proposés (dont Grande Succube, Prince Démon, Aiguillon du Désir, Brute des Fosses, Gouffre des Vices, Fléau Démoniaque) sortent de la liste ; le Démon n14 est câblé vers le Chœur Miroir (d8). C'est l'état du jeu aujourd'hui : **aucune succube, aucun démon de lignée**.
 3. **Réintroduite le 12/11 par la session direction** : les 3 donjons divins TRANCHÉS — « Démons : sous-bosses (ex. la succube) puis le roi des démons ».
 4. **TRANCHÉ le 13/11 (Marc-Olivier) : le camp démon est RÉINTÉGRÉ en familles jouables complètes** — révision datée du verdict 11.4, qui ne s'applique plus. Le tranchage donjons divins du 12/11 reste valable en complément (le donjon Démons pourra s'appuyer sur ces lignées pour ses sous-bosses et son boss).
@@ -24,10 +24,10 @@
 ### La structure réintégrée (v1)
 
 - **Entrée** : n14 Démon (C) ; les deux voies s'ouvrent au choix 1 (UC). **TRANCHÉ le 14/11 (suite 25) : n14 n'a PAS accès au Chœur Miroir** — recâblage acté vers ces voies ; l'accès du Chœur se redéfinit sans n14 (3 options dans `docs/design/spec-trappes-demon-ange-v1.md` §4 : porte coloration-eau de p1 RECOMMANDÉE, événement du miroir, naissance dédiée).
-- **Voie de la chair** : Aiguillon du Désir UC → choix 2 : Succube R → Grande Succube SR → Dame du Désir UR → Asmodia, Reine du Désir L, **ou** Gouffre des Vices R (**trappe DÉBLOQUÉE en v1, suite 25 : Grand Gouffre SR → Gueule de l'Abîme UR → La Faim L**, PROPOSITION).
-- **Voie de la puissance** : Brute des Fosses UC → choix 2 : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → Lilith, Reine des Démons L, **ou** Fléau Démoniaque R (**trappe DÉBLOQUÉE en v1 : Grand Fléau SR → Porte-Peste UR → Pestis, Mère des Fléaux L**, PROPOSITION).
+- **Voie de la chair** : Aiguillon du Désir UC → choix 2 : Succube R → Grande Succube SR → Dame du Désir UR → Asmodia, Reine du Désir L, **ou** Gouffre des Vices R (**trappe DÉBLOQUÉE en v1, suite 25 : Grand Gouffre SR → Gueule de l'Abîme UR → Famine L**, NOM ACTÉ suite 26, ex-« La Faim »).
+- **Voie de la puissance** : Brute des Fosses UC → choix 2 : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → Lilith, Reine des Démons L, **ou** Fléau Démoniaque R (**trappe DÉBLOQUÉE en v1 : Grand Fléau SR → Porte-Peste UR → Peste, Mère des Fléaux L**, NOM ACTÉ suite 26, ex-Pestis).
 - **18 cartes nouvelles, 2 familles de lignée** (6 sorts de lignée chacune, coûts 2/3/5/9/14/20 ✦ ; +6 cartes des trappes débloquées le 14/11, suite 25). Les noms « Aiguillon du Désir, Brute des Fosses, Dame du Désir, Prince Démon » sont des noms proposés v12-v16, validés v15 (« au pire tu les modifieras ») ; Asmodia et Lilith sont actés v14.
-- **La Faim** (un des sept grands monstres) : **PROPOSITION suite 25 — L de la trappe du Gouffre des Vices en v1** (elle quitte la liste différée v2).
+- **Famine** (ex-« La Faim », un des sept grands monstres) : **L de la trappe du Gouffre des Vices en v1 (suite 25, NOM ACTÉ suite 26)** (elle quitte la liste différée v2).
 - **Côté arts** : l'espèce de ces cartes doit être tranchée humanoïde diable (succube, démon) — la question ouverte « n14 Démon : bête ou diable ? » de l'audit espèces (`docs/images/audit-especes-mystiques.md`) se tranche diable avec ce gel ; espèces à ajouter dans `species-map.json`.
 
 ## 3. TRANCHÉ le 13/11 — le gel v1 (les 4 décisions)
@@ -52,7 +52,7 @@ Les quatre tranchages de Marc-Olivier du 13/11/2026 définissent la **liste ferm
 - **Maudit des Berges** (la chaîne de la malédiction des quais existe déjà : Ancien des Berges → Protecteur des Berges → Pontos → Titan des Marées).
 - **Sommets quais et fête** (Ombre des Quais, Brumaire, Virtuose de Fête, Colombine).
 - **Sylvains** (6 cartes), **élues du mage** (4 : Guérisseuse des Rivières, Mage des Marées, Gardienne de Braise, Mage de la Cendre), **élus de la terre** (jamais tranchés).
-- **Paliers H** (HUC, HSR) ; **essences Enge du feu et de la lumière**. (Les trappes démon et La Faim quittent cette liste le 14/11, suite 25 : débloquées en v1, gel §6.1 du v18.)
+- **Paliers H** (HUC, HSR) ; **essences Enge du feu et de la lumière**. (Les trappes démon et Famine quittent cette liste le 14/11, suite 25 : débloquées en v1, gel §6.1 du v18.)
 
 ## 5. Divergences doc/jeu à consigner (hors gel, à traiter au fil des lots)
 

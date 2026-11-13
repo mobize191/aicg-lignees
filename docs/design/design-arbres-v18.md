@@ -47,7 +47,7 @@ Convergences vivantes (`data/evolutions.json`) : l'**Adepte des Rivières (a29)*
 | --- | --- |
 | n13 Ange (C, Lumière) | p1 Jeune Séraphin (UC, effet « remplace », fait disparaître p2 Ange Gardien) ; les 3 portes : **la coloration** (l'eau, l'aube, le sabre — DORMANTE en v1, maillons = destinées post-L différées v2), **la voie céleste** (p5 Séraphin, Porteur de Lumière UR → p6 Séraphin, Chérubin Éveillé L), **la mauvaise volonté** (ANGES DÉVOYÉS à construire, cf. §6.2) |
 | n14 Démon (C, Ombre) | aujourd'hui → d8 Choriste Miroir (la Réflexion) ; **TRANCHÉ le 14/11 (suite 25) : PAS d'accès au Chœur — l'éveil ouvre les voies de la chair et de la puissance** (cf. §6.1 ; retrait de n14 → d8 à livrer avec le nouvel accès Chœur) |
-| n15 Éveillé du Seuil (C, Neutre) | d14 Aiguille du Pont (le Liage, Tisseuses du Pont) |
+| n15 Éveillé du Seuil (C, Neutre) | d14 Aiguille du Pont (le Liage, Tisseuses du Pont) — QUESTION OUVERTE (suite 26) : PROPOSITION de recâblage vers les TROIS familles divines au choix (d1/d7/d13, l'aînée commune), qui résout aussi l'accès Chœur (enquête `enquete-cartes-2026-11-14.md` §3) |
 
 ## 2. Les 14 familles jouables (carte par carte, `data/families.json`)
 
@@ -78,7 +78,7 @@ Toutes complètes C → L (6 maillons), 84 sorts de lignée au total. Les 4 fami
 
 | Famille | Chaîne C → L (série w) | Monstres miroirs (série d) | Éveil |
 | --- | --- | --- | --- |
-| **seuil** (Arbitres du Seuil) | Garde du Seuil → Servante du Sablier → Huissier de l'Entre-Deux → Juge des Heures → Maître des Sabliers → Kairos, Juge Éternel | d1-d6 (L : Kairos, Arbitre du Seuil) | (l'Ange y va par l'événement d'équilibre p1 → d6) |
+| **seuil** (Arbitres du Seuil) | Garde du Seuil → Servante du Sablier → Huissier de l'Entre-Deux → Juge des Heures → Maître des Sabliers → Kairos, Arbitre du Seuil | d1-d6 (L : Kairos, Arbitre du Seuil) | (l'Ange y va par l'événement d'équilibre p1 → d6) |
 | **miroir** (Chœur Miroir) | Lame Miroir → Choriste Miroir → Prisme du Chœur → Miroir Antiphonique → Chef du Chœur → Écho, Refrain Absolu | d7-d12 (L : Écho, Voix Miroir) | n14 (aujourd'hui) |
 | **pont** (Tisseuses du Pont) | Fileuse du Pont → Aiguille du Pont → Brodeuse des Liens → Tisseuse des Nœuds → Architecte du Pont → Ananké, Gardienne des Rives | d13-d18 (L : Ananké, Tisseuse du Pont) | n15 |
 
@@ -126,14 +126,14 @@ Tout ce qui suit est TRANCHÉ (arbitrages du 13/11) et reste à construire côt�
 
 - **Recâblage TRANCHÉ le 14/11 (suite 25) : n14 Démon n'a PAS accès au Chœur Miroir** — l'éveil actuel n14 → d8 part sur les deux voies ; le retrait de `n14 → d8` se livre ENSEMBLE avec le nouvel accès du Chœur (c'est son seul éveil aujourd'hui, sinon la famille devient injouable).
 - **Deux voies depuis n14 Démon (C, Ombre)**, choix 1 : la chair (Aiguillon du Désir UC) ou la puissance (Brute des Fosses UC) ; choix 2 au R.
-- **Voie de la chair** : Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** (ordre acté v14) ; **trappe DÉBLOQUÉE en v1 (suite 25) : Gouffre des Vices R → Grand Gouffre SR → Gueule de l'Abîme UR → La Faim L** (PROPOSITION : La Faim, en piste v2 jusqu'ici, devient la nommée de la trappe, bestiale).
-- **Voie de la puissance** : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L** (nommée actée v14) ; **trappe DÉBLOQUÉE en v1 : Fléau Démoniaque R → Grand Fléau SR → Porte-Peste UR → Pestis, Mère des Fléaux L** (PROPOSITION).
-- **Spec d'exécution RÉDIGÉE : `docs/design/spec-trappes-demon-ange-v1.md`** (ids d19-d36 proposés, écoles le Vice / la Fureur, sorts 2×6 + signatures, 4 lots, digest inchangé attendu). Restent à valider : n14 = C commun aux deux voies (défaut proposé), les écoles et les sorts, **l'accès au Chœur Miroir sans n14** (3 options : la porte coloration-eau de p1 RECOMMANDÉE, l'événement du miroir, une naissance dédiée) ; les espèces des arts (diables humanoïdes, `species-map.json`).
+- **Voie de la chair** : Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** (ordre acté v14) ; **trappe DÉBLOQUÉE en v1 (suite 25) : Gouffre des Vices R → Grand Gouffre SR → Gueule de l'Abîme UR → Famine L** (NOM ACTÉ suite 26, ex-« La Faim » : la nommée de la trappe, bestiale ; titre à caler).
+- **Voie de la puissance** : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L** (nommée actée v14) ; **trappe DÉBLOQUÉE en v1 : Fléau Démoniaque R → Grand Fléau SR → Porte-Peste UR → Peste, Mère des Fléaux L** (NOM ACTÉ suite 26, ex-Pestis). **QUESTION OUVERTE (suite 26)** : le sommet de la puissance, **un roi démon seul ou une reine ET un roi** (le doublon de L est permis, précédent Jeanne/Siegfried ; Lilith reste la reine, le roi serait un nommé à créer).
+- **Spec d'exécution RÉDIGÉE : `docs/design/spec-trappes-demon-ange-v1.md`** (ids d19-d36 proposés, écoles le Vice / la Fureur, sorts 2×6 + signatures, 4 lots, digest inchangé attendu). **DIRECTION REÇUE (suite 26) : le camp divin travaille par ESPÈCES** (Diablotin côté démon — renommage de n14 ou commune supplémentaire, À TRANCHER ; Chérubin/Séraphin côté ange, §6.2). Restent à valider : les écoles et les sorts, **l'accès au Chœur Miroir sans n14** (options mises à jour suite 26 : **n15 l'aînée commune des trois familles RECOMMANDÉE**, l'événement du miroir, une naissance dédiée ; la coloration-eau est ÉCARTÉE, la coloration reste comme définie) ; les espèces des arts (diables humanoïdes, `species-map.json`) ; le roi démon seul ou doublé.
 - **Les donjons divins** (tranchés 12/11, 3 donjons Démons/Anges/Équilibre) s'appuieront sur ces lignées pour leurs sous-bosses et leur roi.
 
 ### 6.2 Les anges dévoyés (4 cartes + re-racement) — LOT PRIORITAIRE du gel (la trappe ange DÉBLOQUÉE en v1, suite 25)
 
-Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L, depuis la porte **mauvaise volonté** de p1 (posée dans trees.json, sans maillons — la porte devient vivante : spec `docs/design/spec-trappes-demon-ange-v1.md` §3, école l'Orgueil proposée). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche : race divine, élément Lumière, courbe inchangée). La porte **coloration** reste dormante en v1 (ses maillons sont les destinées post-L, différées v2), sauf si l'option d'accès Chœur « coloration-eau » est retenue (§6.1).
+Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L, depuis la porte **mauvaise volonté** de p1 (posée dans trees.json, sans maillons — la porte devient vivante : spec `docs/design/spec-trappes-demon-ange-v1.md` §3, école l'Orgueil proposée). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche : race divine, élément Lumière, courbe inchangée). La porte **coloration** reste dormante en v1 (ses maillons sont les destinées post-L, différées v2), **CONFIRMÉE telle quelle (suite 26 : Calypso/Alix, Léna, Kenji)** — l'option d'accès Chœur « coloration-eau » est ÉCARTÉE. **DIRECTION REÇUE (suite 26) : le camp ange travaille par ESPÈCES** — la voie céleste relue (Jeune Séraphin → Séraphin Porteur de Lumière → p6 Chérubin Éveillé, renommage « Séraphin Éblouissant » proposé) ; piste d'une chaîne **Ange → Ange de Lumière → Archange** (sommet proposé « Luz, l'Archange ») — **ATTENTION : Luz figure déjà dans la lignée déchue v2 (§9)**, où s'attache la chaîne et le nom restent À STRUCTURER.
 
 ### 6.3 Le paladin (4 cartes)
 
@@ -160,10 +160,10 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 
 ### 6.7 La synthèse des tranchages restants pour verrouiller la v1 (périmètre arbres/fusion/lignées)
 
-Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Tranchés le 14/11 (suite 25) : **n14 Démon n'a PAS accès au Chœur Miroir** (recâblage vers les voies du camp démon) ; **les trappes démon et ange DÉBLOQUÉES en v1, en tête du gel** (lignées complètes des trappes + anges dévoyés ; spec `docs/design/spec-trappes-demon-ange-v1.md`). Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
+Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Tranchés le 14/11 (suite 25) : **n14 Démon n'a PAS accès au Chœur Miroir** (recâblage vers les voies du camp démon) ; **les trappes démon et ange DÉBLOQUÉES en v1, en tête du gel** (lignées complètes des trappes + anges dévoyés ; spec `docs/design/spec-trappes-demon-ange-v1.md`). Tranchés le 14/11 (suite 26, relecture de l'arbre) : **les noms des L des trappes — Famine et Peste, Mère des Fléaux** ; **la coloration confirmée différée telle que définie** ; **direction reçue : le camp divin travaille par ESPÈCES** (Diablotin, Chérubin/Séraphin). Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
 
-1. **L'accès au Chœur Miroir sans n14** (le recâblage est TRANCHÉ : n14 va aux voies du camp démon) : 3 options dans la spec trappes — **la porte coloration-eau de p1 (RECOMMANDÉE)**, l'événement du miroir, une naissance dédiée.
-2. **Le camp démon, restes de la spec trappes** : n14 = C commun aux deux voies (défaut proposé) ; **les sorts de lignée (2×6) et signatures** (propositions Vice/Fureur à valider) ; **les nommées des trappes à valider (La Faim, Pestis)** — les trappes elles-mêmes sont TRANCHÉES débloquées en v1.
+1. **L'accès au Chœur Miroir sans n14** (le recâblage est TRANCHÉ : n14 va aux voies du camp démon) : options mises à jour suite 26 — **n15 l'aînée commune des trois familles divines (RECOMMANDÉE, spec trappes §4-d)**, l'événement du miroir, une naissance dédiée ; la coloration-eau est ÉCARTÉE.
+2. **Le camp démon, restes de la spec trappes** : la **structure par espèces à retravailler** (Diablotin = renommage de n14 ou commune supplémentaire ; chaîne Ange → Archange côté ange, et le nom Luz déjà pris par la déchue) ; **le roi démon seul ou reine ET roi** ; **les sorts de lignée (2×6) et signatures** (propositions Vice/Fureur/Orgueil à valider) — les trappes sont TRANCHÉES débloquées en v1 et leurs nommées ACTÉES (Famine, Peste).
 3. **Les tags des lignées d'accueil** quand gorgones/fées seront posées : w20/w21 changent-ils de famille, et le sort du tag eau de w19.
 4. **La table des biomes par famille humaine** (fusion) : les défauts thématiques sont posés (eau→Marées, braise→Forge, bosquet→Bosquet, ombre/crépuscule→Crypte, aube/zele/appel→Zénith, bouclier→Bosquet, vol→Marées, familles divines→leur web miroir) ; **le cas de l'école Neutre (lame) reste à caler** (défaut proposé : hasard des 5 biomes).
 5. **Le mapping mystique → famille divine** (fusion humaine + mystique) : PROPOSITION par forme — Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir.
@@ -221,7 +221,7 @@ Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters préd
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 
-Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **La Faim quitte cette liste le 14/11 (suite 25)** : PROPOSITION en L de la trappe du Gouffre des Vices, en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1.
+Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **Famine (ex-« La Faim ») quitte cette liste le 14/11 (suite 25, nom acté suite 26)** : L de la trappe du Gouffre des Vices en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1.
 
 ## 10. Les diagrammes de la v1 cible (l'état du jeu ➕ le gel)
 
@@ -386,7 +386,7 @@ flowchart TD
   N13["n13 Ange · C · Lumière"] -->|"l'éveil du service"| P1["p1 Jeune Séraphin · UC"]
   P1 -->|"la voie céleste"| P5["Séraphin, Porteur de Lumière · UR"]
   P5 --> P6["Séraphin, Chérubin Éveillé · L"]
-  P1 -->|"l'équilibre (événement)"| D6["d6 Kairos, Arbitre du Seuil · M monstre"]
+  P1 -->|"l'équilibre (événement)"| D6["d6 Kairos, Arbitre du Seuil · L"]
   P1 -.->|"la mauvaise volonté (gel)"| AA1["Ange Ardent ➕ · R"]
   P1 -.->|"la coloration — DORMANTE v1"| X1["destinées post-L (différé v2)"]
   AA1 -.-> AA2["Ange du Zénith ➕ · SR (verrou)"]
@@ -402,7 +402,7 @@ flowchart TD
   DA1 -.->|"la trappe DÉBLOQUÉE (suite 25)"| DA6["Gouffre des Vices ➕ · R"]
   DA6 -.-> DA7["Grand Gouffre ➕ · SR (verrou)"]
   DA7 -.-> DA8["Gueule de l'Abîme ➕ · UR"]
-  DA8 -.-> DA9["La Faim ➕ · L (PROPOSITION)"]
+  DA8 -.-> DA9["Famine ➕ · L (NOM ACTÉ suite 26)"]
   DB1 -.-> DB2["Démon Majeur ➕ · R"]
   DB2 -.-> DB3["Seigneur Démon ➕ · SR (verrou)"]
   DB3 -.-> DB4["Prince Démon ➕ · UR"]
@@ -410,20 +410,21 @@ flowchart TD
   DB1 -.->|"la trappe DÉBLOQUÉE (suite 25)"| DB6["Fléau Démoniaque ➕ · R"]
   DB6 -.-> DB7["Grand Fléau ➕ · SR (verrou)"]
   DB7 -.-> DB8["Porte-Peste ➕ · UR"]
-  DB8 -.-> DB9["Pestis, Mère des Fléaux ➕ · L (PROPOSITION)"]
+  DB8 -.-> DB9["Peste, Mère des Fléaux ➕ · L (NOM ACTÉ suite 26)"]
   N15["n15 Éveillé du Seuil · C · Neutre"] -->|"le Liage"| D14["d14 Aiguille du Pont · monstre du Pont"]
+  N15 -.->|"PROPOSITION suite 26 : l'aînée commune — éveil vers d1 / d7 / d13 AU CHOIX"| X2["les 3 familles divines (résout l'accès Chœur)"]
   classDef gel stroke-dasharray: 5 5;
   class AA1,AA2,AA3,AA4,DA1,DA2,DA3,DA4,DA5,DA6,DA7,DA8,DA9,DB1,DB2,DB3,DB4,DB5,DB6,DB7,DB8,DB9 gel;
 ```
 
-- Note : TRANCHÉ le 14/11 (suite 25) — **n14 n'a PAS accès au Chœur Miroir** ; le nouvel accès du Chœur (3 options, spec trappes §4) se pose AVANT de retirer n14 → d8. Les trappes sont DÉBLOQUÉES avec leurs lignées complètes (La Faim, Pestis : PROPOSITIONS). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule).
+- Note : TRANCHÉ le 14/11 (suite 25) — **n14 n'a PAS accès au Chœur Miroir** ; le nouvel accès du Chœur (option RECOMMANDÉE suite 26 : n15 l'aînée commune, spec trappes §4-d) se pose AVANT de retirer n14 → d8. Les trappes sont DÉBLOQUÉES avec leurs lignées complètes (**Famine, Peste : NOMS ACTÉS suite 26**). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule). d6 Kairos est une **L** (l'étiquette « M monstre » était une scorie, corrigée suite 26).
 
 ### 10.7 Les 3 familles divines joueur (w1-w18) et leurs miroirs
 
 ```mermaid
 flowchart TD
   subgraph SEUIL["Arbitres du Seuil (d1-d6 : Kairos Arbitre du Seuil)"]
-    W1["Garde du Seuil · C"] --> W2["Servante du Sablier · UC"] --> W3["Huissier de l'Entre-Deux · R"] --> W4["Juge des Heures · SR"] --> W5["Maître des Sabliers · UR"] --> W6["Kairos, Juge Éternel · L"]
+    W1["Garde du Seuil · C"] --> W2["Servante du Sablier · UC"] --> W3["Huissier de l'Entre-Deux · R"] --> W4["Juge des Heures · SR"] --> W5["Maître des Sabliers · UR"] --> W6["Kairos, Arbitre du Seuil · L"]
   end
   subgraph MIROIR["Chœur Miroir (d7-d12 : Écho, Voix Miroir)"]
     W7["Lame Miroir · C"] --> W8["Choriste Miroir · UC"] --> W9["Prisme du Chœur · R"] --> W10["Miroir Antiphonique · SR"] --> W11["Chef du Chœur · UR"] --> W12["Écho, Refrain Absolu · L"]

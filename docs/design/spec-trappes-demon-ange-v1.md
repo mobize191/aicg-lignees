@@ -1,6 +1,8 @@
 # Spec — Trappes démon et ange v1 : le camp démon complet + les anges dévoyés (lot PRIORITAIRE du gel, prête à lancer après validation des propositions)
 
 > Tranchage de Marc-Olivier (14/11, suite 25) : « Pas d'accès Chœur pour n14, je voudrais que l'on débloque les trappes démon et ange avant d'avancer. » Lecture consignée : (1) n14 Démon n'a PAS accès au Chœur Miroir, son éveil part sur les voies du camp démon ; (2) les trappes du camp démon (Gouffre des Vices, Fléau Démoniaque) reçoivent leur LIGNÉE EN V1 (le « au fil des patchs » est écarté) et la trappe ange (la porte « mauvaise volonté » de p1 : les anges dévoyés) est DÉBLOQUÉE en v1 ; (3) ce lot passe EN TÊTE du gel, avant gorgones/fées, paladin/chevalier, la spec-gel générale et la fusion. À corriger d'un mot si la lecture est mauvaise. Références : `docs/design/design-arbres-v18.md` §6.1-§6.2 + diagramme 10.6 ; chaînes des voies et nommées actées v14 (arbitrages du 13/11).
+>
+> **MAJ 14/11 (suite 26), retours de relecture de Marc-Olivier, intégrés ci-dessous** : noms TRANCHÉS (La Faim → **Famine** ; Pestis → **Peste**) ; QUESTION OUVERTE du sommet de la puissance (un roi démon seul, ou une reine ET un roi) ; DIRECTION REÇUE : le camp divin travaille par ESPÈCES (Diablotin côté démon, Chérubin/Séraphin côté ange), la structure §2.1 se reprend ; l'accès Chœur : la coloration reste comme définie (option a ÉCARTÉE), nouvelle option (d) n15 l'aînée commune des trois familles, RECOMMANDÉE. Enquête complète : `docs/design/enquete-cartes-2026-11-14.md`.
 
 ## 1. Tranchages actés (14/11, suite 25 — rien à rediscuter)
 
@@ -8,12 +10,16 @@
 2. **Les trappes du camp démon sont DÉBLOQUÉES en v1** : Gouffre des Vices et Fléau Démoniaque ne restent pas des culs-de-sac, chacune reçoit sa lignée complète R → SR → UR → L.
 3. **La trappe ange est DÉBLOQUÉE en v1** : la porte « mauvaise volonté » de p1 reçoit les anges dévoyés (4 cartes + re-racement de l'Astre Capiteux, déjà tranché au v18 §6.2). La porte « coloration » reste DORMANTE en v1 (destinées post-L, v2), sauf si l'option d'accès Chœur §4-a est retenue.
 4. **L'ordre du gel** : démon + ange AVANT tout le reste.
+5. **Noms ACTÉS (suite 26)** : la L de la trappe du Gouffre des Vices s'appelle **Famine** (ex-« La Faim », titre à caler) ; la L de la trappe du Fléau s'appelle **Peste, Mère des Fléaux** (ex-Pestis).
+6. **Coloration CONFIRMÉE différée telle que définie** (suite 26 : « tu peux la laisser, elle a déjà été définie », v14/v17 §3.1 : l'eau → Calypso et Alix, l'aube → Léna, le sabre → Kenji). Conséquence : l'option (a) du §4 est ÉCARTÉE ; l'accès Chœur recommandé devient l'option (d).
 
 ## 2. Le camp démon (18 cartes à créer, race divine camp démon, élément Ombre)
 
 ### 2.1 Structure (DÉFAUT PROPOSÉ, à valider d'un mot)
 
 n14 EST la commune C commune aux deux voies (le camp démon se joue comme un novice divin : l'éveil ouvre le choix de voie). Chaque voie est une famille divine : deux éveils depuis n14 (la chair / la puissance), puis un choix au palier R (la carte de voie OU la trappe). Dérrogation assumée à la règle 1.3 (un C pour deux familles) : à documenter dans le validateur, précédent = n13 qui porte les trois familles du camp divin.
+
+**DIRECTION REÇUE (suite 26) — le camp divin travaille par ESPÈCES, pas par créatures uniques.** Côté démon : un **Diablotin** comme espèce de base C « qui devient quelque chose d'autre » (chaîne calquée sur ange : Diablotin → … → démon/Démon Majeur → …). QUESTION DE STRUCTURE : le Diablotin RENOMME n14 (la commune C devient le Diablotin, les deux voies partent de lui), ou une commune SUPPLÉMENTaire s'ajoute (n14 garde son identité actuelle) — À TRANCHER au lot 1. Côté ange : cf. §3 et `design-arbres-v18.md` §6.2 (Chérubin puis Séraphin ; piste Ange → Ange de Lumière → Archange).
 
 ### 2.2 Les chaînes (ids proposés d19-d36, à figer au lot 1 — les arts série 3 attendent ces ids)
 
@@ -29,7 +35,7 @@ n14 EST la commune C commune aux deux voies (le camp démon se joue comme un nov
 | d29 | Gouffre des Vices | R | Occultiste | TRAPPE DÉBLOQUÉE (suite 25) |
 | d30 | Grand Gouffre | SR | Occultiste | verrou |
 | d31 | Gueule de l'Abîme | UR | Occultiste | |
-| d32 | La Faim | L | Occultiste | PROPOSITION : La Faim (en piste v2 jusqu'ici) devient la nommée de la trappe, bestiale, une gueule du gouffre |
+| d32 | Famine | L | Occultiste | NOM ACTÉ suite 26 (ex-« La Faim ») : la nommée de la trappe, bestiale, une gueule du gouffre ; titre à caler |
 
 **La puissance (école proposée : la Fureur, rôle dégâts)**
 
@@ -43,7 +49,9 @@ n14 EST la commune C commune aux deux voies (le camp démon se joue comme un nov
 | d33 | Fléau Démoniaque | R | Occultiste | TRAPPE DÉBLOQUÉE (suite 25) |
 | d34 | Grand Fléau | SR | Occultiste | verrou |
 | d35 | Porte-Peste | UR | Occultiste | |
-| d36 | Pestis, Mère des Fléaux | L | Occultiste | PROPOSITION, nommée à valider |
+| d36 | Peste, Mère des Fléaux | L | Occultiste | NOM ACTÉ suite 26 (ex-Pestis) |
+
+**QUESTION OUVERTE (suite 26) — le sommet de la puissance : un roi démon SEUL, ou une reine ET un roi ?** Le doublon de L au sommet est permis (précédent Jeanne/Siegfried côté humain). Option A : d28 reste l'unique L (Lilith, Reine des Démons). Option B : Lilith reste la reine (d28) ET un roi démon nommé est créé à côté (id dédié, chaîne Prince Démon → roi, à poser). À trancher au lot 1.
 
 Recâblage data : `trees.json` divine.eveils remplace l'entrée `n14 → d8` par deux éveils (n14 → d19 « la voie de la chair », n14 → d24 « la voie de la puissance ») ; `evolutions.json` : d19 → {d20 | d29}, d24 → {d25 | d33}, puis les chaînes SR → UR → L ; l'entrée `n14 → d8` est retirée AU LOT ACCÈS CHŒUR (§4), pas avant. Stats : courbe divine de référence (d1-d18, p1/p5/p6, `RACE_MOD` divine), l'écart de classe s'applique ; valeurs posées au lot, mesurées par le harnas.
 
@@ -53,9 +61,9 @@ Recâblage data : `trees.json` divine.eveils remplace l'entrée `n14 → d8` par
 
 **La Fureur (la puissance)** : ✦2 « Grondement des Fosses » (×1,4) · ✦3 « Coup des Fosses » (×1,6) · ✦5 « Cri de Fureur » (×1,8 + étourdissement 1 tour, taux à caler) · ✦9 « Terreur Majeure » (×2,6 + malédiction 2 tours) · ✦14 « Lilith : Couronne de Fureur » (×3,4) · ✦20 « Ultime Fureur » (×4,5).
 
-**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; Lilith « Sceptre du Jugement » (×2 + étourdissement) ; La Faim « Dévoration Totale » (×2,2) ; Pestis « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
+**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; Lilith « Sceptre du Jugement » (×2 + étourdissement) ; Famine « Dévoration Totale » (×2,2) ; Peste « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
 
-Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, Lilith F, Pestis F), **La Faim bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
+Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, Lilith F, Peste F), **Famine bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
 
 ## 3. Les anges dévoyés (4 cartes + re-racement, TRANCHÉ v18 §6.2)
 
@@ -71,13 +79,14 @@ Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les
 - **Re-racement de l'Astre Capiteux (z8)** : fiche race divine camp ange, élément Lumière, courbe inchangée (TRANCHÉ).
 - La porte « coloration » reste dormante sauf §4-a.
 
-## 4. L'accès au Chœur Miroir sans n14 (À TRANCHER — 3 options)
+## 4. L'accès au Chœur Miroir sans n14 (À TRANCHER — options mises à jour suite 26)
 
 Le Chœur (d7-d12, Eau) est aujourd'hui atteint UNIQUEMENT par l'éveil n14 → d8. Après recâblage :
 
-- **(a) la porte coloration-eau de p1 (RECOMMANDÉE)** : la porte « la coloration (l'eau, l'aube, le sabre) » existe déjà dans trees.json ; sa composante EAU devient l'accès v1 du Chœur (p1 → d8, l'ange coloré d'eau rejoint le Chœur), l'aube et le sabre restent v2. Zéro carte nouvelle, la porte dormante devient vivante, symétrie avec le camp ange.
+- **(a) la porte coloration-eau de p1 — ÉCARTÉE (suite 26)** : la coloration reste DORMANTE telle que définie (Calypso/Alix, Léna, Kenji, v14/v17 §3.1). Ne pas la réveiller pour l'accès.
 - **(b) l'événement du miroir** : symétrique de l'accès du Seuil (l'événement d'équilibre du Séraphin, p1 → d6) ; mais le système d'événements est v2, accès différé.
 - **(c) une naissance dédiée** : une 16e naissance N « Choriste » (C, Eau) éveillant vers d8 ; coûte une carte et casse « les 15 naissances » affichées partout.
+- **(d) n15 l'aînée commune des trois familles divines joueur (RECOMMANDÉE, proposition suite 26)** : l'éveil de n15 Éveillé du Seuil ouvre les TROIS familles divines au choix (n15 → d1 Garde du Seuil / d7 Lame Miroir / d13 Fileuse du Pont), le Pont restant le choix actuel. C'est la vision d'ORIGINE de Marc-Olivier (les trois familles nées d'une même lignée, cf. enquête §3), zéro carte nouvelle, zéro événement, et l'accès Chœur devient un choix d'éveil lisible. Cohérent avec le précédent n13 (une commune, plusieurs éveils).
 
 Quel que soit le choix : vérifier le pool raccourci (formsOf depuis les raciales divines) et les garde-fous du validateur — le Chœur doit rester JOUABLE après le recâblage.
 
@@ -104,4 +113,4 @@ Quel que soit le choix : vérifier le pool raccourci (formsOf depuis les raciale
 
 ## 8. Hors périmètre (rappels)
 
-Les donjons divins (Démons / Anges / Équilibre, tranchés 12/11, non construits) consommeront ces lignées pour leurs sous-bosses et leur roi : chantier séparé. Les arts série 3 attendent les ids définitifs (22 cartes). La coloration « l'aube » et « le sabre » restent v2. La Faim comme événement : si la proposition « L de la trappe » est retenue, l'événement v2 s'y référera au lieu de la créer. La fusion : le camp démon est déjà la cible tranchée de humaine + divin (15 % démon, suite 24) ; la table de synthèse se posera avec la spec-gel générale.
+Les donjons divins (Démons / Anges / Équilibre, tranchés 12/11, non construits) consommeront ces lignées pour leurs sous-bosses et leur roi : chantier séparé. Les arts série 3 attendent les ids définitifs (22 cartes). La coloration « l'aube » et « le sabre » restent v2. Famine comme événement : la L de la trappe étant actée (suite 26), l'événement v2 s'y référera au lieu de la créer. La fusion : le camp démon est déjà la cible tranchée de humaine + divin (15 % démon, suite 24) ; la table de synthèse se posera avec la spec-gel générale.
