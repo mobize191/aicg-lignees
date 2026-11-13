@@ -1,3 +1,10 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 9 (spec vie-jeu Lot 3) LIVRÉE : HÉROS D'ERRANCE PAR CODE (v1.48)
+
+- **`src/errance-hero.js`** (chemin adapté à l'arborescence plate du dépôt ; la spec disait `errance/hero.js`) : `drawHero(ctx, x, y, opts)` peint et anime le héros PAR CODE — femme cape noire cheveux blancs : tête ellipse peau en dégradé, mèches blanches en courbes (retard de phase), cape noire polygone souple qui ondule à l'opposé du mouvement, bras/jambes capsules arrondies, ombre elliptique au sol. Cycle de marche sin(phase) + bob, idle respiration ; 4 directions (dos = chevelure blanche couvrante). **Aucune image, aucun rectangle** (testé : zero fillRect). Remplace le dessin inline rectangle de `src/ui.js` ; branché dans la boucle de rendu errance.
+- Tests : 3 headless (`tests/hero-errance-v148.test.js`) : 4 directions × marche/idle tracés sans erreur, animation temporelle effective, silhouette ≤ 36×50 px + ombre au sol. 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (présentation errance).
+- QA visuelle (captures marche/virage/idle sur Marées) à faire via le protocole IHM — captures non produites dans ce run headless.
+- Tenue sous la cape [À TRANCHER] : défaut proposé = cuir sombre + liseré doré (non peint en dur, la cape couvre).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 8 (spec vie-jeu Lot 2) LIVRÉE : FEEDBACK 3 TIERS + HIT-STOP (v1.47)
 
 - **Routeur unique `feedback(tier, anchor)`** (`src/ui.js`) : small = tick SFX (WebAudio, sans asset) ; medium = flash léger + shake ~0,3 + pop overshoot (ease-out back) sur les floatText ; large (crit, K.O., boss, drops UR) = flash + shake ~0,7 + zoom léger + **hit-stop 80-100 ms**. Branché dans l'animateur de combat (attaque medium/large si crit, K.O. large, soin medium) et l'errance (autel medium).

@@ -17513,6 +17513,120 @@ function unlockZone(zoneId, st) {
   if (!s.zonesUnlocked.includes(zoneId)) s.zonesUnlocked.push(zoneId);
 }
 
+// src/errance-hero.js — héros d'errance peint et animé PAR CODE (Lot 3, spec vie-jeu, TRANCHÉ 12/11).
+// Femme à la cape noire et aux cheveux blancs : tête en ellipse (peau en dégradé doux), cheveux en
+// mèches courbes, cape noire en polygone souple qui ondule à l'opposé du mouvement, bras/jambes en
+// capsules arrondies. Cycle de marche en sin(phase) + bob vertical, cape/cheveux en retard de phase ;
+// idle = respiration lente. 4 directions, silhouette lisible à ~36 px. Aucune image, aucun rectangle.
+
+function drawHero(ctx, x, y, o = {}) {
+  const time = o.time ?? 0;
+  const vx = o.vx ?? 0, vy = o.vy ?? 0;
+  const hsp = Math.hypot(vx, vy);
+  const moving = (o.moving ?? hsp > 0.15) && (o.motionOK ?? true);
+  const dir = o.dir ?? (Math.abs(vx) > Math.abs(vy) ? (vx < -0.05 ? 'left' : 'right') : (vy < -0.05 ? 'up' : 'down'));
+  const walkPh = moving ? time * 11 : 0;
+  const bob = o.motionOK === false ? 0 : (moving ? Math.sin(walkPh) * 1.6 : Math.sin(time * 2.4) * 0.9);
+  const capePh = walkPh - 1.2; // retard de phase : la cape suit le mouvement
+  const breathe = o.motionOK === false ? 0 : Math.sin(time * 1.8) * 0.5;
+
+  ctx.save();
+  ctx.translate(x, y + bob);
+  if (o.tilt) ctx.rotate(o.tilt * (dir === 'left' ? -1 : 1));
+
+  // --- ombre portée elliptique (au sol, sous le personnage) ---
+  ctx.fillStyle = 'rgba(0,0,0,.28)';
+  ctx.beginPath(); ctx.ellipse(1.5, 11.5, 11, 4, 0, 0, 7); ctx.fill();
+
+  const profile = dir === 'left' || dir === 'right';
+  if (profile) ctx.scale(dir === 'left' ? -1 : 1, 1);
+
+  // --- cape noire : polygone souple qui ondule (à l'opposé du mouvement) ---
+  const sway = moving ? Math.sin(capePh) * 2.4 : Math.sin(time * 1.6) * 0.8;
+  const capeLen = 20 + (moving ? 2 : 0);
+  ctx.fillStyle = '#14161f';
+  ctx.beginPath();
+  ctx.moveTo(-6, -12);
+  ctx.quadraticCurveTo(-11 - sway, -2, -8 - sway * 1.4, capeLen * 0.55);
+  ctx.quadraticCurveTo(-4 - sway * 1.6 + Math.sin(capePh + 1) * 1.6, capeLen, 0 - sway * 0.6, capeLen * 0.8);
+  ctx.quadraticCurveTo(5 + sway * 0.8, capeLen * 0.7, 7 + sway * 0.4, capeLen * 0.4);
+  ctx.quadraticCurveTo(9, 0, 6, -12);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.07)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(-5, -10); ctx.quadraticCurveTo(-9 - sway, 0, -6 - sway * 1.3, capeLen * 0.5); ctx.stroke();
+
+  // --- jambes : capsules arrondies, balancement en sin(phase) ---
+  const legSwing = moving ? Math.sin(walkPh) * 4 : 0;
+  ctx.strokeStyle = '#23242e';
+  ctx.lineWidth = 4.4; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-2.5, 4); ctx.lineTo(-2.5 + legSwing, 10.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(2.5, 4); ctx.lineTo(2.5 - legSwing, 10.5); ctx.stroke();
+
+  // --- bras : capsules arrondies ---
+  ctx.strokeStyle = '#2e3140';
+  ctx.lineWidth = 3.8;
+  const armSwing = moving ? Math.sin(walkPh + Math.PI) * 3.4 : Math.sin(time * 2.2) * 0.6;
+  if (profile) {
+    ctx.beginPath(); ctx.moveTo(2, -8); ctx.lineTo(5 + armSwing, -1); ctx.stroke();
+  } else {
+    ctx.beginPath(); ctx.moveTo(-4.5, -8); ctx.lineTo(-6 - armSwing * 0.7, -1.5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(4.5, -8); ctx.lineTo(6 + armSwing * 0.7, -1.5); ctx.stroke();
+  }
+
+  // --- tunique sous la cape (corps) ---
+  const g = ctx.createLinearGradient(0, -14, 0, 6);
+  g.addColorStop(0, '#3a3f55');
+  g.addColorStop(1, '#262a3c');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.ellipse(0, -3 + breathe * 0.4, 7, 9.5, 0, 0, 7); ctx.fill();
+
+  // --- tête : ellipse peau en dégradé doux ---
+  const skin = ctx.createRadialGradient(-1.5, -21, 1, 0, -19, 7);
+  skin.addColorStop(0, '#f6d7b8');
+  skin.addColorStop(1, '#e0b48e');
+  ctx.fillStyle = skin;
+  ctx.beginPath(); ctx.ellipse(0, -19, 6.2, 7, 0, 0, 7); ctx.fill();
+
+  // --- cheveux blancs : mèches en courbes qui dérivent (retard de phase) ---
+  const hairPh = capePh + 0.5;
+  const back = dir === 'up';
+  if (back) {
+    ctx.fillStyle = '#eef1f7';
+    ctx.beginPath(); ctx.ellipse(0, -18, 7.4, 8.4, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#d8dde8';
+    ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * 2.4, -24 + Math.abs(i));
+      ctx.quadraticCurveTo(i * 3 + Math.sin(time * 2 + i) * 1.2, -16, i * 2.2 + Math.sin(hairPh + i) * 1.5, -8);
+      ctx.stroke();
+    }
+  } else {
+    ctx.strokeStyle = '#f2f4f8';
+    ctx.lineWidth = 2.6; ctx.lineCap = 'round';
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath();
+      ctx.moveTo(i * 2.2, -24.5 + Math.abs(i) * 0.8);
+      ctx.quadraticCurveTo(i * 3.1 + Math.sin(time * 2.1 + i * 1.3) * 1.1, -19, i * 2.6 + Math.sin(hairPh + i) * 1.8, -11);
+      ctx.stroke();
+    }
+    ctx.fillStyle = '#f2f4f8';
+    ctx.beginPath(); ctx.ellipse(0, -22.5, 6.4, 4.6, 0, Math.PI, 0); ctx.fill();
+  }
+  if (!back && !profile) {
+    ctx.fillStyle = '#2a2320';
+    ctx.beginPath(); ctx.arc(-2.2, -19.5, 0.9, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(2.2, -19.5, 0.9, 0, 7); ctx.fill();
+  }
+  if (profile) {
+    ctx.fillStyle = '#2a2320';
+    ctx.beginPath(); ctx.arc(2.6, -19.5, 0.9, 0, 7); ctx.fill();
+  }
+
+  ctx.restore();
+}
+
 // src/errance-paint.js — peinture de l'errance, style maquette A+ (docs/design/maquettes/errance-demo-jouable.html)
 // Partie pure testable : errancePalette (data/zones.json, clé errance.paint, défauts intégrés),
 // decorOrders + buildAmbiance (RNG déterministe dérivé du seed de zone, ordre d'appel fixe — guide §2).
@@ -21025,25 +21139,11 @@ function renderErrance(root) {
     const bob = motionOK() ? (moving ? Math.sin(time * 11) * 2 : Math.sin(time * 2.4) * 1) : 0;
     const face = hv.x < -0.05 ? -1 : 1;
     const walkPh = moving ? time * 11 : 0;
-    ctx.save();
-    ctx.translate(hx, hy + bob);
-    ctx.rotate((st.hero.tilt ?? 0) * face); // balancement dans les virages (§5)
-    ctx.scale(face, 1);
-    // héros vectoriel de la maquette A+ : sacoche, jambes animées, tunique deux tons, ceinture, bras, tête, chapeau
-    ctx.fillStyle = '#7a5b3a'; ctx.beginPath(); ctx.ellipse(-7, -3, 4, 5.5, .3, 0, 7); ctx.fill();
-    ctx.fillStyle = '#2a3b5c';
-    ctx.fillRect(-6, 9 + (moving ? Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
-    ctx.fillRect(2, 9 + (moving ? -Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
-    ctx.fillStyle = '#3d6fa8'; ctx.beginPath(); ctx.ellipse(0, -1, 8.5, 12.5, 0, 0, 7); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath(); ctx.ellipse(-2.5, -3, 5, 8.5, .2, 0, 7); ctx.fill();
-    ctx.fillStyle = '#2c4d78'; ctx.fillRect(-8, 4, 16, 3);
-    ctx.fillStyle = '#c8a24e'; ctx.fillRect(-1.5, 3.2, 3, 4.6);
-    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.ellipse(8, -2 + (moving ? Math.sin(walkPh) * 1.2 : 0), 2.6, 5.5, .5, 0, 7); ctx.fill();
-    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(0, -19, 7.5, 0, 7); ctx.fill();
-    ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.arc(0, -21.5, 7.2, Math.PI * .95, Math.PI * 2.05); ctx.fill();
-    ctx.fillStyle = '#2a2a2a'; ctx.beginPath(); ctx.arc(2.8, -19.5, 1.2, 0, 7); ctx.fill();
-    ctx.fillStyle = '#5b4a9e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-9.5, -29, 19, 6.5, 3) : ctx.rect(-9.5, -29, 19, 6.5); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(-9.5, -29, 19, 2.2);
+    // Lot 3 : héros peint et animé PAR CODE (src/errance-hero.js) — cape noire, cheveux blancs, 4 directions, cycle de marche
+    drawHero(ctx, hx, hy, {
+      vx: hv.x, vy: hv.y, moving, time, motionOK: motionOK(), tilt: st.hero.tilt ?? 0,
+      dir: Math.abs(hv.x) > Math.abs(hv.y) ? (hv.x < -0.05 ? 'left' : 'right') : (hv.y < -0.05 ? 'up' : 'down'),
+    });
     ctx.restore();
     // arc de frappe doré (feedback §8, 0,35 s)
     if (atk > 0) {
@@ -24400,6 +24500,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
   ['v1.47 : Feedback 3 tiers + hit-stop', 'Un point de routage unique pour les effets : petit (tick sonore), moyen (flash léger + secousse + pop), grand (crit, K.O., boss : flash + secousse forte + zoom + hit-stop de 90 ms, jamais deux pauses qui se chevauchent). Nouveau réglage « réduire les flashs » (persisté) : teinte sans pulsation, au plus 3 flashs par seconde. Désactivable en une ligne (`FX_HITSTOP` en données). 246 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.45 : Capture à la DQM + jetons', 'À l\u2019écran Récompenses de chaque combat gagné, chaque monstre vaincu (hors boss et nommés) propose « Tenter la capture — X % » : taux de la zone × démonstration de force (vos niveaux moyens contre le sien, plafonné), un seul essai. Nouvelle devise 🎫 JETONS : gagnés en bouclant des donjons, via les jalons et les quêtes ; la Guilde recrute ses 3 compagnons du jour en jetons — jamais en or. 240 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.44 : Points de repos — la vie persiste partout', 'Vos PV et mana ne se régénérent plus automatiquement (fin de la régénération après le premier boss) : ils persistent d\u2019un combat à l\u2019autre, en donjon comme dans les Terres Sauvages, et un K.O. reste K.O. Repos gratuits : revenir au Port des Brumes (Accueil) restaure toute l\u2019equipe, et les autels de l\u2019errance soignent + donnent de la grâce. En donjon, buvez vos potions (🧪). 234 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],

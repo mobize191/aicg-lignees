@@ -2811,25 +2811,11 @@ function renderErrance(root) {
     const bob = motionOK() ? (moving ? Math.sin(time * 11) * 2 : Math.sin(time * 2.4) * 1) : 0;
     const face = hv.x < -0.05 ? -1 : 1;
     const walkPh = moving ? time * 11 : 0;
-    ctx.save();
-    ctx.translate(hx, hy + bob);
-    ctx.rotate((st.hero.tilt ?? 0) * face); // balancement dans les virages (§5)
-    ctx.scale(face, 1);
-    // héros vectoriel de la maquette A+ : sacoche, jambes animées, tunique deux tons, ceinture, bras, tête, chapeau
-    ctx.fillStyle = '#7a5b3a'; ctx.beginPath(); ctx.ellipse(-7, -3, 4, 5.5, .3, 0, 7); ctx.fill();
-    ctx.fillStyle = '#2a3b5c';
-    ctx.fillRect(-6, 9 + (moving ? Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
-    ctx.fillRect(2, 9 + (moving ? -Math.sin(walkPh) * 1.6 : 0), 4.5, 6);
-    ctx.fillStyle = '#3d6fa8'; ctx.beginPath(); ctx.ellipse(0, -1, 8.5, 12.5, 0, 0, 7); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath(); ctx.ellipse(-2.5, -3, 5, 8.5, .2, 0, 7); ctx.fill();
-    ctx.fillStyle = '#2c4d78'; ctx.fillRect(-8, 4, 16, 3);
-    ctx.fillStyle = '#c8a24e'; ctx.fillRect(-1.5, 3.2, 3, 4.6);
-    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.ellipse(8, -2 + (moving ? Math.sin(walkPh) * 1.2 : 0), 2.6, 5.5, .5, 0, 7); ctx.fill();
-    ctx.fillStyle = '#f2c9a0'; ctx.beginPath(); ctx.arc(0, -19, 7.5, 0, 7); ctx.fill();
-    ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.arc(0, -21.5, 7.2, Math.PI * .95, Math.PI * 2.05); ctx.fill();
-    ctx.fillStyle = '#2a2a2a'; ctx.beginPath(); ctx.arc(2.8, -19.5, 1.2, 0, 7); ctx.fill();
-    ctx.fillStyle = '#5b4a9e'; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(-9.5, -29, 19, 6.5, 3) : ctx.rect(-9.5, -29, 19, 6.5); ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.18)'; ctx.fillRect(-9.5, -29, 19, 2.2);
+    // Lot 3 : héros peint et animé PAR CODE (src/errance-hero.js) — cape noire, cheveux blancs, 4 directions, cycle de marche
+    drawHero(ctx, hx, hy, {
+      vx: hv.x, vy: hv.y, moving, time, motionOK: motionOK(), tilt: st.hero.tilt ?? 0,
+      dir: Math.abs(hv.x) > Math.abs(hv.y) ? (hv.x < -0.05 ? 'left' : 'right') : (hv.y < -0.05 ? 'up' : 'down'),
+    });
     ctx.restore();
     // arc de frappe doré (feedback §8, 0,35 s)
     if (atk > 0) {
@@ -6186,6 +6172,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
   ['v1.47 : Feedback 3 tiers + hit-stop', 'Un point de routage unique pour les effets : petit (tick sonore), moyen (flash léger + secousse + pop), grand (crit, K.O., boss : flash + secousse forte + zoom + hit-stop de 90 ms, jamais deux pauses qui se chevauchent). Nouveau réglage « réduire les flashs » (persisté) : teinte sans pulsation, au plus 3 flashs par seconde. Désactivable en une ligne (`FX_HITSTOP` en données). 246 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.45 : Capture à la DQM + jetons', 'À l\u2019écran Récompenses de chaque combat gagné, chaque monstre vaincu (hors boss et nommés) propose « Tenter la capture — X % » : taux de la zone × démonstration de force (vos niveaux moyens contre le sien, plafonné), un seul essai. Nouvelle devise 🎫 JETONS : gagnés en bouclant des donjons, via les jalons et les quêtes ; la Guilde recrute ses 3 compagnons du jour en jetons — jamais en or. 240 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.44 : Points de repos — la vie persiste partout', 'Vos PV et mana ne se régénérent plus automatiquement (fin de la régénération après le premier boss) : ils persistent d\u2019un combat à l\u2019autre, en donjon comme dans les Terres Sauvages, et un K.O. reste K.O. Repos gratuits : revenir au Port des Brumes (Accueil) restaure toute l\u2019equipe, et les autels de l\u2019errance soignent + donnent de la grâce. En donjon, buvez vos potions (🧪). 234 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
