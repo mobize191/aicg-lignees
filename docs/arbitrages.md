@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 39) : SHINY TRANCHÉ — DOUBLE IMAGE PAR CARTE (mode normal + « shiny »), intégré à la refonte v2 comme lot 8 — le prompt passe à 11 lots — propositions balisées (taux, marqueur, couplage variance, fusion)
+
+- **Tranché par Marc-Olivier (15/11)** : chaque carte reçoit une **double image : le mode NORMAL et le mode « shiny »** (version chromatique rare, précédent Pokémon). Le shiny s'ajoute aux 3 versions du grand lancement (classique, Repos, Obscures) : **4e version d'art, fichier `{id}-s.jpg`, clé `"<id>-s"` au manifeste** — génération côté couloir design, structure et mécanique côté couloir 1.
+- **Intégré au prompt de la refonte v2 : `docs/prompt-refonte-v2.md` passe à 11 lots** (nouveau **lot 8 SHINY** : tirage à l'obtention de l'exemplaire — drop, capture, naissance, jeton, fusion —, marqueur, badge fiche, compteur + filtre collection, règles de fusion ; XP 1-100 devient lot 9, clôture lot 10). Digest : INCHANGÉ attendu en couche cosmétique ; MESURE si le couplage variance stats est tranché.
+- **Propositions balisées [À TRANCHER par Marc-Olivier]** : (1) **taux** : 1/100 à l'obtention, aligné sur le taux d'Exception des thèmes (1/100, suite 36 ; le précédent 1/50 était cité par l'étude §G) ; (2) **marqueur visuel** DISTINCT des thèmes Repos (sweep or 60°), Obscures (liseré rouge sombre) et des rares (105°) : proposition paillettes ✨ animées ; (3) **COUPLAGE VARIANCE STATS** (étude §G : indicateur visible) : le shiny EST l'indicateur visible de la variance individuelle (+3-5 % stats, borné), un seul tirage porte les deux ; (4) **fusion** : l'enfant tire son propre état, proposition de transmission si les DEUX parents sont shiny (la règle des thèmes Exception transfère déjà le statut, s'en inspirer).
+- Le shiny complète la chasse à la carte parfaite (variance + thèmes + shiny = trois couches de rareté cosmétique, toutes lisibles en fiche).
+
 ## 2026-11-15 (suite 36) : BUG « combat de zone affiché comme un donjon » CORRIGÉ (pure UI) — digest INCHANGÉ
 
 - **Signalement Marc-Olivier** : combat lancé dans les Terres Sauvages -> l'écran croit être en donjon (« Antre des Marées — étage 1/10 »).
@@ -213,19 +220,3 @@
 - **Demandes de Marc-Olivier (14/11, sur la v2.1)** : (1) « attention avec le boss, tu as des icônes qui se chevauchent » ; (2) « un exemple avec des invocations, c'est-à-dire qu'on ajoute des petits carrés en plus ».
 - **Corrigé dans `docs/design/maquettes/ecran-combat-v2.html` (v2.2)** :
   - **Module boss sans chevauchement** : sbires écartés du boss (Aiguillon gauche, boss centre 118 px, Brute droite, colonnes disjointes) ; alliés répartis sur toute la largeur (8/116/244 px).
-  - **Invocations = PETITS CARRÉS rattachés au lanceur** : carré 40 px à bordure pointillée SOUS l'icône du lanceur, cliquable → fiche de l'invocation (stats dérivées, ttl) ; PV mini + badge ⏳ tours restants sur le carré ; un actif max par lanceur (7-b) ; le bouton d'invocation vit dans la barre de commandes et le chip pointillé 👁 rejoint le rail d'ordre du tour.
-  - **Exemples montrés** : côté ennemi, le Roi des Démons porte sa Lame Ardente (⏳ 4) ; côté allié, le Prêtre porte déjà sa Lanterne Sacrée (⏳ 1) et l'Assassin invoque son Esprit de l'Ombre (⏳ 2) au clic sur le bouton de la barre ; le mini-log rend compte des invocations (frappe de la Lame Ardente, expiration de la Lanterne).
-- **Reste** : validation de la v2.2 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
-
-## 2026-11-14 (suite 20) : MAQUETTE ÉCRAN DE COMBAT v2.1 — 3 demandes de Marc-Olivier intégrées (chiffres, icônes, boss/invocation)
-
-- **Demandes de Marc-Olivier (14/11, sur la maquette v2)** : (1) des chiffres : PV/PVmax, bouclier ; (2) des icônes plus grandes ; (3) montrer un combat de boss (grosse icône) et/ou avec des invocations.
-- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.1)** :
-  - **Chiffres sur les unités** : PV/PVmax et MP/MPmax en clair à côté des barres (lecture sans fiche) ; **bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré** (ordre de lecture : bouclier avant PV).
-  - **Icônes agrandies** : unités 56 → 74 px ; **boss 118 px** (nom en gras, chip élargi 👑 36 px dans le rail d'ordre du tour) ; **invocation 50 px à bordure pointillée + badge ttl** (⏳ tours restants) : l'œil distingue plein/boss/invoqué d'un coup.
-  - **Module BOSS + INVOCATION** (portrait interactif) : Roi des Démons 850/1200 + sbires, chip boss dans le rail ; Esprit de l'Ombre invoquable au clic sur le bouton de la barre de commandes (affiche l'invocation sur le terrain + mini-log), badge « 2 tours », rappel « un actif max par lanceur » (tranchage 7-b) ; mini-log avec absorption de bouclier (🛡 absorbe 32).
-- **Reste** : validation de la v2.1 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
-
-## 2026-11-14 (suite 19) : POSITIONNEMENT ÉCRAN DE COMBAT — TRANCHAGE B ACTÉ (« Plutôt une maquette »), MAQUETTE COMPARATIVE LIVRÉE
-
-- **Tranchage de Marc-Olivier (14/11, sur les options A/B de la suite 18)** : **B — d'abord une maquette**, puis le chantier couloir 1.
