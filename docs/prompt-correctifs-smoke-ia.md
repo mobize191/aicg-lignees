@@ -11,7 +11,7 @@ Contexte : revue indépendante du couloir pilotage (`docs/historique/revue-v1.50
 ## Lot 2 — heuristique IA : école du sort, pas élément de la carte
 
 1. Conflit signalé en clôture du grand lancement : le scoring d'utilité (ciblage IA, refonte v1.34) lit encore **l'élément de la carte** au lieu de **l'école du sort** envisagé. Les dégâts sont bien calculés école-du-sort depuis l'étape 3 ; seul le choix de cible/sort est faussé. Corriger : pour chaque coup évalué, scorer avec l'élément EFFECTIF du coup (école du sort joué ; frappe simple = élément de la carte qui frappe).
-2. **MESURE digest 3000 + 10 000** : le ciblage change, les combats auto-résolus peuvent changer → MESURER et consigner l'écart vs la baseline PROPOSÉE `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000. **Aucune baseline appliquée sans arbitrage de Marc-Olivier. PAS de recalibrage.**
+2. **MESURE digest 3000 + 10 000** : le ciblage change, les combats auto-résolus peuvent changer → MESURER et consigner l'écart vs la baseline **VERROUILLÉE par Marc-Olivier (13/11)** : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000. **PAS de recalibrage** ; tout écart est consigné pour arbitrage avant tout nouveau verrouillage.
 3. Tests headless : l'IA préfère la cible la plus vulnérable à l'école du sort joué (cas construits : sort Eau vs cible Feu vs cible Neutre ; frappe simple vs cible de l'élément opposé).
 4. Docs : `docs/arbitrages.md` (entrée du lot), smoke inchangé sinon.
 

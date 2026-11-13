@@ -1,6 +1,6 @@
-# Spec — Fusion DQM v4 : deux cartes → un enfant (à lancer après arbitrage de la baseline)
+# Spec — Fusion DQM v4 : deux cartes → un enfant (baseline arbitrée : prête à lancer)
 
-> Chantier de contenu v4 n°1, rédigé par le couloir pilotage à partir des tranchages de Marc-Olivier (session du 12/11, items 6, 21, 25-32 du tableau de bord `docs/design/session-qa-direction.md`). PRÉREQUIS : baseline digest arbitrée. La fusion ne touche pas les maths de combat → digest inchangé attendu.
+> Chantier de contenu v4 n°1, rédigé par le couloir pilotage à partir des tranchages de Marc-Olivier (session du 12/11, items 6, 21, 25-32 du tableau de bord `docs/design/session-qa-direction.md`). PRÉREQUIS SATISFAIT : baseline digest VERROUILLÉE par Marc-Olivier le 13/11 (`9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000). La fusion ne touche pas les maths de combat → digest inchangé attendu contre cette baseline.
 
 ## 1. Tranchages actés (rien à rediscuter)
 
