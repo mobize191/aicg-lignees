@@ -1,6 +1,8 @@
 # Spéc v3.3 — Relance complète base 3.1 + couche monstres 3.2 (LoRAs gagnants)
 
 > ARBITRÉ par Marc-Olivier le 13/11 : « la 3.1 a eu de meilleurs résultats globaux que la 3.2 sauf en génération de monstres ». Synthèse v3.3 : **relance complète des 271 depuis les prompts v3.1**, avec la couche monstres de la 3.2, **uniquement 3 LoRAs conservés** (Léviathan, Golems, Forest Guardians), et pour les défauts d'habillage : **« enlève juste le sang »** — PAS de R12 (tenues) en 3.3, PAS de négatif revealing ; seule l'anti-sang (R13) reste.
+>
+> **Compléments arbitrés le 13/11 (2e tour)** : (1) **aucun Fx généré** dans cette session (second temps) ; (2) **les 37 cartes manquantes de la 3.2 sont intégrées** à la session (compagnons c1-c14, p5, p6, w1-w21, cf. `arts-manquants-contenu-v3.md`, seeds 2150000+) ; (3) **push automatique des livrables en fin de session** (le manque de push de la 3.2 a bloqué le QA) ; (4) **switch 4 versions** sur le bouton 🖼️ : V3, V3.1, V3.2, V3.3 en parallèle avec l'étiquette de version affichée sur le bouton ; (5) **POINT D'ARRÊT après le build** : la génération ne démarre qu'après relecture et validation des prompts par Marc-Olivier.
 
 ## 1. Base : prompts v3.1, relance complète
 
@@ -42,8 +44,17 @@ Constat 3.2 : sirènes avec des pieds. Sans LoRA mermaid en 3.3, durcissement pr
 
 ## 7. Process
 
-1. Builder `build-prompts-v33.mjs` = base v31 + descriptions R11 + anti-sang + durcissement sirène + branchement LoRAs (3 fichiers uniquement).
-2. Relance complète 271, mêmes seeds que 3.1, retries seed+1 (max 2 par carte).
-3. Crop signatures global.
-4. QA vision par l'agent (par lot de ~20), rapport unique.
-5. QA vision indépendant du couloir design (Vibe) à la réception, image par image.
+1. Builder `build-prompts-v33.mjs` = base v31 + descriptions R11 + anti-sang + durcissement sirène + branchement LoRAs (3 fichiers uniquement) + prompts des 37 nouvelles cartes (créés depuis `data/cards.json`, verrous 3.3, compagnons character_dna + IPAdapter UR↔L, Gorgonne = morphologie pure, seeds 2150000+ consignés dans `tools/seeds-v3.csv`).
+2. **POINT D'ARRÊT (arbitrage 13/11)** : après le build, `tools/prompts-v33.json` est poussé sur GitHub avec un court rapport de build (comptages : 271 + 37, LoRAs par carte, longueurs de négatif, zéro R12, zéro Fx). **La génération attend la validation écrite de Marc-Olivier.** Il relit les prompts et donne le « go » (ou liste les corrections, un rebuild, puis go).
+3. Après validation : relance complète 271 + génération des 37, mêmes seeds que la 3.1 pour les 271 (retries seed+1, max 2), **aucun Fx** (second temps, arbitré).
+4. Crop signatures global.
+5. QA vision par l'agent (par lot de ~20), rapport unique.
+6. QA vision indépendant du couloir design (Vibe) à la réception, image par image.
+7. **Push automatique en clôture** : rapport, planches, jpg de production, masters référencés, manifestes mis à jour — plus les livrables 3.2 non poussés si disponibles localement (`RAPPORT-vague3-2.md`, arts des 37 si déjà générés en 3.2, cf. §8).
+
+## 8. Switch 4 versions (code, livré dans la même session)
+
+- Bouton 🖼️ : cycle **V3 → V3.1 → V3.2 → V3.3** avec l'étiquette de version affichée sur le bouton (ex. « 🖼️ V3.3 »), préférence persistée comme aujourd'hui (`fondations-art-src`).
+- Architecture : `ART_MANIFESTS = { v3: assets-v3.json, v31: assets-v3.1.json, v32: assets-v32.json, v33: assets-v33.json }` ; un manifeste manquant = bouton grisé avec le libellé (jamais d'erreur), la version courante inchangée.
+- `assets-v32.json` et `assets-v33.json` sont créés depuis les sorties correspondantes (2.2/3.2 et 3.3) ; les arts existant dans une seule version (ex. les 37 nouvelles cartes) sont ajoutés au manifeste PAR DÉFAUT `assets-v3.json` comme le fait déjà v1.33 — présents partout, quelle que soit la version choisie.
+- Digest **inchangé** (IHM seule) ; tests headless (cycle complet, préférence persistée, manifeste manquant toléré) + smoke dédié ; protocole IHM mis à jour (S du switch 4 versions).
