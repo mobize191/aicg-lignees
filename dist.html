@@ -833,7 +833,8 @@ nav { display: none; }
 nav.open { display: flex; flex-direction: column; gap: 2px; padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); padding-left: calc(6px + env(safe-area-inset-left)); padding-right: calc(6px + env(safe-area-inset-right)); }
 nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .92rem; }
 /* v0.46.1 : fenêtre d'action tactile — boutons 44 px, fenêtre plus haute, ✕ toujours visible */
-body.in-combat .act-modal { max-height: 78dvh; }
+/* UX combat adaptatif 13/11 : panneau bas BORNÉ à 38dvh (plus jamais 78 % de recouvrement) */
+body.in-combat .act-modal { max-height: 38dvh; }
 .act-modal .tac-btn { min-height: 44px; padding: 10px 14px; font-size: .82rem; }
 .act-modal .act-target { min-height: 44px; }
 .act-modal .act-lab { font-size: .9rem; }
@@ -915,7 +916,43 @@ body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
 body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
 body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap: 1px 4px; }
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
-body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }
+/* UX combat adaptatif 13/11 (lot 1) : la fenêtre d'action est DANS le flux, jamais en surimpression du terrain */
+body.in-combat #app { overflow: hidden; width: 100%; padding-bottom: 10px; }
+body.in-combat #board-col { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 38dvh; }
+body.in-combat #act-slot:empty { display: none; }
+body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 38dvh; overflow-y: auto; }
+/* terrain rétréci mais COMPLET quand la fenêtre est ouverte */
+body.in-combat.act-open .row-lab { display: none; }
+body.in-combat.act-open .unit { width: clamp(52px, 14vw, 84px); }
+body.in-combat.act-open .unit.boss { width: clamp(72px, 19vw, 110px); }
+/* réserve cachée : badge latéral compact (compteur vivantes/total) à la place du rail */
+body.in-combat #reserve-zone { display: none; }
+.reserve-badge { display: none; }
+body.in-combat .reserve-badge { position: fixed; left: 8px; top: 44%; z-index: 40; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
+body.in-combat .reserve-badge:active { background: rgba(77, 208, 225, .25); }
+body.in-combat .reserve-badge.empty { opacity: .45; }
+/* fiche flottante : ancrée au bord opposé de la fenêtre d'action, ne la ferme PAS */
+body.in-combat .modal-overlay.float-fiche { z-index: 70; background: none; backdrop-filter: none; pointer-events: none; align-items: flex-start; padding: 8px; }
+body.in-combat .modal-overlay.float-fiche .modal { pointer-events: auto; margin: 0 auto; width: min(560px, 94vw); max-height: 50dvh; overflow-y: auto; }
+/* paysage (PC + mobile tourné) : terrain à gauche, fenêtre d'action en rail latéral à droite */
+@media (orientation: landscape) {
+body.in-combat #app { flex-direction: row; max-width: none; margin: 0; padding: 8px 10px 10px; }
+body.in-combat #act-slot { max-height: none; width: min(360px, 38vw); border-left: 1px solid rgba(77, 208, 225, .25); }
+body.in-combat .act-modal { max-height: none; height: 100%; border-radius: 0; border-top: none; border-left: 2px solid rgba(77, 208, 225, .35); }
+body.in-combat.act-open .unit { width: clamp(40px, 6.5vw, 84px); }
+body.in-combat.act-open .unit.boss { width: clamp(52px, 8.5vw, 104px); }
+body.in-combat .modal-overlay.float-fiche { justify-content: flex-start; }
+body.in-combat .modal-overlay.float-fiche .modal { margin: 0; width: min(300px, calc(100vw - min(360px, 38vw) - 24px)); max-height: 94dvh; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+body.in-combat.act-open .rail-wrap { display: none; }
+body.in-combat.act-open #app > #board-col > h2 { font-size: .78rem; }
+body.in-combat.act-open #controls { padding: 2px; }
+body.in-combat.act-open .unit { width: clamp(32px, 9.5dvh, 56px); }
+body.in-combat.act-open .unit.boss { width: clamp(42px, 12dvh, 70px); }
+}
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
 body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
 body.in-combat .tac-name { min-width: 78px; font-size: .72rem; }
@@ -22575,6 +22612,8 @@ function bindTargetHover() {
 
 function closeActModal() {
   if (actBox) { actBox.remove(); actBox = null; }
+  document.body.classList.remove('act-open');
+  for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
   clearActHighlights();
   const ps = promptState;
   promptState = null;
@@ -22595,7 +22634,9 @@ function renderActModal(u, zoneHtml) {
       <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
-  document.body.appendChild(actBox);
+  const actSlot = combatApp ? combatApp.querySelector('#act-slot') : null;
+  (actSlot ?? document.body).appendChild(actBox); // UX 13/11 lot 1 : la fenêtre vit DANS #act-slot, le terrain reste visible
+  document.body.classList.add('act-open');
   const redBtn = actBox.querySelector('.act-reduce');
   if (redBtn) redBtn.onclick = () => {
     actBox.classList.toggle('reduced');
@@ -22837,6 +22878,8 @@ function promptUnitAction(u, kind) {
         promptState = null;
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
+        document.body.classList.remove('act-open');
+        for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
         resolve(choice);
       },
     };
@@ -22880,6 +22923,7 @@ async function runTacTurn() {
     state._events = [...(state._events ?? []), ...r.events];
     await animate(r.events, SPEEDS[speedIdx], myGen);
     if (r.done) break;
+    await new Promise((res) => setTimeout(res, 340)); // UX 13/11 lot 1 : l'impact a le temps d'etre lu avant la fenetre suivante
   }
   closeActModal();
   renderRail();
@@ -22955,7 +22999,7 @@ function openUnitModal(u) {
   if (u.linkedTo) effRows.push(FX_DOC.link());
   if (st.reviving > 0) effRows.push(FX_DOC.revive());
   const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
+  overlay.className = actBox ? 'modal-overlay float-fiche' : 'modal-overlay'; // UX 13/11 : fiche FLOTTANTE pendant un choix, la fenêtre d'action reste ouverte
   const box = document.createElement('div');
   box.className = 'modal end-modal';
   box.innerHTML = ficheCoreHtml(card, {
@@ -23076,6 +23120,14 @@ function drawBoard() {
   }
   
   
+  const rb = combatApp.querySelector('#reserve-badge'); // UX 13/11 : badge réserve vivantes/total (le rail #reserve-zone est caché)
+  if (rb) {
+    const tot = (state.reserve ?? []).length;
+    const alive = (state.reserve ?? []).filter((r) => r && r.alive).length;
+    const rc = rb.querySelector('#reserve-count');
+    if (rc) rc.textContent = `${alive}/${tot}`;
+    rb.classList.toggle('empty', tot === 0);
+  }
   if (promptState && promptState.phase === 'target') {
     const list = (promptState.mode === 'enemy' || promptState.mode === 'zone')
       ? [...state.enemies.avant, ...state.enemies.arriere].filter((e) => e.alive)
@@ -24104,6 +24156,7 @@ function renderCombat(root, opts = {}) {
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
     .join(' ');
   combatApp.innerHTML = `
+    <div id="board-col">
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
       ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
@@ -24114,10 +24167,15 @@ function renderCombat(root, opts = {}) {
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
     <div class="rail-wrap"><div class="rail" id="rail"></div></div>
+    <button type="button" class="reserve-badge" id="reserve-badge" title="R\u00e9serve \u2014 choisir une carte \u00e0 faire entrer (l'\u00e9change co\u00fbte le tour)">\u21c4 <span id="reserve-count">0/0</span></button>
+    <div id="board">
     <div class="enemy-zone" id="enemy-zone"></div>
     <div class="team-zone" id="team-zone"></div>
     <div class="reserve-zone" id="reserve-zone"></div>
-    <div id="log"></div>
+    </div>
+    <div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div>
+    </div>
+    <div id="act-slot"></div>
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
   combatApp.style.background = d.art
@@ -24153,6 +24211,11 @@ function renderCombat(root, opts = {}) {
     run();
   };
   combatApp.querySelector('#bag').onclick = () => openBagModal();
+  const rb = combatApp.querySelector('#reserve-badge'); // UX 13/11 : le badge ouvre le sélecteur d'échange existant (3+2 inchangé)
+  if (rb) rb.onclick = () => {
+    if (promptState && actBox && promptState.unit) askSwapChoice(promptState.unit);
+    else toast('L’échange se choisit pendant le tour d’une de vos cartes (bouton ⇄ Échanger).');
+  };
   drawBoard();
   renderRail();
   if (!teamEmpty && state && !state.winner && !tacPaused) {

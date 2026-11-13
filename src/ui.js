@@ -4143,6 +4143,8 @@ function bindTargetHover() {
 
 function closeActModal() {
   if (actBox) { actBox.remove(); actBox = null; }
+  document.body.classList.remove('act-open');
+  for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
   clearActHighlights();
   const ps = promptState;
   promptState = null;
@@ -4163,7 +4165,9 @@ function renderActModal(u, zoneHtml) {
       <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
-  document.body.appendChild(actBox);
+  const actSlot = combatApp ? combatApp.querySelector('#act-slot') : null;
+  (actSlot ?? document.body).appendChild(actBox); // UX 13/11 lot 1 : la fenêtre vit DANS #act-slot, le terrain reste visible
+  document.body.classList.add('act-open');
   const redBtn = actBox.querySelector('.act-reduce');
   if (redBtn) redBtn.onclick = () => {
     actBox.classList.toggle('reduced');
@@ -4405,6 +4409,8 @@ function promptUnitAction(u, kind) {
         promptState = null;
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
+        document.body.classList.remove('act-open');
+        for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
         resolve(choice);
       },
     };
@@ -4448,6 +4454,7 @@ async function runTacTurn() {
     state._events = [...(state._events ?? []), ...r.events];
     await animate(r.events, SPEEDS[speedIdx], myGen);
     if (r.done) break;
+    await new Promise((res) => setTimeout(res, 340)); // UX 13/11 lot 1 : l'impact a le temps d'etre lu avant la fenetre suivante
   }
   closeActModal();
   renderRail();
@@ -4523,7 +4530,7 @@ function openUnitModal(u) {
   if (u.linkedTo) effRows.push(FX_DOC.link());
   if (st.reviving > 0) effRows.push(FX_DOC.revive());
   const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
+  overlay.className = actBox ? 'modal-overlay float-fiche' : 'modal-overlay'; // UX 13/11 : fiche FLOTTANTE pendant un choix, la fenêtre d'action reste ouverte
   const box = document.createElement('div');
   box.className = 'modal end-modal';
   box.innerHTML = ficheCoreHtml(card, {
@@ -4644,6 +4651,14 @@ function drawBoard() {
   }
   
   
+  const rb = combatApp.querySelector('#reserve-badge'); // UX 13/11 : badge réserve vivantes/total (le rail #reserve-zone est caché)
+  if (rb) {
+    const tot = (state.reserve ?? []).length;
+    const alive = (state.reserve ?? []).filter((r) => r && r.alive).length;
+    const rc = rb.querySelector('#reserve-count');
+    if (rc) rc.textContent = `${alive}/${tot}`;
+    rb.classList.toggle('empty', tot === 0);
+  }
   if (promptState && promptState.phase === 'target') {
     const list = (promptState.mode === 'enemy' || promptState.mode === 'zone')
       ? [...state.enemies.avant, ...state.enemies.arriere].filter((e) => e.alive)
@@ -5672,6 +5687,7 @@ function renderCombat(root, opts = {}) {
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
     .join(' ');
   combatApp.innerHTML = `
+    <div id="board-col">
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
       ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
@@ -5682,10 +5698,15 @@ function renderCombat(root, opts = {}) {
       <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
     <div class="rail-wrap"><div class="rail" id="rail"></div></div>
+    <button type="button" class="reserve-badge" id="reserve-badge" title="R\u00e9serve \u2014 choisir une carte \u00e0 faire entrer (l'\u00e9change co\u00fbte le tour)">\u21c4 <span id="reserve-count">0/0</span></button>
+    <div id="board">
     <div class="enemy-zone" id="enemy-zone"></div>
     <div class="team-zone" id="team-zone"></div>
     <div class="reserve-zone" id="reserve-zone"></div>
-    <div id="log"></div>
+    </div>
+    <div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div>
+    </div>
+    <div id="act-slot"></div>
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
   combatApp.style.background = d.art
@@ -5721,6 +5742,11 @@ function renderCombat(root, opts = {}) {
     run();
   };
   combatApp.querySelector('#bag').onclick = () => openBagModal();
+  const rb = combatApp.querySelector('#reserve-badge'); // UX 13/11 : le badge ouvre le sélecteur d'échange existant (3+2 inchangé)
+  if (rb) rb.onclick = () => {
+    if (promptState && actBox && promptState.unit) askSwapChoice(promptState.unit);
+    else toast('L’échange se choisit pendant le tour d’une de vos cartes (bouton ⇄ Échanger).');
+  };
   drawBoard();
   renderRail();
   if (!teamEmpty && state && !state.winner && !tacPaused) {
