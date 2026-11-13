@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite) : UI COMBAT — RÉSERVE CACHÉE SUR LE CÔTÉ + ENCHAÎNEMENT COULOIR 1
+
+- **TRANCHÉ par Marc-Olivier — plus de rail de réserve visible** : la rangée dédiée « réserve » (`#reserve-zone`, livrée en v1.41) est retirée de l'écran de combat ; les cartes en réserve sont **cachées sur le côté**, accessibles via une **action compacte** (badge/bouton latéral qui ouvre le sélecteur d'échange), afin de ne pas prendre de place à l'écran. Mécanique inchangée : échange volontaire = action de tour (l'entrante n'agit pas ce tour, PV/mana conservés), remplacement sur K.O. automatique et gratuit. → Lot 3 ajouté à `docs/prompt-correctifs-smoke-ia.md` (présentation pure, digest inchangé attendu).
+- **TRANCHÉ — enchaînement couloir 1** : après le correctif smoke+IA (lots 1-2-3), le couloir 1 enchaîne DIRECTEMENT sur la fusion DQM v4 (`docs/design/spec-fusion-v4.md`, 2 lots), sans attendre la validation IHM S26.
+- **Baseline digest : TOUJOURS EN ATTENTE** — question reposée à Marc-Olivier : verrouiller la proposition `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000 maintenant, après la validation S26, ou garder l'ancienne `c62fcbd1…`/`5059e683…`. Aucune application sans arbitrage.
+- **[À TRANCHER] restants de la spec fusion v4** : palier de stats cumulées par rareté (proposé C +20 % → L +50 %), surclassement hybride, choix des sorts hérités (joueur vs auto), bâtiment « Autel des Lignées » — défauts balisés dans la spec, appliqués par le couloir 1 sauf contre-ordre.
+
 ## 2026-11-13 : REVUE PILOTAGE DU GRAND LANCEMENT (v1.39 → v1.50) — CONFORME + 2 TRANCHAGES [À TRANCHER] VALIDÉS + PARALLÉLISME
 
 - **Revue indépendante rejouée** (`docs/historique/revue-v1.50.md`) : build OK, **252/252 tests verts**, smoke 276 PASS avant crash (dette du script, voir ci-dessous), **digests rejoués à l'identique** `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000, **baseline NON appliquée dans le code** (vérifié : les occurrences des digests dans `src/` sont le seul texte du changelog in-game), **site déployé md5 identique au build** (validation S26 possible directement dessus), CI verte (#270). Verdict : **CONFORME**.
@@ -278,7 +285,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 - **PR #7 mergée** (`34cd65c`) : refonte visuelle de l'errance v1.36 en 4 lots (peinture A+ `src/errance-paint.js`, ambiance §9bis, layout v2 + point de retour ville dans chaque zone + sûreté des saves v28, palettes des 5 zones en data). 175 tests, smoke B21, protocole IHM v1.36 + S24. Digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000.
 - **Vérification post-merge sur main** : build OK, 175 tests verts, smoke 360 checks (3 échecs préexistants hors périmètre), digests inchangés. Documentation à jour : arbitrages, CHANGELOG v1.35/v1.36, HISTORY, roadmap, `docs/validation-ihm.md` v1.36 (S23/S24).
 
-## 2026-11-12 : LIVRÉ — refonte visuelle de l'errance (ACTÉ 12/11 4e tour), v1.36 : maquette A+ + guide appliqués, zone témoin Marées puis 5 zones
-
-- **Lot 1 (peinture A+)** : nouveau module `src/errance-paint.js` (pur + canvas) — fond dégradé + taches organiques, micro-détails, chemin de terre texturé, étang complet (rive/dégradé/nénuphars/roseaux), socles + bordures de fleurs des hautes herbes, arbres en couches avec ombre portée, rochers moussus, donjon peint (toit/briques/mousse/porte lumineuse), autel à halo, jarres peintes par frame (intactes/éclats). RNG décor déterministe dérivé du seed de zone ; palette en data (`zones.json` `errance.paint`, défauts intégrés). Layout et gameplay inchangés. `repaintTile` re-peint localement (3×3) à la casse de jarre.
-- **Lot 2 (ambiance §9bis)** : cycle jour/nuit (`ambiance.dayLen` en data, défaut 100 s), overlays plein écran semi-transparents + puce de phase HUD throttlée, ombre du héros étirée + halo nocturne, lames animées (2 `stroke()` groupés, rafale positionnelle, écart au héros, culling viewport), traces de pas, écume/reflets d'étang, ombres de nuages, papillons/lucioles/pissenlits/feuilles, fumée de cheminées. `prefers-reduced-motion` gèle le décor. Budget §9 respecté (0 `ctx.filter`, 0 `shadowBlur`, DPR ≤ 2).
