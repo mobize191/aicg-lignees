@@ -1,12 +1,12 @@
 # Journal des arbitrages et décisions
 
-## 2026-11-13 (suite 13) : LIGNÉES D'EXCEPTION — 3 TRANCHAGES FINAUX (mécanique 3.4 complète)
+## 2026-11-13 (suite 13) : ARBRES V18 — LES DIAGRAMMES LIVRÉS (§10) + COMPLÉTUDES + SYNTHÈSE DES TRANCHAGES RESTANTS V1
 
-- **Bonus = TITRE SEUL (TRANCHÉ)** : aucun bonus statistique. Le titre d'Exception décrit **l'action, le lieu ou la situation** de l'illustration variante (apposition choisie par le builder dans une table courte FR par axe de variation/biome — ex. « Vesna, Dryade du Sous-Bois — Sous la Pluie de Spores »). Digest inchangé.
-- **Taux d'obtention = 1/100 (TRANCHÉ)** à l'acquisition.
-- **Fusion : le statut Exception se TRANSFÈRE au résultat** (même carte) : le résultat affiche sa propre variante si le manifeste en a une, sinon art classique + classe CSS `exception`.
-- Reste en attente : les **ambigus de l'audit espèces** (k1, k12, k13, k15, g13, f5/f23, f4/f21) — fiches détaillées fournies à Marc-Olivier. **Note : n14 Démon est déjà arbitré de facto par le gel v1** (camp démon jouable, entrée depuis n14, espèce « diable humanoïde » à ajouter à species-map — cf. suite 5 du 13/11) : la 3.4 doit reclasser n14 en diable humanoïde, pas en bête.
+> Réponse à Marc-Olivier : le v18 manquait de diagrammes pour se projeter (le v17 en avait). **§10 ajouté au v18 : 10 diagrammes Mermaid, l'état du jeu ➕ le gel** — la carte du monde (15 naissances), les 4 arbres de novice (avec paladin/chevalier/régression morte), le camp divin (Séraphin, 3 portes, démons des deux voies, recâblage n14), les 3 familles divines joueur, les Enge et gorgones/fées du gel, les Embryons vers les 6 biomes, les graines et mini-lignées. Convention : nœuds pleins = déjà dans le jeu ; **➕ en pointillé = le gel à créer** ; DORMANT = porte sans maillon en v1 ; les convergences PROPOSÉES non câblées du v17 ne sont pas dessinées (elles se retranchent en spec).
 
+- **Complétudes de l'inventaire (vérifiées dans `data/evolutions.json`, le v18 les omettait)** : les novices atteignent AUSSI l'appel (n2 → v1 Apprenti Invocateur), le crépuscule et le zèle (n3 → q1/u1), le vol (n4 → t1 Mercenaire). Convergences VIVANTES : a29 Adepte des Rivières et a32 Veilleur de Braise → s5 Prêtresse de l'Aube (« élue de la lumière », lignée de Léna) ; a34 Braconnier des Quais → e3 (la malédiction des quais, conversion vers le web des Marées). Les 3 Enge ont DEUX formes à l'éveil (le web du biome OU la commune d'accueil w19/w20/w21). Le nœud partagé « Brigand ↔ Épéiste Errant » du v17 est reclassé PROPOSITION non câblée.
+- **Synthèse des tranchages restants ajoutée (v18 §6.7)**, 7 points du périmètre arbres/fusion/lignées : (1) la L du chevalier à nommer ; (2) le recâblage n14 + l'accès au Chœur Miroir ; (3) communes/sorts de lignée/trappes du camp démon ; (4) l'entrée du paladin dans la Légion Solaire ; (5) les tags w19-w21 ; (6) les calages fusion (biomes humaine+divin, taux démon, migration des éclats + défauts de la spec v4) ; (7) les 3 questions des lignées uniques. Le combat/calibrage reste suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0 (splash Mage, variance individuelle, vitesses, rempart, baseline v1.51).
+- **Repère technique** : commit de docs seul, aucune data touchée → digest inchangé attendu (état v1.51, `4a5b0123…` 861/3000).
 
 ## 2026-11-13 (suite 12) : UX COMBAT TRANCHÉ — layout ADAPTATIF + paquet lisibilité COMPLET ; vitesses différées (test terrain d'abord)
 
@@ -297,3 +297,9 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 - **Lignées exclusives initiales : DIRECTION ACTÉE EN PRINCIPE** : choix initial parmi **3-4 familles uniques spéciales** (une par race, façon starter : novice, bestiole, ange, démon…), **prédominantes** (la fusion y reste) ; les non-choisies obtenables **très tard** dans le jeu (précédent Pokémon : starters non choisis récupérables en fin de partie), capture très difficile ou incapturables. À préciser en spec contenu : 3 ou 4, composition, sort des non-choisies, moment du choix. Marc-Olivier : « non, en fait, je sais pas trop » sur la forme finale — direction actée, détail ouvert.
 - Tableau de bord (`docs/design/session-qa-direction.md` section 0) : **32 points TRANCHÉS (dont 1 en principe), reste : ops (différé) + forme finale des lignées exclusives.**
 
+## 2026-11-12 : 12e TOUR (fin) — 6 NOUVEAUX TRANCHAGES ORAUX + GRAND LANCEMENT UNIFIÉ (refonte direction + vie du jeu en une session)
+
+- **Carte du monde AFFINÉE : 4 cartes multibiomes** (le « 3-4 » tranché à 4).
+- **Remplacement sur K.O. TRANCHÉ** : switch volontaire = tour de l'entrante consommé ; **K.O. → le remplaçant entre automatiquement SANS consommer de tour et ne joue qu'au tour suivant** (précédé : changement de personnage à la Clair Obscur). Intégré au Lot A de `docs/prompt-refonte-direction.md`.
+- **Donjons divins TRANCHÉS : 3 donjons** avec chaîne sous-bosses → boss — Démons (ex. succube → roi des démons), Anges (anges élémentaires → grand ange de lumière), Équilibre (sous-bosses → Ananke version supérieure).
+- **Mécanique des fins TRANCHÉE** : fins multiples (Échiquier) ; la fin dépend des choix **lier/renier** faits à chaque chaîne de donjon + du nombre de créatures liées par race. Lore à écrire, surcoût assumé.
