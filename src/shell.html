@@ -718,8 +718,8 @@ h2 { font-size: 1.1rem; }
 .float.fx-special { font-size: 1.25rem; }
 .banner { font-size: 1.05rem; }
 /* correctifs v1.51 lot 2 : en combat, les cartes remplissent davantage l'écran (3 actifs + réserve) */
-body.in-combat .unit { width: clamp(104px, 30vw, 132px); }
-body.in-combat .unit.boss { width: clamp(146px, 42vw, 185px); } /* correctifs v3 lot 1 : grand format constant, boss ~1,4x */
+body.in-combat .unit { width: clamp(92px, min(28vw, 11dvh), 124px); }
+body.in-combat .unit.boss { width: clamp(129px, min(39vw, 15.5dvh), 174px); } /* correctifs v4 : grand format borné par la hauteur aussi -> tout tient sur l’écran sans scroll (boss ~1,4x) */
 }
 @media (prefers-reduced-motion: reduce) {
 * { animation-duration: .01s !important; transition-duration: .01s !important; }
@@ -940,12 +940,12 @@ body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-directi
 body.in-combat #app > h2 { font-size: .92rem; margin: 0 0 2px; }
 body.in-combat #controls { margin: 2px 0; padding: 5px; gap: 4px; }
 body.in-combat #controls .btn.ctrl { padding: 4px 8px; font-size: .7rem; }
-body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; }
-body.in-combat .row { margin: 2px 0; gap: 6px; min-height: 0; }
+body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; margin: 4px 0; padding: 4px; } /* correctifs v4 : marges resserrées (constantes) pour tenir sur l’écran */
+body.in-combat .row { margin: 1px 0; gap: 6px; min-height: 0; } /* correctifs v4 : marge de rangée 1px pour tenir sur l’écran */
 /* v1.51 lot 2 : cartes de combat plus grandes aussi en mobile */
-body.in-combat .unit { width: clamp(104px, 30vw, 132px); } /* correctifs v3 lot 1 : grand format constant (~117 px sur 390 px) */
+body.in-combat .unit { width: clamp(92px, min(28vw, 11dvh), 124px); } /* correctifs v4 : min(28vw,11dvh) ~93 px sur 390x844 -> 3 rangées tiennent dans le board */
 body.in-combat .unit.boss .card.battle .name { font-weight: 900; }
-body.in-combat .unit.boss { width: clamp(146px, 42vw, 185px); } /* correctifs v3 lot 1 : boss ~1,4x (~164 px sur 390 px) */
+body.in-combat .unit.boss { width: clamp(129px, min(39vw, 15.5dvh), 174px); } /* correctifs v4 : boss ~1,4x, borné par la hauteur */
 body.in-combat .card.battle { aspect-ratio: 5 / 6; }
 body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
@@ -958,7 +958,7 @@ body.in-combat #board-col { position: relative; flex: 1 1 auto; min-height: 0; m
 body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
 body.in-combat #board { justify-content: safe center; }
 body.in-combat #team-zone { margin: 8px 0 0; } /* correctifs v3 lot 1 (tranchage 15/11, prime sur maquette v2.3) : camps RAPPROCHÉS face à face au CENTRE du terrain, le vide résiduel se répartit AU-DESSUS des ennemis et AU-DESSOUS des alliés, jamais entre les camps */
-body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(30dvh, 320px); min-height: 128px; } /* correctifs v3 lot 2 : zone de commandement PERMANENTE, hauteur FIXE -> le terrain ne bouge jamais (bandeau d’état ou fenêtre de commandes) */
+body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(25dvh, 240px); min-height: 112px; } /* correctifs v4 : un peu moins haute -> le terrain (2 camps) tient entier sur l’écran */ /* correctifs v3 lot 2 : zone de commandement PERMANENTE, hauteur FIXE -> le terrain ne bouge jamais (bandeau d’état ou fenêtre de commandes) */
 body.in-combat .act-modal { position: static; flex: 1 1 auto; min-height: 0; width: 100%; overflow-y: auto; } /* correctifs v3 lot 2 : bornée par la zone permanente, plus de 30dvh propre */
 /* terrain rétréci mais COMPLET quand la fenêtre est ouverte */
 /* réserve cachée : badge latéral compact (compteur vivantes/total) à la place du rail */
@@ -981,14 +981,16 @@ body.in-combat #topbar .rail { flex-direction: column; align-items: flex-start; 
 body.in-combat #topbar .rail-chip { margin-right: 0; }
 body.in-combat #speedbar { order: -1; justify-content: flex-end; padding: 2px 0 4px; }
 body.in-combat #act-slot { grid-area: act; align-self: stretch; height: auto; max-height: none; width: auto; border-left: none; } /* correctifs v3 lot 2 : le rail occupe toute la ligne 1fr (hauteur fixe), terrain stable */
-body.in-combat .unit { width: clamp(76px, 19dvh, 120px); } /* correctifs v3 lot 1 paysage : grand format borné par la hauteur */
-body.in-combat .unit.boss { width: clamp(106px, 27dvh, 168px); }
+body.in-combat .unit { width: clamp(56px, 14dvh, 120px); } /* correctifs v4 paysage : 14dvh -> toutes les rangées tiennent sans scroll */
+body.in-combat .unit.boss { width: clamp(78px, 20dvh, 168px); }
 body.in-combat .act-modal { flex: 1 1 auto; min-height: 0; max-height: none; height: auto; overflow-y: auto; border-radius: 0; border-top: 2px solid rgba(77, 208, 225, .35); border-left: none; }
 body.in-combat .modal-overlay.float-fiche { justify-content: flex-start; }
 body.in-combat .modal-overlay.float-fiche .modal { margin: 0; width: min(300px, calc(100vw - min(360px, 38vw) - 24px)); max-height: 94dvh; }
 }
 @media (orientation: landscape) and (max-height: 500px) {
 body.in-combat.act-open .rail-wrap { display: none; }
+body.in-combat #board-col > h2 { display: none; } /* correctifs v4 : titre masqué en paysage court (constant), le terrain tient */
+body.in-combat #controls { padding: 2px; gap: 4px; }
 }
 /* retour terrain 14/11 (PC grand écran) : le combat remplit la largeur, unités à l'échelle, rail élargi */
 @media (orientation: landscape) and (min-width: 1200px) {

@@ -31,7 +31,7 @@ test('v1.51 lot 2 (c) : la fiche unifiée explicite la frappe de classe (splash 
 
 test('v1.51 lot 2 (d) : cartes de combat plus grandes (point 9) dans le shell', () => {
   const shell = readFileSync('src/shell.html', 'utf8');
-  // repositionnement 14/11 lot 3 puis correctifs v3 lot 1 (tranchage 15/11) : grand format constant 104-132px, boss ~1,4x 146-185px
-  assert.ok(shell.includes('clamp(104px, 30vw, 132px)'), 'unités combat grand format >= 104px');
-  assert.ok(shell.includes('clamp(146px, 42vw, 185px)'), 'boss combat ~1,4x >= 146px');
+  // correctifs v4 (3e retour terrain : tout tient sur l'écran) : grand format borné par min(largeur, hauteur), boss ~1,4x
+  assert.ok(shell.includes('clamp(92px, min(28vw, 11dvh), 124px)'), 'unités combat >= 92px, bornées par la hauteur');
+  assert.ok(shell.includes('clamp(129px, min(39vw, 15.5dvh), 174px)'), 'boss combat ~1,4x, borné par la hauteur');
 });
