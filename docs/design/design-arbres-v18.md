@@ -137,7 +137,7 @@ Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L
 
 ### 6.3 Le paladin (4 cartes)
 
-Depuis le Spadassin Vigilant (UC, lame), choix « la lumière » : Paladin R → Paladin Sacré SR (verrou) → Paladine Sacrée UR → **Isaure, Égide de l'Aube L**. Plus le **choix du zèle** du paladin (acté v14 : la dévotion vers Isaure, ou la croisade qui rejoint la Légion Solaire) : **TRANCHÉ le 14/11 (suite 24) — le choix se fait AU PALIER R, pas après** ; maillon d'entrée proposé : u3 Croisé de l'Aube (R, palier égal), à caler en spec.
+Depuis le Spadassin Vigilant (UC, lame), choix « la lumière » : Paladin R → Paladin Sacré SR (verrou) → Paladine Sacrée UR → **Isaure, Égide de l'Aube L**. Plus le **choix du zèle** du paladin (acté v14 : la dévotion vers Isaure, ou la croisade qui rejoint la Légion Solaire) : **TRANCHÉ le 14/11 (suite 24) — le choix se fait AU PALIER R, pas après** ; maillon d'entrée proposé : u3 Croisé de l'Aube (R, palier égal), à caler en spec. **CONFIRMÉ suite 28 (Marc-Olivier) : la voie du zèle commence bien AU PALIER R, pas à l'UR** — l'entrée u3 Croisé de l'Aube existe déjà en jeu (chaîne u1 Fidèle du Matin → u2 Écuyer Fervent → u3 Croisé de l'Aube → u4 Chapelain du Jour → u5 Arbalétrier Doré → u6 Lémion) ; le diagramme 10.2 était resté sur l'ancienne version (choix à l'UR) : CORRIGÉ ce tour.
 
 ### 6.4 Le chevalier (4 cartes)
 
@@ -169,6 +169,16 @@ Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le c
 5. **Le mapping mystique → famille divine** (fusion humaine + mystique) : PROPOSITION par forme — Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir.
 6. **Les défauts balisés restants de la spec fusion v4** (divines L éligibles, rareté max/surclassement, plafonds de stats, choix des sorts hérités, bâtiment Autel — explication donnée à Marc-Olivier le 14/11, tranchage ou défauts).
 7. **La composition finale des lignées uniques** : les 4 starters proposés (lame/eau/aube/ombre) à valider, le moment du choix, le lore du Lieur.
+8. **Le web des Flots, retours suite 28** : (a) la M mythique — **Léviathan plutôt que le Titan des Marées ?** (question ouverte de Marc-Olivier) ; (b) **Pontos, Aîné des Berges à retirer** (trop humanoïde pour la famille des purs monstres — proposition à confirmer d'un mot, §6.8) ; (c) **les deux boss du donjon à créer** : Hydre des Marées et Souverain des Marées (demande actée suite 28, §6.8).
+
+### 6.8 Le web des Flots : le sommet en question et les deux boss manquants (retours de Marc-Olivier, suite 28 — diagramme restauré 10.11)
+
+Le web de l'eau (donjon des Marées, diagramme **10.11**, restauré ce tour du v17 §8.1 et mis à jour des data réelles) compte 3 familles : Gobelins des Écumes, **Abîmaux** (les purs monstres), Sirènes des Récifs. Trois retours de Marc-Olivier :
+
+1. **La M du biome en question** : aujourd'hui le sommet mythique est le **Titan des Marées (e14)**, au-dessus des L Léviathan (e13) et Pontos (e22). **QUESTION OUVERTE (suite 28) : c'est plutôt Léviathan qu'on mettrait en carte mythique.** À trancher : la M change de porteur (Léviathan monte en M, une nouvelle L bestiale ➕ remonte sous lui, le Titan est retiré ou repositionné) — impact digest si le pool de rencontre bouge, à mesurer le jour du lot.
+2. **Pontos, Aîné des Berges (e22) : à RETIRER (proposition de Marc-Olivier, à confirmer d'un mot)** — trop humanoïde pour la famille des purs monstres. Conséquences à câbler au retrait : la chaîne berges (e15 Ancien des Berges SR → e21 Protecteur des Berges UR → e22 Pontos L) reçoit une **nouvelle L bestiale ➕ à proposer** ; la malédiction des quais différée v2 (le Maudit des Berges, §9) s'appuie aujourd'hui sur cette chaîne (audit §4) → à recâbler.
+3. **Les deux boss du Donjon des Marées n'ont PAS de carte : création DEMANDÉE (suite 28)**. `dungeons.json` ne porte que des noms (`bossNames` 5/10) et `makeWave` renomme une carte tirée au hasard (`boss.name = dungeon.bossNames[stage]` — le bug « Hydre en gobelin » de la suite 16, NON corrigé à ce jour). **Hydre des Marées** (boss palier 5, bestiale multi-têtes canon : 3 têtes) et **Souverain des Marées** (boss palier 10, sommet du donjon) : **2 cartes à créer dans la lignée de l'eau**, paliers L proposés, à caler ; elles s'inscrivent avec le correctif boss non aléatoire (mapping boss → carte dédiée, suite 16 — les 8 autres boss du jeu ont déjà leur carte : f23/f13, g16/g8, k13/k17, z6/z8). **[IMPACT DIGEST]** : vagues 5/10 modifiées → re-mesure et arbitrage baseline obligatoires.
+4. **Le web de l'eau n'était pas perdu** : le v17 §8.1 le documente en entier (gabarit validé des 4 webs) ; c'est le v18 qui ne l'avait pas reporté — **CORRIGÉ ce tour : les 5 webs sont restaurés en 10.11-10.15, à jour des data réelles** (leçon consignée : les diagrammes sont l'outil de repérage premier de Marc-Olivier, ils ne restent jamais au fond de l'historique).
 
 ## 7. La fusion DQM v4 : la couche race, puis la couche famille (TRANCHÉ le 13/11, suite 8 ; détails spec `docs/design/spec-fusion-v4.md`)
 
@@ -221,7 +231,7 @@ Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters préd
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 
-Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **Famine (ex-« La Faim ») quitte cette liste le 14/11 (suite 25, nom acté suite 26)** : L de la trappe du Gouffre des Vices en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1.
+Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **Famine (ex-« La Faim ») quitte cette liste le 14/11 (suite 25, nom acté suite 26)** : L de la trappe du Gouffre des Vices en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1. **Précisions suite 28 (enquête « travaux perdus »)** : la **nécromancie** n'est pas perdue — son détail complet vit au **v17 §2.3** (l'Évocatrice du Caveau · R, la conversion funèbre et ses deux portes, l'école des invocations 2.6) ; le zèle aussi y est détaillé (l'Invocatrice de l'Aube · R, la passerelle vers Isaure). Le **Maudit des Berges** s'appuie sur la chaîne berges (Ancien → Protecteur → Pontos) : si Pontos est retiré (§6.8), la malédiction se recâble sur la nouvelle L bestiale. **Maïa n'est pas perdue** : a27 Maïa, Lame du Bosquet UR → a28 Maïa, Déesse du Bosquet L, la fusion est en jeu (règle 1.4 : le doublon de L est permis, tables `docs/tables/cartes.md`).
 
 ## 10. Les diagrammes de la v1 cible (l'état du jeu ➕ le gel)
 
@@ -285,7 +295,10 @@ flowchart TD
   PAL -.-> PALS["Paladin Sacré ➕ · SR (verrou)"]
   PALS -.-> PALU["Paladine Sacrée ➕ · UR"]
   PALU -.-> PALL["Isaure, Égide de l'Aube ➕ · L"]
-  PALU -.->|"choix du zèle — entrée à définir"| LEG["Arbalétrier Doré · UR (zèle)"]
+  PAL -.->|"choix 2 : le zèle — TRANCHÉ suite 24, CONFIRMÉ suite 28 (au palier R)"| U3["Croisé de l'Aube · R (u3, existe)"]
+  U3 --> U4["Chapelain du Jour · SR"]
+  U4 --> U5["Arbalétrier Doré · UR"]
+  U5 --> U6["Lémion, Chef de la Légion Solaire · L"]
   CHE -.-> CHES["Chevalière du Rempart ➕ · SR (verrou)"]
   CHES -.-> CHEU["Gardienne du Rempart ➕ · UR"]
   CHEU -.-> CHEL["Kiri l'Invincible ➕ · L"]
@@ -509,3 +522,139 @@ flowchart LR
 ```
 
 - Les graines sont des voies propres (SR → UR → L, acté v14) ; les mini-lignées Quais et Fête sont dans l'arbre du Voleur (10.5), leurs sommets UR/L restent différés v2 (§3). Les greffes de commune (Garde-Promesse, Étincelle Vive, Pilier Mécanique, Médecin de Camp, Veilleur d'Acier) rejoignent directement leur UC : §3.
+
+### 10.11 Le web des Flots (donjon des Marées) — RESTAURÉ du v17 §8.1, à jour des data (retours suite 28 en §6.8)
+
+```mermaid
+flowchart TD
+  subgraph Gobelins["Gobelins des Écumes"]
+    E1["e1 Gobelin des Marées · C"] --> E3["e3 Pillard des Récifs · UC"] --> E4["e4 Sergent des Brumes · R"] --> E5["e5 Prophète des Marées · SR"]
+    E5 --> E16["e16 Grand Chaman des Écumes · UR"] --> E17["e17 Zikka, Chaman des Écumes · L"]
+    E5 --> E18["e18 Roi des Écumes · UR"] --> E19["e19 Griknir, Roi des Écumes · L"]
+  end
+  subgraph Abimaux["Abîmaux (les purs monstres)"]
+    E7["e7 Moqueur des Marées · C"] --> E11["e11 Crabe des Berges · UC"] --> E20["e20 Rôdeur des Fonds · R"]
+    E20 --> E9["e9 Confesseur des Abysses · SR"] --> E6["e6 Avatar de l'Abîme · UR"] --> E13["e13 Léviathan, Colère du Gouffre · L"]
+    E20 --> E15["e15 Ancien des Berges · SR"] --> E21["e21 Protecteur des Berges · UR"] --> E22["e22 Pontos, Aîné des Berges · L<br/>QUESTION suite 28 : à RETIRER (trop humanoïde)"]
+  end
+  subgraph Sirenes["Sirènes des Récifs"]
+    E23["e23 Sirène Nouvelle · C"] --> E24["e24 Chanteuse des Récifs · UC"] --> E25["e25 Voix du Large · R"] --> E26["e26 Écumeuse des Récifs · SR"]
+    E26 --> E27["e27 Sirène Ensorceleuse · UR"] --> E28["e28 Méliane, Voix du Large · L"]
+    E26 --> E29["e29 Gardienne des Récifs · UR"] --> E30["e30 Thalassa, Reine des Récifs · L"]
+  end
+  E13 -.->|"QUESTION suite 28 :<br/>Léviathan en M plutôt que le Titan ?"| E14["e14 Titan des Marées · M"]
+  E22 -.-> E14
+  HYD["➕ Hydre des Marées · L (boss palier 5 — À CRÉER, suite 28)"]
+  SOU["➕ Souverain des Marées · L (boss palier 10 — À CRÉER, suite 28)"]
+  E13 -.->|"boss dédié à venir (mapping makeWave, suite 16)"| HYD
+  HYD -.-> SOU
+  style HYD stroke-dasharray: 5 5
+  style SOU stroke-dasharray: 5 5
+```
+
+- Side cards : e2 Tirailleur des Récifs C, e10 Veuve des Récifs UC, e8 Matriarche des Récifs R (Gobelins) ; e12 Gardien des Galets SR (Abîmaux). Le web n'était pas perdu (v17 §8.1, gabarit validé) : c'est le v18 qui ne l'avait pas reporté — corrigé suite 28. Les 3 webs restants (Fournaise, Vivant, Au-delà) et le Zénith suivent (10.12-10.15).
+
+### 10.12 Le web de la Fournaise (donjon de la Forge) — RESTAURÉ du v17 §8.2, à jour des data
+
+```mermaid
+flowchart TD
+  subgraph Cendrels["Cendrels"]
+    F1["f1 Golem de Cendre · C"] --> F10["f10 Souffleur de Braises · UC"] --> F11["f11 Traqueur de Suie · R"]
+    F11 --> F16["f16 Mailleur de Suie · SR"] --> F17["f17 Façonneur de Cendres · UR"] --> F18["f18 Ombeline, Tisseuse de Suie · L"]
+    F11 --> F19["f19 Champion de Cendre · SR"] --> F20["f20 Souffle Ardent · UR"] --> F21["f21 Calcine, Dame des Cendres · L"]
+  end
+  subgraph Braise["Enfants de la Braise"]
+    F14["f14 Braise Errante · C"] --> F15["f15 Semeur de Fournaise · UC"] --> F4["f4 Chevalier de Braise · R"]
+    F4 --> F9["f9 Idole de Magma · SR"] --> F6["f6 Colosse de Magma · UR"] --> F22["f22 Vulcain, Colosse Ardent · L"]
+    F4 --> F5["f5 Invocateur des Foyers · SR"] --> F23["f23 Maître des Foyers · UR"] --> F12["f12 Gardien des Foyers · L"]
+  end
+  subgraph GobFumees["Gobelin des Fumées"]
+    F2["f2 Gobelin des Fumées · C"] --> F24["f24 Gobelin de Suie · UC"]
+  end
+  F13["f13 Seigneur des Cendres · M<br/>(boss palier 10 : la carte existe)"]
+  F18 -.-> F13
+  F21 -.-> F13
+```
+
+- Side cards : f7 Tisseur de Cendres C, f3 Écorcheur de Suie UC, f8 Foreuse d'Âmes R (Cendrels). Boss palier 5 « Maître des Fours » ≈ f23 Maître des Foyers (quasi-existant, mapping à caler). Ancre du biome (v13) : Vulcain ; la piste du **dragon de la Fournaise** (v15, proposition) reste ouverte.
+
+### 10.13 Le web du Vivant (donjon du Bosquet) — RESTAURÉ du v17 §8.3, à jour des data
+
+```mermaid
+flowchart TD
+  subgraph Fougeron["Bêtes du Fougeron"]
+    G1["g1 Rampant du Fougeron · C"] --> G3["g3 Sanglier de Mousse · UC"] --> G4["g4 Gardien des Remparts Verts · R"]
+    G4 --> G13["g13 Semeur Sylvestre · SR"] --> G6["g6 Colosse Sylvestre · UR"] --> G7["g7 Patriarche du Bosquet · L"]
+    G4 --> G14["g14 Mycolithe · SR"] --> G15["g15 Mycélium Vivant · UR"] --> G16["g16 Mycola, Reine des Spores · L<br/>(boss palier 5 : la carte existe)"]
+  end
+  subgraph Sèves["Gens des Sèves"]
+    G9["g9 Lueur Bienveillante · C"] --> G12["g12 Bergère des Sèves · UC"] --> G10["g10 Druidesse des Sèves · R"]
+    G10 --> G11["g11 Oracle des Clairières · SR"] --> G17["g17 Dryade Radieuse · UR"] --> G18["g18 Adriel, Lumignole des Clairières · L"]
+    G10 --> G19["g19 Dryade du Sous-Bois · SR"] --> G20["g20 Rôdeuse des Sous-Bois · UR"] --> G21["g21 Vesna, Dryade du Sous-Bois · L"]
+  end
+  subgraph GobMousses["Gobelins des Mousses"]
+    G31["g31 Gobelin des Mousses · C"] --> G32["g32 Gobelin des Racines · UC"]
+  end
+  G7 -.-> G8["g8 Cœur du Bosquet · M<br/>(boss palier 10 : la carte existe)<br/>ancre du biome (v13)"]
+  G16 -.-> G8
+```
+
+- Side cards : g2 Luciole Hargneuse C, g5 Prisme Vivant SR (Bêtes). La malédiction du Bosquet (une carte de la lignée de Solen tue le Cœur, v12) : le Cœur reste unique.
+
+### 10.14 Le web de l'Au-delà (donjon de la Crypte) — RESTAURÉ du v17 §8.4, à jour des data (les trois familles de la Crypte)
+
+```mermaid
+flowchart TD
+  subgraph Caveaux["Spectres des Caveaux"]
+    K1["k1 Rôdeur des Caveaux · C"] --> K3["k3 Fossoyeur Nocturne · UC"] --> K13["k13 Goule des Caveaux · R<br/>(boss palier 5 : la carte existe)"]
+    K13 --> K5["k5 Spectre des Quais · SR"] --> K6["k6 Banshee des Caveaux · UR"] --> K14["k14 Macha, Hurleuse des Caveaux · L"]
+    K13 --> K15["k15 Éveillé des Caveaux · SR"] --> K16["k16 Liche des Caveaux · UR"] --> K7["k7 Archiliche des Caveaux · L<br/>(le boss de la mort d'Isaure, acté)"]
+  end
+  subgraph Naufragés["Les Naufragés (la famille des nymphes)"]
+    K2["k2 Nymphe Croupie · C"] --> K12["k12 Veilleuse de Bord · UC"] --> K10["k10 Meneuse de Deuil · R"]
+    K10 --> K11["k11 Prieuse des Naufragés · SR"] --> K18["k18 Endeuillée des Flots · UR"] --> K19["k19 Ysolde, Veuve Éternelle · L"]
+    K10 --> K20["k20 Capitaine Noyé · SR"] --> K21["k21 Revenu des Flots · UR"] --> K22["k22 Ahab, Lord des Naufragés · L"]
+  end
+  subgraph Défunte["Chevalerie Défunte"]
+    K23["k23 Écuyer Défunt · C"] --> K24["k24 Porte-Étendard Défunt · UC"] --> K4["k4 Chevalier Défunt · R"]
+    K4 --> K25["k25 Chevalière de la Veille · SR"] --> K26["k26 Paladine Défunte · UR"] --> K27["k27 Jeanne d'Arc, Chevalière de la Veille · L"]
+    K4 --> K28["k28 Chevalière du Serment · SR"] --> K29["k29 Sermenteuse Défunte · UR"] --> K30["k30 Siegfried, Chevalière du Serment Brisé · L"]
+  end
+  subgraph GobCaveaux["Gobelins des Caveaux"]
+    K31["k31 Gobelin des Caveaux · C"] --> K32["k32 Gobelin des Ossements · UC"]
+  end
+  K7 -.-> K17["k17 La Mort, Faucheuse des Tombes · M<br/>(boss palier 10 : la carte existe)<br/>ancre du biome (v13)"]
+  K14 -.-> K17
+  K22 -.->|"l'Ancien Naufragé, l'autre face du deuil marin"| K8["k8 Ancien Naufragé · M"]
+```
+
+- Side cards : k9 Servante Pâle C (Naufragés). Le renommage « Nymphes » de la famille des Naufragés (suite 26, à trancher si voulu) reste ouvert. Le pont v17 « le chant envoie par le fond » (Sirènes → Revenu des Flots) reste une piste.
+
+### 10.15 Le web du Zénith (les cieux) — RESTAURÉ, à jour des data (phénix = la branche des cieux du v17 §4)
+
+```mermaid
+flowchart TD
+  subgraph Légion["Légion Solaire (la croisade fourvoyée, 6.3)"]
+    Z1["z1 Écuyer du Zénith · C"] --> Z3["z3 Arbalétrier Doré · UC"] --> Z4["z4 Lancier Solaire · R"] --> Z5["z5 Voulige d'Aube · SR"]
+    Z5 --> Z13["z13 Centurion Ardent · UR"] --> Z7["z7 Héraut du Zénith · L"]
+    Z5 --> Z14["z14 Lancière de l'Aube · UR"] --> Z15["z15 Aurorine, Lance de l'Aube · L<br/>(le sommet de la Légion, acté v15)"]
+  end
+  subgraph Phénix["Phénix Célestes (la branche des cieux)"]
+    Z2["z2 Souffle-Mèche · C"] --> Z16["z16 Essor de Flammes · UC"] --> Z17["z17 Oiseau de Feu · R"] --> Z18["z18 Cendre d'Éclosion · SR"]
+    Z18 --> Z6["z6 Phénix du Zénith · UR<br/>(boss palier 5 : la carte existe)"] --> Z19["z19 Pyrrha, Cendre Éternelle · L"]
+    Z18 --> Z20["z20 Plume Miroir · SR"] --> Z21["z21 Phénix Miroir · UR"] --> Z22["z22 Fjalar, Phénix du Renvoi · L"]
+  end
+  subgraph Clergé["Clergé du Plein Jour (la foi fourvoyée)"]
+    Z9["z9 Chantre du Zénith · C"] --> Z23["z23 Chapelain du Jour · UC"] --> Z24["z24 Diacre du Plein Jour · R"] --> Z11["z11 Prêtresse du Plein Jour · SR"]
+    Z11 --> Z25["z25 Cantatrice du Zénith · UR"] --> Z26["z26 Célestin, Apôtre du Chant · L"]
+    Z11 --> Z27["z27 Inquisitrice du Jour · SR"] --> Z28["z28 Justicière du Jour · UR"] --> Z29["z29 Justine, Justicière du Jour · L"]
+  end
+  Z7 -.-> Z8["z8 Astre Capiteux · M<br/>(boss palier 10 : la carte existe)<br/>re-racé divine camp ange (fiche seule, tranche suite 25)"]
+  Z15 -.->|"la Légion s'arrête à Aurorine (acté v15)"| Z8
+  Z26 -.-> Z30["z30 Apolline, Prophétesse du Jour · M"]
+  Z29 -.-> Z30
+```
+
+- Side cards : z12 Garde-Flamme UC, z10 Serre-Soleil R (Légion). Les M doubles (Astre Capiteux côté Légion, Apolline côté Clergé) sont les M humains tranchés (Morzak, l'Astre, Apolline). Le donjon divin (d1-d18) est couvert en 10.7.
+
+Les 6 webs sont donc TOUS dans ce document : Flots (10.11), Fournaise (10.12), Vivant (10.13), Au-delà (10.14), Zénith (10.15), divin (10.7). **Règle suite 28 : les diagrammes sont l'outil de repérage premier de Marc-Olivier — toute évolution du design se reporte TOUJOURS sur les diagrammes §10, jamais seulement en texte ou en tableau.**
