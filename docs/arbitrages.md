@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 22) : RETOUR TERRAIN PC — combat trop petit sur grand écran, espace perdu → CORRIGÉ (pure UI, digest inchangé)
+
+- **Signalement Marc-Olivier (PC, écran large ~2551px)** : « tout petit, beaucoup d'espace perdu » (capture fournie). Cause : en paysage, #app remplissait la largeur mais les unités restaient cappées (120-160px) et les rangées centrées → grand vide autour.
+- **Correctif** (branche `vibe/grand-ecran-combat-ec66f9`) : media `landscape + min-width 1200px` — unités à l'échelle `clamp(150px, 12vw, 250px)` (boss `clamp(190px, 16vw, 340px)`, act-open 120-190px), rangées en `justify-content: space-evenly` (marges symétriques mesurées 375/375px à 2560px), rail latéral élargi `min(430px, 26vw)`, topbar/rail-chips agrandis. Aucune unité ne se chevauche (space-evenly).
+- **Preuves** : 279 tests, smoke 421 TOUT PASSE, sweep Playwright 43/43 (390×844, 844×390, 1440×900, 1920×1080, 2560×1080 — app = 100 % largeur, 0 recouvrement, 0 erreur console), **digests inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `docs/captures-validation/repositionnement-ecran/grand*`.
+
 ## 2026-11-13 (suite 16) : BUG BOSS « HYDRE EN GOBELIN » + AUDIT CANON D&D/MTG (audit complet poussé : `docs/images/audit-canon-especes.md`)
 
 - **BUG CONFIRMÉ (constat Marc-Olivier en jeu)** : les bosses de stage 5/10 sont des cartes tirées AU HASARD dans le pool d'ennemis puis RENOMMÉES (`makeWave` : `boss.name = dungeon.bossNames[stage]`) — l'art reste celui de la carte tirée (gobelin pour l'« Hydre des Marées »). **Correctif** : mapping boss → carte dédiée (8 boss sur 10 ont une carte existante au nom exact ou quasi : f23, f13, g16, g8, k13, k17, z6, z8) + **2 nouvelles cartes boss Marées à créer** (hydre multi-têtes, souverain des marées) avec art en 3.4. **[À TRANCHER — IMPACT DIGEST]** : boss non aléatoire = composition des vagues 5/10 modifiée → les digets verrouillés `9faff1b9…`/`6103e7b0…` bougeront, re-mesure + arbitrage baseline requis.
