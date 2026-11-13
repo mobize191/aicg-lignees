@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 12) : UX COMBAT TRANCHÉ — layout ADAPTATIF + paquet lisibilité COMPLET ; vitesses différées (test terrain d'abord)
+
+- **TRANCHÉ par Marc-Olivier (13/11) : orientation ADAPTATIVE** — paysage (PC + mobile tourné) : terrain à gauche + fenêtre d'action en rail latéral, jamais superposée ; portrait (mobile) : panneau bas borné (~40 % max), terrain toujours entier. **Invariant acté : la fenêtre d'action ne recouvre JAMAIS le terrain, PV et effets de toutes les cartes lisibles sans réduire la fenêtre.**
+- **TRANCHÉ : paquet lisibilité COMPLET** — impacts lisibles ~600-800 ms + trace source→cible + pause avant la fenêtre suivante + **mini-log permanent** (plus aucun dégât subi inexpliqué) + fiches flottantes au clic sans fermer la fenêtre d'action.
+- **Vitesses par contexte (errance rapide / donjon réfléchi) : DIFFÉRÉES** — Marc-Olivier testera la nouvelle fenêtre d'abord (« on peut régler la vitesse du combat » manuellement en attendant) ; à re-trancher après validation terrain.
+- **Chantier couloir 1 prêt : `docs/prompt-ux-combat-adaptatif.md`** (2 lots, présentation seule, digest inchangé attendu). Le Lot 3 « réserve cachée » du prompt smoke/IA (toujours non livré) y est INTÉGRÉ (même écran, un seul passage sur le layout).
+
 ## 2026-11-13 (suite 11) : DIAGNOSTIC UX COMBAT (retour de Marc-Olivier) — la fenêtre d'action recouvre le terrain, impacts illisibles, dégâts inexpliqués
 
 - **Constat de Marc-Olivier, VÉRIFIÉ dans le code** : la fenêtre d'action (`.act-modal`, `src/shell.html` ~875) est en **`position: fixed` bas d'écran, pleine largeur, fond quasi opaque `rgba(10,14,22,.97)`, max-height **78dvh** en combat tactile → elle recouvre jusqu'à 78 % de l'écran ; pour choisir un sort il faut ouvrir, réduire (bouton `.act-reduce`), regarder les PV/effets ennemis, rouvrir, choisir, cibler — puis l'action se joue trop vite et la fenêtre suivante s'ouvre. Des PV se perdent sans explication visible.
@@ -288,11 +295,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 - **Remplacement sur K.O. TRANCHÉ** : switch volontaire = tour de l'entrante consommé ; **K.O. → le remplaçant entre automatiquement SANS consommer de tour et ne joue qu'au tour suivant** (précédé : changement de personnage à la Clair Obscur). Intégré au Lot A de `docs/prompt-refonte-direction.md`.
 - **Donjons divins TRANCHÉS : 3 donjons** avec chaîne sous-bosses → boss — Démons (ex. succube → roi des démons), Anges (anges élémentaires → grand ange de lumière), Équilibre (sous-bosses → Ananke version supérieure).
 - **Mécanique des fins TRANCHÉE** : fins multiples (Échiquier) ; la fin dépend des choix **lier/renier** faits à chaque chaîne de donjon + du nombre de créatures liées par race. Lore à écrire, surcoût assumé.
-- **Élément des sorts TRANCHÉ : libre par carte + grimoires**, avec 2-3 sorts signatures par famille, quelques sorts par race, gros corpus libre ; piste sorts par biome à étudier en spec contenu.
-- **Équipement TRANCHÉ : 6-8 emplacements ; panoplies famille × classe SÉLECTIVES** (sirènes → magiciens, monstres marins → guerriers/prêtres, gobelins → chamanes, roi → guerriers, sirène → assassins ; répartition par biome/donjon en spec).
-- **RESTENT à trancher** : lignée exclusive initiale (« aucune idée » — questions posées : par race ? créées ? existantes ?), cohabitation fusion × familles (a/b, explication fournie), ops DIFFÉRÉS.
-- **GRAND LANCEMENT UNIFIÉ** : `docs/prompt-grand-lancement.md` — fusion refonte direction (A-D) + vie du jeu (0-5) + v1.40 en tête, exécution d'une traite, un commit FR par lot, clôture unique : rapport + nouvelle baseline digest PROPOSÉE + validation IHM (`docs/validation-ihm.md`, scénarios ajoutés/modifiés, téléphone ET PC) + docs + push + CI vérifiée. Ordre : v1.40 → A → B → crits → C → D → 0 → 2 → 3 → 4 → 5.
-- Tableau de bord de session (`docs/design/session-qa-direction.md` section 0) : **30 points TRANCHÉS, 3 restant à trancher.**
-
-## 2026-11-12 : 12e TOUR (suite) — 4 TRANCHAGES DE FIN DE SESSION : fusion (forme exacte), carte du monde (3-4 régionales fixes), expéditions (temps réel plafonné), fin du jeu (fins multiples Échiquier)
-
