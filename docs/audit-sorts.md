@@ -30,7 +30,7 @@ Les cartes concernées : les 6 paliers de la famille du Vol (Grand Brigand SR po
 Racine : data `lineage-spells.json` (cible « 1 allié »), famille d'Assassins à école Ruse (role manip).
 - Gadianton (t6) : Larcin Agile ×1,4 · Coup de Jarnac ×1,6 · Dague dans le Dos ×1,9 · Fauchage ×2,6 · Embuscade ×3,4 · Coup de Grâce ×4,5 — tous : fiche manip/« 1 allié », effet observé = buff ATQ, zéro dégât.
 
-[À TRANCHER §0 n°7-a] A) cible « 1 ennemi » (attaque sournoise, cohérente avec la classe Assassin et les mults identiques aux lignées d'attaque ; digest Auto inchangé) ; B) assumer une lignée de soutien (renommage des sorts) ; C) statu quo.
+**TRANCHÉ (Marc-Olivier, 14/11) : A — attaque, `cible: "1 ennemi"`** (digest Auto inchangé attendu ; le bug était purement Tactique).
 
 ### R2 — Lignées de l'Appel et du Pont : invocations qui ne s'invoquent jamais (12 sorts)
 
@@ -38,7 +38,7 @@ Racine : data « les renforts » + moteur : `actTeamStriker` résout tout sort d
 - Archimage de l'Appel (v6) : Appel Mineur · Élémentaire de Braise · Meute Spirituelle · Portail · Légion Céleste · Appel Suprême.
 - Ananké (w18) : Fil I → Fil VI.
 
-[À TRANCHER §0 n°7-b] A) vraie invocation (un esprit rejoint la réserve/l'avant ; chantier moteur, le digest Auto bougera et devra être mesuré) ; B) attaques « au nom de l'invocation » (cible « 1 ennemi », digest Auto inchangé) ; C) buff assumé (fiche corrigée).
+**TRANCHÉ (Marc-Olivier, 14/11) : A — vraie invocation** (esprit temporaire, stats dérivées du lanceur, ttl, Tactique ET Auto — digest Auto MESURÉ, sans recalibrage).
 
 ### R3 — Signatures des recrues à effet : la fiche annonce l'effet, le tour frappe (33 sorts)
 
@@ -49,7 +49,7 @@ Racine moteur : `applySupport` (lignes support, donc les ennemis) applique bien 
 - 8 boost/manip : Foreure d'Âmes « Cri de la Forge », Meneuse de Deuil « Deuil Martial », Sermenteuse Défunte « Serment Rallié », Cantatrice du Zénith « Hymne du Zénith », Célestin « Cantique Final », Miroir Antiphonique « Chant Miroir » (soi), Tisseuse des Nœuds « Nœud d'Or », Architecte du Pont « Deux Rives ».
 - 1 soin/résurrection : Adriel, Lumignole des Clairières « Première Clarté » (fiche soin « 1 allié », effet = frappe).
 
-[À TRANCHER §0 n°7-c] A) appliquer l'effet affiché en Tactique (prolonge le tranchage v1.51 « une carte soigneuse a une signature de soin » ; le switch existe déjà côté support : shield → bouclier, summon → renfort, atkBuff/warcry → boost, link/copy → lien/renvoi, revive → résurrection ; branche tactique seule = digest Auto inchangé) ; B) aligner la fiche sur « dégâts » (l'effet ne s'applique qu'aux ennemis).
+**TRANCHÉ (Marc-Olivier, 14/11) : A — l'effet affiché s'applique en Tactique** (tous les rôles, prolonge le tranchage v1.51 soins ; branche Tactique seule = digest Auto inchangé attendu).
 
 ### R4 — Noms fusionnés au grimoire : largeur = MAX des crans au lieu du cran du porteur (racine moteur)
 
@@ -70,13 +70,17 @@ Le remappage famille → école propage le rôle de l'école aux sorts de ligné
 - Œil du Malheur (sort de classe Occultiste, 2 porteuses testées n12/n15) : malus annoncé, frappe seule.
 - 6 signatures « contrôle » de monstres : Marée Traîtresse, Chant Paralysant, Filet de Suie, Ombre Tissée, Sable Glissant, Sentence Lente.
 
-[À TRANCHER §0 n°7-d] A) implémenter les effets (données taux/tours à créer pour les 24 sorts de lignée ; prolongement naturel des specs v4 « sorts libres ») ; B) retirer les badges contrôle/malus de l'affichage tant que les effets n'existent pas (les sorts restent des frappes, fiche honnête) ; C) diffé : specs v4.
+**TRANCHÉ (Marc-Olivier, 14/11) : A — effets implémentés** (taux/tours créés dans les data, le sort garde ses dégâts + pose le statut — digest Auto MESURÉ, sans recalibrage).
 
 ## Ce qui est conforme (224 sorts)
 
 - Les 7 lignées d'attaque (lame, ombre, eau, aube-soins, bouclier-équipe, zele-boosts, miroir) et la lignée Aube (soins) : fiches et effets cohérents, puissances conformes (ratio dmg/(atk×mult) ≈ 1,0 sur les 8 seeds), ciblage conforme.
 - Les sorts communs (Frappe Précise, Premiers Soins), les sorts de race, les sorts de classe dégâts (Brise-Garde, Frappe dans le Dos, Décharge Arcanique « zone » cohérente en zone de 3, Onde Consacrée), les signatures soigneuses (v1.51), les signatures dégâts des monstres, les gimmicks (belier ×1,5 documenté, volee, carrousel) : tous conformes.
 - Note d'affichage (non bloquant) : les boosts de la lignée Zèle (Ferveur) affichent « ×1,4 ATQ » pour un effet « +40 % à la prochaine frappe de l'allié » : cohérent, mais le libellé pourrait préciser « +40 % ».
+
+## Chantier de correctifs
+
+**Lancé (14/11) : `docs/prompt-correctifs-sorts.md`, 5 lots, couloir 1** (lot 1 Vol, lot 2 signatures Tactique, lot 3 largeur cran, lot 4 invocations, lot 5 contrôles/malus).
 
 ## Impact sur le digest (à consigner par le couloir 1)
 
