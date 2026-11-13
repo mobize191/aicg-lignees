@@ -24,7 +24,7 @@ Faut-il retravailler les caractéristiques, les classes, ou d'autres choses, pou
 
 - **Sources internes (repo GitHub public)** : lecture complète de `docs/regles-jeu.md`, `docs/arbitrages.md` (journal des tranchages), `docs/design/session-qa-direction.md` §0 (tableau de bord), études existantes (`etude-polyvalence-2026-11-13.md`, `etude-duree-combats-2026-11-13.md`), et analyse exhaustive des 23 fichiers de `data/*.json` (150 cartes, 159 monstres, 309 sorts, 150 pièces d'équipement) et du moteur (`src/engine/combat.js`, `stats.js`, `spells.js`).
 - **Reproduction du harnas** : le repo a été reconstruit localement (`node build.mjs`), 277/279 tests verts (2 échecs préexistants liés aux manifestes d'arts absents du clone), et le digest officiel **reproduit à l'identique : `3b11106f…` 871/3000** (29,0 %). Toutes les mesures qui suivent utilisent donc le moteur réel, protocole v3 du harnas (mêmes seeds n+1, 5 donjons, étages 1-10, difficultés 1-3, N = 3000 combats par configuration, 0 exception, 0 marathon).
-- **Études originales** (scripts rejouables, même protocole que `tools/etude-polyvalence.mjs`) : mono-classe (3× la meilleure carte R de chaque classe, niveau 12, 2 avant + 1 arrière), coût de slot support, impact de l'équipement, et **mono-classe monstres recrutables** (3× le meilleur monstre R de chaque classe, même protocole, équipe témoin joueur rejouée à l'identique pour la reproductibilité : 2359/3000), et **paires quasi jumelles race/élément** (5 configurations supplémentaires pour isoler le cran de race de l'élément, N = 3000 chacune, 0 exception, 0 marathon), et **extension multi-paliers UC/R/SR/UR** (3× la meilleure carte joueur par classe et palier, critère cardPower, niveau 12, N = 3000 par ligne, 0 exception, 0 marathon).
+- **Études originales** (scripts rejouables, même protocole que `tools/etude-polyvalence.mjs`) : mono-classe (3× la meilleure carte R de chaque classe, niveau 12, 2 avant + 1 arrière), coût de slot support, impact de l'équipement, et **mono-classe monstres recrutables** (3× le meilleur monstre R de chaque classe, même protocole, équipe témoin joueur rejouée à l'identique pour la reproductibilité : 2359/3000), et **paires quasi jumelles race/élément** (5 configurations supplémentaires pour isoler le cran de race de l'élément, N = 3000 chacune, 0 exception, 0 marathon), et **extension multi-paliers UC/R/SR/UR** (3× la meilleure carte joueur par classe et palier, critère cardPower, niveau 12, N = 3000 par ligne, 0 exception, 0 marathon), script rejouable commité au repo : [`tools/etude-paliers.mjs`](https://github.com/mobize191/aicg-lignees/blob/main/tools/etude-paliers.mjs).
 - **Sources externes** : méthodes d'équilibrage du genre (simulation de risque, tiering par usage, formules de référence). Détail en fin de rapport.
 - **Limites** : simulation auto-résolue (l'IA des deux camps, pas la saisie tactique humaine) ; palier R niveau 12 pour les études mono-classe (les paliers SR+ pourront corriger le classement, le Mage montée en puissance via ses uniques de zone) ; le taux de victoire dépend du protocole (équipe de 3 actifs, pas la formation 5 cartes complète).
 
@@ -59,7 +59,7 @@ Faut-il retravailler les caractéristiques, les classes, ou d'autres choses, pou
 | SR | 85,9 % (b1) | 80,0 % (b7) | 70,3 % (b6) | 63,0 % (u4) | 59,5 % (q4) | 26,4 pts |
 | UR | 93,5 % (a15) | 87,5 % (a16) | 85,0 % (a22) | 83,7 % (u5) | 81,7 % (q5) | **11,8 pts** |
 
-Décomposition par difficulté (d1/d2/d3) disponible dans le script `etude-paliers.mjs` ; repère : à UR, le pire mono-classe (Occultiste) fait 69,5 % en difficile, le meilleur (Guerrier) 89,7 %.
+Décomposition par difficulté (d1/d2/d3) fournie par [`tools/etude-paliers.mjs`](https://github.com/mobize191/aicg-lignees/blob/main/tools/etude-paliers.mjs) (commité au repo, même protocole v3 que `tools/etude-polyvalence.mjs`) ; repère : à UR, le pire mono-classe (Occultiste) fait 69,5 % en difficile, le meilleur (Guerrier) 89,7 %.
 
 Trois lectures de l'extension :
 
@@ -300,7 +300,7 @@ Le digest mesure le win rate global ; lui adjoindre le **win rate par classe et 
 
 ## Plan de chantier proposé (4 phases, une seule nouvelle baseline)
 
-**Phase 0 : Outils (1 session).** Commiter les études mono-classe/slots/équipement dans `tools/` (protocole v3, rejouables) ; ajouter la bande de tolérance M1 au harnas. Aucune modification du jeu.
+**Phase 0 : Outils (1 session).** Commiter les études mono-classe/slots/équipement dans `tools/` (protocole v3, rejouables) ; ajouté le 13/11 : `tools/etude-paliers.mjs` (multi-paliers, rejouable) est commité, le protocole des autres études est documenté en méthodologie ; ajouter la bande de tolérance M1 au harnas. Aucune modification du jeu.
 
 **Phase 1 : Contrats + data (sans toucher le moteur).** Contrats M1 tranchés ; data : INT des Prêtres/Occultistes relevée (2-3 → 6-10 sur C-R), ATQ des tanks (tranchage 6a), armes `intPct` des profils INT, modificateurs d'école E, et **alignement des deux collections (arbitrage I)** : PV des cartes Mage humaines, ATQ des supports monstres (le lot non négociable : plus aucun support monstre sous atk 8, et vérification marathon au harnas), et **budget du cran de race** (10/20/30 % : matrice classe × race dans les contrats si la fusion v4 doit l'ouvrir aux cartes). Mesure : la strate des lanceurs doit rejoindre 50-60 %, supports purs 25-40 %.
 
