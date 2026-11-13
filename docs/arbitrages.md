@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 33) : 3e RETOUR TERRAIN TÉLÉPHONE — « il faut scroller pour voir les deux équipes » → CORRIGÉ : tout tient sur l'écran sans scroll (pure UI) — digest INCHANGÉ
+
+- **Signalement Marc-Olivier** : après les correctifs v3, on doit scroller pour voir les deux camps ; tout doit tenir sur l'écran, sauf le menu de choix des sorts (défilement interne autorisé).
+- **Diagnostic mesuré (390×844)** : le board faisait scrollHeight 670 pour clientHeight 379 — cause racine : les 3 unités de 117 px ne tenaient pas en ligne (358 px dispo) → wrapping en 2 lignes, + zone de commandement 253 px.
+- **Correctif** (commit `8fc6eb1`, branche `vibe/correctifs-ecran-v4-ec66f9`) : grand format borné AUSSI par la hauteur `clamp(92px, min(28vw, 11dvh), 124px)` (~93 px sur 390×844, boss ~1,4×), paysage 14dvh ; zone de commandement `min(25dvh, 240px)`, marges des zones 4 px, rangées 1 px (constantes → terrain toujours stable), titre h2 masqué en paysage ≤ 500 px. **Résultat mesuré : board scrollHeight == clientHeight sur 390×844 (422), 844×390 (270), 1440×900 (723), 2560×1080 (903)** — les deux camps visibles sans scroll, fenêtre ouverte comme en mode bandeau ; cartes identiques au pixel entre les deux états (stabilité v3 conservée).
+- **Preuves** : build ok, 279 tests, smoke 450 checks TOUT PASSE (section 54 n/o), sweep Playwright 46/46 (0 recouvrement, 0 erreur console), **digests INCHANGÉS `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `correctifs-v4-*`. Retour terrain Marc-Olivier attendu.
+
 ## 2026-11-15 (suite 33) : LES 5 DERNIERS MOTS — roi démon = BELZÉBUTH, L du ange = SÉRAPHIN, ARCHANGE ULTIME, éveil lumière du mage RETIRÉ (sans remplacement), écoles et sorts Vice/Fureur/Orgueil VALIDÉS, nymphes : UNIQUEMENT les Dryades en v1 (le reste en v2) — le camp divin est entièrement tranché, le LOT 1 du gel peut être lancé
 
 - **Le roi démon NOMMÉ : Belzébuth** (« Belzebuth », orthographe française Belzébuth) — d28 devient **Belzébuth, Roi des Démons**, l'unique L de la voie de la puissance (TRANCHÉ suite 31 : roi seul ; Lilith déplacée v2). Signature conservée « Sceptre du Jugement » ; sort ✦14 « Belzébuth : Couronne de Fureur » (spec trappes §2.2-§2.3).
