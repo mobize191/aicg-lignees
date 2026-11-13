@@ -1111,16 +1111,17 @@ async function main() {
     const nbBtn = doc.body.querySelectorAll('[data-compagnon]').length;
     check('B8 a Guilde : 3 compagnons du jour rendus, rotation déterministe', offres.length === 3 && nbBtn === 3 && api.compagnonsDuJour().map((c) => c.id).join() === offres.map((c) => c.id).join(), offres.map((c) => c.id).join());
     check('B8 b compagnons hors rang L/N/archivés/monstres', offres.every((c) => !c.monster && !c.archived && c.rarity !== 'N' && c.rarity !== 'L' && c.rarity !== 'M' && api.compagnonPrix(c) != null), '');
-    api.store.gold = 20000;
+    api.store.gold = 20000; api.store.jetons = 500; // Lot D : le vendeur se paie en JETONS, jamais en or
     const c = offres[0];
+    const jetons0 = api.store.jetons;
     const gold0 = api.store.gold;
     const owned0 = api.ownedOf(c.id);
-    check('B8 c recrutement compagnon : -prix, +1 exemplaire', api.buyCompagnon(c.id) === true && api.store.gold === gold0 - api.compagnonPrix(c) && api.ownedOf(c.id) === owned0 + 1, `${c.id} ${api.compagnonPrix(c)}`);
-    check('B8 d prix actés (C 500, UR 2 000)', api.GUILDE.prixCompagnons.C === 500 && api.GUILDE.prixCompagnons.UR === 2000, '');
+    check('B8 c recrutement compagnon : -prix en jetons (or intact), +1 exemplaire', api.buyCompagnon(c.id) === true && api.store.jetons === jetons0 - api.compagnonPrix(c) && api.store.gold === gold0 && api.ownedOf(c.id) === owned0 + 1, `${c.id} ${api.compagnonPrix(c)}`);
+    check('B8 d prix actés en jetons (C 5, UR 200)', api.GUILDE.prixCompagnonsJetons.C === 5 && api.GUILDE.prixCompagnonsJetons.UR === 200, '');
     const nCard = (api.DATA.cards ?? []).find((x) => x.rarity === 'N');
     check('B8 e rang N jamais recrutable à la Guilde', api.buyCompagnon(nCard.id) === false, nCard.id);
-    api.store.gold = 0;
-    check('B8 f recrutement sans or refusé', api.buyCompagnon(c.id) === false, '');
+    api.store.jetons = 0; api.store.gold = 99999;
+    check('B8 f recrutement sans jetons refusé (l or ne suffit pas)', api.buyCompagnon(c.id) === false, '');
     check('B8 g 0 exception lot E3a', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 

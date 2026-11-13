@@ -1,3 +1,10 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 6 (Lot D refonte) LIVRÉE : CAPTURE DQM + VENDEUR À JETONS (v1.45)
+
+- **Capture DQM** : à l'écran Récompenses de chaque combat gagné (donjon ET errance), une ligne « 🐾 Tenter la capture — X % » par monstre recrutable vaincu (hors boss/nommés, `recrutableMonsters` inchangé). % = taux de base de la zone (`zone.recrute.taux`) × démonstration de force = min(`CAPTURE_FORCE_CAP`=3, niveau moyen des actifs / niveau du monstre) — plafonné, affiché avant le choix. **Un seul essai** par monstre (bouton désactivé après clic) ; réussite → `newInst` + collection. L'ancien tirage auto ~1 % à la fin d'étage est supprimé.
+- **Devise JETONS** (`store.jetons`, migration passive sans bump) : sources en data `engine.JETONS` = donjon bouclé +10, jalon +5 (clear1/diff3), quêtes +1/+2/+4 selon la tier. Badge 🪙 or · 🎟 jetons. **Vendeur unique** : Guilde, 3 offres quotidiennes stables (seed du jour, inchangé), prix en jetons `guilde.prixCompagnonsJetons` (C 5 → UR 200), **jamais d'or** — `buyCompagnon` débite `store.jetons`, l'or reste intact. Les compagnons/jour à l'or disparaissent.
+- Tests : 5 headless (`tests/capture-jetons-v145.test.js`) + smoke B8 adapté (achat en jetons, or intact, refus sans jetons). 240 tests verts. **DIGEST INCHANGÉ constaté : `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000** (économie hors combat).
+- Épreuve humains/mystiques (lore Le Lieur) : HORS périmètre, inchangée.
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 5 (Lot C refonte) LIVRÉE : POINTS DE REPOS, PERSISTANCE PARTOUT (v1.44)
 
 - **Plus aucun soin automatique** : `REGEN_BOSS_STAGE` supprimé (data + code + ligne de récompense), plus de reset du pool à l'entrée de zone (`startZoneFight`), au nouveau run (`enterAt`) ni en fin de run (victoire finale comme défaite : `persistRunStateFrom` systématique, `runState.active` conservé). Le pool PV/mana persiste partout (donjons, errance, combats de zone).

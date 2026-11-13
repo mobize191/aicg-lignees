@@ -4263,6 +4263,14 @@ const DATA = {
    "mauvais-oeil": "Ombre",
    "ferveur": "Lumière",
    "ruse": "Eau"
+  },
+  "CAPTURE_FORCE_CAP": 3,
+  "JETONS": {
+   "donjonBoucle": 10,
+   "jalon": 5,
+   "quetePetite": 1,
+   "queteMoyenne": 2,
+   "queteGrande": 4
   }
  },
  "equipment": {
@@ -9521,7 +9529,14 @@ const DATA = {
   },
   "nbOffresJour": 3,
   "maxExemplaires": 3,
-  "note": "Guilde (ex-Forge, économie v2) : évolutions inchangées (éclats/pierres) + compagnons en rotation quotidienne (seed de la date). Prix actés C 500 → UR 2 000 or ; le rang L n'est jamais recrutable (évolution uniquement)."
+  "note": "Guilde (ex-Forge, économie v2) : évolutions inchangées (éclats/pierres) + compagnons en rotation quotidienne (seed de la date). Prix actés C 500 → UR 2 000 or ; le rang L n'est jamais recrutable (évolution uniquement).",
+  "prixCompagnonsJetons": {
+   "C": 5,
+   "UC": 12,
+   "R": 30,
+   "SR": 80,
+   "UR": 200
+  }
  },
  "keywords": {
   "brulure": {
@@ -18718,7 +18733,7 @@ function compagnonsDuJour() {
 }
 
 function compagnonPrix(card) {
-  return GUILDE.prixCompagnons?.[card.rarity] ?? null;
+  return GUILDE.prixCompagnonsJetons?.[card.rarity] ?? GUILDE.prixCompagnons?.[card.rarity] ?? null; // Lot D : prix en jetons
 }
 
 function buyCompagnon(id) {
@@ -18727,8 +18742,8 @@ function buyCompagnon(id) {
   if (!c || c.monster || prix == null) return false;
   const max = GUILDE.maxExemplaires ?? 3;
   if ((ownedOf(id) ?? 0) >= max) { toast(`✗ Déjà ${max} exemplaires de ${c.name}.`, 'warn'); return false; }
-  if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour recruter ${c.name}.`, 'warn'); return false; }
-  store.gold -= prix;
+  if ((store.jetons ?? 0) < prix) { toast(`✗ Il faut ${prix} 🎫 jetons pour recruter ${c.name}.`, 'warn'); return false; } // Lot D : jamais d'or
+  store.jetons -= prix;
   newInst(id, 1, 0);
   save();
   updatePtsBadge();
@@ -18765,7 +18780,12 @@ function questProgress(type, n = 1) {
       q.done = true;
       changed = true;
       addGold(q.or ?? 0);
-      let extra = `+${q.or ?? 0} 🪙 or`;
+      // Lot D : les quêtes rapportent aussi des jetons selon la tier (montants en data)
+      const jn = QUETES.petites.some((x) => x.id === q.id) ? E.JETONS.quetePetite
+        : QUETES.moyennes.some((x) => x.id === q.id) ? E.JETONS.queteMoyenne
+        : E.JETONS.queteGrande;
+      addJetons(jn);
+      let extra = `+${q.or ?? 0} 🪙 or · +${jn} 🎫 jetons`;
       if (q.eclat) { const el = ELEMENTS[Math.floor(uiRand() * ELEMENTS.length)]; addGem('brut', el, 1); extra += ` · +1 éclat brut (${el})`; }
       if (q.bonusN) { const c = drawDailyCommon(); grantCards([c.id]); extra += ` · ${RACE_GLYPH[raceOfCard(c)] ?? '🎴'} ${c.name} rejoint la collection`; }
       toast(`✓ Quête accomplie : ${q.label} — ${extra}`);
@@ -19042,6 +19062,7 @@ const store = {
   },
   seed: 42,
   gold: 0,
+  jetons: 0, // Lot D : nouvelle devise JETONS (le vendeur de compagnons ne prend jamais d'or)
   potions: freshPotions(),
   runState: freshRunState(),
   departFait: false,
@@ -19174,6 +19195,7 @@ function snapshot() {
     progress: store.progress,
     seed: store.seed,
     gold: store.gold,
+    jetons: store.jetons ?? 0,
     potions: { ...store.potions },
     runState: { active: !!store.runState.active, units: { ...(store.runState.units ?? {}) } },
     departFait: !!store.departFait,
@@ -19414,6 +19436,7 @@ function restore(data) {
       if (Number.isInteger(data.potions[k]) && data.potions[k] >= 0) store.potions[k] = data.potions[k];
     }
   }
+  store.jetons = Number.isInteger(data.jetons) && data.jetons >= 0 ? data.jetons : 0; // Lot D : migration passive, pas de bump de version
   store.runState = freshRunState();
   if (data.runState && typeof data.runState === 'object') {
     store.runState.active = !!data.runState.active;
@@ -19817,6 +19840,13 @@ function addGold(n) {
   save();
   return store.gold;
 }
+// Lot D : devise JETONS — sources = donjons bouclés, jalons, quêtes (montants en data engine.JETONS)
+function addJetons(n) {
+  store.jetons = Math.max(0, (store.jetons ?? 0) + Math.round(n));
+  save();
+  updatePtsBadge();
+  return store.jetons;
+}
 
 
 function todayKey() {
@@ -20001,22 +20031,22 @@ function updatePtsBadge() {
   const el = document.getElementById('pts');
   if (!el) return;
   if (storage.persistent && !storage.persistent()) {
-    el.textContent = `💾 🪙 ${store.gold} or`;
+    el.textContent = `💾 🪙 ${store.gold} or · 🎫 ${store.jetons ?? 0}`;
     el.title = 'Sauvegarde de session : la page ne peut pas écrire sur l\u2019appareil — exportez votre progression depuis l\u2019accueil pour la conserver.';
     if (!saveWarnShown) {
       saveWarnShown = true;
       toast('💾 Sauvegarde de session : cette page ne peut pas écrire sur l\u2019appareil. La progression tient pour la session — exportez un code de sauvegarde depuis l\u2019accueil pour la garder.', 'warn');
     }
   } else if (store.saveBroken) {
-    el.textContent = `⚠️ 🪙 ${store.gold} or`;
+    el.textContent = `⚠️ 🪙 ${store.gold} or · 🎫 ${store.jetons ?? 0}`;
     el.title = 'Sauvegarde impossible : la progression de cette session risque de ne pas être conservée.';
     if (!saveWarnShown) {
       saveWarnShown = true;
       toast('⚠️ Sauvegarde impossible — ta progression de cette session ne sera pas conservée si tu recharges la page.', 'warn');
     }
   } else {
-    el.textContent = `🪙 ${store.gold} or`;
-    el.title = '';
+    el.textContent = `🪙 ${store.gold} or · 🎫 ${store.jetons ?? 0}`;
+    el.title = 'Jetons : gagnés en bouclant des donjons, via les jalons et les quêtes — dépensés au vendeur de compagnons de la Guilde.';
   }
 }
 ;
@@ -22857,7 +22887,32 @@ function openRecompensesModal(recomp) {
   overlay.querySelectorAll('.recomp-row').forEach((b) => {
     b.onclick = () => {
       const r = recomp[Number(b.dataset.i)];
-      if (r) toast(`${r.label} — ${r.detail ?? ''}`, '');
+      if (!r) return;
+      // Lot D : capture DQM — un seul essai manuel par monstre vaincu, % affiché = taux zone × force
+      if (r.kind === 'capture' && !r.tried) {
+        r.tried = true;
+        const pct = Number(r.pct) || 0;
+        const detailEl = b.querySelector('.muted');
+        if (uiRand() < pct) {
+          if ((instsOf(r.monster)?.length ?? 0) >= 3) {
+            toast(`✗ Déjà 3 exemplaires de ${r.mname}.`, 'warn');
+            if (detailEl) detailEl.textContent = 'déjà 3 exemplaires possédés';
+          } else {
+            newInst(r.monster);
+            markSeen(r.monster);
+            toast(`🐾 ${r.mname} rejoint la collection !`);
+            if (detailEl) detailEl.textContent = `capturé ! (${Math.round(pct * 100)} %)`;
+          }
+        } else {
+          toast(`✗ ${r.mname} s'est échappé… (${Math.round(pct * 100)} %)` , 'warn');
+          if (detailEl) detailEl.textContent = `échappé — un seul essai (${Math.round(pct * 100)} %)`;
+        }
+        b.disabled = true;
+        b.classList.add('off');
+        save();
+        return;
+      }
+      toast(`${r.label} — ${r.detail ?? ''}`, '');
     };
   });
   const close = () => { recompOpen = false; overlay.remove(); };
@@ -23264,7 +23319,7 @@ async function animate(events, ms, gen = null) {
         let rewards = null;
         // boucle v2 lot 4 : récompenses structurées pour l'écran « Récompenses » (chaque gain cliquable)
         const recomp = [];
-        const pushRecomp = (kind, label, detail = '', rarity = null) => recomp.push({ kind, label, detail, rarity });
+        const pushRecomp = (kind, label, detail = '', rarity = null, data = null) => recomp.push({ kind, label, detail, rarity, ...(data ?? {}) });
         if (won) {
           // économie v2 lot E4 : quêtes quotidiennes — monstres vaincus, boss, donjon fini
           const nbEnnemis = [...(state.enemies?.avant ?? []), ...(state.enemies?.arriere ?? [])].filter((u) => u && u.hp <= 0).length;
@@ -23349,18 +23404,17 @@ async function animate(events, ms, gen = null) {
               rewardLine += ` · 🐥 ${oeuf.name} (naissance ${RACE_LABEL[raceOfCard(oeuf)].toLowerCase()}) se joint à vous !`;
             }
           }
-          // boucle v2 lot 3 : recrutement naturel — ~1 % par vaincu (hors boss et nommés), taux calibré par zone
+          // Lot D : capture à la DQM — proposée à l'écran Récompenses, un essai manuel par monstre vaincu (hors boss/nommés)
+          // % = taux de base de la zone × démonstration de force (niveau moyen des actifs / niveau du monstre, plafonné en data)
           const zoneRec = getZone(`zone-${store.dungeon}`);
           const tauxRec = zoneRec?.recrute?.taux ?? RECRUTE_TAUX;
+          const actifsVivants = (state.team?.avant ?? []).filter((u) => u && u.alive);
+          const moyLvl = actifsVivants.length ? actifsVivants.reduce((a, u) => a + (u.level ?? 1), 0) / actifsVivants.length : 1;
           for (const m of recrutableMonsters(state)) {
-            if (uiRand() >= tauxRec * loot.drop) continue;
-            if (instsOf(m.cardId).length >= 3) continue; // limite de 3 exemplaires par carte
-            newInst(m.cardId);
-            markSeen(m.cardId);
-            if (runLog) runLog.cards.push(m.name);
-            pushRecomp('recrue', `🐾 ${m.name}`, 'vaincu qui rejoint la collection', 'C');
-            rewardLine += ` · 🐾 ${m.name} rejoint votre collection !`;
-            toast(`🐾 ${m.name} vaincu rejoint votre collection !`);
+            const force = Math.min(E.CAPTURE_FORCE_CAP ?? 3, moyLvl / Math.max(1, m.level ?? 1));
+            const pct = Math.min(1, tauxRec * force);
+            pushRecomp('capture', `🐾 Tenter la capture — ${Math.round(pct * 100)} %`, `${m.name} (Nv ${m.level ?? '?'}) · taux zone ${Math.round(tauxRec * 100)} % × force ${force.toFixed(1)} · un seul essai`, 'C', { monster: m.cardId ?? m.id, mname: m.name, pct });
+            rewardLine += ` · 🐾 capture de ${m.name} proposée (${Math.round(pct * 100)} %)`;
           }
           // boucle v2 lot 4 : drops v2 — matériau de la zone sur chaque monstre vaincu
           const zoneMat = getZone(`zone-${store.dungeon}`);
@@ -23415,11 +23469,16 @@ async function animate(events, ms, gen = null) {
             if (!store.milestones.clear1) {
               store.milestones.clear1 = true;
               rewardLine += '· 🎁 Jalon : premier donjon terminé ! ';
+              addJetons(E.JETONS.jalon); rewardLine += `· 🎫 +${E.JETONS.jalon} jetons (jalon) `;
             }
             if (store.diff >= 3 && !store.milestones.diff3) {
               store.milestones.diff3 = true;
               rewardLine += '· 🎁 Jalon : première Difficile terminée ! ';
+              addJetons(E.JETONS.jalon); rewardLine += `· 🎫 +${E.JETONS.jalon} jetons (jalon) `;
             }
+            addJetons(E.JETONS.donjonBoucle);
+            pushRecomp('jetons', `+${E.JETONS.donjonBoucle} 🎫 jetons`, 'donjon bouclé', 'C');
+            rewardLine += ` · 🎫 +${E.JETONS.donjonBoucle} jetons (donjon bouclé) !`;
           }
           save();
         }
@@ -24185,7 +24244,7 @@ function renderForge(root) {
     const max = GUILDE.maxExemplaires ?? 3;
     return `<div class="shop-row">
       <span>🤝 <b>${c.name}</b> <span class="muted">${RARITY_LABEL[c.rarity] ?? c.rarity} · ${c.classe} · ${c.element} · possédée : <b>${owned}</b>/${max}</span></span>
-      <button type="button" class="btn small gold" data-compagnon="${c.id}" ${store.gold < prix || owned >= max ? 'disabled' : ''}>Recruter — ${prix} or</button>
+      <button type="button" class="btn small" data-compagnon="${c.id}" ${(store.jetons ?? 0) < prix || owned >= max ? 'disabled' : ''}>Recruter — ${prix} 🎫</button>
     </div>`;
   });
 
@@ -24204,7 +24263,7 @@ function renderForge(root) {
     <p class="muted fam-hint">Sacrifiez 5 exemplaires LIBRES d\u2019une m\u00eame cat\u00e9gorie (personnages OU monstres, jamais m\u00e9lang\u00e9s) pour g\u00e9n\u00e9rer 1 carte de raret\u00e9 sup\u00e9rieure, m\u00eame cat\u00e9gorie, \u00e9l\u00e9ment pond\u00e9r\u00e9 par les cartes sacrifi\u00e9es. Cha\u00eene compl\u00e8te : 5 C = 1 UC \u00b7 5 UC = 1 R \u00b7 5 R = 1 SR \u00b7 5 SR = 1 UR \u00b7 5 UR = 1 <b>L</b>. La L\u00e9gendaire est un PROJET, jamais un tirage : elle se construit (1 L = 25 SR = 125 R = 625 UC = 3125 communes, ou l\u2019\u00e9quivalent en jetons).</p>
     <div class="fusion-list">${altarBtns.join('')}</div>
     <h3>🤝 Compagnons du jour ${guildeRows.length ? `(${guildeRows.length})` : ''}</h3>
-    <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre de l'or : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 500 → UR 2 000 or), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
+    <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre des JETONS 🎫 (gagnés en donjons, jalons, quêtes — jamais d'or) : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 5 → UR 2 000 or), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
     <div class="fusion-list">${guildeRows.join('') || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}</div>
   `;
   root.querySelectorAll('[data-open]').forEach((el) => {
@@ -24280,6 +24339,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.45 : Capture à la DQM + jetons', 'À l\u2019écran Récompenses de chaque combat gagné, chaque monstre vaincu (hors boss et nommés) propose « Tenter la capture — X % » : taux de la zone × démonstration de force (vos niveaux moyens contre le sien, plafonné), un seul essai. Nouvelle devise 🎫 JETONS : gagnés en bouclant des donjons, via les jalons et les quêtes ; la Guilde recrute ses 3 compagnons du jour en jetons — jamais en or. 240 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.44 : Points de repos — la vie persiste partout', 'Vos PV et mana ne se régénérent plus automatiquement (fin de la régénération après le premier boss) : ils persistent d\u2019un combat à l\u2019autre, en donjon comme dans les Terres Sauvages, et un K.O. reste K.O. Repos gratuits : revenir au Port des Brumes (Accueil) restaure toute l\u2019equipe, et les autels de l\u2019errance soignent + donnent de la grâce. En donjon, buvez vos potions (🧪). 234 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.43 : Coups critiques d\u2019agilité', 'Chaque frappe physique a une chance de coup critique tirée de l\u2019agilité : 5 % de base + 1 % par point d\u2019agilité d\u2019avantage sur la cible, plafonné à 30 %, pour des dégâts ×1,5. L\u2019esquive se résout d\u2019abord ; les sorts ne critiquent pas (v1). Symétrique : les ennemis et l\u2019auto-résolution aussi. Un « CRIT » s\u2019affiche sur la frappe. 230 tests, digest MESURÉ `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.42 : Oppositions au sort + Nature', 'Le bonus d\u2019opposition (+25 %) se calcule désormais entre l\u2019élément de l\u2019école du SORT (badge \u2192 sur chaque sort) et l\u2019élément inné de la cible ; la frappe simple garde l\u2019élément de la carte. Les cartes humaines sont Neutres (hors oppositions), les monstres et divins gardent leur élément inné. L\u2019élément « Terre » s\u2019appelle désormais « Nature » (mêmes oppositions). 225 tests, digest MESURÉ `daef2bca\u2026` 835/3000 et `883c1c18\u2026` 2797/10000.'],

@@ -727,5 +727,13 @@
   "mauvais-oeil": "Ombre",
   "ferveur": "Lumière",
   "ruse": "Eau"
+ },
+ "CAPTURE_FORCE_CAP": 3,
+ "JETONS": {
+  "donjonBoucle": 10,
+  "jalon": 5,
+  "quetePetite": 1,
+  "queteMoyenne": 2,
+  "queteGrande": 4
  }
 }

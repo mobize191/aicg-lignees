@@ -1,12 +1,19 @@
 {
-  "prixCompagnons": {
-    "C": 500,
-    "UC": 800,
-    "R": 1200,
-    "SR": 1600,
-    "UR": 2000
-  },
-  "nbOffresJour": 3,
-  "maxExemplaires": 3,
-  "note": "Guilde (ex-Forge, économie v2) : évolutions inchangées (éclats/pierres) + compagnons en rotation quotidienne (seed de la date). Prix actés C 500 → UR 2 000 or ; le rang L n'est jamais recrutable (évolution uniquement)."
+ "prixCompagnons": {
+  "C": 500,
+  "UC": 800,
+  "R": 1200,
+  "SR": 1600,
+  "UR": 2000
+ },
+ "nbOffresJour": 3,
+ "maxExemplaires": 3,
+ "note": "Guilde (ex-Forge, économie v2) : évolutions inchangées (éclats/pierres) + compagnons en rotation quotidienne (seed de la date). Prix actés C 500 → UR 2 000 or ; le rang L n'est jamais recrutable (évolution uniquement).",
+ "prixCompagnonsJetons": {
+  "C": 5,
+  "UC": 12,
+  "R": 30,
+  "SR": 80,
+  "UR": 200
+ }
 }
