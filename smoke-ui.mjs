@@ -111,6 +111,8 @@ async function main() {
     const amTxt = am ? am._innerHTML : '';
     check('46 f fenêtre d’action : titre, stats, illustration, sorts', !!am && amTxt.includes('à vous d’agir') && amTxt.includes('♥') && !!am.querySelector('.act-art') && amTxt.includes('✦'), amTxt.slice(0, 90));
     check('46 f boutons ⚔ Attaque et ⏸ Attendre', !!am && amTxt.includes('⚔ Attaque') && amTxt.includes('⏸ Attendre'), '');
+    // UX 13/11 lot 1 : pendant un choix, body.act-open (terrain rétréci mais visible, fenêtre dans le flux)
+    check('46 i choix en cours : body.act-open + fenêtre d’action hors recouvrement', !!am && doc.body.classList.contains('act-open'), '');
     const bAtk = am ? am.querySelector('.act-attack') : null;
     const bPass = am ? am.querySelector('.act-pass') : null;
     if (bAtk && bPass) {
@@ -144,6 +146,8 @@ async function main() {
       api._tacPause(true); // pas de chaine auto : on fige le flux avant la verification
       await wait(80);
       check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', !api._actEl() && !api._busy(), `act=${!!api._actEl()} busy=${api._busy()} winner=${stC.winner}`);
+      // UX 13/11 lot 2 : le mini-log #log a été alimenté pendant le combat (au moins la ligne de fin ou un événement tracé)
+      check('46 j mini-log #log alimenté pendant le combat', (appEl.querySelector('#log')?.children.length ?? 0) > 0, '');
     } else {
       check('46 g cible proposée : liste cliquable', false, 'fenêtre sans boutons');
       check('46 g pion ennemi surligné sur le plateau', false, '');
@@ -371,6 +375,8 @@ async function main() {
     const st50 = api._state();
     api._speed(6);
     check("50 a rail d'ordre présent dans l'écran combat", !!(st50 && appEl.querySelector('#rail')), '');
+    // UX combat adaptatif 13/11 lot 1 : structure layout (board-col + act-slot + badge réserve, rail réserve caché en CSS)
+    check('50 g layout adaptatif : #board-col + #act-slot + badge réserve rendus, rail #reserve-zone caché', (els.get('app')?._innerHTML ?? '').includes('id="board-col"') && (els.get('app')?._innerHTML ?? '').includes('id="act-slot"') && !!appEl.querySelector('#reserve-badge') && !!appEl.querySelector('#reserve-zone') && html.includes('body.in-combat #reserve-zone { display: none; }'), '');
     if (st50) {
       const chips = [...appEl.querySelectorAll('.rail-chip')];
       const agiOf = (c) => Number((c.textContent.match(/\u26a1(\d+)/) ?? [])[1] ?? 0);
@@ -654,12 +660,16 @@ async function main() {
 
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
   check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
-  check('45 b rien de coupé : #app défile en interne, fenêtre d’action bornée et défilable', html.includes('body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }') && !html.includes('#tac-panel'), '');
+  // UX combat adaptatif 13/11 lot 1 : la fenêtre d'action est DANS le flux (#act-slot, borné 38dvh), jamais en surimpression ; les recouvrements 78dvh/56dvh sont partis
+  check('45 b invariant : fenêtre d’action dans le flux (#act-slot borné 38dvh), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 38dvh; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
   // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
   check('44 a one-screen : unités de combat agrandies (v1.51 : 30vw/180px desktop, 28vw/150px mobile) et panneau compact', html.includes('body.in-combat .unit { width: clamp(120px, 30vw, 180px); }') && html.includes('body.in-combat .unit { width: clamp(110px, 28vw, 150px); }') && html.includes('body.in-combat .unit.boss { width: clamp(150px, 38vw, 220px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
-  check('44 a one-screen : journal borné, rappels bas disparus', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && !html.includes('-webkit-line-clamp'), '');
+  // UX 13/11 lot 2 : le journal devient un mini-log permanent (plus de max-height 20dvh tronqué)
+  check('44 a one-screen : journal borné en mini-log permanent, rappels bas disparus', !html.includes('max-height: 20dvh') && !html.includes('-webkit-line-clamp'), '');
+  // UX 13/11 lot 2 : lisibilité — mini-log flex-end 3 lignes (clic = complet), floatText 700 ms min même à ×16/×32, trace source->cible
+  check('44 a2 lisibilité : mini-log permanent + floatText 700ms min + trace SVG + logLine', html.includes('body.in-combat #log { display: flex; flex-direction: column; justify-content: flex-end;') && html.includes('body.in-combat #log.full { max-height: 40dvh;') && html.includes('const FLOAT_MIN_MS = 700;') && html.includes('function traceLine(') && html.includes('function logLine(') && html.includes('.trace-svg'), '');
   check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
   check('44 b la base v0.43.1 des unités reste en place (override seulement)', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)'), '');
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');

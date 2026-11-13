@@ -833,7 +833,8 @@ nav { display: none; }
 nav.open { display: flex; flex-direction: column; gap: 2px; padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); padding-left: calc(6px + env(safe-area-inset-left)); padding-right: calc(6px + env(safe-area-inset-right)); }
 nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .92rem; }
 /* v0.46.1 : fenêtre d'action tactile — boutons 44 px, fenêtre plus haute, ✕ toujours visible */
-body.in-combat .act-modal { max-height: 78dvh; }
+/* UX combat adaptatif 13/11 : panneau bas BORNÉ à 38dvh (plus jamais 78 % de recouvrement) */
+body.in-combat .act-modal { max-height: 38dvh; }
 .act-modal .tac-btn { min-height: 44px; padding: 10px 14px; font-size: .82rem; }
 .act-modal .act-target { min-height: 44px; }
 .act-modal .act-lab { font-size: .9rem; }
@@ -915,12 +916,55 @@ body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
 body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }
 body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap: 1px 4px; }
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
-body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }
+/* UX combat adaptatif 13/11 (lot 1) : la fenêtre d'action est DANS le flux, jamais en surimpression du terrain */
+body.in-combat #app { overflow: hidden; width: 100%; padding-bottom: 10px; }
+body.in-combat #board-col { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 38dvh; }
+body.in-combat #act-slot:empty { display: none; }
+body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 38dvh; overflow-y: auto; }
+/* terrain rétréci mais COMPLET quand la fenêtre est ouverte */
+body.in-combat.act-open .row-lab { display: none; }
+body.in-combat.act-open .unit { width: clamp(52px, 14vw, 84px); }
+body.in-combat.act-open .unit.boss { width: clamp(72px, 19vw, 110px); }
+/* réserve cachée : badge latéral compact (compteur vivantes/total) à la place du rail */
+body.in-combat #reserve-zone { display: none; }
+.reserve-badge { display: none; }
+body.in-combat .reserve-badge { position: fixed; left: 8px; top: 44%; z-index: 40; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
+body.in-combat .reserve-badge:active { background: rgba(77, 208, 225, .25); }
+body.in-combat .reserve-badge.empty { opacity: .45; }
+/* fiche flottante : ancrée au bord opposé de la fenêtre d'action, ne la ferme PAS */
+body.in-combat .modal-overlay.float-fiche { z-index: 70; background: none; backdrop-filter: none; pointer-events: none; align-items: flex-start; padding: 8px; }
+body.in-combat .modal-overlay.float-fiche .modal { pointer-events: auto; margin: 0 auto; width: min(560px, 94vw); max-height: 50dvh; overflow-y: auto; }
+/* paysage (PC + mobile tourné) : terrain à gauche, fenêtre d'action en rail latéral à droite */
+@media (orientation: landscape) {
+body.in-combat #app { flex-direction: row; max-width: none; margin: 0; padding: 8px 10px 10px; }
+body.in-combat #act-slot { max-height: none; width: min(360px, 38vw); border-left: 1px solid rgba(77, 208, 225, .25); }
+body.in-combat .act-modal { max-height: none; height: 100%; border-radius: 0; border-top: none; border-left: 2px solid rgba(77, 208, 225, .35); }
+body.in-combat.act-open .unit { width: clamp(40px, 6.5vw, 84px); }
+body.in-combat.act-open .unit.boss { width: clamp(52px, 8.5vw, 104px); }
+body.in-combat .modal-overlay.float-fiche { justify-content: flex-start; }
+body.in-combat .modal-overlay.float-fiche .modal { margin: 0; width: min(300px, calc(100vw - min(360px, 38vw) - 24px)); max-height: 94dvh; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+body.in-combat.act-open .rail-wrap { display: none; }
+body.in-combat.act-open #app > #board-col > h2 { font-size: .78rem; }
+body.in-combat.act-open #controls { padding: 2px; }
+body.in-combat.act-open .unit { width: clamp(32px, 9.5dvh, 56px); }
+body.in-combat.act-open .unit.boss { width: clamp(42px, 12dvh, 70px); }
+}
 body.in-combat .tac-head { margin: 2px 0; font-size: .8rem; }
 body.in-combat .tac-row { padding: 3px 6px; gap: 4px; margin: 3px 0; }
 body.in-combat .tac-name { min-width: 78px; font-size: .72rem; }
 body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }
-body.in-combat #log { min-height: 20px; max-height: 20dvh; overflow: hidden; margin: 4px 0; font-size: .74rem; }
+/* UX combat adaptatif 13/11 lot 2 : mini-log PERMANENT (2-3 lignes toujours visibles, toucher = log complet) */
+body.in-combat #log { display: flex; flex-direction: column; justify-content: flex-end; flex: 0 0 auto; min-height: 3.3em; max-height: 3.3em; overflow: hidden; margin: 4px 0; font-size: .74rem; cursor: pointer; }
+body.in-combat #log.full { max-height: 40dvh; overflow-y: auto; }
+body.in-combat #log .logline { margin: 0; line-height: 1.32; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* UX 13/11 lot 2 : trace visuelle source -> cible (flèche brève, durée fixe insensible à la vitesse) */
+.trace-svg { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 55; animation: tracefade .78s ease forwards; }
+.trace-svg line { stroke: #ffd54f; stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 0 6px rgba(255, 213, 79, .85)); }
+@keyframes tracefade { 0% { opacity: 0; } 12% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
 
 /* v0.42 : la carte du modificateur de run */
 .run-mod-card { display: flex; align-items: center; gap: 14px; border: 1px solid #d9b45a; border-radius: 12px; padding: 12px 16px; margin: 10px 0; background: rgba(217,180,90,.08); }
