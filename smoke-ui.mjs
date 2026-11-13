@@ -146,6 +146,8 @@ async function main() {
       api._tacPause(true); // pas de chaine auto : on fige le flux avant la verification
       await wait(80);
       check('46 h le tour se termine seul (fenêtre fermée, rien en attente)', !api._actEl() && !api._busy(), `act=${!!api._actEl()} busy=${api._busy()} winner=${stC.winner}`);
+      // UX 13/11 lot 2 : le mini-log #log a été alimenté pendant le combat (au moins la ligne de fin ou un événement tracé)
+      check('46 j mini-log #log alimenté pendant le combat', (appEl.querySelector('#log')?.children.length ?? 0) > 0, '');
     } else {
       check('46 g cible proposée : liste cliquable', false, 'fenêtre sans boutons');
       check('46 g pion ennemi surligné sur le plateau', false, '');
@@ -664,7 +666,10 @@ async function main() {
   // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
   check('44 a one-screen : unités de combat agrandies (v1.51 : 30vw/180px desktop, 28vw/150px mobile) et panneau compact', html.includes('body.in-combat .unit { width: clamp(120px, 30vw, 180px); }') && html.includes('body.in-combat .unit { width: clamp(110px, 28vw, 150px); }') && html.includes('body.in-combat .unit.boss { width: clamp(150px, 38vw, 220px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
-  check('44 a one-screen : journal borné, rappels bas disparus', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && !html.includes('-webkit-line-clamp'), '');
+  // UX 13/11 lot 2 : le journal devient un mini-log permanent (plus de max-height 20dvh tronqué)
+  check('44 a one-screen : journal borné en mini-log permanent, rappels bas disparus', !html.includes('max-height: 20dvh') && !html.includes('-webkit-line-clamp'), '');
+  // UX 13/11 lot 2 : lisibilité — mini-log flex-end 3 lignes (clic = complet), floatText 700 ms min même à ×16/×32, trace source->cible
+  check('44 a2 lisibilité : mini-log permanent + floatText 700ms min + trace SVG + logLine', html.includes('body.in-combat #log { display: flex; flex-direction: column; justify-content: flex-end;') && html.includes('body.in-combat #log.full { max-height: 40dvh;') && html.includes('const FLOAT_MIN_MS = 700;') && html.includes('function traceLine(') && html.includes('function logLine(') && html.includes('.trace-svg'), '');
   check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
   check('44 b la base v0.43.1 des unités reste en place (override seulement)', html.includes('.unit { flex: 0 0 auto; width: clamp(84px, 16vw, 112px)'), '');
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');

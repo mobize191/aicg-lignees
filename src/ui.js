@@ -4955,14 +4955,59 @@ function dash(srcEl, dstEl, ms) {
 }
 
 const FLOAT_MS = 1500;
+const FLOAT_MIN_MS = 700; // UX 13/11 lot 2 : lecture garantie ~700 ms même à ×16/×32
 
 function floatText(el, text, cls) {
-  if (!el || turbo()) return;
+  if (!el) return; // UX 13/11 lot 2 : affiché à TOUTES les vitesses (seule la durée est plafonnée à 700 ms en turbo)
   const f = document.createElement('div');
   f.className = `float ${cls}${cls && String(cls).includes('dmg') ? ' pop' : ''}`; // Lot 2 : pop overshoot (ease-out back) sur les dégâts/soins
   f.textContent = text;
   el.appendChild(f);
-  setTimeout(() => f.remove(), FLOAT_MS);
+  setTimeout(() => f.remove(), turbo() ? FLOAT_MIN_MS : FLOAT_MS);
+}
+
+let traceSeq = 0;
+function traceLine(srcEl, dstEl) { // UX 13/11 lot 2 : flèche brève frappeur -> cible (durée fixe, insensible à la vitesse)
+  try {
+    if (!srcEl || !dstEl || typeof document.createElementNS !== 'function') return;
+    const a = srcEl.getBoundingClientRect();
+    const b = dstEl.getBoundingClientRect();
+    if ((!a.width && !a.height) || (!b.width && !b.height)) return;
+    const x1 = a.left + a.width / 2, y1 = a.top + a.height / 2;
+    const dx = (b.left + b.width / 2) - x1, dy = (b.top + b.height / 2) - y1;
+    const dist = Math.hypot(dx, dy) || 1;
+    const stop = Math.min(34, dist * 0.25); // la flèche s'arrête au bord de la cible
+    const x2 = x1 + (dx / dist) * (dist - stop), y2 = y1 + (dy / dist) * (dist - stop);
+    const W = window.innerWidth || 1024, H = window.innerHeight || 768;
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'trace-svg');
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const arrowId = 'trace-arrow-' + (++traceSeq);
+    const defs = document.createElementNS(NS, 'defs');
+    const mk = document.createElementNS(NS, 'marker');
+    mk.setAttribute('id', arrowId); mk.setAttribute('viewBox', '0 0 10 10'); mk.setAttribute('refX', '8'); mk.setAttribute('refY', '5');
+    mk.setAttribute('markerWidth', '7'); mk.setAttribute('markerHeight', '7'); mk.setAttribute('orient', 'auto-start-reverse');
+    const pth = document.createElementNS(NS, 'path');
+    pth.setAttribute('d', 'M0,0 L10,5 L0,10 z'); pth.setAttribute('fill', '#ffd54f');
+    mk.appendChild(pth); defs.appendChild(mk); svg.appendChild(defs);
+    const ln = document.createElementNS(NS, 'line');
+    ln.setAttribute('x1', String(x1)); ln.setAttribute('y1', String(y1)); ln.setAttribute('x2', String(x2)); ln.setAttribute('y2', String(y2));
+    ln.setAttribute('marker-end', `url(#${arrowId})`);
+    svg.appendChild(ln);
+    document.body.appendChild(svg);
+    setTimeout(() => svg.remove(), 780);
+  } catch (e) { /* SVG indisponible : pas de trace, pas d'erreur */ }
+}
+
+function logLine(text, cls = '') { // UX 13/11 lot 2 : mini-log permanent — chaque événement tracé en texte court
+  const logEl = combatApp ? combatApp.querySelector('#log') : null;
+  if (!logEl) return;
+  const p = document.createElement('p');
+  p.className = 'logline' + (cls ? ' ' + cls : '');
+  p.textContent = text;
+  logEl.appendChild(p);
+  while (logEl.children.length > 30) logEl.firstChild.remove();
 }
 
 function shake(el, big) {
@@ -5123,13 +5168,17 @@ async function animate(events, ms, gen = null) {
           dstEl = first ? elOf(first.uid) : null;
         }
         await dash(srcEl, dstEl, special ? Math.min(460, ms) : Math.min(340, ms));
+        traceLine(srcEl, dstEl); // UX 13/11 lot 2 : trace source -> cible
         updateMana(ev.sourceId, ev.mana);
+        const srcName = findUnit(ev.sourceId)?.name ?? '';
         if (ev.targetId !== 'all' && dstEl) {
           lastSingle = ev;
+          logLine(`${srcName} frappe ${findUnit(ev.targetId)?.name ?? ''} : -${ev.amount} PV${tag}${ev.crit ? ' (CRIT)' : ''}`, ev.crit ? 'lose' : ''); // UX 13/11 lot 2 : mini-log
           feedback(ev.crit ? 'large' : 'medium', dstEl); // Lot 2 : routage unique (crit = large + hit-stop)
           floatText(dstEl, `${ev.crit ? 'CRIT ' : ''}-${ev.amount}${tag}${special ? ' !' : ''}`, (special ? 'dmg fx-special' : 'dmg') + (ev.crit ? ' fx-crit' : '')); // Lot 1 : flag crit lu depuis l'event
           if (ev.crit) await hitStopLarge(); // Lot 2 : hit-stop réservé au tier large
         } else if (ev.targetId === 'all') {
+          logLine(`${srcName} frappe toute la zone : -${ev.amount} PV`); // UX 13/11 lot 2 : mini-log
         }
         await sleep(special ? ms * 0.7 : ms * 0.5);
         break;
@@ -5139,6 +5188,7 @@ async function animate(events, ms, gen = null) {
         const el = elOf(ev.targetId);
         const fromSingle = lastSingle && lastSingle.targetId === ev.targetId;
         if (!fromSingle) {
+          logLine(`${findUnit(ev.targetId)?.name ?? ''} subit -${ev.amount} PV`); // UX 13/11 lot 2 : mini-log (DoT, zone...)
           
           floatText(el, `-${ev.amount}`, 'dmg');
           shake(el, false);
@@ -5147,6 +5197,7 @@ async function animate(events, ms, gen = null) {
       }
       case 'heal': {
         updateHp(ev.targetId, ev.amount);
+        logLine(`${ev.sourceId === 'regen' ? 'Régénération' : (findUnit(ev.sourceId)?.name ?? '')} soigne ${findUnit(ev.targetId)?.name ?? ''} : +${ev.amount} PV`, 'win'); // UX 13/11 lot 2 : mini-log
         const el = elOf(ev.targetId);
         if (el) feedback('medium', el); // Lot 2
         if (el) {
@@ -5513,8 +5564,16 @@ async function animate(events, ms, gen = null) {
             floatText(el, label, 'buff');
             await sleep(ms * 0.15);
           }
+          if (ev.kind !== 'tactical') { // UX 13/11 lot 2 : mini-log (texte court, ex. « Banshee maudit Nymphe : -2 tours »)
+            const srcN = curCast?.cardName ?? '';
+            const dstN = findUnit(ev.targetId)?.name ?? '';
+            const verb = ev.kind === 'stun' ? 'étourdit' : ev.kind === 'slow' ? 'ralentit' : ev.kind === 'curse' ? 'maudit' : ev.kind === 'dot' ? 'empoisonne' : ev.kind === 'reflect' ? 'renvoi' : ev.kind === 'link' ? 'lie' : ev.kind === 'copy' ? 'copie' : ev.kind === 'exec' ? 'exécute' : 'affecte';
+            const det = (ev.kind === 'stun' || ev.kind === 'slow') ? ` : ${ev.value} tour(s)` : ev.kind === 'curse' ? ` : -${Math.round((ev.value ?? 0) * 100)} %` : '';
+            logLine(`${srcN ? srcN + ' ' : ''}${verb} ${dstN}${det}`);
+          }
         } else if (ev.type === 'revive') {
           updateHp(ev.targetId, ev.amount);
+          logLine(`${findUnit(ev.targetId)?.name ?? ''} ressuscite : +${ev.amount} PV`, 'win'); // UX 13/11 lot 2 : mini-log
           el.classList.remove('ko');
           floatText(el, '✨ Résurrection', 'heal fx-special');
           await sleep(ms * 0.4);
@@ -5522,6 +5581,7 @@ async function animate(events, ms, gen = null) {
           floatText(el, `🔥 ${ev.turns}`, 'buff');
         } else if (ev.type === 'expire') {
           el.classList.add('ko');
+          logLine(`${findUnit(ev.targetId)?.name ?? ''} tombe K.O.`, 'lose'); // UX 13/11 lot 2 : mini-log
           floatText(el, '⌛', 'dmg');
         } else if (ev.type === 'dodge') {
           const srcU = ev.sourceId ? findUnit(ev.sourceId) : null;
@@ -5742,6 +5802,8 @@ function renderCombat(root, opts = {}) {
     run();
   };
   combatApp.querySelector('#bag').onclick = () => openBagModal();
+  const logEl = combatApp.querySelector('#log');
+  if (logEl) logEl.onclick = () => logEl.classList.toggle('full'); // UX 13/11 lot 2 : toucher le mini-log = log complet
   const rb = combatApp.querySelector('#reserve-badge'); // UX 13/11 : le badge ouvre le sélecteur d'échange existant (3+2 inchangé)
   if (rb) rb.onclick = () => {
     if (promptState && actBox && promptState.unit) askSwapChoice(promptState.unit);
