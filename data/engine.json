@@ -735,5 +735,8 @@
   "quetePetite": 1,
   "queteMoyenne": 2,
   "queteGrande": 4
- }
+ },
+ "FX_HITSTOP": true,
+ "FX_HITSTOP_MS": 90,
+ "FX_FLASH_MAX_PER_S": 3
 }

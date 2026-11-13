@@ -213,6 +213,7 @@ const API_PAIRS = {
   addXpI: 'addXpI',
   addCardIid: 'addCardIid',
   _setAuto: '() => {}', // v1.39 lot 2 : le mode auto n'existe plus, no-op pour les appels de test
+  feedback: 'feedback', hitStopLarge: 'hitStopLarge', // Lot 2 : feedback 3 tiers testable
   _autoMode: '() => false',
   _state: '() => state',
   _runLog: '() => runLog',

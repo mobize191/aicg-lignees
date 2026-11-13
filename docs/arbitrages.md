@@ -1,3 +1,10 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 8 (spec vie-jeu Lot 2) LIVRÉE : FEEDBACK 3 TIERS + HIT-STOP (v1.47)
+
+- **Routeur unique `feedback(tier, anchor)`** (`src/ui.js`) : small = tick SFX (WebAudio, sans asset) ; medium = flash léger + shake ~0,3 + pop overshoot (ease-out back) sur les floatText ; large (crit, K.O., boss, drops UR) = flash + shake ~0,7 + zoom léger + **hit-stop 80-100 ms**. Branché dans l'animateur de combat (attaque medium/large si crit, K.O. large, soin medium) et l'errance (autel medium).
+- **Hit-stop** : réservé au tier large, jamais deux freezes qui se chevauchent (token : le plus récent restaure), retour exact au repos. **Kill switch en 1 ligne** : `FX_HITSTOP: false` dans `data/engine.json` (testé). Constantes en data : `FX_HITSTOP_MS: 90`, `FX_FLASH_MAX_PER_S: 3` (rate limit flashs ≤ 3/s).
+- **Option « réduire les flashs »** : persistée (`uiPrefs.reduceFlashes`, migration passive, `combatAuto` toujours ignoré), flashs en teinte sans pulsation ; `prefers-reduced-motion` déjà respecté partout.
+- Tests : 4 headless (`tests/feedback-v147.test.js`) : classes posées/retirées au repos, hit-stop toujours terminé (2 large à 30 ms), kill switch, rate limit 3/s. 246 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (couche feel, présentation seule).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 7 (spec vie-jeu Lot 0) LIVRÉE : MANIFESTE D'ASSETS (v1.46)
 
 - **`tools/assets-manifest.json`** (schéma acté 12/11) : 740 entrées (art + bg × assets-v3.json + assets-v3.1.json), chacune `{ id, kind, source{kind:"gen", model:"wai-illustrious-v17", loras[{civitaiId, version, base, trigger, license}], seed}, qa{status, date}, production{path, w, h, ko} }`. Rempli depuis la session 3.2 : prompts/seeds (`tools/prompts-v32.json`, 530 seeds remontés), LoRAs (`tools/lora-verdicts-v32.json`, 72 entrées avec LoRA), dimensions lues dans les JPEG de production.

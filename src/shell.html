@@ -274,6 +274,16 @@ animation: floatup 1.5s ease-out forwards;
 .float.cast { color: #b39dff; }
 .float.fx-special { font-size: 1.5rem; color: #ffe082; text-shadow: 0 0 14px rgba(255, 213, 79, .95), 0 2px 6px rgba(0,0,0,.85); }
 .float.fx-crit { font-size: 1.7rem; color: #ffb300; text-shadow: 0 0 16px rgba(255, 179, 0, .95), 0 2px 6px rgba(0,0,0,.9); }
+/* Lot 2 : feedback 3 tiers */
+.fx-flash { position: fixed; inset: 0; pointer-events: none; z-index: 90; }
+.fx-flash-big { background: rgba(255, 244, 214, .28); animation: fxflash .28s ease-out; }
+.fx-flash-med { background: rgba(255, 244, 214, .14); animation: fxflash .22s ease-out; }
+.fx-flash-soft { background: rgba(255, 244, 214, .10); } /* option « réduire les flashs » : teinte sans pulsation */
+@keyframes fxflash { from { opacity: 1; } to { opacity: 0; } }
+.float.pop { animation: floatpop .38s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes floatpop { 0% { transform: translateY(6px) scale(.7); } 100% { transform: translateY(-26px) scale(1); } }
+.zoom-pop { animation: zoompop .32s ease-out; }
+@keyframes zoompop { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
 .float.dodge { font-size: 1.3rem; font-weight: 700; color: #b3e5fc; text-shadow: 0 0 12px rgba(179,229,252,.9), 0 2px 6px rgba(0,0,0,.85); }
 @keyframes dodgePose { 30% { transform: translateX(-14px) rotate(-6deg); } 60% { transform: translateX(8px); } }
 .unit.dodge-pose { animation: dodgePose .5s ease; }
