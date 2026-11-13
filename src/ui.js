@@ -4015,11 +4015,17 @@ function renderRail(actorUid = null) {
   if (!combatApp) return;
   const railEl = combatApp.querySelector('#rail');
   if (!railEl) return;
-  railEl.innerHTML = railItems().map((it) => {
+  // repositionnement 14/11 lot 1 : rail horizontal persistant en haut — boss (chip élargi),
+  // invocation (chip pointillé, elles jouent dans l'ordre), séparateur › vers la suite du tour
+  const items = railItems();
+  railEl.innerHTML = items.map((it, i) => {
     const u = it.u;
-    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', actorUid && u.uid === actorUid ? 'acting' : '', u.alive ? '' : 'ko']
+    const isActing = !!(actorUid && u.uid === actorUid);
+    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', isActing ? 'acting' : '', u.alive ? '' : 'ko', u.boss ? 'boss' : '', u.uid.includes('-inv') ? 'summon' : '']
       .filter(Boolean).join(' ');
-    return `<div class="${cls}" data-uid="${u.uid}"><span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
+    const glyph = u.boss ? '<span class="rc-g">\ud83d\udc51</span>' : (u.uid.includes('-inv') ? '<span class="rc-g">\ud83d\udc3e</span>' : '');
+    const sep = isActing && i < items.length - 1 ? '<span class="rail-sep">\u203a</span>' : '';
+    return `${sep}<div class="${cls}" data-uid="${u.uid}">${glyph}<span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
   }).join('');
 }
 
@@ -5751,17 +5757,20 @@ function renderCombat(root, opts = {}) {
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
     .join(' ');
   combatApp.innerHTML = `
+    <div id="topbar">
+      <div class="rail-wrap"><div class="rail" id="rail"></div><span class="chip" id="stage-chip">${defi ? 'D\u00e9fi divin' : `\u00c9tage ${store.stage}/${d.floors}`}</span></div>
+      <div id="speedbar">
+        <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
+        <button class="btn big" id="fight">${fightLabel()}</button>
+      </div>
+    </div>
     <div id="board-col">
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
-      ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
-      <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="bag" title="Boire une potion hors combat (entre les étages)">🧪 Objets (${totalPotions()})</button>
-      <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
-    <div class="rail-wrap"><div class="rail" id="rail"></div></div>
     <button type="button" class="reserve-badge" id="reserve-badge" title="R\u00e9serve \u2014 choisir une carte \u00e0 faire entrer (l'\u00e9change co\u00fbte le tour)">\u21c4 <span id="reserve-count">0/0</span></button>
     <div id="board">
     <div class="enemy-zone" id="enemy-zone"></div>

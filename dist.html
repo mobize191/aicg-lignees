@@ -938,9 +938,16 @@ body.in-combat .modal-overlay.float-fiche { z-index: 70; background: none; backd
 body.in-combat .modal-overlay.float-fiche .modal { pointer-events: auto; margin: 0 auto; width: min(560px, 94vw); max-height: 50dvh; overflow-y: auto; }
 /* paysage (PC + mobile tourné) : terrain à gauche, fenêtre d'action en rail latéral à droite */
 @media (orientation: landscape) {
-body.in-combat #app { flex-direction: row; max-width: none; margin: 0; padding: 8px 10px 10px; }
-body.in-combat #act-slot { max-height: none; width: min(360px, 38vw); border-left: 1px solid rgba(77, 208, 225, .25); }
-body.in-combat .act-modal { max-height: none; height: 100%; border-radius: 0; border-top: none; border-left: 2px solid rgba(77, 208, 225, .35); }
+/* repositionnement 14/11 lot 1 : rail latéral droit — vitesse/pause en HAUT, rail d'ordre vertical, commandes EN BAS */
+body.in-combat #app { display: grid; grid-template-columns: 1fr min(360px, 38vw); grid-template-rows: auto 1fr; grid-template-areas: "board top" "board act"; max-width: none; margin: 0; padding: 8px 10px 10px; overflow: hidden; }
+body.in-combat #board-col { grid-area: board; }
+body.in-combat #topbar { grid-area: top; flex-direction: column; align-items: stretch; border-bottom: none; border-left: 1px solid rgba(77, 208, 225, .25); border-radius: 8px; }
+body.in-combat #topbar .rail-wrap { max-height: 32dvh; overflow-y: auto; overflow-x: hidden; }
+body.in-combat #topbar .rail { flex-direction: column; align-items: flex-start; gap: 4px; }
+body.in-combat #topbar .rail-chip { margin-right: 0; }
+body.in-combat #speedbar { order: -1; justify-content: flex-end; padding: 2px 0 4px; }
+body.in-combat #act-slot { grid-area: act; align-self: end; max-height: 66dvh; width: auto; border-left: none; }
+body.in-combat .act-modal { max-height: 100%; height: auto; border-radius: 0; border-top: 2px solid rgba(77, 208, 225, .35); border-left: none; }
 body.in-combat.act-open .unit { width: clamp(40px, 6.5vw, 84px); }
 body.in-combat.act-open .unit.boss { width: clamp(52px, 8.5vw, 104px); }
 body.in-combat .modal-overlay.float-fiche { justify-content: flex-start; }
@@ -1017,6 +1024,16 @@ animation: newpulse 1.6s infinite;
 
 /* ===== combat v2.1 : rail d'ordre du tour ===== */
 .rail-wrap { display: flex; margin: 6px 0 4px; overflow-x: auto; scrollbar-width: thin; }
+/* repositionnement 14/11 lot 1 : tiers haut persistant — rail d'ordre horizontal + compteur étage + vitesse/pause */
+body.in-combat #topbar { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; padding: 4px 6px; background: rgba(13, 17, 28, .92); border-bottom: 1px solid rgba(255, 255, 255, .1); }
+body.in-combat #topbar .rail-wrap { flex: 1 1 auto; margin: 0; min-width: 0; }
+body.in-combat #topbar .rail { display: flex; align-items: center; gap: 5px; overflow: hidden; }
+body.in-combat #topbar #stage-chip { flex: 0 0 auto; }
+body.in-combat #speedbar { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
+.rail-sep { color: #ffd54f; font-weight: 900; flex: 0 0 auto; font-size: .85rem; }
+.rail-chip .rc-g { font-size: .8rem; }
+.rail-chip.boss { border-color: rgba(255, 92, 108, .85); border-width: 2px; background: rgba(194, 58, 58, .22); font-size: .78rem; }
+.rail-chip.summon { border-style: dashed; border-color: rgba(154, 106, 216, .85); }
 .rail-chip { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 3px 9px; margin-right: 5px; border-radius: 999px; background: rgba(16, 21, 33, .82); border: 1px solid rgba(255, 255, 255, .14); font-size: .68rem; font-weight: 700; white-space: nowrap; }
 .rail-chip .rc-nm { max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
 .rail-chip .rc-agi { color: #93a0b5; font-weight: 700; }
@@ -22712,11 +22729,17 @@ function renderRail(actorUid = null) {
   if (!combatApp) return;
   const railEl = combatApp.querySelector('#rail');
   if (!railEl) return;
-  railEl.innerHTML = railItems().map((it) => {
+  // repositionnement 14/11 lot 1 : rail horizontal persistant en haut — boss (chip élargi),
+  // invocation (chip pointillé, elles jouent dans l'ordre), séparateur › vers la suite du tour
+  const items = railItems();
+  railEl.innerHTML = items.map((it, i) => {
     const u = it.u;
-    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', actorUid && u.uid === actorUid ? 'acting' : '', u.alive ? '' : 'ko']
+    const isActing = !!(actorUid && u.uid === actorUid);
+    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', isActing ? 'acting' : '', u.alive ? '' : 'ko', u.boss ? 'boss' : '', u.uid.includes('-inv') ? 'summon' : '']
       .filter(Boolean).join(' ');
-    return `<div class="${cls}" data-uid="${u.uid}"><span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
+    const glyph = u.boss ? '<span class="rc-g">\ud83d\udc51</span>' : (u.uid.includes('-inv') ? '<span class="rc-g">\ud83d\udc3e</span>' : '');
+    const sep = isActing && i < items.length - 1 ? '<span class="rail-sep">\u203a</span>' : '';
+    return `${sep}<div class="${cls}" data-uid="${u.uid}">${glyph}<span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
   }).join('');
 }
 
@@ -24448,17 +24471,20 @@ function renderCombat(root, opts = {}) {
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
     .join(' ');
   combatApp.innerHTML = `
+    <div id="topbar">
+      <div class="rail-wrap"><div class="rail" id="rail"></div><span class="chip" id="stage-chip">${defi ? 'D\u00e9fi divin' : `\u00c9tage ${store.stage}/${d.floors}`}</span></div>
+      <div id="speedbar">
+        <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
+        <button class="btn big" id="fight">${fightLabel()}</button>
+      </div>
+    </div>
     <div id="board-col">
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
-      ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
-      <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="bag" title="Boire une potion hors combat (entre les étages)">🧪 Objets (${totalPotions()})</button>
-      <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
-    <div class="rail-wrap"><div class="rail" id="rail"></div></div>
     <button type="button" class="reserve-badge" id="reserve-badge" title="R\u00e9serve \u2014 choisir une carte \u00e0 faire entrer (l'\u00e9change co\u00fbte le tour)">\u21c4 <span id="reserve-count">0/0</span></button>
     <div id="board">
     <div class="enemy-zone" id="enemy-zone"></div>
