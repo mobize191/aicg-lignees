@@ -1,910 +1,1033 @@
 {
-  "_meta": {
-    "version": 2,
-    "date": "2026-11-12",
-    "source": "charte-graphique-v2.md §3 et §12 + arbitrages 10/11/2026",
-    "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy). Règle `beast: true` : le genre est enregistré pour la fiche/registre mais JAMAIS injecté dans le prompt (une bête n'a pas de 1girl/1boy), et les antiTags de l'espèce sont obligatoires.",
-    "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age.",
-    "humanMaturityRule": "RÈGLE GÉNÉRALE (Marc-Olivier, 10/11 soir) : pour TOUTE carte de race humaine (nommée OU générique), plus la rareté est haute, plus le personnage est mature : build-prompts.mjs dérive l'âge apparent de la rareté via humanMaturityByRarity. Le champ age d'une entrée nommée reste prioritaire (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes).",
-    "r11": "Verrous R11-R14 (12/11) : descriptions d'espèce concrètes canon MTG/LotR ; léviathan = canon Atlantide Disney (carapace de crustacé, yeux rouges, gueule à tentacules) ; gobelin = petite créature verte noueuse à grandes oreilles. Nouvelles espèces goblin/gorgon ; familles seuil/miroir/pont ; nommées c1-c14, p5, p6, w6, w18, w19-w21."
-  },
-  "humanMaturityByRarity": {
-    "C": "adolescent, e (14-17 ans apparents)",
-    "UC": "jeune adulte (18-22 ans apparents)",
-    "R": "adulte (23-30 ans apparents)",
-    "SR": "adulte confirmé, e (30-38 ans apparents)",
-    "UR": "mature, aguerri, e (40-50 ans apparents)",
-    "L": "force de l'âge légendaire, aura de vétéran (50+)",
-    "M": "figure mythique d'âge indéterminé (vénérable ou éternel)"
-  },
-  "speciesTags": {
-    "human": [
-      "human"
-    ],
-    "mermaid": [
-      "mermaid, long iridescent fish tail, no legs, no feet, fully aquatic tail ending in a fluke, scaled skin, seashell accents"
-    ],
-    "seaSerpent": [
-      "a colossal sea serpent, an elongated scaled serpentine body, dorsal fins, a gaping fanged maw, gleaming eyes, no limbs, no human traits"
-    ],
-    "seaBehemoth": [
-      "a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins"
-    ],
-    "shaman": [
-      "human",
-      "shaman",
-      "tribal headdress"
-    ],
-    "vikingKing": [
-      "human",
-      "king",
-      "bearded man",
-      "fur cloak",
-      "war axe"
-    ],
-    "riverSage": [
-      "human",
-      "old man",
-      "long beard",
-      "flowing robes"
-    ],
-    "fireLord": [
-      "a colossal fire lord of molten slag and burning rock, beast-like massive body, crown of embers, glowing ember eyes, no humanoid proportions"
-    ],
-    "magmaGolem": [
-      "a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy"
-    ],
-    "fireElemental": [
-      "a towering elemental of living flame, body made of fire and smoke with an ember core, no solid human body, no human face, wreathed in blazing fire"
-    ],
-    "emberGuardian": [
-      "human",
-      "mage-smith",
-      "glowing forge sigils"
-    ],
-    "treant": [
-      "an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths"
-    ],
-    "fungusQueen": [
-      "a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy"
-    ],
-    "dryad": [
-      "dryad",
-      "leaf hair",
-      "bark skin accents",
-      "wooden antlers"
-    ],
-    "fireflySpirit": [
-      "firefly spirit, a young woman with glowing translucent wings, light motes, leaf and flower crown, fair skin"
-    ],
-    "reaper": [
-      "a grim reaper, a hooded skeletal figure in a tattered cloak, skull face with glowing eyes, holding a scythe, clearly undead"
-    ],
-    "lich": [
-      "a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh"
-    ],
-    "banshee": [
-      "a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream"
-    ],
-    "undeadCaptain": [
-      "an undead ship captain, a skeletal sea-soaked figure in a tattered captain coat, skeletal face, holding a harpoon, clearly non-living"
-    ],
-    "undeadKnightF": [
-      "undead knight",
-      "girl",
-      "ethereal armor",
-      "spectral sword",
-      "glowing eyes"
-    ],
-    "widowGhost": [
-      "a spectral widow ghost, a translucent pale figure in a tattered veil and dress, ghostly and incorporeal, floating"
-    ],
-    "solarDeity": [
-      "solar deity",
-      "radiant halo",
-      "sun crown",
-      "divine being"
-    ],
-    "oracle": [
-      "oracle",
-      "prophetess",
-      "sun motif",
-      "divine robes"
-    ],
-    "phoenixFirebird": [
-      "a giant phoenix firebird, fully avian body with beak and talons, blazing wings of ember feathers, no arms, no human features"
-    ],
-    "justiceKnight": [
-      "human",
-      "knight-errant",
-      "golden scale emblem"
-    ],
-    "assassinLight": [
-      "human",
-      "assassin",
-      "dawnlight blade"
-    ],
-    "herald": [
-      "human",
-      "herald",
-      "banner",
-      "radiant pauldrons"
-    ],
-    "apostle": [
-      "human",
-      "apostle",
-      "prayer beads",
-      "sun motif robes"
-    ],
-    "celestialJudge": [
-      "celestial being",
-      "hourglass motif",
-      "floating shards",
-      "male"
-    ],
-    "echoSpirit": [
-      "voice spirit",
-      "mirror shards",
-      "ethereal",
-      "celestial being"
-    ],
-    "fateWeaver": [
-      "fate weaver",
-      "golden threads",
-      "celestial loom",
-      "celestial being"
-    ],
-    "nightQueen": [
-      "human",
-      "queen of night",
-      "gothic royal dress",
-      "dark aura",
-      "star motif"
-    ],
-    "banditChief": [
-      "human",
-      "bandit chief",
-      "scarred face",
-      "leather armor",
-      "cruel grin"
-    ],
-    "legionCommander": [
-      "human",
-      "solar legion commander",
-      "gold-trimmed armor",
-      "sun banner"
-    ],
-    "archmage": [
-      "human",
-      "archmage",
-      "summoning circle",
-      "wide-brim hat",
-      "arcane staff"
-    ],
-    "beast": [
-      "a hulking monstrous beast, claws, fangs, thick hide, no human traits"
-    ],
-    "beastWater": [
-      "a massive amphibious sea beast, scaly wet hide, fins and webbed claws, a gaping fanged maw, glowing eyes, no human traits"
-    ],
-    "beastFire": [
-      "a hulking beast of ember and ash, smoke-blackened fur, burning eyes, claws and fangs, nostrils wreathed in smoke, no human traits"
-    ],
-    "beastWood": [
-      "a massive hulking forest beast of bark and thorns, moss-covered hide, branch antlers, clawed paws, fangs, no human traits"
-    ],
-    "beastDark": [
-      "a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits"
-    ],
-    "goblin": [
-      "a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions"
-    ],
-    "gorgon": [
-      "a monstrous gorgon beast, a massive serpentine-haired creature, a head of living snakes atop a hulking reptilian body, scaled hide, fangs, no human anatomy"
-    ]
-  },
-  "antiTags": {
-    "beast": [
-      "catgirl",
-      "human",
-      "girl",
-      "elf",
-      "cute animal ears"
-    ],
-    "phoenixFirebird": [
-      "human",
-      "humanoid",
-      "girl",
-      "boy",
-      "woman",
-      "man",
-      "human face",
-      "anthropomorphic",
-      "girl with fire wings",
-      "feathered arms"
-    ],
-    "fireLord": [
-      "knight",
-      "human",
-      "armor",
-      "humanoid"
-    ]
-  },
-  "families": {
-    "lame": {
-      "species": "human",
-      "univers": "Forge",
-      "note": "voies sabre/épée, tenues de duelliste et de forge"
-    },
-    "eau": {
-      "species": "human",
-      "univers": "Marées",
-      "note": "tenues de mage des marées"
-    },
-    "aube": {
-      "species": "human",
-      "univers": "Zénith",
-      "note": "tenues claires de clergé"
-    },
-    "ombre": {
-      "species": "human",
-      "univers": "Crypte",
-      "note": "tenues sombres d'assassin"
-    },
-    "bouclier": {
-      "species": "human",
-      "univers": "Forge",
-      "note": "armures de protection"
-    },
-    "braise": {
-      "species": "human",
-      "univers": "Forge",
-      "note": "tenues d'invocateur de fournaise"
-    },
-    "bosquet": {
-      "species": "human",
-      "univers": "Bosquet",
-      "note": "tenues de chasseur sylvestre"
-    },
-    "crepuscule": {
-      "species": "human",
-      "univers": "Marées",
-      "note": "NOUVELLE (v3) : robe sombre à motif d'étoiles, voile de nuit"
-    },
-    "vol": {
-      "species": "human",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3) : cuir de bandit, capuche"
-    },
-    "zele": {
-      "species": "human",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3) : or léger de légion solaire"
-    },
-    "appel": {
-      "species": "human",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3) : robes d'archimage, cercles d'invocation"
-    },
-    "seuil": {
-      "species": "human",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3.2) : arbitres du Seuil, tenues de cérémonie lumineuse (R12)"
-    },
-    "miroir": {
-      "species": "echoSpirit",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3.2) : chœur miroir, esprits du reflet"
-    },
-    "pont": {
-      "species": "fateWeaver",
-      "univers": "Zénith",
-      "note": "NOUVELLE (v3.2) : tisseuses du pont, fils dorés du destin"
-    }
-  },
-  "named": {
-    "e14": {
-      "name": "Titan des Marées",
-      "gender": "1boy",
-      "species": "seaBehemoth",
-      "age": "ancien colosse"
-    },
-    "e13": {
-      "name": "Léviathan",
-      "gender": "1boy",
-      "species": "seaSerpent",
-      "age": "ancien colosse"
-    },
-    "e28": {
-      "name": "Méliane",
-      "gender": "1girl",
-      "species": "mermaid",
-      "age": "adulte"
-    },
-    "e30": {
-      "name": "Thalassa",
-      "gender": "1girl",
-      "species": "mermaid",
-      "age": "adulte"
-    },
-    "e17": {
-      "name": "Zikka",
-      "gender": "1girl",
-      "species": "shaman",
-      "age": "adulte"
-    },
-    "e19": {
-      "name": "Griknir",
-      "gender": "1boy",
-      "species": "vikingKing",
-      "age": "adulte aguerri"
-    },
-    "e22": {
-      "name": "Pontos",
-      "gender": "1boy",
-      "species": "riverSage",
-      "age": "ancien"
-    },
-    "f13": {
-      "name": "Seigneur des Cendres",
-      "gender": "1boy",
-      "species": "fireLord",
-      "age": "éternel",
-      "note": "ADN monstrueux acté au test checkpoint 10/11 : négatif knight, human, armor, humanoid"
-    },
-    "f22": {
-      "name": "Vulcain",
-      "gender": "1boy",
-      "species": "magmaGolem",
-      "age": "éternel"
-    },
-    "f21": {
-      "name": "Calcine",
-      "gender": "1girl",
-      "species": "fireElemental",
-      "age": "adulte"
-    },
-    "f18": {
-      "name": "Ombeline",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte",
-      "note": "tisseuse humaine, tenue de la Forge"
-    },
-    "f12": {
-      "name": "Gardien des Foyers",
-      "gender": "1boy",
-      "species": "emberGuardian",
-      "age": "adulte aguerri",
-      "note": "futur nommé (arbitrages 10/11)"
-    },
-    "g8": {
-      "name": "Cœur du Bosquet",
-      "gender": "1boy",
-      "species": "treant",
-      "age": "ancien"
-    },
-    "g7": {
-      "name": "Patriarche du Bosquet",
-      "gender": "1boy",
-      "species": "treant",
-      "age": "ancien",
-      "note": "futur nommé (arbitrages 10/11)"
-    },
-    "g16": {
-      "name": "Mycola",
-      "gender": "1girl",
-      "species": "fungusQueen",
-      "age": "adulte"
-    },
-    "g18": {
-      "name": "Adriel",
-      "gender": "1girl",
-      "species": "fireflySpirit",
-      "age": "adulte"
-    },
-    "g21": {
-      "name": "Vesna",
-      "gender": "1girl",
-      "species": "dryad",
-      "age": "adulte"
-    },
-    "k17": {
-      "name": "La Mort",
-      "gender": "1girl",
-      "species": "reaper",
-      "age": "éternelle"
-    },
-    "k7": {
-      "name": "Archiliche des Caveaux",
-      "gender": "1boy",
-      "species": "lich",
-      "age": "éternel",
-      "note": "futur nommé (arbitrages 10/11)"
-    },
-    "k14": {
-      "name": "Macha",
-      "gender": "1girl",
-      "species": "banshee",
-      "age": "adulte"
-    },
-    "k22": {
-      "name": "Ahab, Lord des Naufragés",
-      "gender": "1boy",
-      "species": "undeadCaptain",
-      "age": "adulte défunt"
-    },
-    "k27": {
-      "name": "Jeanne d'Arc",
-      "gender": "1girl",
-      "species": "undeadKnightF",
-      "age": "adulte défunte"
-    },
-    "k30": {
-      "name": "Siegfried",
-      "gender": "1girl",
-      "species": "undeadKnightF",
-      "age": "adulte défunte",
-      "note": "chevalière défunte (acté v3)"
-    },
-    "k19": {
-      "name": "Ysolde",
-      "gender": "1girl",
-      "species": "widowGhost",
-      "age": "adulte défunte"
-    },
-    "z8": {
-      "name": "Astre Capiteux",
-      "gender": "1boy",
-      "species": "solarDeity",
-      "age": "éternel"
-    },
-    "z30": {
-      "name": "Apolline, Prophétesse du Jour",
-      "gender": "1girl",
-      "species": "oracle",
-      "age": "adulte",
-      "note": "M du Clergé du Zénith (acté v3)"
-    },
-    "z29": {
-      "name": "Justine, Justicière du Jour",
-      "gender": "1girl",
-      "species": "justiceKnight",
-      "age": "adulte"
-    },
-    "z19": {
-      "name": "Pyrrha",
-      "gender": "F",
-      "species": "phoenixFirebird",
-      "age": "adulte",
-      "beast": true,
-      "note": "PHÉNIX = vrai oiseau de feu, PAS une femme-oiseau (retour vague 1, 10/11) : gender enregistré pour la fiche mais JAMAIS injecté dans le prompt ; antiTags phoenixFirebird obligatoires"
-    },
-    "z22": {
-      "name": "Fjalar",
-      "gender": "M",
-      "species": "phoenixFirebird",
-      "age": "adulte",
-      "beast": true,
-      "note": "PHÉNIX = vrai oiseau de feu, PAS un homme-oiseau (retour vague 1, 10/11) : idem z19"
-    },
-    "z15": {
-      "name": "Aurorine, Lance de l'Aube",
-      "gender": "1girl",
-      "species": "assassinLight",
-      "age": "adulte",
-      "note": "z15 reste Aurorine (arbitrages 10/11)"
-    },
-    "z7": {
-      "name": "Héraut du Zénith",
-      "gender": "1boy",
-      "species": "herald",
-      "age": "adulte",
-      "note": "futur nommé (arbitrages 10/11)"
-    },
-    "z26": {
-      "name": "Célestin",
-      "gender": "1boy",
-      "species": "apostle",
-      "age": "adulte"
-    },
-    "d6": {
-      "name": "Kairos",
-      "gender": "1boy",
-      "species": "celestialJudge",
-      "age": "éternel"
-    },
-    "d12": {
-      "name": "Écho",
-      "gender": "1girl",
-      "species": "echoSpirit",
-      "age": "éternelle"
-    },
-    "d18": {
-      "name": "Ananké",
-      "gender": "1girl",
-      "species": "fateWeaver",
-      "age": "éternelle"
-    },
-    "a15": {
-      "name": "Kenji, Lame Éternelle",
-      "gender": "1boy",
-      "species": "human",
-      "age": "adulte aguerri",
-      "note": "test checkpoint 10/11 : verrouiller 1boy, adult man, mature face, veteran warrior ; négatif young, teen, boy"
-    },
-    "a16": {
-      "name": "Kira, Reine des Ombres",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte"
-    },
-    "a13": {
-      "name": "Alix, Archimage des Marées",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte"
-    },
-    "s9": {
-      "name": "Léna, Avatar de l'Aurore",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte"
-    },
-    "s11": {
-      "name": "Argus, Rempart Éveillé",
-      "gender": "1boy",
-      "species": "human",
-      "age": "adulte aguerri"
-    },
-    "a22": {
-      "name": "Solen, Archimage de la Braise",
-      "gender": "1boy",
-      "species": "human",
-      "age": "adulte aguerri"
-    },
-    "a27": {
-      "name": "Maïa, Lame du Bosquet",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte"
-    },
-    "b1": {
-      "name": "Yuki, Brise-Lame",
-      "gender": "1girl",
-      "species": "human",
-      "age": "jeune (graine)",
-      "note": "validé au test : gamine OK pour la graine, évolutions plus matures"
-    },
-    "b2": {
-      "name": "Onyx, Fil de Nuit",
-      "gender": "1boy",
-      "species": "human",
-      "age": "jeune (graine)"
-    },
-    "b3": {
-      "name": "Naïa, Sourcéleine",
-      "gender": "1girl",
-      "species": "human",
-      "age": "jeune (graine)"
-    },
-    "b4": {
-      "name": "Aïna, Voix du Matin",
-      "gender": "1girl",
-      "species": "human",
-      "age": "jeune (graine)"
-    },
-    "b5": {
-      "name": "Roc, Épaule du Monde",
-      "gender": "1boy",
-      "species": "human",
-      "age": "jeune (graine)"
-    },
-    "b6": {
-      "name": "Ember, Cœur de Fournaise",
-      "gender": "1girl",
-      "species": "human",
-      "age": "jeune (graine)",
-      "note": "genre tranché F par Marc-Olivier (10/11 soir)"
-    },
-    "b7": {
-      "name": "Sylve, Écorce Vive",
-      "gender": "1girl",
-      "species": "human",
-      "age": "jeune (graine)"
-    },
-    "q6": {
-      "name": "Vesperine, Reine de la Nuit",
-      "gender": "1girl",
-      "species": "nightQueen",
-      "age": "adulte",
-      "note": "famille Crépuscule (v3)"
-    },
-    "t6": {
-      "name": "Gadianton, Chef des Brigands",
-      "gender": "1boy",
-      "species": "banditChief",
-      "age": "adulte aguerri",
-      "note": "famille Vol (v3)"
-    },
-    "u6": {
-      "name": "Lémion, Chef de la Légion Solaire",
-      "gender": "1boy",
-      "species": "legionCommander",
-      "age": "adulte aguerri",
-      "note": "famille Zèle (v3), ex-Aurorine u6 (arbitrages 10/11)"
-    },
-    "v6": {
-      "name": "Archimage de l'Appel",
-      "gender": "1girl",
-      "species": "archmage",
-      "age": "mûre, majestueuse",
-      "note": "genre tranché F par Marc-Olivier (10/11 soir) ; futur nommé (arbitrages 10/11)"
-    },
-    "c1": {
-      "name": "Yuki, Lame Ardente",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b1",
-      "note": "compagnon UR — identité verrouillée par IPAdapter depuis la graine b1 ; c8 (L) ref c1"
-    },
-    "c2": {
-      "name": "Onyx, Lame Funeste",
-      "gender": "1boy",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b2",
-      "note": "compagnon UR, ref b2 ; c9 (L) ref c2"
-    },
-    "c3": {
-      "name": "Naïa, Source du Large",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b3",
-      "note": "compagnon UR, ref b3 ; c10 (L) ref c3"
-    },
-    "c4": {
-      "name": "Aïna, Chant de l’Aube",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b4",
-      "note": "compagnon UR, ref b4 ; c11 (L) ref c4"
-    },
-    "c5": {
-      "name": "Roc, Montagne Vivante",
-      "gender": "1boy",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b5",
-      "note": "compagnon UR, ref b5 ; c12 (L) ref c5"
-    },
-    "c6": {
-      "name": "Ember, Flamme Vive",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b6",
-      "note": "compagnon UR, ref b6 ; c13 (L) ref c6"
-    },
-    "c7": {
-      "name": "Sylve, Griffe Sylvestre",
-      "gender": "1girl",
-      "species": "human",
-      "age": "adulte aguerri",
-      "ipa": "b7",
-      "note": "compagnon UR, ref b7 ; c14 (L) ref c7"
-    },
-    "c8": {
-      "name": "Yuki, Sabre de l’Aurore",
-      "gender": "1girl",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c1",
-      "note": "compagnon L — IPAdapter depuis c1 (UR) pour la MÊME identité"
-    },
-    "c9": {
-      "name": "Onyx, Ombre Éternelle",
-      "gender": "1boy",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c2",
-      "note": "L, ref c2"
-    },
-    "c10": {
-      "name": "Naïa, Marée Éternelle",
-      "gender": "1girl",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c3",
-      "note": "L, ref c3"
-    },
-    "c11": {
-      "name": "Aïna, Aurore Immortelle",
-      "gender": "1girl",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c4",
-      "note": "L, ref c4"
-    },
-    "c12": {
-      "name": "Roc, Rempart du Monde",
-      "gender": "1boy",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c5",
-      "note": "L, ref c5"
-    },
-    "c13": {
-      "name": "Ember, Soleil Captif",
-      "gender": "1girl",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c6",
-      "note": "L, ref c6"
-    },
-    "c14": {
-      "name": "Sylve, Âme du Bosquet",
-      "gender": "1girl",
-      "species": "human",
-      "age": "force de l’âge légendaire",
-      "ipa": "c7",
-      "note": "L, ref c7"
-    },
-    "p5": {
-      "name": "Séraphin, Porteur de Lumière",
-      "gender": "1boy",
-      "species": "human",
-      "age": "éternel",
-      "extra": "a divine angelic being with halo and wings",
-      "note": "séraphin (UR seuil)"
-    },
-    "p6": {
-      "name": "Séraphin, Chérubin Éveillé",
-      "gender": "1boy",
-      "species": "human",
-      "age": "éternel",
-      "extra": "a divine angelic being with halo and wings",
-      "note": "chérubin (L seuil) — même identité que p5 (hypothèse : séraphin masculin, voir rapport)"
-    },
-    "w6": {
-      "name": "Kairos, Juge Éternel",
-      "gender": "1girl",
-      "species": "human",
-      "age": "éternel",
-      "ipa": "kairos",
-      "note": "vidéo WAN wan21-kairos.webm : Kairos = femme blonde en armure céleste dorée (ref kairos.jpg) — genre corrigé 1girl d'après la ref vidéo ; IPAdapter sur kairos"
-    },
-    "w18": {
-      "name": "Ananké, Gardienne des Rives",
-      "gender": "1girl",
-      "species": "human",
-      "age": "éternelle",
-      "ipa": "wan21-ananke",
-      "note": "vidéo WAN wan21-ananke.webm existe : IPAdapter sur la ref vidéo"
-    },
-    "w19": {
-      "name": "Sirène Nouvelle",
-      "gender": "1girl",
-      "species": "mermaid",
-      "age": "adulte",
-      "note": "sirène = humanoïde assumé (écailles)"
-    },
-    "w20": {
-      "name": "Fée Nouvelle",
-      "gender": "1girl",
-      "species": "fireflySpirit",
-      "age": "adulte",
-      "note": "fée = humanoïde assumé"
-    },
-    "w21": {
-      "name": "Gorgonne Nouvelle",
-      "gender": null,
-      "species": "gorgon",
-      "beast": true,
-      "age": null,
-      "note": "bête à chevelure de serpents (R11 morphologie pure)"
-    }
-  },
-  "genericRules": {
-    "_note": "Règles pour les 231 arts génériques tant que l'entrée par carte n'existe pas ; build-prompts.mjs applique speciesTags[family→species] puis ce match.",
-    "bestiau": {
-      "match": "Bestiau*",
-      "speciesByDungeon": {
-        "e": "beastWater",
-        "f": "beastFire",
-        "g": "beastWood",
-        "k": "beastDark"
-      },
-      "negative": "beast"
-    },
-    "monstresAttaque": {
-      "match": "monstres d'attaque",
-      "rule": "majorité bestiale ; l'espèce se lit en un coup d'œil (boss = silhouette unique)"
-    },
-    "monstresSupport": {
-      "match": "monstres de support",
-      "rule": "humanoides ou enges ; jamais catgirl par défaut"
-    },
-    "en gesDivines": {
-      "match": "enge/divine",
-      "rule": "tags explicites par famille + dignité des conventions v1"
-    }
-  },
-  "genderPolicy": {
-    "ratio": "Équilibre raisonnable SANS quota strict (Marc-Olivier, 10/11 soir) : les nommées finissent ~30 F / 23 M, la campagne compense naturellement sur les génériques, aucune case genre à remplir à l'identique."
-  },
-  "beastSpecies": [
-    "beast",
-    "beastWater",
-    "beastFire",
-    "beastWood",
-    "beastDark",
-    "seaSerpent",
-    "seaBehemoth",
-    "treant",
-    "magmaGolem",
-    "fireElemental",
-    "phoenixFirebird",
-    "fireLord",
-    "goblin",
-    "gorgon",
-    "fungusQueen"
+ "_meta": {
+  "version": "v3.4",
+  "date": "2026-11-12",
+  "source": "charte-graphique-v2.md §3 et §12 + arbitrages 10/11/2026",
+  "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy). Règle `beast: true` : le genre est enregistré pour la fiche/registre mais JAMAIS injecté dans le prompt (une bête n'a pas de 1girl/1boy), et les antiTags de l'espèce sont obligatoires.",
+  "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age.",
+  "humanMaturityRule": "RÈGLE GÉNÉRALE (Marc-Olivier, 10/11 soir) : pour TOUTE carte de race humaine (nommée OU générique), plus la rareté est haute, plus le personnage est mature : build-prompts.mjs dérive l'âge apparent de la rareté via humanMaturityByRarity. Le champ age d'une entrée nommée reste prioritaire (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes).",
+  "r11": "Verrous R11-R14 (12/11) : descriptions d'espèce concrètes canon MTG/LotR ; léviathan = canon Atlantide Disney (carapace de crustacé, yeux rouges, gueule à tentacules) ; gobelin = petite créature verte noueuse à grandes oreilles. Nouvelles espèces goblin/gorgon ; familles seuil/miroir/pont ; nommées c1-c14, p5, p6, w6, w18, w19-w21.",
+  "updated": "2026-11-15",
+  "note": "Extension gel v18 : 29 nouvelles espèces (camp démon 18, anges 9, gorgon réécrite, faerie, paladin/knight/kiri, hydra, merSovereign)"
+ },
+ "humanMaturityByRarity": {
+  "C": "adolescent, e (14-17 ans apparents)",
+  "UC": "jeune adulte (18-22 ans apparents)",
+  "R": "adulte (23-30 ans apparents)",
+  "SR": "adulte confirmé, e (30-38 ans apparents)",
+  "UR": "mature, aguerri, e (40-50 ans apparents)",
+  "L": "force de l'âge légendaire, aura de vétéran (50+)",
+  "M": "figure mythique d'âge indéterminé (vénérable ou éternel)"
+ },
+ "speciesTags": {
+  "human": [
+   "human"
   ],
-  "loraBySpecies": {
-    "goblin": {
-      "file": "IL_10.safetensors",
-      "trigger": "g0bl1nr4ce"
-    },
-    "treant": {
-      "file": "Forest-Guardians-000014.safetensors",
-      "trigger": "FG-V2.0-Treant"
-    },
-    "dryad": {
-      "file": "Forest-Guardians-000014.safetensors",
-      "trigger": "FG-V2.0-Dryad"
-    },
-    "fireflySpirit": {
-      "file": "Forest-Guardians-000014.safetensors",
-      "trigger": "FG-V2.0-Spirit"
-    },
-    "magmaGolem": {
-      "file": "Golems.safetensors",
-      "trigger": "Magma Golem"
-    },
-    "seaBehemoth": {
-      "file": "Leviatan.safetensors",
-      "trigger": "leviathan a sea monster"
-    },
-    "lich": {
-      "file": "wow-undead.safetensors",
-      "trigger": "xundeadx"
-    },
-    "reaper": {
-      "file": "wow-undead.safetensors",
-      "trigger": "xundeadx"
-    },
-    "undeadCaptain": {
-      "file": "wow-undead.safetensors",
-      "trigger": "xundeadx"
-    },
-    "widowGhost": {
-      "file": "wow-undead.safetensors",
-      "trigger": "xundeadx"
-    },
-    "banshee": {
-      "file": "Banshee.safetensors",
-      "trigger": "banshee"
-    },
-    "fungusQueen": {
-      "file": "Cordyceps_XL.safetensors",
-      "trigger": "crdcps"
-    },
-    "beastDark": {
-      "file": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
-      "trigger": "CWM-WolfIL"
-    }
+  "mermaid": [
+   "mermaid, long iridescent fish tail, no legs, no feet, fully aquatic tail ending in a fluke, scaled skin, seashell accents"
+  ],
+  "seaSerpent": [
+   "a colossal sea serpent, an elongated scaled serpentine body, dorsal fins, a gaping fanged maw, gleaming eyes, no limbs, no human traits"
+  ],
+  "seaBehemoth": [
+   "a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins"
+  ],
+  "shaman": [
+   "human",
+   "shaman",
+   "tribal headdress"
+  ],
+  "vikingKing": [
+   "human",
+   "king",
+   "bearded man",
+   "fur cloak",
+   "war axe"
+  ],
+  "riverSage": [
+   "human",
+   "old man",
+   "long beard",
+   "flowing robes"
+  ],
+  "fireLord": [
+   "a colossal fire lord of molten slag and burning rock, beast-like massive body, crown of embers, glowing ember eyes, no humanoid proportions"
+  ],
+  "magmaGolem": [
+   "a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy"
+  ],
+  "fireElemental": [
+   "a towering elemental of living flame, body made of fire and smoke with an ember core, no solid human body, no human face, wreathed in blazing fire"
+  ],
+  "emberGuardian": [
+   "human",
+   "mage-smith",
+   "glowing forge sigils"
+  ],
+  "treant": [
+   "an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths"
+  ],
+  "fungusQueen": [
+   "a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy"
+  ],
+  "dryad": [
+   "dryad",
+   "leaf hair",
+   "bark skin accents",
+   "wooden antlers"
+  ],
+  "fireflySpirit": [
+   "firefly spirit, a young woman with glowing translucent wings, light motes, leaf and flower crown, fair skin"
+  ],
+  "reaper": [
+   "a grim reaper, a hooded skeletal figure in a tattered cloak, skull face with glowing eyes, holding a scythe, clearly undead"
+  ],
+  "lich": [
+   "a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh"
+  ],
+  "banshee": [
+   "a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream"
+  ],
+  "undeadCaptain": [
+   "an undead ship captain, a skeletal sea-soaked figure in a tattered captain coat, skeletal face, holding a harpoon, clearly non-living"
+  ],
+  "undeadKnightF": [
+   "undead knight",
+   "girl",
+   "ethereal armor",
+   "spectral sword",
+   "glowing eyes"
+  ],
+  "widowGhost": [
+   "a spectral widow ghost, a translucent pale figure in a tattered veil and dress, ghostly and incorporeal, floating"
+  ],
+  "solarDeity": [
+   "solar deity",
+   "radiant halo",
+   "sun crown",
+   "divine being"
+  ],
+  "oracle": [
+   "oracle",
+   "prophetess",
+   "sun motif",
+   "divine robes"
+  ],
+  "phoenixFirebird": [
+   "a giant phoenix firebird, fully avian body with beak and talons, blazing wings of ember feathers, no arms, no human features"
+  ],
+  "justiceKnight": [
+   "human",
+   "knight-errant",
+   "golden scale emblem"
+  ],
+  "assassinLight": [
+   "human",
+   "assassin",
+   "dawnlight blade"
+  ],
+  "herald": [
+   "human",
+   "herald",
+   "banner",
+   "radiant pauldrons"
+  ],
+  "apostle": [
+   "human",
+   "apostle",
+   "prayer beads",
+   "sun motif robes"
+  ],
+  "celestialJudge": [
+   "celestial being",
+   "hourglass motif",
+   "floating shards",
+   "male"
+  ],
+  "echoSpirit": [
+   "voice spirit",
+   "mirror shards",
+   "ethereal",
+   "celestial being"
+  ],
+  "fateWeaver": [
+   "fate weaver",
+   "golden threads",
+   "celestial loom",
+   "celestial being"
+  ],
+  "nightQueen": [
+   "human",
+   "queen of night",
+   "gothic royal dress",
+   "dark aura",
+   "star motif"
+  ],
+  "banditChief": [
+   "human",
+   "bandit chief",
+   "scarred face",
+   "leather armor",
+   "cruel grin"
+  ],
+  "legionCommander": [
+   "human",
+   "solar legion commander",
+   "gold-trimmed armor",
+   "sun banner"
+  ],
+  "archmage": [
+   "human",
+   "archmage",
+   "summoning circle",
+   "wide-brim hat",
+   "arcane staff"
+  ],
+  "beast": [
+   "a hulking monstrous beast, claws, fangs, thick hide, no human traits"
+  ],
+  "beastWater": [
+   "a massive amphibious sea beast, scaly wet hide, fins and webbed claws, a gaping fanged maw, glowing eyes, no human traits"
+  ],
+  "beastFire": [
+   "a hulking beast of ember and ash, smoke-blackened fur, burning eyes, claws and fangs, nostrils wreathed in smoke, no human traits"
+  ],
+  "beastWood": [
+   "a massive hulking forest beast of bark and thorns, moss-covered hide, branch antlers, clawed paws, fangs, no human traits"
+  ],
+  "beastDark": [
+   "a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits"
+  ],
+  "goblin": [
+   "a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions"
+  ],
+  "gorgon": [
+   "a gorgon like Medusa, a pale beautiful woman with living hissing snakes for hair, green scaled skin, serpentine eyes, a petrifying gaze, elegant menace, humanoid female"
+  ],
+  "imp": [
+   "a small impish humanoid demon, ash-grey skin, small curved horns, stubby bat wings, long thin tail, mischievous toothy grin, tattered loincloth"
+  ],
+  "demonDesire": [
+   "a lean elegant humanoid demon, wine-red skin, sharp handsome features, slim horns, tailored dark silk attire, seductive smirk"
+  ],
+  "succubus": [
+   "a beautiful winged succubus, a shapely female demon, small bat wings, small horns, thin barbed tail, elegant dark gown"
+  ],
+  "succubusGreater": [
+   "a regal demoness, a beautiful winged succubus queen, crown of dark flame, ornate black-gold gown, larger bat wings, small horns, barbed tail"
+  ],
+  "ladyOfDesire": [
+   "a towering regal demon noblewoman, obsidian skin, golden ornaments, commanding presence, ornate throne-room attire, small horns"
+  ],
+  "asmodia": [
+   "a majestic infernal queen, tall statuesque humanoid devil, black-gold regal robes, crown of black fire, elegant curved horns, commanding smile"
+  ],
+  "viceMaw": [
+   "a gaunt bestial demon, stretched grey hide, multiple thin arms, a gaping fanged maw"
+  ],
+  "viceMawGreater": [
+   "a hulking bestial demon, distended gaping maw, clawed limbs, emaciated dread presence, stretched grey hide"
+  ],
+  "abyssMaw": [
+   "a colossal demonic maw-monster, ringed with fangs, clawed limbs, dark void halo"
+  ],
+  "famine": [
+   "an emaciated regal demon, hollow cheeks, towering gaunt frame, tattered royal robes, an eternally empty chalice, devouring shadow aura"
+  ],
+  "demonPit": [
+   "a stocky brutish humanoid demon, thick horns, heavy jaw, iron chains, scarred leather harness"
+  ],
+  "demonGreater": [
+   "a tall armored humanoid demon, black plate armor, blazing eyes, horns"
+  ],
+  "demonLord": [
+   "an armored demon commander, horned helm, tattered banner, commanding pose, humanoid"
+  ],
+  "demonPrince": [
+   "a regal horned demon prince, ornate dark armor, infernal crown, commanding presence, humanoid"
+  ],
+  "belzebuth": [
+   "a tall dark-skinned infernal king, compound eyes like a fly, black regal robes with gold, a halo of hovering flies, lordly pose, crowned, humanoid"
+  ],
+  "plagueDemon": [
+   "a lean demon shrouded in a swarm of flies, insectile wings, sickly green miasma, humanoid"
+  ],
+  "plagueDemonGreater": [
+   "a chitin-plated demon, insectile limbs, fly-swarm cloak, plague censer, humanoid"
+  ],
+  "plagueBearer": [
+   "a hooded towering demon carrying a smoking plague censer, ornate rusted armor, green fog, humanoid"
+  ],
+  "peste": [
+   "a regal hooded plague queen, a demon mother of plagues, ornate funeral robes, sickly green flames in hand, swarming halo, humanoid female"
+  ],
+  "seraphYoung": [
+   "a child-like radiant angel, small white wings, simple white-gold robes, soft halo, humanoid"
+  ],
+  "seraphBearer": [
+   "a young angel warrior bearing golden light, two large white feathered wings, white-gold armor, radiant halo, humanoid"
+  ],
+  "angelLight": [
+   "an armored angel of light, gleaming white-gold plate, large white feathered wings, blazing halo, humanoid"
+  ],
+  "archangel": [
+   "a majestic armored archangel, towering, radiant halo, large white-gold feathered wings, flaming sword, humanoid"
+  ],
+  "seraphUltimate": [
+   "a supreme radiant archangel, SIX large white-gold feathered wings, blazing crown of light, solar halo, humanoid"
+  ],
+  "fallenAngelArdent": [
+   "a fierce angel of burning pride, white-gold armor cracked with veins of black fire, intense gaze, large white wings, humanoid"
+  ],
+  "fallenAngelZenith": [
+   "an angel of the zenith, dark-gold armor, solar coronation, haughty pose, large radiant wings, humanoid"
+  ],
+  "fallenStar": [
+   "a towering solar warrior, large radiant feathered wings, dark-gold armor, blazing spear, humanoid"
+  ],
+  "darkSun": [
+   "a supreme solar king turned to pride, six radiant wings, black-edged golden corona, majestic and menacing, humanoid"
+  ],
+  "faerie": [
+   "a tiny winged faerie, a diminutive humanoid with iridescent insect wings, delicate features, playful trickster grin, wild moss-and-petal attire"
+  ],
+  "paladin": [
+   "human",
+   "paladin",
+   "sacred white-gold armor",
+   "dawn tabard",
+   "solar shield"
+  ],
+  "knight": [
+   "human",
+   "knight",
+   "grey-gold rampart armor",
+   "shield"
+  ],
+  "kiri": [
+   "human female, long straight black hair, full black armor, sword at rest"
+  ],
+  "hydra": [
+   "a massive multi-headed sea hydra, THREE serpentine heads on long necks, scaled hide, fins, coral crowns, no human traits"
+  ],
+  "merSovereign": [
+   "a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle, no human traits"
+  ]
+ },
+ "antiTags": {
+  "beast": [
+   "catgirl",
+   "human",
+   "girl",
+   "elf",
+   "cute animal ears"
+  ],
+  "phoenixFirebird": [
+   "human",
+   "humanoid",
+   "girl",
+   "boy",
+   "woman",
+   "man",
+   "human face",
+   "anthropomorphic",
+   "girl with fire wings",
+   "feathered arms"
+  ],
+  "fireLord": [
+   "knight",
+   "human",
+   "armor",
+   "humanoid"
+  ],
+  "gorgon": [
+   "jellyfish",
+   "cnidarian",
+   "umbrella shaped",
+   "tentacles only",
+   "no human body"
+  ]
+ },
+ "families": {
+  "lame": {
+   "species": "human",
+   "univers": "Forge",
+   "note": "voies sabre/épée, tenues de duelliste et de forge"
+  },
+  "eau": {
+   "species": "human",
+   "univers": "Marées",
+   "note": "tenues de mage des marées"
+  },
+  "aube": {
+   "species": "human",
+   "univers": "Zénith",
+   "note": "tenues claires de clergé"
+  },
+  "ombre": {
+   "species": "human",
+   "univers": "Crypte",
+   "note": "tenues sombres d'assassin"
+  },
+  "bouclier": {
+   "species": "human",
+   "univers": "Forge",
+   "note": "armures de protection"
+  },
+  "braise": {
+   "species": "human",
+   "univers": "Forge",
+   "note": "tenues d'invocateur de fournaise"
+  },
+  "bosquet": {
+   "species": "human",
+   "univers": "Bosquet",
+   "note": "tenues de chasseur sylvestre"
+  },
+  "crepuscule": {
+   "species": "human",
+   "univers": "Marées",
+   "note": "NOUVELLE (v3) : robe sombre à motif d'étoiles, voile de nuit"
+  },
+  "vol": {
+   "species": "human",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3) : cuir de bandit, capuche"
+  },
+  "zele": {
+   "species": "human",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3) : or léger de légion solaire"
+  },
+  "appel": {
+   "species": "human",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3) : robes d'archimage, cercles d'invocation"
+  },
+  "seuil": {
+   "species": "human",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3.2) : arbitres du Seuil, tenues de cérémonie lumineuse (R12)"
+  },
+  "miroir": {
+   "species": "echoSpirit",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3.2) : chœur miroir, esprits du reflet"
+  },
+  "pont": {
+   "species": "fateWeaver",
+   "univers": "Zénith",
+   "note": "NOUVELLE (v3.2) : tisseuses du pont, fils dorés du destin"
   }
+ },
+ "named": {
+  "e14": {
+   "name": "Titan des Marées",
+   "gender": "1boy",
+   "species": "seaBehemoth",
+   "age": "ancien colosse"
+  },
+  "e13": {
+   "name": "Léviathan",
+   "gender": "1boy",
+   "species": "seaSerpent",
+   "age": "ancien colosse"
+  },
+  "e28": {
+   "name": "Méliane",
+   "gender": "1girl",
+   "species": "mermaid",
+   "age": "adulte"
+  },
+  "e30": {
+   "name": "Thalassa",
+   "gender": "1girl",
+   "species": "mermaid",
+   "age": "adulte"
+  },
+  "e17": {
+   "name": "Zikka",
+   "gender": "1girl",
+   "species": "shaman",
+   "age": "adulte"
+  },
+  "e19": {
+   "name": "Griknir",
+   "gender": "1boy",
+   "species": "vikingKing",
+   "age": "adulte aguerri"
+  },
+  "e22": {
+   "name": "Pontos",
+   "gender": "1boy",
+   "species": "riverSage",
+   "age": "ancien"
+  },
+  "f13": {
+   "name": "Seigneur des Cendres",
+   "gender": "1boy",
+   "species": "fireLord",
+   "age": "éternel",
+   "note": "ADN monstrueux acté au test checkpoint 10/11 : négatif knight, human, armor, humanoid"
+  },
+  "f22": {
+   "name": "Vulcain",
+   "gender": "1boy",
+   "species": "magmaGolem",
+   "age": "éternel"
+  },
+  "f21": {
+   "name": "Calcine",
+   "gender": "1girl",
+   "species": "fireElemental",
+   "age": "adulte"
+  },
+  "f18": {
+   "name": "Ombeline",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte",
+   "note": "tisseuse humaine, tenue de la Forge"
+  },
+  "f12": {
+   "name": "Gardien des Foyers",
+   "gender": "1boy",
+   "species": "emberGuardian",
+   "age": "adulte aguerri",
+   "note": "futur nommé (arbitrages 10/11)"
+  },
+  "g8": {
+   "name": "Cœur du Bosquet",
+   "gender": "1boy",
+   "species": "treant",
+   "age": "ancien"
+  },
+  "g7": {
+   "name": "Patriarche du Bosquet",
+   "gender": "1boy",
+   "species": "treant",
+   "age": "ancien",
+   "note": "futur nommé (arbitrages 10/11)"
+  },
+  "g16": {
+   "name": "Mycola",
+   "gender": "1girl",
+   "species": "fungusQueen",
+   "age": "adulte"
+  },
+  "g18": {
+   "name": "Adriel",
+   "gender": "1girl",
+   "species": "fireflySpirit",
+   "age": "adulte"
+  },
+  "g21": {
+   "name": "Vesna",
+   "gender": "1girl",
+   "species": "dryad",
+   "age": "adulte"
+  },
+  "k17": {
+   "name": "La Mort",
+   "gender": "1girl",
+   "species": "reaper",
+   "age": "éternelle"
+  },
+  "k7": {
+   "name": "Archiliche des Caveaux",
+   "gender": "1boy",
+   "species": "lich",
+   "age": "éternel",
+   "note": "futur nommé (arbitrages 10/11)"
+  },
+  "k14": {
+   "name": "Macha",
+   "gender": "1girl",
+   "species": "banshee",
+   "age": "adulte"
+  },
+  "k22": {
+   "name": "Ahab, Lord des Naufragés",
+   "gender": "1boy",
+   "species": "undeadCaptain",
+   "age": "adulte défunt"
+  },
+  "k27": {
+   "name": "Jeanne d'Arc",
+   "gender": "1girl",
+   "species": "undeadKnightF",
+   "age": "adulte défunte"
+  },
+  "k30": {
+   "name": "Siegfried",
+   "gender": "1girl",
+   "species": "undeadKnightF",
+   "age": "adulte défunte",
+   "note": "chevalière défunte (acté v3)"
+  },
+  "k19": {
+   "name": "Ysolde",
+   "gender": "1girl",
+   "species": "widowGhost",
+   "age": "adulte défunte"
+  },
+  "z8": {
+   "name": "Astre Capiteux",
+   "gender": "1boy",
+   "species": "solarDeity",
+   "age": "éternel"
+  },
+  "z30": {
+   "name": "Apolline, Prophétesse du Jour",
+   "gender": "1girl",
+   "species": "oracle",
+   "age": "adulte",
+   "note": "M du Clergé du Zénith (acté v3)"
+  },
+  "z29": {
+   "name": "Justine, Justicière du Jour",
+   "gender": "1girl",
+   "species": "justiceKnight",
+   "age": "adulte"
+  },
+  "z19": {
+   "name": "Pyrrha",
+   "gender": "F",
+   "species": "phoenixFirebird",
+   "age": "adulte",
+   "beast": true,
+   "note": "PHÉNIX = vrai oiseau de feu, PAS une femme-oiseau (retour vague 1, 10/11) : gender enregistré pour la fiche mais JAMAIS injecté dans le prompt ; antiTags phoenixFirebird obligatoires"
+  },
+  "z22": {
+   "name": "Fjalar",
+   "gender": "M",
+   "species": "phoenixFirebird",
+   "age": "adulte",
+   "beast": true,
+   "note": "PHÉNIX = vrai oiseau de feu, PAS un homme-oiseau (retour vague 1, 10/11) : idem z19"
+  },
+  "z15": {
+   "name": "Aurorine, Lance de l'Aube",
+   "gender": "1girl",
+   "species": "assassinLight",
+   "age": "adulte",
+   "note": "z15 reste Aurorine (arbitrages 10/11)"
+  },
+  "z7": {
+   "name": "Héraut du Zénith",
+   "gender": "1boy",
+   "species": "herald",
+   "age": "adulte",
+   "note": "futur nommé (arbitrages 10/11)"
+  },
+  "z26": {
+   "name": "Célestin",
+   "gender": "1boy",
+   "species": "apostle",
+   "age": "adulte"
+  },
+  "d6": {
+   "name": "Kairos",
+   "gender": "1boy",
+   "species": "celestialJudge",
+   "age": "éternel"
+  },
+  "d12": {
+   "name": "Écho",
+   "gender": "1girl",
+   "species": "echoSpirit",
+   "age": "éternelle"
+  },
+  "d18": {
+   "name": "Ananké",
+   "gender": "1girl",
+   "species": "fateWeaver",
+   "age": "éternelle"
+  },
+  "a15": {
+   "name": "Kenji, Lame Éternelle",
+   "gender": "1boy",
+   "species": "human",
+   "age": "adulte aguerri",
+   "note": "test checkpoint 10/11 : verrouiller 1boy, adult man, mature face, veteran warrior ; négatif young, teen, boy"
+  },
+  "a16": {
+   "name": "Kira, Reine des Ombres",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte"
+  },
+  "a13": {
+   "name": "Alix, Archimage des Marées",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte"
+  },
+  "s9": {
+   "name": "Léna, Avatar de l'Aurore",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte"
+  },
+  "s11": {
+   "name": "Argus, Rempart Éveillé",
+   "gender": "1boy",
+   "species": "human",
+   "age": "adulte aguerri"
+  },
+  "a22": {
+   "name": "Solen, Archimage de la Braise",
+   "gender": "1boy",
+   "species": "human",
+   "age": "adulte aguerri"
+  },
+  "a27": {
+   "name": "Maïa, Lame du Bosquet",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte"
+  },
+  "b1": {
+   "name": "Yuki, Brise-Lame",
+   "gender": "1girl",
+   "species": "human",
+   "age": "jeune (graine)",
+   "note": "validé au test : gamine OK pour la graine, évolutions plus matures"
+  },
+  "b2": {
+   "name": "Onyx, Fil de Nuit",
+   "gender": "1boy",
+   "species": "human",
+   "age": "jeune (graine)"
+  },
+  "b3": {
+   "name": "Naïa, Sourcéleine",
+   "gender": "1girl",
+   "species": "human",
+   "age": "jeune (graine)"
+  },
+  "b4": {
+   "name": "Aïna, Voix du Matin",
+   "gender": "1girl",
+   "species": "human",
+   "age": "jeune (graine)"
+  },
+  "b5": {
+   "name": "Roc, Épaule du Monde",
+   "gender": "1boy",
+   "species": "human",
+   "age": "jeune (graine)"
+  },
+  "b6": {
+   "name": "Ember, Cœur de Fournaise",
+   "gender": "1girl",
+   "species": "human",
+   "age": "jeune (graine)",
+   "note": "genre tranché F par Marc-Olivier (10/11 soir)"
+  },
+  "b7": {
+   "name": "Sylve, Écorce Vive",
+   "gender": "1girl",
+   "species": "human",
+   "age": "jeune (graine)"
+  },
+  "q6": {
+   "name": "Vesperine, Reine de la Nuit",
+   "gender": "1girl",
+   "species": "nightQueen",
+   "age": "adulte",
+   "note": "famille Crépuscule (v3)"
+  },
+  "t6": {
+   "name": "Gadianton, Chef des Brigands",
+   "gender": "1boy",
+   "species": "banditChief",
+   "age": "adulte aguerri",
+   "note": "famille Vol (v3)"
+  },
+  "u6": {
+   "name": "Lémion, Chef de la Légion Solaire",
+   "gender": "1boy",
+   "species": "legionCommander",
+   "age": "adulte aguerri",
+   "note": "famille Zèle (v3), ex-Aurorine u6 (arbitrages 10/11)"
+  },
+  "v6": {
+   "name": "Archimage de l'Appel",
+   "gender": "1girl",
+   "species": "archmage",
+   "age": "mûre, majestueuse",
+   "note": "genre tranché F par Marc-Olivier (10/11 soir) ; futur nommé (arbitrages 10/11)"
+  },
+  "c1": {
+   "name": "Yuki, Lame Ardente",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b1",
+   "note": "compagnon UR — identité verrouillée par IPAdapter depuis la graine b1 ; c8 (L) ref c1"
+  },
+  "c2": {
+   "name": "Onyx, Lame Funeste",
+   "gender": "1boy",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b2",
+   "note": "compagnon UR, ref b2 ; c9 (L) ref c2"
+  },
+  "c3": {
+   "name": "Naïa, Source du Large",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b3",
+   "note": "compagnon UR, ref b3 ; c10 (L) ref c3"
+  },
+  "c4": {
+   "name": "Aïna, Chant de l’Aube",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b4",
+   "note": "compagnon UR, ref b4 ; c11 (L) ref c4"
+  },
+  "c5": {
+   "name": "Roc, Montagne Vivante",
+   "gender": "1boy",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b5",
+   "note": "compagnon UR, ref b5 ; c12 (L) ref c5"
+  },
+  "c6": {
+   "name": "Ember, Flamme Vive",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b6",
+   "note": "compagnon UR, ref b6 ; c13 (L) ref c6"
+  },
+  "c7": {
+   "name": "Sylve, Griffe Sylvestre",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "ipa": "b7",
+   "note": "compagnon UR, ref b7 ; c14 (L) ref c7"
+  },
+  "c8": {
+   "name": "Yuki, Sabre de l’Aurore",
+   "gender": "1girl",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c1",
+   "note": "compagnon L — IPAdapter depuis c1 (UR) pour la MÊME identité"
+  },
+  "c9": {
+   "name": "Onyx, Ombre Éternelle",
+   "gender": "1boy",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c2",
+   "note": "L, ref c2"
+  },
+  "c10": {
+   "name": "Naïa, Marée Éternelle",
+   "gender": "1girl",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c3",
+   "note": "L, ref c3"
+  },
+  "c11": {
+   "name": "Aïna, Aurore Immortelle",
+   "gender": "1girl",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c4",
+   "note": "L, ref c4"
+  },
+  "c12": {
+   "name": "Roc, Rempart du Monde",
+   "gender": "1boy",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c5",
+   "note": "L, ref c5"
+  },
+  "c13": {
+   "name": "Ember, Soleil Captif",
+   "gender": "1girl",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c6",
+   "note": "L, ref c6"
+  },
+  "c14": {
+   "name": "Sylve, Âme du Bosquet",
+   "gender": "1girl",
+   "species": "human",
+   "age": "force de l’âge légendaire",
+   "ipa": "c7",
+   "note": "L, ref c7"
+  },
+  "p5": {
+   "name": "Séraphin, Porteur de Lumière",
+   "gender": "1boy",
+   "species": "human",
+   "age": "éternel",
+   "extra": "a divine angelic being with halo and wings",
+   "note": "séraphin (UR seuil)"
+  },
+  "p6": {
+   "name": "Séraphin, Chérubin Éveillé",
+   "gender": "1boy",
+   "species": "human",
+   "age": "éternel",
+   "extra": "a divine angelic being with halo and wings",
+   "note": "chérubin (L seuil) — même identité que p5 (hypothèse : séraphin masculin, voir rapport)"
+  },
+  "w6": {
+   "name": "Kairos, Juge Éternel",
+   "gender": "1girl",
+   "species": "human",
+   "age": "éternel",
+   "ipa": "kairos",
+   "note": "vidéo WAN wan21-kairos.webm : Kairos = femme blonde en armure céleste dorée (ref kairos.jpg) — genre corrigé 1girl d'après la ref vidéo ; IPAdapter sur kairos"
+  },
+  "w18": {
+   "name": "Ananké, Gardienne des Rives",
+   "gender": "1girl",
+   "species": "human",
+   "age": "éternelle",
+   "ipa": "wan21-ananke",
+   "note": "vidéo WAN wan21-ananke.webm existe : IPAdapter sur la ref vidéo"
+  },
+  "w19": {
+   "name": "Sirène Nouvelle",
+   "gender": "1girl",
+   "species": "mermaid",
+   "age": "adulte",
+   "note": "sirène = humanoïde assumé (écailles)"
+  },
+  "w20": {
+   "name": "Fée Nouvelle",
+   "gender": "1girl",
+   "species": "fireflySpirit",
+   "age": "adulte",
+   "note": "fée = humanoïde assumé"
+  },
+  "w21": {
+   "name": "Gorgonne Nouvelle",
+   "gender": null,
+   "species": "gorgon",
+   "beast": true,
+   "age": null,
+   "note": "bête à chevelure de serpents (R11 morphologie pure)"
+  }
+ },
+ "genericRules": {
+  "_note": "Règles pour les 231 arts génériques tant que l'entrée par carte n'existe pas ; build-prompts.mjs applique speciesTags[family→species] puis ce match.",
+  "bestiau": {
+   "match": "Bestiau*",
+   "speciesByDungeon": {
+    "e": "beastWater",
+    "f": "beastFire",
+    "g": "beastWood",
+    "k": "beastDark"
+   },
+   "negative": "beast"
+  },
+  "monstresAttaque": {
+   "match": "monstres d'attaque",
+   "rule": "majorité bestiale ; l'espèce se lit en un coup d'œil (boss = silhouette unique)"
+  },
+  "monstresSupport": {
+   "match": "monstres de support",
+   "rule": "humanoides ou enges ; jamais catgirl par défaut"
+  },
+  "en gesDivines": {
+   "match": "enge/divine",
+   "rule": "tags explicites par famille + dignité des conventions v1"
+  }
+ },
+ "genderPolicy": {
+  "ratio": "Équilibre raisonnable SANS quota strict (Marc-Olivier, 10/11 soir) : les nommées finissent ~30 F / 23 M, la campagne compense naturellement sur les génériques, aucune case genre à remplir à l'identique."
+ },
+ "beastSpecies": [
+  "beast",
+  "beastWater",
+  "beastFire",
+  "beastWood",
+  "beastDark",
+  "seaSerpent",
+  "seaBehemoth",
+  "treant",
+  "magmaGolem",
+  "fireElemental",
+  "phoenixFirebird",
+  "fireLord",
+  "goblin",
+  "gorgon",
+  "fungusQueen",
+  "hydra",
+  "merSovereign",
+  "viceMaw",
+  "viceMawGreater",
+  "abyssMaw"
+ ],
+ "loraBySpecies": {
+  "goblin": {
+   "file": "IL_10.safetensors",
+   "trigger": "g0bl1nr4ce"
+  },
+  "treant": {
+   "file": "Forest-Guardians-000014.safetensors",
+   "trigger": "FG-V2.0-Treant"
+  },
+  "dryad": {
+   "file": "Forest-Guardians-000014.safetensors",
+   "trigger": "FG-V2.0-Dryad"
+  },
+  "fireflySpirit": {
+   "file": "Forest-Guardians-000014.safetensors",
+   "trigger": "FG-V2.0-Spirit"
+  },
+  "magmaGolem": {
+   "file": "Golems.safetensors",
+   "trigger": "Magma Golem"
+  },
+  "seaBehemoth": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster"
+  },
+  "lich": {
+   "file": "wow-undead.safetensors",
+   "trigger": "xundeadx"
+  },
+  "reaper": {
+   "file": "wow-undead.safetensors",
+   "trigger": "xundeadx"
+  },
+  "undeadCaptain": {
+   "file": "wow-undead.safetensors",
+   "trigger": "xundeadx"
+  },
+  "widowGhost": {
+   "file": "wow-undead.safetensors",
+   "trigger": "xundeadx"
+  },
+  "banshee": {
+   "file": "Banshee.safetensors",
+   "trigger": "banshee"
+  },
+  "fungusQueen": {
+   "file": "Cordyceps_XL.safetensors",
+   "trigger": "crdcps"
+  },
+  "beastDark": {
+   "file": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+   "trigger": "CWM-WolfIL"
+  }
+ }
 }
