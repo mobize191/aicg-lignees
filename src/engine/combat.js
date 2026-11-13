@@ -1000,6 +1000,15 @@ function spreadAt(stage) {
   return 3;
 }
 
+// v3.4 lot bug bosses (suite 16, livré avec la 3.4) : mapping boss -> carte dédiée (plus de renommage aléatoire)
+const BOSS_CARD_MAP = {
+  marees: { 5: 'e31', 10: 'e32' },   // Hydre des Marées, Souverain des Marées
+  forge:  { 5: 'f23', 10: 'f13' },   // Maître des Foyers, Seigneur des Cendres
+  bosquet: { 5: 'g16', 10: 'g8' },   // Mycola, Cœur du Bosquet
+  crypte: { 5: 'k13', 10: 'k17' },   // Goule des Caveaux, La Mort
+  zenith: { 5: 'z6', 10: 'z8' },     // Phénix du Zénith, Astre Capiteux
+};
+
 function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, waveSizeRange = null) { // v1.38 lot 2 : waveSizeRange = [min,max] en data (combats de zone)
   const rng = mulberry32(hashSeed(seed, stage));
   const dungeon = dungeonById(dungeonId);
@@ -1035,8 +1044,22 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
     const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
-    const boss = scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
-    boss.name = dungeon.bossNames?.[stage] ?? boss.name;
+    // v3.4 : boss = carte dédiée (BOSS_CARD_MAP), sinon fallback sur l'ancien comportement
+    const bossCardId = BOSS_CARD_MAP[dungeonId]?.[stage];
+    let boss;
+    if (bossCardId) {
+      const bossCard = (typeof MONSTERS !== 'undefined' ? MONSTERS : []).find((c) => c.id === bossCardId)
+        || POOL.find((c) => c.id === bossCardId);
+      if (bossCard) {
+        boss = { ...bossCard, level: levelFor(bossCard.rarity, true) };
+      } else {
+        boss = scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
+        boss.name = dungeon.bossNames?.[stage] ?? boss.name;
+      }
+    } else {
+      boss = scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
+      boss.name = dungeon.bossNames?.[stage] ?? boss.name;
+    }
     boss.boss = true;
     boss.final = isFinal;
     boss.level = levelFor(boss.rarity, true);

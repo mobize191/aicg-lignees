@@ -1851,14 +1851,15 @@ const ART = {};
 // Les anciens manifests (DreamShaper XL, WAI v2) sont archivés dans archives/assets/.
 // Les assets existant dans une seule version (ex. les 37 cartes de la vague 3.3) sont aussi dans v3.0 : par défaut partout.
 // Un manifeste manquant = bouton grisé libellé, jamais d'erreur, version courante inchangée.
-const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json', v32: 'assets-v32.json', v33: 'assets-v33.json' };
+const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json', v32: 'assets-v32.json', v33: 'assets-v33.json', v34: 'assets-v34.json' };
 const ART_SRC_LABEL = {
   v3: 'AICG Lignées V3.0 (WAI-Illustrious v17 — vague 3)',
   v31: 'AICG Lignées V3.1 (verrous 3.1 — relance complète)',
   v32: 'AICG Lignées V3.2 (couche monstres R11 + LoRAs)',
   v33: 'AICG Lignées V3.3 (base 3.1 + 3 LoRAs + 37 cartes — vague 3.3)',
+  v34: 'AICG Lignées V3.4 (gel v18 + 3 thèmes Classique/Repos/Obscures — vague 3.4)',
 };
-const ART_SRC_TAG = { v3: 'V3', v31: 'V3.1', v32: 'V3.2', v33: 'V3.3' };
+const ART_SRC_TAG = { v3: 'V3', v31: 'V3.1', v32: 'V3.2', v33: 'V3.3', v34: 'V3.4' };
 let artManifestMissing = false; // true = manifeste de la version affichée indisponible (bouton grisé)
 function artSrcKey() {
   try {
@@ -1878,8 +1879,41 @@ function clearNewOf(id) {
   for (const i of instsOf(id)) i.isNew = false;
 }
 
+// v3.4 : mécanique Exception — taux 1/100 à l'obtention, tirage 50% Repos / 50% Obscures
+// Le statut se transfère à la fusion. L'art utilisé est ART[id+'-r'] ou ART[id+'-o'] (fallback propre sur classique).
+const EXCEPTION_RATE = 100; // 1/100
+function rollException(rng) { return rng() < 1 / EXCEPTION_RATE; }
+function exceptionTheme(rng) { return rng() < 0.5 ? 'r' : 'o'; }
+// Appositions choisies dans des tables par axe et par thème en data (jamais de texte aléatoire)
+const EXCEPTION_APPOSITIONS = {
+  r: { // Repos -> action/lieu de vie
+    marees: ['au Ponton', 'aux Filets', 'au Marché aux Coquillages'],
+    bosquet: ['dans le Sous-Bois', 'à la Clairière', 'sous les Grands Arbres'],
+    forge: ['près de l\'Enclume', 'au Foyer', 'à la Forge éteinte'],
+    crypte: ['à la Veillée', 'sur la Tombe Fleurie', 'près des Cierges'],
+    zenith: ['à la Bibliothèque Céleste', 'en Prière du Soir', 'à l\'Observatoire'],
+    divin: ['dans le Hall des Miroirs', 'au Seuil', 'sur le Pont de Fil'],
+    default: ['au Repos', 'en Paix', 'un Moment Calme'],
+  },
+  o: { // Obscures -> situation d'inversion
+    default: [' des Ombres', ' de Lumière Noire', ' du Crépuscule Intérieur', ' Renversé', ' Corrompu', ' Purifié'],
+  },
+};
+function exceptionApposition(id, theme, universe) {
+  const table = EXCEPTION_APPOSITIONS[theme]?.[universe] || EXCEPTION_APPOSITIONS[theme]?.default || [];
+  if (!table.length) return '';
+  return ' — ' + table[Math.floor(Math.random() * table.length)];
+}
+
 function artOf(c) {
   const id = c ? (c.cardId ?? c.id) : null;
+  // v3.4 : carte Exception -> variante -r ou -o (fallback propre sur l'art classique)
+  if (id && c.exception) {
+    const suffix = c.exceptionTheme === 'o' ? '-o' : '-r';
+    if (ART[id + suffix]) {
+      return `<img class="art-img exception" src="${ART[id + suffix]}" alt="${c.name}" loading="lazy">`;
+    }
+  }
   if (id && ART[id]) return `<img class="art-img" src="${ART[id]}" alt="${c.name}" loading="lazy">`;
   return `<div class="glyph">${GLYPH[c.classe] ?? '★'}</div>`;
 }

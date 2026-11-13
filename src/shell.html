@@ -126,6 +126,17 @@ animation: holo 3.2s ease-in-out infinite;
 }
 .art { position: relative; height: 56%; overflow: hidden; background: #0d1119; }
 .art-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* v3.4 : carte Exception — sweep or 60° (Repos) / rouge sombre (Obscures), halo discret */
+.art-img.exception { filter: drop-shadow(0 0 6px rgba(255, 200, 80, .45)); }
+.art-img.exception::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(60deg, transparent 30%, rgba(255, 200, 80, .18) 50%, transparent 70%); }
+@media (prefers-reduced-motion: no-preference) {
+  .art-img.exception { animation: exception-sheen 4s ease-in-out infinite; }
+}
+@keyframes exception-sheen {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 200, 80, .3)); }
+  50% { filter: drop-shadow(0 0 10px rgba(255, 200, 80, .6)); }
+}
 .glyph {
 position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
 font-size: 2.1rem; opacity: .92;
