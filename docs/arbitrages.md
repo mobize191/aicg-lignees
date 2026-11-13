@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 21) : REPOSITIONNEMENT ÉCRAN DE COMBAT LIVRÉ (3 lots, maquette v2.3 VALIDÉE, prompt `docs/prompt-repositionnement-ecran-combat.md`) — pure UI, digest INCHANGÉ
+
+- **Lots** : 1 = tiers haut persistant (rail d'ordre horizontal en haut #topbar + vitesse/pause persistants #speedbar + compteur étage ; paysage = rail droit vertical) ; 2 = barre de commandes compacte ≤ 30dvh, boutons ≥ 44px, indispo grisé AVEC raison, fiche flottante côté opposé au clic ; 3 = unités ≥ 74px / boss ≥ 118px nom gras, barres PV/MP + bouclier doré au-dessus, invocations en première ligne (.front-row, carrés 40px pointillés cliquables, ⏳ ttl), ciblage pulse/grisé + confirmation ✔ au-dessus de la cible. Commits `d46c26b` / `fd48bd8` / `eb864a4` (branche `vibe/repositionnement-ecran-ec66f9`).
+- **Invariants tenus** : la barre ne recouvre jamais le terrain (mesuré 0 recouvrement sur 390×844, 844×390, 1440×900) ; feedback au-dessus du point de contact (`.float` remonté au-dessus de l'unité).
+- **Preuves** : 279 tests verts ; smoke 421 checks TOUT PASSE (section 52 ajoutée : topbar, barres, invocation en front-row prouvée en DOM réel, ciblage, barre 30dvh) ; sweep Playwright 24/24, 0 erreur console ; captures `docs/captures-validation/repositionnement-ecran/` ; **digests MESURÉS inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000** (attendu : pure présentation, 0 exception) — aucune divergence, pas de STOP.
+- **Hors périmètre respecté** : moteur, data, ciblage, IA, calibrage, arts inchangés ; vitesses par contexte toujours différées (§0 n°5). Validation terrain Marc-Olivier (téléphone + PC) en attente.
+
 ## 2026-11-14 (suite 23) : MAQUETTE ÉCRAN DE COMBAT VALIDÉE par Marc-Olivier (« C'est bon pour moi ») — dernière retouche (vignettes alliées du boss) + PROMPT COULOIR 1 RÉDIGÉ
 
 - **Validation de Marc-Olivier (14/11)** : la maquette v2.3 (`docs/design/maquettes/ecran-combat-v2.html`) est VALIDÉE, avec une dernière retouche demandée : « sur l'exemple avec le boss, bien remettre les vignettes de mon côté correctement » → vignettes alliées du module boss RÉALIGNÉES symétriquement (mêmes positions que l'exemple standard : marges égales, ligne régulière, 22/147/272 px).
