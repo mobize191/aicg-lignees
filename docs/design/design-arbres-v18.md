@@ -136,11 +136,11 @@ Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L
 
 ### 6.3 Le paladin (4 cartes)
 
-Depuis le Spadassin Vigilant (UC, lame), choix « la lumière » : Paladin R → Paladin Sacré SR (verrou) → Paladine Sacrée UR → **Isaure, Égide de l'Aube L**. Plus le **choix du zèle** du paladin (acté v14 : la dévotion vers Isaure, ou la croisade qui rejoint la Légion Solaire) : le maillon d'entrée dans la Légion reste à définir (10.1 du v17).
+Depuis le Spadassin Vigilant (UC, lame), choix « la lumière » : Paladin R → Paladin Sacré SR (verrou) → Paladine Sacrée UR → **Isaure, Égide de l'Aube L**. Plus le **choix du zèle** du paladin (acté v14 : la dévotion vers Isaure, ou la croisade qui rejoint la Légion Solaire) : **TRANCHÉ le 14/11 (suite 24) — le choix se fait AU PALIER R, pas après** ; maillon d'entrée proposé : u3 Croisé de l'Aube (R, palier égal), à caler en spec.
 
 ### 6.4 Le chevalier (4 cartes)
 
-Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chevalier R → Chevalière du Rempart SR (verrou) → Gardienne du Rempart UR → **sa L à nommer** (la double convergence vers Argus meurt, v14 : le Bouclier garde sa L à lui).
+Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chevalier R → Chevalière du Rempart SR (verrou) → Gardienne du Rempart UR → **Kiri l'Invincible L (NOMMÉE le 14/11, suite 24)** : femme aux longs cheveux noirs lisses dans une armure noire ; **art alternatif : robe blanche immaculée** (la variante « Lignée d'Exception », 2 images par carte, vague 3.4). La double convergence vers Argus meurt (v14 : le Bouclier garde sa L à lui).
 
 ### 6.5 Gorgones (8 cartes) et fées (7 cartes)
 
@@ -159,15 +159,15 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 
 ### 6.7 La synthèse des tranchages restants pour verrouiller la v1 (périmètre arbres/fusion/lignées)
 
-Points où la décision de Marc-Olivier est attendue (rien ne bouge sans elle) — le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0 :
+Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
 
-1. **La L du chevalier à nommer** (Gardienne du Rempart UR → L ➕).
-2. **Le recâblage de n14 Démon** (aujourd'hui vers d8 Chœur Miroir) et **l'accès au Chœur Miroir** après recâblage (options : une porte du Démon, une naissance dédiée, l'événement du miroir).
-3. **La structure des communes du camp démon** : n14 est-il le C commun aux deux voies, ou deux communes séparées (règle 1.3) ; les **sorts de lignée** (2×6 + signatures) ; le sort des **trappes** (Gouffre des Vices, Fléau Démoniaque : lignée en v1 ou au fil des patchs).
-4. **Le maillon d'entrée du paladin dans la Légion Solaire** (le choix du zèle, v17 10.1).
-5. **Les tags des lignées d'accueil** quand gorgones/fées seront posées : w20/w21 changent-ils de famille, et le sort du tag eau de w19.
-6. **Fusion, calages avant le lot 1** : les biomes cibles par paire humaine + divin (défaut proposé : biome de l'élément de la famille humaine) ; le **taux de démon** (défaut proposé : 15-20 %) ; la **migration des éclats de régression** en stock (défaut : or ou jetons) ; plus les défauts balisés de la spec fusion v4 (divines L éligibles, rareté max/surclassement, plafonds de stats, choix des sorts hérités, bâtiment Autel).
-7. **Lignées uniques** : les 3 questions ouvertes du §8 (fin de la prédominance, 2e carte de départ, rôle narratif de la forme divine — et la chute : forme divine + humaine → starter démon ?).
+1. **Le recâblage de n14 Démon** (aujourd'hui vers d8 Chœur Miroir) et **l'accès au Chœur Miroir** après recâblage (options : une porte du Démon, une naissance dédiée, l'événement du miroir).
+2. **La structure des communes du camp démon** : n14 est-il le C commun aux deux voies, ou deux communes séparées (règle 1.3) ; les **sorts de lignée** (2×6 + signatures) ; le sort des **trappes** (Gouffre des Vices, Fléau Démoniaque : lignée en v1 ou au fil des patchs).
+3. **Les tags des lignées d'accueil** quand gorgones/fées seront posées : w20/w21 changent-ils de famille, et le sort du tag eau de w19.
+4. **La table des biomes par famille humaine** (fusion) : les défauts thématiques sont posés (eau→Marées, braise→Forge, bosquet→Bosquet, ombre/crépuscule→Crypte, aube/zele/appel→Zénith, bouclier→Bosquet, vol→Marées, familles divines→leur web miroir) ; **le cas de l'école Neutre (lame) reste à caler** (défaut proposé : hasard des 5 biomes).
+5. **Le mapping mystique → famille divine** (fusion humaine + mystique) : PROPOSITION par forme — Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir.
+6. **Les défauts balisés restants de la spec fusion v4** (divines L éligibles, rareté max/surclassement, plafonds de stats, choix des sorts hérités, bâtiment Autel — explication donnée à Marc-Olivier le 14/11, tranchage ou défauts).
+7. **La composition finale des lignées uniques** : les 4 starters proposés (lame/eau/aube/ombre) à valider, le moment du choix, le lore du Lieur.
 
 ## 7. La fusion DQM v4 : la couche race, puis la couche famille (TRANCHÉ le 13/11, suite 8 ; détails spec `docs/design/spec-fusion-v4.md`)
 
@@ -196,8 +196,8 @@ Quand le saut réussit (ou pour les paires sans saut), la table désigne la fami
 | --- | --- | --- |
 | humaine + monstre aquatique (Embryon des Eaux, webs des Marées, Naufragés ?) | **sirène**, entrée w19 Sirène Nouvelle (famille eau) | cible ACTÉE (12/11), réconciliée avec le cycle |
 | humaine + ent (Bêtes du Fougeron, Gens des Sèves, Gobelins des Mousses) | **dryade**, entrée p3 Pousse des Sèves (famille bosquet) | cible ACTÉE, réconciliée |
-| humaine + divin (seuil/miroir/pont, Séraphin, anges dévoyés) | **monstre du biome** (par paire, à caler en spec) **+ chance de DÉMON** (famille démon du gel §6.1) | cycle TRANCHÉ, biomes et taux À CALER |
-| humaine + mystique (Enge, w19-w21, gorgones/fées du gel) | famille divine (seuil/miroir/pont, hasard, plafonnée) | PROPOSÉ |
+| humaine + divin (seuil/miroir/pont, Séraphin, anges dévoyés) | **monstre du biome de la FAMILLE HUMAINE** (défauts thématiques posés : eau→Marées, braise→Forge, bosquet→Bosquet, ombre/crépuscule→Crypte, aube/zele/appel→Zénith, bouclier→Bosquet, vol→Marées, familles divines→leur web miroir, lame=Neutre à caler) **+ 15 % de DÉMON** (famille démon du gel §6.1) | TRANCHÉ le 14/11 (suite 24) : biomes par famille + taux 15 % ; le cas lame (Neutre) à caler (défaut proposé : hasard des 5 biomes) |
+| humaine + mystique (Enge, w19-w21, gorgones/fées du gel) | famille divine PLAFONNÉE, **mapping par forme (PROPOSITION)** : Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir | PROPOSÉ (logique demandée par Marc-Olivier le 14/11, symétrique de humaine + monstre) |
 | même famille | la même famille | PROPOSÉ |
 | deux familles humaines (les 11) | hasard A/B — SAUF paire avec la lignée prédominante du joueur : elle s'impose (« A » forcé) | PROPOSÉ (marge prédominante actée dans la spec) |
 | deux familles divines | hasard A/B, enfant plafonné (aucune L divine créée ex nihilo) | PROPOSÉ |
@@ -216,7 +216,7 @@ Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters préd
 1. **Les 4 candidates : lame, eau, aube, ombre** — une par novice (l'Épéiste → Kenji, le Mage → Alix, le Prêtre → Léna, le Voleur → Kira). Argument : le choix de lignée chevauche le choix de carte de départ déjà acté (4 propositions, une par race), et chaque candidate porte un sommet iconique.
 2. **La mécanique** : à la création de partie, le joueur choisit SA lignée (elle suit sa carte de départ ou s'affirme au premier éveil) ; tant que les non-choisies ne sont pas débloquées : (a) toute fusion impliquant la lignée choisie reste dans la lignée choisie ; (b) les 10 autres familles humaines sont gated très tard (fin de jeu, déblocage lié au lore du Lieur) ; (c) les monstres recrutés et les races supérieures (mystique/divine) ne sont PAS gated : le recrutement naturel ~1 % et la capture restent la porte de sortie de la lignée unique.
 3. **Les formes supérieures du starter PAR FUSION (TRANCHÉ le 13/11, suite 8)** : la L humaine du starter n'est plus une impasse — c'est le ticket d'ascension : **L humaine + monstre → forme MYSTIQUE du starter ; forme mystique + humaine → forme DIVINE.** La prédominance capture le saut (la famille s'impose, la race suit le cycle du §7) : les formes supérieures sont les seules issues des sauts pour le starter. Cartes à créer au contenu v4, arts au backlog série 3 après les ids définitifs. **Les régressions MEURENT** (« toutes les régressions meurent et passent par la fusion », Marc-Olivier) : le type d'évolution « regression » et l'Éclat de régression disparaissent au lot fusion v4 (l'entrée vivante a17 Kenji, Sabre Céleste → a20 Mage de la Fournaise est retirée ; migration des éclats en stock à caler en spec).
-4. **Questions ouvertes restantes** : (a) la prédominance s'arrête-t-elle à l'ouverture des non-choisies ou plus tôt (premier donjon bouclé) ? (b) la 2e carte de départ (aléatoire) peut-elle sortir de la lignée choisie ? (défaut proposé : oui, c'est la première divergence offerte) ; (c) la forme divine du starter a-t-elle un rôle narratif (le Lieur, la fin de jeu) — et le cycle peut-il aller jusqu'à la chute (forme divine + humaine → le starter devient monstre/démon) ?
+4. **Tranchés le 14/11 (suite 24), les ex-questions ouvertes** : (a) la prédominance s'arrête **à l'ouverture des non-choisies** ; (b) la 2e carte de départ = **une carte d'une AUTRE race au hasard** (pas humaine ; l'Embryon devient le 1er ingrédient de fusion) ; (c) l'ascension/chute divine = **l'histoire d'un PERSONNAGE SECONDAIRE**, pas du starter. **Questions encore ouvertes** : la validation finale des 4 candidates (lame/eau/aube/ombre) et de leur moment de choix ; le lore du Lieur qui débloque les non-choisies ; le devenir narratif du personnage secondaire (quelle lignée l'incarne).
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 
@@ -287,7 +287,7 @@ flowchart TD
   PALU -.->|"choix du zèle — entrée à définir"| LEG["Arbalétrier Doré · UR (zèle)"]
   CHE -.-> CHES["Chevalière du Rempart ➕ · SR (verrou)"]
   CHES -.-> CHEU["Gardienne du Rempart ➕ · UR"]
-  CHEU -.-> CHEL["L ➕ à nommer · L"]
+  CHEU -.-> CHEL["Kiri l'Invincible ➕ · L"]
   S6 --> S7["Bastion Arcanique · SR"]
   S7 --> S11["Argus, Rempart Éveillé · UR"]
   S11 --> S12["Argus, Forteresse Vivante · L"]
