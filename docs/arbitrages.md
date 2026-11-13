@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 31) : CORRECTIFS ÉCRAN COMBAT v3 LIVRÉS (3 lots, pure UI, tranchage 15/11 appliqué) — cartes plus grosses + camps face à face + terrain STABLE + défilement des tours visible — digest INCHANGÉ
+
+- **Lot 1** (commit `1f72013`) : grand format constant `clamp(104px,30vw,132px)` (mesuré **117 px** sur 390 px), boss ~1,4× `clamp(146px,42vw,185px)` ; camps RAPPROCHÉS face à face au CENTRE (`#board` en `safe center`, écart mesuré **4 %** de la hauteur du terrain à 390×844, cible ≤ 15 %) — remplace l'ancrage bas v2 conformément au tranchage du 15/11 qui prime sur la maquette v2.3 ; paysage borné par la hauteur (19dvh/27dvh), PC ≥ 1200 px inchangé (173 px mesuré à 1440×900, 280 px à 2560×1080).
+- **Lot 2** (commit `60214a9`) : TERRAIN STABLE — tous les resizes `act-open .unit/.boss` supprimés (portrait/paysage/≤500px/≥1200px), zone de commandement PERMANENTE `#act-slot` à hauteur fixe `min(30dvh,320px)`, mini-log déplacé DANS la zone, fenêtre insérée avant le log ; preuve superposable : **positions/tailles des cartes identiques au pixel** entre fenêtre ouverte et bandeau sur les 4 résolutions. stub.mjs : `insertBefore` rendu conforme au DOM réel.
+- **Lot 3** (commit `3ac7282`) : bandeau `#turn-banner` dans la zone permanente — « ▶ Tour de [Nom] » + chip camp + « ensuite : X › Y › Z » (4 suivants) ; la fenêtre de commandes remplace le bandeau quand c'est au joueur ; bandeau + rail + surlignage terrain (v2) désignent toujours le même combattant (vérifié en smoke).
+- **Preuves** : build ok, 279 tests verts, smoke 448 checks TOUT PASSE (section 54, 13 checks), sweep Playwright **36/36** (390×844, 844×390, 1440×900, 2560×1080 — 0 recouvrement, 0 erreur console), **digests INCHANGÉS `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `docs/captures-validation/repositionnement-ecran/correctifs-v3-*` (paires action/bandeau). Retour terrain Marc-Olivier (téléphone) attendu à la livraison.
+
 ## 2026-11-13 (suite 19) : THÈME C AJOUTÉ AU TEST — « LIGNÉES OBSCURES » (inversion d'alignement)
 
 - **AJOUTÉ par Marc-Olivier** : 3e thème au test comparatif, canon gacha (versions d'alignement inversé). Lumineux → corrompus par l'ombre ; obscurs/nécrotiques → purifiés par la lumière ; neutres/élémentaires → élément inversé (golem de magma en cristal de glace spectral). Espèce et personnage inchangés, R13 conservé (corruption lumineuse, JAMAIS gore). Le test témoin passe à **3 thèmes × 12 cartes = 36 images (~15-20 min)**.
