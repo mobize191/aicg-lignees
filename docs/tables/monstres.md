@@ -37,7 +37,7 @@
 | lignee | lignes | side | mythique |
 | --- | --- | --- | --- |
 | Bêtes du Fougeron | g1 -> g3 -> g4 ; g13 -> g6 -> g7 ; g14 -> g15 -> g16 | g2, g5 | g8 |
-| Gens des Sèves | g9 -> g12 -> g10 ; g11 -> g17 -> g18 ; g19 -> g20 -> g21 | - | - |
+| Dryades | g9 -> g12 -> g10 ; g11 -> g17 -> g18 ; g19 -> g20 -> g21 | - | - |
 | Gobelins des Mousses | g31 -> g32 | - | - |
 
 ## Donjon crypte (32)
