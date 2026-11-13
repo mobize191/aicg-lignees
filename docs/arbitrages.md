@@ -1,5 +1,14 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 20) : MAQUETTE ÉCRAN DE COMBAT v2.1 — 3 demandes de Marc-Olivier intégrées (chiffres, icônes, boss/invocation)
+
+- **Demandes de Marc-Olivier (14/11, sur la maquette v2)** : (1) des chiffres : PV/PVmax, bouclier ; (2) des icônes plus grandes ; (3) montrer un combat de boss (grosse icône) et/ou avec des invocations.
+- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.1)** :
+  - **Chiffres sur les unités** : PV/PVmax et MP/MPmax en clair à côté des barres (lecture sans fiche) ; **bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré** (ordre de lecture : bouclier avant PV).
+  - **Icônes agrandies** : unités 56 → 74 px ; **boss 118 px** (nom en gras, chip élargi 👑 36 px dans le rail d'ordre du tour) ; **invocation 50 px à bordure pointillée + badge ttl** (⏳ tours restants) : l'œil distingue plein/boss/invoqué d'un coup.
+  - **Module BOSS + INVOCATION** (portrait interactif) : Roi des Démons 850/1200 + sbires, chip boss dans le rail ; Esprit de l'Ombre invoquable au clic sur le bouton de la barre de commandes (affiche l'invocation sur le terrain + mini-log), badge « 2 tours », rappel « un actif max par lanceur » (tranchage 7-b) ; mini-log avec absorption de bouclier (🛡 absorbe 32).
+- **Reste** : validation de la v2.1 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
+
 ## 2026-11-14 (suite 19) : POSITIONNEMENT ÉCRAN DE COMBAT — TRANCHAGE B ACTÉ (« Plutôt une maquette »), MAQUETTE COMPARATIVE LIVRÉE
 
 - **Tranchage de Marc-Olivier (14/11, sur les options A/B de la suite 18)** : **B — d'abord une maquette**, puis le chantier couloir 1.
@@ -263,12 +272,4 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 - Reste à valider en IHM (téléphone+PC) : captures héros 3 états + sweep résolutions (scénarios ajoutés à `docs/validation-ihm.md` en clôture).
 
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 10 (spec vie-jeu Lot 4) LIVRÉE : UI/UX MOBILE (v1.49)
-
-- **Safe-area** : `env(safe-area-inset-*)` sur le menu latéral (`nav`, `nav.open`) et le HUD d'errance (`.errance-top`, `.errance-hint`) dans `src/shell.html` ; recalcul au resize par le navigateur (unités relatives). Smoke B8c a.
-- **Bande de rareté jamais couleur seule** : `.rar-chip::before { content: '◆ ' }` + chips de rareté des récompenses avec ◆ — couleur + losange partout. Smoke B8c b.
-- **Audit contraste 4.5:1 consigné dans le smoke** (B8c c, ratios WCAG calculés) : texte nav 12+ :1, corps ~15 :1, bouton actif ~8 :1 — conformes. **Cas à risque consigné** : or #ffd54f sur place ensoleillée #e8d9b0 ≈ 1.6:1 — non bloquant (texte or toujours sur fond sombre en UI ; la place ensoleillée est un décor SVG sans texte).
-- **Sweep de résolutions** 1280×720 / 2560×1080 / 1080×2340 vérifié en smoke (B8c d : conteneurs présents, pas de largeur fixe tronquante ; captures réelles à valider en protocole IHM téléphone+PC).
-- 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (IHM seule).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 9 (spec vie-jeu Lot 3) LIVRÉE : HÉROS D'ERRANCE PAR CODE (v1.48)
 

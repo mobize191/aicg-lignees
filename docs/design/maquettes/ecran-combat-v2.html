@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="fr">
 <head>
@@ -12,7 +13,7 @@
   body{margin:0; padding:24px;}
   h1{font-size:22px; margin:0 0 6px; color:#d8b45a;}
   h2{font-size:16px; margin:28px 0 12px; color:#d8b45a; border-bottom:1px solid #2a3350; padding-bottom:6px;}
-  p.intro{max-width:900px; color:#b8b2a0; font-size:13px; margin:0 0 18px; line-height:1.5;}
+  p.intro{max-width:940px; color:#b8b2a0; font-size:13px; margin:0 0 18px; line-height:1.5;}
   .legend{display:flex; flex-wrap:wrap; gap:8px 18px; max-width:940px; font-size:12px; color:#b8b2a0; margin-bottom:20px;}
   .legend b{color:#e8e4d8;}
   .zoneA{color:#e05252;} .zoneV{color:#4cc47c;}
@@ -31,13 +32,14 @@
     display:flex; align-items:center; justify-content:center; z-index:50; box-shadow:0 0 0 3px rgba(0,0,0,.4);}
   .pin.bad{background:#e05252; color:#fff;}
   .pin.good{background:#4cc47c; color:#06120a;}
+  .pin.label{width:auto; height:auto; padding:2px 7px; border-radius:10px; font-size:10px; font-weight:600;}
   /* ============ COMMUN : terrain ============ */
   .terrain{position:absolute; background:linear-gradient(180deg,#1a2438 0%,#22304a 45%,#1c2a18 55%,#24361f 100%);}
   .terrain .ground-line{position:absolute; left:8%; right:8%; top:50%; height:2px;
     background:repeating-linear-gradient(90deg,#3a4a30 0 14px,transparent 14px 24px); opacity:.5;}
-  .unit{position:absolute; width:76px; cursor:pointer; text-align:center; z-index:5;}
-  .unit .art{width:56px; height:56px; margin:0 auto; border-radius:10px; border:2px solid #555;
-    display:flex; align-items:center; justify-content:center; font-size:22px; background:#0b0e18; position:relative;}
+  .unit{position:absolute; width:96px; cursor:pointer; text-align:center; z-index:5;}
+  .unit .art{width:74px; height:74px; margin:0 auto; border-radius:14px; border:2.5px solid #555;
+    display:flex; align-items:center; justify-content:center; font-size:36px; background:#0b0e18; position:relative;}
   .unit.enemy .art{border-color:#a84a4a;}
   .unit.ally .art{border-color:#4a6ea8;}
   .unit.active .art{border-color:#d8b45a; box-shadow:0 0 10px #d8b45a88;}
@@ -45,23 +47,41 @@
   .unit.dimmed .art{filter:grayscale(1) brightness(.5);}
   .unit.dimmed{opacity:.55;}
   @keyframes pulse{50%{box-shadow:0 0 0 6px #ffcf5a33;}}
-  .unit .nm{font-size:9px; margin-top:2px; color:#d8d4c4; white-space:nowrap; overflow:hidden;}
+  .unit .nm{font-size:10px; margin-top:3px; color:#d8d4c4; white-space:nowrap; overflow:hidden;}
+  /* boss : icône XL */
+  .unit.boss{width:150px;}
+  .unit.boss .art{width:118px; height:118px; font-size:62px; border-width:3px; border-color:#c23a3a;
+    box-shadow:0 0 18px #c23a3a66;}
+  .unit.boss .nm{font-size:12px; color:#ffb0b0; font-weight:700;}
+  .unit.boss .n{font-size:10px;}
+  /* invocation : icône réduite, bordure pointillée */
+  .unit.summon{width:80px;}
+  .unit.summon .art{width:50px; height:50px; font-size:26px; border-style:dashed; border-color:#9a6ad8;
+    background:#140f1e;}
+  .unit.summon .nm{font-style:italic; color:#c9b8e8;}
+  /* barres + chiffres */
   .bars{margin-top:2px;}
-  .hp{height:5px; background:#3a1216; border-radius:3px; overflow:hidden;}
+  .sh{height:5px; margin-bottom:1px; background:#3a3010; border-radius:3px; overflow:hidden;}
+  .sh i{display:block; height:100%; background:#d8b45a;}
+  .bar{display:flex; align-items:center; gap:3px;}
+  .hp{flex:1; height:6px; background:#3a1216; border-radius:3px; overflow:hidden;}
   .hp i{display:block; height:100%; background:#e05252;}
-  .mp{height:4px; margin-top:1px; background:#12203a; border-radius:3px; overflow:hidden;}
+  .mp{flex:1; height:5px; margin-top:1px; background:#12203a; border-radius:3px; overflow:hidden;}
   .mp i{display:block; height:100%; background:#5aa2e8;}
-  .fx{font-size:8px; margin-top:1px; color:#ffd27a;}
+  .n{font-size:9px; color:#ff9d9d; font-weight:700; white-space:nowrap;}
+  .n.m{color:#8ab4e8;}
+  .fx{font-size:8.5px; margin-top:2px; color:#ffd27a; white-space:nowrap; overflow:hidden;}
   .fx s{text-decoration:none; background:#3a3040; border-radius:4px; padding:0 3px; margin-right:2px; display:inline-block;}
   .dmg-float{position:absolute; left:50%; transform:translateX(-50%); top:-14px; background:#7a1e26; color:#ffe;
-    font-weight:700; font-size:13px; padding:2px 8px; border-radius:6px; z-index:40; animation:floatup 1.6s forwards;}
-  @keyframes floatup{0%{opacity:0; top:10px;}15%{opacity:1;}80%{opacity:1;}100%{opacity:0; top:-22px;}}
+    font-weight:700; font-size:14px; padding:2px 9px; border-radius:6px; z-index:40; animation:floatup 1.6s forwards;}
+  @keyframes floatup{0%{opacity:0; top:10px;}15%{opacity:1;}80%{opacity:1;}100%{opacity:0; top:-24px;}}
   /* rail d'ordre du tour */
   .turnrail{display:flex; align-items:center; gap:5px; overflow:hidden;}
-  .turnchip{min-width:26px; height:26px; border-radius:50%; background:#171d2e; border:2px solid #4a6ea8;
-    color:#cfd8e8; font-size:10px; display:flex; align-items:center; justify-content:center; flex:none;}
+  .turnchip{min-width:28px; height:28px; border-radius:50%; background:#171d2e; border:2px solid #4a6ea8;
+    color:#cfd8e8; font-size:11px; display:flex; align-items:center; justify-content:center; flex:none;}
   .turnchip.enemy{border-color:#a84a4a;}
   .turnchip.now{border-color:#d8b45a; background:#2a2410; box-shadow:0 0 8px #d8b45a66;}
+  .turnchip.boss{width:36px; height:36px; border-width:3px; border-color:#c23a3a; background:#2a1418; font-size:17px;}
   .turnsep{color:#5a5a4a; font-size:10px; flex:none;}
   /* mini-log */
   .minilog{background:#0b0e18e6; border-top:1px solid #2a3350; font-size:10.5px; color:#a8a290;
@@ -139,7 +159,7 @@
 </head>
 <body>
 <h1>Écran de combat : maquette comparative (v2, positionnement cible)</h1>
-<p class="intro">Demande de Marc-Olivier du 14/11 : le front UX (PR #12) est livré mais le rendu reste mauvais ; tranchage B acté : maquette d'abord, chantier ensuite. Référence : <b>docs/design/recherche-ecran-combat-2026-11-14.md</b>. La maquette APRÈS est interactive : clique une unité (fiche flottante), puis un sort d'attaque, puis une cible (illumination + confirmation au-dessus du point de contact + mini-log).</p>
+<p class="intro">Demande de Marc-Olivier du 14/11 : le front UX (PR #12) est livré mais le rendu reste mauvais ; tranchage B acté : maquette d'abord, chantier ensuite. Référence : <b>docs/design/recherche-ecran-combat-2026-11-14.md</b>. Les maquettes APRÈS sont interactives : clique une unité (fiche flottante), puis un sort d'attaque, puis une cible (illumination + confirmation au-dessus du point de contact + mini-log). Ajouts v2.1 : chiffres PV/PVmax, MP et bouclier sur les unités ; icônes agrandies (74 px, boss 118 px, invocation 50 px) ; module boss + invocations.</p>
 <div class="legend">
   <span><b class="zoneA">Pastilles rouges</b> : écarts du positionnement actuel</span>
   <span><b class="zoneV">Pastilles vertes</b> : positionnement cible justifié par le genre</span>
@@ -161,7 +181,7 @@
   <div class="frame">
     <h3 class="zoneA">AVANT : actuel</h3>
     <div class="sub">fenêtre 38 %, rail médian, vitesse dans la fenêtre</div>
-    <div class="phone-wrap"><div class="phone" id="phAvant">
+    <div class="phone-wrap"><div class="phone">
       <div class="avant-top"><span>Terres Sauvages · combat</span><span>Pause auto : off</span></div>
       <div class="avant-rail">
         <div class="turnrail">
@@ -172,12 +192,12 @@
       </div>
       <div class="terrain avant-terrain">
         <div class="ground-line"></div>
-        <div class="unit enemy" style="top:16px; left:44px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div></div>
-        <div class="unit enemy" style="top:22px; left:160px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div><div class="fx"><s>🛡 bouclier</s></div></div></div>
-        <div class="unit enemy" style="top:16px; left:276px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div></div></div>
-        <div class="unit ally" style="bottom:22px; left:44px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div></div></div>
-        <div class="unit ally active" style="bottom:16px; left:160px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
-        <div class="unit ally" style="bottom:22px; left:276px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div><div class="mp"><i style="width:11%"></i></div></div></div>
+        <div class="unit enemy" style="top:12px; left:36px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="bar"><div class="hp"><i style="width:75%"></i></div><span class="n">45/60</span></div></div></div>
+        <div class="unit enemy" style="top:18px; left:150px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="sh"><i style="width:30%"></i></div><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">80/80</span></div><div class="fx"><s>🛡 24</s></div></div></div>
+        <div class="unit enemy" style="top:12px; left:264px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="bar"><div class="hp"><i style="width:65%"></i></div><span class="n">62/95</span></div></div></div>
+        <div class="unit ally" style="bottom:14px; left:36px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="bar"><div class="hp"><i style="width:86%"></i></div><span class="n">120/140</span></div></div></div>
+        <div class="unit ally active" style="bottom:8px; left:150px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div></div>
+        <div class="unit ally" style="bottom:14px; left:264px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div></div></div>
       </div>
       <div class="minilog" style="position:absolute; left:0; right:0; top:384px; height:56px;">
         <div><b>Assassin</b> frappe : −14 Gobelin Archer</div>
@@ -213,7 +233,7 @@
   <div class="frame">
     <h3 class="zoneV">APRÈS : cible (interactive)</h3>
     <div class="sub">ordre du tour + vitesse en haut · barre compacte ≤ 30 % · fiche flottante</div>
-    <div class="phone-wrap"><div class="phone" id="phApres">
+    <div class="phone-wrap"><div class="phone">
       <div class="apres-top">
         <div class="left">
           <div class="turnrail" style="flex:1;">
@@ -225,24 +245,24 @@
         <div class="wave">Vague 2/3</div>
         <div class="speedgrp"><button>×2 ▾</button><button>⏸</button></div>
       </div>
-      <div class="terrain apres-terrain" id="terrainApres">
+      <div class="terrain apres-terrain" data-terrain="1">
         <div class="ground-line"></div>
-        <div class="unit enemy" data-name="Gobelin Archer" data-fiche="Commune · Archer · Feu" style="top:34px; left:40px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div><div class="fx"><s>☠ poison ×2</s></div></div>
-        <div class="unit enemy" data-name="Pillard des Récifs" data-fiche="Rare · Guerrier · Eau" style="top:48px; left:158px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div></div><div class="fx"><s>🛡 bouclier</s></div></div>
-        <div class="unit enemy" data-name="Ange Déchu" data-fiche="Super Rare · Mage · Lumière" style="top:34px; left:274px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div><div class="mp"><i style="width:45%"></i></div></div></div>
-        <div class="unit ally" data-name="Chevalière Isaure" data-fiche="Super Rare · Guerrier · Aube" style="bottom:64px; left:40px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div><div class="mp"><i style="width:33%"></i></div><div class="fx"><s>🛡 rempart</s></div></div></div>
-        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31 · DÉF 18" style="bottom:48px; left:158px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
-        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:64px; left:274px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div><div class="mp"><i style="width:11%"></i></div></div></div>
+        <div class="unit enemy" data-name="Gobelin Archer" data-fiche="Commune · Archer · Feu" style="top:26px; left:22px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="bar"><div class="hp"><i style="width:75%"></i></div><span class="n">45/60</span></div></div><div class="fx"><s>☠ poison ×2</s></div></div>
+        <div class="unit enemy" data-name="Pillard des Récifs" data-fiche="Rare · Guerrier · Eau" style="top:40px; left:147px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="sh"><i style="width:30%"></i></div><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">80/80</span></div><div class="fx"><s>🛡 24</s></div></div></div>
+        <div class="unit enemy" data-name="Ange Déchu" data-fiche="Super Rare · Mage · Lumière" style="top:26px; left:272px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="bar"><div class="hp"><i style="width:65%"></i></div><span class="n">62/95</span></div><div class="bar"><div class="mp"><i style="width:45%"></i></div><span class="n m">22/50</span></div></div></div>
+        <div class="unit ally" data-name="Chevalière Isaure" data-fiche="Super Rare · Guerrier · Aube · bouclier 18 · rempart" style="bottom:50px; left:22px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="sh"><i style="width:13%"></i></div><div class="bar"><div class="hp"><i style="width:86%"></i></div><span class="n">120/140</span></div><div class="bar"><div class="mp"><i style="width:33%"></i></div><span class="n m">10/30</span></div></div><div class="fx"><s>🛡 18</s><s>🪨 rempart</s></div></div>
+        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31 · DÉF 18" style="bottom:36px; left:147px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div></div>
+        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:50px; left:272px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div><div class="bar"><div class="mp"><i style="width:11%"></i></div><span class="n m">5/45</span></div></div></div>
       </div>
-      <div class="minilog apres-log" id="logApres">
+      <div class="minilog apres-log" data-log="1">
         <div><b>Assassin</b> frappe : −14 Gobelin Archer</div>
         <div><b>Ange Déchu</b> lance Châtiment : −18 Prêtre de l'Aube</div>
         <div>Poison lent se dissipe sur Gobelin Archer</div>
       </div>
-      <div class="hint" id="hintApres">Choisis une cible</div>
+      <div class="hint" data-hint="1">Choisis une cible</div>
       <div class="apres-bar">
         <div class="who"><span><b>Assassin</b> · PV 68/92 · MP 24/40</span><span style="color:#8a8574">Tactique</span></div>
-        <div class="cmdrow" id="cmdApres">
+        <div class="cmdrow" data-cmd="1">
           <button data-attack="1">⚔ Attaque<small>gratuit</small></button>
           <button data-attack="1" data-mp="8">🗡 Lame Dansante<small>1 ennemi · MP 8</small></button>
           <button data-buff="1">☠ Poison Lent<small>malus · MP 6</small></button>
@@ -260,18 +280,74 @@
   </div>
 </div>
 
+<h2>Portrait : combat de BOSS (icône XL) + invocation alliée</h2>
+<div class="row">
+  <div class="frame">
+    <h3 class="zoneV">APRÈS : boss + invocation (interactive)</h3>
+    <div class="sub">chip boss élargi dans le rail · PV longs lisibles · invocation réduite avec ttl · clique « Esprit de l'Ombre » pour l'invoquer</div>
+    <div class="phone-wrap"><div class="phone">
+      <div class="apres-top">
+        <div class="left">
+          <div class="turnrail" style="flex:1;">
+            <div class="turnchip now" title="Assassin">As</div>
+            <div class="turnchip boss enemy" title="Roi des Démons">👑</div>
+            <div class="turnchip" title="Prêtre">Pr</div>
+            <div class="turnchip enemy" title="Brute">BF</div>
+            <div class="turnchip" title="Chevalière">Ch</div>
+            <div class="turnchip enemy" title="Aiguillon">Aig</div>
+            <div class="turnsep">›</div><div class="turnchip">As</div><div class="turnsep">tour 7</div>
+          </div>
+        </div>
+        <div class="wave">Boss · étage 5</div>
+        <div class="speedgrp"><button>×2 ▾</button><button>⏸</button></div>
+      </div>
+      <div class="terrain apres-terrain" data-terrain="2">
+        <div class="ground-line"></div>
+        <div class="unit enemy" data-name="Aiguillon du Désir" data-fiche="Rare · Démon · Charme" style="top:88px; left:12px;"><div class="art">😈</div><div class="nm">Aiguillon du Désir</div><div class="bars"><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">95/95</span></div></div></div>
+        <div class="unit enemy boss" data-name="Roi des Démons" data-fiche="Boss · Prince des Démons · Feu · ATQ 58 · courroux ×3" style="top:26px; left:120px;"><div class="art">👑</div><div class="nm">Roi des Démons</div><div class="bars"><div class="sh"><i style="width:10%"></i></div><div class="bar"><div class="hp"><i style="width:71%"></i></div><span class="n">850/1200</span></div><div class="bar"><div class="mp"><i style="width:75%"></i></div><span class="n m">300/400</span></div></div><div class="fx"><s>🛡 120</s><s>🔥 courroux ×3</s></div></div>
+        <div class="unit enemy" data-name="Brute des Fosses" data-fiche="Rare · Démon · Tank" style="top:88px; left:252px;"><div class="art">👹</div><div class="nm">Brute des Fosses</div><div class="bars"><div class="bar"><div class="hp"><i style="width:88%"></i></div><span class="n">140/160</span></div></div></div>
+        <div class="unit ally" data-name="Chevalière Isaure" data-fiche="Super Rare · Guerrier · Aube · bouclier 32 · rempart" style="bottom:44px; left:12px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="sh"><i style="width:23%"></i></div><div class="bar"><div class="hp"><i style="width:64%"></i></div><span class="n">90/140</span></div><div class="bar"><div class="mp"><i style="width:33%"></i></div><span class="n m">10/30</span></div></div><div class="fx"><s>🛡 32</s><s>🪨 rempart</s></div></div>
+        <div class="unit ally active" data-name="Assassin" data-fiche="Ultrarare · Assassin · Ombre · AGI 14 · ATQ 31" style="bottom:34px; left:138px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div></div>
+        <div class="unit ally summon" data-name="Esprit de l'Ombre" data-fiche="Invocation de l'Assassin ·stats dérivées du lanceur · expire dans 2 tours" style="display:none; bottom:52px; left:262px;"><div class="art">👁</div><div class="nm">Esprit de l'Ombre</div><div class="bars"><div class="bar"><div class="hp"><i style="width:67%"></i></div><span class="n">30/45</span></div></div><div class="fx"><s>⏳ 2 tours</s></div></div>
+        <div class="unit ally" data-name="Prêtre de l'Aube" data-fiche="Rare · Prêtre · Lumière" style="bottom:110px; left:284px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div><div class="bar"><div class="mp"><i style="width:11%"></i></div><span class="n m">5/45</span></div></div></div>
+      </div>
+      <div class="minilog apres-log" data-log="2">
+        <div><b>Roi des Démons</b> : Écrasement → −34 Chevalière Isaure (🛡 absorbe 32)</div>
+        <div><b>Assassin</b> : Lame Dansante → −24 Brute des Fosses</div>
+        <div>Le courroux du Roi des Démons monte (×3)</div>
+      </div>
+      <div class="hint" data-hint="2">Choisis une cible</div>
+      <div class="apres-bar">
+        <div class="who"><span><b>Assassin</b> · PV 68/92 · MP 24/40</span><span style="color:#8a8574">Tactique · boss</span></div>
+        <div class="cmdrow" data-cmd="2">
+          <button data-attack="1">⚔ Attaque<small>gratuit</small></button>
+          <button data-attack="1" data-mp="8">🗡 Lame Dansante<small>1 ennemi · MP 8</small></button>
+          <button data-summon="1">👁 Esprit de l'Ombre<small>invocation · MP 12</small></button>
+          <button data-buff="1">☠ Poison Lent<small>malus · MP 6</small></button>
+          <button class="off">🌑 Éclipse<small>MP 40</small></button>
+          <button>🧪 Objet<small>potion…</small></button>
+        </div>
+        <div class="reservecue">⇄ réserve (2) · un actif max par lanceur</div>
+      </div>
+      <div class="pin good" style="top:8px; left:8px;">1·2</div>
+      <div class="pin good label" style="top:26px; left:150px;">boss : icône XL</div>
+      <div class="pin good" style="bottom:96px; left:8px;">3</div>
+    </div></div>
+  </div>
+</div>
+
 <h2>Paysage 844×390 : cible (rail latéral, commandes en bas du rail)</h2>
 <div class="row">
   <div class="frame">
     <div class="phone-wrap land"><div class="phone land">
       <div class="terrain land-terrain">
         <div class="ground-line"></div>
-        <div class="unit enemy" style="top:26px; left:60px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="hp"><i style="width:75%"></i></div></div></div>
-        <div class="unit enemy" style="top:36px; left:210px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="hp"><i style="width:100%"></i></div></div></div>
-        <div class="unit enemy" style="top:26px; left:360px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="hp"><i style="width:65%"></i></div></div></div>
-        <div class="unit ally" style="bottom:34px; left:60px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="hp"><i style="width:86%"></i></div></div></div>
-        <div class="unit ally active" style="bottom:26px; left:210px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="hp"><i style="width:74%"></i></div><div class="mp"><i style="width:60%"></i></div></div></div>
-        <div class="unit ally" style="bottom:34px; left:360px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="hp"><i style="width:78%"></i></div></div></div>
+        <div class="unit enemy" style="top:18px; left:48px;"><div class="art">🏹</div><div class="nm">Gobelin Archer</div><div class="bars"><div class="bar"><div class="hp"><i style="width:75%"></i></div><span class="n">45/60</span></div></div></div>
+        <div class="unit enemy" style="top:30px; left:194px;"><div class="art">🦈</div><div class="nm">Pillard des Récifs</div><div class="bars"><div class="sh"><i style="width:30%"></i></div><div class="bar"><div class="hp"><i style="width:100%"></i></div><span class="n">80/80</span></div><div class="fx"><s>🛡 24</s></div></div></div>
+        <div class="unit enemy" style="top:18px; left:346px;"><div class="art">😇</div><div class="nm">Ange Déchu</div><div class="bars"><div class="bar"><div class="hp"><i style="width:65%"></i></div><span class="n">62/95</span></div></div></div>
+        <div class="unit ally" style="bottom:20px; left:48px;"><div class="art">🛡</div><div class="nm">Chevalière Isaure</div><div class="bars"><div class="bar"><div class="hp"><i style="width:86%"></i></div><span class="n">120/140</span></div><div class="bar"><div class="mp"><i style="width:33%"></i></div><span class="n m">10/30</span></div></div></div>
+        <div class="unit ally active" style="bottom:12px; left:194px;"><div class="art">🗡</div><div class="nm">Assassin</div><div class="bars"><div class="bar"><div class="hp"><i style="width:74%"></i></div><span class="n">68/92</span></div><div class="bar"><div class="mp"><i style="width:60%"></i></div><span class="n m">24/40</span></div></div></div>
+        <div class="unit ally" style="bottom:20px; left:346px;"><div class="art">✨</div><div class="nm">Prêtre de l'Aube</div><div class="bars"><div class="bar"><div class="hp"><i style="width:78%"></i></div><span class="n">55/70</span></div></div></div>
       </div>
       <div class="land-rail">
         <div class="top">
@@ -308,78 +384,90 @@
 <h2>Notes d'implémentation (pour le prompt couloir 1)</h2>
 <ul class="notes">
   <li><b>Invariant conservé</b> : la fenêtre ne recouvre jamais le terrain ; la barre compacte réduit encore l'emprise (38 % → ~28 % en portrait).</li>
-  <li><b>Pure UI</b> : HTML/CSS uniquement, aucun changement moteur ni data : digest inchangé attendu.</li>
+  <li><b>Chiffres sur les unités</b> : PV/PVmax et MP/MPmax en clair à côté des barres (lisible sans fiche) ; bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré (le bouclier s'affiche avant les PV dans l'ordre de lecture).</li>
+  <li><b>Tailles d'icônes</b> : unités 74 px (passé 56), boss 118 px + nom en gras + chip élargi (👑 36 px) dans le rail d'ordre ; invocation 50 px à bordure pointillée + badge ttl (⏳ tours restants) : l'œil distingue immédiatement qui est plein, boss, ou invoqué.</li>
+  <li><b>Invocations (tranchage 7-b)</b> : un actif max par lanceur, stats dérivées, ttl visible sur l'icône ET la fiche ; le bouton d'invocation vit dans la barre de commandes comme un sort.</li>
+  <li><b>Pure UI</b> : HTML/CSS uniquement, aucun changement moteur ni data : digest inchangé attendu (les invocations elles-mêmes relèvent du chantier sorts en cours).</li>
   <li><b>Cibles tactiles ≥ 44 px</b> (WCAG 2.5.5) ; sort indisponible = grisé, jamais masqué (contrainte visible, leçon TCG Pocket).</li>
   <li><b>Feedback d'occlusion</b> : la confirmation de ciblage et les dégâts flottent au-dessus de l'unité, jamais sous le pouce ; le mini-log (3 lignes) reste juste au-dessus de la barre.</li>
-  <li><b>Ordre du tour</b> : les deux camps, ennemis inclus, actif surligné, sélecteur de vitesse persistant en haut-droite (plus de manipulation à chaque tour).</li>
   <li><b>À trancher ensuite</b> : vitesses par contexte (§0 n°5, après test terrain de cette maquette).</li>
 </ul>
 
 <script>
 (function(){
-  var terrain = document.getElementById('terrainApres');
-  var log = document.getElementById('logApres');
-  var hint = document.getElementById('hintApres');
-  var cmd = document.getElementById('cmdApres');
-  var spell = null, fiche = null;
-  var units = terrain.querySelectorAll('.unit');
+  document.querySelectorAll('[data-terrain]').forEach(function(terrain){
+    var phone = terrain.closest('.phone');
+    var log = phone.querySelector('[data-log="' + terrain.dataset.terrain + '"]');
+    var hint = phone.querySelector('[data-hint="' + terrain.dataset.terrain + '"]');
+    var cmd = phone.querySelector('[data-cmd="' + terrain.dataset.terrain + '"]');
+    if(!log || !cmd || !hint) return;
+    var spell = null, fiche = null;
+    var units = terrain.querySelectorAll('.unit');
 
-  function clearFiche(){ if(fiche){ fiche.remove(); fiche = null; } }
-  function resetTargets(){
-    spell = null;
-    hint.style.display = 'none';
-    units.forEach(function(u){ u.classList.remove('targetable','dimmed'); });
-    cmd.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick'); });
-  }
-  function addLog(html){
-    var d = document.createElement('div'); d.innerHTML = html;
-    log.appendChild(d);
-    while(log.children.length > 3) log.removeChild(log.firstChild);
-  }
-
-  cmd.addEventListener('click', function(e){
-    var b = e.target.closest('button');
-    if(!b || b.classList.contains('off')) return;
-    resetTargets(); clearFiche();
-    if(b.dataset.attack){
-      spell = {name: b.textContent.replace(/\s+/g,' ').trim().split(' ').slice(0,2).join(' '), dmg: b.dataset.mp ? 24 : 16};
-      b.classList.add('pick');
-      units.forEach(function(u){
-        if(u.classList.contains('enemy')) u.classList.add('targetable');
-        else u.classList.add('dimmed');
-      });
-      hint.style.display = 'block';
-      addLog('<b>Assassin</b> prépare ' + spell.name);
+    function clearFiche(){ if(fiche){ fiche.remove(); fiche = null; } }
+    function resetTargets(){
+      spell = null;
+      hint.style.display = 'none';
+      units.forEach(function(u){ u.classList.remove('targetable','dimmed'); });
+      cmd.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick'); });
     }
-  });
-
-  terrain.addEventListener('click', function(e){
-    var u = e.target.closest('.unit');
-    if(!u){ clearFiche(); return; }
-    if(spell && u.classList.contains('enemy')){
-      var dmg = document.createElement('div');
-      dmg.className = 'dmg-float';
-      dmg.textContent = '−' + spell.dmg;
-      u.appendChild(dmg);
-      setTimeout(function(){ dmg.remove(); }, 1700);
-      addLog('<b>Assassin</b> : ' + spell.name + ' → ' + u.dataset.name + ' : −' + spell.dmg);
-      resetTargets();
-      return;
+    function addLog(html){
+      var d = document.createElement('div'); d.innerHTML = html;
+      log.appendChild(d);
+      while(log.children.length > 3) log.removeChild(log.firstChild);
     }
-    // fiche flottante ancrée au-dessus de la barre, côté opposé au clic
-    clearFiche();
-    fiche = document.createElement('div');
-    fiche.className = 'fiche';
-    var rect = u.getBoundingClientRect();
-    var host = u.closest('.phone').getBoundingClientRect();
-    var left = (rect.left - host.left) > 195 ? (rect.left - host.left - 220) : (rect.left - host.left + 86);
-    fiche.style.left = Math.max(8, Math.min(left, 172)) + 'px';
-    fiche.style.bottom = '132px';
-    fiche.innerHTML = '<span class="close">✕</span><h4>' + u.dataset.name + '</h4>'
-      + '<table><tr><td>' + (u.dataset.fiche || '') + '</td></tr>'
-      + '<tr><td style="color:#8a8574">' + (u.classList.contains('enemy') ? 'camp ennemi' : 'camp allié') + ' · PV/MP ci-dessus, effets en badges</td></tr></table>';
-    document.getElementById('phApres').appendChild(fiche);
-    fiche.querySelector('.close').addEventListener('click', clearFiche);
+
+    cmd.addEventListener('click', function(e){
+      var b = e.target.closest('button');
+      if(!b || b.classList.contains('off')) return;
+      resetTargets(); clearFiche();
+      if(b.dataset.summon){
+        var s = terrain.querySelector('.summon');
+        if(s && s.style.display === 'none'){
+          s.style.display = '';
+          addLog('<b>Assassin</b> invoque l\'Esprit de l\'Ombre (2 tours)');
+        }
+        return;
+      }
+      if(b.dataset.attack){
+        spell = {name: b.textContent.replace(/\s+/g,' ').trim().split(' ').slice(0,2).join(' '), dmg: b.dataset.mp ? 24 : 16};
+        b.classList.add('pick');
+        units.forEach(function(u){
+          if(u.classList.contains('enemy')) u.classList.add('targetable');
+          else if(u.style.display !== 'none') u.classList.add('dimmed');
+        });
+        hint.style.display = 'block';
+        addLog('<b>Assassin</b> prépare ' + spell.name);
+      }
+    });
+
+    terrain.addEventListener('click', function(e){
+      var u = e.target.closest('.unit');
+      if(!u){ clearFiche(); return; }
+      if(spell && u.classList.contains('enemy')){
+        var dmg = document.createElement('div');
+        dmg.className = 'dmg-float';
+        dmg.textContent = '−' + spell.dmg;
+        u.appendChild(dmg);
+        setTimeout(function(){ dmg.remove(); }, 1700);
+        addLog('<b>Assassin</b> : ' + spell.name + ' → ' + u.dataset.name + ' : −' + spell.dmg);
+        resetTargets();
+        return;
+      }
+      clearFiche();
+      fiche = document.createElement('div');
+      fiche.className = 'fiche';
+      var rect = u.getBoundingClientRect();
+      var host = u.closest('.phone').getBoundingClientRect();
+      var left = (rect.left - host.left) > 195 ? (rect.left - host.left - 220) : (rect.left - host.left + 100);
+      fiche.style.left = Math.max(8, Math.min(left, 172)) + 'px';
+      fiche.style.bottom = '132px';
+      fiche.innerHTML = '<span class="close">✕</span><h4>' + u.dataset.name + '</h4>'
+        + '<table><tr><td>' + (u.dataset.fiche || '') + '</td></tr>'
+        + '<tr><td style="color:#8a8574">' + (u.classList.contains('enemy') ? 'camp ennemi' : 'camp allié') + ' · PV/MP/bouclier sur l\'icône, effets en badges</td></tr></table>';
+      phone.appendChild(fiche);
+      fiche.querySelector('.close').addEventListener('click', clearFiche);
+    });
   });
 })();
 </script>
