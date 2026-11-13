@@ -5,6 +5,8 @@
 > **MAJ 14/11 (suite 26), retours de relecture de Marc-Olivier, intégrés ci-dessous** : noms TRANCHÉS (La Faim → **Famine** ; Pestis → **Peste**) ; QUESTION OUVERTE du sommet de la puissance (un roi démon seul, ou une reine ET un roi) ; DIRECTION REÇUE : le camp divin travaille par ESPÈCES (Diablotin côté démon, Chérubin/Séraphin côté ange), la structure §2.1 se reprend ; l'accès Chœur : la coloration reste comme définie (option a ÉCARTÉE), nouvelle option (d) n15 l'aînée commune des trois familles, RECOMMANDÉE. Enquête complète : `docs/design/enquete-cartes-2026-11-14.md`.
 >
 > **MAJ 15/11 (suite 30), 2e relecture de l'arbre** : **Diablotin TRANCHÉ — il RENOMME n14** (« le Diablotin, c'est juste pour les démons, il remplace en effet la n14 ») ; les UC de voie proposées deviennent **Démon du Désir** (la chair) et **Démon des Fosses** (la puissance), À VALIDER d'un mot (§2.1).
+>
+> **MAJ 15/11 (suite 31), tranchages reçus** : **les UC ACTÉES** (Démon du Désir / Démon des Fosses, « oui, pour les UC, c'est bon ») ; **le sommet de la puissance TRANCHÉ : un ROI DÉMON SEUL** — Lilith quitte le sommet (d28), elle se replace ailleurs dans le camp démon, différée V2 ; **l'accès Chœur TRANCHÉ : l'option (d) n15 Éveillé du Seuil, la source des trois familles divines** (« pour moi, c'est la source des trois familles », §4) ; **l'espèce ange TRANCHÉE** (v18 §6.2 : Séraphin Porteur de Lumière R → Ange de Lumière SR → Archange UR → Archange Éveillé L). L'école et les sorts (§2.3) restent à valider après lecture détaillée (demande suite 31).
 
 ## 1. Tranchages actés (14/11, suite 25 — rien à rediscuter)
 
@@ -21,7 +23,7 @@
 
 **Diablotin = le nouveau nom de n14 (TRANCHÉ le 15/11, suite 30)** : la commune C du camp démon s'appelle le **Diablotin** (le camp divin travaille par espèces, pas par créatures uniques : « qui devient quelque chose d'autre »). Dérrogation assumée à la règle 1.3 (un C pour deux familles) : à documenter dans le validateur, précédent = n13 qui porte les trois familles du camp divin. Chaque voie est une famille divine : deux éveils depuis le Diablotin (la chair / la puissance), puis un choix au palier R (la carte de voie OU la trappe).
 
-**PROPOSITION (suite 30, À VALIDER d'un mot)** : les UC de voie deviennent **Démon du Désir** (la chair, tête de la voie des succubes) et **Démon des Fosses** (la puissance, tête de la voie des gouffres) — en écho direct aux trappes Gouffre des Vices et Fléau Démoniaque. Côté ange : cf. §3 et `design-arbres-v18.md` §6.2 (Chérubin puis Séraphin ; piste Ange → Ange de Lumière → Archange, structure à définir).
+**Espèce de base et UC ACTÉS** : le **Diablotin** (ex-n14, TRANCHÉ suite 30) ouvre les deux voies ; **d19 Démon du Désir** (la chair, tête de la voie des succubes) et **d24 Démon des Fosses** (la puissance, tête de la voie des gouffres) — **NOMS ACTÉS suite 31**, en écho direct aux trappes Gouffre des Vices et Fléau Démoniaque. Côté ange : cf. §3 et `design-arbres-v18.md` §6.2 (espèce TRANCHÉE suite 31 : Séraphin Porteur de Lumière R → Ange de Lumière SR → Archange UR → Archange Éveillé L ; Luz reste réservée à la lignée déchue, plus tard).
 
 ### 2.2 Les chaînes (ids proposés d19-d36, à figer au lot 1 — les arts série 3 attendent ces ids)
 
@@ -29,7 +31,7 @@
 
 | Id | Carte | Palier | Classe (prop.) | Note |
 | --- | --- | --- | --- | --- |
-| d19 | Démon du Désir | UC | Assassin | **PROPOSITION suite 30** (remplace « Aiguillon du Désir », à valider d'un mot) ; choix 2 au R |
+| d19 | Démon du Désir | UC | Assassin | **NOM ACTÉ suite 31** (ex-« Aiguillon du Désir ») ; choix 2 au R |
 | d20 | Succube | R | Occultiste | chaîne principale |
 | d21 | Grande Succube | SR | Occultiste | verrou |
 | d22 | Dame du Désir | UR | Occultiste | |
@@ -43,17 +45,17 @@
 
 | Id | Carte | Palier | Classe (prop.) | Note |
 | --- | --- | --- | --- | --- |
-| d24 | Démon des Fosses | UC | Guerrier | **PROPOSITION suite 30** (remplace « Brute des Fosses », à valider d'un mot) ; choix 2 au R |
+| d24 | Démon des Fosses | UC | Guerrier | **NOM ACTÉ suite 31** (ex-« Brute des Fosses ») ; choix 2 au R |
 | d25 | Démon Majeur | R | Guerrier | chaîne principale |
 | d26 | Seigneur Démon | SR | Guerrier | verrou |
 | d27 | Prince Démon | UR | Guerrier | |
-| d28 | Lilith, Reine des Démons | L | Occultiste | nommée ACTÉE v14 |
+| d28 | le Roi des Démons (nom à proposer) | L | Guerrier | **TRANCHÉ suite 31 : un ROI SEUL au sommet de la puissance** (« roi démon seul ») ; Lilith quitte le sommet, elle se replace ailleurs dans le camp démon (V2, à définir) ; nom à caler (pistes : Bélial, Mammon) |
 | d33 | Fléau Démoniaque | R | Occultiste | TRAPPE DÉBLOQUÉE (suite 25) |
 | d34 | Grand Fléau | SR | Occultiste | verrou |
 | d35 | Porte-Peste | UR | Occultiste | |
 | d36 | Peste, Mère des Fléaux | L | Occultiste | NOM ACTÉ suite 26 (ex-Pestis) |
 
-**QUESTION OUVERTE (suite 26) — le sommet de la puissance : un roi démon SEUL, ou une reine ET un roi ?** Le doublon de L au sommet est permis (précédent Jeanne/Siegfried côté humain). Option A : d28 reste l'unique L (Lilith, Reine des Démons). Option B : Lilith reste la reine (d28) ET un roi démon nommé est créé à côté (id dédié, chaîne Prince Démon → roi, à poser). À trancher au lot 1.
+**Le sommet de la puissance TRANCHÉ (suite 31) : un ROI DÉMON SEUL.** Le doublon de L au sommet (option « la reine ET le roi », question suite 26) est ÉCARTÉ : la voie de la puissance termine sur UN roi nommé (d28, à nommer). **Lilith quitte le sommet** : elle se replace « autre part dans le truc des démons » (Marc-Olivier) — proposition d'attache V2 à caler (piste : une carte de la trappe du Gouffre des Vices, ou la nommée d'une future voie v2), rien à figer au lot 1 en dehors du renommage de d28.
 
 Recâblage data : `trees.json` divine.eveils remplace l'entrée `n14 → d8` par deux éveils (n14 → d19 « la voie de la chair », n14 → d24 « la voie de la puissance ») ; `evolutions.json` : d19 → {d20 | d29}, d24 → {d25 | d33}, puis les chaînes SR → UR → L ; l'entrée `n14 → d8` est retirée AU LOT ACCÈS CHŒUR (§4), pas avant. Stats : courbe divine de référence (d1-d18, p1/p5/p6, `RACE_MOD` divine), l'écart de classe s'applique ; valeurs posées au lot, mesurées par le harnas.
 
@@ -61,11 +63,11 @@ Recâblage data : `trees.json` divine.eveils remplace l'entrée `n14 → d8` par
 
 **Le Vice (la chair)** : ✦2 « Frôlement du Vice » (1 ennemi, ×1,4) · ✦3 « Regard de Luxure » (×1,6 + malédiction ATQ −25 %, 2 tours) · ✦5 « Haleine du Gouffre » (×1,8 + ralentissement 2 tours) · ✦9 « Charme de l'Abîme » (×2,6 + malédiction 2 tours) · ✦14 « Asmodia : Danse des Vices » (×3,4) · ✦20 « Désir Absolu » (×4,5).
 
-**La Fureur (la puissance)** : ✦2 « Grondement des Fosses » (×1,4) · ✦3 « Coup des Fosses » (×1,6) · ✦5 « Cri de Fureur » (×1,8 + étourdissement 1 tour, taux à caler) · ✦9 « Terreur Majeure » (×2,6 + malédiction 2 tours) · ✦14 « Lilith : Couronne de Fureur » (×3,4) · ✦20 « Ultime Fureur » (×4,5).
+**La Fureur (la puissance)** : ✦2 « Grondement des Fosses » (×1,4) · ✦3 « Coup des Fosses » (×1,6) · ✦5 « Cri de Fureur » (×1,8 + étourdissement 1 tour, taux à caler) · ✦9 « Terreur Majeure » (×2,6 + malédiction 2 tours) · ✦14 « le Roi : Couronne de Fureur » (×3,4, renommage suite 31 à suivre le nom du roi) · ✦20 « Ultime Fureur » (×4,5).
 
-**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; Lilith « Sceptre du Jugement » (×2 + étourdissement) ; Famine « Dévoration Totale » (×2,2) ; Peste « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
+**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; le Roi des Démons « Sceptre du Jugement » (×2 + étourdissement, ex-signature de Lilith, à caler au renommage suite 31) ; Famine « Dévoration Totale » (×2,2) ; Peste « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
 
-Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, Lilith F, Peste F), **Famine bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
+Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, le Roi des Démons M, Peste F), **Famine bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
 
 ## 3. Les anges dévoyés (4 cartes + re-racement, TRANCHÉ v18 §6.2)
 
@@ -81,14 +83,14 @@ Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les
 - **Re-racement de l'Astre Capiteux (z8)** : fiche race divine camp ange, élément Lumière, courbe inchangée (TRANCHÉ).
 - La porte « coloration » reste dormante sauf §4-a.
 
-## 4. L'accès au Chœur Miroir sans n14 (À TRANCHER — options mises à jour suite 26)
+## 4. L'accès au Chœur Miroir sans n14 — **TRANCHÉ suite 31 : l'option (d) n15, la source des trois familles**
 
 Le Chœur (d7-d12, Eau) est aujourd'hui atteint UNIQUEMENT par l'éveil n14 → d8. Après recâblage :
 
 - **(a) la porte coloration-eau de p1 — ÉCARTÉE (suite 26)** : la coloration reste DORMANTE telle que définie (Calypso/Alix, Léna, Kenji, v14/v17 §3.1). Ne pas la réveiller pour l'accès.
 - **(b) l'événement du miroir** : symétrique de l'accès du Seuil (l'événement d'équilibre du Séraphin, p1 → d6) ; mais le système d'événements est v2, accès différé.
 - **(c) une naissance dédiée** : une 16e naissance N « Choriste » (C, Eau) éveillant vers d8 ; coûte une carte et casse « les 15 naissances » affichées partout.
-- **(d) n15 l'aînée commune des trois familles divines joueur (RECOMMANDÉE, proposition suite 26)** : l'éveil de n15 Éveillé du Seuil ouvre les TROIS familles divines au choix (n15 → d1 Garde du Seuil / d7 Lame Miroir / d13 Fileuse du Pont), le Pont restant le choix actuel. C'est la vision d'ORIGINE de Marc-Olivier (les trois familles nées d'une même lignée, cf. enquête §3), zéro carte nouvelle, zéro événement, et l'accès Chœur devient un choix d'éveil lisible. Cohérent avec le précédent n13 (une commune, plusieurs éveils).
+- **(d) n15 l'aînée commune des trois familles divines joueur — TRANCHÉE (suite 31)** : « n15, Éveillé du Seuil, pour moi, c'est la source des trois familles » : l'éveil de n15 Éveillé du Seuil ouvre les TROIS familles divines au choix (n15 → d1 Garde du Seuil / d7 Lame Miroir / d13 Fileuse du Pont), le Pont restant le choix actuel. C'est la vision d'ORIGINE de Marc-Olivier (les trois familles nées d'une même lignée, cf. enquête §3), zéro carte nouvelle, zéro événement, et l'accès Chœur devient un choix d'éveil lisible. Cohérent avec le précédent n13 (une commune, plusieurs éveils). **Le lot accès Chœur peut donc être lancé** : poser n15 → {d1, d7, d13} dans `trees.json`, recâbler les chaînes sans d8/d14 (v18 §6.9-§6.10), PUIS retirer l'entrée `n14 → d8` (le garde-fou demeure : jamais avant le nouvel accès).
 
 Quel que soit le choix : vérifier le pool raccourci (formsOf depuis les raciales divines) et les garde-fous du validateur — le Chœur doit rester JOUABLE après le recâblage.
 
