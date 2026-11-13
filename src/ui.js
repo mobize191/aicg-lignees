@@ -5400,7 +5400,7 @@ async function animate(events, ms, gen = null) {
           rewards = stageRewards(store.seed, stage, 0, store.dungeon, store.diff);
           pts = Math.round((15 + 5 * stage) * (rewards.boss ? 2 : 1) * DIFF.pts * loot.pts);
           addGold(pts);
-          pushRecomp('or', `+${pts} 🪙 or`, `étage ${stage} × mode ${DIFF.name} `);
+          pushRecomp('or', `+${pts} 🪙 or`, `${store.zoneFight ? 'combat de zone' : `étage ${stage} × mode ${DIFF.name} `}`);
           store.record = Math.max(store.record, stage);
           save();
           updatePtsBadge();
@@ -5762,6 +5762,9 @@ function renderCombat(root, opts = {}) {
   if (defi) runLog = null;
   else if (store.stage === 1) runLog = freshRunLog();
   const d = defi ? { name: 'Défi du jour', floors: 1 } : dungeonById(store.dungeon);
+  // correctif retour terrain : en combat de ZONE (errance), l'en-tête affiche la zone, pas le donjon
+  const zoneFight = !!(store.zoneFight && !store.zoneFight.donjon);
+  const zoneLabel = zoneFight ? (getZone(store.zoneFight.zone)?.nature ?? store.zoneFight.zone) : null;
   const zfCount = (store.zoneFight && !store.zoneFight.donjon) ? (store.zoneFightCount ?? 0) : null; // v1.38 lot 2 : rencontres = seed par combat
   const zoneWaveSize = zfCount != null ? (getZone(store.zoneFight.zone)?.errance?.waveSize ?? [2, 3]) : null; // taille de vague en data
   const wseed = defi ? dailySeed() : waveSeedFor(store.dungeon, store.diff, zfCount);
@@ -5855,14 +5858,14 @@ function renderCombat(root, opts = {}) {
     .join(' ');
   combatApp.innerHTML = `
     <div id="topbar">
-      <div class="rail-wrap"><div class="rail" id="rail"></div><span class="chip" id="stage-chip">${defi ? 'D\u00e9fi divin' : `\u00c9tage ${store.stage}/${d.floors}`}</span></div>
+      <div class="rail-wrap"><div class="rail" id="rail"></div><span class="chip" id="stage-chip">${defi ? 'D\u00e9fi divin' : zoneLabel ? `\u2694 Combat de zone` : `\u00c9tage ${store.stage}/${d.floors}`}</span></div>
       <div id="speedbar">
         <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
         <button class="btn big" id="fight">${fightLabel()}</button>
       </div>
     </div>
     <div id="board-col">
-    <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
+    <h2>${defi ? `🌟 ${d.name}` : zoneLabel ? `\u2694 ${zoneLabel} \u2014 combat de zone <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>

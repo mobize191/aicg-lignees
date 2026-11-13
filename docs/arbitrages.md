@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 36) : BUG « combat de zone affiché comme un donjon » CORRIGÉ (pure UI) — digest INCHANGÉ
+
+- **Signalement Marc-Olivier** : combat lancé dans les Terres Sauvages -> l'écran croit être en donjon (« Antre des Marées — étage 1/10 »).
+- **Cause racine** : `startZoneFight` pose `store.dungeon = dungeonOfZone(zone)` (nécessaire au pool de monstres/rewards) et l'en-tête du combat lisait ce champ sans distinguer le genre de combat.
+- **Correctif** (branche `vibe/zone-header-fix-ec66f9`) : en combat de zone (`store.zoneFight && !store.zoneFight.donjon`), le h2 affiche « ⚔ {nature de la zone} — combat de zone » et le `#stage-chip` « ⚔ Combat de zone » ; le détail de la récompense or dit « combat de zone ». Run donjon et entrée de donjon depuis l'errance (`donjon: true`) inchangés. Test headless `tests/zone-header-v4.test.js` (3 phases). Preuves : build, 280 tests, smoke 450 PASS, **digests INCHANGÉS `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**.
 ## 2026-11-15 (suite 38) : LANCEMENT DE LA REFONTE v2 — l'étude de rééquilibrage de Marc-Olivier est en jeu (J1-J12 actés) ; SPEC DONJONS LIVRÉE ; PROMPT COULOIR 1 LIVRÉ (10 lots) ; CAPTURE RELEVÉE ACTÉE (retour terrain : « je ne peux jamais capturer »)
 
 - **Retour terrain Marc-Olivier** : les taux de capture de monstres sont trop bas — « je ne peux jamais capturer de monstre ». Diagnostic chiffré (pilotage) : taux de zone 0,8-1,2 % (`data/zones.json` `recrute.taux`, `RECRUTE_TAUX` 1 %) × force = min(3, niveaux moyens/niveau du monstre) → **1-3 % par monstre vaincu, un seul essai**. **CORRECTION ACTÉE (lot 0 du prompt)** : taux de base des zones relevés à 8-12 % à force égale, plancher de force 0,5, plafond ×3 conservé, borne 95 % ; cible ~2-4 captures par run à niveau égal. Digest INCHANGÉ attendu (aucune maths de combat).
@@ -14,6 +19,7 @@
 - **Grille carte 1 RÉVISÉE** (paliers indicatifs, à caler sur le rééquilibrage des classes) : Écumes ~3 (Marées), Enfants de la Braise/Vulcain ~8 (Fournaise), Dryades/Adriel ~13 (Vivant), Spectres des Caveaux/Macha ~17 (Au-delà), Clergé du Plein Jour/Célestin ~21 (Zénith), clôture Donjon des Abîmes palier 1 ~24 (Rôdeur des Fonds). Cartes 2-4 dans leur principe inchangé : Sirènes/Méliane ~28, échelles Cendrels/Fougeron/Naufragés ~33-43, Phénix/Pyrrha ~46, Abîmes palier 2/Hydre ~50, Légion/Héraut ~55, Chevalerie/Jeanne d'Arc ~60, royales ~63-73 (dont Gobelins Royaux/Roi des Écumes), Léviathan ~76, royales restantes, les 3 donjons divins ~95-100 (Belzébuth, Séraphin Archange Ultime, Équilibre).
 - **Vérifié dans les data** : les 13 familles natives non-gobelines sont toutes complètes (8-12 cartes, C→L) — **la grille tient SANS créer aucune carte nouvelle en v1** (`data/monster-families.json` + `data/monsters.json`).
 - La spec `docs/design/spec-donjons-par-famille-v1.md` reste en attente du document de rééquilibrage des classes (ordre acté suite 34). Digest INCHANGÉ (commit docs seul).
+
 
 ## 2026-11-15 (suite 36) : LA 3.4 DEVIENT « GRAND LANCEMENT » — le gel v18 ENTIER dans le périmètre arts + thèmes d'exception ÉLARGIS : CLASSIQUE + REPOS + OBSCURES pour TOUTES les cartes — canons MTG/D&D des nouvelles espèces VÉRIFIÉS
 
