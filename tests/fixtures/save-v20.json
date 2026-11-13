@@ -1,5 +1,5 @@
 {
- "version": 28,
+ "version": 29,
  "teams": [
   {
    "slots": [
@@ -207,7 +207,6 @@
    "id": "n1",
    "lvl": 15,
    "xp": 4,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,
@@ -221,7 +220,6 @@
    "id": "n2",
    "lvl": 8,
    "xp": 1,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,
@@ -235,7 +233,6 @@
    "id": "n3",
    "lvl": 5,
    "xp": 0,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,
@@ -249,7 +246,6 @@
    "id": "a30",
    "lvl": 4,
    "xp": 2,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,
@@ -262,7 +258,6 @@
    "id": "s13",
    "lvl": 3,
    "xp": 1,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,
@@ -275,7 +270,6 @@
    "id": "e13",
    "lvl": 1,
    "xp": 0,
-   "asc": 0,
    "name": "",
    "acc": [],
    "isNew": true,

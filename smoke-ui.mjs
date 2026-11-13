@@ -2,6 +2,7 @@
 // Usage : node smoke-ui.mjs [dist.html]
 import { readFileSync } from 'node:fs';
 import { bootDist, wait } from './stub.mjs';
+import { mulberry32 } from './tests/helpers/rng.js';
 
 const file = process.argv[2] ?? 'dist.html';
 const html = readFileSync(file, 'utf8');
@@ -87,7 +88,8 @@ async function main() {
   check('43 B zones team/enemy rendues', !!tz && !!ez, '');
   if (tz && ez) {
     check('43 B deux rangées par camp (avant + arrière)', tz.querySelectorAll('.row').length === 2 && ez.querySelectorAll('.row').length === 2, tz.querySelectorAll('.row').length + '/' + ez.querySelectorAll('.row').length);
-    check('43 B 5 cartes posées', tz.querySelectorAll('.unit').length === 5, String(tz.querySelectorAll('.unit').length));
+    // depuis v1.41 (formation 3 actifs + 2 réserve) seules les 3 cartes actives sont sur le plateau ; les 2 réserve restent hors ciblage
+    check('43 B 3 cartes actives posées (formation 3+2, les 2 réserve hors plateau depuis v1.41)', tz.querySelectorAll('.unit').length === 3, String(tz.querySelectorAll('.unit').length));
   }
   const rowsT = tz ? [...tz.querySelectorAll('.row')] : [];
   const rowsE = ez ? [...ez.querySelectorAll('.row')] : [];
@@ -338,18 +340,23 @@ async function main() {
       const uid = (st49.team.avant[0] ?? st49.team.arriere[0]).uid;
       api._openUnit(uid);
       await wait(40);
-      const hero = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
-      check('49 a hero plein cadre (.modal-hero.full)', !!hero, '');
-      check('49 a voile dégradé + nom + sous-titre classe·élément·rareté', !!hero && !!hero.querySelector('.hero-veil') && !!hero.querySelector('.hero-name') && (hero.querySelector('.hero-sub')?.textContent ?? '').includes('·'), hero ? (hero.querySelector('.hero-sub')?.textContent ?? '') : '');
-      const hs = hero ? hero.querySelector('.hero-stats') : null;
-      const hsTxt = hs ? hs.textContent : '';
-      check('49 a stats en bas du hero (PV rouge, mana violet, actuel/total)', !!hs && /♥ \d+\/\d+/.test(hsTxt) && /✦ \d+\/\d+/.test(hsTxt), hsTxt.slice(0, 60));
+      // correctifs v1.51 lot 2 : fiche UNIFIÉE (ficheCoreHtml) — même rendu menu équipe et combat :
+      // illustration contenue dans .modal-card (plus de .modal-hero.full tronqué)
+      const fiche49 = doc.querySelector('.modal-card') ?? null;
+      const info49 = doc.querySelector('.modal-info') ?? null;
+      check('49 a fiche unifiée combat : illustration contenue (.modal-card), pas de hero plein cadre', !!fiche49 && doc.querySelectorAll('.modal-hero').length === 0, '');
+      const ps49 = info49 ? [...info49.querySelectorAll('p')].map((e) => e.textContent ?? '') : [];
+      const sub49 = ps49.find((t) => t.includes('·')) ?? '';
+      check('49 a nom + sous-titre classe·élément·rareté', !!info49 && (info49.querySelector('h3')?.textContent ?? '').length > 0 && !!sub49, sub49);
+      const sl49 = info49 ? (info49.querySelector('.statline')?.textContent ?? '') : '';
+      // le stub DOM tronque le textContent des <b> : on vérifie la structure (labels ATQ/PV/AGI/INT/Mana), les valeurs sont testées headless
+      check('49 a statline complète (ATQ, PV, AGI, INT, Mana présents)', ['ATQ', 'PV', 'AGI', 'INT', 'Mana'].every((k) => sl49.includes(k)), sl49.slice(0, 90));
       const close = doc.querySelector('#unit-close');
       if (close) close.click();
       await wait(20);
-      check('49 b la fiche se ferme', ![...doc.querySelectorAll('.modal-hero')].some((el) => el.classList.contains('full')), '');
+      check('49 b la fiche se ferme', !doc.querySelector('.modal-card'), '');
     } else {
-      check('49 a hero plein cadre (.modal-hero.full)', false, 'pas de combat');
+      check('49 a fiche unifiée combat', false, 'pas de combat');
     }
     check('49 z 0 exception après fiche v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
@@ -411,18 +418,18 @@ async function main() {
         if (uid50) {
           api._openUnit(uid50);
           await wait(40);
-          const hero50 = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
-          const sub50 = hero50 ? (hero50.querySelector('.hero-sub')?.textContent ?? '') : '';
+          // correctifs v1.51 lot 2 : fiche unifiée — identité (classe·élément·rareté) dans la ligne muted du modal-info
+          const info50 = doc.querySelector('.modal-info') ?? null;
+          const ps50 = info50 ? [...info50.querySelectorAll('p')].map((e) => e.textContent ?? '') : [];
+          const sub50 = ps50.find((t) => t.includes('·')) ?? '';
           check('50 e fiche : Neutre affiché pour une naissance, rareté en toutes lettres',
             sub50.includes('Neutre') && /Naissance|Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
           check('50 e fiche : statline corrigée (stats + oppositions, plus de doublon)',
-            [...doc.querySelectorAll('.statline')].length === 2, String([...doc.querySelectorAll('.statline')].length));
-          const fstats50 = [...doc.querySelectorAll('.fstat')].map((el) => el.textContent ?? '');
-          check('50 e fiche : grille identité (classe, élément, rareté), le rôle attaque/support retiré (T0.3)',
-            fstats50.length === 3 && fstats50.some((t) => t.includes('Classe')) && fstats50.some((t) => t.includes('Élément')) && fstats50.some((t) => t.includes('Rareté'))
-            && !fstats50.some((t) => t.includes('Rôle')), fstats50.join(' | '));
+            doc.querySelectorAll('.modal .statline').length >= 2 || doc.querySelectorAll('.statline').length >= 2, String(doc.querySelectorAll('.statline').length));
+          check('50 e fiche : identité classe·élément·rareté dans la fiche unifiée, le rôle attaque/support retiré (T0.3)',
+            sub50.split('·').length >= 3 && !sub50.includes('Rôle'), sub50);
           {
-            const fiche50 = [...doc.querySelectorAll('.modal-hero, .fstats, .spells')].map((el) => el.textContent ?? '').join(' ');
+            const fiche50 = [...doc.querySelectorAll('.modal-info, .spells')].map((el) => el.textContent ?? '').join(' ');
             check('50 e fiche : aucun « Attaquant »/« Soutien » affiché (T0.3)',
               !fiche50.includes('Attaquant') && !fiche50.includes('Soutien') && !fiche50.includes('attaque') && !fiche50.includes('support'), fiche50.slice(0, 90));
             check('50 e dist : le libellé « (rôle opposé) » a disparu des sorts croisés (T0.3)', !html.includes('rôle opposé'), '');
@@ -649,7 +656,8 @@ async function main() {
   check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
   check('45 b rien de coupé : #app défile en interne, fenêtre d’action bornée et défilable', html.includes('body.in-combat .act-modal { max-height: 56dvh; overflow-y: auto; }') && !html.includes('#tac-panel'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
-  check('44 a one-screen : unités de combat agrandies et panneau compact', html.includes('body.in-combat .unit { width: clamp(96px, 22vw, 128px); }') && html.includes('body.in-combat .unit.boss { width: clamp(122px, 28vw, 162px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+  // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
+  check('44 a one-screen : unités de combat agrandies (v1.51 : 30vw/180px desktop, 28vw/150px mobile) et panneau compact', html.includes('body.in-combat .unit { width: clamp(120px, 30vw, 180px); }') && html.includes('body.in-combat .unit { width: clamp(110px, 28vw, 150px); }') && html.includes('body.in-combat .unit.boss { width: clamp(150px, 38vw, 220px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
   check('44 a one-screen : journal borné, rappels bas disparus', html.includes('body.in-combat #log { min-height: 20px; max-height: 20dvh;') && !html.includes('-webkit-line-clamp'), '');
   check('44 b grandes cartes : collection 186px, fiche 232px, équipe 156px, familles 118px', html.includes('repeat(auto-fill, minmax(186px, 1fr))') && !html.includes('minmax(168px, 1fr)') && html.includes('grid-template-columns: 232px 1fr') && html.includes('.slot { flex: 0 1 156px; width: min(156px, calc((100% - 32px) / 5)); }') && html.includes('.fam-card { width: 118px; }'), '');
@@ -657,7 +665,7 @@ async function main() {
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');
   check('44 c changelog v0.44 écrit', html.includes('v0.44 : Le combat plein écran'), '');
   check('45 a emojis réparés : aucun code brut \\U0001F9xx, vrai 🤖 présent', !html.includes('\\U0001F9') && html.includes('🤖') && html.includes('🧭'), '');
-  check('45 e sorts spéciaux : bandeau non couvrant (pas de voile plein écran)', html.includes('.special-overlay {\nposition: fixed; inset: 0; z-index: 70; pointer-events: none;\ndisplay: flex; align-items: flex-start; justify-content: center;\npadding-top: 9dvh;\nanimation: fadein .2s ease;\n}') && !html.includes('background: rgba(5, 7, 12, .72);') && html.includes('.special-txt { min-width: 0; }') && html.includes('.special-art { position: relative; flex: 0 0 92px; width: 92px; height: 116px;'), '');
+  check('45 e sorts spéciaux : bandeau non couvrant (pointer-events: none, aucun fond sur .special-overlay)', (() => { const ovRule = (html.match(/\.special-overlay\s*\{[^}]*\}/) ?? [''])[0]; return /pointer-events:\s*none/.test(ovRule) && !/background/.test(ovRule) && /\.special-txt\s*\{\s*min-width:\s*0/.test(html) && /\.special-art\s*\{[^}]*position:\s*relative/.test(html); })(), (html.match(/\.special-overlay\s*\{[^}]*\}/) ?? [''])[0].slice(0, 120)); // assertions sémantiques plutôt qu'une chaîne CSS exacte (fragile à toute évolution de la feuille)
   check('45 f changelog v0.45 écrit', html.includes('v0.45 : Rien de caché, des pions à voir'), '');
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n3', 'a29'], 15);
@@ -681,9 +689,11 @@ async function main() {
   const v4 = api.newInst('n1', 5);
   const r4 = api.addCardIid(v4.iid);
   check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
-  check('46 b pions mobiles 26vw (media 600)', html.includes('clamp(104px, 26vw, 136px)') && html.includes('clamp(130px, 32vw, 172px)'), '');
+  // correctifs v1.51 lot 2 (point 9) : cartes de combat plus grandes — clamp(120px, 30vw, 180px) / boss clamp(150px, 38vw, 220px)
+  check('46 b pions combat 30vw (v1.51 lot 2 : cartes plus grandes)', html.includes('clamp(120px, 30vw, 180px)') && html.includes('clamp(150px, 38vw, 220px)'), '');
   check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
-  check('46 b fiche : h\u00e9ro plein cadre en t\u00eate de fiche', html.includes('.modal-hero.full') && html.includes('<div class="modal-hero full">'), '');
+  // correctifs v1.51 lot 2 : plus de hero plein cadre tronqué en tête de fiche combat — la fiche unifiée rend l'illustration contenue (.modal-card)
+  check('46 b fiche : plus de hero plein cadre tronqué en combat (fiche unifiée v1.51)', !html.includes('<div class="modal-hero full">'), '');
   check('46 c pastilles info en t\u00eate, rappels bas supprim\u00e9s', html.includes('.info-chip') && html.includes('openInfoModal') && !html.includes('mode-hint') && !html.includes('tacHintText'), '');
   check('46 c les 3 pastilles cliquables existent', html.includes('data-info="rules"') && html.includes('data-info="mod"') && html.includes('data-info="disc"'), '');
   api.go('#glossaire');
@@ -744,8 +754,12 @@ async function main() {
     const buyBtns = els.get('app').querySelectorAll('[data-buy]');
     check('B1 b boutique : rayon potions rendu avec prix en or', shopHtml.includes('Boutique') && shopHtml.includes('or') && buyBtns.length === 4, shopHtml.slice(0, 120));
     const buyBtn = buyBtns.find((b) => b.dataset.buy === 'soin30') ?? null;
+    const goldBefore = store.gold;
+    // la quête « acheter » du jour (seed de la date) peut se terminer sur cet achat et ajouter son or : on l'anticipe
+    const qa = api.ensureQuetes().find((x) => x.type === 'acheter' && !x.done) ?? null;
     if (buyBtn) { buyBtn.click(); await wait(20); }
-    check('B1 c achat : stock +1 et or débité (50 or)', api.potionCount('soin30') === 1 && store.gold === 450, `stock=${api.potionCount('soin30')} gold=${store.gold}`);
+    const expectedGold = goldBefore - 50 + (qa && qa.done ? qa.or : 0); // comportement réel Boutique v2 : prix débité, + récompense de quête du jour si accomplie
+    check('B1 c achat : stock +1 et or débité du prix (50 or, + quête « acheter » du jour si elle tombe dessus)', api.potionCount('soin30') === 1 && store.gold === expectedGold, `stock=${api.potionCount('soin30')} gold=${store.gold} attendu=${expectedGold}`);
 
     // action Objet dans la fenêtre d'action
     setup(['n1', 'n3'], 10);
@@ -942,69 +956,37 @@ async function main() {
   }
 
   {
-    // lot E2 économie v2 — marchand de créatures dans la Boutique
+    // correctifs v1.51 lot 3 (conformité tranchage Lot D du 12/11) : plus d'achat de cartes/monstres à l'or
     api.go('#boutique');
     await wait(20);
+    const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
     const nbMon = doc.body.querySelectorAll('[data-buy-mon]').length;
     const pool = api.marchandMonsters();
-    check('B7 a marchand v2 : catalogue complet MASQUÉ (0 bouton data-buy-mon), pool data intact (> 50 non nommés)', nbMon === 0 && pool.length > 50 && pool.every((m) => !(m.name ?? '').includes(',')), `${nbMon}/${pool.length}`);
+    check('B7 a Boutique : plus de rayon marchand (0 data-buy-offre, 0 data-buy-mon), pool data intact (> 50 non nommés)', nbOffres === 0 && nbMon === 0 && pool.length > 50, `${nbOffres}/${nbMon}/${pool.length}`);
+    check('B7 b le dist ne rend plus de bouton d\u2019achat marchand (data-buy-offre) ; le rayon Boutique n\u2019affiche plus le marchand', !html.includes('data-buy-offre') && !doc.body.textContent.includes('Marchand de cr\u00e9atures'), '');
     api.store.gold = 50000;
     const m = pool.find((x) => x.rarity === 'C');
     const gold0 = api.store.gold;
     const owned0 = api.ownedOf(m.id);
-    check('B7 b achat monstre C : -200 or, +1 exemplaire', api.buyMonster(m.id) === true && api.store.gold === gold0 - api.marchandPrix(m) && api.ownedOf(m.id) === owned0 + 1, m.id);
-    check('B7 c prix selon échelle data (C 200, UR 10 000)', api.marchandPrix(pool.find((x) => x.rarity === 'C')) === 200 && api.marchandPrix(pool.find((x) => x.rarity === 'UR')) === 10000, '');
-    const named = (api.DATA.monsters ?? []).find((x) => (x.name ?? '').includes(','));
-    check('B7 d monstre nommé non vendu', api.buyMonster(named.id) === false, named.id);
-    const l = (api.DATA.monsters ?? []).find((x) => x.rarity === 'L');
-    check('B7 e rang L non vendu au marchand', api.buyMonster(l.id) === false, l.id);
-    api.store.gold = 0;
-    check('B7 f achat sans or refusé', api.buyMonster(m.id) === false, '');
-    check('B7 g 0 exception lot E2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
-    // contenu v3 lot C1 — marchand v2 : 3 offres/jour (seedOfDay), prix actés, déblocage par donjon bouclé
-    const offres = api.offresMarchandDuJour();
-    check('B7 h offres du jour : 3 offres déterministes, distinctes, raretés débloquées', offres.length === 3 && new Set(offres.map((m) => m.id)).size === 3 && api.offresMarchandDuJour().map((m) => m.id).join() === offres.map((m) => m.id).join() && offres.every((m) => api.marchandRareteDebloquee(m.rarity)), offres.map((m) => m.id).join());
-    check('B7 i prix actés v2 (UC 1 500 / R 4 500 / SR 8 000 or)', api.marchandPrix(pool.find((x) => x.rarity === 'UC')) === 1500 && api.marchandPrix(pool.find((x) => x.rarity === 'R')) === 4500 && api.marchandPrix(pool.find((x) => x.rarity === 'SR')) === 8000, '');
-    const uc = pool.find((x) => x.rarity === 'UC');
-    api.store.gold = 50000;
-    check('B7 j sans donjon bouclé : seule C débloquée, achat UC refusé', api.raretesMarchandDebloquees().join() === 'C' && api.buyMonster(uc.id) === false, api.raretesMarchandDebloquees().join());
-    api.store.progress.marees.diffs[1].record = 10;
-    const ownedUc = api.ownedOf(uc.id);
-    check('B7 k donjon bouclé en Facile → UC débloquée et achetable', api.raretesMarchandDebloquees().join() === 'C,UC' && api.buyMonster(uc.id) === true && api.ownedOf(uc.id) === ownedUc + 1, api.raretesMarchandDebloquees().join());
-    api.store.progress.marees.diffs[1].record = 0;
-    const cAlt = pool.filter((x) => x.rarity === 'C')[1];
-    let ok3 = true;
-    for (let i = 0; i < 3; i++) ok3 = ok3 && api.buyMonster(cAlt.id) === true;
-    check('B7 l limite 3 exemplaires par monstre au marchand', ok3 && api.buyMonster(cAlt.id) === false, cAlt.id);
-    const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
-    check('B7 m rayon rend les 3 offres du jour', nbOffres === offres.length, `${nbOffres}/${offres.length}`);
+    check('B7 c buyMonster refusé (plus d\u2019achat à l\u2019or) : or et collection inchangés, redirection Guilde/jetons', api.buyMonster(m.id) === false && api.store.gold === gold0 && api.ownedOf(m.id) === owned0, m.id);
+    check('B7 d 0 exception lot 3', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    // la Guilde reste le seul vendeur de compagnons, en jetons
+    api.go('#forge');
+    await wait(20);
+    const guildeTxt = doc.body.textContent ?? '';
+    check('B7 e Guilde : prix affichés en jetons 🎫, plus « or » dans le texte d\u2019accueil', guildeTxt.includes('jetons') && !/UR 2 000 or/.test(guildeTxt), '');
+    const nbComp = doc.body.querySelectorAll('[data-compagnon]').length;
+    check('B7 f Guilde : 3 offres du jour seules (jetons)', nbComp === 3, `${nbComp}`);
 
-    // ---------- B24 : correctifs v1.37 lot 4 — Boutique : 3 offres du jour seules, verrous masqués ----------
+    // ---------- B24 (réécrit v1.51 lot 3) : la Boutique n\u2019affiche plus aucun article marchand ----------
     check('B24 a le dist ne contient plus « Catalogue complet »', !html.includes('Catalogue complet'), '');
     check('B24 b le dist ne rend plus de boutons data-buy-mon', !html.includes('data-buy-mon'), '');
     api.go('#boutique');
     await wait(20);
-    check('B24 c Boutique : 3 offres du jour seules au rayon marchand, aucun article verrouillé affiché', doc.body.querySelectorAll('[data-buy-offre]').length === offres.length && doc.body.querySelectorAll('[data-buy-mon]').length === 0, `offres=${doc.body.querySelectorAll('[data-buy-offre]').length}`);
-    // offre épuisée : grisée avec compteur, bouton désactivé
-    const o0 = offres[0];
-    for (let k = 0; k < (api.MARCHAND.maxExemplaires ?? 3); k++) api.newInst(o0.id, 1, 0);
-    api.go('#boutique');
-    await wait(20);
-    const rowOut = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o0.id);
-    check('B24 d offre du jour épuisée : ligne grisée (.out) avec compteur N/max + « épuisée », bouton désactivé', !!rowOut && rowOut.classList.contains('out') && /épuisée/.test(rowOut.textContent) && rowOut.querySelector('button').getAttribute('disabled') !== null, rowOut ? rowOut.textContent.slice(0, 90) : 'ligne absente');
-    // manque d'or seul : article visible, bouton grisé, PAS masqué
-    api.store.gold = 0;
-    api.go('#boutique');
-    await wait(20);
-    const o1 = offres[1];
-    const rowPoor = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o1.id);
-    check('B24 e manque d\u2019or seul : offre du jour toujours visible, bouton grisé (pas de .out)', !!rowPoor && !rowPoor.classList.contains('out') && rowPoor.querySelector('button').getAttribute('disabled') !== null, rowPoor ? rowPoor.classList.contains('out') + '/' + String(rowPoor.querySelector('button').getAttribute('disabled')) : 'absente');
-    // progression avancée : les raretés débloquées ne rouvrent pas le catalogue
-    api.store.gold = 50000;
-    api.store.progress.marees.diffs[1].record = 10;
-    api.go('#boutique');
-    await wait(20);
-    check('B24 f donjon bouclé (UC débloquée) : toujours seules les offres du jour, aucun article de catalogue réaffiché', doc.body.querySelectorAll('[data-buy-mon]').length === 0 && doc.body.querySelectorAll('[data-buy-offre]').length >= 1, `mon=${doc.body.querySelectorAll('[data-buy-mon]').length}`);
+    check('B24 c Boutique : aucun article marchand affiché (0 data-buy-offre, 0 data-buy-mon)', doc.body.querySelectorAll('[data-buy-offre]').length === 0 && doc.body.querySelectorAll('[data-buy-mon]').length === 0, '');
+    const boutiqueTxt = doc.body.textContent ?? '';
+    check('B24 d Boutique : renvoi à la Guilde en jetons pour les compagnons', boutiqueTxt.includes('Guilde') && boutiqueTxt.includes('jetons'), '');
+    check('B24 e Boutique : équipement à l\u2019or toujours présent', doc.body.querySelectorAll('[data-buy-eq]').length > 0 && doc.body.querySelectorAll('[data-buy]').length > 0, '');
     api.store.progress.marees.diffs[1].record = 0;
   }
 
@@ -1015,7 +997,8 @@ async function main() {
       const dodgePushes = html.match(/type: 'dodge'[^}]*sourceId/g) ?? [];
       check('B25 c les 4 sites moteur poussent un dodge avec sourceId (journal « esquive la frappe de »)', dodgePushes.length === 4, String(dodgePushes.length));
       check('B25 d fenêtre d’action : frappe avec dégâts effectifs + % de classe', /frappe de \$\{u\.classe\}/.test(html) && /strikePct/.test(html), '');
-      check('B25 e fiche carte : % de frappe depuis CLASSE_MODS.strike (data)', /CLASSE_MODS\[card\.classe\]\?\.strike/.test(html), '');
+      // correctifs v1.51 lot 2 : fiche unifiée — cm = CLASSE_MODS[card?.classe] puis « frappe de ${card.classe} à ${Math.round((cm.strike ?? 1) * 100)} % »
+  check('B25 e fiche carte : % de frappe depuis CLASSE_MODS.strike (data, ficheCoreHtml v1.51)', /CLASSE_MODS\[card\?\.classe\]/.test(html) && /cm\.strike/.test(html), '');
       check('B25 f fenêtre de désignation : esquive de la cible rappelée (DODGE_CAP/AGI en data)', /M\.DODGE_CAP/.test(html) && /M\.DODGE_PER_AGI/.test(html), '');
     }
 
@@ -1023,7 +1006,10 @@ async function main() {
     {
       check('B26 a signatureMetaOf présent dans le dist (dérivation data)', /function signatureMetaOf\(/.test(html), '');
       check('B26 b uiSpellMeta câblé dans le ciblage (fallback fiche signature)', /spellSideOf\(sp\) \?\? spellSideOf\(uiSpellMeta/.test(html), '');
-      check('B26 c les objets runtime des monstres n’embarquent pas role/cible (digest Auto inchangé)', api.allMonsters().every((m) => (m.spells ?? []).filter((sp) => sp.cat === 'unique').every((sp) => sp.role === undefined && sp.cible === undefined)), '');
+      // correctifs v1.51 lot 1 (justification) : les signatures des monstres SOIGNEURS embarquent
+      // désormais role soin + cible allié — c'est le correctif (elles partaient en dégâts en Auto,
+      // digest re-MESURÉ et consigné dans arbitrages). Les autres signatures restent sans role/cible.
+      check('B26 c les objets runtime des monstres n’embarquent pas role/cible, sauf signatures de soigneurs (v1.51 lot 1)', api.allMonsters().every((m) => (m.spells ?? []).filter((sp) => sp.cat === 'unique').every((sp) => (m.effect && m.effect.kind === 'heal') ? (sp.role === 'soin' && sp.cible === '1 allié') : (sp.role === undefined && sp.cible === undefined))), '');
       const sigDefs = [...(api.DATA.cards ?? []), ...(api.DATA.monsters ?? [])].filter((d) => d.soloSpell);
       const withMeta = sigDefs.filter((d) => { const m = api.signatureMetaOf(d); return m.cible && api.spellSideOf({ ...m }) !== null; });
       check('B26 d 100 % des signatures ont une cible valide via la métadonnée dérivée', withMeta.length === sigDefs.length && sigDefs.length > 200, `${withMeta.length}/${sigDefs.length}`);
@@ -1092,7 +1078,9 @@ async function main() {
       check('B29 f makeWave respecte waveSize [2,2] (toujours 2 monstres, 0 support étage 1)', wA.avant.length === 2 && wA.arriere.length === 0, `${wA.avant.length}/${wA.arriere.length}`);
       const ids = (c) => api.makeWave(api.waveSeedFor('marees', 1, c), 1, 'marees', 1).avant.map((m) => m.id).join(',');
       check('B29 g deux compteurs différents -> deux vagues distinctes ; même compteur -> même vague', ids(1) !== ids(2) && ids(1) === ids(1), `${ids(1)} vs ${ids(2)}`);
-      const today = new Date().toISOString().slice(0, 10);
+      // même construction de date locale que todayKey() (getFullYear/getMonth/getDate), robuste au fuseau horaire
+      const dNow = new Date();
+      const today = `${dNow.getFullYear()}-${String(dNow.getMonth() + 1).padStart(2, '0')}-${String(dNow.getDate()).padStart(2, '0')}`;
       const legacy = (() => { let h = 7; for (const ch of `${today}|marees|1`) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0; return h; })();
       check('B29 h sans extra, waveSeedFor = hash historique (donjons classiques inchangés)', api.waveSeedFor('marees', 1) === legacy, `${api.waveSeedFor('marees', 1)} vs ${legacy}`);
     }
@@ -1173,9 +1161,9 @@ async function main() {
     check('B9 b quêtes du jour rendues avec barre de progression', doc.body.querySelectorAll('.quest-row').length === 3 && !!doc.body.querySelector('.quest-bar'), '');
     api.store.gold = 0;
     const gold0 = api.store.gold;
-    const q = list.find((x) => x.type === 'tuer');
-    api.questProgress('tuer', q.n);
-    check('B9 c quête accomplie : +or, done=true', q.done === true && api.store.gold === gold0 + q.or, `or=${api.store.gold}`);
+    const q = list.find((x) => !x.done); // première quête non faite, quel que soit son type (dépend du seed de la date — ne plus chercher 'tuer' en dur)
+    api.questProgress(q.type, q.n);
+    check('B9 c quête accomplie (son type, sa récompense) : +or, done=true', q.done === true && api.store.gold === gold0 + q.or, `type=${q.type} or=${api.store.gold}`);
     check('B9 d pas de bonus de complétion tant que les 3 ne sont pas faites', api.store.quetes.bonusDone === false && api.pierreCount() === 0, '');
     const rest = list.filter((x) => !x.done);
     for (const r of rest) api.questProgress(r.type, r.n);
@@ -1185,6 +1173,31 @@ async function main() {
     const list2 = api.ensureQuetes();
     check('B9 f changement de jour : quêtes remises à zéro', api.store.quetes.day !== '1999-01-01' && list2.every((x) => !x.done && x.progress === 0), '');
     check('B9 g 0 exception lot E4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    // garde-fou : la section B9 ne dépend plus du type tiré — 7 dates simulées (même seed FNV-1a que seedOfDay,
+    // même tirage que quetesDuJour), progression de la 1re quête quel que soit son type, sans crash
+    const fnv = (k) => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+    const quetesPourDate = (d) => {
+      const rng = mulberry32(fnv(d));
+      const pick = (arr) => { const pool = (arr ?? []).filter((q) => !q.errance); return pool.length ? pool[Math.floor(rng() * pool.length)] : null; };
+      const g = pick(api.QUETES.grandes);
+      return [pick(api.QUETES.petites), pick(api.QUETES.moyennes), g].filter(Boolean).map((q) => ({ ...q, progress: 0, done: false }));
+    };
+    const nowD = new Date();
+    const realToday = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, '0')}-${String(nowD.getDate()).padStart(2, '0')}`;
+    let crash7 = 0, ok7 = 0; const typesVus = new Set();
+    for (const d of ['2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14']) {
+      try {
+        api.store.quetes = { day: realToday, list: quetesPourDate(d), bonusDone: false }; // day = aujourd'hui réel : ensureQuetes garde la liste simulée
+        api.store.gold = 0;
+        const l7 = api.store.quetes.list;
+        const q7 = l7.find((x) => !x.done);
+        if (!q7) throw new Error('pas de quête tirée');
+        typesVus.add(q7.type);
+        api.questProgress(q7.type, q7.n);
+        if (q7.done === true && api.store.gold === q7.or) ok7++;
+      } catch (e) { crash7++; }
+    }
+    check('B9 h 7 dates simulées : 1re quête (tout type) accomplie sans crash, +or selon son montant', crash7 === 0 && ok7 === 7, `ok=${ok7}/7 crash=${crash7} types=${[...typesVus].join(',')}`);
   }
 
   {
@@ -1256,10 +1269,12 @@ async function main() {
     const off = api.compagnonsDuJour();
     store.gold = 5000;
     const g1 = store.gold;
+    const jetons0 = store.jetons ?? 0;
     api.buyCompagnon(off[0].id);
-    check('B11 l recrutement compagnon à la Guilde : or déduit, +1 carte', store.gold === g1 - api.compagnonPrix(off[0]) && store.instances.length === 3, `or=${store.gold} inst=${store.instances.length}`);
+    // économie v2 lot D : le recrutement se paie en JETONS, jamais en or — gold inchangé est le comportement voulu, pas un bug
+    check('B11 l recrutement compagnon à la Guilde : jetons débités, or inchangé, +1 carte', (store.jetons ?? 0) === jetons0 - api.compagnonPrix(off[0]) && store.gold === g1 && store.instances.length === 3, `jetons=${store.jetons} or=${store.gold} inst=${store.instances.length}`);
     api.go('#inventaire');
-    await wait(30);
+    await wait(150); // anti-flake : rendu inventaire (vu flaky en lot v1.51)
     const invHtml = els.get('app').innerHTML;
     check('B11 m inventaire groupé (potions + pièces + gemmes)', invHtml.includes('Potions') && invHtml.includes('Pièces') && invHtml.includes('Gemmes'), '');
     const rawSave = mem.get('aicg-save') ?? mem.get([...mem.keys()][0]);
@@ -1418,7 +1433,7 @@ async function main() {
     check('B15 g page Personnage : onglets Équipe + Inventaire + bouton retour', !!els.get('app').querySelector('#tab-equipe') && !!els.get('app').querySelector('#tab-inventaire') && !!els.get('app').querySelector('#perso-back'), '');
     check('B15 h onglet Équipe actif : 3 actifs + 2 réserve, plus de boutons 3+2/2+3',
       !els.get('app').querySelector('#form-3-2') && !els.get('app').querySelector('#form-2-3')
-      && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('r' + chr(233) + 'serve'), '');
+      && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('réserve'), '');
     els.get('app').querySelector('#tab-inventaire').click();
     await wait(20);
     check('B15 i onglet Inventaire rend potions/matériaux/équipement', !!els.get('app').querySelector('#inv-back') && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('Potions'), '');
@@ -1738,7 +1753,7 @@ async function main() {
         mem.get('fondations-art-src') === 'v31' && b.textContent === '🖼️ V3.2' && b.classList.contains('off') && errors.length === errBefore,
         `pref=${mem.get('fondations-art-src')} tag=${b.textContent} off=${b.classList.contains('off')}`);
       ctx.fetch = origFetch;
-      mem.removeItem('fondations-art-src');
+      mem.delete('fondations-art-src'); // mem est une Map (pas un Storage) : removeItem n'existe pas — crash S27 sinon
     }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);

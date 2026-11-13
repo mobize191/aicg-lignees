@@ -217,7 +217,7 @@ function applySpecialEvo(inst, entry, ctx = {}) {
   if (entry.type === 'regression') {
     if (ctx.items && entry.condition?.kind === 'item') ctx.items[entry.condition.id] -= (entry.condition.n ?? 1);
     const to = getCard(entry.to) ?? getMonster(entry.to);
-    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, asc: (inst.asc ?? 0) * (1 + M.REG_STATS_BONUS), acc: [...(inst.acc ?? [])] };
+    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, acc: [...(inst.acc ?? [])] };
     return { ok: true, spawned, type: 'regression' };
   }
   if (entry.type === 'fusion') {

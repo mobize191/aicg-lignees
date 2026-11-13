@@ -265,3 +265,24 @@ test('reste code lot 1 : unknownSpellsOf ne cumule que les sorts inconnus de la 
   const kept2 = E.unknownSpellsOf([{ sort: 'colonne-de-feu', cran: 'I' }], newFormSpells, acc);
   assert.equal(kept2.length, 1, 'un sort inconnu de la nouvelle forme est conservé une fois');
 });
+
+test('v1.51 lot 1 : migration v28 -> v29 retire l\u2019ascendance des instances (ignor\u00e9e, non perdue sinon)', () => {
+  const E = loadEngine();
+  const s = {
+    version: 28,
+    instances: [
+      { iid: 1, id: 'q6', lvl: 12, xp: 0, asc: 2.5, acc: [] },
+      { iid: 2, id: 'n1', lvl: 3, xp: 0, acc: [] },
+    ],
+    gold: 7,
+  };
+  const out = E.migrate(structuredClone(s));
+  assert.equal(out.version, 29);
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
+  assert.equal('asc' in out.instances[0], false, 'asc supprimé de l\u2019instance');
+  assert.equal('asc' in out.instances[1], false);
+  assert.equal(out.instances[0].lvl, 12, 'le reste de l\u2019instance est intact');
+  assert.equal(out.gold, 7);
+  const again = E.migrate(structuredClone(out));
+  assert.equal(again.version, 29, 'idempotent');
+});

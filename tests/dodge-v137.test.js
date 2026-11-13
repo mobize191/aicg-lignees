@@ -55,7 +55,9 @@ test('v1.37 lot 5 (c) : la source UI affiche le feedback esquive (floatText + jo
   assert.ok(/logline dodge/.test(src) && /esquive/.test(src), 'ligne de journal à l\u2019esquive');
   assert.ok(/dodge-pose/.test(src), 'pose d\u2019esquive du pion');
   assert.ok(/frappe de \$\{u\.classe\} (?:\\u00e0|à) \$\{strikePct\} %/.test(src), 'fenêtre d\u2019action : dégâts effectifs + % de frappe de classe');
-  assert.ok(/frappe de \$\{card\.classe\} (?:\\u00e0|à) \$\{Math\.round\(\(CLASSE_MODS\[card\.classe\]\?\.strike/.test(src), 'fiche carte : % de frappe de la classe');
+  // correctifs v1.51 lot 2 : la fiche est unifiée (ficheCoreHtml) — le % de frappe de classe y est
+  // toujours affiché, via cm = CLASSE_MODS[card.classe] puis « frappe de ${card.classe} à ${Math.round((cm.strike ?? 1) * 100)} % »
+  assert.ok(/const cm = CLASSE_MODS\[card\?\.classe\]/.test(src) && /frappe de \$\{card\.classe\} .*cm\.strike/.test(src), 'fiche unifiée : % de frappe de la classe (ficheCoreHtml)');
   const shell = readFileSync('src/shell.html', 'utf8');
   assert.ok(/\.float\.dodge/.test(shell) && /@keyframes dodgePose/.test(shell), 'CSS du feedback esquive présent dans le dist');
 });

@@ -355,10 +355,10 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 28,
+ "SAVE_VERSION": 29,
  "SAVE_KEY": "fondations-cards-v1",
  "SAVE_SLOTS": 4,
- "CURRENT_VERSION": 28,
+ "CURRENT_VERSION": 29,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",

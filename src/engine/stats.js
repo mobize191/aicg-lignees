@@ -84,10 +84,9 @@ function cardPower(card, lvl) {
   return (st.atk * M.POWER_ATK_WEIGHT + st.hp * M.POWER_HP_WEIGHT) * (RARITY_POWER[card.rarity] ?? 1) * (1 + M.POWER_SPELL_STEP * Math.max(0, spellsN - 1));
 }
 
-function statsAt(card, lvl, asc = 0) {
+function statsAt(card, lvl) {
   const m = 1 + LEVEL_BONUS * ((lvl ?? 1) - 1);
-  const a = 1 + (asc ?? 0) / 100;
-  return { atk: Math.max(1, Math.round(card.atk * m * a)), hp: Math.max(1, Math.round(card.hp * m * a)) };
+  return { atk: Math.max(1, Math.round(card.atk * m)), hp: Math.max(1, Math.round(card.hp * m)) };
 }
 
 function monstersOf(dungeonId) {

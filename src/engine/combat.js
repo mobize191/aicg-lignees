@@ -412,6 +412,38 @@ function actTeamStriker(u, i, ctx, step) {
       }
     }
   }
+  // correctifs v1.51 lot 1 : en Auto, la SIGNATURE (cat 'unique') alliée (soin/boost/bouclier) de la
+  // ligne d'attaque se résout par son rôle (soigne le plus blessé, buff/bouclier l'avant) ;
+  // T0.2 inchangé : les autres sorts (commun/race/classe/lignée) restent des coups en Auto
+  if (spell && spell.cat === 'unique') {
+    const sd = spellSideOf(spell);
+    const role = spell.role ?? null;
+    if ((sd === 'self' || sd === 'ally' || sd === 'team') && (role === 'soin' || role === 'boost' || role === 'bouclier')) {
+      const alliesAlive = ctx.teamAll().filter((a) => a.alive);
+      let t = u;
+      if (sd === 'self') t = u;
+      else if (role === 'soin') t = [...alliesAlive].sort((a, b) => a.hp - b.hp)[0] ?? u;
+      else t = alliesAlive.filter((a) => a.rang === 'avant')[0] ?? alliesAlive[0] ?? u;
+      const big = !!spell.big || spell.cost >= 5;
+      if (role === 'soin') {
+        const amount = Math.min(Math.max(1, Math.round(statOf(u) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));
+        ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big, fx: 'heal', mana: u.mana });
+        if (amount > 0) { t.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' }); }
+      } else if (role === 'bouclier') {
+        const amount = Math.min(Math.round(statOf(u) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big, fx: 'atk', mana: u.mana });
+        t.shield += amount;
+        ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+      } else {
+        const value = Math.max(0, (spell.mult ?? 1) - 1);
+        ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big, fx: 'atk', mana: u.mana });
+        t.atkBuff = (t.atkBuff ?? 0) + value;
+        ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+      }
+      ctx.firstAttack = false;
+      return false;
+    }
+  }
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
   }
@@ -467,7 +499,7 @@ function actTeamStriker(u, i, ctx, step) {
   const idx = !ctx.frontEmpty && step && step.targetIdx !== null && step.targetIdx !== undefined ? step.targetIdx : null;
   const foeLineOf = (t) => (t && t.rang === 'arriere' ? enemies.arriere : enemies.avant);
   // refonte IA lot 1 : en Auto sans désignation, même utilité de ciblage que l'IA ennemie (avec hystérésis)
-  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : pickTargetByUtility(u, foes, dmg, ctx.state, 'team');
+  const target = idx !== null && [...enemies.avant, ...enemies.arriere][idx]?.alive ? [...enemies.avant, ...enemies.arriere][idx] : pickTargetByUtility(u, foes, dmg, ctx.state, 'team', atkEl);
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
@@ -557,11 +589,11 @@ function actTeamSupport(s, ctx, step) {
 
 // refonte IA lot 1 : score d'utilité de ciblage partagé IA ennemie / Auto joueur
 // (kill possible, opposition d'élément, menace, ligne arrière protégée, fragilité) — poids en data
-function targetUtilityScore(attacker, t, dmgBase, st, side) {
-  const dmg = Math.max(1, Math.round(dmgBase * elementMult(attacker.element, t.element)));
+function targetUtilityScore(attacker, t, dmgBase, st, side, atkEl = attacker.element) {
+  const dmg = Math.max(1, Math.round(dmgBase * elementMult(atkEl, t.element)));
   let s = 0;
   if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
-  if (elementTag(attacker.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
+  if (elementTag(atkEl, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
   s += M.TARGET_THREAT_WEIGHT * (t.atk ?? 0);
   if (st && backProtected(st, side, t, false)) s -= M.TARGET_BACK_PENALTY;
   return s - t.hp;
@@ -569,17 +601,17 @@ function targetUtilityScore(attacker, t, dmgBase, st, side) {
 
 // sélection argmax + hystérésis anti flip-flop : la cible en cours est conservée si elle
 // reste vivante et dans la marge TARGET_HYSTERESIS du meilleur score (skill utility-ai : inertie)
-function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
+function pickTargetByUtility(attacker, targets, dmgBase, st, side, atkEl = attacker.element) {
   if (!targets.length) return null;
   const ranked = targets
-    .map((t) => ({ item: t, score: targetUtilityScore(attacker, t, dmgBase, st, side) }))
+    .map((t) => ({ item: t, score: targetUtilityScore(attacker, t, dmgBase, st, side, atkEl) }))
     .sort((a, b) => b.score - a.score);
   let best = ranked[0].item;
   const bestScore = ranked[0].score;
   if (st) {
     const last = st.lastTarget ? st.lastTarget[side] : null;
     const prev = last ? targets.find((t) => t.uid === last) : null;
-    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side) >= bestScore - M.TARGET_HYSTERESIS) {
+    if (prev && targetUtilityScore(attacker, prev, dmgBase, st, side, atkEl) >= bestScore - M.TARGET_HYSTERESIS) {
       best = prev;
     }
     // lot 3 : profil de difficulté — une part des choix est volontairement sous-optimale
@@ -594,13 +626,13 @@ function pickTargetByUtility(attacker, targets, dmgBase, st, side) {
   return best;
 }
 
-function enemyPickTarget(e, targets, dmgBase, st = null) {
-  if (st) return pickTargetByUtility(e, targets, dmgBase, st, 'enemies');
+function enemyPickTarget(e, targets, dmgBase, st = null, atkEl = e.element) {
+  if (st) return pickTargetByUtility(e, targets, dmgBase, st, 'enemies', atkEl);
   const score = (t) => {
-    const dmg = Math.max(1, Math.round(dmgBase * elementMult(e.element, t.element)));
+    const dmg = Math.max(1, Math.round(dmgBase * elementMult(atkEl, t.element)));
     let s = 0;
     if (t.hp <= dmg) s += M.TARGET_KILL_BONUS;
-    if (elementTag(e.element, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
+    if (elementTag(atkEl, t.element) === 'fort') s += M.ELEMENT_ADVANTAGE_BONUS;
     return s - t.hp;
   };
   return targets.reduce((a, b) => (score(b) > score(a) ? b : a), targets[0]);
@@ -617,6 +649,35 @@ function actEnemyStriker(e, ctx) {
   const targets = ctx.teamAll(); // Option A : l'arrière est ciblable tant que des cibles vivent
   if (!targets.length) return false;
   const spell = pickSpell(e, { state: ctx.state, allies: enemies, foes: targets, side: 'enemies' });
+  // correctifs v1.51 lot 1 : symétrie — la SIGNATURE (cat 'unique') alliée de la ligne d'attaque
+  // ennemie se résout par son rôle (soigne le plus blessé de son camp, buff/bouclier l'avant)
+  if (spell && spell.cat === 'unique') {
+    const eSd = spellSideOf(spell);
+    const eRole = spell.role ?? null;
+    if ((eSd === 'self' || eSd === 'ally' || eSd === 'team') && (eRole === 'soin' || eRole === 'boost' || eRole === 'bouclier')) {
+      const eAllies = ctx.enemyAll().filter((x) => x.alive);
+      let t = e;
+      if (eRole === 'soin') t = [...eAllies].sort((a, b) => a.hp - b.hp)[0] ?? e;
+      else t = eAllies.filter((x) => x.rang === 'avant')[0] ?? eAllies[0] ?? e;
+      const big = !!spell.big || spell.cost >= 5;
+      if (eRole === 'soin') {
+        const amount = Math.min(Math.max(1, Math.round(statOf(e) * (spell.mult ?? 1))), Math.max(0, t.maxHp - t.hp));
+        ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big, fx: 'heal', mana: e.mana });
+        if (amount > 0) { t.hp += amount; ctx.events.push({ type: 'heal', side: 'enemies', sourceId: e.uid, targetId: t.uid, amount, kind: 'special' }); }
+      } else if (eRole === 'bouclier') {
+        const amount = Math.min(Math.round(statOf(e) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big, fx: 'atk', mana: e.mana });
+        t.shield += amount;
+        ctx.events.push({ type: 'shield', side: 'enemies', sourceId: e.uid, targetId: t.uid, amount, kind: 'special' });
+      } else {
+        const value = Math.max(0, (spell.mult ?? 1) - 1);
+        ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big, fx: 'atk', mana: e.mana });
+        t.atkBuff = (t.atkBuff ?? 0) + value;
+        ctx.events.push({ type: 'buff', side: 'enemies', sourceId: e.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+      }
+      return false;
+    }
+  }
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big: !!spell.big, fx: 'atk', mana: e.mana });
     ctx.state.lastEnemySpell = { name: spell.name, mult: spell.mult, cost: spell.cost, big: !!spell.big };
@@ -633,7 +694,7 @@ function actEnemyStriker(e, ctx) {
   const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
   const eAtkEl = atkElementOf(e, spell); // Lot B : idem côté ennemis
-  const target = enemyPickTarget(e, targets, dmgBase, ctx.state);
+  const target = enemyPickTarget(e, targets, dmgBase, ctx.state, eAtkEl);
   const gRed = Math.min(DMG_REDUCTION_MAX, mods.dmgReduction || 0);
   const tRed = target.status && target.status.dmgRed ? target.status.dmgRed.pct : 0;
   const redFactor = gRed >= DMG_REDUCTION_MAX ? 1
