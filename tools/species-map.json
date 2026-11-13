@@ -1,14 +1,13 @@
 {
  "_meta": {
-  "version": "v3.4",
+  "version": 3,
   "date": "2026-11-12",
   "source": "charte-graphique-v2.md §3 et §12 + arbitrages 10/11/2026",
   "usage": "tools/build-prompts.mjs DOIT échouer explicitement pour toute carte sans entrée de ce fichier. L'espèce vient des data, jamais du nom. Le genre est verrouillé dans l'ADN (1girl/1boy). Règle `beast: true` : le genre est enregistré pour la fiche/registre mais JAMAIS injecté dans le prompt (une bête n'a pas de 1girl/1boy), et les antiTags de l'espèce sont obligatoires.",
   "ageRule": "Toute nommée évolutive a un âge apparent par palier de rareté (graine = jeune → chaque évolution plus mature/grande) : champ age.",
   "humanMaturityRule": "RÈGLE GÉNÉRALE (Marc-Olivier, 10/11 soir) : pour TOUTE carte de race humaine (nommée OU générique), plus la rareté est haute, plus le personnage est mature : build-prompts.mjs dérive l'âge apparent de la rareté via humanMaturityByRarity. Le champ age d'une entrée nommée reste prioritaire (ex. Kenji adulte aguerri à tous les paliers, graines = jeunes).",
   "r11": "Verrous R11-R14 (12/11) : descriptions d'espèce concrètes canon MTG/LotR ; léviathan = canon Atlantide Disney (carapace de crustacé, yeux rouges, gueule à tentacules) ; gobelin = petite créature verte noueuse à grandes oreilles. Nouvelles espèces goblin/gorgon ; familles seuil/miroir/pont ; nommées c1-c14, p5, p6, w6, w18, w19-w21.",
-  "updated": "2026-11-15",
-  "note": "Extension gel v18 : 29 nouvelles espèces (camp démon 18, anges 9, gorgon réécrite, faerie, paladin/knight/kiri, hydra, merSovereign)"
+  "note": "v3 (gel v1) : 37 espèces du gel (démons chair/puissance/trappes, dévoyés, chaîne céleste, gorgones devenue humanoïde canon Medusa, fées, bosses Marées bêtes, imp) ; gorgon retirée de beastSpecies ; dryad canon MTG ; solarDeity + ailes."
  },
  "humanMaturityByRarity": {
   "C": "adolescent, e (14-17 ans apparents)",
@@ -72,9 +71,7 @@
   ],
   "dryad": [
    "dryad",
-   "leaf hair",
-   "bark skin accents",
-   "wooden antlers"
+   "a graceful tree spirit woman, smooth bark-like skin, living leaf and vine hair, moss and flowers"
   ],
   "fireflySpirit": [
    "firefly spirit, a young woman with glowing translucent wings, light motes, leaf and flower crown, fair skin"
@@ -105,7 +102,8 @@
    "solar deity",
    "radiant halo",
    "sun crown",
-   "divine being"
+   "divine being",
+   "large radiant feathered wings"
   ],
   "oracle": [
    "oracle",
@@ -202,7 +200,7 @@
    "a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions"
   ],
   "gorgon": [
-   "a gorgon like Medusa, a pale beautiful woman with living hissing snakes for hair, green scaled skin, serpentine eyes, a petrifying gaze, elegant menace, humanoid female"
+   "a gorgon like Medusa, a pale beautiful woman with living hissing snakes for hair, green scaled skin, serpentine eyes, a petrifying gaze"
   ],
   "imp": [
    "a small impish humanoid demon, ash-grey skin, small curved horns, stubby bat wings, long thin tail, mischievous toothy grin, tattered loincloth"
@@ -214,104 +212,97 @@
    "a beautiful winged succubus, a shapely female demon, small bat wings, small horns, thin barbed tail, elegant dark gown"
   ],
   "succubusGreater": [
-   "a regal demoness, a beautiful winged succubus queen, crown of dark flame, ornate black-gold gown, larger bat wings, small horns, barbed tail"
+   "a regal winged demoness, crown of dark flame, ornate black-gold gown, larger bat wings, small horns, thin barbed tail"
   ],
   "ladyOfDesire": [
    "a towering regal demon noblewoman, obsidian skin, golden ornaments, commanding presence, ornate throne-room attire, small horns"
   ],
   "asmodia": [
-   "a majestic infernal queen, tall statuesque humanoid devil, black-gold regal robes, crown of black fire, elegant curved horns, commanding smile"
+   "a majestic infernal queen, a tall statuesque humanoid devil, black-gold regal robes, crown of black fire, elegant curved horns, commanding smile"
   ],
   "viceMaw": [
    "a gaunt bestial demon, stretched grey hide, multiple thin arms, a gaping fanged maw"
   ],
   "viceMawGreater": [
-   "a hulking bestial demon, distended gaping maw, clawed limbs, emaciated dread presence, stretched grey hide"
+   "a hulking gaunt bestial demon, distended fanged maw, clawed limbs, emaciated dread presence"
   ],
   "abyssMaw": [
    "a colossal demonic maw-monster, ringed with fangs, clawed limbs, dark void halo"
   ],
   "famine": [
-   "an emaciated regal demon, hollow cheeks, towering gaunt frame, tattered royal robes, an eternally empty chalice, devouring shadow aura"
+   "a colossal emaciated maw-demon, a gaunt towering frame of stretched grey hide, a gaping fanged maw devouring all light, tattered regal shreds, devouring shadow aura"
   ],
   "demonPit": [
-   "a stocky brutish humanoid demon, thick horns, heavy jaw, iron chains, scarred leather harness"
+   "a stocky brutish humanoid demon, thick horns, heavy jaw, iron chains, leather harness"
   ],
   "demonGreater": [
    "a tall armored humanoid demon, black plate armor, blazing eyes, horns"
   ],
   "demonLord": [
-   "an armored demon commander, horned helm, tattered banner, commanding pose, humanoid"
+   "an armored demon commander, horned helm, tattered banner, commanding pose"
   ],
   "demonPrince": [
-   "a regal horned demon prince, ornate dark armor, infernal crown, commanding presence, humanoid"
+   "a regal horned demon warlord, ornate dark armor, infernal crown, commanding presence"
   ],
   "belzebuth": [
-   "a tall dark-skinned infernal king, compound eyes like a fly, black regal robes with gold, a halo of hovering flies, lordly pose, crowned, humanoid"
+   "a tall dark-skinned infernal king, compound eyes like a fly, black regal robes with gold, a halo of hovering flies, lordly pose, crowned"
   ],
   "plagueDemon": [
-   "a lean demon shrouded in a swarm of flies, insectile wings, sickly green miasma, humanoid"
+   "a lean humanoid demon shrouded in a swarm of flies, insectile wings, sickly green miasma"
   ],
   "plagueDemonGreater": [
-   "a chitin-plated demon, insectile limbs, fly-swarm cloak, plague censer, humanoid"
+   "a chitin-plated humanoid demon, insectile limbs, fly-swarm cloak, plague censer"
   ],
   "plagueBearer": [
-   "a hooded towering demon carrying a smoking plague censer, ornate rusted armor, green fog, humanoid"
+   "a hooded towering humanoid demon carrying a smoking plague censer, ornate rusted armor, green fog"
   ],
   "peste": [
-   "a regal hooded plague queen, a demon mother of plagues, ornate funeral robes, sickly green flames in hand, swarming halo, humanoid female"
+   "a regal hooded plague queen, a demon mother of plagues, ornate funeral robes, sickly green flames in hand, swarming halo"
   ],
   "seraphYoung": [
-   "a child-like radiant angel, small white wings, simple white-gold robes, soft halo, humanoid"
+   "a child-like radiant angel, small white feathered wings, simple white-gold robes, soft halo"
   ],
   "seraphBearer": [
-   "a young angel warrior bearing golden light, two large white feathered wings, white-gold armor, radiant halo, humanoid"
+   "a young angel warrior bearing golden light, two large white feathered wings, white-gold armor, radiant halo"
   ],
   "angelLight": [
-   "an armored angel of light, gleaming white-gold plate, large white feathered wings, blazing halo, humanoid"
+   "an armored angel of light, gleaming white-gold plate, large white feathered wings, blazing halo"
   ],
   "archangel": [
-   "a majestic armored archangel, towering, radiant halo, large white-gold feathered wings, flaming sword, humanoid"
+   "a majestic armored archangel, towering, radiant halo, large white-gold feathered wings, flaming sword"
   ],
   "seraphUltimate": [
-   "a supreme radiant archangel, SIX large white-gold feathered wings, blazing crown of light, solar halo, humanoid"
+   "a supreme radiant archangel, six large white-gold feathered wings, blazing crown of light, solar halo, majestic white-gold vestments"
   ],
   "fallenAngelArdent": [
-   "a fierce angel of burning pride, white-gold armor cracked with veins of black fire, intense gaze, large white wings, humanoid"
+   "a fierce angel of burning pride, white-gold armor cracked with veins of black fire, large feathered wings, intense gaze"
   ],
   "fallenAngelZenith": [
-   "an angel of the zenith, dark-gold armor, solar coronation, haughty pose, large radiant wings, humanoid"
+   "a fallen angel of haughty pride, dark-gold armor, solar coronation, haughty pose, large feathered wings"
   ],
   "fallenStar": [
-   "a towering solar warrior, large radiant feathered wings, dark-gold armor, blazing spear, humanoid"
+   "a towering solar warrior, large radiant feathered wings, dark-gold armor, blazing spear"
   ],
   "darkSun": [
-   "a supreme solar king turned to pride, six radiant wings, black-edged golden corona, majestic and menacing, humanoid"
+   "a supreme solar king turned to pride, six radiant feathered wings, black-edged golden corona, majestic and menacing"
+  ],
+  "gorgonSerpen": [
+   "a serpentine gorgon noble, a pale woman with living royal snakes for hair, a serpent lower body like a naga, green scaled skin, regal bearing"
   ],
   "faerie": [
    "a tiny winged faerie, a diminutive humanoid with iridescent insect wings, delicate features, playful trickster grin, wild moss-and-petal attire"
   ],
-  "paladin": [
-   "human",
-   "paladin",
-   "sacred white-gold armor",
-   "dawn tabard",
-   "solar shield"
+  "faerieQueen": [
+   "a regal tiny faerie queen, gossamer gown, crown of dewdrops, iridescent insect wings"
   ],
-  "knight": [
-   "human",
-   "knight",
-   "grey-gold rampart armor",
-   "shield"
-  ],
-  "kiri": [
-   "human female, long straight black hair, full black armor, sword at rest"
+  "thornQueen": [
+   "a thorn faerie queen, crown of hawthorn spikes, briar-rose gown, thorny bramble wings"
   ],
   "hydra": [
-   "a massive multi-headed sea hydra, THREE serpentine heads on long necks, scaled hide, fins, coral crowns, no human traits"
+   "a massive multi-headed sea hydra, three serpentine heads on long necks, scaled hide, fins, coral crowns"
   ],
   "merSovereign": [
-   "a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle, no human traits"
+   "a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle"
   ]
  },
  "antiTags": {
@@ -342,10 +333,13 @@
   ],
   "gorgon": [
    "jellyfish",
-   "cnidarian",
-   "umbrella shaped",
-   "tentacles only",
-   "no human body"
+   "jellyfish tentacles",
+   "medusa fish"
+  ],
+  "faerie": [
+   "giant",
+   "colossal",
+   "human-sized"
   ]
  },
  "families": {
@@ -575,7 +569,8 @@
    "name": "Astre Capiteux",
    "gender": "1boy",
    "species": "solarDeity",
-   "age": "éternel"
+   "age": "éternel",
+   "note": "re-race divine camp ange (suite 31) — re-art v3.4 : + large radiant feathered wings (canon D&D solar)"
   },
   "z30": {
    "name": "Apolline, Prophétesse du Jour",
@@ -874,18 +869,16 @@
   "p5": {
    "name": "Séraphin, Porteur de Lumière",
    "gender": "1boy",
-   "species": "human",
+   "species": "seraphBearer",
    "age": "éternel",
-   "extra": "a divine angelic being with halo and wings",
-   "note": "séraphin (UR seuil)"
+   "note": "palier R (re-palieré depuis UR, suite 33) — re-art v3.4"
   },
   "p6": {
-   "name": "Séraphin, Chérubin Éveillé",
+   "name": "Séraphin, Archange Ultime",
    "gender": "1boy",
-   "species": "human",
+   "species": "seraphUltimate",
    "age": "éternel",
-   "extra": "a divine angelic being with halo and wings",
-   "note": "chérubin (L seuil) — même identité que p5 (hypothèse : séraphin masculin, voir rapport)"
+   "note": "RENOMMÉE suite 33 (ex Chérubin Éveillé ; « Archange Éveillé » écarté) — re-art v3.4, canon séraphin/solar six ailes"
   },
   "w6": {
    "name": "Kairos, Juge Éternel",
@@ -924,6 +917,108 @@
    "beast": true,
    "age": null,
    "note": "bête à chevelure de serpents (R11 morphologie pure)"
+  },
+  "n14": {
+   "name": "Diablotin",
+   "gender": "1boy",
+   "species": "imp",
+   "age": null,
+   "note": "commune divine du camp démon (suite 30) — re-art v3.4 (ex beastDark) : un diable humanoïde, PAS une bête"
+  },
+  "p1": {
+   "name": "Jeune Séraphin",
+   "gender": "1boy",
+   "species": "seraphYoung",
+   "age": "jeune (graine)",
+   "note": "commune divine du camp ange — re-art v3.4 : canon ange enfant D&D"
+  },
+  "d23": {
+   "name": "Asmodia, Reine du Désir",
+   "gender": "1girl",
+   "species": "asmodia",
+   "age": "mûre, majestueuse",
+   "note": "L de la chair — ref d22 (Dame du Désir)",
+   "ipa": "d22"
+  },
+  "d28": {
+   "name": "Belzébuth, Roi des Démons",
+   "gender": "1boy",
+   "species": "belzebuth",
+   "age": "éternel",
+   "note": "L de la puissance, roi seul au sommet (suite 31/33) — ref d27 (Prince Démon)",
+   "ipa": "d27"
+  },
+  "d32": {
+   "name": "Famine",
+   "gender": null,
+   "species": "famine",
+   "beast": true,
+   "age": null,
+   "note": "L bestiale de la trappe du Gouffre (suite 26/33) — PAS de figure humanoïde ; nouvelle identité sans référence entrante"
+  },
+  "d36": {
+   "name": "Peste, Mère des Fléaux",
+   "gender": "1girl",
+   "species": "peste",
+   "age": "éternelle",
+   "note": "L de la trappe du Fléau — nouvelle identité sans référence entrante (d35 Porte-Peste ≠ Peste)"
+  },
+  "d40": {
+   "name": "Astre Rayonnant",
+   "gender": "1boy",
+   "species": "darkSun",
+   "age": "éternel",
+   "note": "L des anges dévoyés, signature « Lumière Noire » — ref d39 (Astre Vaillant)",
+   "ipa": "d39"
+  },
+  "k37": {
+   "name": "Méduse, Reine des Écueils",
+   "gender": "1girl",
+   "species": "gorgon",
+   "age": "mûre, majestueuse",
+   "note": "L du regard — ref k36 (Gorgonne Immaculée)",
+   "ipa": "k36"
+  },
+  "k40": {
+   "name": "Euryale, Nourrice des Serpents",
+   "gender": "1girl",
+   "species": "gorgonSerpen",
+   "age": "mûre, majestueuse",
+   "note": "L des serpents, canon Theros — ref k39 (Grande Serpentine)",
+   "ipa": "k39"
+  },
+  "g36": {
+   "name": "Mab, Souveraine des Jeux",
+   "gender": "1girl",
+   "species": "faerieQueen",
+   "age": "mûre, majestueuse",
+   "note": "L des jeux — ref g35 (Souveraine des Jeux)",
+   "ipa": "g35"
+  },
+  "g39": {
+   "name": "Aubépine, Reine des Ronces",
+   "gender": "1girl",
+   "species": "thornQueen",
+   "age": "mûre, majestueuse",
+   "note": "L des ronces — ref g38 (Reine des Ronces)",
+   "ipa": "g38"
+  },
+  "a53": {
+   "name": "Isaure, Égide de l'Aube",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "note": "L du paladin — ref a52 (Paladine Sacrée)",
+   "ipa": "a52"
+  },
+  "s18": {
+   "name": "Kiri l'Invincible",
+   "gender": "1girl",
+   "species": "human",
+   "age": "adulte aguerri",
+   "extra": "long straight black hair, a full black plate armor, a sheathed sword at rest, unhelmeted",
+   "note": "L du chevalier (NOMMÉE suite 24) — ref s17 (Gardienne du Rempart) ; art alternatif « robe blanche immaculée » = sa version Exception",
+   "ipa": "s17"
   }
  },
  "genericRules": {
@@ -968,13 +1063,13 @@
   "phoenixFirebird",
   "fireLord",
   "goblin",
-  "gorgon",
   "fungusQueen",
-  "hydra",
-  "merSovereign",
   "viceMaw",
   "viceMawGreater",
-  "abyssMaw"
+  "abyssMaw",
+  "famine",
+  "hydra",
+  "merSovereign"
  ],
  "loraBySpecies": {
   "goblin": {
@@ -1028,6 +1123,16 @@
   "beastDark": {
    "file": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
    "trigger": "CWM-WolfIL"
+  },
+  "hydra": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "merSovereign": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
   }
  }
 }
