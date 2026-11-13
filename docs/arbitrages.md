@@ -1,5 +1,9 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 : VALIDATION IHM v1.51 (locale, Playwright) — 39/39 PASS — captures `docs/captures-validation/v1.51/`
+
+- Protocole `docs/validation-ihm.md` versionné **v1.51**, servi en local sur le port 4173 (jamais 3030), deux viewports **1440×900 et 390×844** : 39/39 PASS — console propre (0 erreur), pas de scroll horizontal partout, départ/hub OK, fiche unifiée menu ET combat (`.modal-card`, plus de `.modal-hero.full`, statline ATQ/PV/AGI/INT + mana en combat), badge élément avec glyphe, Boutique sans marchand à l'or (équipement à l'or intact, renvoi Guilde jetons 🎫), Guilde 3 offres en jetons sans « or », combat lancé avec cartes agrandies (128px desktop / ≥110px mobile), captures S1/S2/S3/S3b/S6/S8/S10/S11 × 2 viewports. Smoke 404 checks TOUT PASSE, 266 tests verts. **Reste : validation terrain par Marc-Olivier (téléphone ET PC) selon le protocole.**
+
 ## 2026-11-13 : LOT 3 LIVRÉ — économie v1.51 : plus d'achat de cartes à l'or (conformité tranchage Lot D du 12/11) — prompt `docs/prompt-correctifs-v1.51.md`
 
 - **Boutique** : le rayon « Marchand de créatures » (3 offres/jour à l'or, prix C 200 → UR 10 000 or) est retiré ; la Boutique ne garde que potions, éclats bruts et **équipement à l'or (inchangé)** + atelier. `buyMonster` refuse désormais avec redirection « Guilde en jetons 🎫 ». Textes mis à jour (Boutique, collection vide, donjons, fiche mystère, Forge) ; la Guilde affiche « C 5 → UR 2 000 jetons 🎫 » (plus « or »). Recrutement de compagnons UNIQUEMENT à la Guilde en jetons — inchangé. Changelog in-game + CHANGELOG.md à jour.

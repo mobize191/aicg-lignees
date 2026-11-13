@@ -904,8 +904,9 @@ body.in-combat #controls { margin: 2px 0; padding: 5px; gap: 4px; }
 body.in-combat #controls .btn.ctrl { padding: 4px 8px; font-size: .7rem; }
 body.in-combat .enemy-zone, body.in-combat .team-zone { flex: 0 0 auto; }
 body.in-combat .row { margin: 2px 0; gap: 6px; min-height: 0; }
-body.in-combat .unit { width: clamp(96px, 22vw, 128px); }
-body.in-combat .unit.boss { width: clamp(122px, 28vw, 162px); }
+/* v1.51 lot 2 : cartes de combat plus grandes aussi en mobile */
+body.in-combat .unit { width: clamp(110px, 28vw, 150px); }
+body.in-combat .unit.boss { width: clamp(140px, 36vw, 180px); }
 body.in-combat .card.battle { aspect-ratio: 5 / 6; }
 body.in-combat .card.battle .name { font-size: .62rem; line-height: 1.05; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 body.in-combat .card.battle .cardbody { padding: 2px 4px 0; }
