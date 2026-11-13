@@ -132,9 +132,12 @@ test('lot 3 : un sort tactique à fiche "zone" frappe 3 cibles contiguës autour
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 5);
   const st = E.initCombat(team, foes, 777, {});
   const u = st.team.avant[0];
-  u.spells = [{ name: 'Lame d\u2019\u00c9cume', cost: 3, mult: 1.5 }];
+  u.spells = [{ name: 'Lame d\u2019\u00c9cume', cost: 5, mult: 2.2, cran: 'III' }]; // cran III = largeur 3 du porteur
   u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
-  assert.equal(E.largeurOfSpellName('Lame d\u2019\u00c9cume'), 3);
+  // correctifs sorts lot 3 (14/11) : largeur = cran du porteur ; nom seul (sans cran) = monocible 1, jamais le max
+  assert.equal(E.largeurOfSpell({ name: 'Lame d\u2019\u00c9cume', cran: 'III' }), 3);
+  assert.equal(E.largeurOfSpell({ name: 'Lame d\u2019\u00c9cume' }), 1);
+  assert.equal(E.largeurOfSpell({ name: 'Colonne de Feu' }), 1, 'signature sans cran (Colonne de Feu) = monocible');
   const pre = E.beginRound(st);
   st._events = [...pre];
   const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: 'e.a2' });
@@ -151,9 +154,10 @@ test('lot 3 : un sort à fiche "tous" touche toute la ligne sans désignation (A
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees' && m.classe !== 'Assassin').slice(0, 4);
   const st = E.initCombat(team, foes, 778, {});
   const u = st.team.avant[0];
-  u.spells = [{ name: 'Hurlement', cost: 3, mult: 1.5 }]; // cran IV = tous (5)
+  u.spells = [{ name: 'Hurlement', cost: 6, mult: 1.5, cran: 'IV' }]; // cran IV du porteur = tous (5)
   u.mana = 10; u.manaMax = 10; u.manaRegen = 2; u.agi = 999;
-  assert.equal(E.largeurOfSpellName('Hurlement'), 5);
+  assert.equal(E.largeurOfSpell({ name: 'Hurlement', cran: 'IV' }), 5);
+  assert.equal(E.largeurOfSpell({ name: 'Hurlement' }), 1, 'sans cran = monocible (jamais le max)');
   E.beginRound(st);
   const r = E.stepRound(st, { kind: 'spell', idx: 0 }); // aucune cible désignée
   const hits = r.events.filter((e) => (e.type === 'attack' || e.type === 'dodge') && typeof e.targetId === 'string' && e.targetId.startsWith('e.'));

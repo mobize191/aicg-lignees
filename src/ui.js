@@ -4041,19 +4041,23 @@ function spellDefOfName(name) {
   return (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name) ?? null;
 }
 function zoneLabelOf(sp) {
-  const def = spellDefOfName(sp?.name);
-  const cran = def?.crans?.II ?? def?.crans?.I;
-  const l = cran?.largeur;
+  // correctifs sorts lot 3 : la largeur affichée = celle du cran du sort (jamais le max des crans)
+  const l = zoneWidthOf(sp);
   if (l === 2) return 'zone de 2';
   if (l === 3) return 'zone de 3';
   if (l === 5) return 'tous les ennemis';
-  if (l === 'equipe') return "l'équipe";
+  if (l === 4) return "l'équipe";
   return '';
 }
 function zoneWidthOf(sp) {
-  const def = spellDefOfName(sp?.name);
-  const cran = def?.crans?.II ?? def?.crans?.I;
-  const l = Number(cran?.largeur);
+  const name = typeof sp === 'string' ? sp : sp?.name;
+  const def = spellDefOfName(name);
+  if (!def) return 1;
+  const obj = typeof sp === 'string' ? null : sp;
+  let l;
+  if (obj && obj.largeur != null) l = (obj.largeur === 'equipe' || obj.largeur === 'equipe-renforcee') ? 4 : Number(obj.largeur);
+  else if (obj && obj.cran != null) { const c = def.crans?.[obj.cran]; l = (c && !c.vide) ? Number(c.largeur) : 1; }
+  else l = 1; // sort d'école sans cran (signature) : monocible, jamais le max (lot 3)
   return Number.isFinite(l) && l >= 2 ? Math.min(l, 5) : 1;
 }
 

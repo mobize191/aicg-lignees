@@ -96,7 +96,7 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
 function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   const foeSide = side === 'team' ? 'enemies' : 'team';
   const foeLines = st ? (side === 'team' ? st.enemies : st.team) : null;
-  const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
+  const larg = largeurOfSpell(spell); // correctifs sorts lot 3 : largeur du cran du porteur, jamais le max
   const anchorUid = action && action.targetUid != null ? action.targetUid : null;
   const vivantes = foes.filter((f) => f.alive);
   const anchor = anchorUid != null
@@ -467,19 +467,32 @@ function resolveSignature(ownerId) {
   return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
 }
 
-// lot 3 (fiche type) : la largeur max remplie d'un sort d'école, retrouvée par nom
-function largeurOfSpellName(name) {
+// correctifs sorts lot 3 (14/11) : la largeur vient du CRAN DU PORTEUR (sp.largeur, ou sp.cran
+// dans le sort d'école), JAMAIS du max des crans ; une signature sans cran d'école = monocible (1)
+function largeurOfSpell(sp) {
+  if (!sp) return 1;
+  const l0 = sp.largeur;
+  if (l0 != null) return (l0 === 'equipe' || l0 === 'equipe-renforcee') ? 4 : Number(l0) || 1;
+  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === sp.name);
+  if (def) {
+    if (sp.cran != null) {
+      const c = def.crans?.[sp.cran];
+      if (c && !c.vide) { const l = c.largeur; return (l === 'equipe' || l === 'equipe-renforcee') ? 4 : Number(l) || 1; }
+      return 1; // cran vide/inconnu -> monocible
+    }
+    return 1; // sort d'école sans cran (signature) -> monocible
+  }
   const entrees = [...(DATA.grimoire?.entrees ?? []), ...(DATA.grimoire?.communs ?? []), ...(DATA.grimoire?.race ?? [])];
-  const entree = entrees.find((s) => s.nom === name);
+  const entree = entrees.find((s) => s.nom === sp.name);
   if (entree) {
     if (entree.cible === 'zone') return 3;
     if (entree.cible === 'tous' || String(entree.cible).includes('tous')) return 5;
     if (String(entree.cible).includes('quipe')) return 4;
     return 1;
   }
-  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name);
-  if (!def) return 1;
-  const vals = Object.values(def.crans ?? {}).filter((c) => !c.vide).map((c) => c.largeur);
-  if (!vals.length) return 1;
-  return Math.max(...vals.map((l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : Number(l) || 1)));
+  return 1;
+}
+// compat nom seul : un nom sans porteur = pas de cran -> monocible pour les sorts d'école (lot 3)
+function largeurOfSpellName(name) {
+  return largeurOfSpell({ name });
 }

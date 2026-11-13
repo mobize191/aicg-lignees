@@ -550,7 +550,7 @@ function actTeamStriker(u, i, ctx, step) {
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
-    const larg = largeurOfSpellName(spell.name);
+    const larg = largeurOfSpell(spell); // lot 3 correctifs sorts : cran du porteur, jamais le max
     if (larg === 5) hitList = ctx.enemyAll();
     else if (larg === 3 && idx !== null) { const fl = foeLineOf(target); hitList = pickZoneTargets(fl, Math.max(0, fl.findIndex((x) => x.uid === target.uid))); }
   }
