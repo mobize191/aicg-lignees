@@ -340,18 +340,23 @@ async function main() {
       const uid = (st49.team.avant[0] ?? st49.team.arriere[0]).uid;
       api._openUnit(uid);
       await wait(40);
-      const hero = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
-      check('49 a hero plein cadre (.modal-hero.full)', !!hero, '');
-      check('49 a voile dégradé + nom + sous-titre classe·élément·rareté', !!hero && !!hero.querySelector('.hero-veil') && !!hero.querySelector('.hero-name') && (hero.querySelector('.hero-sub')?.textContent ?? '').includes('·'), hero ? (hero.querySelector('.hero-sub')?.textContent ?? '') : '');
-      const hs = hero ? hero.querySelector('.hero-stats') : null;
-      const hsTxt = hs ? hs.textContent : '';
-      check('49 a stats en bas du hero (PV rouge, mana violet, actuel/total)', !!hs && /♥ \d+\/\d+/.test(hsTxt) && /✦ \d+\/\d+/.test(hsTxt), hsTxt.slice(0, 60));
+      // correctifs v1.51 lot 2 : fiche UNIFIÉE (ficheCoreHtml) — même rendu menu équipe et combat :
+      // illustration contenue dans .modal-card (plus de .modal-hero.full tronqué)
+      const fiche49 = doc.querySelector('.modal-card') ?? null;
+      const info49 = doc.querySelector('.modal-info') ?? null;
+      check('49 a fiche unifiée combat : illustration contenue (.modal-card), pas de hero plein cadre', !!fiche49 && doc.querySelectorAll('.modal-hero').length === 0, '');
+      const ps49 = info49 ? [...info49.querySelectorAll('p')].map((e) => e.textContent ?? '') : [];
+      const sub49 = ps49.find((t) => t.includes('·')) ?? '';
+      check('49 a nom + sous-titre classe·élément·rareté', !!info49 && (info49.querySelector('h3')?.textContent ?? '').length > 0 && !!sub49, sub49);
+      const sl49 = info49 ? (info49.querySelector('.statline')?.textContent ?? '') : '';
+      // le stub DOM tronque le textContent des <b> : on vérifie la structure (labels ATQ/PV/AGI/INT/Mana), les valeurs sont testées headless
+      check('49 a statline complète (ATQ, PV, AGI, INT, Mana présents)', ['ATQ', 'PV', 'AGI', 'INT', 'Mana'].every((k) => sl49.includes(k)), sl49.slice(0, 90));
       const close = doc.querySelector('#unit-close');
       if (close) close.click();
       await wait(20);
-      check('49 b la fiche se ferme', ![...doc.querySelectorAll('.modal-hero')].some((el) => el.classList.contains('full')), '');
+      check('49 b la fiche se ferme', !doc.querySelector('.modal-card'), '');
     } else {
-      check('49 a hero plein cadre (.modal-hero.full)', false, 'pas de combat');
+      check('49 a fiche unifiée combat', false, 'pas de combat');
     }
     check('49 z 0 exception après fiche v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
@@ -413,18 +418,18 @@ async function main() {
         if (uid50) {
           api._openUnit(uid50);
           await wait(40);
-          const hero50 = [...doc.querySelectorAll('.modal-hero')].find((el) => el.classList.contains('full')) ?? null;
-          const sub50 = hero50 ? (hero50.querySelector('.hero-sub')?.textContent ?? '') : '';
+          // correctifs v1.51 lot 2 : fiche unifiée — identité (classe·élément·rareté) dans la ligne muted du modal-info
+          const info50 = doc.querySelector('.modal-info') ?? null;
+          const ps50 = info50 ? [...info50.querySelectorAll('p')].map((e) => e.textContent ?? '') : [];
+          const sub50 = ps50.find((t) => t.includes('·')) ?? '';
           check('50 e fiche : Neutre affiché pour une naissance, rareté en toutes lettres',
             sub50.includes('Neutre') && /Naissance|Commune|Peu commune|Rare|Légendaire/.test(sub50), sub50);
           check('50 e fiche : statline corrigée (stats + oppositions, plus de doublon)',
-            [...doc.querySelectorAll('.statline')].length === 2, String([...doc.querySelectorAll('.statline')].length));
-          const fstats50 = [...doc.querySelectorAll('.fstat')].map((el) => el.textContent ?? '');
-          check('50 e fiche : grille identité (classe, élément, rareté), le rôle attaque/support retiré (T0.3)',
-            fstats50.length === 3 && fstats50.some((t) => t.includes('Classe')) && fstats50.some((t) => t.includes('Élément')) && fstats50.some((t) => t.includes('Rareté'))
-            && !fstats50.some((t) => t.includes('Rôle')), fstats50.join(' | '));
+            doc.querySelectorAll('.modal .statline').length >= 2 || doc.querySelectorAll('.statline').length >= 2, String(doc.querySelectorAll('.statline').length));
+          check('50 e fiche : identité classe·élément·rareté dans la fiche unifiée, le rôle attaque/support retiré (T0.3)',
+            sub50.split('·').length >= 3 && !sub50.includes('Rôle'), sub50);
           {
-            const fiche50 = [...doc.querySelectorAll('.modal-hero, .fstats, .spells')].map((el) => el.textContent ?? '').join(' ');
+            const fiche50 = [...doc.querySelectorAll('.modal-info, .spells')].map((el) => el.textContent ?? '').join(' ');
             check('50 e fiche : aucun « Attaquant »/« Soutien » affiché (T0.3)',
               !fiche50.includes('Attaquant') && !fiche50.includes('Soutien') && !fiche50.includes('attaque') && !fiche50.includes('support'), fiche50.slice(0, 90));
             check('50 e dist : le libellé « (rôle opposé) » a disparu des sorts croisés (T0.3)', !html.includes('rôle opposé'), '');
@@ -683,9 +688,11 @@ async function main() {
   const v4 = api.newInst('n1', 5);
   const r4 = api.addCardIid(v4.iid);
   check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
-  check('46 b pions mobiles 26vw (media 600)', html.includes('clamp(104px, 26vw, 136px)') && html.includes('clamp(130px, 32vw, 172px)'), '');
+  // correctifs v1.51 lot 2 (point 9) : cartes de combat plus grandes — clamp(120px, 30vw, 180px) / boss clamp(150px, 38vw, 220px)
+  check('46 b pions combat 30vw (v1.51 lot 2 : cartes plus grandes)', html.includes('clamp(120px, 30vw, 180px)') && html.includes('clamp(150px, 38vw, 220px)'), '');
   check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
-  check('46 b fiche : h\u00e9ro plein cadre en t\u00eate de fiche', html.includes('.modal-hero.full') && html.includes('<div class="modal-hero full">'), '');
+  // correctifs v1.51 lot 2 : plus de hero plein cadre tronqué en tête de fiche combat — la fiche unifiée rend l'illustration contenue (.modal-card)
+  check('46 b fiche : plus de hero plein cadre tronqué en combat (fiche unifiée v1.51)', !html.includes('<div class="modal-hero full">'), '');
   check('46 c pastilles info en t\u00eate, rappels bas supprim\u00e9s', html.includes('.info-chip') && html.includes('openInfoModal') && !html.includes('mode-hint') && !html.includes('tacHintText'), '');
   check('46 c les 3 pastilles cliquables existent', html.includes('data-info="rules"') && html.includes('data-info="mod"') && html.includes('data-info="disc"'), '');
   api.go('#glossaire');
@@ -1021,7 +1028,8 @@ async function main() {
       const dodgePushes = html.match(/type: 'dodge'[^}]*sourceId/g) ?? [];
       check('B25 c les 4 sites moteur poussent un dodge avec sourceId (journal « esquive la frappe de »)', dodgePushes.length === 4, String(dodgePushes.length));
       check('B25 d fenêtre d’action : frappe avec dégâts effectifs + % de classe', /frappe de \$\{u\.classe\}/.test(html) && /strikePct/.test(html), '');
-      check('B25 e fiche carte : % de frappe depuis CLASSE_MODS.strike (data)', /CLASSE_MODS\[card\.classe\]\?\.strike/.test(html), '');
+      // correctifs v1.51 lot 2 : fiche unifiée — cm = CLASSE_MODS[card?.classe] puis « frappe de ${card.classe} à ${Math.round((cm.strike ?? 1) * 100)} % »
+  check('B25 e fiche carte : % de frappe depuis CLASSE_MODS.strike (data, ficheCoreHtml v1.51)', /CLASSE_MODS\[card\?\.classe\]/.test(html) && /cm\.strike/.test(html), '');
       check('B25 f fenêtre de désignation : esquive de la cible rappelée (DODGE_CAP/AGI en data)', /M\.DODGE_CAP/.test(html) && /M\.DODGE_PER_AGI/.test(html), '');
     }
 

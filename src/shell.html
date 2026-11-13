@@ -700,8 +700,9 @@ h2 { font-size: 1.1rem; }
 .float { font-size: .98rem; }
 .float.fx-special { font-size: 1.25rem; }
 .banner { font-size: 1.05rem; }
-body.in-combat .unit { width: clamp(104px, 26vw, 136px); }
-body.in-combat .unit.boss { width: clamp(130px, 32vw, 172px); }
+/* correctifs v1.51 lot 2 : en combat, les cartes remplissent davantage l'écran (3 actifs + réserve) */
+body.in-combat .unit { width: clamp(120px, 30vw, 180px); }
+body.in-combat .unit.boss { width: clamp(150px, 38vw, 220px); }
 }
 @media (prefers-reduced-motion: reduce) {
 * { animation-duration: .01s !important; transition-duration: .01s !important; }

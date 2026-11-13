@@ -2290,6 +2290,40 @@ function openEquipPicker(card, slot) {
   });
 }
 
+// correctifs v1.51 lot 2 : fiche UNIFIÉE — une seule fonction de rendu, utilisée menu équipe ET combat.
+// Base commune : illustration contenue (même rendu des deux côtés), stats complètes PV/ATQ/AGI/INT
+// (+ mana en combat), sorts avec descriptions, élément, classe, rareté, niveau. Le combat ajoute
+// la variante « effets actifs » via opts.extra ; la frappe de classe (splash Mage, wave Occultiste)
+// est explicitée dans la fiche.
+function ficheCoreHtml(card, { level = null, unit = null, inst = null, ownedInfo = '', extra = '' } = {}) {
+  const lvl = level ?? levelOf(card.id);
+  const cm = CLASSE_MODS[card?.classe] ?? {};
+  const st = unit
+    ? { atk: Math.max(0, Math.round(unit.atk * (1 + (unit.atkBuff || 0)))), hp: unit.hp, maxHp: unit.maxHp, agi: unit.agi ?? '—', int: unit.int ?? '—' }
+    : { ...statsAt(card, lvl), agi: inst?.agi ?? '—', int: inst?.int ?? '—' };
+  const art = `<div class="modal-card">${cardFront({ ...card, level: lvl, ...statsAt(card, lvl) }, { extraClass: 'big' + (hasArt(card) ? ' unit-art' : '') })}</div>`;
+  const sub = [card?.classe, card?.element ?? 'Neutre', card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : null].filter(Boolean).join(' · ');
+  const manaPart = unit ? ` &nbsp; ✦ Mana <b>${unit.mana}/${unit.manaMax}</b>` : '';
+  const buffNote = unit && unit.atkBuff ? ` <span class="muted">(+${Math.round(unit.atkBuff * 100)} % ce tour)</span>` : '';
+  const strikeNote = ` <span class="muted">(· frappe de ${card.classe} à ${Math.round((cm.strike ?? 1) * 100)} %)</span>`;
+  const classeNote = cm.splash
+    ? `<p class="statline">Frappe de ${card.classe} : la cible + éclats à ${Math.round((cm.splash / cm.strike) * 100)} % des dégâts sur les autres ennemis.</p>`
+    : (cm.wave ? `<p class="statline">Frappe de ${card.classe} : zone — toute la ligne ennemie est touchée.</p>` : '');
+  const opposition = card?.element && card.element !== 'Neutre'
+    ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>`
+    : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus.</p>`;
+  return `${art}
+    <div class="modal-info">
+      <h3>${card.name} <span class="lvl-chip">Nv ${lvl}</span>${unit?.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
+      <p class="muted">${sub}${ownedInfo}</p>
+      <p class="statline">⚔ ATQ <b>${st.atk}</b>${buffNote}${strikeNote} &nbsp; ♥ PV <b>${st.hp}${st.maxHp != null ? '/' + st.maxHp : ''}</b> &nbsp; ⚡ AGI <b>${st.agi}</b> &nbsp; 🧠 INT <b>${st.int}</b>${manaPart}</p>
+      ${classeNote}
+      ${opposition}
+      ${extra}
+      ${spellList(card)}
+    </div>`;
+}
+
 function renderCardModal(overlay, card, opts, feedbackText = '') {
   const { onAdd = null, onRemove = null, onChange = null, level: forcedLevel = null } = opts;
   const prevModal = overlay.querySelector('.modal');
@@ -2361,34 +2395,30 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
   }
 
   
-  const bigCard = mystery
-    ? `<div class="modal-card">${cardFront({ ...card, id: '?' + card.id, atk: '?', hp: '?' }, { extraClass: 'big mystery' })}</div>`
-    : `<div class="modal-card">${cardFront({ ...card, level, ...statsAt(card, level) }, { extraClass: 'big' + (hasArt(card) ? ' unit-art' : '') })}</div>`;
+  const ownedInfo = owned ? ` · possédé ×${owned}${placed ? ` (${usedInTeam(card.id)} en équipe)` : ''}` : wasSeen ? ' · plus possédée' : ' · pas encore dévoilée';
+  const raceLine = `<p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' — stats de base <b>+30 %</b> · bonus d’équipe : dès 2 divines en équipe, +10 % dégâts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' — la référence du jeu' : ` — stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (règle de la race pour les nouvelles cartes et la régression)`}</p>`;
+  const verrouLine = card.verrou?.actif ? `<p class="statline">🔒 Verrouillée — ${card.verrou.condition ?? 'condition à découvrir'}</p>` : '';
+  const actionsBlock = mystery ? '' : `<div class="modal-actions">
+          ${onAdd ? `<button class="btn ${st.ok ? '' : 'off'}" id="modal-add" ${st.ok ? '' : 'disabled'}>Ajouter à l’équipe${st.ok ? '' : ` — ${st.label}`}</button>` : ''}
+          ${onRemove && placed ? `<button class="btn" id="modal-rem">Retirer de l’équipe</button>` : ''}
+        </div>
+        <p class="modal-feedback" id="modal-feedback"></p>`;
   overlay.innerHTML = `
     <div class="modal">
       <button class="modal-close" aria-label="Fermer">\u2716</button>
-      ${bigCard}
-      <div class="modal-info">
-        <h3>${card.name}${!mystery ? ` <span class="lvl-chip">Nv ${level}</span>` : ''}</h3>
-        <p class="muted">${card.rarity} \u00b7 ${card.classe} \u00b7 ${card.element ?? 'Neutre'}${owned ? ` \u00b7 poss\u00e9d\u00e9e \u00d7${owned}${placed ? ` (${usedInTeam(card.id)} en \u00e9quipe)` : ''}` : wasSeen ? ' \u00b7 plus poss\u00e9d\u00e9e' : ' \u00b7 pas encore d\u00e9voil\u00e9e'}</p>
-        ${mystery
-          ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel, au marchand ou \u00e0 la Guilde pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
-          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level).atk}</b> <span class="muted">(\u00b7 frappe de ${card.classe} \u00e0 ${Math.round((CLASSE_MODS[card.classe]?.strike ?? 1) * 100)} %)</span> &nbsp; \u2665 PV <b>${statsAt(card, level).hp}</b>${level > 1 ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %)</span>` : ''}</p>
-        ${owned > 0 ? equipBlockHtml(card) : ''}
-        <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
-        ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
-        ${card.element && card.element !== 'Neutre' ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. Les naissances raciales (Novices, Embryons, Enge, Éveillés du Seuil) naissent neutres ; l'élément arrive avec la voie choisie à l'évolution.</p>`}
-        ${exemplairesBlock}
-        ${spellList(card)}`}
-        ${evo}
-        ${fusionBlock}
-        ${eclatBlock}
-        ${mystery ? '' : `<div class="modal-actions">
-          ${onAdd ? `<button class="btn ${st.ok ? '' : 'off'}" id="modal-add" ${st.ok ? '' : 'disabled'}>Ajouter \u00e0 l\u2019\u00e9quipe${st.ok ? '' : ` \u2014 ${st.label}`}</button>` : ''}
-          ${onRemove && placed ? `<button class="btn" id="modal-rem">Retirer de l\u2019\u00e9quipe</button>` : ''}
-        </div>`}
-        <p class="modal-feedback" id="modal-feedback"></p>
-      </div>
+      ${mystery
+        ? `<div class="modal-card">${cardFront({ ...card, id: '?' + card.id, atk: '?', hp: '?' }, { extraClass: 'big mystery' })}</div>
+          <div class="modal-info">
+            <h3>${card.name}</h3>
+            <p class="muted">${card.rarity} · ${card.classe} · ${card.element ?? 'Neutre'} · pas encore dévoilée</p>
+            <p class="muted">Carte à dévoiler : gagnez-la en donjon, à l’autel, au marchand ou à la Guilde pour révéler son illustration, ses stats et ses sorts.</p>
+          </div>`
+        : ficheCoreHtml(card, {
+            level,
+            inst: bestInstOf(card.id),
+            ownedInfo,
+            extra: `${owned > 0 ? equipBlockHtml(card) : ''}${raceLine}${verrouLine}${exemplairesBlock}${evo}${fusionBlock}${eclatBlock}${actionsBlock}`,
+          })}
     </div>`;
   overlay.querySelector('.modal').scrollTop = scrollTop;
   overlay.querySelector('.modal-close').onclick = closeCardModal;
@@ -2406,7 +2436,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
     el.onclick = () => openEquipPicker(byId(el.dataset.card), el.dataset.slot);
   });
   const feedback = overlay.querySelector('#modal-feedback');
-  if (feedbackText) feedback.textContent = feedbackText;
+  if (feedbackText && feedback) feedback.textContent = feedbackText;
   overlay.querySelectorAll('[data-evolve-iid]').forEach((el) => {
     el.onclick = () => {
       const r = evolveInstance(Number(el.dataset.evolveIid), el.dataset.evolveTo ?? null);
@@ -4015,7 +4045,7 @@ function uiSpellMeta(sp, ownerDef) {
 function spellBadgeHtml(sp) {
   // Lot B : badge délément du sort = élément de son école (data SCHOOL_ELEMENT)
   const el = sp?.ecole ? (SCHOOL_ELEMENT[sp.ecole] ?? null) : null;
-  const elBadge = el ? `<span class="sort-badge b-el" title="élément du sort (opposition sort > cible)" style="margin-right:4px">(EL_GLYPH[el] ?? '') ${el}</span>` : '';
+  const elBadge = el ? `<span class="sort-badge b-el" title="élément du sort (opposition sort > cible)" style="margin-right:4px">${EL_GLYPH[el] ?? ''} ${el}</span>` : '';
   const role = sp?.role ?? null;
   if (role) return elBadge + `<span class="sort-badge b-${role}">${SPELL_ROLE_LABEL[role] ?? role}</span>`;
   if (sp?.cat) return elBadge + `<span class="sort-badge b-cat">sort ${SPELL_CAT_LABEL[sp.cat] ?? sp.cat}</span>`;
@@ -4473,25 +4503,12 @@ function openUnitModal(u) {
   overlay.className = 'modal-overlay';
   const box = document.createElement('div');
   box.className = 'modal end-modal';
-    const sub = [card?.classe, card?.element ?? 'Neutre', card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : null].filter(Boolean).join(' · ');
-  box.innerHTML = `<div class="modal-hero full">${artOf(card)}<div class="hero-veil"></div>
-    <div class="hero-text">
-      <div class="hero-name">${card ? card.name : 'Unité'} <span class="chip">Nv ${u.level}</span>${u.boss ? ' <span class="chip">BOSS</span>' : ''}</div>
-      <div class="hero-sub">${sub}</div>
-      <div class="hero-stats"><span class="hp">♥ ${u.hp}/${u.maxHp}</span><span class="atk">⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</span><span class="mana">✦ ${u.mana}/${u.manaMax}</span></div>
-    </div>
-  </div>
-    <p class="statline">\u2694 ATQ <b>${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))}</b>${u.atkBuff ? ` <span class="muted">(+${Math.round(u.atkBuff * 100)} % ce tour)</span>` : ''} \u00b7 \u2665 PV <b>${u.hp}/${u.maxHp}</b> \u00b7 \ud83d\udee1 <b>${u.shield}</b> \u00b7 \u2726 Mana <b>${u.mana}/${u.manaMax}</b> \u00b7 \u26a1 AGI <b>${u.agi ?? '—'}</b> \u00b7 \ud83e\udde0 INT <b>${u.int ?? '—'}</b></p>
-    <div class="fstats">
-      <span class="fstat"><b>Classe</b>${card?.classe ?? '—'}</span>
-      <span class="fstat"><b>Élément</b>${card?.element ?? 'Neutre'}</span>
-      <span class="fstat"><b>Rareté</b>${card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : '—'}</span>
-    </div>
-    ${card?.element && card?.element !== 'Neutre' ? `<p class="statline">Opposition : <b>${card.element} domine ${BEATS[card.element]}</b> et est dominé par <b>${BEATEN_BY[card.element]}</b> — frapper ce qu'on domine donne <b>+25 %</b> de dégâts (l'ennemi en profite aussi).</p>` : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus. L'élément arrive avec la voie choisie à l'évolution.</p>`}
-    <h4>Effets actifs sur cette carte</h4>
-    ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}
-    ${(card?.spells ?? []).length || card?.effect ? `<h4>Sorts et pouvoir</h4><ul class="spells">${card?.effect ? `<li class="spell"><b>\u2726 ${effetDesc(card.effect)}</b> <span class="muted">Pouvoir \u2014 automatique à chaque action, sans mana</span></li>` : ''}${(card?.spells ?? []).map((sp) => { const spx = uiSpellMeta(sp, card); return `<li class="spell"><span class="sort-top"><b>\u2726 ${sp.name}</b>${spellBadgeHtml(spx)}<span class="sort-cost">\u2726 ${sp.cost}</span></span><span class="muted sort-meta">${spellMetaHtml(spx)}</span>${sp.desc ? `<span class="muted spell-desc">${sp.desc}</span>` : ''}</li>`; }).join('')}</ul>` : ''}
-    <div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
+  box.innerHTML = ficheCoreHtml(card, {
+    level: u.level,
+    unit: u,
+    extra: `<h4>Effets actifs sur cette carte</h4>
+    ${effRows.length ? `<ul class="glo-list">${effRows.map((l) => `<li>${l}</li>`).join('')}</ul>` : '<p class="muted">Aucun effet actif : cette carte joue avec ses stats de base.</p>'}`,
+  }) + `<div class="actions"><button type="button" class="btn" id="unit-close">Fermer</button></div>`;
   overlay.appendChild(box);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
   box.querySelector('#unit-close').onclick = () => overlay.remove();
