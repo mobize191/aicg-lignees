@@ -491,11 +491,13 @@ function actTeamStriker(u, i, ctx, step) {
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
   }
-  // correctifs sorts lot 2 : en Tactique, un sort d'invocation (spell.summon ou signature rôle invocation)
-  // déclenche castSummon ; garde-fou tacAct -> le chemin Auto n'est PAS touché (digest inchangé)
+  // correctifs sorts lots 2+4 : un sort d'invocation déclenche castSummon. Lot 4 (14/11) : les sorts
+  // Appel/Pont (spell.summon en data, rôle invocation) invoquent VRAIMENT en Tactique ET en Auto
+  // (cohérence des chemins -> digest MESURÉ) ; les signatures de recrues (cat 'unique') restent
+  // réservées au Tactique (garde-fou tacAct) comme au lot 2.
   const sigRole = spell && spell.cat === 'unique' ? (signatureMetaOfUnit(u)?.role ?? null) : null;
-  if (spell && ((u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') || (tacAct && (spell.summon || sigRole === 'invocation')))) {
-    if (castSummon(u, team, mods, ctx.events, 'team', spell.summon ? { ...spell.summon, mult: spell.mult ?? 1, name: spell.name } : null)) {
+  if (spell && ((u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') || spell.summon || spell.role === 'invocation' || (tacAct && sigRole === 'invocation'))) {
+    if (castSummon(u, team, mods, ctx.events, 'team', spell.summon ? { ...spell.summon, mult: spell.mult ?? 1 } : null)) {
       ctx.firstAttack = false;
       return false;
     }

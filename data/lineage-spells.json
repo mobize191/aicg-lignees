@@ -485,7 +485,12 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier C.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.35,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Élémentaire de Braise",
@@ -493,7 +498,12 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier UC.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.4,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Meute Spirituelle",
@@ -501,7 +511,12 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier R.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.45,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Portail",
@@ -509,7 +524,12 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier SR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.5,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Légion Céleste",
@@ -517,7 +537,12 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier UR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.55,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Appel Suprême",
@@ -525,7 +550,12 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier L.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.6,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   }
  ],
  "seuil": [
@@ -635,7 +665,12 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier C.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.35,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil II",
@@ -643,7 +678,12 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier UC.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.4,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil III",
@@ -651,7 +691,12 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier R.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.45,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil IV",
@@ -659,7 +704,12 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier SR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.5,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil V",
@@ -667,7 +717,12 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier UR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.55,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil VI",
@@ -675,7 +730,12 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier L.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.6,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   }
  ]
 }
