@@ -4043,6 +4043,32 @@ function renderRail(actorUid = null) {
     const chip = railEl.querySelector('.rail-chip.acting');
     if (chip) chip.scrollIntoView({ block: 'nearest', inline: 'center' });
   }
+  lastActorUid = actorUid;
+  renderTurnBanner(actorUid); // correctifs v3 lot 3 : bandeau d'état permanent (qui joue + la file des suivants)
+}
+
+let lastActorUid = null;
+// correctifs v3 lot 3 : bandeau permanent DANS la zone de commandement — « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » ;
+// quand c'est au joueur, la fenêtre de commandes remplace le bandeau (même zone, hauteur fixe, terrain stable)
+function renderTurnBanner(actorUid) {
+  if (!combatApp) return;
+  const slot = combatApp.querySelector('#act-slot');
+  if (!slot) return;
+  let banner = slot.querySelector('#turn-banner');
+  if (actBox) { if (banner) banner.remove(); return; }
+  const items = railItems();
+  const idx = items.findIndex((it) => it.u.uid === actorUid);
+  const actor = idx >= 0 ? items[idx].u : null;
+  const nexts = (idx >= 0 ? items.slice(idx + 1) : items).filter((it) => it.u.alive).slice(0, 4).map((it) => it.u.name);
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.setAttribute('id', 'turn-banner');
+    slot.insertBefore(banner, slot.querySelector('#log') ?? null);
+  }
+  if (!actor) { banner.innerHTML = '<span class="tb-now">\u25b6 Pr\u00e9paration du tour\u2026</span>'; return; }
+  const side = items[idx].side === 'team' ? 'alli\u00e9' : 'ennemi';
+  const sideCls = items[idx].side === 'team' ? 'mine' : 'foe';
+  banner.innerHTML = `<span class="tb-now">\u25b6 Tour de <b>${actor.name}</b> <span class="chip ${sideCls}">${side}</span></span><span class="tb-next">ensuite : ${nexts.join(' \u203a ') || '\u2014'}</span>`;
 }
 
 function fightLabel() {
@@ -4171,6 +4197,7 @@ function bindTargetHover() {
 function closeActModal() {
   if (actBox) { actBox.remove(); actBox = null; }
   document.body.classList.remove('act-open');
+  renderTurnBanner(lastActorUid); // correctifs v3 lot 3 : le bandeau revient dans la zone permanente
   for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
   clearActHighlights();
   const ps = promptState;
@@ -4193,7 +4220,8 @@ function renderActModal(u, zoneHtml) {
     </div>
     <div class="act-zone">${zoneHtml}</div>`;
   const actSlot = combatApp ? combatApp.querySelector('#act-slot') : null;
-  (actSlot ?? document.body).appendChild(actBox); // UX 13/11 lot 1 : la fenêtre vit DANS #act-slot, le terrain reste visible
+  const slot = actSlot ?? document.body; slot.insertBefore(actBox, slot.querySelector('#log') ?? null); // UX 13/11 lot 1 + correctifs v3 lot 2 : fenêtre DANS #act-slot, AVANT le mini-log (zone permanente)
+  renderTurnBanner(null); // correctifs v3 lot 3 : la fenêtre de commandes REMPLACE le bandeau dans la zone fixe
   document.body.classList.add('act-open');
   const redBtn = actBox.querySelector('.act-reduce');
   if (redBtn) redBtn.onclick = () => {
@@ -4440,6 +4468,7 @@ function promptUnitAction(u, kind) {
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
         document.body.classList.remove('act-open');
+        renderTurnBanner(lastActorUid); // correctifs v3 lot 3
         for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
         resolve(choice);
       },
@@ -5845,9 +5874,8 @@ function renderCombat(root, opts = {}) {
     <div class="team-zone" id="team-zone"></div>
     <div class="reserve-zone" id="reserve-zone"></div>
     </div>
-    <div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div>
     </div>
-    <div id="act-slot"></div>
+    <div id="act-slot"><div id="log" title="Journal du combat \u2014 toucher pour tout d\u00e9rouler"></div></div> <!-- correctifs v3 lot 2 : le mini-log vit DANS la zone de commandement permanente -->
     ${teamEmpty ? '<div class="banner lose bannerin">Placez d\u2019abord des cartes dans votre équipe !</div><p><a class="btn" href="#equipe">Composer mon équipe →</a></p>' : ''}
   `;
   combatApp.style.background = d.art

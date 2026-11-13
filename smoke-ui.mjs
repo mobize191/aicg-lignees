@@ -259,7 +259,8 @@ async function main() {
         check('52 d invocation en PREMIÈRE LIGNE', false, `u52=${!!u52} am=${!!am52} prompt=${api._prompt() ? api._prompt().unit?.cardId : '?'}`);
       }
       check('52 e ciblage : pulse cibles valides + zones invalides grisées (CSS targeting)', html.includes('body.in-combat.targeting .unit:not(.targeted):not(.ko)') && html.includes('@keyframes targetpulse'), '');
-      check('52 f barre compacte 30dvh + boutons 44px + off grisé avec raison', html.includes('max-height: 30dvh') && html.includes('min-height: 44px') && html.includes('.off-reason'), '');
+      // correctifs v3 lot 2 (tranchage 15/11, terrain stable) : la zone de commandement a une hauteur FIXE min(30dvh,320px), le max-height:30dvh propre de la barre est parti
+      check('52 f zone de commandement permanente bornée à 30dvh + boutons 44px + off grisé avec raison', html.includes('height: min(30dvh, 320px)') && html.includes('min-height: 44px') && html.includes('.off-reason'), '');
     }
     check('52 z 0 exception repositionnement', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
@@ -294,10 +295,61 @@ async function main() {
       for (let w = 0; w < 200 && !st53.winner && !sawActing; w++) { await wait(25); sawActing = [...appEl.querySelectorAll('.unit')].some((el) => el.classList.contains('acting')); }
       check('53 i tour AUTO : unité active toujours marquée sur le terrain pendant le round', sawActing || !!st53.winner, `winner=${!!st53.winner}`);
     }
-    check('53 j correctifs v2 lot 2 : camp allié ancré au bas du terrain (margin-top:auto sur #team-zone)', html.includes('body.in-combat #team-zone { margin: auto 0 0; }'), '');
-    check('53 k correctifs v2 lot 2 : plus de safe center sur #board (l\u2019ancrage bas gère la hauteur)', !html.includes('justify-content: safe center'), '');
+    // correctifs v3 lot 1 (tranchage 15/11, prime sur v2) : l'ancrage bas v2 est REMPLACÉ par les camps face à face au centre
+    check('53 j correctifs v3 lot 1 : plus d’ancrage bas v2 (margin auto 0 0 parti, camps face à face au centre)', !html.includes('margin: auto 0 0') && html.includes('body.in-combat #board { justify-content: safe center; }'), '');
+    check('53 k safe center rétabli sur #board pour le centrage des camps (v3 lot 1)', html.includes('justify-content: safe center'), '');
     check('53 l correctifs v2 lot 2 : badge réserve ancré à côté du camp allié (plus fixed au milieu du vide)', html.includes('body.in-combat .reserve-badge { position: absolute; left: 8px; bottom: 48px;') && !html.includes('top: 44%'), '');
     check('53 z 0 exception correctifs v2 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
+  // ---------- 54 : correctifs écran combat v3 lot 1 — cartes PLUS GROSSES + camps RAPPROCHÉS face à face (tranchage 15/11) ----------
+  {
+    check('54 a grand format constant : unité clamp(104px,30vw,132px), boss ~1,4x clamp(146px,42vw,185px)', html.includes('body.in-combat .unit { width: clamp(104px, 30vw, 132px); }') && html.includes('body.in-combat .unit.boss { width: clamp(146px, 42vw, 185px); }'), '');
+    check('54 b camps face à face au CENTRE : #board en safe center, ancrage bas v2 parti', html.includes('body.in-combat #board { justify-content: safe center; }') && html.includes('body.in-combat #team-zone { margin: 8px 0 0; }') && !html.includes('margin: auto 0 0'), '');
+    check('54 c paysage téléphone : taille bornée par la hauteur (19dvh / 27dvh)', html.includes('body.in-combat .unit { width: clamp(76px, 19dvh, 120px); }') && html.includes('body.in-combat .unit.boss { width: clamp(106px, 27dvh, 168px); }'), '');
+    check('54 d lot 2 terrain STABLE : plus aucun resize act-open .unit/.boss', !html.includes('act-open .unit { width') && !html.includes('act-open .unit.boss { width'), '');
+    check('54 e lot 2 : zone de commandement permanente hauteur fixe, plus de :empty display:none', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(30dvh, 320px); min-height: 128px; }') && !html.includes('#act-slot:empty'), '');
+    check('54 f lot 2 paysage : rail act en stretch sur la ligne 1fr (hauteur fixe)', html.includes('body.in-combat #act-slot { grid-area: act; align-self: stretch; height: auto; max-height: none;'), '');
+    // structure live : le mini-log vit DANS #act-slot, la fenêtre s'insère avant lui
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(200);
+    const st54 = api._state();
+    check('54 g lot 2 combat lancé pour vérif structure', !!st54, '');
+    if (st54) {
+      const slot = appEl.querySelector('#act-slot');
+      check('54 h lot 2 : #log DANS #act-slot (zone permanente)', !!slot && !!slot.querySelector('#log'), '');
+      api._speed(6);
+      els.get('fight').click();
+      let am54 = null;
+      for (let w = 0; w < 120 && !am54; w++) { await wait(25); am54 = api._actEl(); }
+      const slot2 = appEl.querySelector('#act-slot');
+      const kids = slot2 ? [...slot2.children].map((c) => c.className || c.id) : [];
+      check('54 i lot 2 : fenêtre .act-modal insérée AVANT #log dans la zone fixe', !!am54 && slot2 && kids[0] === 'act-modal' && kids[kids.length - 1] === 'log', `kids=${kids.join(',')}`);
+      // lot 3 : la fenêtre remplace le bandeau dans la zone permanente
+      const slotB = appEl.querySelector('#act-slot');
+      check('54 j lot 3 : fenêtre ouverte -> bandeau #turn-banner MASQUÉ', !!am54 && !!(slotB && !slotB.querySelector('#turn-banner')), '');
+      const pass = am54 ? am54.querySelector('.act-pass') : null;
+      if (pass) pass.click();
+      // le bandeau vit pendant les tours sans fenêtre (ennemis) : scrutation fine, fenêtre fermée requise
+      let bannerBack = null, consistent = false;
+      for (let w = 0; w < 400 && !consistent; w++) {
+        await wait(10);
+        if (api._actEl()) continue; // fenêtre ouverte : le bandeau est masqué, on attend
+        bannerBack = appEl.querySelector('#turn-banner');
+        const chipA = [...appEl.querySelectorAll('.rail-chip')].find((el) => el.classList.contains('acting'));
+        const unitA = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('acting'));
+        const nmChip = chipA && chipA.querySelector('.rc-nm');
+        const bEl = bannerBack && bannerBack.querySelector('.tb-now b');
+        // bandeau et rail doivent toujours désigner le même combattant ; le terrain aussi quand il est marqué
+        if (bannerBack && bEl && nmChip && bEl.textContent === nmChip.textContent && (!unitA || (unitA._unit && bEl.textContent === unitA._unit.name))) consistent = true;
+      }
+      const bt = bannerBack ? (bannerBack.textContent || '') : '';
+      check('54 k lot 3 : bandeau « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » rendu dans la zone permanente', !!bannerBack && bt.includes('Tour de') && bt.includes('ensuite'), bt.slice(0, 90));
+      check('54 l lot 3 : bandeau + rail + terrain désignent TOUJOURS le même combattant', consistent, bt.slice(0, 90));
+    }
+    check('54 m lot 3 CSS : #turn-banner + .tb-next (file des suivants) présents', html.includes('#turn-banner .tb-next') && html.includes('#turn-banner .tb-now'), '');
+    check('54 z 0 exception correctifs v3 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
 
@@ -733,10 +785,12 @@ async function main() {
   // ---------- v0.44 : combat plein écran + grandes cartes ----------
   check('44 a one-screen : le body devient colonne flex, #app prend le reste', html.includes('body.in-combat { overflow: hidden; height: 100dvh; display: flex; flex-direction: column; }') && html.includes('body.in-combat header, body.in-combat nav { flex: 0 0 auto; position: static; }') && html.includes('body.in-combat #app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow-y: auto;'), '');
   // UX combat adaptatif 13/11 lot 1 : la fenêtre d'action est DANS le flux (#act-slot, borné 30dvh), jamais en surimpression ; les recouvrements 78dvh/56dvh sont partis
-  check('45 b invariant : barre de commandes dans le flux, fenêtre d’action dans le flux (#act-slot borné 30dvh), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel') && !html.includes('max-height: 38dvh'), '');
+  // correctifs v3 lot 2 : #act-slot a une hauteur FIXE permanente (min(30dvh,320px)), la fenêtre reste dans le flux, aucun recouvrement
+  check('45 b invariant : zone de commandement permanente dans le flux (#act-slot hauteur fixe min(30dvh,320px)), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; flex-direction: column; height: min(30dvh, 320px); min-height: 128px; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel') && !html.includes('max-height: 38dvh'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
   // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
-    check('44 a one-screen : unités de combat >= 74px / boss >= 118px + nom de boss en gras (repositionnement 14/11 lot 3)', html.includes('body.in-combat .unit { width: clamp(96px, 22vw, 140px); }') && html.includes('body.in-combat .unit { width: clamp(84px, 20vw, 120px); }') && html.includes('body.in-combat .unit.boss { width: clamp(128px, 30vw, 180px); }') && html.includes('body.in-combat .unit.boss { width: clamp(118px, 28vw, 160px); }') && html.includes('body.in-combat .unit.boss .card.battle .name { font-weight: 900; }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+    // correctifs v3 lot 1 (tranchage 15/11) : grand format constant 104-132px / boss 146-185px, les anciens clamps sont remplacés
+    check('44 a one-screen : unités de combat grand format constant >= 104px / boss ~1,4x + nom de boss en gras (repositionnement 14/11 lot 3 + correctifs v3 lot 1)', html.includes('body.in-combat .unit { width: clamp(104px, 30vw, 132px); }') && html.includes('body.in-combat .unit.boss { width: clamp(146px, 42vw, 185px); }') && html.includes('body.in-combat .unit.boss .card.battle .name { font-weight: 900; }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
   // UX 13/11 lot 2 : le journal devient un mini-log permanent (plus de max-height 20dvh tronqué)
   check('44 a one-screen : journal borné en mini-log permanent, rappels bas disparus', !html.includes('max-height: 20dvh') && !html.includes('-webkit-line-clamp'), '');
@@ -772,7 +826,8 @@ async function main() {
   const r4 = api.addCardIid(v4.iid);
   check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
   // correctifs v1.51 lot 2 (point 9) : cartes de combat plus grandes — clamp(120px, 30vw, 180px) / boss clamp(150px, 38vw, 220px)
-  check('46 b pions combat >= 74px / boss >= 118px (repositionnement 14/11 lot 3)', html.includes('clamp(96px, 22vw, 140px)') && html.includes('clamp(128px, 30vw, 180px)') && html.includes('clamp(84px, 20vw, 120px)') && html.includes('clamp(118px, 28vw, 160px)'), '');
+  // correctifs v3 lot 1 (tranchage 15/11) : nouveau grand format, justification = cartes plus grosses demandées au 2e retour terrain
+  check('46 b pions combat grand format v3 (>= 104px / boss ~1,4x)', html.includes('clamp(104px, 30vw, 132px)') && html.includes('clamp(146px, 42vw, 185px)'), '');
   check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
   // correctifs v1.51 lot 2 : plus de hero plein cadre tronqué en tête de fiche combat — la fiche unifiée rend l'illustration contenue (.modal-card)
   check('46 b fiche : plus de hero plein cadre tronqué en combat (fiche unifiée v1.51)', !html.includes('<div class="modal-hero full">'), '');
