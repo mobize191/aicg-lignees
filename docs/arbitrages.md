@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 15) : g5 PRISME VIVANT (pas de renommage, lien photosynthèse) + e11 CRABE DES BERGES reclassé géant crabe
+
+- **g5 Prisme Vivant (SR) — TRANCHÉ** : PAS de renommage ; la cohérence Bosquet passe par la **photosynthèse/sève** : être végétal translucide aux feuilles comme du vitrail vert, veines de sève lumineuse, fleurs le long des membres qui réfractent la lumière en petits prismes. Espèce `plantPrism` (non-humanoïde, LoRA Forest Guardians/Spirit autorisé). Le cristal minéral est écarté.
+- **e11 Crabe des Berges (UC, Marées) — CONSTAT Marc-Olivier confirmé par QA vision** : rendu comme un guerrier HUMAIN (« an adult man, a warrior in armor » dans le prompt) alors que la carte désigne un crabe. Reclassé `giantCrab` : géant crabe des berges moussu, coquille fissurée couverte de bernacles, pinces levées, yeux pédonculés. Verrou R8 conservé (bête concrète, anti-tags crab contre la dérive canidée). Les autres humains des Marées (e6 Avatar, e15 Ancien des Berges) sont ASSUMÉS humains par design : représentatifs, pas touchés.
+
+
 ## 2026-11-13 (suite 14) : AUDIT LOUPS — TOUS LES AMBIGUS TRANCHÉS + règle « zéro prompt bête générique » pour la 3.4
 
 - **Tranchages de Marc-Olivier** : **k1** = goule/cadavre d'ANIMAL (quadrupède mort réanimé, reste une bête mais avec tags undead, pas un loup vivant) ; **k12** = femme de veille des noyés (`ghostMourner`, F) ; **k13** = humanoïde zombie ayant perdu son humanité, marche à 4 pattes comme une bête ; **k15** = humanoïde zombie ayant gardé un peu d'humanité, marche debout ; **g13** = ent (`treant`, LoRA Forest Guardians) ; **n14** = diable humanoïde (acté via le camp démon jouable du gel v1).
@@ -288,6 +294,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 
 - **Moteur** (`src/engine/combat.js`) : `initCombat` prend `{avant, reserve}` — slots 0-2 en avant, 3-4 en `state.reserve` (l'arrière joueur disparaît du plateau). La réserve est hors ciblage, hors dégâts de zone, hors items de tour. `peekRound` saute les unités `benched`.
 - **« Échanger » volontaire** (`stepRound` kind `swap`) : consomme le tour — le sortant est benché, l'entrante occupe la place mais n'est pas dans les items du tour (elle joue au suivant). Événement `swap` `voluntary: true`. PV/mana conservés (mêmes objets).
-- **K.O. → remplacement automatique GRATUIT** (`replaceKoTeam`, appelé dans `beginRound` et après chaque action de `stepRound`) : la première réserve vivante entre sans consommer de tour, joue au tour suivant. Événement `swap` `voluntary: false`. Sans réserve, le combat continue/se perd normalement.
-- **Réserve à 50 % d'XP** : constante `engine.reserveXpMult = 0.5` en data, appliquée côté UI (index de slot >= 3). Synergies de combat calculées sur les 3 actifs seuls [À TRANCHER si synergies sur les 5]. Pas de bump de save (les sauvegardes à 5 cartes se chargent telles quelles).
-- **UI** : rail « réserve » visible sous l'équipe en combat, bouton « ⇄ Échanger » (coûte le tour), modale de choix de la réserve, bouton d'annulation, événement `swap` animé. Onglet Équipe : libellés « 3 actifs · 2 réserve », boutons 3+2/2+3 supprimés (smoke B15 h adapté).
