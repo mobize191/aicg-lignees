@@ -984,7 +984,7 @@ async function main() {
     const elig = api.recrutableMonsters(st);
     check('B3 e recrutement : éligibles = vaincus hors boss et nommés', elig.length > 0 && elig.every((u) => !u.boss && !u.name.includes(',')), elig.map((u) => u.name).join('|'));
     const zones = api.DATA.zones ?? [];
-    check('B3 f taux de recrue par zone dans data/zones.json (~1 %)', zones.length === 5 && zones.every((z) => typeof z.recrute?.taux === 'number' && z.recrute.taux > 0 && z.recrute.taux <= 0.05), zones.map((z) => z.id + ':' + (z.recrute?.taux ?? '?')).join(' '));
+    check('B3 f taux de capture par zone dans data/zones.json (bande 8-12 %, lot 0 refonte v2 suite 38)', zones.length === 5 && zones.every((z) => typeof z.recrute?.taux === 'number' && z.recrute.taux >= 0.08 && z.recrute.taux <= 0.12), zones.map((z) => z.id + ':' + (z.recrute?.taux ?? '?')).join(' '));
     check('B3 g 0 exception lot 3', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 

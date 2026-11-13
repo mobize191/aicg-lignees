@@ -86,7 +86,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.008
+   "taux": 0.08
   },
   "materiau": {
    "id": "ecume",
@@ -311,7 +311,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.01
+   "taux": 0.09
   },
   "materiau": {
    "id": "cendre",
@@ -448,7 +448,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.012
+   "taux": 0.10
   },
   "materiau": {
    "id": "seve",
@@ -587,7 +587,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.014
+   "taux": 0.11
   },
   "materiau": {
    "id": "larme",
@@ -734,7 +734,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.016
+   "taux": 0.12
   },
   "materiau": {
    "id": "eclat-solaire",

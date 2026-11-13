@@ -704,7 +704,7 @@
   "n10",
   "n13"
  ],
- "RECRUTE_TAUX": 0.01,
+ "RECRUTE_TAUX": 0.1,
  "EQUIP_DROP_RATE": 0.02,
  "GEM_BRUT_PRIX": 100,
  "ECLAT_BUY_PRIX": 150,
@@ -730,6 +730,8 @@
   "ruse": "Eau"
  },
  "CAPTURE_FORCE_CAP": 3,
+ "CAPTURE_FORCE_FLOOR": 0.5,
+ "CAPTURE_PCT_MAX": 0.95,
  "JETONS": {
   "donjonBoucle": 10,
   "jalon": 5,

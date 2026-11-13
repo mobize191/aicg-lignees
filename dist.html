@@ -4386,7 +4386,7 @@ const DATA = {
    "n10",
    "n13"
   ],
-  "RECRUTE_TAUX": 0.01,
+  "RECRUTE_TAUX": 0.1,
   "EQUIP_DROP_RATE": 0.02,
   "GEM_BRUT_PRIX": 100,
   "ECLAT_BUY_PRIX": 150,
@@ -4412,6 +4412,8 @@ const DATA = {
    "ruse": "Eau"
   },
   "CAPTURE_FORCE_CAP": 3,
+  "CAPTURE_FORCE_FLOOR": 0.5,
+  "CAPTURE_PCT_MAX": 0.95,
   "JETONS": {
    "donjonBoucle": 10,
    "jalon": 5,
@@ -14274,7 +14276,7 @@ const DATA = {
     }
    ],
    "recrute": {
-    "taux": 0.008
+    "taux": 0.08
    },
    "materiau": {
     "id": "ecume",
@@ -14499,7 +14501,7 @@ const DATA = {
     }
    ],
    "recrute": {
-    "taux": 0.01
+    "taux": 0.09
    },
    "materiau": {
     "id": "cendre",
@@ -14636,7 +14638,7 @@ const DATA = {
     }
    ],
    "recrute": {
-    "taux": 0.012
+    "taux": 0.1
    },
    "materiau": {
     "id": "seve",
@@ -14775,7 +14777,7 @@ const DATA = {
     }
    ],
    "recrute": {
-    "taux": 0.014
+    "taux": 0.11
    },
    "materiau": {
     "id": "larme",
@@ -14922,7 +14924,7 @@ const DATA = {
     }
    ],
    "recrute": {
-    "taux": 0.016
+    "taux": 0.12
    },
    "materiau": {
     "id": "eclat-solaire",
@@ -24246,8 +24248,9 @@ async function animate(events, ms, gen = null) {
           const actifsVivants = (state.team?.avant ?? []).filter((u) => u && u.alive);
           const moyLvl = actifsVivants.length ? actifsVivants.reduce((a, u) => a + (u.level ?? 1), 0) / actifsVivants.length : 1;
           for (const m of recrutableMonsters(state)) {
-            const force = Math.min(E.CAPTURE_FORCE_CAP ?? 3, moyLvl / Math.max(1, m.level ?? 1));
-            const pct = Math.min(1, tauxRec * force);
+            // lot 0 refonte v2 (suite 38) : plancher de force 0,5 (une equipe plus basse garde une chance), plafond x3 conserve, borne 95 %
+            const force = Math.min(E.CAPTURE_FORCE_CAP ?? 3, Math.max(E.CAPTURE_FORCE_FLOOR ?? 0.5, moyLvl / Math.max(1, m.level ?? 1)));
+            const pct = Math.min(E.CAPTURE_PCT_MAX ?? 0.95, tauxRec * force);
             pushRecomp('capture', `🐾 Tenter la capture — ${Math.round(pct * 100)} %`, `${m.name} (Nv ${m.level ?? '?'}) · taux zone ${Math.round(tauxRec * 100)} % × force ${force.toFixed(1)} · un seul essai`, 'C', { monster: m.cardId ?? m.id, mname: m.name, pct });
             rewardLine += ` · 🐾 capture de ${m.name} proposée (${Math.round(pct * 100)} %)`;
           }

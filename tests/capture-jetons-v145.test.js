@@ -104,6 +104,10 @@ test('Lot D : jetons — achat compagnon en jetons (or intact), refus sans jeton
 test('Lot D : sources de jetons en data + formules de capture en data', () => {
   const E = loadEngine();
   assert.equal(E.DATA.engine.CAPTURE_FORCE_CAP, 3);
+  assert.equal(E.DATA.engine.CAPTURE_FORCE_FLOOR, 0.5, 'lot 0 refonte v2 : plancher de force 0,5');
+  assert.equal(E.DATA.engine.CAPTURE_PCT_MAX, 0.95, 'lot 0 refonte v2 : borne 95 %');
+  const zones = E.DATA.zones ?? [];
+  for (const z of zones) assert.ok(z.recrute.taux >= 0.08 && z.recrute.taux <= 0.12, `taux de capture de ${z.id} dans la bande 8-12 %`);
   assert.deepEqual(E.DATA.engine.JETONS, { donjonBoucle: 10, jalon: 5, quetePetite: 1, queteMoyenne: 2, queteGrande: 4 });
   assert.deepEqual(E.DATA.guilde.prixCompagnonsJetons, { C: 5, UC: 12, R: 30, SR: 80, UR: 200 });
   // boss et nommés jamais capturables

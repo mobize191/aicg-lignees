@@ -5466,8 +5466,9 @@ async function animate(events, ms, gen = null) {
           const actifsVivants = (state.team?.avant ?? []).filter((u) => u && u.alive);
           const moyLvl = actifsVivants.length ? actifsVivants.reduce((a, u) => a + (u.level ?? 1), 0) / actifsVivants.length : 1;
           for (const m of recrutableMonsters(state)) {
-            const force = Math.min(E.CAPTURE_FORCE_CAP ?? 3, moyLvl / Math.max(1, m.level ?? 1));
-            const pct = Math.min(1, tauxRec * force);
+            // lot 0 refonte v2 (suite 38) : plancher de force 0,5 (une equipe plus basse garde une chance), plafond x3 conserve, borne 95 %
+            const force = Math.min(E.CAPTURE_FORCE_CAP ?? 3, Math.max(E.CAPTURE_FORCE_FLOOR ?? 0.5, moyLvl / Math.max(1, m.level ?? 1)));
+            const pct = Math.min(E.CAPTURE_PCT_MAX ?? 0.95, tauxRec * force);
             pushRecomp('capture', `🐾 Tenter la capture — ${Math.round(pct * 100)} %`, `${m.name} (Nv ${m.level ?? '?'}) · taux zone ${Math.round(tauxRec * 100)} % × force ${force.toFixed(1)} · un seul essai`, 'C', { monster: m.cardId ?? m.id, mname: m.name, pct });
             rewardLine += ` · 🐾 capture de ${m.name} proposée (${Math.round(pct * 100)} %)`;
           }
