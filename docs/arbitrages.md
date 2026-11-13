@@ -1,5 +1,14 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 18) : RECHERCHE ÉCRAN DE COMBAT MOBILE — conventions du genre consignées (Hearthstone, TCG Pocket, Marvel Snap, LoR, Star Rail, Epic Seven), positionnement cible proposé, tranchage A/B demandé (§0 n°8)
+
+- **Déclencheur** : retour terrain de Marc-Olivier après la PR #12 (UX combat adaptatif livrée) : « le travail sur le front est terminé mais je trouve cela encore mauvais… faire une recherche sur les jeux mobiles de combat en tour par tour et de cartes (MTG, Hearthstone, etc.) pour analyser l'écran de combat et voir comment bien positionner les différents éléments ».
+- **Recherche livrée** : `docs/design/recherche-ecran-combat-2026-11-14.md` (2 guides UX mobile + critique UX académique TCG Pocket + conventions des jeux de cartes et tour-par-tour mobiles).
+- **Conventions identifiées** : (1) commander en bas, lire en haut, le milieu n'appartient qu'au plateau (Hearthstone, Star Rail, Epic Seven) ; (2) ordre du tour en HAUT de l'écran, deux camps, ennemis compris (Star Rail) ; (3) stats SUR les unités, panneau séparé = détail à la demande (Hearthstone, Star Rail) ; (4) tiers bas = actions primaires, médian = secondaire, tiers haut = statut (carte du pouce) ; (5) feedback au-dessus du point de contact, jamais sous le pouce (occlusion) ; (6) densité éditoriale : test « fréquent + urgent sinon pas à l'écran », cibles ≥ 44 px ; (7) les infos critiques restent à l'écran (critique Pratt de l'info éphémère de TCG Pocket).
+- **Positionnement cible proposé** : ordre du tour + compteur de vague + vitesse/pause persistants en tiers haut ; terrain SVG entier en bande médiane sans UI permanente ; mini-log juste au-dessus de la fenêtre (conforme) ; fenêtre d'action réduite à une barre de commandes compacte ≤ 30 % écran (nom du joueur actif + boutons de sorts, fiche flottante au clic) ; paysage : commandes en BAS du rail latéral, statut en HAUT.
+- **TRANCHAGE DEMANDÉ (§0 n°8)** : A) chantier couloir 1 « repositionnement écran combat » (pure UI CSS/HTML, digest inchangé attendu, à lancer APRÈS la livraison des correctifs sorts pour ne pas croiser les branches) ; B) d'abord maquette/capture comparative (couloir design), puis chantier. Le moteur et les données ne bougent pas.
+- **Liens avec l'existant** : invariant « la fenêtre ne recouvre jamais le terrain » conservé (l'amélioration porte sur la DENSITÉ et le RANGEMENT, pas sur le recouvrement) ; vitesses par contexte toujours différées (§0 n°5, re-tranchage après test terrain de la nouvelle fenêtre).
+
 ## 2026-11-14 (suite 17) : AUDIT EXHAUSTIF DES SORTS — 309 sorts rejoués en combat, 224 conformes, 85 anomalies en 5 racines — 4 tranchages demandés (§0 n°7)
 
 - **Déclencheur** : signalement terrain de Marc-Olivier — sur une carte « grand assassin », tous les sorts d'attaque ne peuvent viser que ses alliés ; « j'ai l'impression qu'un sur deux est buggé, pourrais-tu tous les essayer et valider ».
@@ -264,16 +273,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 8 (spec vie-jeu Lot 2) LIVRÉE : FEEDBACK 3 TIERS + HIT-STOP (v1.47)
 
 - **Routeur unique `feedback(tier, anchor)`** (`src/ui.js`) : small = tick SFX (WebAudio, sans asset) ; medium = flash léger + shake ~0,3 + pop overshoot (ease-out back) sur les floatText ; large (crit, K.O., boss, drops UR) = flash + shake ~0,7 + zoom léger + **hit-stop 80-100 ms**. Branché dans l'animateur de combat (attaque medium/large si crit, K.O. large, soin medium) et l'errance (autel medium).
-- **Hit-stop** : réservé au tier large, jamais deux freezes qui se chevauchent (token : le plus récent restaure), retour exact au repos. **Kill switch en 1 ligne** : `FX_HITSTOP: false` dans `data/engine.json` (testé). Constantes en data : `FX_HITSTOP_MS: 90`, `FX_FLASH_MAX_PER_S: 3` (rate limit flashs ≤ 3/s).
-- **Option « réduire les flashs »** : persistée (`uiPrefs.reduceFlashes`, migration passive, `combatAuto` toujours ignoré), flashs en teinte sans pulsation ; `prefers-reduced-motion` déjà respecté partout.
-- Tests : 4 headless (`tests/feedback-v147.test.js`) : classes posées/retirées au repos, hit-stop toujours terminé (2 large à 30 ms), kill switch, rate limit 3/s. 246 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (couche feel, présentation seule).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 7 (spec vie-jeu Lot 0) LIVRÉE : MANIFESTE D'ASSETS (v1.46)
-
-- **`tools/assets-manifest.json`** (schéma acté 12/11) : 740 entrées (art + bg × assets-v3.json + assets-v3.1.json), chacune `{ id, kind, source{kind:"gen", model:"wai-illustrious-v17", loras[{civitaiId, version, base, trigger, license}], seed}, qa{status, date}, production{path, w, h, ko} }`. Rempli depuis la session 3.2 : prompts/seeds (`tools/prompts-v32.json`, 530 seeds remontés), LoRAs (`tools/lora-verdicts-v32.json`, 72 entrées avec LoRA), dimensions lues dans les JPEG de production.
-- **Licences LoRAs enregistrées pour information, NON bloquantes** (arbitrage 12/11) : champ `license` renseigné « non renseigné (session 3.2) » quand absent des run-logs.
-- Smoke : nouveau check **B8b h** — tout art des manifestes de production a une entrée source+qa. Tests : 2 headless (`tests/assets-manifest-v146.test.js`). 242 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (donnée outillée, hors moteur).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 6 (Lot D refonte) LIVRÉE : CAPTURE DQM + VENDEUR À JETONS (v1.45)
-
-- **Capture DQM** : à l'écran Récompenses de chaque combat gagné (donjon ET errance), une ligne « 🐾 Tenter la capture — X % » par monstre recrutable vaincu (hors boss/nommés, `recrutableMonsters` inchangé). % = taux de base de la zone (`zone.recrute.taux`) × démonstration de force = min(`CAPTURE_FORCE_CAP`=3, niveau moyen des actifs / niveau du monstre) — plafonné, affiché avant le choix. **Un seul essai** par monstre (bouton désactivé après clic) ; réussite → `newInst` + collection. L'ancien tirage auto ~1 % à la fin d'étage est supprimé.
