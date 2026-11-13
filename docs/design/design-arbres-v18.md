@@ -17,7 +17,7 @@
 | Naissance | Voies (éveil N → maillon d'entrée) |
 | --- | --- |
 | n1 Épéiste Novice | guerrier → a30 Spadassin Vigilant (lame) · protection → s14 Garde du Rempart (bouclier) · sylvestre → a33 Pisteur du Bosquet (bosquet) |
-| n2 Mage Novice | l'Eau → a29 Adepte des Rivières (eau) · le Feu → a32 Veilleur de Braise (braise) · les Sylvains → a33 Pisteur du Bosquet (bosquet, nœud partagé) · la lumière → s13 Servante de l'Aube (aube) · l'ombre → a31 Guetteur Crépusculaire (ombre) · l'appel → v1 Apprenti Invocateur (appel) |
+| n2 Mage Novice | l'Eau → a29 Adepte des Rivières (eau) · le Feu → a32 Veilleur de Braise (braise) · le Bosquet → a33 Pisteur du Bosquet (nœud partagé ; **SUITE 30 : les Mages Sylvains ne sont PAS le Pisteur du Bosquet — c'est la branche Druide, voie propre, différée v2 §9**) · la lumière → s13 Servante de l'Aube (aube) · l'ombre → a31 Guetteur Crépusculaire (ombre) · l'appel → v1 Apprenti Invocateur (appel) |
 | n3 Prêtre Novice | la foi → s13 Servante de l'Aube (aube) · la garde → s14 Garde du Rempart (bouclier) · l'ombre → q1 Novice du Crépuscule (crepuscule) · le zèle → u1 Fidèle du Matin (zele) |
 | n4 Voleur Novice | l'assassinat → a31 Guetteur Crépusculaire (ombre) · les quais → a34 Braconnier des Quais (mini-lignée Quais) · la fête → a37 Jongleur de Fête (mini-lignée Fête) · le vol → t1 Mercenaire (vol) |
 
@@ -46,7 +46,7 @@ Convergences vivantes (`data/evolutions.json`) : l'**Adepte des Rivières (a29)*
 | Naissance | Éveil (état actuel → état visé par le gel v1) |
 | --- | --- |
 | n13 Ange (C, Lumière) | p1 Jeune Séraphin (UC, effet « remplace », fait disparaître p2 Ange Gardien) ; les 3 portes : **la coloration** (l'eau, l'aube, le sabre — DORMANTE en v1, maillons = destinées post-L différées v2), **la voie céleste** (p5 Séraphin, Porteur de Lumière UR → p6 Séraphin, Chérubin Éveillé L), **la mauvaise volonté** (ANGES DÉVOYÉS à construire, cf. §6.2) |
-| n14 Démon (C, Ombre) | aujourd'hui → d8 Choriste Miroir (la Réflexion) ; **TRANCHÉ le 14/11 (suite 25) : PAS d'accès au Chœur — l'éveil ouvre les voies de la chair et de la puissance** (cf. §6.1 ; retrait de n14 → d8 à livrer avec le nouvel accès Chœur) |
+| n14 Démon (C, Ombre) | aujourd'hui → d8 Choriste Miroir (la Réflexion) ; **TRANCHÉ le 14/11 (suite 25) : PAS d'accès au Chœur — l'éveil ouvre les voies de la chair et de la puissance** (cf. §6.1 ; retrait de n14 → d8 à livrer avec le nouvel accès Chœur) ; **TRANCHÉ le 15/11 (suite 30) : n14 EST RENOMMÉ « Diablotin »** (l'espèce de base du camp démon, « qui devient quelque chose d'autre ») |
 | n15 Éveillé du Seuil (C, Neutre) | d14 Aiguille du Pont (le Liage, Tisseuses du Pont) — QUESTION OUVERTE (suite 26) : PROPOSITION de recâblage vers les TROIS familles divines au choix (d1/d7/d13, l'aînée commune), qui résout aussi l'accès Chœur (enquête `enquete-cartes-2026-11-14.md` §3) |
 
 ## 2. Les 14 familles jouables (carte par carte, `data/families.json`)
@@ -125,10 +125,10 @@ Tout ce qui suit est TRANCHÉ (arbitrages du 13/11) et reste à construire côt�
 ### 6.1 Le camp démon (18 cartes) — le trou principal, LOT PRIORITAIRE du gel (Marc-Olivier, 14/11)
 
 - **Recâblage TRANCHÉ le 14/11 (suite 25) : n14 Démon n'a PAS accès au Chœur Miroir** — l'éveil actuel n14 → d8 part sur les deux voies ; le retrait de `n14 → d8` se livre ENSEMBLE avec le nouvel accès du Chœur (c'est son seul éveil aujourd'hui, sinon la famille devient injouable).
-- **Deux voies depuis n14 Démon (C, Ombre)**, choix 1 : la chair (Aiguillon du Désir UC) ou la puissance (Brute des Fosses UC) ; choix 2 au R.
+- **Deux voies depuis n14 (C, Ombre)**, choix 1 : la chair (Aiguillon du Désir UC) ou la puissance (Brute des Fosses UC) ; choix 2 au R. **TRANCHÉ le 15/11 (suite 30) : n14 est RENOMMÉ « Diablotin »** — c'est l'espèce de base du camp démon, pas une commune supplémentaire ; **PROPOSITION suite 30 (à valider d'un mot) : les UC de voie deviennent « Démon du Désir » (la chair) et « Démon des Fosses » (la puissance)**, à la place de l'Aiguillon du Désir et de la Brute des Fosses.
 - **Voie de la chair** : Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** (ordre acté v14) ; **trappe DÉBLOQUÉE en v1 (suite 25) : Gouffre des Vices R → Grand Gouffre SR → Gueule de l'Abîme UR → Famine L** (NOM ACTÉ suite 26, ex-« La Faim » : la nommée de la trappe, bestiale ; titre à caler).
 - **Voie de la puissance** : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L** (nommée actée v14) ; **trappe DÉBLOQUÉE en v1 : Fléau Démoniaque R → Grand Fléau SR → Porte-Peste UR → Peste, Mère des Fléaux L** (NOM ACTÉ suite 26, ex-Pestis). **QUESTION OUVERTE (suite 26)** : le sommet de la puissance, **un roi démon seul ou une reine ET un roi** (le doublon de L est permis, précédent Jeanne/Siegfried ; Lilith reste la reine, le roi serait un nommé à créer).
-- **Spec d'exécution RÉDIGÉE : `docs/design/spec-trappes-demon-ange-v1.md`** (ids d19-d36 proposés, écoles le Vice / la Fureur, sorts 2×6 + signatures, 4 lots, digest inchangé attendu). **DIRECTION REÇUE (suite 26) : le camp divin travaille par ESPÈCES** (Diablotin côté démon — renommage de n14 ou commune supplémentaire, À TRANCHER ; Chérubin/Séraphin côté ange, §6.2). Restent à valider : les écoles et les sorts, **l'accès au Chœur Miroir sans n14** (options mises à jour suite 26 : **n15 l'aînée commune des trois familles RECOMMANDÉE**, l'événement du miroir, une naissance dédiée ; la coloration-eau est ÉCARTÉE, la coloration reste comme définie) ; les espèces des arts (diables humanoïdes, `species-map.json`) ; le roi démon seul ou doublé.
+- **Spec d'exécution RÉDIGÉE : `docs/design/spec-trappes-demon-ange-v1.md`** (ids d19-d36 proposés, écoles le Vice / la Fureur, sorts 2×6 + signatures, 4 lots, digest inchangé attendu). **DIRECTION REÇUE (suite 26) : le camp divin travaille par ESPÈCES** (Diablotin côté démon — **TRANCHÉ suite 30 : le Diablotin RENOMME n14** ; Chérubin/Séraphin côté ange, §6.2). Restent à valider : les écoles et les sorts, **l'accès au Chœur Miroir sans n14** (options mises à jour suite 26 : **n15 l'aînée commune des trois familles RECOMMANDÉE**, l'événement du miroir, une naissance dédiée ; la coloration-eau est ÉCARTÉE, la coloration reste comme définie) ; les espèces des arts (diables humanoïdes, `species-map.json`) ; le roi démon seul ou doublé ; les UC de voie (Démon du Désir / Démon des Fosses, proposition suite 30).
 - **Les donjons divins** (tranchés 12/11, 3 donjons Démons/Anges/Équilibre) s'appuieront sur ces lignées pour leurs sous-bosses et leur roi.
 
 ### 6.2 Les anges dévoyés (4 cartes + re-racement) — LOT PRIORITAIRE du gel (la trappe ange DÉBLOQUÉE en v1, suite 25)
@@ -160,7 +160,7 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 
 ### 6.7 La synthèse des tranchages restants pour verrouiller la v1 (périmètre arbres/fusion/lignées)
 
-Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Tranchés le 14/11 (suite 25) : **n14 Démon n'a PAS accès au Chœur Miroir** (recâblage vers les voies du camp démon) ; **les trappes démon et ange DÉBLOQUÉES en v1, en tête du gel** (lignées complètes des trappes + anges dévoyés ; spec `docs/design/spec-trappes-demon-ange-v1.md`). Tranchés le 14/11 (suite 26, relecture de l'arbre) : **les noms des L des trappes — Famine et Peste, Mère des Fléaux** ; **la coloration confirmée différée telle que définie** ; **direction reçue : le camp divin travaille par ESPÈCES** (Diablotin, Chérubin/Séraphin). Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
+Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Tranchés le 14/11 (suite 25) : **n14 Démon n'a PAS accès au Chœur Miroir** (recâblage vers les voies du camp démon) ; **les trappes démon et ange DÉBLOQUÉES en v1, en tête du gel** (lignées complètes des trappes + anges dévoyés ; spec `docs/design/spec-trappes-demon-ange-v1.md`). Tranchés le 14/11 (suite 26, relecture de l'arbre) : **les noms des L des trappes — Famine et Peste, Mère des Fléaux** ; **la coloration confirmée différée telle que définie** ; **direction reçue : le camp divin travaille par ESPÈCES** (Diablotin, Chérubin/Séraphin). **Tranchés le 15/11 (suite 30, 2e relecture de l'arbre)** : **le Diablotin RENOMME n14** ; **la chaîne berges (Ancien → Protecteur → Pontos) QUITTE les Abîmaux, remplacée par la lignée des boss (Hydre des Marées → Souverain des Marées), le Titan reste la M** (§6.8) ; **les Naufragés ne sont PAS la famille des nymphes ; les vraies Nymphes = 5 familles côté nature, différées v2** (§6.9) ; **la Légion Solaire et le Clergé du Plein Jour sont des familles HUMAINES** (Légion → guerriers, Clergé → prêtres, dédoublonnage à tracer, §6.9) ; **d8 Choriste Miroir et d14 Aiguille du Pont RETIRÉS des familles divines joueur** (§6.9) ; **les Mages Sylvains = la branche Druide, pas le Pisteur du Bosquet** ; **l'Ange Gardien confirmé mort (retrait de la carte p2 du data à livrer)** ; **les sommets quais/fête (Ombre des Quais, Brumaire, Virtuose de Fête, Colombine) remis au diagramme 10.5**. Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
 
 1. **L'accès au Chœur Miroir sans n14** (le recâblage est TRANCHÉ : n14 va aux voies du camp démon) : options mises à jour suite 26 — **n15 l'aînée commune des trois familles divines (RECOMMANDÉE, spec trappes §4-d)**, l'événement du miroir, une naissance dédiée ; la coloration-eau est ÉCARTÉE.
 2. **Le camp démon, restes de la spec trappes** : la **structure par espèces à retravailler** (Diablotin = renommage de n14 ou commune supplémentaire ; chaîne Ange → Archange côté ange, et le nom Luz déjà pris par la déchue) ; **le roi démon seul ou reine ET roi** ; **les sorts de lignée (2×6) et signatures** (propositions Vice/Fureur/Orgueil à valider) — les trappes sont TRANCHÉES débloquées en v1 et leurs nommées ACTÉES (Famine, Peste).
@@ -169,16 +169,29 @@ Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le c
 5. **Le mapping mystique → famille divine** (fusion humaine + mystique) : PROPOSITION par forme — Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir.
 6. **Les défauts balisés restants de la spec fusion v4** (divines L éligibles, rareté max/surclassement, plafonds de stats, choix des sorts hérités, bâtiment Autel — explication donnée à Marc-Olivier le 14/11, tranchage ou défauts).
 7. **La composition finale des lignées uniques** : les 4 starters proposés (lame/eau/aube/ombre) à valider, le moment du choix, le lore du Lieur.
-8. **Le web des Flots, retours suite 28** : (a) la M mythique — **Léviathan plutôt que le Titan des Marées ?** (question ouverte de Marc-Olivier) ; (b) **Pontos, Aîné des Berges à retirer** (trop humanoïde pour la famille des purs monstres — proposition à confirmer d'un mot, §6.8) ; (c) **les deux boss du donjon à créer** : Hydre des Marées et Souverain des Marées (demande actée suite 28, §6.8).
+8. **Le web des Flots — TRANCHÉ suite 30** : la chaîne berges (e15 Ancien, e21 Protecteur, e22 Pontos) QUITTE les Abîmaux ; la famille reçoit la lignée des boss (**Hydre des Marées → … → Souverain des Marées**), le **Titan des Marées reste la M au sommet** (la question « Léviathan en M » est résolue : Léviathan garde sa chaîne en L) ; spec du donjon des Marées à rédiger (§6.8).
+9. **Le dédoublonnage du zèle (à tracer, suite 30)** : les cartes humaines u4 Chapelain du Jour / u5 Arbalétrier Doré DOUBLENT les monstres z23/z3 du Zénith — UNE seule famille du zèle à constituer (§6.9).
+10. **La structure espèces côté ange** : où s'attache la chaîne Ange → Ange de Lumière → Archange, et le nom « Luz » déjà pris par la déchue v2.
 
-### 6.8 Le web des Flots : le sommet en question et les deux boss manquants (retours de Marc-Olivier, suite 28 — diagramme restauré 10.11)
+### 6.8 Le web des Flots : la restructuration TRANCHÉE (suite 30 ; question posée suite 28 — diagramme restauré 10.11)
 
-Le web de l'eau (donjon des Marées, diagramme **10.11**, restauré ce tour du v17 §8.1 et mis à jour des data réelles) compte 3 familles : Gobelins des Écumes, **Abîmaux** (les purs monstres), Sirènes des Récifs. Trois retours de Marc-Olivier :
+Le web de l'eau (donjon des Marées, diagramme **10.11**) compte 3 familles : Gobelins des Écumes, **Abîmaux** (les purs monstres), Sirènes des Récifs. **TRANCHÉ le 15/11 (suite 30)** :
 
-1. **La M du biome en question** : aujourd'hui le sommet mythique est le **Titan des Marées (e14)**, au-dessus des L Léviathan (e13) et Pontos (e22). **QUESTION OUVERTE (suite 28) : c'est plutôt Léviathan qu'on mettrait en carte mythique.** À trancher : la M change de porteur (Léviathan monte en M, une nouvelle L bestiale ➕ remonte sous lui, le Titan est retiré ou repositionné) — impact digest si le pool de rencontre bouge, à mesurer le jour du lot.
-2. **Pontos, Aîné des Berges (e22) : à RETIRER (proposition de Marc-Olivier, à confirmer d'un mot)** — trop humanoïde pour la famille des purs monstres. Conséquences à câbler au retrait : la chaîne berges (e15 Ancien des Berges SR → e21 Protecteur des Berges UR → e22 Pontos L) reçoit une **nouvelle L bestiale ➕ à proposer** ; la malédiction des quais différée v2 (le Maudit des Berges, §9) s'appuie aujourd'hui sur cette chaîne (audit §4) → à recâbler.
-3. **Les deux boss du Donjon des Marées n'ont PAS de carte : création DEMANDÉE (suite 28)**. `dungeons.json` ne porte que des noms (`bossNames` 5/10) et `makeWave` renomme une carte tirée au hasard (`boss.name = dungeon.bossNames[stage]` — le bug « Hydre en gobelin » de la suite 16, NON corrigé à ce jour). **Hydre des Marées** (boss palier 5, bestiale multi-têtes canon : 3 têtes) et **Souverain des Marées** (boss palier 10, sommet du donjon) : **2 cartes à créer dans la lignée de l'eau**, paliers L proposés, à caler ; elles s'inscrivent avec le correctif boss non aléatoire (mapping boss → carte dédiée, suite 16 — les 8 autres boss du jeu ont déjà leur carte : f23/f13, g16/g8, k13/k17, z6/z8). **[IMPACT DIGEST]** : vagues 5/10 modifiées → re-mesure et arbitrage baseline obligatoires.
-4. **Le web de l'eau n'était pas perdu** : le v17 §8.1 le documente en entier (gabarit validé des 4 webs) ; c'est le v18 qui ne l'avait pas reporté — **CORRIGÉ ce tour : les 5 webs sont restaurés en 10.11-10.15, à jour des data réelles** (leçon consignée : les diagrammes sont l'outil de repérage premier de Marc-Olivier, ils ne restent jamais au fond de l'historique).
+1. **La chaîne berges QUITTE les Abîmaux** : e15 Ancien des Berges, e21 Protecteur des Berges et e22 Pontos sont enlevés de la famille (des « berges » quasi humanoïdes, pas des abîmaux : la famille doit être des PURS monstres). La question « Léviathan en M ? » est résolue par la restructuration : **le Titan des Marées reste la M**, Léviathan garde sa chaîne (e9 → e6 → e13) en L.
+2. **La lignée des boss prend la place** : **Hydre des Marées** (boss palier 5, bestiale multi-têtes) et **Souverain des Marées** (boss palier 10) entrent DANS la famille — la lignée des boss du donjon finit « avec le Titan à la fin » : Hydre des Marées → (maillons des Marées à proposer) → Souverain des Marées, puis la M Titan des Marées au sommet. Paliers à caler en spec (L pour les deux boss, proposition suite 28 confirmée suite 30).
+3. **Correctif boss non aléatoire à livrer avec** : `makeWave` renomme toujours une carte tirée au hasard (`boss.name = dungeon.bossNames[stage]` — le bug « Hydre en gobelin », suite 16) ; les 8 autres boss du jeu ont déjà leur carte (f23/f13, g16/g8, k13/k17, z6/z8). **[IMPACT DIGEST]** : vagues 5/10 modifiées → re-mesure et arbitrage baseline obligatoires.
+4. **Conséquences à câbler en spec** : le sort des 3 cartes berges (retrait du jeu, ou relogement — la malédiction des quais v2, le Maudit des Berges, s'appuyait sur cette chaîne : à recâbler) ; le side e12 Gardien des Galets (SR, berges lui aussi) à arbitrer avec ; la fiche du web 10.11 mise à jour.
+
+### 6.9 Les familles humaines et la structure, tranchages suite 30 (l'arbre épuré)
+
+1. **La Légion Solaire et le Clergé du Plein Jour sont des FAMILLES HUMAINES** (« ils font partie des hommes... plus que du donjon, c'est des cartes humaines ») : à intégrer aux humains, avec les mêmes paliers et symboles de rareté. Répartition : **la Légion Solaire avec les GUERRIERS** (l'éveil du N de l'Épéiste peut ouvrir la Légion — « le N du guerrier a un choix » : Arbalétrier Doré, Lancier Solaire cités ; chaîne actuelle du Zénith : z1 Écuyer du Zénith C → z3 Arbalétrier Doré UC → z4 Lancier Solaire R → z5 Voulige d'Aube SR → z13 Centurion Ardent UR → z7 Héraut du Zénith L / z14 Lancière de l'Aube UR → z15 Aurorine L) ; **le Clergé du Plein Jour avec les PRÊTRES** (z9 Chantre du Zénith C → z23 Chapelain du Jour UC → z24 Diacre R → z11 Prêtresse SR → z25 Cantatrice UR → z26 Célestin L ; z27 → z28 → z29 Justine L). **Et un LIEN entre les deux** : le prêtre peut rejoindre la Légion Solaire (via l'Arbalétrier Doré), le pont à tracer.
+2. **UNE seule famille du zèle, pas deux** (« pourquoi tu fais deux familles de zèle ? ») : les cartes humaines u4 Chapelain du Jour / u5 Arbalétrier Doré double les monstres z23 / z3 du Zénith. Chantier de dédoublonnage à tracer en spec : la famille u1-u6 (Fidèle du Matin → Lémion) et les cartes du Zénith fusionnent en UNE famille humaine du zèle, répartie Clergé (prêtres) / Légion (guerriers). Le choix du paladin au palier R (u3 Croisé de l'Aube) reste TRANCHÉ suite 24, confirmé suite 28.
+3. **d8 Choriste Miroir et d14 Aiguille du Pont : RETIRÉS des familles divines joueur** (TRANCHÉ suite 30 : « je ne sais pas d'où ils sortent... enlève-les ») — s'ils restent un jour, ce serait côté monstres, pas côté divins. Conséquences à caler en spec : les chaînes du Chœur (d7 Lame Miroir C → d8 → d9 Prisme R) et du Pont (d13 Fileuse C → d14 → d15 Brodeuse R) se recâblent sans leur UC ; l'accès n15 (l'aînée commune, option recommandée) reste par les C d1/d7/d13 ; le garde-fou « ne pas retirer n14 → d8 avant le nouvel accès » demeure jusqu'au lot accès.
+4. **Les Naufragés ne sont PAS la famille des nymphes** (TRANCHÉ suite 30) : les Naufragés (Crypte) restent eux-mêmes (Nymphe Croupie k2 peut rester en tête de chaîne, sans être « spécialement une nymphe ») ; les NYMPHES sont une autre famille, côté NATURE, **différée v2** : les 5 types à construire par recherche détaillée (noms, formats, chaînes) — **Alcéides** (nymphes des prés et des champs ; piste maison : la lumière), **Naïades** (les eaux), **Lampades** (nymphes sombres des enfers et des deuils ; piste : les Naufragés en seraient notre version), **Auréades** (les montagnes), **Dryades** (les arbres, déjà présentes au Bosquet : Dryade Radieuse, Dryade du Sous-Bois, Vesna). La Gorgonne et la Luciole (fées) s'ajoutent par ailleurs au gel (§6.5).
+5. **Les Mages Sylvains = la branche Druide, pas le Pisteur du Bosquet** (suite 30) : le mage qui va au Bosquet rejoint la famille du Bosquet par le nœud partagé a33 (correct), mais les Mages Sylvains sont une voie DRUIDE propre, différée v2 avec les Sylvains ; les libellés « les Sylvains → a33 » corrigés dans les diagrammes (10.3).
+6. **Les Mages Noirs = les Nécromanciens ; pas de Mages de Lumière** (suite 30) : la piste « mage noir » se résout en nécromancie (différée v2, v17 §2.3 : l'Évocatrice du Caveau) — le prêtre noir (Novice du Crépuscule) peut ouvrir la branche vers les Nécromanciens (invocations de morts-vivants) ; PAS de voie lumière du mage (confirmé v15) ; les Prêtres de l'Aube restent accessibles par l'éveil du prêtre (n3 → lumière). « Le Mage de la terre » : les élus de la terre, jamais tranchés (§9).
+7. **L'Ange Gardien confirmé MORT** (suite 30 : « on l'a enlevé, il n'y a plus d'Ange Gardien ») : le design v16 le tuait (une carte à elle seule ne fait pas un palier), l'éveil n13 → p1 le fait disparaître en jeu (effet « remplace ») — MAIS la carte p2 « Ange Gardien » traîne encore dans `cards.json` : retrait à livrer en lot data (impact digest à mesurer) ; la greffe de l'Aube part de p1 (diagramme 10.4 corrigé).
+8. **Les sommets quais et fête REMIS aux diagrammes** (suite 30 : « on avait déjà défini, je veux que tu les rajoutes ») : quais : Maître des Brumes R → **Ombre des Quais ➕ UR → Brumaire, Renard des Quais ➕ L** ; fête : Maître Jongleur R → **Virtuose de Fête ➕ UR → Colombine, Reine de la Fête ➕ L** (v17 §2.5, noms proposés) — différés v2 mais VISIBLES (10.5 corrigé, ils ne s'installent qu'au-dessus du R, rien d'autre ne bouge).
 
 ## 7. La fusion DQM v4 : la couche race, puis la couche famille (TRANCHÉ le 13/11, suite 8 ; détails spec `docs/design/spec-fusion-v4.md`)
 
@@ -231,7 +244,7 @@ Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters préd
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 
-Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **Famine (ex-« La Faim ») quitte cette liste le 14/11 (suite 25, nom acté suite 26)** : L de la trappe du Gouffre des Vices en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1. **Précisions suite 28 (enquête « travaux perdus »)** : la **nécromancie** n'est pas perdue — son détail complet vit au **v17 §2.3** (l'Évocatrice du Caveau · R, la conversion funèbre et ses deux portes, l'école des invocations 2.6) ; le zèle aussi y est détaillé (l'Invocatrice de l'Aube · R, la passerelle vers Isaure). Le **Maudit des Berges** s'appuie sur la chaîne berges (Ancien → Protecteur → Pontos) : si Pontos est retiré (§6.8), la malédiction se recâble sur la nouvelle L bestiale. **Maïa n'est pas perdue** : a27 Maïa, Lame du Bosquet UR → a28 Maïa, Déesse du Bosquet L, la fusion est en jeu (règle 1.4 : le doublon de L est permis, tables `docs/tables/cartes.md`).
+Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **Famine (ex-« La Faim ») quitte cette liste le 14/11 (suite 25, nom acté suite 26)** : L de la trappe du Gouffre des Vices en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1. **Précisions suite 28 (enquête « travaux perdus »)** : la **nécromancie** n'est pas perdue — son détail complet vit au **v17 §2.3** (l'Évocatrice du Caveau · R, la conversion funèbre et ses deux portes, l'école des invocations 2.6) ; le zèle aussi y est détaillé (l'Invocatrice de l'Aube · R, la passerelle vers Isaure). Le **Maudit des Berges** s'appuie sur la chaîne berges (Ancien → Protecteur → Pontos) : si Pontos est retiré (§6.8), la malédiction se recâble sur la nouvelle L bestiale. **Maïa n'est pas perdue** : a27 Maïa, Lame du Bosquet UR → a28 Maïa, Déesse du Bosquet L, la fusion est en jeu (règle 1.4 : le doublon de L est permis, tables `docs/tables/cartes.md`). **Précisions suite 30 (2e relecture de l'arbre)** : les **Sylvains = la branche Druide** des mages (voie propre, PAS le Pisteur du Bosquet — le mage garde l'éveil vers a33, nœud partagé du Bosquet, mais le libellé « les Sylvains » est une scorie à corriger dans les libellés d'éveil) ; les **Nymphes = 5 familles côté nature, différées v2** (Alcéides des prés/champs — piste maison : la lumière —, Naïades des eaux, Lampades des deuils — piste : les Naufragés en sont notre version —, Auréades des montagnes, Dryades des arbres, déjà au Bosquet ; recherche détaillée demandée : noms, formats, chaînes) ; l'**Ange Gardien (p2) est bien MORT** — la carte existe encore dans `data/cards.json` (effet « remplace » qui la fait disparaître à l'éveil n13→p1) : son retrait du data se livre en lot séparé (avec la scorie p4 Fidèle du Jour) ; la **malédiction des quais** se recâble sans la chaîne berges (le Maudit des Berges devient « Maudit des Marées », à caler sur la nouvelle lignée des boss, §6.8) ; les **élus de la terre** (« le Mage de la terre ») restent jamais tranchés — la question demeure ouverte.
 
 ## 10. Les diagrammes de la v1 cible (l'état du jeu ➕ le gel)
 
@@ -302,6 +315,7 @@ flowchart TD
   CHE -.-> CHES["Chevalière du Rempart ➕ · SR (verrou)"]
   CHES -.-> CHEU["Gardienne du Rempart ➕ · UR"]
   CHEU -.-> CHEL["Kiri l'Invincible ➕ · L"]
+  N1 -.->|"éveil du guerrier : la Légion Solaire — SUITE 30, à tracer"| Z1["z1 Écuyer du Zénith · C (la Légion devient HUMAINE, §6.9)"]
   S6 --> S7["Bastion Arcanique · SR"]
   S7 --> S11["Argus, Rempart Éveillé · UR"]
   S11 --> S12["Argus, Forteresse Vivante · L"]
@@ -319,7 +333,7 @@ flowchart TD
   N2["n2 Mage Novice · N"] -->|"les flots"| A5["Apprentie des Rivières · C"]
   N2 -->|"la fournaise"| A19["Allumeur de Braises · C"]
   N2 -->|"l'appel"| V1["Apprenti Invocateur · C"]
-  N2 -->|"les Sylvains"| A33["Pisteur du Bosquet · UC — arbre 10.2"]
+  N2 -->|"le Bosquet (nœud partagé — SUITE 30 : les Mages Sylvains = la branche Druide, différée v2, PAS cette voie)"| A33["Pisteur du Bosquet · UC — arbre 10.2"]
   N2 -->|"la lumière"| S13["Servante de l'Aube · UC — arbre 10.4"]
   N2 -->|"l'ombre"| A31["Guetteur Crépusculaire · UC — arbre 10.5"]
   A5 --> A29["Adepte des Rivières · UC"]
@@ -364,8 +378,11 @@ flowchart TD
   U3 --> U4["Chapelain du Jour · SR"]
   U4 --> U5["Arbalétrier Doré · UR"]
   U5 --> U6["Lémion, Chef de la Légion Solaire · L"]
-  P2["p2 Ange Gardien · C (greffe de l'Aube)"] -.-> S13
+  P1 -.->|"la greffe de l'Aube — SUITE 30 : l'Ange Gardien (p2) est MORT, la greffe part du Jeune Séraphin"| S13
+  Q1 -.->|"SUITE 30 : le prêtre noir → les Nécromanciens (différée v2, v17 §2.3)"| NEC["Évocatrice du Caveau ➕ · R — la nécromancie : invocations de morts-vivants"]
 ```
+
+- **SUITE 30** : le Clergé du Plein Jour rejoint les PRÊTRES et la Légion Solaire les GUERRIERS (§6.9) — le dédoublonnage de la famille du zèle (u4/u5 doublonnent z23/z3) est à tracer ; la branche u1-u6 ci-dessus reste la trace actuelle du jeu. Les Mages Noirs = les Nécromanciens (branche du prêtre noir, différée v2) ; PAS de Mages de Lumière (confirmé v15).
 
 ### 10.5 L'arbre du Voleur (n4) — ombre, vol, mini-lignées Quais/Fête
 
@@ -387,9 +404,11 @@ flowchart TD
   T5 --> T6["Gadianton, Chef des Brigands · L"]
   A34 --> A40["Chasseur des Quais · UC"]
   A40 --> A41["Maître des Brumes · R (verrou)"]
+  A41 -.->|"la voie normale (SUITE 30 : remis au diagramme, différé v2)"| OQ["Ombre des Quais ➕ · UR"] -.-> BRU["Brumaire, Renard des Quais ➕ · L"]
   A34 -.->|"la malédiction des quais (conversion vers le web)"| E3["e3 Pillard des Récifs · web des Marées"]
   A37 --> A45["Artiste de Fête · UC"]
   A45 --> A46["Maître Jongleur · R (verrou)"]
+  A46 -.->|"SUITE 30 : remis au diagramme, différé v2"| VF["Virtuose de Fête ➕ · UR"] -.-> COL["Colombine, Reine de la Fête ➕ · L"]
 ```
 
 ### 10.6 Le camp divin (n13-n15) — Séraphin, portes, démons (gel), pont
@@ -405,9 +424,9 @@ flowchart TD
   AA1 -.-> AA2["Ange du Zénith ➕ · SR (verrou)"]
   AA2 -.-> AA3["Astre Vaillant ➕ · UR"]
   AA3 -.-> AA4["Astre Rayonnant ➕ · L"]
-  N14["n14 Démon · C · Ombre"] -->|"AUJOURD'HUI (retiré au lot accès Chœur, suite 25) : la Réflexion"| D8["d8 Choriste Miroir · monstre du Chœur"]
-  N14 -.->|"choix 1 : la chair (gel)"| DA1["Aiguillon du Désir ➕ · UC"]
-  N14 -.->|"choix 1 : la puissance (gel)"| DB1["Brute des Fosses ➕ · UC"]
+  N14["n14 Diablotin · C · Ombre (ex-Démon, RENOMMÉ suite 30)"] -->|"AUJOURD'HUI (retiré au lot accès Chœur, suite 25 ; d8 RETIRÉ des familles divines joueur, suite 30)"| D8["d8 Choriste Miroir · monstre du Chœur"]
+  N14 -.->|"choix 1 : la chair (gel)"| DA1["Démon du Désir ➕ · UC (PROPOSITION suite 30, ex-Aiguillon du Désir)"]
+  N14 -.->|"choix 1 : la puissance (gel)"| DB1["Démon des Fosses ➕ · UC (PROPOSITION suite 30, ex-Brute des Fosses)"]
   DA1 -.-> DA2["Succube ➕ · R"]
   DA2 -.-> DA3["Grande Succube ➕ · SR (verrou)"]
   DA3 -.-> DA4["Dame du Désir ➕ · UR"]
@@ -430,7 +449,7 @@ flowchart TD
   class AA1,AA2,AA3,AA4,DA1,DA2,DA3,DA4,DA5,DA6,DA7,DA8,DA9,DB1,DB2,DB3,DB4,DB5,DB6,DB7,DB8,DB9 gel;
 ```
 
-- Note : TRANCHÉ le 14/11 (suite 25) — **n14 n'a PAS accès au Chœur Miroir** ; le nouvel accès du Chœur (option RECOMMANDÉE suite 26 : n15 l'aînée commune, spec trappes §4-d) se pose AVANT de retirer n14 → d8. Les trappes sont DÉBLOQUÉES avec leurs lignées complètes (**Famine, Peste : NOMS ACTÉS suite 26**). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule). d6 Kairos est une **L** (l'étiquette « M monstre » était une scorie, corrigée suite 26).
+- Note : TRANCHÉ le 14/11 (suite 25) — **n14 n'a PAS accès au Chœur Miroir** ; le nouvel accès du Chœur (option RECOMMANDÉE suite 26 : n15 l'aînée commune, spec trappes §4-d) se pose AVANT de retirer n14 → d8. **SUITE 30 : d8 Choriste Miroir et d14 Aiguille du Pont RETIRÉS des familles divines joueur** (§6.9) — les chaînes du Chœur et du Pont se recâblent sans leur UC, à caler en spec. Les trappes sont DÉBLOQUÉES avec leurs lignées complètes (**Famine, Peste : NOMS ACTÉS suite 26**). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule). d6 Kairos est une **L** (l'étiquette « M monstre » était une scorie, corrigée suite 26).
 
 ### 10.7 Les 3 familles divines joueur (w1-w18) et leurs miroirs
 
@@ -532,27 +551,26 @@ flowchart TD
     E5 --> E16["e16 Grand Chaman des Écumes · UR"] --> E17["e17 Zikka, Chaman des Écumes · L"]
     E5 --> E18["e18 Roi des Écumes · UR"] --> E19["e19 Griknir, Roi des Écumes · L"]
   end
-  subgraph Abimaux["Abîmaux (les purs monstres)"]
+  subgraph Abimaux["Abîmaux (les purs monstres) — SUITE 30 : la chaîne berges QUITTE la famille"]
     E7["e7 Moqueur des Marées · C"] --> E11["e11 Crabe des Berges · UC"] --> E20["e20 Rôdeur des Fonds · R"]
     E20 --> E9["e9 Confesseur des Abysses · SR"] --> E6["e6 Avatar de l'Abîme · UR"] --> E13["e13 Léviathan, Colère du Gouffre · L"]
-    E20 --> E15["e15 Ancien des Berges · SR"] --> E21["e21 Protecteur des Berges · UR"] --> E22["e22 Pontos, Aîné des Berges · L<br/>QUESTION suite 28 : à RETIRER (trop humanoïde)"]
   end
   subgraph Sirenes["Sirènes des Récifs"]
     E23["e23 Sirène Nouvelle · C"] --> E24["e24 Chanteuse des Récifs · UC"] --> E25["e25 Voix du Large · R"] --> E26["e26 Écumeuse des Récifs · SR"]
     E26 --> E27["e27 Sirène Ensorceleuse · UR"] --> E28["e28 Méliane, Voix du Large · L"]
     E26 --> E29["e29 Gardienne des Récifs · UR"] --> E30["e30 Thalassa, Reine des Récifs · L"]
   end
-  E13 -.->|"QUESTION suite 28 :<br/>Léviathan en M plutôt que le Titan ?"| E14["e14 Titan des Marées · M"]
-  E22 -.-> E14
-  HYD["➕ Hydre des Marées · L (boss palier 5 — À CRÉER, suite 28)"]
-  SOU["➕ Souverain des Marées · L (boss palier 10 — À CRÉER, suite 28)"]
-  E13 -.->|"boss dédié à venir (mapping makeWave, suite 16)"| HYD
+  E13 -.->|"le Titan demeure la M (TRANCHÉ suite 30 : Léviathan garde sa chaîne en L)"| E14["e14 Titan des Marées · M"]
+  HYD["➕ Hydre des Marées · L (boss palier 5 — À CRÉER, dans la lignée, suite 30)"]
+  SOU["➕ Souverain des Marées · L (boss palier 10 — À CRÉER, dans la lignée, suite 30)"]
+  E20 -.->|"la lignée des boss entre dans la famille (remplace la chaîne berges : e15 Ancien, e21 Protecteur, e22 Pontos RETIRÉS ; paliers à caler)"| HYD
   HYD -.-> SOU
+  SOU -.-> E14
   style HYD stroke-dasharray: 5 5
   style SOU stroke-dasharray: 5 5
 ```
 
-- Side cards : e2 Tirailleur des Récifs C, e10 Veuve des Récifs UC, e8 Matriarche des Récifs R (Gobelins) ; e12 Gardien des Galets SR (Abîmaux). Le web n'était pas perdu (v17 §8.1, gabarit validé) : c'est le v18 qui ne l'avait pas reporté — corrigé suite 28. Les 3 webs restants (Fournaise, Vivant, Au-delà) et le Zénith suivent (10.12-10.15).
+- Side cards : e2 Tirailleur des Récifs C, e10 Veuve des Récifs UC, e8 Matriarche des Récifs R (Gobelins) ; e12 Gardien des Galets SR (Abîmaux — des berges lui aussi, à arbitrer avec le retrait §6.8). **TRANCHÉ suite 30** : la chaîne berges quitte les Abîmaux, la lignée des boss (Hydre des Marées → Souverain des Marées, paliers à caler) la remplace, le Titan reste la M, Léviathan garde sa chaîne en L. Le web n'était pas perdu (v17 §8.1, gabarit validé) : c'est le v18 qui ne l'avait pas reporté — corrigé suite 28. Les 3 webs restants (Fournaise, Vivant, Au-delà) et le Zénith suivent (10.12-10.15).
 
 ### 10.12 Le web de la Fournaise (donjon de la Forge) — RESTAURÉ du v17 §8.2, à jour des data
 
@@ -610,7 +628,7 @@ flowchart TD
     K13 --> K5["k5 Spectre des Quais · SR"] --> K6["k6 Banshee des Caveaux · UR"] --> K14["k14 Macha, Hurleuse des Caveaux · L"]
     K13 --> K15["k15 Éveillé des Caveaux · SR"] --> K16["k16 Liche des Caveaux · UR"] --> K7["k7 Archiliche des Caveaux · L<br/>(le boss de la mort d'Isaure, acté)"]
   end
-  subgraph Naufragés["Les Naufragés (la famille des nymphes)"]
+  subgraph Naufragés["Les Naufragés (SUITE 30 : PAS la famille des nymphes — les Nymphes sont une autre famille, côté nature, v2)"]
     K2["k2 Nymphe Croupie · C"] --> K12["k12 Veilleuse de Bord · UC"] --> K10["k10 Meneuse de Deuil · R"]
     K10 --> K11["k11 Prieuse des Naufragés · SR"] --> K18["k18 Endeuillée des Flots · UR"] --> K19["k19 Ysolde, Veuve Éternelle · L"]
     K10 --> K20["k20 Capitaine Noyé · SR"] --> K21["k21 Revenu des Flots · UR"] --> K22["k22 Ahab, Lord des Naufragés · L"]
@@ -628,7 +646,7 @@ flowchart TD
   K22 -.->|"l'Ancien Naufragé, l'autre face du deuil marin"| K8["k8 Ancien Naufragé · M"]
 ```
 
-- Side cards : k9 Servante Pâle C (Naufragés). Le renommage « Nymphes » de la famille des Naufragés (suite 26, à trancher si voulu) reste ouvert. Le pont v17 « le chant envoie par le fond » (Sirènes → Revenu des Flots) reste une piste.
+- Side cards : k9 Servante Pâle C (Naufragés). **SUITE 30** : les Naufragés ne sont PAS la famille des nymphes — Nymphe Croupie peut rester en tête de chaîne sans être « spécialement une nymphe » (renommage ouvert) ; les vraies Nymphes = 5 familles côté nature, différées v2 (Alcéides, Naïades, Lampades — piste : les Naufragés en seraient notre version —, Auréades, Dryades ; recherche détaillée à faire, v18 §6.9). Le pont v17 « le chant envoie par le fond » (Sirènes → Revenu des Flots) reste une piste.
 
 ### 10.15 Le web du Zénith (les cieux) — RESTAURÉ, à jour des data (phénix = la branche des cieux du v17 §4)
 

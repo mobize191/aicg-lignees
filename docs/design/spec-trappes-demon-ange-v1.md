@@ -3,6 +3,8 @@
 > Tranchage de Marc-Olivier (14/11, suite 25) : « Pas d'accès Chœur pour n14, je voudrais que l'on débloque les trappes démon et ange avant d'avancer. » Lecture consignée : (1) n14 Démon n'a PAS accès au Chœur Miroir, son éveil part sur les voies du camp démon ; (2) les trappes du camp démon (Gouffre des Vices, Fléau Démoniaque) reçoivent leur LIGNÉE EN V1 (le « au fil des patchs » est écarté) et la trappe ange (la porte « mauvaise volonté » de p1 : les anges dévoyés) est DÉBLOQUÉE en v1 ; (3) ce lot passe EN TÊTE du gel, avant gorgones/fées, paladin/chevalier, la spec-gel générale et la fusion. À corriger d'un mot si la lecture est mauvaise. Références : `docs/design/design-arbres-v18.md` §6.1-§6.2 + diagramme 10.6 ; chaînes des voies et nommées actées v14 (arbitrages du 13/11).
 >
 > **MAJ 14/11 (suite 26), retours de relecture de Marc-Olivier, intégrés ci-dessous** : noms TRANCHÉS (La Faim → **Famine** ; Pestis → **Peste**) ; QUESTION OUVERTE du sommet de la puissance (un roi démon seul, ou une reine ET un roi) ; DIRECTION REÇUE : le camp divin travaille par ESPÈCES (Diablotin côté démon, Chérubin/Séraphin côté ange), la structure §2.1 se reprend ; l'accès Chœur : la coloration reste comme définie (option a ÉCARTÉE), nouvelle option (d) n15 l'aînée commune des trois familles, RECOMMANDÉE. Enquête complète : `docs/design/enquete-cartes-2026-11-14.md`.
+>
+> **MAJ 15/11 (suite 30), 2e relecture de l'arbre** : **Diablotin TRANCHÉ — il RENOMME n14** (« le Diablotin, c'est juste pour les démons, il remplace en effet la n14 ») ; les UC de voie proposées deviennent **Démon du Désir** (la chair) et **Démon des Fosses** (la puissance), À VALIDER d'un mot (§2.1).
 
 ## 1. Tranchages actés (14/11, suite 25 — rien à rediscuter)
 
@@ -15,11 +17,11 @@
 
 ## 2. Le camp démon (18 cartes à créer, race divine camp démon, élément Ombre)
 
-### 2.1 Structure (DÉFAUT PROPOSÉ, à valider d'un mot)
+### 2.1 Structure (TRANCHÉE suite 30 sur le Diablotin ; UC de voie à valider d'un mot)
 
-n14 EST la commune C commune aux deux voies (le camp démon se joue comme un novice divin : l'éveil ouvre le choix de voie). Chaque voie est une famille divine : deux éveils depuis n14 (la chair / la puissance), puis un choix au palier R (la carte de voie OU la trappe). Dérrogation assumée à la règle 1.3 (un C pour deux familles) : à documenter dans le validateur, précédent = n13 qui porte les trois familles du camp divin.
+**Diablotin = le nouveau nom de n14 (TRANCHÉ le 15/11, suite 30)** : la commune C du camp démon s'appelle le **Diablotin** (le camp divin travaille par espèces, pas par créatures uniques : « qui devient quelque chose d'autre »). Dérrogation assumée à la règle 1.3 (un C pour deux familles) : à documenter dans le validateur, précédent = n13 qui porte les trois familles du camp divin. Chaque voie est une famille divine : deux éveils depuis le Diablotin (la chair / la puissance), puis un choix au palier R (la carte de voie OU la trappe).
 
-**DIRECTION REÇUE (suite 26) — le camp divin travaille par ESPÈCES, pas par créatures uniques.** Côté démon : un **Diablotin** comme espèce de base C « qui devient quelque chose d'autre » (chaîne calquée sur ange : Diablotin → … → démon/Démon Majeur → …). QUESTION DE STRUCTURE : le Diablotin RENOMME n14 (la commune C devient le Diablotin, les deux voies partent de lui), ou une commune SUPPLÉMENTaire s'ajoute (n14 garde son identité actuelle) — À TRANCHER au lot 1. Côté ange : cf. §3 et `design-arbres-v18.md` §6.2 (Chérubin puis Séraphin ; piste Ange → Ange de Lumière → Archange).
+**PROPOSITION (suite 30, À VALIDER d'un mot)** : les UC de voie deviennent **Démon du Désir** (la chair, tête de la voie des succubes) et **Démon des Fosses** (la puissance, tête de la voie des gouffres) — en écho direct aux trappes Gouffre des Vices et Fléau Démoniaque. Côté ange : cf. §3 et `design-arbres-v18.md` §6.2 (Chérubin puis Séraphin ; piste Ange → Ange de Lumière → Archange, structure à définir).
 
 ### 2.2 Les chaînes (ids proposés d19-d36, à figer au lot 1 — les arts série 3 attendent ces ids)
 
@@ -27,7 +29,7 @@ n14 EST la commune C commune aux deux voies (le camp démon se joue comme un nov
 
 | Id | Carte | Palier | Classe (prop.) | Note |
 | --- | --- | --- | --- | --- |
-| d19 | Aiguillon du Désir | UC | Assassin | choix 2 au R |
+| d19 | Démon du Désir | UC | Assassin | **PROPOSITION suite 30** (remplace « Aiguillon du Désir », à valider d'un mot) ; choix 2 au R |
 | d20 | Succube | R | Occultiste | chaîne principale |
 | d21 | Grande Succube | SR | Occultiste | verrou |
 | d22 | Dame du Désir | UR | Occultiste | |
@@ -41,7 +43,7 @@ n14 EST la commune C commune aux deux voies (le camp démon se joue comme un nov
 
 | Id | Carte | Palier | Classe (prop.) | Note |
 | --- | --- | --- | --- | --- |
-| d24 | Brute des Fosses | UC | Guerrier | choix 2 au R |
+| d24 | Démon des Fosses | UC | Guerrier | **PROPOSITION suite 30** (remplace « Brute des Fosses », à valider d'un mot) ; choix 2 au R |
 | d25 | Démon Majeur | R | Guerrier | chaîne principale |
 | d26 | Seigneur Démon | SR | Guerrier | verrou |
 | d27 | Prince Démon | UR | Guerrier | |

@@ -1,6 +1,8 @@
 # Enquête de traçabilité — les cartes « perdues » de Marc-Olivier (14/11, suite 26)
 
 > Demande : « il y a plein de choses qui existaient et je ne les trouve plus... tu peux faire un peu de tri et d'ordre et de recherche. » Méthode : chaque carte citée a été cherchée dans les data du jeu (v1.51), le v18 (inventaire de l'état du jeu), le v17 (archive des propositions) et les tables générées (`docs/tables/cartes.md` et `monstres.md`). Pour voir les cartes dans le jeu : la collection par race (bandeau Crypte pour la nymphe, mini-lignées pour les quais et la fête), ou les tables générées dans `docs/tables/`.
+>
+> **MAJ 15/11 (suite 30)** : correctif sur les nymphes — les Naufragés ne sont PAS la famille des nymphes (détail §2) ; les vraies Nymphes sont une famille côté nature, différée v2, recherche détaillée demandée.
 
 ## 1. Premier verdict : rien n'a disparu du jeu
 
@@ -12,7 +14,7 @@ Le v18 n'a rien supprimé : c'est l'inventaire de ce qui EST dans le jeu (v1.51)
 | --- | --- | --- |
 | Nymphe Croupie | **DANS LE JEU** | k2, monstre C de la Crypte (Mage, Eau) ; famille des Naufragés, le deuil marin ; `data/monsters.json`, table `docs/tables/monstres.md` ; espèce d'art dédiée `stagnantNymph` (correctif d'art acté 13/11 : figure nymphique humanoïde, pas un monstre reptilien) |
 | Servante Pâle | **DANS LE JEU** | k9, C Prêtre Ombre, même famille des Naufragés |
-| « la famille des nymphes » | **DANS LE JEU, sous le nom NAUFRAGÉS** | la lignée du deuil marin de la Crypte : Nymphe Croupie, Servante Pâle, Veilleuse de Bord (k12), Meneuse de Deuil (k10), Capitaine Noyé, Prieuse des Naufragés, Revenu des Flots, Endeuillée des Flots → Ysolde et Ahab (L), M : Ancien Naufragé (v17 §8.4, v18 §4). Si le nom vitrine « Nymphes » doit revenir, c'est un renommage à trancher, pas une reconstruction |
+| « la famille des nymphes » | **DANS LE JEU, sous le nom NAUFRAGÉS** | la lignée du deuil marin de la Crypte : Nymphe Croupie, Servante Pâle, Veilleuse de Bord (k12), Meneuse de Deuil (k10), Capitaine Noyé, Prieuse des Naufragés, Revenu des Flots, Endeuillée des Flots → Ysolde et Ahab (L), M : Ancien Naufragé (v17 §8.4, v18 §4). **CORRECTIF suite 30 (2e relecture) : les Naufragés ne SONT PAS la famille des nymphes** — Nymphe Croupie k2 peut rester en tête sans être « spécialement une nymphe » ; les vraies Nymphes sont une AUTRE famille, côté nature, différée v2 (5 types : Alcéides, Naïades, Lampades — piste : les Naufragés en sont notre version —, Auréades, Dryades ; recherche détaillée demandée, v18 §6.9/§9) |
 | Braconnier des Quais → Chasseur des Quais → Maître des Brumes | **DANS LE JEU** | a34 → a40 → a41, mini-lignée des quais depuis n4 (v18 §3), verrou R |
 | Brumaire (le sommet des quais) | **DIFFÉRÉE v2, pas perdue** | proposée v17 (« Brumaire, Renard des Quais ➕ · L, nom proposé »), jamais construite ; listée v18 §9 « sommets quais/fête » ; idem **Ombre des Quais ➕ · UR** |
 | Jongleur de Fête → Artiste de Fête → Maître Jongleur | **DANS LE JEU** | a37 → a45 → a46, mini-lignée de la fête depuis n4 (v18 §3), verrou R |
