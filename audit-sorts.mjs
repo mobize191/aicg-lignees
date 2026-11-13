@@ -155,10 +155,10 @@ function verdict(r) {
       return 'FICHE_ALLIEE_EFFET_HOSTILE';
     }
     if (r.healTotal > 0 || r.shieldTotal > 0) return 'ALLIE_OK';
-    if (r.reserveApres > 0) return 'ALLIE_OK (renfort)';
+    if (r.reserveApres > 0 || (r.divers.summon ?? 0) > 0) return 'ALLIE_OK (renfort)'; // un esprit rejoint la ligne avant (event summon), pas la réserve
     if (r.buffs > 0) {
       if (role === 'invocation') return 'INVOC_RESOLUE_EN_BUFF_ATK';
-      if (role === 'manip') return `ATTAQUE_RESOLUE_EN_BUFF_ATK (lignée d'attaque, cible allié)`;
+      if (role === 'manip' && r.cat === 'lignée') return `ATTAQUE_RESOLUE_EN_BUFF_ATK (lignée d'attaque, cible allié)`; // une signature manip (copy/lien) avec buff de repli est conforme
       if (r.cat === 'lignée' && (r.mult ?? 1) > 1.05 && role !== 'boost') return 'LIGNEE_MULT_RESOLUE_EN_BUFF_ATK';
       return 'ALLIE_BUFF_OK';
     }
