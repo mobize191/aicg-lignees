@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 13) : LIGNÉES D'EXCEPTION — 3 TRANCHAGES FINAUX (mécanique 3.4 complète)
+
+- **Bonus = TITRE SEUL (TRANCHÉ)** : aucun bonus statistique. Le titre d'Exception décrit **l'action, le lieu ou la situation** de l'illustration variante (apposition choisie par le builder dans une table courte FR par axe de variation/biome — ex. « Vesna, Dryade du Sous-Bois — Sous la Pluie de Spores »). Digest inchangé.
+- **Taux d'obtention = 1/100 (TRANCHÉ)** à l'acquisition.
+- **Fusion : le statut Exception se TRANSFÈRE au résultat** (même carte) : le résultat affiche sa propre variante si le manifeste en a une, sinon art classique + classe CSS `exception`.
+- Reste en attente : les **ambigus de l'audit espèces** (k1, k12, k13, k15, g13, f5/f23, f4/f21) — fiches détaillées fournies à Marc-Olivier. **Note : n14 Démon est déjà arbitré de facto par le gel v1** (camp démon jouable, entrée depuis n14, espèce « diable humanoïde » à ajouter à species-map — cf. suite 5 du 13/11) : la 3.4 doit reclasser n14 en diable humanoïde, pas en bête.
+
+
 ## 2026-11-13 (suite 12) : UX COMBAT TRANCHÉ — layout ADAPTATIF + paquet lisibilité COMPLET ; vitesses différées (test terrain d'abord)
 
 - **TRANCHÉ par Marc-Olivier (13/11) : orientation ADAPTATIVE** — paysage (PC + mobile tourné) : terrain à gauche + fenêtre d'action en rail latéral, jamais superposée ; portrait (mobile) : panneau bas borné (~40 % max), terrain toujours entier. **Invariant acté : la fenêtre d'action ne recouvre JAMAIS le terrain, PV et effets de toutes les cartes lisibles sans réduire la fenêtre.**
@@ -289,9 +297,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 - **Lignées exclusives initiales : DIRECTION ACTÉE EN PRINCIPE** : choix initial parmi **3-4 familles uniques spéciales** (une par race, façon starter : novice, bestiole, ange, démon…), **prédominantes** (la fusion y reste) ; les non-choisies obtenables **très tard** dans le jeu (précédent Pokémon : starters non choisis récupérables en fin de partie), capture très difficile ou incapturables. À préciser en spec contenu : 3 ou 4, composition, sort des non-choisies, moment du choix. Marc-Olivier : « non, en fait, je sais pas trop » sur la forme finale — direction actée, détail ouvert.
 - Tableau de bord (`docs/design/session-qa-direction.md` section 0) : **32 points TRANCHÉS (dont 1 en principe), reste : ops (différé) + forme finale des lignées exclusives.**
 
-## 2026-11-12 : 12e TOUR (fin) — 6 NOUVEAUX TRANCHAGES ORAUX + GRAND LANCEMENT UNIFIÉ (refonte direction + vie du jeu en une session)
-
-- **Carte du monde AFFINÉE : 4 cartes multibiomes** (le « 3-4 » tranché à 4).
-- **Remplacement sur K.O. TRANCHÉ** : switch volontaire = tour de l'entrante consommé ; **K.O. → le remplaçant entre automatiquement SANS consommer de tour et ne joue qu'au tour suivant** (précédé : changement de personnage à la Clair Obscur). Intégré au Lot A de `docs/prompt-refonte-direction.md`.
-- **Donjons divins TRANCHÉS : 3 donjons** avec chaîne sous-bosses → boss — Démons (ex. succube → roi des démons), Anges (anges élémentaires → grand ange de lumière), Équilibre (sous-bosses → Ananke version supérieure).
-- **Mécanique des fins TRANCHÉE** : fins multiples (Échiquier) ; la fin dépend des choix **lier/renier** faits à chaque chaîne de donjon + du nombre de créatures liées par race. Lore à écrire, surcoût assumé.

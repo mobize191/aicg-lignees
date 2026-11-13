@@ -23,12 +23,12 @@
 - **Fichiers** : `<id>-v.jpg` en production 400×560 JPEG q80 ; masters à part comme pour la vague classique.
 - **Manifestes** : clé `"<id>-v"` dans la section `art` du même manifeste (`assets-v33.json` inchangé ; nouveau `assets-v34.json` = arts classiques 3.3 (ou régénérés 3.4 pour les reclassées) + toutes les variantes). Crop signatures 4 % bas-droit appliqué aux variantes comme au classique.
 
-## 3. Mécanique de jeu [défauts balisés — trancher avant codage]
+## 3. Mécanique de jeu [TRANCHÉE Marc-Olivier 13/11]
 
-- **Obtention** : à l'acquisition d'une carte (pack, récompense, errance), jet de « Lignée d'Exception » : **1/50 par défaut** [À TRANCHER : 1/50 vs 1/64 vs 1/100]. Un tirage Exception remplace l'illustration par la variante, la carte EST la variante (une seule instance, pas deux copies distinctes).
-- **Bonus** [À TRANCHER entre les deux formes] : (a) **+5 % PV max** (arrondi sup), OU (b) titre « d'Exception » affiché sur la carte + compteur collection, sans bonus. Défaut si non tranché : titre seul (zéro impact digest, réversible).
+- **Obtention** : à l'acquisition d'une carte (pack, récompense, errance), jet de « Lignée d'Exception » : **1/100 (TRANCHÉ Marc-Olivier 13/11)**. Un tirage Exception remplace l'illustration par la variante, la carte EST la variante (une seule instance, pas deux copies distinctes).
+- **Bonus = TITRE SEUL (TRANCHÉ Marc-Olivier 13/11)** : pas de bonus statistique. Le titre d'Exception n'est pas un simple suffixe : la carte variante reçoit une **APPOSITION décrivant l'action, le lieu ou la situation** de son illustration (ex. « Vesna, Dryade du Sous-Bois — Sous la Pluie de Spores », « Gobelin des Marées — Pillard au Pierroux »). Le builder la choisit dans une **table par axe de variation** (pose → action, tenue → fonction, environnement → lieu), une liste courte FR par biome/axe en data, jamais de texte généré au hasard. Titre affiché sur la fiche + compteur collection. **Digest inchangé** (cosmétique).
 - **Collection** : compteur 2/2 par carte (classique + variante), badge ✨ sur la carte variante, aura dorée discrète sur l'art en combat.
-- **Économie** : aucune vente/fusion spéciale en 3.4 ; une carte variante fusionnée transfère son statut au résultat si même carte [À TRANCHER : transfert vs perte].
+- **Économie** : aucune vente/fusion spéciale en 3.4 ; **le statut Exception se TRANSFÈRE à la fusion (TRANCHÉ Marc-Olivier 13/11)** : une carte Exception fusionnée (même carte) transmet le statut au résultat, qui affiche SA variante (art `<résultat>-v` si le manifeste en contient une, sinon art classique + classe CSS `exception`).
 - **Digest** : le bonus (a) impacte les combats → nouveau digest attendu et baseline à re-mesurer ; le titre (b) = digest inchangé. Consigner l'un OU l'autre dans le rapport.
 
 ## 4. UI / intégration
