@@ -17,8 +17,8 @@
   - tenue : rôle alternatif au sein du même univers de costume (« a mage in flowing robes casting a spell » ↔ « a robed scholar ») ;
   - environnement : variation du second plan du biome (ex. Bosquet : « golden spores » ↔ « morning mist and fireflies »).
   - **Interdits** : changer l'espèce, le genre, la magie dominante ou le biome ; ajouter du sang (R13 conservé sur les variantes).
-- **Cartes nommées** (character_dna : Vesna, Macha, Zikka, Méliane, Thalassa, Léviathan, Titan, compagnons UR↔L…) : la variante garde le même personnage — mêmes speciesTags, même âge, même genre, IPAdapter identique ; seuls varient pose/tenue/accessoire via les axes ci-dessus, + accent chromatique alternatif (la couleur d'accent magique passe à la couleur complémentaire du biome : Marées turquoise → or, Bosquet vert/or → bleu nuit, Forge orange → bleu spectral, Zénith ivoire → crépuscule violet).
-- **Cartes génériques** : mêmes axes de variation, sans contrainte d'identité (l'accent chromatique alternatif s'applique aussi, c'est le marqueur visuel de la variante).
+- **Cartes nommées** (character_dna : Vesna, Macha, Zikka, Méliane, Thalassa, Léviathan, Titan, compagnons UR↔L…) : la variante garde le même personnage — mêmes speciesTags, même âge, même genre, IPAdapter identique ; seuls varient pose/tenue/accessoire via les axes ci-dessus. Accent chromatique alternatif OPTIONNEL (arbitrage 13/11 suite 6 : le marqueur visuel de la variante est la SURCOUCHE CSS, pas le prompt ; l'accent reste permis en flavor sur les nommées si le builder le juge naturel).
+- **Cartes génériques** : mêmes axes de variation, sans contrainte d'identité (accent chromatique libre, non obligatoire).
 - **Seeds** : variante = seed classique + 5 000 000, consigné dans `tools/seeds-v3.csv` (retries +1, max 2, même règle).
 - **Fichiers** : `<id>-v.jpg` en production 400×560 JPEG q80 ; masters à part comme pour la vague classique.
 - **Manifestes** : clé `"<id>-v"` dans la section `art` du même manifeste (`assets-v33.json` inchangé ; nouveau `assets-v34.json` = arts classiques 3.3 (ou régénérés 3.4 pour les reclassées) + toutes les variantes). Crop signatures 4 % bas-droit appliqué aux variantes comme au classique.
@@ -40,7 +40,7 @@
 ## 5. Process (point d'arrêt conservé)
 
 1. Mise à jour `data/cards.json` par Marc-Olivier (en cours) → attendre son signal.
-2. Builder `build-prompts-v34.mjs` : base v3.3 + reclassifications audit + prompts variantes (axes §2, accent chromatique par biome, seeds +5 000 000).
+2. Builder `build-prompts-v34.mjs` : base v3.3 + reclassifications audit + prompts variantes (axes §2, accent chromatique libre, seeds +5 000 000).
 3. **POINT D'ARRÊT** : push `tools/prompts-v34.json` + rapport de build (comptages : classiques régénérés, variantes, longueurs négatif, espèces reclassées) → validation écrite de Marc-Olivier avant génération.
 4. Génération locale ComfyUI (reclassées + variantes), mêmes seeds consignés, retries +1 max 2.
 5. Crop signatures global sur la production.
@@ -49,6 +49,7 @@
 
 ## 6. QA spécifique variantes
 
-- Comptages : variantes avec accent chromatique alternatif LISIBLE (couleur dominante ≠ classique), identité préservée sur les nommées (comparaison côte à côte classique/variante), zéro sang, zéro Fx, style painterly sans dérive.
+- **MARQUEUR VISUEL = SURCOUCHE CSS** (arbitrage 13/11 suite 6) : une carte Exception porte la classe CSS `exception` — reflet doré CROISÉ (angle 60° vs 105° pour les rares existantes, teinte or chaud saturée), halo `drop-shadow` discret permanent, liseré dégradé or ; badge ✨ (coin) réservé à la collection. Animation coupée via `prefers-reduced-motion`. Ce marqueur est indépendant de l'image : il fonctionne même si la variante générée est subtile.
+- Comptages : variantes distinctes du classique (pose/tenue/environnement à l'œil), identité préservée sur les nommées (comparaison côte à côte classique/variante), zéro sang, zéro Fx, style painterly sans dérive, classe CSS `exception` présente sur toute carte variante.
 - Espèces reclassées : figure humanoïde/esprit (pas dragon/loup), k2 = figure nymphique.
 - Échantillon ≥ 20 par lot, verdicts image par image, planches contact = détection uniquement.

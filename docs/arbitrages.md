@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 6) : VARIANTES — MARQUEUR VISUEL = SURCOUCHE CSS (l'accent chromatique dans le prompt devient optionnel)
+
+- **TRANCHÉ par Marc-Olivier** : la reconnaissance immédiate d'une carte « Lignée d'Exception » passe par une **surcouche CSS** — reflet brillant dans l'esprit des cartes rares existantes mais « légèrement différent pour qu'on le distingue ». Spéc v3.4 mise à jour : classe `exception` = sweep doré croisé (60° vs 105° des rares) + halo discret permanent + liseré or ; l'accent chromatique alternatif dans le prompt n'est plus obligatoire (flavor libre, surtout nommées). Avantage consigné : le marqueur est garanti à 100 % sur toutes les cartes, indépendant de ce que le modèle image produit.
+
+
 ## 2026-11-13 (suite 5) : VAGUE 3.4 TRANCHÉE — correctifs espèces + VARIANTES « Lignées d'Exception » (2 images par carte)
 
 - **Variantes ACTÉES dans la 3.4** (idée Marc-Olivier, type Pokémon chromatiques) : chaque carte obtient une 2e illustration. **Génération = légère variation de prompt sur la position, l'habit ou l'environnement** (pas un simple reseed, pas de prompt entièrement différent) ; espèce/genre/magie/biome inchangés ; accent chromatique alternatif par biome comme marqueur visuel. Nommées : même personnage (character_dna + IPAdapter conservés). Seeds variantes = classique + 5 000 000. Fichiers `<id>-v.jpg`, clé `"<id>-v"` au manifeste.
@@ -292,4 +297,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 ## 2026-11-12 : EN COURS — correctifs v1.38 (TRANCHÉ 12/11, 9e tour) : TOUS LES LOTS LIVRÉS (1-2) — chantier v1.38 clôturé
 
 - **Lot 1 — XP des combats de zone (LIVRÉ, racine diagnostiquée)** : l'XP de run exigeait `!won || finalClear` ; une victoire de zone n'étant ni l'un ni l'autre, **jamais d'XP en errance**. Correctif minimal : la condition devient `(!won || finalClear || !!store.zoneFight)` — tout combat de zone terminé (victoire OU défaite, porte du donjon de zone comprise) distribue l'XP d'un étage de run à l'écran Récompenses, **formule inchangée** (`DIFFX.pts × 1,5 × 0,8 × tactXpMult`, bonus de découverte éventuel), via le bloc existant (`runLog.stages = 1`). Runs de donjon classiques inchangés (XP cumulée en fin de run uniquement).
-- **Lot 2 — aléatoire PAR COMBAT + taille en data (LIVRÉ, TRANCHÉ 9e tour)** : `startZoneFight` incrémente `store.zoneFightCount` (**persisté dans la save**, champ additif sans bump de version) ; les rencontres de zone utilisent `waveSeedFor(donjon, diff, zoneFightCount)` = `hash(jour|donjon|diff|compteur)` → chaque combat est différent, reproductible dans une sauvegarde donnée. **Sans extra, le hash est bit-identique à l'ancien** (`jour|donjon|diff`) : donjons classiques et digest inchangés. La porte du donjon de zone garde le seed classique. Taille de vague : `errance.waveSize: [2, 3]` en data pour les 5 zones, consommée par `makeWave(..., waveSizeRange)` (6e param, défaut null = comportement historique) — croissance future (4-5, supports) tranchée après la session 1→100, en data uniquement.
