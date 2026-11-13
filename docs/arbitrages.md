@@ -1,5 +1,16 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 17) : CANON TRANCHÉ — MTG pour mystiques/fongiques, D&D pour le divin
+
+- **TRANCHÉ par Marc-Olivier : MTG = canon de référence** (« un des très bons canons de jeu qui existe ») pour dryades, luciole/esprits, nymphes et créations fongiques ; **D&D** pour l'Astre Capiteux (solar = ange solaire AILÉ, ajout des ailes acté).
+- **Dryades** : canon MTG — femme-esprit d'arbre, peau d'écorce, cheveux de feuilles ; **bois de cerf RETIRÉS** (non-canon). **Nymphe croupie** : nymphe MTG (esprit féminin gracieux de l'eau) + corruption croupie conservée. **Adriel/luciole** : esprit de lumière MTG.
+- **Gorgone = Méduse MTG, PRÉCISION CRITIQUE** : une FEMME aux CHEVEUX DE SERPENTS — **pas la méduse-animale (jellyfish), qu'il est interdit de représenter**.
+- **Mycola + toutes les créations fongiques** : canon MTG fungus NON-HUMANOÏDE (le « mushroom girl » du prompt était une contradiction avec species-map ; Mycola régénérée en 3.4).
+- **f13 Seigneur des Cendres** : canon efreet HUMANOÏDE (fini le « beast-like ») ; régénéré en 3.4.
+- **Bug bosses + 2 cartes Marées** (hydre 3 têtes, souverain) : intégré à la spec 3.4, impact digest balisé.
+- **Annonce Marc-Olivier** : il ajoute les cartes manquantes en masse (la liste était très incomplète) ; ensuite préparation des prompts 3.4 (normales + spéciales), puis il construira un GRAND TABLEAU comparatif des versions 3 → 3.4 (+ 3.4 bis…) indiquant pour chaque version quelle image est la normale et laquelle est la spéciale → source de vérité pour le choix d'art par version.
+
+
 ## 2026-11-14 (suite 22) : RETOUR TERRAIN PC — combat trop petit sur grand écran, espace perdu → CORRIGÉ (pure UI, digest inchangé)
 
 - **Signalement Marc-Olivier (PC, écran large ~2551px)** : « tout petit, beaucoup d'espace perdu » (capture fournie). Cause : en paysage, #app remplissait la largeur mais les unités restaient cappées (120-160px) et les rangées centrées → grand vide autour.
@@ -247,14 +258,3 @@
 > Diagnostics vérifiés dans le code par le couloir pilotage ; prompt pour le couloir 1 : `docs/prompt-correctifs-v1.51.md` (3 lots). Ordre couloir 1 : lots 1-3 du prompt smoke/IA (en cours), PUIS ce chantier, PUIS fusion DQM v4.
 
 - **Sorts signature des soigneurs (confirmé, systémique)** : les soloSpells sont construits SANS `kind` (`src/ui.js:100`, `src/data.js:182`) → défaut moteur = dégâts. Les 15 cartes Prêtre à `effect.kind === "heal"` (dont l'Ange « Éclat d'Aube » signalé) attaquent au lieu de soigner. **Correction tranchée : la signature d'un soigneur soigne** (kind heal, cible = allié le plus blessé) ; MESURE digest obligatoire (les maths changent). [À TRANCHER] si une signature doit rester offensive, Marc-Olivier la nomme.
-- **ASCENDANCE RETIRÉE (tranchage oral de Marc-Olivier rappelé le 13/11)** : plus de bonus « +X % Ascendance » gravé à l'évolution — mécanique supprimée, affichages retirés, migration des saves, les évolutions restent. Le tranchage oral datait d'hier ; la trace écrite manquait, le rappel fait foi.
-- **Défaite en Terres Sauvages → écran de défaite du DONJON (confirmé, capture à l'appui)** : le flux de défaite (~`src/ui.js:5385-5401`) affiche toujours « La prochaine exploration repart de l'étage 1 » + boutons « Relancer l'exploration (étage 1) » / « Retour au donjon », même pour un combat de zone. **Défaut balisé** : écran de défaite dédié en errance (« Vos cartes sont à bout — retour au Port des Brumes »), retour ville, aucune mention d'étage/donjon.
-- **Mana « se régénère à chaque combat » (à prouver)** : `MANA_START_RATIO 0.6` + `applyRunStateTo` existent, la persistance est branchée (v1.44). Tests headless exigés : entre deux combats de zone sans passage par l'Accueil/autel, le mana de départ = restant persisté. Toute restauration cachée sera traquée ; le repos complet en ville/autel reste VOULU (tranché).
-- **Fiche carte : UNIFIÉE entre menu équipe et combat (tranché par Marc-Olivier)** : une seule base de rendu (stats complètes PV/ATQ/AGI/INT, sorts), la combat ajoute les effets actuels ; modifier l'un modifie l'autre. Corrige : stats absentes au menu équipe + illustration coupée en combat.
-- **Badge `(EL_GLYPH[el] ?? '')` affiché en littéral sur tous les sorts (confirmé)** : interpolation manquante `src/ui.js:4056`.
-- **Splash Mage (EXPLIQUÉ, pas un bug) — TRANCHÉ par Marc-Olivier (13/11)** : la frappe des Mages touche la cible + 50 % sur les autres (`CLASSE_MODS.Mage` splash 0.4/strike 0.8) — voulu et conservé ; la fiche l'explicite dès le lot 2 de v1.51 (« cible + éclats à 50 % sur les autres », constat sur Nymphe Croupie et Souffle-Mèche, toutes deux Mages). Aucun changement de maths. **Le retrait éventuel du splash (calibrage) est DIFFÉRÉ en point à trancher** (tableau de bord §0, reste n°3).
-- **Taille des cartes en combat (tranché)** : 3 actifs → cartes plus grandes ; à faire avec le Lot 3 « réserve cachée » du prompt smoke/IA (un seul passage sur le layout).
-- **Achat de cartes à l'or SUPPRIMÉ (conformité au tranchage Lot D du 12/11)** : le marchand de créatures (Boutique, 3 offres/jour en OR) doit disparaître ; recrutement UNIQUEMENT par la Guilde en jetons 🎫 ; la Boutique ne garde que l'équipement (or, inchangé). Au passage : le texte Guilde dit encore « UR 2 000 or » → jetons.
-
-## 2026-11-13 (suite 5) : GEL DE L'ARBRE V1 TRANCHÉ — le camp démon réintégré en familles jouables, anges dévoyés + paladin + chevalier + gorgones/fées dans v1 (retour de Marc-Olivier)
-
