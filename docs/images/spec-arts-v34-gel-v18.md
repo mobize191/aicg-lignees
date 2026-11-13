@@ -54,7 +54,9 @@ Espèce `faerie` : a tiny winged faerie, a diminutive humanoid with iridescent i
 Paladin R, Paladin Sacré SR, Paladine Sacrée UR : armure sacralisée or-blanc, tabard aube, écusard solaire. **Isaure, Égide de l'Aube (L)** : paladine suprême, armure or-blanc irradiante, bouclier aurore. Chevalier R, Chevalière du Rempart SR, Gardienne du Rempart UR : armures de rempart or-gris. **Kiri l'Invincible (L)** : femme aux longs cheveux noirs lisses, armure noire intégrale, lame au repos (art alternatif « robe blanche immaculée » = sa version Exception, à conserver parmi les thèmes).
 
 ### 1.6 Marées (boss)
-**Hydre des Marées** : espèce `hydra` — a massive multi-headed sea hydra, THREE serpentine heads on long necks, scaled hide, fins, coral crowns (canon D&D/MTG : le trait distinctif est les TÊTES MULTIPLES). **Souverain des Marées** : `merSovereign` — a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle.
+- **Hydre des Marées** : espèce `hydra` — a massive multi-headed sea hydra, THREE serpentine heads on long necks, scaled hide, fins, coral crowns (canon D&D/MTG : le trait distinctif est les TÊTES MULTIPLES).
+- **Souverain des Marées** : `merSovereign` — **[À TRANCHER d'un mot]** : (a) RECO, cohérente avec la suite 30 (la lignée des boss entre dans la famille des Abîmaux, PURS monstres) : a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle ; (b) spec de base §1 : roi des fonds HUMANOÏDE, canon MTG merfolk — dans ce cas l'assumer hors Abîmaux ou comme écart.
+- **Lot bug bosses (couloir 1, repris TEL QUEL de la spec de base §1, livré AVEC la 3.4)** : mapping boss → carte dédiée (f23, f13, g16, g8, k13, k17, z6, z8) + fix `makeWave` (`boss.name = dungeon.bossNames[stage]` dans `src/engine/combat.js`). **[IMPACT DIGEST À TRANCHER]** : vagues 5/10 modifiées → re-mesure des digests + arbitrage baseline requis. Le « digest inchangé » de la session arts ne vaut QUE pour les images ; ce lot code fait bouger le digest.
 
 ### 1.7 Retraits / conservations
 - p2 **Ange Gardien : RETIRÉ** (confirme mort, suite 30) — aucune génération, entrée manifeste supprimée.
@@ -68,19 +70,21 @@ Paladin R, Paladin Sacré SR, Paladine Sacrée UR : armure sacralisée or-blanc,
 
 | Version | Fichier | Seed | Marqueur CSS |
 | --- | --- | --- | --- |
-| Classique (canon 3.4) | `{id}.jpg` | seed v3.3 (nouvelles : bloc 2 250 000+) | aucun |
+| Classique (canon 3.4) | `{id}.jpg` | seed v3.3 de la carte ; nouvelles cartes = SUITE de `tools/seeds-v3.csv` à partir de 2 150 037 (convention existante, jamais de bloc inventé) | aucun |
 | Lignées au Repos (thème A) | `{id}-r.jpg` | classique + 5 000 000 | sweep OR CHAUD croisé 60° (distinct des rares 105°) |
 | Lignées Obscures (thème C) | `{id}-o.jpg` | classique + 10 000 000 | liseré + sweep ROUGE SOMBRE |
 
 - **Repos** (définition `test-themes-exception.md` §1-A) : scène de vie du biome, activité calme, sans magie ni combat. L'espèce, le personnage, la tenue canon sont conservés.
 - **Obscures** (§1-C) : inversion d'alignement/élément — corruption par l'ombre pour les lumineuses, purification dorée pour les obscures, élément inversé pour les neutres (golem de magma → cristal de glace spectral). Espèce et pose conservées, seule la magie s'échange. **R13 conservé : JAMAIS de gore, jamais de changement d'espèce.**
 - **Crépuscule (thème B) : DIFFÉRÉ** — candidat « 3.4 bis » du grand tableau comparatif.
-- Mécanique en jeu INCHANGÉE (suite 14) : titre seul + apposition action/lieu/situation, taux **1/100** (tirage **50 % Repos / 50 % Obscures**), transfert du statut à la fusion, digest inchangé, bonus cosmétique seul.
+- Mécanique en jeu INCHANGÉE (suite 14, base §3) : titre seul + **APPOSITION choisie dans une table PAR AXE ET PAR THÈME en data** (Repos → action/lieu de vie ; Obscures → situation d'inversion), jamais de texte généré au hasard ; taux **1/100** (tirage **50 % Repos / 50 % Obscures**), transfert du statut à la fusion, bonus cosmétique seul.
+
+**AMENDEMENT de la spec de base `spec-arts-v34.md`** : les suffixes `-r`/`-o` REMPLACENT partout le `-v` unique de la base (§2 fichiers, §4 UI `ART[id+'-r']` / `ART[id+'-o']` avec le même fallback propre, manifeste `assets-v34.json`, switch 5 versions) ; le seed +10 000 000 amende de même le « +5 000 000 » unique de la base §2. En cas de divergence, le présent compagnon PRIME.
 - Nommées : IPAdapter 0.4 sur les 3 versions (identité maximale classique ↔ Repos ↔ Obscures).
 
 ## 3. Process (point d'arrêt conservé)
 
-1. Prérequis : `data/cards.json` mis à jour par Marc-Olivier (gel v18 + retrait p2) poussé sur main.
+1. Prérequis : `data/cards.json` mis à jour par Marc-Olivier (gel v18 + retraits p2 Ange Gardien ET p4 Fidèle du Jour, suites 28/30) poussé sur main. Le recâblage n15 → d1/d7/d13 (accès Chœur, spec trappes §4-d) est un lot couloir 1 SÉPARÉ, il ne bloque pas les arts.
 2. Compléter `tools/species-map.json` (v3, entrées §1 ci-dessus) → builder `build-prompts-v34.mjs` : base v3.3 + reclassifications + gel v18 + 2 jeux de prompts thèmes (Repos/Obscures) + seeds. ÉCHEC explicite sur toute carte sans espèce.
 3. **POINT D'ARRÊT** : push `tools/prompts-v34.json` + `docs/images/RAPPORT-build-v34.md` (comptages : classiques/régénérations, gel v18, Repos, Obscures ; longueurs négatif ; zéro canidé attendu ; durée estimée) → validation écrite de Marc-Olivier.
 4. Génération ComfyUI complète (classique + -r + -o), canon §15 inchangé (WAI-Illustrious v17, Euler a, 28 steps, CFG 5.5, hires ×1.25, ADetailer 0.32), retries +1 max 2, crop signatures 4 % bas-droit sur toute la production. Durée réelle s/image consignée.
