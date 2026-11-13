@@ -97,7 +97,7 @@ for (const c of CATALOG) {
       { ...COMMON_SPELLS[!!(c.effect && c.effect.kind === 'heal') ? 'support' : 'attaque'] },
       ...(raceSpell ? [{ ...raceSpell }] : []),
       ...(classSpell ? [{ ...classSpell }] : []),
-      { name: c.soloSpell, cost: c.soloCost ?? 5, mult: c.soloMult ?? 1.85, ...(c.soloDot ? { dot: c.soloDot } : {}), cat: 'unique', desc: 'La signature de cette carte — son geste à elle.' },
+      { name: c.soloSpell, cost: c.soloCost ?? 5, mult: c.soloMult ?? 1.85, ...(c.soloDot ? { dot: c.soloDot } : {}), ...(c.effect && c.effect.kind === 'heal' ? { role: 'soin', cible: '1 allié' } : {}), cat: 'unique', desc: 'La signature de cette carte — son geste à elle.' },
     ];
     c.mana = SOLO_MANA.max;
     c.manaRegen = SOLO_MANA.regen;
@@ -672,7 +672,7 @@ function curHpManaOf(iid) {
   const inst = byIid(iid);
   if (!inst) return null;
   const c = byId(inst.id);
-  const st = statsAt(c, inst.lvl, inst.asc ?? 0);
+  const st = statsAt(c, inst.lvl);
   const mem = store.runState.active ? store.runState.units[iid] : null;
   return {
     hp: mem && Number.isFinite(mem.hp) ? (mem.hp <= 0 ? 0 : Math.max(1, Math.min(st.hp, Math.round(mem.hp)))) : st.hp, // Lot C : K.O. persistant (0 PV) jusqu'au soin explicite
@@ -735,7 +735,7 @@ function syncCount(id) {
   else store.collection.delete(id);
 }
 function newInst(id, lvl = 1, xp = 0) {
-  const inst = { iid: store.instanceSeq++, id, lvl, xp, asc: 0, name: '', acc: [], isNew: true };
+  const inst = { iid: store.instanceSeq++, id, lvl, xp, name: '', acc: [], isNew: true };
   store.instances.push(inst);
   syncCount(id);
   return inst;
@@ -743,7 +743,7 @@ function newInst(id, lvl = 1, xp = 0) {
 function bestInstOf(id) {
   const list = instsOf(id);
   if (!list.length) return null;
-  return list.reduce((a, b) => (b.lvl > a.lvl || (b.lvl === a.lvl && b.asc > a.asc) ? b : a));
+  return list.reduce((a, b) => (b.lvl > a.lvl ? b : a));
 }
 function addXpI(iid, gain) {
   const inst = byIid(iid);
@@ -1118,7 +1118,6 @@ function restore(data) {
         id: raw.id,
         lvl: Math.min(LEVEL_CAP, Math.max(1, Number.isInteger(raw.lvl) ? raw.lvl : 1)),
         xp: Number.isFinite(raw.xp) ? Math.max(0, raw.xp) : 0,
-        asc: Number.isFinite(raw.asc) ? Math.max(0, raw.asc) : 0,
         name: typeof raw.name === 'string' ? raw.name.slice(0, 24) : '',
         acc: Array.isArray(raw.acc) ? raw.acc.filter((sp) => sp && (typeof sp.name === 'string' || typeof sp.sort === 'string')) : [],
         voie: typeof raw.voie === 'string' ? raw.voie : undefined,
@@ -1555,8 +1554,6 @@ function evolveInstance(iid, targetId = null) {
     return { ok: false, reason: `Il faut ${n} éclat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} d’élément ${elt} (vous en avez ${gemCount(tier, elt)}) — les boss des étages 5 et 10 en lâchent.` };
   }
   if (!isEveil) spendGems(tier, elt, n);
-  const waitBonus = Math.round((inst.lvl - 10) * 5) / 10;
-  inst.asc = Math.round((inst.asc + waitBonus) * 10) / 10;
   const oldSpells = unknownSpellsOf((cur.spells ?? []).map((sp) => ({ ...sp })), byId(nextId)?.spells, inst.acc);
   if (oldSpells.length) inst.acc = [...(inst.acc ?? []), ...oldSpells];
   const prevId = inst.id;
@@ -1581,7 +1578,7 @@ function evolveInstance(iid, targetId = null) {
   syncCount(nextId);
   markSeen(nextId);
   save();
-  return { ok: true, nextId, asc: inst.asc, inherited: inst.acc.length };
+  return { ok: true, nextId, inherited: inst.acc.length };
 }
 
 function runAltar(rar, cat) {
@@ -2300,7 +2297,6 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
   const owned = store.collection.get(card.id) ?? 0;
   const wasSeen = seenCard(card.id);
   const level = forcedLevel ?? levelOf(card.id);
-  const asc = bestInstOf(card.id)?.asc ?? 0;
   const mystery = owned === 0 && !wasSeen;
   const fam = familyOf(card);
   let evo = '';
@@ -2330,19 +2326,18 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         const cost = evoCostOf(card.id);
         const [tier, nG] = cost ?? ['?', 0];
         const isEveil = tier === 'pierre';
-        const gain = Math.max(0, Math.round((inst.lvl - 10) * 5) / 10);
         return targets.map((tid) => {
           const tgt = byId(tid);
           const elt = card.element ?? tgt.element; 
           const have = tier === '?' ? 0 : (isEveil ? pierreCount() : gemCount(tier, elt));
           const voie = evoVoieOf(card.id, tid);
           const costTxt = isEveil ? `${nG} pierre${nG > 1 ? 's' : ''} d\u2019\u00e9veil (${have}/${nG})` : `${nG} \u00e9clats ${GEM_LABEL[tier]} ${elt} (${have}/${nG})`;
-          return `<button type="button" class="btn small ${have >= nG ? 'gold' : ''}" data-evolve-iid="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} l\u2019exemplaire Nv ${inst.lvl} \u2192 ${tgt.name}${voie ? ` (${voie})` : ''} : +${gain} % Ascendance \u00b7 ${costTxt}</button>`;
+          return `<button type="button" class="btn small ${have >= nG ? 'gold' : ''}" data-evolve-iid="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} l\u2019exemplaire Nv ${inst.lvl} \u2192 ${tgt.name}${voie ? ` (${voie})` : ''} \u00b7 ${costTxt}</button>`;
         }).join('');
       }).join('');
       fusionBlock = `<h4>${multi ? '\u00c9volution \u2014 le choix de la voie' : '\u00c9volution'}</h4>
       <div class="fusion-list">
-        ${evolveBtns || `<button type="button" class="btn small" disabled>\u00c9voluer : niveau 10 requis + \u00e9clats d\u2019\u00e9volution \u2014 le dilemme de l’Ascendance se joue à la Guilde</button>`}
+        ${evolveBtns || `<button type="button" class="btn small" disabled>\u00c9voluer : niveau 10 requis + \u00e9clats d\u2019\u00e9volution</button>`}
       </div>
       ${multi ? `<p class="muted">Plusieurs voies s\u2019ouvrent \u2014 chaque bouton est une discipline diff\u00e9rente. Le choix est d\u00e9finitif pour CET exemplaire (une autre copie pourra prendre une autre voie) ; le novice sans \u00e9l\u00e9ment paie dans l\u2019\u00e9l\u00e9ment de la voie choisie.</p>` : ''}`;
     }
@@ -2356,20 +2351,19 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
       const pct = inst.lvl >= LEVEL_CAP ? 100 : Math.min(100, Math.round((inst.xp / xpToNext(inst.lvl)) * 100));
       return `<div class="inst-row">
         <span class="inst-lvl">Nv ${inst.lvl}${inst.lvl >= LEVEL_CAP ? ' MAX' : ` \u00b7 ${pct} %`}</span>
-        ${inst.asc ? `<span class="chip">Asc +${inst.asc} %</span>` : ''}
         ${(inst.acc?.length ?? 0) ? `<span class="chip">\u2726 ${inst.acc.length} h\u00e9rit\u00e9${inst.acc.length > 1 ? 's' : ''}</span>` : ''}
         ${iidInTeam(inst.iid) ? '<span class="chip on">en \u00e9quipe</span>' : ''}
       </div>`;
     }).join('');
     exemplairesBlock = `<h4>Exemplaires (${instsOf(card.id).length})</h4>
-      <p class="muted">Chaque exemplaire monte SES propres niveaux (1 \u00e0 20) en donjon : \u00e9tages franchis \u00d7 difficult\u00e9 \u00d7 1,5 si victoire, fatigue quotidienne par carte (plancher 25 %). L\u2019Ascendance se grave \u00e0 l\u2019\u00e9volution : +0,5 % de stats de base par niveau d\u2019attente au-dessus de 10, cumul\u00e9e \u00e0 chaque \u00e9volution. Chaque forme garde son nom de carte : l\u2019identit\u00e9 reste lisible.</p>
+      <p class="muted">Chaque exemplaire monte SES propres niveaux (1 \u00e0 20) en donjon : \u00e9tages franchis \u00d7 difficult\u00e9 \u00d7 1,5 si victoire, fatigue quotidienne par carte (plancher 25 %). Chaque forme garde son nom de carte : l\u2019identit\u00e9 reste lisible.</p>
       <div class="inst-list">${rows}</div>`;
   }
 
   
   const bigCard = mystery
     ? `<div class="modal-card">${cardFront({ ...card, id: '?' + card.id, atk: '?', hp: '?' }, { extraClass: 'big mystery' })}</div>`
-    : `<div class="modal-card">${cardFront({ ...card, level, ...statsAt(card, level, asc) }, { extraClass: 'big' + (hasArt(card) ? ' unit-art' : '') })}</div>`;
+    : `<div class="modal-card">${cardFront({ ...card, level, ...statsAt(card, level) }, { extraClass: 'big' + (hasArt(card) ? ' unit-art' : '') })}</div>`;
   overlay.innerHTML = `
     <div class="modal">
       <button class="modal-close" aria-label="Fermer">\u2716</button>
@@ -2379,7 +2373,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
         <p class="muted">${card.rarity} \u00b7 ${card.classe} \u00b7 ${card.element ?? 'Neutre'}${owned ? ` \u00b7 poss\u00e9d\u00e9e \u00d7${owned}${placed ? ` (${usedInTeam(card.id)} en \u00e9quipe)` : ''}` : wasSeen ? ' \u00b7 plus poss\u00e9d\u00e9e' : ' \u00b7 pas encore d\u00e9voil\u00e9e'}</p>
         ${mystery
           ? `<p class="muted">Carte \u00e0 d\u00e9voiler : gagnez-la en donjon, \u00e0 l\u2019autel, au marchand ou \u00e0 la Guilde pour r\u00e9v\u00e9ler son illustration, ses stats et ses sorts.</p>`
-          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level, asc).atk}</b> <span class="muted">(\u00b7 frappe de ${card.classe} \u00e0 ${Math.round((CLASSE_MODS[card.classe]?.strike ?? 1) * 100)} %)</span> &nbsp; \u2665 PV <b>${statsAt(card, level, asc).hp}</b>${level > 1 || asc ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %${asc ? ` \u00b7 Ascendance +${asc} %` : ''})</span>` : ''}</p>
+          : `<p class="statline">\u2694 Attaque <b>${statsAt(card, level).atk}</b> <span class="muted">(\u00b7 frappe de ${card.classe} \u00e0 ${Math.round((CLASSE_MODS[card.classe]?.strike ?? 1) * 100)} %)</span> &nbsp; \u2665 PV <b>${statsAt(card, level).hp}</b>${level > 1 ? ` <span class="muted">(base ${card.atk}/${card.hp} \u00b7 Nv ${level} : +${(level - 1) * 8} %)</span>` : ''}</p>
         ${owned > 0 ? equipBlockHtml(card) : ''}
         <p class="statline">${RACE_GLYPH[raceOfCard(card)]} Race <b>${RACE_LABEL[raceOfCard(card)]}</b>${raceOfCard(card) === 'divine' ? ' \u2014 stats de base <b>+30 %</b> \u00b7 bonus d\u2019\u00e9quipe : d\u00e8s 2 divines en \u00e9quipe, +10 % d\u00e9g\u00e2ts et +10 % soins' : raceOfCard(card) === 'humaine' ? ' \u2014 la r\u00e9f\u00e9rence du jeu' : ` \u2014 stats de base <b>+${Math.round(RACE_MOD[raceOfCard(card)] * 100)} %</b> (r\u00e8gle de la race pour les nouvelles cartes et la r\u00e9gression)`}</p>
         ${card.verrou?.actif ? `<p class="statline">\u{1F512} Verrouill\u00e9e \u2014 ${card.verrou.condition ?? 'condition \u00e0 d\u00e9couvrir'}</p>` : ''}
@@ -2417,8 +2411,8 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
     el.onclick = () => {
       const r = evolveInstance(Number(el.dataset.evolveIid), el.dataset.evolveTo ?? null);
       if (r.ok) {
-        refresh(r.nextId, `\u2713 \u00c9volution : ${byId(r.nextId).name} ! Ascendance totale +${r.asc} %${r.inherited ? `, ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''}.`);
-        openRevealModal([r.nextId], { title: '⭐ ÉVOLUTION !', subtitle: `Ascendance grav\u00e9e : +${r.asc} % de stats de base.`, note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer', keepModal: true });
+        refresh(r.nextId, `\u2713 \u00c9volution : ${byId(r.nextId).name} !${r.inherited ? ` ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''}.`);
+        openRevealModal([r.nextId], { title: '⭐ ÉVOLUTION !', subtitle: 'La carte devient sa nouvelle forme.', note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer', keepModal: true });
       } else if (r.reason) {
         feedback.textContent = `\u2717 ${r.reason}`;
       }
@@ -3421,7 +3415,7 @@ function slotsHtml() {
     const inst = iid ? byIid(iid) : null;
     if (inst) {
       const c = byId(inst.id);
-      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button>${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}</div>`;
+      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button></div>`;
     }
     return `<div class="slot empty" data-idx="${i}"></div>`;
   };
@@ -3603,7 +3597,7 @@ function renderEquipe(root) {
     .map((c) => instsOf(c.id)
       .map((inst) => {
         const inTeam = iidInTeam(inst.iid);
-        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl, inst.asc) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${inst.asc ? `<span class="owned-badge">+${inst.asc} %</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
+        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
       })
       .join(''))
     .join('');
@@ -4709,6 +4703,23 @@ function openRecompensesModal(recomp) {
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
 }
 
+// correctifs v1.51 lot 1 : défaite d'un combat de ZONE (errance) — écran dédié, aucun texte de donjon,
+// bouton unique de retour à la ville (le repos en ville s'applique ensuite, tranché)
+function endModalZoneDefeat(xpLine) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const box = document.createElement('div');
+  box.className = 'modal end-modal';
+  box.innerHTML = `<h3>DÉFAITE</h3><p>Vos cartes sont à bout — retour au Port des Brumes.${xpLine ? `<br><b>${xpLine}</b>` : ''}</p>`;
+  const back = document.createElement('button');
+  back.className = 'btn end-action';
+  back.textContent = '↩ Retour à la ville';
+  back.onclick = () => { overlay.remove(); store.zoneFight = null; save(); go('#accueil'); };
+  box.appendChild(back);
+  overlay.appendChild(box);
+  combatApp.appendChild(overlay);
+}
+
 function endModal(title, message) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -5357,15 +5368,19 @@ async function animate(events, ms, gen = null) {
             log.innerHTML = `<p class="logline win">🎁 ${rewardLine}</p>`;
           }
         } else if (log) {
-          log.innerHTML = '<p class="logline lose">La prochaine exploration repart de l\u2019étage 1 — farmez les étages, montez vos cartes, puis revenez.</p>';
+          log.innerHTML = store.zoneFight
+            ? '<p class="logline lose">Vos cartes sont à bout \u2014 retour au Port des Brumes.</p>'
+            : '<p class="logline lose">La prochaine exploration repart de l\u2019\u00e9tage 1 \u2014 farmez les \u00e9tages, montez vos cartes, puis revenez.</p>';
         }
         
         
         
-        if (!won) {
+        if (!won && store.zoneFight) {
+          endModalZoneDefeat(xpLine); // combat de zone : écran de défaite dédié (pas de texte donjon)
+        } else if (!won) {
           endModal(
-            'DÉFAITE',
-            'La prochaine exploration repart de l\u2019étage 1 — farmez les étages, montez vos cartes, puis revenez.' + (xpLine ? `<br><b>${xpLine}</b>` : ''),
+            'D\u00c9FAITE',
+            'La prochaine exploration repart de l\u2019\u00e9tage 1 \u2014 farmez les \u00e9tages, montez vos cartes, puis revenez.' + (xpLine ? `<br><b>${xpLine}</b>` : ''),
           );
         } else if (finalClear) {
           runEndModal();
@@ -5571,7 +5586,6 @@ function renderCombat(root, opts = {}) {
       intPct: eb.intPct + teamBonus.intPct,
       manaRegen: eb.manaRegen + teamBonus.manaRegen,
     };
-    const ascM = 1 + (inst.asc ?? 0) / 100;
     // retour terrain : les sorts h\u00e9rit\u00e9s remapp\u00e9s ({sort, cran}) se r\u00e9solvent en fiches compl\u00e8tes
     // correctif terrain : la fusion acc + sorts de la forme est dédoublonnée (clé = nom, sinon id + cran)
     const spellKeys = new Set();
@@ -5585,8 +5599,8 @@ function renderCombat(root, opts = {}) {
       ...base,
       iid: inst.iid, // Lot A : persistance PV/mana par iid (survit aux échanges actif <-> réserve)
       level: inst.lvl,
-      atk: Math.max(1, Math.round(base.atk * ascM)),
-      hp: Math.max(1, Math.round(base.hp * ascM)),
+      atk: Math.max(1, Math.round(base.atk)),
+      hp: Math.max(1, Math.round(base.hp)),
       noLossPct: inst.noLoss ?? 0,
       equip,
       ...(instSpells.length ? { spells: instSpells } : {}),
@@ -6015,8 +6029,8 @@ function forgeEvolve(iid, to = null) {
     return;
   }
   questProgress('evoluer');
-  toast(`\u2713 \u00c9volution : ${byId(r.nextId).name} \u2014 Ascendance +${r.asc} % grav\u00e9e${r.inherited ? `, ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''} !`);
-  openRevealModal([r.nextId], { title: '⭐ ÉVOLUTION !', subtitle: `Ascendance grav\u00e9e : +${r.asc} % de stats de base${r.inherited ? ` \u00b7 ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''}.`, note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer' });
+  toast(`\u2713 \u00c9volution : ${byId(r.nextId).name}${r.inherited ? ` \u2014 ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''} !`);
+  openRevealModal([r.nextId], { title: '\u2b50 \u00c9VOLUTION !', subtitle: 'La carte devient sa nouvelle forme.', note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer' });
 }
 
 function renderForge(root) {
@@ -6030,8 +6044,7 @@ function renderForge(root) {
     const cost = evoCostOf(inst.id);
     const [tier, n] = cost ?? ['?', 0];
     const isEveil = tier === 'pierre';
-    const gainNow = Math.max(0, Math.round((inst.lvl - 10) * 5) / 10);
-    const st = statsAt(card, inst.lvl, inst.asc ?? 0);
+    const st = statsAt(card, inst.lvl);
     const nextNames = targets.map((tid) => {
       const voie = evoVoieOf(inst.id, tid);
       return `${byId(tid).name}${voie ? ` (${voie})` : ''}`;
@@ -6043,15 +6056,14 @@ function renderForge(root) {
       const ready = inst.lvl >= 10 && have >= n;
       const voie = evoVoieOf(inst.id, tid);
       return ready
-        ? `<button class="btn small gold" data-evolve="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} \u2192 ${next.name}${voie ? ` (${voie})` : ''} (+${gainNow} % Ascendance)</button>`
+        ? `<button class="btn small gold" data-evolve="${inst.iid}" data-evolve-to="${tid}">${isEveil ? '\u00c9veiller' : '\u00c9voluer'} \u2192 ${next.name}${voie ? ` (${voie})` : ''})</button>`
         : `<button class="btn small" disabled>${inst.lvl < 10 ? `Niveau ${inst.lvl}/10 requis \u2014 l\u2019XP vient des donjons` : (isEveil ? `${have}/${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${have}/${n} \u00e9clats ${GEM_LABEL[tier]} d\u2019\u00e9l\u00e9ment ${elt}`)}</button>`;
     }).join(' ');
     evoRows.push(`<div class="forge-row">
     <div class="forge-card" data-open="${inst.id}">${cardFront({ ...card, level: inst.lvl, atk: st.atk, hp: st.hp }, { extraClass: hasArt(card) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
     <div class="forge-acts">
-      <p class="muted">${card.name} \u2014 <b>Nv ${inst.lvl}/20</b> \u00b7 Ascendance +${inst.asc ?? 0} % de base \u00b7 ATQ ${st.atk} / PV ${st.hp}</p>
+      <p class="muted">${card.name} \u2014 <b>Nv ${inst.lvl}/20\u00b7 ${st.atk} / PV ${st.hp}</p>
       <p class="muted">${isEveil ? `\u00c9veiller` : `\u00c9voluer`} en <b>${nextNames}</b> : niveau 10 atteint + ${isEveil ? `${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${n} \u00e9clat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} dans l\u2019\u00e9l\u00e9ment de la forme choisie`} \u2014 la nouvelle forme repart niveau 1 et GARDE les sorts accumul\u00e9s.</p>
-      <p class="muted">Dilemme de l\u2019Ascendance : \u00e9voluer maintenant grave <b>+${gainNow} %</b>${inst.lvl >= 20 ? ' (maximum atteint)' : ` \u00b7 attendre le niveau 20 graverait <b>+5 %</b>`} \u2014 le bonus se CUMULE \u00e0 chaque \u00e9volution.</p>
       ${btns}
     </div>
   </div>`);
@@ -6083,7 +6095,7 @@ function renderForge(root) {
 
   root.innerHTML = `
     <h2>🛡️ La Guilde <span class="muted">— évolutions, autel, compagnons</span></h2>
-    <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) et son Ascendance propres. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
+    <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) propre. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
     <h3>\u00c9volutions ${evoRows.length ? `(${evoRows.length})` : ''}</h3>
     ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : recrutez des cartes (Guilde, marchand, quêtes, donjon) et montez-les au niveau 10 en donjon.</p>'}
     <h3>\u00c9clats d\u2019\u00e9volution en r\u00e9serve</h3>
@@ -6263,7 +6275,7 @@ const HISTORY = [
 const GONE_DOC = [
   ['Boosters et boutique (v0.31 \u00e0 v0.33)', 'La boutique a disparu : les cartes se gagnent en donjon (jauge de boss, captures), par jetons, \u00e0 l\u2019autel et par les jalons ; le d\u00e9fi divin tire ses 5 cartes sur-le-champ.'],
   ['Nourrir et sacrifier (v0.24 \u00e0 v0.33)', 'Les doublons ne nourrissent plus : les niveaux viennent uniquement de l\u2019XP de donjon ; les doublons s\u2019\u00e9changent \u00e0 l\u2019autel (5 pour 1).'],
-  ['Niveau unique (v0.24 à v0.32)', 'Une carte n’avait qu’un seul niveau partagé par tous ses exemplaires ; depuis v0.33, chaque exemplaire vit ses propres niveaux, son nom, son Ascendance et ses sorts hérités.'],
+  ['Niveau unique (v0.24 à v0.32)', 'Une carte n’avait qu’un seul niveau partagé par tous ses exemplaires ; depuis v0.33, chaque exemplaire vit ses propres niveaux, son nom, et ses sorts hérités.'],
   ['Postes fixes', 'Avant, l’équipe avait des emplacements attaque et support dédiés ; désormais 5 emplacements libres, la carte joue son rôle où qu’elle soit.'],
   ['Seuil du soin croisé', 'Le Souffle Croisé se déclenchait sous 35 % des PV de l’allié ; le seuil est passé à 20 %.'],
 ];
@@ -6366,7 +6378,7 @@ function renderGlossaire(root) {
       <ul class="glo-list">${STATUS_DOC.map(([i, n, d]) => `<li><b>${i} ${n}</b> : ${d}</li>`).join('')}</ul>
       <h3>Niveaux et progression</h3>
       <ul class="glo-list">
-        <li><b>Niveaux par exemplaire</b> : chaque exemplaire vit SES propres niveaux, de 1 à 20 (+8 % d’ATQ et de PV par niveau), plus son nom personnel, son Ascendance et ses sorts. L’XP vient des donjons (voir la section Ascension).</li>
+        <li><b>Niveaux par exemplaire</b> : chaque exemplaire vit SES propres niveaux, de 1 à 20 (+8 % d’ATQ et de PV par niveau), plus son nom personnel, et ses sorts. L’XP vient des donjons (voir la section Ascension).</li>
         <li><b>Doublons</b> : ils ne nourrissent plus — 5 exemplaires libres d’une même rareté s’échangent à l’autel contre 1 carte de rareté supérieure.</li>
         <li><b>Évoluer</b> : dès le niveau 10, avec des éclats d’évolution de l’élément de la carte (jamais d’or), depuis la fiche ou la Forge. Monstres et cartes divines suivent la même règle le long de leur ligne de famille.</li>
       </ul>
@@ -6434,7 +6446,6 @@ function renderGlossaire(root) {
         <li><b>Évolution dès le niveau 10</b> : le coût se paie en éclats d’évolution de l’élément de la carte, jamais en or : ${evoSentence}. L’exemplaire repart niveau 1 dans sa forme supérieure, garde son nom et cumule les sorts de ses formes passées.</li>
         <li><b>Le choix de la voie (v0.36)</b> : à la première évolution, chaque Novice choisit sa discipline — l’épéiste ouvre le guerrier, la protection ou la sylvestre ; le mage choisit son élément (ou la lumière : l’élue rejoint la lignée du prêtre) ; le prêtre choisit la foi ou la garde ; le voleur l’assassinat, les quais ou la fête. Un choix est définitif pour l’exemplaire, une autre copie peut prendre une autre voie. Le novice sans élément paie dans l’élément de la voie choisie.</li>
         <li><b>Les nouvelles lignées (v0.41)</b> : le Bestiau des Cieux ouvre à son évolution les trois voies du Zénith — la Légion Solaire, les Phénix Célestes, le Clergé du Plein Jour. Les naissances divines rejoignent les lignées du Seuil : l’Ange les Arbitres, le Démon le Chœur Miroir, l’Éveillé du Seuil les Tisseuses du Pont, trois chaînes qui courent désormais jusqu’à leurs Légendaires (Kairos, Écho, Ananké). Et l’audit des vieilles cartes est fermé : les 5 solos d’origine sont rattachés aux chaînes (Garde-Promesse rejoint la garde, Étincelle Vive la braise, Médecin de Camp l’aube, Veilleur d’Acier l’ombre, Pilier Mécanique le bouclier) — toute copie possédée évolue dans l’architecture ; seules les 7 branches SR des familles restent dormantes, pour les choix à venir.</li>
-        <li><b>Ascendance</b> : évoluer au niveau 10 ne grave rien ; chaque niveau d’attente au-delà grave +0,5 % de stats de base (jusqu’à +5 % au niveau 20), pour toujours, cumulée à chaque évolution. Évoluer vite ou attendre fort : le dilemme.</li>
         <li><b>Éclats d’évolution</b> : les boss des étages 5 et 10 en lâchent (tier de la difficulté ci-dessous), et chaque étage intermédiaire offre une chance d’éclat brut :</li>
         <li><b>Couleur des éclats</b> : l’élément d’un éclat est tiré des monstres du donjon courant, et chaque donjon concentre deux éléments (Marées : Eau et Nature · Forge : Feu et Ombre · Bosquet : Nature et Lumière · Crypte : Ombre et Eau · Zénith : Lumière et Feu). Pour évoluer une carte Eau, farmez les donjons où l’Eau coule ; le rang (brut, poli, gravé, éternel) dépend de la difficulté.</li>
       </ul>

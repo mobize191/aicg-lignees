@@ -1029,7 +1029,10 @@ async function main() {
     {
       check('B26 a signatureMetaOf présent dans le dist (dérivation data)', /function signatureMetaOf\(/.test(html), '');
       check('B26 b uiSpellMeta câblé dans le ciblage (fallback fiche signature)', /spellSideOf\(sp\) \?\? spellSideOf\(uiSpellMeta/.test(html), '');
-      check('B26 c les objets runtime des monstres n’embarquent pas role/cible (digest Auto inchangé)', api.allMonsters().every((m) => (m.spells ?? []).filter((sp) => sp.cat === 'unique').every((sp) => sp.role === undefined && sp.cible === undefined)), '');
+      // correctifs v1.51 lot 1 (justification) : les signatures des monstres SOIGNEURS embarquent
+      // désormais role soin + cible allié — c'est le correctif (elles partaient en dégâts en Auto,
+      // digest re-MESURÉ et consigné dans arbitrages). Les autres signatures restent sans role/cible.
+      check('B26 c les objets runtime des monstres n’embarquent pas role/cible, sauf signatures de soigneurs (v1.51 lot 1)', api.allMonsters().every((m) => (m.spells ?? []).filter((sp) => sp.cat === 'unique').every((sp) => (m.effect && m.effect.kind === 'heal') ? (sp.role === 'soin' && sp.cible === '1 allié') : (sp.role === undefined && sp.cible === undefined))), '');
       const sigDefs = [...(api.DATA.cards ?? []), ...(api.DATA.monsters ?? [])].filter((d) => d.soloSpell);
       const withMeta = sigDefs.filter((d) => { const m = api.signatureMetaOf(d); return m.cible && api.spellSideOf({ ...m }) !== null; });
       check('B26 d 100 % des signatures ont une cible valide via la métadonnée dérivée', withMeta.length === sigDefs.length && sigDefs.length > 200, `${withMeta.length}/${sigDefs.length}`);
