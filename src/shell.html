@@ -814,6 +814,8 @@ border: 1px solid rgba(77, 208, 225, .35);
 background: rgba(77, 208, 225, .12); color: #bfe8ff; cursor: pointer;
 }
 #art-src-btn:active { background: rgba(77, 208, 225, .28); }
+/* v1.51 : manifeste de la version affichée indisponible -> bouton grisé libellé */
+#art-src-btn.off { opacity: .45; filter: grayscale(.8); cursor: not-allowed; }
 
 #menu-btn { display: none; }
 @media (max-width: 639px) {

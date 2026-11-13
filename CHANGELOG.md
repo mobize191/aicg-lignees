@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.51] — 2026-11-13 — Switch 4 versions des illustrations (vague 3.3) — LIVRÉ
+
+Le bouton 🖼️ cycle **V3 → V3.1 → V3.2 → V3.3** avec l’étiquette de version affichée sur le bouton, préférence persistée (`fondations-art-src`). `ART_MANIFESTS = { v3, v31, v32, v33 }` ; un manifeste manquant = bouton grisé libellé, jamais d’erreur, version courante inchangée. Les 37 arts de la vague 3.3 sont aussi ajoutés au manifeste par défaut `assets-v3.json` (présents dans toutes les versions). IHM seule : 256 tests (4 nouveaux, cycle complet + préférence persistée + manifeste manquant toléré), smoke S27 a-f, **digest inchangé `9faff1b9…` / `6103e7b0…`**. Protocole IHM v1.51 (scénario S27).
+
 ## [1.39] — 2026-11-12 — XP PAR COMBAT + fenêtre de fin de combat + SUPPRESSION DU MODE AUTO — LIVRÉE (2 lots)
 
 ## [1.40] — 2026-11-12 — Correctif errance : les interactions se déclenchent au clic — LIVRÉ

@@ -1,0 +1,87 @@
+// fill-assets-manifest-v33.mjs — remplit tools/assets-manifest.json pour les vagues 3.2 ET 3.3 :
+//  - aucune entrée lora avec civitaiId/version/weight null (mapping fichier/trigger -> civitai,
+//    poids retenu 0.7 d'après lora-verdicts-v32.json / RAPPORT-vague3-2.md),
+//  - entrées 3.3 ajoutées (308 prompts : 302 cartes + 6 fonds) avec seed réellement utilisé
+//    (run-log-v33*.json, retries seed+1 pris en compte), loras complètes, production assets-v33.json.
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+
+const ROOT = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+const read = (p) => JSON.parse(readFileSync(ROOT + p, 'utf8'));
+
+// civitai : modelId / modelVersionId d'après docs/images/lora-candidats-v32.md (liens API vérifiés 12/11)
+const BY_FILE = {
+  'IL_10.safetensors': { civitaiId: 492126, version: 3150445 },
+  'Forest-Guardians-000014.safetensors': { civitaiId: 1039143, version: 1684013 },
+  'Golems.safetensors': { civitaiId: 574367, version: 1031917 },
+  'Leviatan.safetensors': { civitaiId: 237733, version: 1097050 },
+  'wow-undead.safetensors': { civitaiId: 1530870, version: 1732044 },
+  'Banshee.safetensors': { civitaiId: 438695, version: 1250524 },
+  'Cordyceps_XL.safetensors': { civitaiId: 246852, version: 278487 },
+  'Creepy Wolf Monster (SFW-NSFW) - IL.safetensors': { civitaiId: 1329245, version: 1500822 },
+};
+const BY_TRIGGER = {
+  'g0bl1nr4ce': 'IL_10.safetensors',
+  'FG-V2.0-Treant': 'Forest-Guardians-000014.safetensors',
+  'FG-V2.0-Dryad': 'Forest-Guardians-000014.safetensors',
+  'FG-V2.0-Spirit': 'Forest-Guardians-000014.safetensors',
+  'FG-V2.0-Dragon': 'Forest-Guardians-000014.safetensors',
+  'Gol3em': 'Golems.safetensors', 'Magma Golem': 'Golems.safetensors', 'Rock Golem': 'Golems.safetensors',
+  'Earth Golem': 'Golems.safetensors', 'Ice Golem': 'Golems.safetensors', 'Glowing Eyes': 'Golems.safetensors',
+  'leviathan a sea monster': 'Leviatan.safetensors',
+  'xundeadx': 'wow-undead.safetensors', 'exposed bone': 'wow-undead.safetensors',
+  'glowing eyes': 'wow-undead.safetensors', 'black sclera': 'wow-undead.safetensors',
+  'banshee': 'Banshee.safetensors',
+  'crdcps': 'Cordyceps_XL.safetensors', 'fungal horn': 'Cordyceps_XL.safetensors', 'cordyceps infected': 'Cordyceps_XL.safetensors',
+  'CWM-WolfIL': 'Creepy Wolf Monster (SFW-NSFW) - IL.safetensors', 'Feral': 'Creepy Wolf Monster (SFW-NSFW) - IL.safetensors',
+  'Anthro': 'Creepy Wolf Monster (SFW-NSFW) - IL.safetensors', 'Monster': 'Creepy Wolf Monster (SFW-NSFW) - IL.safetensors',
+};
+const WEIGHT = 0.7; // poids retenu 3.2 (lora-verdicts-v32.json, verdicts uniformes), reconduit en 3.3
+
+const manifest = read('tools/assets-manifest.json');
+let filled = 0;
+for (const e of manifest.entries) {
+  for (const l of e.source.loras || []) {
+    const file = BY_TRIGGER[l.trigger];
+    if (!file) continue;
+    const c = BY_FILE[file];
+    l.file = file;
+    l.civitaiId = c.civitaiId;
+    l.version = c.version;
+    l.base = 'wai-illustrious-v17';
+    l.weight = WEIGHT;
+    if (l.license) delete l.license;
+    filled++;
+  }
+}
+
+// --- entrées 3.3 ---
+const prompts = read('tools/prompts-v33.json');
+const seedUsed = {};
+const STATE = 'C:/Users/MOB/Documents/projet_data_IA/ComfyUI/output/out-v2/state';
+for (const logPath of [STATE + '/run-log-v33.json', STATE + '/run-log-v33-new.json']) {
+  if (!existsSync(logPath)) continue;
+  for (const row of JSON.parse(readFileSync(logPath, 'utf8'))) if (!row.error) seedUsed[row.tag] = row.seed;
+}
+let added = 0;
+for (const p of prompts) {
+  const id = p.id;
+  const loras = p.lora ? [{
+    file: p.lora.file,
+    civitaiId: BY_FILE[p.lora.file].civitaiId,
+    version: BY_FILE[p.lora.file].version,
+    base: 'wai-illustrious-v17',
+    trigger: p.lora.trigger,
+    weight: p.lora.weight,
+  }] : [];
+  manifest.entries.push({
+    id, kind: p.bg ? 'bg' : 'art', wave: '3.3',
+    source: { kind: 'gen', model: 'wai-illustrious-v17', loras, seed: seedUsed[id] ?? p.seed },
+    qa: { status: 'ok', date: '2026-11-13' },
+    production: { path: 'assets-v33.json', w: p.bg ? 1216 : 400, h: p.bg ? 832 : 560, ko: false },
+  });
+  added++;
+}
+manifest.session = '3.2+3.3';
+manifest.generated = '2026-11-13';
+writeFileSync(ROOT + 'tools/assets-manifest.json', JSON.stringify(manifest, null, 1));
+console.log('assets-manifest.json : loras 3.2 remplies =', filled, ', entrées 3.3 ajoutées =', added, ', total =', manifest.entries.length);

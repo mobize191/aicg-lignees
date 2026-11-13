@@ -1,0 +1,482 @@
+[
+ {
+  "tag": "lora-IL-10-safetensors-w0.6-0",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.6,
+  "species": "goblin",
+  "seed": 2127071,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-IL-10-safetensors-w0.6-1",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.6,
+  "species": "goblin",
+  "seed": 2127072,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-IL-10-safetensors-w0.7-2",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.7,
+  "species": "goblin",
+  "seed": 2127073,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-IL-10-safetensors-w0.7-3",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.7,
+  "species": "goblin",
+  "seed": 2127074,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-IL-10-safetensors-w0.8-4",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.8,
+  "species": "goblin",
+  "seed": 2127075,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-IL-10-safetensors-w0.8-5",
+  "lora": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce",
+  "weight": 0.8,
+  "species": "goblin",
+  "seed": 2127080,
+  "positive": "a a small wiry green-skinned goblin, long pointed ears, hooked nose, hunched posture, yellow eyes, crude leather armor, ragged loincloth, wielding a rusty dagger or notched club, no human proportions, g0bl1nr4ce, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.6-0",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.6,
+  "species": "treant",
+  "seed": 2126012,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.6-1",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.6,
+  "species": "treant",
+  "seed": 2126013,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.7-2",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.7,
+  "species": "treant",
+  "seed": 2126014,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.7-3",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.7,
+  "species": "treant",
+  "seed": 2126015,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.8-4",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.8,
+  "species": "treant",
+  "seed": 2126016,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Forest-Guardians-000014--w0.8-5",
+  "lora": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant",
+  "weight": 0.8,
+  "species": "treant",
+  "seed": 2126017,
+  "positive": "a an ent, a towering tree-being like Tolkien's Ents, thick bark skin, branch arms, root legs, a deep-set wooden face with glowing eyes, moss and lichen growths, FG-V2.0-Treant, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.6-0",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.6,
+  "species": "magmaGolem",
+  "seed": 2126008,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.6-1",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.6,
+  "species": "magmaGolem",
+  "seed": 2126009,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.7-2",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.7,
+  "species": "magmaGolem",
+  "seed": 2126010,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.7-3",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.7,
+  "species": "magmaGolem",
+  "seed": 2126011,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.8-4",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.8,
+  "species": "magmaGolem",
+  "seed": 2126012,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Golems-safetensors-w0.8-5",
+  "lora": "Golems.safetensors",
+  "trigger": "Magma Golem",
+  "weight": 0.8,
+  "species": "magmaGolem",
+  "seed": 2126013,
+  "positive": "a a hulking magma golem made of molten rock and black volcanic stone, glowing lava cracks across its body, jagged stone limbs, ember eyes in a crude rock face, no human anatomy, Magma Golem, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.6-0",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.6,
+  "species": "seaBehemoth",
+  "seed": 2126000,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.6-1",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.6,
+  "species": "seaBehemoth",
+  "seed": 2126001,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.7-2",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.7,
+  "species": "seaBehemoth",
+  "seed": 2126002,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.7-3",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.7,
+  "species": "seaBehemoth",
+  "seed": 2126003,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.8-4",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.8,
+  "species": "seaBehemoth",
+  "seed": 2126004,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Leviatan-safetensors-w0.8-5",
+  "lora": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster",
+  "weight": 0.8,
+  "species": "seaBehemoth",
+  "seed": 2126005,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.6-0",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.6,
+  "species": "lich",
+  "seed": 2126018,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.6-1",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.6,
+  "species": "lich",
+  "seed": 2126019,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.7-2",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.7,
+  "species": "lich",
+  "seed": 2126020,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.7-3",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.7,
+  "species": "lich",
+  "seed": 2126021,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.8-4",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.8,
+  "species": "lich",
+  "seed": 2126022,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-wow-undead-safetensors-w0.8-5",
+  "lora": "wow-undead.safetensors",
+  "trigger": "xundeadx",
+  "weight": 0.8,
+  "species": "lich",
+  "seed": 2126023,
+  "positive": "a a lich, an undead skeletal sorcerer, exposed skull with glowing arcane eyes, tattered arcane robes hanging from a skeletal frame, no living flesh, xundeadx, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.6-0",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.6,
+  "species": "banshee",
+  "seed": 2126019,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.6-1",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.6,
+  "species": "banshee",
+  "seed": 2126020,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.7-2",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.7,
+  "species": "banshee",
+  "seed": 2126021,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.7-3",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.7,
+  "species": "banshee",
+  "seed": 2126022,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.8-4",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.8,
+  "species": "banshee",
+  "seed": 2126023,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Banshee-safetensors-w0.8-5",
+  "lora": "Banshee.safetensors",
+  "trigger": "banshee",
+  "weight": 0.8,
+  "species": "banshee",
+  "seed": 2126024,
+  "positive": "a a banshee, a spectral undead woman with long flowing white hair, tattered grave clothes, translucent ghostly body, mouth open in a wailing scream, banshee, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.6-0",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.6,
+  "species": "fungusQueen",
+  "seed": 2126014,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.6-1",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.6,
+  "species": "fungusQueen",
+  "seed": 2126015,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.7-2",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.7,
+  "species": "fungusQueen",
+  "seed": 2126016,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.7-3",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.7,
+  "species": "fungusQueen",
+  "seed": 2126017,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.8-4",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.8,
+  "species": "fungusQueen",
+  "seed": 2126018,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Cordyceps-XL-safetensors-w0.8-5",
+  "lora": "Cordyceps_XL.safetensors",
+  "trigger": "crdcps",
+  "weight": 0.8,
+  "species": "fungusQueen",
+  "seed": 2126019,
+  "positive": "a a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy, crdcps, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.6-0",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.6,
+  "species": "beastDark",
+  "seed": 2127013,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.6-1",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.6,
+  "species": "beastDark",
+  "seed": 2127129,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.7-2",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.7,
+  "species": "beastDark",
+  "seed": 2127131,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.7-3",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.7,
+  "species": "beastDark",
+  "seed": 2127133,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.8-4",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.8,
+  "species": "beastDark",
+  "seed": 2127134,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ },
+ {
+  "tag": "lora-Creepy-Wolf-Monster-SFW--w0.8-5",
+  "lora": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL",
+  "weight": 0.8,
+  "species": "beastDark",
+  "seed": 2127136,
+  "positive": "a a hulking shadow beast of the crypt, dark matted fur, glowing pale eyes, long claws and fangs, a monstrous quadruped, no human traits, CWM-WolfIL, a wild non-humanoid creature, no human traits, no human face, no human posture, in a dark fantasy setting, full body, centered, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, ornate border, picture frame, text, watermark, signature, blood, gore, open wounds, blood stains, humans, humanoid, human face, human posture, 1girl, 1boy, bad quality, worst quality"
+ }
+]

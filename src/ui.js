@@ -1721,7 +1721,7 @@ function start() {
   });
   const artSrcBtn = document.getElementById('art-src-btn');
   if (artSrcBtn) {
-    artSrcBtn.title = 'Source des images : ' + ART_SRC_LABEL[artSrcKey()];
+    updateArtSrcBtn();
     artSrcBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       switchArtSrc();
@@ -1859,10 +1859,19 @@ const ART = {};
 
 // v1.28 : campagne AICG V3 (WAI-Illustrious v17, vague 3) = source par défaut (v3.0).
 // v1.33 : la relance 3.1 (verrous R8/R9/R10) est ajoutée en doublon commutable via le bouton 🖼️ (v3.1).
+// v1.51 (vague 3.3) : switch 4 versions — cycle V3 → V3.1 → V3.2 → V3.3, étiquette de version SUR le bouton.
 // Les anciens manifests (DreamShaper XL, WAI v2) sont archivés dans archives/assets/.
-// Les assets existant uniquement en 3.1 (7 cartes série 3 + 90 équipements) sont aussi dans v3.0 : par défaut partout.
-const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json' };
-const ART_SRC_LABEL = { v3: 'AICG Lignées V3.0 (WAI-Illustrious v17 — vague 3)', v31: 'AICG Lignées V3.1 (verrous 3.1 — relance complète)' };
+// Les assets existant dans une seule version (ex. les 37 cartes de la vague 3.3) sont aussi dans v3.0 : par défaut partout.
+// Un manifeste manquant = bouton grisé libellé, jamais d'erreur, version courante inchangée.
+const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json', v32: 'assets-v32.json', v33: 'assets-v33.json' };
+const ART_SRC_LABEL = {
+  v3: 'AICG Lignées V3.0 (WAI-Illustrious v17 — vague 3)',
+  v31: 'AICG Lignées V3.1 (verrous 3.1 — relance complète)',
+  v32: 'AICG Lignées V3.2 (couche monstres R11 + LoRAs)',
+  v33: 'AICG Lignées V3.3 (base 3.1 + 3 LoRAs + 37 cartes — vague 3.3)',
+};
+const ART_SRC_TAG = { v3: 'V3', v31: 'V3.1', v32: 'V3.2', v33: 'V3.3' };
+let artManifestMissing = false; // true = manifeste de la version affichée indisponible (bouton grisé)
 function artSrcKey() {
   try {
     const k = storage.getItem('fondations-art-src');
@@ -1989,35 +1998,58 @@ async function probeDungeonBg(d) {
   }
 }
 
-async function initAssets() {
+async function loadArtManifest(key) {
   try {
-    const res = await fetch(ART_MANIFESTS[artSrcKey()]);
-    if (res.ok) {
-      applyManifest(await res.json());
-      return;
-    }
+    const res = await fetch(ART_MANIFESTS[key]);
+    if (res.ok) return await res.json();
   } catch (e) {
     
+  }
+  return null;
+}
+
+async function initAssets() {
+  const m = await loadArtManifest(artSrcKey());
+  artManifestMissing = !m;
+  if (m) {
+    applyManifest(m);
+    return;
   }
   await Promise.all([...CATALOG.map(probeCardArt), ...DUNGEONS.map(probeDungeonBg)]);
 }
 
-// v0.47.2 : bascule la source d'images et re-rend la page courante
+// v1.51 : étiquette de version sur le bouton 🖼️ ; grisé si le manifeste affiché est indisponible
+function updateArtSrcBtn(showKey) {
+  const b = document.getElementById('art-src-btn');
+  if (!b) return;
+  const k = showKey || artSrcKey();
+  b.title = 'Source des images : ' + ART_SRC_LABEL[k] + (artManifestMissing ? ' (manifeste indisponible)' : '');
+  b.textContent = '🖼️ ' + ART_SRC_TAG[k];
+  b.classList.toggle('off', artManifestMissing);
+}
+
+// v0.47.2 : bascule la source d'images et re-rend la page courante ; v1.51 : cycle 4 versions
 async function switchArtSrc() {
   const keys = Object.keys(ART_MANIFESTS);
-  const next = keys[(keys.indexOf(artSrcKey()) + 1) % keys.length];
+  const cur = artSrcKey();
+  const next = keys[(keys.indexOf(cur) + 1) % keys.length];
+  const m = await loadArtManifest(next);
+  if (!m) {
+    // manifeste manquant : bouton grisé libellé, version courante inchangée, jamais d'erreur
+    artManifestMissing = true;
+    updateArtSrcBtn(next);
+    toast('🖼️ ' + ART_SRC_LABEL[next] + ' — manifeste indisponible');
+    return;
+  }
   try { storage.setItem('fondations-art-src', next); } catch (e) { }
   for (const k of Object.keys(ART)) delete ART[k];
   for (const d of DUNGEONS) d.art = null;
   for (const k of Object.keys(fxFound)) delete fxFound[k];
-  await initAssets();
-  const b = document.getElementById('art-src-btn');
-  if (b) {
-    b.title = 'Source des images : ' + ART_SRC_LABEL[artSrcKey()];
-    b.textContent = '🖼️';
-  }
+  applyManifest(m);
+  artManifestMissing = false;
+  updateArtSrcBtn();
   go(location.hash || '#accueil'); // Lot C : après le boot, tout retour à l'accueil soigne
-  toast('🖼️ Illustrations : ' + ART_SRC_LABEL[artSrcKey()]);
+  toast('🖼️ Illustrations : ' + ART_SRC_LABEL[next]);
 }
 
 async function probeFx(name) {
@@ -6172,6 +6204,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.51 : Switch 4 versions des illustrations (vague 3.3)', 'Le bouton 🖼️ cycle désormais V3 → V3.1 → V3.2 → V3.3 avec l’étiquette de version affichée sur le bouton, préférence persistée. Manifeste manquant = bouton grisé libellé, jamais d’erreur, version courante inchangée. Les 37 arts de la vague 3.3 sont aussi dans le manifeste par défaut assets-v3.json (présents partout). IHM seule : digest inchangé.'],
   ['v1.50 : Vérifications level design', 'Reachabilité prouvée par test : depuis chaque zone, le chemin atteint la porte du donjon, l\u2019autel, les jarres et le retour ville. Graphe d\u2019acquisition vérifié acyclique. Table de beats par zone en données (intensité + taux de rencontre). 252 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.49 : UI mobile : safe-area, losanges de rareté, contraste audité', 'Le menu latéral et le HUD d\u2019errance respectent les encoches (env safe-area-inset). Les bandes de rareté affichent un losange ◆ en plus de la couleur. Audit de contraste WCAG consigné dans le smoke (textes conformes 4.5:1 ; or sur place ensoleillée = cas décoratif consigné). Sweep 1280×720 / 2560×1080 / 1080×2340 vérifié. 249 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
