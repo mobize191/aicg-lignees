@@ -1,4 +1,4 @@
-# Spec — Trappes démon et ange v1 : le camp démon complet + les anges dévoyés (lot PRIORITAIRE du gel, prête à lancer après validation des propositions)
+# Spec — Trappes démon et ange v1 : le camp démon complet + les anges dévoyés (lot PRIORITAIRE du gel — VALIDÉE suite 33, prête à lancer : LOT 1)
 
 > Tranchage de Marc-Olivier (14/11, suite 25) : « Pas d'accès Chœur pour n14, je voudrais que l'on débloque les trappes démon et ange avant d'avancer. » Lecture consignée : (1) n14 Démon n'a PAS accès au Chœur Miroir, son éveil part sur les voies du camp démon ; (2) les trappes du camp démon (Gouffre des Vices, Fléau Démoniaque) reçoivent leur LIGNÉE EN V1 (le « au fil des patchs » est écarté) et la trappe ange (la porte « mauvaise volonté » de p1 : les anges dévoyés) est DÉBLOQUÉE en v1 ; (3) ce lot passe EN TÊTE du gel, avant gorgones/fées, paladin/chevalier, la spec-gel générale et la fusion. À corriger d'un mot si la lecture est mauvaise. Références : `docs/design/design-arbres-v18.md` §6.1-§6.2 + diagramme 10.6 ; chaînes des voies et nommées actées v14 (arbitrages du 13/11).
 >
@@ -7,6 +7,8 @@
 > **MAJ 15/11 (suite 30), 2e relecture de l'arbre** : **Diablotin TRANCHÉ — il RENOMME n14** (« le Diablotin, c'est juste pour les démons, il remplace en effet la n14 ») ; les UC de voie proposées deviennent **Démon du Désir** (la chair) et **Démon des Fosses** (la puissance), À VALIDER d'un mot (§2.1).
 >
 > **MAJ 15/11 (suite 31), tranchages reçus** : **les UC ACTÉES** (Démon du Désir / Démon des Fosses, « oui, pour les UC, c'est bon ») ; **le sommet de la puissance TRANCHÉ : un ROI DÉMON SEUL** — Lilith quitte le sommet (d28), elle se replace ailleurs dans le camp démon, différée V2 ; **l'accès Chœur TRANCHÉ : l'option (d) n15 Éveillé du Seuil, la source des trois familles divines** (« pour moi, c'est la source des trois familles », §4) ; **l'espèce ange TRANCHÉE** (v18 §6.2 : Séraphin Porteur de Lumière R → Ange de Lumière SR → Archange UR → Archange Éveillé L). L'école et les sorts (§2.3) restent à valider après lecture détaillée (demande suite 31).
+
+> **MAJ 15/11 (suite 33), les 5 derniers mots — LA SPEC EST ENTIÈREMENT VALIDÉE** : le roi démon est **BELZÉBUTH** (d28, « Belzébuth, Roi des Démons ») ; la L du ange est **« Séraphin, Archange Ultime »** (p6 renommé, v18 §6.2) ; l'éveil « la lumière » du mage est **RETIRÉ sans remplacement** (v18 §6.10.5, recâblage v2) ; **les écoles Vice/Fureur/Orgueil, les 3×6 sorts et les signatures VALIDÉS** (§2.3-§3 ne sont plus des propositions) ; **les nymphes : uniquement les Dryades en v1** (vitrine « Gens des Sèves » → « Dryades », commit data joint ; le reste v2, `recherche-nymphes-2026-11-15.md`). **Le lot 1 peut être lancé.**
 
 ## 1. Tranchages actés (14/11, suite 25 — rien à rediscuter)
 
@@ -49,25 +51,25 @@
 | d25 | Démon Majeur | R | Guerrier | chaîne principale |
 | d26 | Seigneur Démon | SR | Guerrier | verrou |
 | d27 | Prince Démon | UR | Guerrier | |
-| d28 | le Roi des Démons (nom à proposer) | L | Guerrier | **TRANCHÉ suite 31 : un ROI SEUL au sommet de la puissance** (« roi démon seul ») ; Lilith quitte le sommet, elle se replace ailleurs dans le camp démon (V2, à définir) ; nom à caler (pistes : Bélial, Mammon) |
+| d28 | Belzébuth, Roi des Démons | L | Guerrier | **NOM ACTÉ suite 33** (« Belzebuth ») ; TRANCHÉ suite 31 : un ROI SEUL au sommet de la puissance ; Lilith quitte le sommet, elle se replace ailleurs dans le camp démon (V2, à définir) |
 | d33 | Fléau Démoniaque | R | Occultiste | TRAPPE DÉBLOQUÉE (suite 25) |
 | d34 | Grand Fléau | SR | Occultiste | verrou |
 | d35 | Porte-Peste | UR | Occultiste | |
 | d36 | Peste, Mère des Fléaux | L | Occultiste | NOM ACTÉ suite 26 (ex-Pestis) |
 
-**Le sommet de la puissance TRANCHÉ (suite 31) : un ROI DÉMON SEUL.** Le doublon de L au sommet (option « la reine ET le roi », question suite 26) est ÉCARTÉ : la voie de la puissance termine sur UN roi nommé (d28, à nommer). **Lilith quitte le sommet** : elle se replace « autre part dans le truc des démons » (Marc-Olivier) — proposition d'attache V2 à caler (piste : une carte de la trappe du Gouffre des Vices, ou la nommée d'une future voie v2), rien à figer au lot 1 en dehors du renommage de d28.
+**Le sommet de la puissance TRANCHÉ (suite 31) : un ROI DÉMON SEUL.** Le doublon de L au sommet (option « la reine ET le roi », question suite 26) est ÉCARTÉ : la voie de la puissance termine sur UN roi nommé — **Belzébuth, Roi des Démons (NOM ACTÉ suite 33)**. **Lilith quitte le sommet** : elle se replace « autre part dans le truc des démons » (Marc-Olivier) — proposition d'attache V2 à caler (piste : une carte de la trappe du Gouffre des Vices, ou la nommée d'une future voie v2), rien d'autre à figer au lot 1.
 
 Recâblage data : `trees.json` divine.eveils remplace l'entrée `n14 → d8` par deux éveils (n14 → d19 « la voie de la chair », n14 → d24 « la voie de la puissance ») ; `evolutions.json` : d19 → {d20 | d29}, d24 → {d25 | d33}, puis les chaînes SR → UR → L ; l'entrée `n14 → d8` est retirée AU LOT ACCÈS CHŒUR (§4), pas avant. Stats : courbe divine de référence (d1-d18, p1/p5/p6, `RACE_MOD` divine), l'écart de classe s'applique ; valeurs posées au lot, mesurées par le harnas.
 
-### 2.3 Sorts de lignée (2×6, coûts 2/3/5/9/14/20 ✦) + signatures — PROPOSITIONS à valider
+### 2.3 Sorts de lignée (2×6, coûts 2/3/5/9/14/20 ✦) + signatures — **VALIDÉS suite 33**
 
 **Le Vice (la chair)** : ✦2 « Frôlement du Vice » (1 ennemi, ×1,4) · ✦3 « Regard de Luxure » (×1,6 + malédiction ATQ −25 %, 2 tours) · ✦5 « Haleine du Gouffre » (×1,8 + ralentissement 2 tours) · ✦9 « Charme de l'Abîme » (×2,6 + malédiction 2 tours) · ✦14 « Asmodia : Danse des Vices » (×3,4) · ✦20 « Désir Absolu » (×4,5).
 
-**La Fureur (la puissance)** : ✦2 « Grondement des Fosses » (×1,4) · ✦3 « Coup des Fosses » (×1,6) · ✦5 « Cri de Fureur » (×1,8 + étourdissement 1 tour, taux à caler) · ✦9 « Terreur Majeure » (×2,6 + malédiction 2 tours) · ✦14 « le Roi : Couronne de Fureur » (×3,4, renommage suite 31 à suivre le nom du roi) · ✦20 « Ultime Fureur » (×4,5).
+**La Fureur (la puissance)** : ✦2 « Grondement des Fosses » (×1,4) · ✦3 « Coup des Fosses » (×1,6) · ✦5 « Cri de Fureur » (×1,8 + étourdissement 1 tour, taux à caler) · ✦9 « Terreur Majeure » (×2,6 + malédiction 2 tours) · ✦14 « Belzébuth : Couronne de Fureur » (×3,4) · ✦20 « Ultime Fureur » (×4,5).
 
-**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; le Roi des Démons « Sceptre du Jugement » (×2 + étourdissement, ex-signature de Lilith, à caler au renommage suite 31) ; Famine « Dévoration Totale » (×2,2) ; Peste « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
+**Signatures (soloSpell, jamais le nom de la carte)** : Asmodia « Extase Interdite » (×2 + malédiction) ; **Belzébuth « Sceptre du Jugement »** (×2 + étourdissement) ; Famine « Dévoration Totale » (×2,2) ; Peste « Souffle Noir » (×2 + malédiction) ; les autres cartes suivent la grammaire des sorts (commun + signature par carte, crans au grimoire). n14 garde « Trait de Vice ».
 
-Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, le Roi des Démons M, Peste F), **Famine bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
+Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les chaînes principales (Asmodia F, **Belzébuth M**, Peste F), **Famine bestiale** (une gueule, jamais de figure humanoïde, règle beast:true).
 
 ## 3. Les anges dévoyés (4 cartes + re-racement, TRANCHÉ v18 §6.2)
 
@@ -79,7 +81,7 @@ Espèces des arts (plus tard, `species-map.json`) : diables humanoïdes pour les
 | d40 | Astre Rayonnant | L | Prêtre | Lumière |
 
 - Porte « mauvaise volonté » de p1 : `evolutions.json` p1 → d37 (choix au R, à côté de la voie céleste p1 → p5) ; la porte cesse d'être dormante dans trees.json.
-- Famille « dévoyés », école proposée **l'Orgueil** (rôle dégâts) : ✦2 « Éclat Dévoyé » (×1,4) · ✦3 « Bannière Reniée » (×1,6 + malédiction 2 tours) · ✦5 « Zénith Fêlé » (×1,8 + ralentissement 2 tours) · ✦9 « Châtiment Renversé » (×2,6) · ✦14 « Voûte Renversée » (×3,4) · ✦20 « Chute de l'Empyrée » (×4,5). Signature de l'Astre Rayonnant : « Lumière Noire » (×2) — PROPOSITIONS à valider.
+- Famille « dévoyés », école proposée **l'Orgueil** (rôle dégâts) : ✦2 « Éclat Dévoyé » (×1,4) · ✦3 « Bannière Reniée » (×1,6 + malédiction 2 tours) · ✦5 « Zénith Fêlé » (×1,8 + ralentissement 2 tours) · ✦9 « Châtiment Renversé » (×2,6) · ✦14 « Voûte Renversée » (×3,4) · ✦20 « Chute de l'Empyrée » (×4,5). Signature de l'Astre Rayonnant : « Lumière Noire » (×2) — **VALIDÉS suite 33**.
 - **Re-racement de l'Astre Capiteux (z8)** : fiche race divine camp ange, élément Lumière, courbe inchangée (TRANCHÉ).
 - La porte « coloration » reste dormante sauf §4-a.
 

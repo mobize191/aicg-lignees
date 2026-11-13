@@ -1,6 +1,8 @@
 # Recherche détaillée — les 5 familles de nymphes (15/11, suite 31)
 
 > Demande (Marc-Olivier, suite 30) : les Naufragés ne sont PAS les nymphes ; les vraies Nymphes sont une famille côté NATURE, différée v2, 5 types à construire par recherche détaillée (noms, formats, chaînes) : Alcéides (prés et champs), Naïades (les eaux), Lampades (sombres, enfers et deuils), Auréades (les montagnes), Dryades (les arbres). Relance (suite 31) : « vas-y, lance la recherche détaillée » — intégration à la V1 possible au cas par cas, sinon tout en V2. Cette doc répond : pour chaque famille, l'ancrage mythologique, le format, la chaîne proposée, le lien avec l'existant, et un verdict d'intégration.
+>
+> **VERDICT REÇU suite 33 : UNIQUEMENT LES DRYADES EN V1** (« uniquement dryade en v1, le reste en v2 ») — la vitrine « Gens des Sèves » est renommée « Dryades » (commit data suite 33, zéro carte nouvelle) ; Naïades, Alcéides, Auréades et Lampades restent en V2, cette doc servant de tracé pour elles.
 
 > Méthode : le gabarit des familles est celui des webs de biomes du v17 §8 (commune C → UC → choix au R, SR verrou, UR, L nommée ; une M si la famille porte un biome entier) ; la règle des noms 1.4 s'applique (une nommée garde son nom, une graine crée sa propre voie). Les éléments, classes et rôles suivent la grammaire du jeu ; les espèces d'art suivent le précédent `stagnantNymph` (k2 Nymphe Croupie : figure nymphique humanoïde, correctif d'art acté 13/11).
 
