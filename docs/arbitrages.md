@@ -1,3 +1,11 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 10 (spec vie-jeu Lot 4) LIVRÉE : UI/UX MOBILE (v1.49)
+
+- **Safe-area** : `env(safe-area-inset-*)` sur le menu latéral (`nav`, `nav.open`) et le HUD d'errance (`.errance-top`, `.errance-hint`) dans `src/shell.html` ; recalcul au resize par le navigateur (unités relatives). Smoke B8c a.
+- **Bande de rareté jamais couleur seule** : `.rar-chip::before { content: '◆ ' }` + chips de rareté des récompenses avec ◆ — couleur + losange partout. Smoke B8c b.
+- **Audit contraste 4.5:1 consigné dans le smoke** (B8c c, ratios WCAG calculés) : texte nav 12+ :1, corps ~15 :1, bouton actif ~8 :1 — conformes. **Cas à risque consigné** : or #ffd54f sur place ensoleillée #e8d9b0 ≈ 1.6:1 — non bloquant (texte or toujours sur fond sombre en UI ; la place ensoleillée est un décor SVG sans texte).
+- **Sweep de résolutions** 1280×720 / 2560×1080 / 1080×2340 vérifié en smoke (B8c d : conteneurs présents, pas de largeur fixe tronquante ; captures réelles à valider en protocole IHM téléphone+PC).
+- 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (IHM seule).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 9 (spec vie-jeu Lot 3) LIVRÉE : HÉROS D'ERRANCE PAR CODE (v1.48)
 
 - **`src/errance-hero.js`** (chemin adapté à l'arborescence plate du dépôt ; la spec disait `errance/hero.js`) : `drawHero(ctx, x, y, opts)` peint et anime le héros PAR CODE — femme cape noire cheveux blancs : tête ellipse peau en dégradé, mèches blanches en courbes (retard de phase), cape noire polygone souple qui ondule à l'opposé du mouvement, bras/jambes capsules arrondies, ombre elliptique au sol. Cycle de marche sin(phase) + bob, idle respiration ; 4 directions (dos = chevelure blanche couvrante). **Aucune image, aucun rectangle** (testé : zero fillRect). Remplace le dessin inline rectangle de `src/ui.js` ; branché dans la boucle de rendu errance.

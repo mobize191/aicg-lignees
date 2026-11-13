@@ -46,6 +46,9 @@ border-radius: 999px; padding: 4px 12px;
 nav {
 position: sticky; top: 45px; z-index: 39;
 display: flex; gap: 2px; padding: 6px 6px;
+/* Lot 4 : safe-area (PWA installée, encoche) — recalculée au resize par le navigateur */
+padding-left: calc(6px + env(safe-area-inset-left));
+padding-right: calc(6px + env(safe-area-inset-right));
 background: rgba(10, 14, 22, .92);
 border-bottom: 1px solid rgba(124, 77, 255, .22);
 }
@@ -134,6 +137,7 @@ font-size: .62rem; font-weight: 800; letter-spacing: .06em;
 padding: 2px 7px; border-radius: 999px;
 background: rgba(8, 11, 17, .82); border: 1px solid rgba(255, 255, 255, .14);
 }
+.rar-chip::before { content: '◆ '; } /* Lot 4 : bande de rareté = losange + couleur, jamais couleur seule */
 .r-C .rar-chip { color: #9aa5b5; }
 .r-N .rar-chip { color: #8d99ad; }
 .r-UC .rar-chip { color: #61d691; }
@@ -823,7 +827,7 @@ background: rgba(77, 208, 225, .12); color: #bfe8ff; cursor: pointer;
 }
 #menu-btn:active { background: rgba(77, 208, 225, .28); }
 nav { display: none; }
-nav.open { display: flex; flex-direction: column; gap: 2px; padding: 6px; }
+nav.open { display: flex; flex-direction: column; gap: 2px; padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); padding-left: calc(6px + env(safe-area-inset-left)); padding-right: calc(6px + env(safe-area-inset-right)); }
 nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .92rem; }
 /* v0.46.1 : fenêtre d'action tactile — boutons 44 px, fenêtre plus haute, ✕ toujours visible */
 body.in-combat .act-modal { max-height: 78dvh; }
@@ -1041,7 +1045,8 @@ animation: newpulse 1.6s infinite;
 .pop .ok{display:block;text-align:center;padding:12px;border-radius:12px;background:linear-gradient(180deg,#2b6a4c,#1c4a36);color:#eafff2;font-weight:700;text-decoration:none}
 .pop .ghost{padding:12px;border-radius:12px;background:rgba(24,18,8,.5);color:#dfe6f2;border:1px solid rgba(201,164,78,.6)}
 .errance-wrap{position:fixed;inset:0;display:flex;flex-direction:column}
-.errance-top{position:relative;display:flex;gap:8px;padding:10px 12px;z-index:5}
+.errance-top{position:relative;display:flex;gap:8px;padding:10px 12px;z-index:5;padding-top:calc(10px + env(safe-area-inset-top));padding-left:calc(12px + env(safe-area-inset-left));padding-right:calc(12px + env(safe-area-inset-right))}
+.errance-hint{padding-bottom:calc(6px + env(safe-area-inset-bottom))}
 #errance-canvas{flex:1;width:100%;touch-action:none}
 .errance-hint{padding:6px 12px;font-size:11px}
 .sort-badge.b-objet { background: rgba(77, 208, 225, .18); color: #7ce7f5; border-color: rgba(77, 208, 225, .45); }

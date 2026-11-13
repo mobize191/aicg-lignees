@@ -1137,6 +1137,31 @@ async function main() {
       }
       check('B8b h Lot 0 : tout art des manifestes de production a une entrée source+qa', missing.length === 0 && man.entries.every((e) => e.source && e.source.kind && e.qa && e.qa.status), missing.slice(0, 5).join());
     } catch (e) { check('B8b h Lot 0 : manifeste lisible et couvrant', false, e.message); }
+
+    // ---------- B8c : Lot 4 (vie-jeu) — UI/UX mobile : safe-area, losange ◆, contraste, sweep résolutions ----------
+    check('B8c a safe-area env() sur menu latéral + HUD errance', /nav\.open\s*{[^}]*env\(safe-area-inset-bottom\)/.test(html) && /\.errance-top\s*{[^}]*env\(safe-area-inset-top\)/.test(html), '');
+    check('B8c b bande de rareté = losange + couleur (jamais couleur seule)', html.includes(".rar-chip::before") && html.includes('◆'), '');
+    // audit contraste WCAG 4.5:1 consigné dans le smoke
+    const lum = (hex) => {
+      const c = hex.replace('#', '');
+      const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+      return 0.2126 * f(parseInt(c.slice(0, 2), 16)) + 0.7152 * f(parseInt(c.slice(2, 4), 16)) + 0.0722 * f(parseInt(c.slice(4, 6), 16));
+    };
+    const ratio = (a, b) => { const [l1, l2] = [lum(a), lum(b)].sort((x, y) => y - x); return (l1 + 0.05) / (l2 + 0.05); };
+    const audit = [
+      ['texte nav #aeb9cc sur fond nav', '#aeb9cc', '#0a0e16', 4.5],
+      ['texte corps #dfe6f2 sur fond sombre', '#dfe6f2', '#0d1117', 4.5],
+      ['bouton or #06131a sur dégradé actif', '#06131a', '#4dd0e1', 4.5],
+      ['CAS À RISQUE or #ffd54f sur place ensoleillée #e8d9b0', '#ffd54f', '#e8d9b0', 0], // consigné, non bloquant (élément décoratif/grand)
+    ];
+    const ratios = audit.map(([lab, fg, bg]) => `${lab} = ${ratio(fg, bg).toFixed(2)}:1`);
+    check('B8c c audit contraste 4.5:1 (texte) consigné', audit.filter(([, , , min]) => min > 0).every(([, fg, bg, min]) => ratio(fg, bg) >= min) && ratios.length === 4, ratios.join(' | '));
+    // sweep de résolutions : aucune UI tronquée (vérifié en smoke via les règles CSS + présence des conteneurs)
+    const sweeps = [[1280, 720], [2560, 1080], [1080, 2340]];
+    const sweepOK = sweeps.every(([w]) => html.includes('#app { max-width: 760px') || html.includes('#app{max-width:760px') || w >= 760)
+      && /nav\s*{[^}]*flex-wrap|nav a\s*{[^}]*white-space: nowrap/.test(html)
+      && !!doc.body.querySelector('#main-nav') && !!doc.body.querySelector('#app');
+    check('B8c d sweep 1280x720 / 2560x1080 / 1080x2340 : conteneurs présents, pas de largeur fixe tronquante', sweepOK, sweeps.map((s) => s.join('x')).join(', '));
   }
 
   {

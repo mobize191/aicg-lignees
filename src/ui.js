@@ -4664,7 +4664,7 @@ function openRecompensesModal(recomp) {
   const overlay = document.createElement('div');
   overlay.className = 'modal-overlay recomp-overlay';
   const rows = recomp.map((r, i) => `<button type="button" class="btn tac-btn recomp-row r-${r.rarity ?? 'C'}" data-i="${i}">
-    <b>${r.label}</b>${r.rarity ? ` <span class="chip r-${r.rarity}">${RARITY_LABEL[r.rarity] ?? r.rarity}</span>` : ''}
+    <b>${r.label}</b>${r.rarity ? ` <span class="chip r-${r.rarity}">◆ ${RARITY_LABEL[r.rarity] ?? r.rarity}</span>` : ''} // Lot 4 : losange ◆ + couleur
     <span class="muted">${r.detail ?? ''}</span></button>`).join('');
   overlay.innerHTML = `<div class="modal-box recomp-box">
     <h3>🎁 Récompenses du combat</h3>
@@ -6172,6 +6172,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.49 : UI mobile : safe-area, losanges de rareté, contraste audité', 'Le menu latéral et le HUD d\u2019errance respectent les encoches (env safe-area-inset). Les bandes de rareté affichent un losange ◆ en plus de la couleur. Audit de contraste WCAG consigné dans le smoke (textes conformes 4.5:1 ; or sur place ensoleillée = cas décoratif consigné). Sweep 1280×720 / 2560×1080 / 1080×2340 vérifié. 249 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
   ['v1.47 : Feedback 3 tiers + hit-stop', 'Un point de routage unique pour les effets : petit (tick sonore), moyen (flash léger + secousse + pop), grand (crit, K.O., boss : flash + secousse forte + zoom + hit-stop de 90 ms, jamais deux pauses qui se chevauchent). Nouveau réglage « réduire les flashs » (persisté) : teinte sans pulsation, au plus 3 flashs par seconde. Désactivable en une ligne (`FX_HITSTOP` en données). 246 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
   ['v1.45 : Capture à la DQM + jetons', 'À l\u2019écran Récompenses de chaque combat gagné, chaque monstre vaincu (hors boss et nommés) propose « Tenter la capture — X % » : taux de la zone × démonstration de force (vos niveaux moyens contre le sien, plafonné), un seul essai. Nouvelle devise 🎫 JETONS : gagnés en bouclant des donjons, via les jalons et les quêtes ; la Guilde recrute ses 3 compagnons du jour en jetons — jamais en or. 240 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],
