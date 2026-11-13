@@ -1,5 +1,17 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 : LOT 3 LIVRÉ — économie v1.51 : plus d'achat de cartes à l'or (conformité tranchage Lot D du 12/11) — prompt `docs/prompt-correctifs-v1.51.md`
+
+- **Boutique** : le rayon « Marchand de créatures » (3 offres/jour à l'or, prix C 200 → UR 10 000 or) est retiré ; la Boutique ne garde que potions, éclats bruts et **équipement à l'or (inchangé)** + atelier. `buyMonster` refuse désormais avec redirection « Guilde en jetons 🎫 ». Textes mis à jour (Boutique, collection vide, donjons, fiche mystère, Forge) ; la Guilde affiche « C 5 → UR 2 000 jetons 🎫 » (plus « or »). Recrutement de compagnons UNIQUEMENT à la Guilde en jetons — inchangé. Changelog in-game + CHANGELOG.md à jour.
+- **Preuve** : build OK, **266 tests verts**, smoke **404 checks TOUT PASSE** (B7/B24 réécrits pour la nouvelle économie, avec justification ; B11 m reste un flake de timing préexistant du stub, non lié), **digests INCHANGÉS `4a5b0123…` 861/3000 / `3f828555…` 2864/10000** (hors combat, mesure de contrôle).
+
+## 2026-11-13 : LOT 2 LIVRÉ — UI v1.51 (fiche unifiée, badge élément, splash explicite, cartes combat) — prompt `docs/prompt-correctifs-v1.51.md` — PRÉSENTATION SEULE, digest inchangé
+
+- **Fiche unifiée** : une seule fonction `ficheCoreHtml` (`src/ui.js`) rend la fiche des deux côtés — menu équipe (`renderCardModal`) et combat (`openUnitModal`) : illustration contenue (`.modal-card` + `cardFront`, **plus de `.modal-hero.full` tronqué en combat**), stats complètes PV/ATQ/AGI/INT (+ mana en combat), sorts avec descriptions, élément, classe, rareté, niveau ; le combat ajoute la variante « effets actifs » (buffs/statuts/mana). **Splash Mage explicitée** (« la cible + éclats à 50 % des dégâts sur les autres ») et **wave Occultiste** (« zone — toute la ligne ennemie »), depuis `CLASSE_MODS` en data. Aucun changement de maths.
+- **Badge élément réparé** : `src/ui.js` affichait littéralement `(EL_GLYPH[el] ?? '')` (parenthèses hors interpolation) → `${EL_GLYPH[el] ?? ''}`.
+- **Cartes de combat plus grandes** (point 9) : `clamp(120px, 30vw, 180px)` / boss `clamp(150px, 38vw, 220px)` dans `src/shell.html` ; sweep 3 résolutions (1280×720, 2560×1080, 1080×2340) couvert par le smoke (B8c d), rien de tronqué.
+- **Preuve** : build OK, **266 tests verts** (4 nouveaux structurels, `tests/fiche-v151.test.js`), smoke **412 checks TOUT PASSE** (checks 49/50/46 b/B25 e re-pointés sur la fiche unifiée AVEC justification en commentaire), **digests INCHANGÉS `4a5b0123…` 861/3000 / `3f828555…` 2864/10000** (mesure de contrôle, présentation seule).
+
 ## 2026-11-13 : LOT 1 LIVRÉ — correctifs v1.51 lot 1 (signatures soigneuses + ascendance retirée + défaite errance + mana) — prompt `docs/prompt-correctifs-v1.51.md`
 
 - **Signatures soigneuses** : les 14 cartes Prêtre à `effect.kind === "heal"` (et 14 monstres) construisaient leur sort signature sans rôle → défaut dégâts. Désormais `role: 'soin', cible: '1 allié'` embarqué à la construction (`src/ui.js`, `src/data.js`), `signatureMetaOf` donne la priorité au soin sur le défaut soloMult, et les lignes d'attaque (joueur Auto + ennemi, symétrie) résolvent une signature alliée par son rôle (soigne le plus blessé, via le mécanisme du sort commun support). T0.2 inchangé : les autres sorts (commun/race/classe/lignée) restent des coups en Auto. Tests : 4 nouveaux headless (`tests/signature-v137.test.js`) + invariant B26 c / test v1.37 (c) mis à jour AVEC justification.

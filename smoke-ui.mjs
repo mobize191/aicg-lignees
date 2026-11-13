@@ -955,69 +955,37 @@ async function main() {
   }
 
   {
-    // lot E2 économie v2 — marchand de créatures dans la Boutique
+    // correctifs v1.51 lot 3 (conformité tranchage Lot D du 12/11) : plus d'achat de cartes/monstres à l'or
     api.go('#boutique');
     await wait(20);
+    const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
     const nbMon = doc.body.querySelectorAll('[data-buy-mon]').length;
     const pool = api.marchandMonsters();
-    check('B7 a marchand v2 : catalogue complet MASQUÉ (0 bouton data-buy-mon), pool data intact (> 50 non nommés)', nbMon === 0 && pool.length > 50 && pool.every((m) => !(m.name ?? '').includes(',')), `${nbMon}/${pool.length}`);
+    check('B7 a Boutique : plus de rayon marchand (0 data-buy-offre, 0 data-buy-mon), pool data intact (> 50 non nommés)', nbOffres === 0 && nbMon === 0 && pool.length > 50, `${nbOffres}/${nbMon}/${pool.length}`);
+    check('B7 b le dist ne rend plus de bouton d\u2019achat marchand (data-buy-offre) ; le rayon Boutique n\u2019affiche plus le marchand', !html.includes('data-buy-offre') && !doc.body.textContent.includes('Marchand de cr\u00e9atures'), '');
     api.store.gold = 50000;
     const m = pool.find((x) => x.rarity === 'C');
     const gold0 = api.store.gold;
     const owned0 = api.ownedOf(m.id);
-    check('B7 b achat monstre C : -200 or, +1 exemplaire', api.buyMonster(m.id) === true && api.store.gold === gold0 - api.marchandPrix(m) && api.ownedOf(m.id) === owned0 + 1, m.id);
-    check('B7 c prix selon échelle data (C 200, UR 10 000)', api.marchandPrix(pool.find((x) => x.rarity === 'C')) === 200 && api.marchandPrix(pool.find((x) => x.rarity === 'UR')) === 10000, '');
-    const named = (api.DATA.monsters ?? []).find((x) => (x.name ?? '').includes(','));
-    check('B7 d monstre nommé non vendu', api.buyMonster(named.id) === false, named.id);
-    const l = (api.DATA.monsters ?? []).find((x) => x.rarity === 'L');
-    check('B7 e rang L non vendu au marchand', api.buyMonster(l.id) === false, l.id);
-    api.store.gold = 0;
-    check('B7 f achat sans or refusé', api.buyMonster(m.id) === false, '');
-    check('B7 g 0 exception lot E2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
-    // contenu v3 lot C1 — marchand v2 : 3 offres/jour (seedOfDay), prix actés, déblocage par donjon bouclé
-    const offres = api.offresMarchandDuJour();
-    check('B7 h offres du jour : 3 offres déterministes, distinctes, raretés débloquées', offres.length === 3 && new Set(offres.map((m) => m.id)).size === 3 && api.offresMarchandDuJour().map((m) => m.id).join() === offres.map((m) => m.id).join() && offres.every((m) => api.marchandRareteDebloquee(m.rarity)), offres.map((m) => m.id).join());
-    check('B7 i prix actés v2 (UC 1 500 / R 4 500 / SR 8 000 or)', api.marchandPrix(pool.find((x) => x.rarity === 'UC')) === 1500 && api.marchandPrix(pool.find((x) => x.rarity === 'R')) === 4500 && api.marchandPrix(pool.find((x) => x.rarity === 'SR')) === 8000, '');
-    const uc = pool.find((x) => x.rarity === 'UC');
-    api.store.gold = 50000;
-    check('B7 j sans donjon bouclé : seule C débloquée, achat UC refusé', api.raretesMarchandDebloquees().join() === 'C' && api.buyMonster(uc.id) === false, api.raretesMarchandDebloquees().join());
-    api.store.progress.marees.diffs[1].record = 10;
-    const ownedUc = api.ownedOf(uc.id);
-    check('B7 k donjon bouclé en Facile → UC débloquée et achetable', api.raretesMarchandDebloquees().join() === 'C,UC' && api.buyMonster(uc.id) === true && api.ownedOf(uc.id) === ownedUc + 1, api.raretesMarchandDebloquees().join());
-    api.store.progress.marees.diffs[1].record = 0;
-    const cAlt = pool.filter((x) => x.rarity === 'C')[1];
-    let ok3 = true;
-    for (let i = 0; i < 3; i++) ok3 = ok3 && api.buyMonster(cAlt.id) === true;
-    check('B7 l limite 3 exemplaires par monstre au marchand', ok3 && api.buyMonster(cAlt.id) === false, cAlt.id);
-    const nbOffres = doc.body.querySelectorAll('[data-buy-offre]').length;
-    check('B7 m rayon rend les 3 offres du jour', nbOffres === offres.length, `${nbOffres}/${offres.length}`);
+    check('B7 c buyMonster refusé (plus d\u2019achat à l\u2019or) : or et collection inchangés, redirection Guilde/jetons', api.buyMonster(m.id) === false && api.store.gold === gold0 && api.ownedOf(m.id) === owned0, m.id);
+    check('B7 d 0 exception lot 3', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    // la Guilde reste le seul vendeur de compagnons, en jetons
+    api.go('#forge');
+    await wait(20);
+    const guildeTxt = doc.body.textContent ?? '';
+    check('B7 e Guilde : prix affichés en jetons 🎫, plus « or » dans le texte d\u2019accueil', guildeTxt.includes('jetons') && !/UR 2 000 or/.test(guildeTxt), '');
+    const nbComp = doc.body.querySelectorAll('[data-compagnon]').length;
+    check('B7 f Guilde : 3 offres du jour seules (jetons)', nbComp === 3, `${nbComp}`);
 
-    // ---------- B24 : correctifs v1.37 lot 4 — Boutique : 3 offres du jour seules, verrous masqués ----------
+    // ---------- B24 (réécrit v1.51 lot 3) : la Boutique n\u2019affiche plus aucun article marchand ----------
     check('B24 a le dist ne contient plus « Catalogue complet »', !html.includes('Catalogue complet'), '');
     check('B24 b le dist ne rend plus de boutons data-buy-mon', !html.includes('data-buy-mon'), '');
     api.go('#boutique');
     await wait(20);
-    check('B24 c Boutique : 3 offres du jour seules au rayon marchand, aucun article verrouillé affiché', doc.body.querySelectorAll('[data-buy-offre]').length === offres.length && doc.body.querySelectorAll('[data-buy-mon]').length === 0, `offres=${doc.body.querySelectorAll('[data-buy-offre]').length}`);
-    // offre épuisée : grisée avec compteur, bouton désactivé
-    const o0 = offres[0];
-    for (let k = 0; k < (api.MARCHAND.maxExemplaires ?? 3); k++) api.newInst(o0.id, 1, 0);
-    api.go('#boutique');
-    await wait(20);
-    const rowOut = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o0.id);
-    check('B24 d offre du jour épuisée : ligne grisée (.out) avec compteur N/max + « épuisée », bouton désactivé', !!rowOut && rowOut.classList.contains('out') && /épuisée/.test(rowOut.textContent) && rowOut.querySelector('button').getAttribute('disabled') !== null, rowOut ? rowOut.textContent.slice(0, 90) : 'ligne absente');
-    // manque d'or seul : article visible, bouton grisé, PAS masqué
-    api.store.gold = 0;
-    api.go('#boutique');
-    await wait(20);
-    const o1 = offres[1];
-    const rowPoor = [...doc.body.querySelectorAll('.shop-row')].find((r) => r.querySelector('[data-buy-offre]')?.dataset.buyOffre === o1.id);
-    check('B24 e manque d\u2019or seul : offre du jour toujours visible, bouton grisé (pas de .out)', !!rowPoor && !rowPoor.classList.contains('out') && rowPoor.querySelector('button').getAttribute('disabled') !== null, rowPoor ? rowPoor.classList.contains('out') + '/' + String(rowPoor.querySelector('button').getAttribute('disabled')) : 'absente');
-    // progression avancée : les raretés débloquées ne rouvrent pas le catalogue
-    api.store.gold = 50000;
-    api.store.progress.marees.diffs[1].record = 10;
-    api.go('#boutique');
-    await wait(20);
-    check('B24 f donjon bouclé (UC débloquée) : toujours seules les offres du jour, aucun article de catalogue réaffiché', doc.body.querySelectorAll('[data-buy-mon]').length === 0 && doc.body.querySelectorAll('[data-buy-offre]').length >= 1, `mon=${doc.body.querySelectorAll('[data-buy-mon]').length}`);
+    check('B24 c Boutique : aucun article marchand affiché (0 data-buy-offre, 0 data-buy-mon)', doc.body.querySelectorAll('[data-buy-offre]').length === 0 && doc.body.querySelectorAll('[data-buy-mon]').length === 0, '');
+    const boutiqueTxt = doc.body.textContent ?? '';
+    check('B24 d Boutique : renvoi à la Guilde en jetons pour les compagnons', boutiqueTxt.includes('Guilde') && boutiqueTxt.includes('jetons'), '');
+    check('B24 e Boutique : équipement à l\u2019or toujours présent', doc.body.querySelectorAll('[data-buy-eq]').length > 0 && doc.body.querySelectorAll('[data-buy]').length > 0, '');
     api.store.progress.marees.diffs[1].record = 0;
   }
 
@@ -1305,7 +1273,7 @@ async function main() {
     // économie v2 lot D : le recrutement se paie en JETONS, jamais en or — gold inchangé est le comportement voulu, pas un bug
     check('B11 l recrutement compagnon à la Guilde : jetons débités, or inchangé, +1 carte', (store.jetons ?? 0) === jetons0 - api.compagnonPrix(off[0]) && store.gold === g1 && store.instances.length === 3, `jetons=${store.jetons} or=${store.gold} inst=${store.instances.length}`);
     api.go('#inventaire');
-    await wait(30);
+    await wait(150); // anti-flake : rendu inventaire (vu flaky en lot v1.51)
     const invHtml = els.get('app').innerHTML;
     check('B11 m inventaire groupé (potions + pièces + gemmes)', invHtml.includes('Potions') && invHtml.includes('Pièces') && invHtml.includes('Gemmes'), '');
     const rawSave = mem.get('aicg-save') ?? mem.get([...mem.keys()][0]);

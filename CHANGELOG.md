@@ -1,5 +1,9 @@
 # Changelog
 
+## [post-v1.50] — 2026-11-13 — Correctifs terrain v1.51 (9e signalement) — 3 LOTS LIVRÉS
+
+Prompt `docs/prompt-correctifs-v1.51.md`. **Lot 1 (moteur, MESURÉ)** : signatures des 14 cartes Prêtre (et 14 monstres) soigneuses = de vrais soins (rôle soin embarqué, symétrie Auto joueur/ennemi) ; **Ascendance retirée** (tranchage oral 13/11 : statsAt sans asc, UI, migration save v28→v29) ; **défaite d'un combat de zone = écran dédié** « retour au Port des Brumes », plus de texte de donjon ; mana prouvé persistant entre combats de zone (test headless). **Lot 2 (UI, digest inchangé)** : fiche unifiée menu équipe = combat (illustration contenue, stats PV/ATQ/AGI/INT + mana en combat), badge élément réparé, splash Mage / wave Occultiste explicitées, cartes de combat plus grandes. **Lot 3 (économie)** : plus d'achat de cartes/monstres à l'or — recrutement UNIQUEMENT à la Guilde en jetons 🎫 ; Boutique = équipement à l'or uniquement. 266 tests, smoke 404 checks. **Digests MESURÉS `4a5b0123…` 861/3000 et `3f828555…` 2864/10000** (lot 1 : +0,77/+0,69 pt vs `9faff1b9…`/`6103e7b0…`, aucun recalibrage ; lots 2-3 inchangés).
+
 ## [post-v1.50] — 2026-11-13 — Correctifs smoke + heuristique IA — LOT 1 LIVRÉ (smoke robuste)
 
 Prompt `docs/prompt-correctifs-smoke-ia.md`. **Lot 1 (script de test uniquement, jeu inchangé)** : B9 c ne cherche plus une quête « tuer » en dur (progresse la première quête non faite, quel que soit son type, + garde-fou B9 h sur 7 dates simulées) ; échecs préexistants traités avec justification en commentaire (43 B → 3 actifs + 2 réserve depuis v1.41 ; B1 c → prix débité + récompense de quête du jour ; B11 l → recrutement en jetons, jamais en or ; B29 h → date locale robuste au fuseau ; 45 e → assertions sémantiques ; crash `chr(233)` réparé). 252 tests, smoke **412 checks TOUT PASSE sans crash**. Digests inchangés `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000.

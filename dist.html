@@ -19081,19 +19081,10 @@ function marchandPrix(monstre) {
 }
 
 function buyMonster(id) {
-  const m = allMonsters().find((x) => x.id === id);
-  const prix = m ? marchandPrix(m) : null;
-  if (!m || prix == null) return false;
-  if (!marchandRareteDebloquee(m.rarity)) { toast(`🔒 ${m.rarity} verrouillée au marchand : bouclez un donjon dans la difficulté requise.`, 'warn'); return false; }
-  const max = MARCHAND.maxExemplaires ?? 3;
-  if ((ownedOf(id) ?? 0) >= max) { toast(`✗ Déjà ${max} exemplaires de ${m.name}.`, 'warn'); return false; }
-  if (store.gold < prix) { toast(`✗ Il faut ${prix} or pour ${m.name}.`, 'warn'); return false; }
-  store.gold -= prix;
-  newInst(id, 1, 0);
-  questProgress('recruter');
-  save();
-  updatePtsBadge();
-  return true;
+  // correctifs v1.51 lot 3 (conformité au tranchage Lot D du 12/11) : plus d'achat de monstres/cartes
+  // à l'or — le recrutement passe UNIQUEMENT par la Guilde en jetons 🎫
+  toast('✗ Plus d’achat de cartes à l’or — recrutez à la Guilde contre des jetons 🎫.', 'warn');
+  return false;
 }
 
 // PV/mana courants d'un exemplaire hors combat : persistés dans le run, à plein sinon
@@ -20840,7 +20831,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
           <div class="modal-info">
             <h3>${card.name}</h3>
             <p class="muted">${card.rarity} · ${card.classe} · ${card.element ?? 'Neutre'} · pas encore dévoilée</p>
-            <p class="muted">Carte à dévoiler : gagnez-la en donjon, à l’autel, au marchand ou à la Guilde pour révéler son illustration, ses stats et ses sorts.</p>
+            <p class="muted">Carte à dévoiler : gagnez-la en donjon, à l’autel ou à la Guilde (jetons) pour révéler son illustration, ses stats et ses sorts.</p>
           </div>`
         : ficheCoreHtml(card, {
             level,
@@ -22068,7 +22059,7 @@ function renderEquipe(root) {
     ${teamEquipHtml()}
     ${synPanel()}
     ${owned.length === 0
-      ? '<p class="empty-collection muted">Votre collection est vide — recrutez à la Guilde, au marchand de la Boutique, ou en quêtes !</p>'
+      ? '<p class="empty-collection muted">Votre collection est vide — recrutez à la Guilde (jetons 🎫), en quêtes ou en donjon !</p>'
       : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''})</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
         ? `<p class="empty-collection">Aucune carte ne correspond aux filtres actifs (${owned.length} possédée${owned.length > 1 ? 's' : ''}). <button class="btn" id="reset-filters">Réinitialiser les filtres</button></p>`
         : `<div class="grid">${cells}</div>`}`}`;
@@ -24284,16 +24275,6 @@ function renderBoutique(root) {
     <button type="button" class="btn small gold" data-buy-eclat="${el}" ${store.gold < eclatPrix ? 'disabled' : ''}>Acheter — ${eclatPrix} or</button>
   </div>`).join('');
   const boutiquePieces = EQUIPMENT.filter((p) => p.source === 'boutique');
-  const offres = offresMarchandDuJour();
-  const offreRows = offres.map((m) => {
-    const prix = marchandPrix(m) ?? 0;
-    const max = MARCHAND.maxExemplaires ?? 3;
-    const epuisee = (ownedOf(m.id) ?? 0) >= max;
-    return `<div class="shop-row${epuisee ? ' out' : ''}">
-      <span>🐾 <b>${m.name}</b> <span class="muted">${m.classe} · ${m.element} · ${RARITY_LABEL[m.rarity] ?? m.rarity} · possédée : <b>${ownedOf(m.id)}</b>/${max}${epuisee ? ' · épuisée' : ''}</span></span>
-      <button type="button" class="btn small gold" data-buy-offre="${m.id}" ${store.gold < prix || epuisee ? 'disabled' : ''}>Acheter — ${prix} or</button>
-    </div>`;
-  }).join('');
   const eqRows = boutiquePieces.map((p) => `<div class="shop-row">
     <span>${p.slot === 'arme' ? '🗡️' : p.slot === 'armure' ? '🛡️' : '📿'} <b>${p.nom}</b> <span class="muted">${p.slot}${p.classe ? ` · ${p.classe}` : ''} · ${RARITY_LABEL[p.rarity] ?? p.rarity} · ${bonusLabelOf(p.bonus)} · possédée : <b>${equipPieceCount(p.id)}</b></span></span>
     <button type="button" class="btn small gold" data-buy-eq="${p.id}" ${store.gold < p.prix ? 'disabled' : ''}>Acheter — ${p.prix} or</button>
@@ -24323,10 +24304,8 @@ function renderBoutique(root) {
     ${eclatRows}
     <h3>🗡️ Équipement (rayon Boutique)</h3>
     ${eqRows}
-    <h3>🐾 Marchand de créatures</h3>
-    <p class="muted">Monstres non nommés (fusion, enseignements), limite ${MARCHAND.maxExemplaires ?? 3} exemplaires — échelle C 200 → UR 10 000 or. Seules les <b>${MARCHAND.nbOffresJour ?? 3} offres du jour</b> sont affichées (rotation quotidienne, seed du jour) ; une rareté verrouillée par la progression est masquée jusqu'à son déblocage (boucler un donjon dans la difficulté requise : C dès le départ, puis UC Facile, R Normal, SR Difficile, UR Très difficile).</p>
-    <h4 class="shop-sub">✨ Offres du jour (${offres.length})</h4>
-    ${offreRows || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}
+    <h3>🐾 Compagnons</h3>
+    <p class="muted">Plus d’achat de cartes à l’or (tranchage Lot D du 12/11) : les compagnons se recrutent UNIQUEMENT à la <b>Guilde</b> contre des <b>jetons 🎫</b> (donjons bouclés, jalons, quêtes — jamais d’or).</p>
     <h3>🔨 Atelier — craft en ville (pièces de set)</h3>
     <p class="muted">Les sets se fabriquent ici : la base demande des matériaux de la zone ; la supérieure et la royale exigent en plus la matière du boss du donjon de la zone (elle ne s'achète pas). Coûts en data (table « craft » de data/equipment.json).</p>
     ${atelierRows}`;
@@ -24351,15 +24330,6 @@ function renderBoutique(root) {
       const piece = EQUIP_BY_ID[b.dataset.buyEq];
       if (buyEquipment(b.dataset.buyEq)) {
         toast(`✓ ${piece.nom} achetée (${piece.prix} or) — elle rejoint l'inventaire, à équiper depuis la fiche.`);
-        renderBoutique(root);
-      }
-    };
-  });
-  root.querySelectorAll('[data-buy-offre]').forEach((b) => {
-    b.onclick = () => {
-      const m = allMonsters().find((x) => x.id === b.dataset.buyOffre);
-      if (buyMonster(b.dataset.buyOffre)) {
-        toast(`✓ ${m.name} rejoint la collection (${marchandPrix(m)} or).`);
         renderBoutique(root);
       }
     };
@@ -24452,7 +24422,7 @@ function renderDonjons(root) {
     </div>
     <p class="muted">🎰 À l'entrée de chaque exploration, un modificateur de run est tiré — acceptez-le (butin majoré), entrez librement sans lui, ou relancez le tirage contre 1 éclat brut.</p>
     <p class="vspace"></p>
-    <p class="muted">Chaque donjon a son bestiaire : les monstres vaincus ne se capturent plus — les cartes naissent à la Guilde (compagnons, autel), au marchand de la Boutique, en quêtes et en donjon ; elles montent en niveau par l’XP de donjon.</p>`;
+    <p class="muted">Chaque donjon a son bestiaire : les monstres vaincus ne se capturent plus — les cartes naissent à la Guilde (compagnons en jetons, autel), en quêtes et en donjon ; elles montent en niveau par l’XP de donjon.</p>`;
   root.querySelectorAll('.enter-btn').forEach((el) => {
     el.onclick = () => enterAt(1, el.dataset.dungeon);
   });
@@ -24543,7 +24513,7 @@ function renderForge(root) {
     <h2>🛡️ La Guilde <span class="muted">— évolutions, autel, compagnons</span></h2>
     <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) propre. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
     <h3>\u00c9volutions ${evoRows.length ? `(${evoRows.length})` : ''}</h3>
-    ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : recrutez des cartes (Guilde, marchand, quêtes, donjon) et montez-les au niveau 10 en donjon.</p>'}
+    ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : recrutez des cartes (Guilde en jetons, quêtes, donjon) et montez-les au niveau 10 en donjon.</p>'}
     <h3>\u00c9clats d\u2019\u00e9volution en r\u00e9serve</h3>
     <p class="muted">${gemList || 'Aucun \u00e9clat pour l\u2019instant : les boss des \u00e9tages 5 et 10 en l\u00e2chent (tier selon la difficult\u00e9), et chaque \u00e9tage interm\u00e9diaire a une chance d\u2019\u00e9clat brut \u2014 fatigue quotidienne par donjon (premier drop garanti, puis 50 %, 25 %, 12,5 %\u2026 plancher 10 %, remise \u00e0 z\u00e9ro chaque nuit).'}</p>
     <h3>💎 Pierres d’éveil en réserve : ${store.pierres ?? 0}</h3>
@@ -24554,7 +24524,7 @@ function renderForge(root) {
     <p class="muted fam-hint">Sacrifiez 5 exemplaires LIBRES d\u2019une m\u00eame cat\u00e9gorie (personnages OU monstres, jamais m\u00e9lang\u00e9s) pour g\u00e9n\u00e9rer 1 carte de raret\u00e9 sup\u00e9rieure, m\u00eame cat\u00e9gorie, \u00e9l\u00e9ment pond\u00e9r\u00e9 par les cartes sacrifi\u00e9es. Cha\u00eene compl\u00e8te : 5 C = 1 UC \u00b7 5 UC = 1 R \u00b7 5 R = 1 SR \u00b7 5 SR = 1 UR \u00b7 5 UR = 1 <b>L</b>. La L\u00e9gendaire est un PROJET, jamais un tirage : elle se construit (1 L = 25 SR = 125 R = 625 UC = 3125 communes, ou l\u2019\u00e9quivalent en jetons).</p>
     <div class="fusion-list">${altarBtns.join('')}</div>
     <h3>🤝 Compagnons du jour ${guildeRows.length ? `(${guildeRows.length})` : ''}</h3>
-    <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre des JETONS 🎫 (gagnés en donjons, jalons, quêtes — jamais d'or) : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 5 → UR 2 000 or), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
+    <p class="muted fam-hint">La Guilde (ex-Forge) recrute des compagnons contre des JETONS 🎫 (gagnés en donjons, jalons, quêtes — jamais d'or) : rotation quotidienne de ${GUILDE.nbOffresJour ?? 3} offres (seed du jour), prix selon le rang (C 5 → UR 2 000 jetons 🎫), limite ${GUILDE.maxExemplaires ?? 3} exemplaires — le rang L se construit à l'autel, jamais au recrutement.</p>
     <div class="fusion-list">${guildeRows.join('') || '<p class="muted fam-hint">Plus d’offre aujourd’hui.</p>'}</div>
   `;
   root.querySelectorAll('[data-open]').forEach((el) => {
@@ -24630,6 +24600,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.51 : Correctifs retours terrain (9e signalement)', 'Signatures des soigneurs = vrais soins ; Ascendance retirée (plus de bonus gravé à l\u2019évolution) ; défaite en Terres Sauvages = écran « retour au Port des Brumes » ; mana persistant entre les combats (prouvé par test). Fiche unifiée équipe/combat, badge élément réparé, cartes de combat plus grandes, frappe Mage/Occultiste explicitée. Plus d\u2019achat de cartes à l\u2019or : Guilde en jetons 🎫 uniquement. 266 tests, digests mesurés `4a5b0123\u2026` 861/3000 et `3f828555\u2026` 2864/10000 (aucun recalibrage).'],
   ['v1.50 : Vérifications level design', 'Reachabilité prouvée par test : depuis chaque zone, le chemin atteint la porte du donjon, l\u2019autel, les jarres et le retour ville. Graphe d\u2019acquisition vérifié acyclique. Table de beats par zone en données (intensité + taux de rencontre). 252 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.49 : UI mobile : safe-area, losanges de rareté, contraste audité', 'Le menu latéral et le HUD d\u2019errance respectent les encoches (env safe-area-inset). Les bandes de rareté affichent un losange ◆ en plus de la couleur. Audit de contraste WCAG consigné dans le smoke (textes conformes 4.5:1 ; or sur place ensoleillée = cas décoratif consigné). Sweep 1280×720 / 2560×1080 / 1080×2340 vérifié. 249 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
