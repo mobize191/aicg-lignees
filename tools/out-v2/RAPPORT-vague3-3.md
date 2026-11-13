@@ -34,4 +34,4 @@ Non évaluée image par image (QA différée). Mécanisme en place : `character_
 
 ## 6. Conflits spec vs code
 
-Aucun. Note pipeline (hors spec, préexistante) : padding latéral noir du convert 5:7 (cf. §1). Fichier comparatif local non poussé : `tools/out-v2/COMPARATIF-v3x.md` (pointe vers les jpg locaux).
+Aucun. Signal : arbitrage post-build 9e4998f (k2 Nymphe Croupie reclassée stagnantNymph, hors LoRA Leviathan) — l’image k2 de cette vague a été générée AVANT ce correctif (beastWater + Leviatan), conservée telle quelle (arbitrage « pas de retry, comparatif plus tard »). Note pipeline (hors spec, préexistante) : padding latéral noir du convert 5:7 (cf. §1). Fichier comparatif local non poussé : `tools/out-v2/COMPARATIF-v3x.md` (pointe vers les jpg locaux).

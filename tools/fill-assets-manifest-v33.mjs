@@ -38,6 +38,7 @@ const BY_TRIGGER = {
 const WEIGHT = 0.7; // poids retenu 3.2 (lora-verdicts-v32.json, verdicts uniformes), reconduit en 3.3
 
 const manifest = read('tools/assets-manifest.json');
+manifest.entries = manifest.entries.filter((e) => e.wave !== '3.3'); // idempotent
 let filled = 0;
 for (const e of manifest.entries) {
   for (const l of e.source.loras || []) {
@@ -49,7 +50,7 @@ for (const e of manifest.entries) {
     l.version = c.version;
     l.base = 'wai-illustrious-v17';
     l.weight = WEIGHT;
-    if (l.license) delete l.license;
+    if (!l.license) l.license = 'non renseigné (Civitai) — enregistré pour information, non bloquant';
     filled++;
   }
 }
@@ -62,9 +63,11 @@ for (const logPath of [STATE + '/run-log-v33.json', STATE + '/run-log-v33-new.js
   if (!existsSync(logPath)) continue;
   for (const row of JSON.parse(readFileSync(logPath, 'utf8'))) if (!row.error) seedUsed[row.tag] = row.seed;
 }
+const NEW37 = new Set(['c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11','c12','c13','c14','p5','p6',
+  'w1','w2','w3','w4','w5','w6','w7','w8','w9','w10','w11','w12','w13','w14','w15','w16','w17','w18','w19','w20','w21']);
 let added = 0;
 for (const p of prompts) {
-  const id = p.id;
+  const id = p.bg ? p.id.replace(/^bg-/, '') : p.id; // fonds : clé = id de donjon, comme assets-v3.json
   const loras = p.lora ? [{
     file: p.lora.file,
     civitaiId: BY_FILE[p.lora.file].civitaiId,
@@ -72,14 +75,36 @@ for (const p of prompts) {
     base: 'wai-illustrious-v17',
     trigger: p.lora.trigger,
     weight: p.lora.weight,
+    license: 'non renseigné (Civitai) — enregistré pour information, non bloquant',
   }] : [];
-  manifest.entries.push({
+  const entry = (path) => ({
     id, kind: p.bg ? 'bg' : 'art', wave: '3.3',
-    source: { kind: 'gen', model: 'wai-illustrious-v17', loras, seed: seedUsed[id] ?? p.seed },
+    source: { kind: 'gen', model: 'wai-illustrious-v17', loras, seed: seedUsed[p.id] ?? p.seed },
     qa: { status: 'ok', date: '2026-11-13' },
-    production: { path: 'assets-v33.json', w: p.bg ? 1216 : 400, h: p.bg ? 832 : 560, ko: false },
+    production: { path, w: p.bg ? 1216 : 400, h: p.bg ? 832 : 560, ko: false },
   });
+  manifest.entries.push(entry('assets-v33.json'));
   added++;
+  if (NEW37.has(p.id)) { manifest.entries.push(entry('assets-v3.json')); added++; } // 37 arts présents partout (manifeste par défaut)
+}
+// entrées wave 3.2 pour assets-v32.json (mêmes arts que la production 3.2, clonés depuis l'entrée v3)
+{
+  const s32 = read('assets-v32.json');
+  const byIdV3 = new Map(manifest.entries.filter((e) => e.production.path === 'assets-v3.json').map((e) => [e.id, e]));
+  let added32 = 0;
+  for (const kind of ['art', 'bg']) {
+    for (const aid of Object.keys(s32[kind] ?? {})) {
+      const src = byIdV3.get(aid);
+      manifest.entries.push({
+        id: aid, kind, wave: '3.2',
+        source: src ? src.source : { kind: 'gen', model: 'wai-illustrious-v17', loras: [], seed: null },
+        qa: src && src.qa ? src.qa : { status: 'ok', date: '2026-11-12' },
+        production: { path: 'assets-v32.json', w: kind === 'bg' ? 1216 : 400, h: kind === 'bg' ? 832 : 560, ko: false },
+      });
+      added32++;
+    }
+  }
+  console.log('entrées 3.2 (assets-v32.json) ajoutées =', added32);
 }
 manifest.session = '3.2+3.3';
 manifest.generated = '2026-11-13';
