@@ -54,11 +54,13 @@ Suite de la session (12e tour, fin — tranchages oraux de Marc-Olivier) :
 33. **Baseline digest TRANCHÉE (13/11, « verrouiller maintenant »)** : la mesure du grand lancement **`9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000 est VERROUILLÉE** comme baseline de référence (remplace la v1.34 `c62fcbd1…`/`5059e683…`). Aucun digest codé en dur dans le moteur ; toute dérive future est MESURÉE contre cette baseline avant nouveau verrouillage.
 34. **Ascendance RETIRÉE (rappel du tranchage oral, 13/11)** : plus de bonus « +X % Ascendance » gravé à l'évolution ; mécanique et affichages supprimés, évolutions conservées, migration des saves. Voir `docs/prompt-correctifs-v1.51.md` lot 1 et `docs/arbitrages.md` (suite 6).
 35. **Signatures des soigneurs TRANCHÉES (13/11)** : le sort signature d'une carte à effet de soin SOIGNE (allié le plus blessé), n'attaque plus — corrige les 15 Prêtres dont l'Ange « Éclat d'Aube » ; MESURE digest contre la baseline 33.
+36. **Splash Mage : fiche explicite TRANCHÉE (13/11)** — la fiche unifiée dit « cible + éclats à 50 % sur les autres » (aucun changement de maths) ; le retrait ÉVENTUEL du splash (calibrage) est DIFFÉRÉ au point « reste à trancher » n°3.
 
 ### ⏳ RESTE À TRANCHER (rien ne bouge sans décision explicite)
 
 1. **Ops en attente** (Marc-Olivier : « on regardera ça plus tard », DIFFÉRÉ) : ~~verrouillage de la baseline~~ **FAIT 13/11 : nouvelle baseline VERROUILLÉE** (`9faff1b9…`/`6103e7b0…`, point 33) ; restent les échecs smoke préexistants (43 B, 45 e, B1 c, B29 h — correctif lot 1 en cours), validations téléphone ET PC (S24/S25 à rejouer, S26 à faire), maquette habillage boucle v2 (couloir design).
 2. **Forme finale des lignées exclusives initiales** : le point 32 est acté en principe ; la composition exacte (3 ou 4 familles, sort des non-choisies, moment du choix) se statuera avec la spec contenu v4 et le lore Le Lieur.
+3. **Splash des Mages (différé, décision de Marc-Olivier 13/11)** : la fiche l'explicite dès v1.51 (cible + 50 % sur les autres, voulu) ; faut-il GARDER ce splash ou le retirer ? Le retirer change le calibrage (digest à re-mesurer) — à trancher plus tard, rien ne bouge avant.
 
 ## 1. Identité du jeu — recherche demandée (DQM Joker vs Pokémon vs Final Fantasy)
 
