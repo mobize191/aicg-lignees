@@ -207,4 +207,4 @@ Suite de la session (12e tour, fin — tranchages oraux de Marc-Olivier) :
 7. **En parallèle (couloir design)** : arts série 3 (en cours), maquette habillage boucle v2 (en attente de validation), héros d'errance propre.
 8. **Attendent** : redesign de l'IA de combat (après errance et calibrage ; guidé par le skill `docs/skills/game-ai/`) ; calibrage (MESURE après chaque changement de maths, jamais de recalibrage sauf tranchage) ; systèmes HUR/HSR et hybrides « H » (différés après 1→100).
 
-**Validations en attente de Marc-Olivier** : v1.50 (grand lancement, scénario IHM S26) sur téléphone ET PC + verrouillage de la baseline digest proposée (`9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000) ; v1.32 sur téléphone ET PC ; maquette habillage boucle v2 (couloir design) ; lots visuels v1.37 (S24/S25 du protocole IHM) sur téléphone ET PC.
+**Validations en attente de Marc-Olivier** : v1.50 (grand lancement, scénario IHM S26) sur téléphone ET PC (baseline digest VERROUILLÉE le 13/11, point 33) ; v1.32 sur téléphone ET PC ; maquette habillage boucle v2 (couloir design) ; lots visuels v1.37 (S24/S25 du protocole IHM) sur téléphone ET PC.
