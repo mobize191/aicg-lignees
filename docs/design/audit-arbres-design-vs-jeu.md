@@ -23,11 +23,11 @@
 
 ### La structure réintégrée (v1)
 
-- **Entrée** : n14 Démon (C) ; les deux voies s'ouvrent au choix 1 (UC). n14 est recâblé de d8 vers ces voies ; l'accès au Chœur Miroir reste à définir en spec (autre porte, ou naissance dédiée).
-- **Voie de la chair** : Aiguillon du Désir UC → choix 2 : Succube R → Grande Succube SR → Dame du Désir UR → Asmodia, Reine du Désir L, **ou** Gouffre des Vices R (trappe : sa lignée se dessinera au fil des patchs).
-- **Voie de la puissance** : Brute des Fosses UC → choix 2 : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → Lilith, Reine des Démons L, **ou** Fléau Démoniaque R (trappe).
-- **12 cartes nouvelles, 2 familles de lignée** (6 sorts de lignée chacune, coûts 2/3/5/9/14/20 ✦). Les noms « Aiguillon du Désir, Brute des Fosses, Dame du Désir, Prince Démon » sont des noms proposés v12-v16, validés v15 (« au pire tu les modifieras ») ; Asmodia et Lilith sont actés v14.
-- **La Faim** (un des sept grands monstres) : piste, pas en v1.
+- **Entrée** : n14 Démon (C) ; les deux voies s'ouvrent au choix 1 (UC). **TRANCHÉ le 14/11 (suite 25) : n14 n'a PAS accès au Chœur Miroir** — recâblage acté vers ces voies ; l'accès du Chœur se redéfinit sans n14 (3 options dans `docs/design/spec-trappes-demon-ange-v1.md` §4 : porte coloration-eau de p1 RECOMMANDÉE, événement du miroir, naissance dédiée).
+- **Voie de la chair** : Aiguillon du Désir UC → choix 2 : Succube R → Grande Succube SR → Dame du Désir UR → Asmodia, Reine du Désir L, **ou** Gouffre des Vices R (**trappe DÉBLOQUÉE en v1, suite 25 : Grand Gouffre SR → Gueule de l'Abîme UR → La Faim L**, PROPOSITION).
+- **Voie de la puissance** : Brute des Fosses UC → choix 2 : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → Lilith, Reine des Démons L, **ou** Fléau Démoniaque R (**trappe DÉBLOQUÉE en v1 : Grand Fléau SR → Porte-Peste UR → Pestis, Mère des Fléaux L**, PROPOSITION).
+- **18 cartes nouvelles, 2 familles de lignée** (6 sorts de lignée chacune, coûts 2/3/5/9/14/20 ✦ ; +6 cartes des trappes débloquées le 14/11, suite 25). Les noms « Aiguillon du Désir, Brute des Fosses, Dame du Désir, Prince Démon » sont des noms proposés v12-v16, validés v15 (« au pire tu les modifieras ») ; Asmodia et Lilith sont actés v14.
+- **La Faim** (un des sept grands monstres) : **PROPOSITION suite 25 — L de la trappe du Gouffre des Vices en v1** (elle quitte la liste différée v2).
 - **Côté arts** : l'espèce de ces cartes doit être tranchée humanoïde diable (succube, démon) — la question ouverte « n14 Démon : bête ou diable ? » de l'audit espèces (`docs/images/audit-especes-mystiques.md`) se tranche diable avec ce gel ; espèces à ajouter dans `species-map.json`.
 
 ## 3. TRANCHÉ le 13/11 — le gel v1 (les 4 décisions)
@@ -52,7 +52,7 @@ Les quatre tranchages de Marc-Olivier du 13/11/2026 définissent la **liste ferm
 - **Maudit des Berges** (la chaîne de la malédiction des quais existe déjà : Ancien des Berges → Protecteur des Berges → Pontos → Titan des Marées).
 - **Sommets quais et fête** (Ombre des Quais, Brumaire, Virtuose de Fête, Colombine).
 - **Sylvains** (6 cartes), **élues du mage** (4 : Guérisseuse des Rivières, Mage des Marées, Gardienne de Braise, Mage de la Cendre), **élus de la terre** (jamais tranchés).
-- **La Faim** et les trappes démon au-delà du palier R ; **paliers H** (HUC, HSR) ; **essences Enge du feu et de la lumière**.
+- **Paliers H** (HUC, HSR) ; **essences Enge du feu et de la lumière**. (Les trappes démon et La Faim quittent cette liste le 14/11, suite 25 : débloquées en v1, gel §6.1 du v18.)
 
 ## 5. Divergences doc/jeu à consigner (hors gel, à traiter au fil des lots)
 

@@ -1,6 +1,6 @@
 # Les arbres v18 — l'inventaire exhaustif de l'arbre du jeu
 
-> **Référence courante du design des arbres** (13/11/2026, établi depuis les data v1.51 : 150 cartes, 159 monstres, 14 familles, 15 naissances, 6 biomes — plus le gel v1 tranché le même jour). Remplace `docs/historique/design-arbres-v17.md` (archive) comme document de repérage : chaque carte y est localisée par famille, race et biome. Quatre usages : (1) se repérer dans l'arbre ; (2) voir les trous restants pour valider la v1 (anges et démons en tête) ; (3) poser la table de synthèse de la fusion DQM v4 ; (4) trancher les lignées uniques du début de jeu — et **(5) les diagrammes §10 pour se projeter : l'état du jeu et le gel, arbre par arbre**. Le détail des tranchages du gel : `docs/design/audit-arbres-design-vs-jeu.md` + arbitrages du 13/11.
+> **Référence courante du design des arbres** (13/11/2026, établi depuis les data v1.51 : 150 cartes, 159 monstres, 14 familles, 15 naissances, 6 biomes — plus le gel v1 tranché le même jour). Remplace `docs/historique/design-arbres-v17.md` (archive) comme document de repérage : chaque carte y est localisée par famille, race et biome. Quatre usages : (1) se repérer dans l'arbre ; (2) voir les trous restants pour valider la v1 (anges et démons en tête : **LOT PRIORITAIRE tranché le 14/11, spec `docs/design/spec-trappes-demon-ange-v1.md`**) ; (3) poser la table de synthèse de la fusion DQM v4 ; (4) trancher les lignées uniques du début de jeu — et **(5) les diagrammes §10 pour se projeter : l'état du jeu et le gel, arbre par arbre**. Le détail des tranchages du gel : `docs/design/audit-arbres-design-vs-jeu.md` + arbitrages du 13/11.
 
 ## 0. La grammaire (tout acté, rappel)
 
@@ -46,7 +46,7 @@ Convergences vivantes (`data/evolutions.json`) : l'**Adepte des Rivières (a29)*
 | Naissance | Éveil (état actuel → état visé par le gel v1) |
 | --- | --- |
 | n13 Ange (C, Lumière) | p1 Jeune Séraphin (UC, effet « remplace », fait disparaître p2 Ange Gardien) ; les 3 portes : **la coloration** (l'eau, l'aube, le sabre — DORMANTE en v1, maillons = destinées post-L différées v2), **la voie céleste** (p5 Séraphin, Porteur de Lumière UR → p6 Séraphin, Chérubin Éveillé L), **la mauvaise volonté** (ANGES DÉVOYÉS à construire, cf. §6.2) |
-| n14 Démon (C, Ombre) | aujourd'hui → d8 Choriste Miroir (la Réflexion) ; **visé par le gel : les voies de la chair et de la puissance** (cf. §6.1) |
+| n14 Démon (C, Ombre) | aujourd'hui → d8 Choriste Miroir (la Réflexion) ; **TRANCHÉ le 14/11 (suite 25) : PAS d'accès au Chœur — l'éveil ouvre les voies de la chair et de la puissance** (cf. §6.1 ; retrait de n14 → d8 à livrer avec le nouvel accès Chœur) |
 | n15 Éveillé du Seuil (C, Neutre) | d14 Aiguille du Pont (le Liage, Tisseuses du Pont) |
 
 ## 2. Les 14 familles jouables (carte par carte, `data/families.json`)
@@ -120,19 +120,20 @@ Yuki, Brise-Lame → Lame Ardente → **Sabre de l'Aurore** · Onyx, Fil de Nuit
 
 ## 6. Le gel v1 : les trous à combler pour valider la première version
 
-Tout ce qui suit est TRANCHÉ (arbitrages du 13/11) et reste à construire côté data : **≈ 39 cartes**. Les contours exacts : audit §2-§3.
+Tout ce qui suit est TRANCHÉ (arbitrages du 13/11) et reste à construire côté data : **≈ 45 cartes** (les 6 des trappes débloquées le 14/11, suite 25). **LOT PRIORITAIRE (Marc-Olivier, 14/11) : §6.1 + §6.2 — les trappes démon et ange — AVANT le reste du gel** ; spec d'exécution : `docs/design/spec-trappes-demon-ange-v1.md`. Les contours exacts : audit §2-§3.
 
-### 6.1 Le camp démon (12 cartes) — le trou principal
+### 6.1 Le camp démon (18 cartes) — le trou principal, LOT PRIORITAIRE du gel (Marc-Olivier, 14/11)
 
+- **Recâblage TRANCHÉ le 14/11 (suite 25) : n14 Démon n'a PAS accès au Chœur Miroir** — l'éveil actuel n14 → d8 part sur les deux voies ; le retrait de `n14 → d8` se livre ENSEMBLE avec le nouvel accès du Chœur (c'est son seul éveil aujourd'hui, sinon la famille devient injouable).
 - **Deux voies depuis n14 Démon (C, Ombre)**, choix 1 : la chair (Aiguillon du Désir UC) ou la puissance (Brute des Fosses UC) ; choix 2 au R.
-- **Voie de la chair** : Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** (ordre acté v14) ; trappe : Gouffre des Vices R (lignée au fil des patchs, La Faim en piste).
-- **Voie de la puissance** : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L** (nommée actée v14) ; trappe : Fléau Démoniaque R.
-- **À définir en spec** : le recâblage de n14 (aujourd'hui vers d8 Chœur Miroir) ; **l'accès au Chœur Miroir après recâblage** (options : une porte du Démon, une naissance dédiée, ou l'événement du miroir) ; les communes éventuelles des deux voies (règle 1.3 : toute famille commence à C — n14 EST le C ici, à valider) ; les sorts de lignée (2×6) et signatures ; les espèces des arts (diables humanoïdes, `species-map.json`).
+- **Voie de la chair** : Succube R → Grande Succube SR → Dame du Désir UR → **Asmodia, Reine du Désir L** (ordre acté v14) ; **trappe DÉBLOQUÉE en v1 (suite 25) : Gouffre des Vices R → Grand Gouffre SR → Gueule de l'Abîme UR → La Faim L** (PROPOSITION : La Faim, en piste v2 jusqu'ici, devient la nommée de la trappe, bestiale).
+- **Voie de la puissance** : Démon Majeur R → Seigneur Démon SR → Prince Démon UR → **Lilith, Reine des Démons L** (nommée actée v14) ; **trappe DÉBLOQUÉE en v1 : Fléau Démoniaque R → Grand Fléau SR → Porte-Peste UR → Pestis, Mère des Fléaux L** (PROPOSITION).
+- **Spec d'exécution RÉDIGÉE : `docs/design/spec-trappes-demon-ange-v1.md`** (ids d19-d36 proposés, écoles le Vice / la Fureur, sorts 2×6 + signatures, 4 lots, digest inchangé attendu). Restent à valider : n14 = C commun aux deux voies (défaut proposé), les écoles et les sorts, **l'accès au Chœur Miroir sans n14** (3 options : la porte coloration-eau de p1 RECOMMANDÉE, l'événement du miroir, une naissance dédiée) ; les espèces des arts (diables humanoïdes, `species-map.json`).
 - **Les donjons divins** (tranchés 12/11, 3 donjons Démons/Anges/Équilibre) s'appuieront sur ces lignées pour leurs sous-bosses et leur roi.
 
-### 6.2 Les anges dévoyés (4 cartes + re-racement)
+### 6.2 Les anges dévoyés (4 cartes + re-racement) — LOT PRIORITAIRE du gel (la trappe ange DÉBLOQUÉE en v1, suite 25)
 
-Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L, depuis la porte **mauvaise volonté** de p1 (posée dans trees.json, sans maillons). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche : race divine, élément Lumière, courbe inchangée). La porte **coloration** reste dormante en v1 (ses maillons sont les destinées post-L, différées v2).
+Ange Ardent R → Ange du Zénith SR → Astre Vaillant UR → Astre Rayonnant L, depuis la porte **mauvaise volonté** de p1 (posée dans trees.json, sans maillons — la porte devient vivante : spec `docs/design/spec-trappes-demon-ange-v1.md` §3, école l'Orgueil proposée). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche : race divine, élément Lumière, courbe inchangée). La porte **coloration** reste dormante en v1 (ses maillons sont les destinées post-L, différées v2), sauf si l'option d'accès Chœur « coloration-eau » est retenue (§6.1).
 
 ### 6.3 Le paladin (4 cartes)
 
@@ -149,8 +150,8 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 
 ### 6.6 Checklist de validation de la v1
 
-- [ ] les ≈ 39 cartes du gel posées, validateur vert (EXI-DATA-3 nommées uniques, paliers complets, aucune paire dominée) ;
-- [ ] n14 recâblé + accès Chœur Miroir défini ; portes du Séraphin toutes vivantes ou explicitement dormantes ;
+- [ ] les ≈ 45 cartes du gel posées (le lot démon+ange en tête, spec `spec-trappes-demon-ange-v1.md`), validateur vert (EXI-DATA-3 nommées uniques, paliers complets, aucune paire dominée) ;
+- [ ] n14 recâblé SANS accès Chœur + nouvel accès Chœur Miroir posé le même lot (spec trappes §4) ; portes du Séraphin toutes vivantes ou explicitement dormantes ;
 - [ ] re-racements de fiches (Astre divine ; champ race des monstres pour Sirènes/dryades/Crypte si posé en spec) ;
 - [ ] tables régénérées (`node tools/gen-tables.mjs`), digest en MESURE consignée (baseline verrouillée `9faff1b9…`/`6103e7b0…`) ;
 - [ ] ids définitifs → backlog arts série 3 (39 cartes, IPAdapter pour les nommées : Asmodia, Lilith, Méduse, Euryale, Mab, Aubépine, Isaure) ;
@@ -159,10 +160,10 @@ Depuis le Garde du Rempart (UC, bouclier), choix « la voie du rempart » : Chev
 
 ### 6.7 La synthèse des tranchages restants pour verrouiller la v1 (périmètre arbres/fusion/lignées)
 
-Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
+Tranchés le 14/11 (suite 24) : la L du chevalier (**Kiri l'Invincible**) ; le choix du zèle **au palier R** (entrée proposée : u3 Croisé de l'Aube) ; les biomes par famille humaine (fusion) ; le **taux de démon : 15 %** ; les éclats de régression → **or** ; la fin de la prédominance **à l'ouverture des non-choisies** ; la 2e carte de départ = **une carte d'une autre race au hasard** ; l'ascension/chute divine = **l'histoire d'un personnage secondaire**. Tranchés le 14/11 (suite 25) : **n14 Démon n'a PAS accès au Chœur Miroir** (recâblage vers les voies du camp démon) ; **les trappes démon et ange DÉBLOQUÉES en v1, en tête du gel** (lignées complètes des trappes + anges dévoyés ; spec `docs/design/spec-trappes-demon-ange-v1.md`). Restent à trancher (le combat/calibrage est suivi dans le tableau de bord `docs/design/session-qa-direction.md` §0) :
 
-1. **Le recâblage de n14 Démon** (aujourd'hui vers d8 Chœur Miroir) et **l'accès au Chœur Miroir** après recâblage (options : une porte du Démon, une naissance dédiée, l'événement du miroir).
-2. **La structure des communes du camp démon** : n14 est-il le C commun aux deux voies, ou deux communes séparées (règle 1.3) ; les **sorts de lignée** (2×6 + signatures) ; le sort des **trappes** (Gouffre des Vices, Fléau Démoniaque : lignée en v1 ou au fil des patchs).
+1. **L'accès au Chœur Miroir sans n14** (le recâblage est TRANCHÉ : n14 va aux voies du camp démon) : 3 options dans la spec trappes — **la porte coloration-eau de p1 (RECOMMANDÉE)**, l'événement du miroir, une naissance dédiée.
+2. **Le camp démon, restes de la spec trappes** : n14 = C commun aux deux voies (défaut proposé) ; **les sorts de lignée (2×6) et signatures** (propositions Vice/Fureur à valider) ; **les nommées des trappes à valider (La Faim, Pestis)** — les trappes elles-mêmes sont TRANCHÉES débloquées en v1.
 3. **Les tags des lignées d'accueil** quand gorgones/fées seront posées : w20/w21 changent-ils de famille, et le sort du tag eau de w19.
 4. **La table des biomes par famille humaine** (fusion) : les défauts thématiques sont posés (eau→Marées, braise→Forge, bosquet→Bosquet, ombre/crépuscule→Crypte, aube/zele/appel→Zénith, bouclier→Bosquet, vol→Marées, familles divines→leur web miroir) ; **le cas de l'école Neutre (lame) reste à caler** (défaut proposé : hasard des 5 biomes).
 5. **Le mapping mystique → famille divine** (fusion humaine + mystique) : PROPOSITION par forme — Brumes/Sirène → le Pont ; Bois/Dryade/Fée → le Seuil ; Caveaux/Gorgonne → le Miroir.
@@ -220,7 +221,7 @@ Tranchage d'origine (12/11) : « choix parmi 3-4 familles uniques starters préd
 
 ## 9. Le reste différé v2+ (rappel, liste fermée)
 
-Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, La Faim, paliers H, essences Enge du feu et de la lumière. Détail : audit §4. Rien ne se génère en arts pour la v1.
+Destinées post-L (Ange du Sabre → Kenji Dieu du Sabre ; Ange de l'Aube → Léna Déesse de l'Aube ; Calypso), lignée déchue (Ange Déchu, Luz, Exilé Céleste, Étoile Errante), événements (Morzak, mort d'Isaure, M de l'Équilibre), nécromancie, Maudit des Berges, sommets quais/fête (Brumaire, Colombine), Sylvains, élues du mage, paliers H, essences Enge du feu et de la lumière. **La Faim quitte cette liste le 14/11 (suite 25)** : PROPOSITION en L de la trappe du Gouffre des Vices, en v1 (spec trappes). Détail : audit §4. Rien ne se génère en arts pour la v1.
 
 ## 10. Les diagrammes de la v1 cible (l'état du jeu ➕ le gel)
 
@@ -391,25 +392,31 @@ flowchart TD
   AA1 -.-> AA2["Ange du Zénith ➕ · SR (verrou)"]
   AA2 -.-> AA3["Astre Vaillant ➕ · UR"]
   AA3 -.-> AA4["Astre Rayonnant ➕ · L"]
-  N14["n14 Démon · C · Ombre"] -->|"AUJOURD'HUI : la Réflexion"| D8["d8 Choriste Miroir · monstre du Chœur"]
+  N14["n14 Démon · C · Ombre"] -->|"AUJOURD'HUI (retiré au lot accès Chœur, suite 25) : la Réflexion"| D8["d8 Choriste Miroir · monstre du Chœur"]
   N14 -.->|"choix 1 : la chair (gel)"| DA1["Aiguillon du Désir ➕ · UC"]
   N14 -.->|"choix 1 : la puissance (gel)"| DB1["Brute des Fosses ➕ · UC"]
   DA1 -.-> DA2["Succube ➕ · R"]
   DA2 -.-> DA3["Grande Succube ➕ · SR (verrou)"]
   DA3 -.-> DA4["Dame du Désir ➕ · UR"]
   DA4 -.-> DA5["Asmodia, Reine du Désir ➕ · L"]
-  DA1 -.->|"trappe (lignée à définir)"| DA6["Gouffre des Vices ➕ · R"]
+  DA1 -.->|"la trappe DÉBLOQUÉE (suite 25)"| DA6["Gouffre des Vices ➕ · R"]
+  DA6 -.-> DA7["Grand Gouffre ➕ · SR (verrou)"]
+  DA7 -.-> DA8["Gueule de l'Abîme ➕ · UR"]
+  DA8 -.-> DA9["La Faim ➕ · L (PROPOSITION)"]
   DB1 -.-> DB2["Démon Majeur ➕ · R"]
   DB2 -.-> DB3["Seigneur Démon ➕ · SR (verrou)"]
   DB3 -.-> DB4["Prince Démon ➕ · UR"]
   DB4 -.-> DB5["Lilith, Reine des Démons ➕ · L"]
-  DB1 -.->|"trappe (lignée à définir)"| DB6["Fléau Démoniaque ➕ · R"]
+  DB1 -.->|"la trappe DÉBLOQUÉE (suite 25)"| DB6["Fléau Démoniaque ➕ · R"]
+  DB6 -.-> DB7["Grand Fléau ➕ · SR (verrou)"]
+  DB7 -.-> DB8["Porte-Peste ➕ · UR"]
+  DB8 -.-> DB9["Pestis, Mère des Fléaux ➕ · L (PROPOSITION)"]
   N15["n15 Éveillé du Seuil · C · Neutre"] -->|"le Liage"| D14["d14 Aiguille du Pont · monstre du Pont"]
   classDef gel stroke-dasharray: 5 5;
-  class AA1,AA2,AA3,AA4,DA1,DA2,DA3,DA4,DA5,DA6,DB1,DB2,DB3,DB4,DB5,DB6 gel;
+  class AA1,AA2,AA3,AA4,DA1,DA2,DA3,DA4,DA5,DA6,DA7,DA8,DA9,DB1,DB2,DB3,DB4,DB5,DB6,DB7,DB8,DB9 gel;
 ```
 
-- Note : le recâblage de n14 fera perdre l'accès au Chœur Miroir — l'entrée à redéfinir (tranchage §6.7) ; l'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule).
+- Note : TRANCHÉ le 14/11 (suite 25) — **n14 n'a PAS accès au Chœur Miroir** ; le nouvel accès du Chœur (3 options, spec trappes §4) se pose AVANT de retirer n14 → d8. Les trappes sont DÉBLOQUÉES avec leurs lignées complètes (La Faim, Pestis : PROPOSITIONS). L'**Astre Capiteux (z8)** est re-racé divine camp ange (fiche seule).
 
 ### 10.7 Les 3 familles divines joueur (w1-w18) et leurs miroirs
 
