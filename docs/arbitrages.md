@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 11) : DIAGNOSTIC UX COMBAT (retour de Marc-Olivier) — la fenêtre d'action recouvre le terrain, impacts illisibles, dégâts inexpliqués
+
+- **Constat de Marc-Olivier, VÉRIFIÉ dans le code** : la fenêtre d'action (`.act-modal`, `src/shell.html` ~875) est en **`position: fixed` bas d'écran, pleine largeur, fond quasi opaque `rgba(10,14,22,.97)`, max-height **78dvh** en combat tactile → elle recouvre jusqu'à 78 % de l'écran ; pour choisir un sort il faut ouvrir, réduire (bouton `.act-reduce`), regarder les PV/effets ennemis, rouvrir, choisir, cibler — puis l'action se joue trop vite et la fenêtre suivante s'ouvre. Des PV se perdent sans explication visible.
+- **Principe du genre rappelé par Marc-Olivier (à faire nôtre)** : « dans la majorité des jeux, le choix des actions n'empêche pas de bien voir la carte et les statistiques de tout le monde ». **INVARIANT À ACTER : la fenêtre d'action ne recouvre JAMAIS le terrain ; PV et effets de toutes les cartes restent lisibles sans manipuler la fenêtre.**
+- **Distinction actée par Marc-Olivier (structure Pokémon)** : combats SAUVAGES (errance) = enchaînement rapide ; combats ARÈNE/DONJON = plus longs, réfléchis. → piste : profil de vitesse PAR CONTEXTE (errance plus rapide par défaut, donjon réfléchi) — à intégrer au tranchage n°5.
+- **Question posée : orientation paysage du terrain ?** Le terrain actuel est portrait (`svg viewBox="0 0 390 844"`). Avis du couloir pilotage : le paysage aide (rail d'action à CÔTÉ du terrain, standard DQ XI/DQM console et TBT desktop) mais **l'orientation seule ne suffirait pas** : le problème racine est le panneau pleine-largeur opaque ; un layout adaptatif avec l'invariant ci-dessus est la vraie solution. TRANCHAGE demandé : (a) paysage partout, (b) adaptatif paysage + portrait corrigé (recommandé), (c) portrait corrigé seul.
+- **Paquet UX à acter avec l'orientation** : impacts lisibles (floatText persistant ~600-800 ms, trace source→cible, hit-stop sur coups forts, pause ~300-400 ms avant la fenêtre suivante), traçabilité des dégâts subis (floatText + mini-log permanent, rien d'inexpliqué), fiches flottantes au clic qui ne ferment pas la fenêtre, vitesses par contexte.
+
 ## 2026-11-13 (suite 10) : ÉTUDE DURÉE DES COMBATS — le jeu est DANS la norme en tours ; la longueur perçue vient du TEMPS RÉEL ; GARDIEN DU REMPART confirmé sans dent offensive
 
 > Demande de Marc-Olivier : recherche des durées du genre + simulation de masse (niveaux ±3, rareté ±1). Étude complète : `docs/design/etude-duree-combats-2026-11-13.md` ; outils rejouables `etude-duree.mjs` (miroirs) et `etude-duree-donjons.mjs` (flux donjons), moteur réel auto-résolu, zéro modification du jeu.
@@ -288,12 +296,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 
 ## 2026-11-12 : 12e TOUR (suite) — 4 TRANCHAGES DE FIN DE SESSION : fusion (forme exacte), carte du monde (3-4 régionales fixes), expéditions (temps réel plafonné), fin du jeu (fins multiples Échiquier)
 
-- **Fusion, forme exacte TRANCHÉE** : enfant **niveau 1** ; **25 % des stats cumulées des parents, plafonné par la rareté de l'enfant** — le bonus d'héritage est borné par un % max de la base de l'enfant, défini par rareté en `data/` (une commune fusionnée à fond reste utile mais n'atteint pas objectivement une légendaire de même niveau : la rareté garde son sens de potentiel) ; **2-3 sorts hérités** (jamais le signature de l'enfant) ; rareté par **table de synthèse**. Pourcentages exacts du plafond : à définir en data à la spec fusion.
-- **Carte du monde TRANCHÉE : 3-4 cartes régionales FIXES multibiomes** (recommandation de l'étude acceptée) ; errance intérieure et profondeurs générées par seed comme aujourd'hui.
-- **Expéditions TRANCHÉES : temps réel plafonné** (DQ Treasures / Poké Jobs) — résolues par l'auto-résolution interne du moteur (conservée à cet effet en v1.39), drops exclusifs + XP ; plafond de durée en spec.
-- **Fin du jeu TRANCHÉE : fins multiples à l'Échiquier des Quatre** — Le Lieur reste la colonne vertébrale (allégeance/pacte/énigme/consécration), l'Échiquier fournit les fins selon la race liée en priorité (imposer une race, l'équilibre, ou soi-même).
-- Tableau de bord de session mis à jour (`docs/design/session-qa-direction.md` section 0) : **24 points TRANCHÉS, 6 restant à trancher** (lignée exclusive initiale, donjons divins, élément des sorts famille vs libre, emplacements d'équipement, cohabitation fusion × familles, ops).
-
-## 2026-11-12 : ARBITRAGES Marc-Olivier (revue 4-lens, suite) : hit-stop à tester, CRITS d'agilité à créer, héros errance par code, manifeste JSON
-
-- **Hit-stop** : « pourquoi pas, à tester » — réversible (une constante pour le couper), tier large uniquement. Verdict définitif à la lecture en jeu.
