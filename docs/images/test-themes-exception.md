@@ -1,6 +1,6 @@
-# Test des thèmes « Lignées d'Exception » : Lignées au Repos vs Lignées au Crépuscule — protocole témoin (13/11)
+# Test des thèmes « Lignées d'Exception » : Repos vs Crépuscule vs Obscures — protocole témoin (13/11)
 
-> ARBITRÉ Marc-Olivier : tester **2 thèmes** d'alt-art avant de lancer la vague complète. Méthode : échantillon témoin de 12 cartes (comme les tests LoRA 3.2), ~24 images, ~10-15 min de génération ComfyUI. Canon technique inchangé (§15). Seeds témoins = seed classique + 5 000 000.
+> ARBITRÉ Marc-Olivier : tester **3 thèmes** d'alt-art avant de lancer la vague complète. Méthode : échantillon témoin de 12 cartes (comme les tests LoRA 3.2), ~36 images, ~15-20 min de génération ComfyUI. Canon technique inchangé (§15). Seeds témoins = seed classique + 5 000 000.
 
 ## 1. Les deux thèmes
 
@@ -19,7 +19,14 @@ La variante garde la scène classique mais **remplace l'heure/couleur du biome p
 - Zénith : ivoire + or → **crépuscule violet** (`violet dusk sky, threads of fate glinting like starlight`)
 Pas de changement de pose ni de tenue : le thème est PORTÉ par la lumière. C'est le test de cohérence de collection (le plus proche du showcase MTG).
 
-## 2. Les 12 cartes témoins
+### Thème C — « Lignées Obscures » (inversion d'alignement, canon gacha) — AJOUTÉ 13/11 suite 19
+La variante montre la carte **dans son élément opposé** : corruption pour les lumineuses, purification pour les obscures. Le prompt garde l'espèce, le personnage, la pose ; on ÉCHANGE la magie dominante (Lumière ↔ Ombre, et l'inverse couleur/magie du biome pour les neutres) et on inverse l'aura :
+- Lumineux → corrompu : `corrupted by shadow, dark veins of smoky wisps, dimmed halo, ominous aura, pale sickly light`
+- Obscurs/nécrotiques → purifiés : `purified by holy light, radiant golden glow dispelling the darkness, serene expression, soft dawn light`
+- Neutres/élémentaires : inversion de l'élément (feu ↔ eau : golem de magma en cristal de glace bleu spectral, « a frozen magma golem, obsidian shell cracked with icy veins, cold blue mist » ; terre ↔ air, etc.)
+Règle : JAMAIS de changement d'espèce ni de sang ajouté (R13 conservé) — la corruption est lumineuse/ombreuse, pas gore. Idée forte : un golem de lave en cristal de glace, une liche baignée de lumière dorée, un paladin rongé par l'ombre.
+
+
 
 | # | Carte | Pourquoi elle teste |
 |---|---|---|
@@ -46,10 +53,10 @@ Pas de changement de pose ni de tenue : le thème est PORTÉ par la lumière. C'
 
 ## 4. Verdict (après le test, Marc-Olivier choisit)
 
-Critères de lecture des 24 images :
+Critères de lecture des 36 images :
 1. **Lisibilité du thème SANS légende** : peut-on dire « c'est une scène de vie » / « c'est l'heure inversée » sans connaître la carte normale ?
 2. **Identité préservée** sur les nommées (Vesna reste Vesna, Zikka reste Zikka) — comparaison côte à côte avec l'art classique.
 3. **Espèce lisible** : le léviathan reste un monstre marin, la Gorgonne reste une femme-cheveux-de-serpents (pas une jellyfish !).
 4. **Style painterly sans dérive** avec les LoRAs.
-5. **Viabilité sur non-humanoïdes** (crépuscule devrait passer partout ; repos est le plus risqué sur léviathan/golem/phénix).
-Départage : si un thème échoue sur ≥ 2 des 5 critères → écarté ; si les deux passent, arbitrage de goût (ou thème A en 3.4, thème B réservé au « 3.4 bis » du grand tableau de versions).
+5. **Viabilité sur non-humanoïdes** (crépuscule devrait passer partout ; repos est le plus risqué sur léviathan/golem/phénix ; obscures doit rester lisible sans verser dans le gore).
+Départage : un thème qui échoue sur ≥ 2 des 5 critères → écarté ; les gagnants se répartissent par vague (ex. Repos en 3.4, Crépuscule en « 3.4 bis », Obscures en 3.5), CHACUN avec son marqueur CSS distinct (or pour Repos, argent-violet pour Crépuscule, rouge sombre pour Obscures).
