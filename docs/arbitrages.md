@@ -1,5 +1,12 @@
 ## 2026-11-12 : GRAND LANCEMENT — CLÔTURE (rapport final, v1.40 → v1.50)
 
+## 2026-11-13 : ARBITRÉ — vague 3.3 : relance complète base 3.1 + couche monstres, 3 LoRAs seulement, « enlève juste le sang »
+
+- **Verdict comparatif 3.1 vs 3.2 (Marc-Olivier, 13/11)** : la 3.1 a de meilleurs résultats GLOBAUX, sauf la génération de monstres (meilleure en 3.2). Diagnostic probable du rendu 3.2 : le positif R12 (« fully clothed, modest attire ») a uniformisé les costumes et le cumul négatif R12+R13 a explosé le canon « négatif court ~20 tags » (flou global).
+- **V3.3 ACTÉE** : (1) relance COMPLETE des 271 depuis les prompts v3.1, mêmes seeds ; (2) couche monstres 3.2 conservée : descriptions R11 + **3 LoRAs uniquement** — Leviathan XL, Golems, Forest Guardians (arbitrage : « les 3 que j'ai trouvés les meilleurs ») ; les autres LoRAs (goblin, wow-undead, banshee, cordyceps, creepy wolf, mermaid) sont ABANDONNÉS, leurs espèces passent en description R11 seule ; (3) tenues : PAS de R12 en 3.3 (ni positif ni négatif revealing) — arbitrage explicite « enlève juste le sang » ; (4) R13 anti-sang conservé (4 tags, budget négatif court à respecter) ; (5) durcissement prompt sirène (queue, anti-pieds) sans LoRA ; (6) crop signatures 4 % conservé.
+- Spéc : `docs/images/spec-arts-v33.md`. Rapport attendu : `tools/out-v2/RAPPORT-vague3-3.md` + remplissage du manifeste assets (civitaiId/version/seed/poids des 3 LoRAs).
+
+
 **Par étape** (un commit FR chacune, preuves : build + `node --test tests/*.test.js` + smoke + digests) :
 
 | Étape | Lot | Commit | Tests | Digest |
@@ -272,113 +279,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 
 - **Diagnostic** (`docs/prompt-correctif-panneaux-accueil.md`, état post-PR #5) : `.save-box` statique sans z-index → peint sous `.hub-scene`/`.hub-veil` (`position:fixed` plein écran, fond opaque) : panneaux invisibles et incliquables sur la branche hub de l'Accueil. Le smoke B20 a testait la présence DOM, pas la visibilité (faux vert).
 - **Correctif (minimal, réversible)** : `.save-box { position: relative; z-index: 30; }` (au-dessus des couches z 20/22 du hub, sous le header z 40) ; `pointer-events:none` sur `.hub-scene` (`.hub-veil` l'avait déjà) ; espaceur `.hub-spacer { height: 100dvh }` dans le flux avant les deux panneaux de la branche hub uniquement → les panneaux se placent sous l'écran plein du hub, accessibles au défilement. Branches bienvenue et écran de départ inchangées (pas de scène fixe). Visuel du hub non modifié.
-- **Garde-fou smoke durci** : B20 a teste désormais la visibilité effective (déclarations CSS du dist : `position:relative`/`z-index:30` sur `.save-box`, `pointer-events:none` sur `.hub-scene`/`.hub-veil`, espaceur `100dvh` présent) + présence DOM, et les 3 branches de l'Accueil (hub, bienvenue, départ). 171 tests verts, smoke 352 checks (3 échecs préexistants hors périmètre). **Digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000** — correctif 100 % CSS/IHM.
-## 2026-11-12 : ACTÉ — canon visuel du Léviathan des Marées = le Léviathan du film « Atlantide, la cité perdue » (Disney) — CONFIRMÉ par Marc-Olivier (5e tour)
-
-- **Canon visuel du léviathan / seaBehemoth (Titan des Marées e14, bêtes aquatiques massives) ACTÉ par Marc-Olivier** : monstre colossal à carapace de crustacé, yeux rouges luisants, gueule à tentacules, gardien antique des profondeurs — PAS un géant humanoïde type Tidehunter DotA2 (écarté).
-- **CONFIRMÉ (12/11, 5e tour)** : Marc-Olivier a confirmé au couloir pilotage que ce tranchage vient bien de lui (passé par un autre canal) — l'entrée reste ACTÉE en l'état, voir `docs/historique/revue-v1.36.md` §5.
-- **Aucun LoRA dédié au design Disney n'existe sur Civitai** (seuls Kida/Helga/Vinny + un style transfer Krea 2 incompatible avec WAI-Illustrious). **Route actée** : description R11 « a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, dark underwater ruins » + **[Leviathan XL](https://civitai.com/models/237733) retenu** (Illustrious natif, ⭐154, SFW) pour ancrer la morphologie non humanoïde. Consigné dans `docs/images/lora-candidats-v32.md`.
-
-
-## 2026-11-12 : ACTÉ — refonte visuelle de l'errance lancée AVANT la session (décision de Marc-Olivier, 4e tour)
-
-- **Décision de Marc-Olivier** : appliquer MAINTENANT la maquette A+ et le guide à l'errance en jeu, « zone témoin Marées d'abord, puis les 5 zones ». L'interdit de coordination « pas d'errance avant la session » est **levé pour le périmètre rendu / pilotage / ambiance / layout de zone** : le guide est conçu indépendant de l'architecture (modules + zones.json), le travail survit aux tranchages de la session.
-- **Restent à la session du 12/11** : architecture donjons × errance (« 25 donjons », profondeurs, grandes zones), élément des cartes, niveaux 1→100, gating, identité, lore. Le **point de retour ville** (ACTÉ 11/11 nuit point 7) est inclus au chantier (tuile de retour dans chaque zone).
-- **Docs de référence verrouillées** : `docs/design/maquettes/errance-demo-jouable.html` (plancher de qualité, A+ de Marc-Olivier) et `docs/design/errance-topdown.md` (guide §1-§12). Les fichiers reçus de Marc-Olivier (12/11) sont **identiques octet par octet** aux versions du repo (vérifié par le couloir pilotage, 55 143 / 26 196 octets, diff vide) : déjà intégrés, rien à re-pousser.
-- **Prompt de lancement** : `docs/prompt-refonte-errance.md` (lots 1-4 : peinture style A+, ambiance §9bis, layout v2 + sûreté des sauvegardes, généralisation 5 zones ; digests inchangés exigés).
-
-## 2026-11-12 : ACTÉ — Léviathan des Marées : canon visuel Atlantide Disney + LoRA Leviathan XL
-
-- **Canon visuel du Léviathan (e13, seaSerpent/Léviathan des Marées, et les seaBehemoth)** : le monstre du film Disney « Atlantide, la cité perdue » (colosse à carapace de crustacé, yeux rouges luisants, gueule à tentacules, gardien antique des profondeurs). Arbitrage de Marc-Olivier après consultation des candidats Civitai.
-- **Leviathan XL** (civitai.com/models/237733, Illustrious natif, ⭐154, SFW) RETENU comme appui morphologique, en complément de la description R11 (« a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw »). Aucun LoRA dédié au design Disney n'existe sur Civitai.
-- **Tidehunter DotA2 ÉCARTÉ** (géant bleu humanoïde, pas la cible) ; candidats Krea 2 / SD 1.5 du film Atlantide incompatibles avec WAI-Illustrious. Consigné dans `docs/images/lora-candidats-v32.md`.
-
-## 2026-11-12 : CONSTAT — 38 cartes sans illustration (contenu v3) : périmètre image à étendre
-
-- **Mécanisme** : le front charge les arts depuis les manifestes `assets-v3.json`/`assets-v3.1.json` (clé = id de carte) ; toute carte absente du manifeste affiche le fallback sans image. Signalement de Marc-Olivier via « Lame Miroir » (w7).
-- **Inventaire (38, aucune n'a prompt/seed/image/manifeste)** : c1-c14 (14 compagnons évolutifs : Yuki, Onyx, Naïa, Aïna, Roc, Ember, Sylve en UR puis L), p2/p5/p6 (divines : Ange Gardien C, Séraphin UR/L), w1-w6 (famille Seuil, C→L, dont Kairos), w7-w12 (famille Miroir, dont Lame Miroir), w13-w18 (famille Pont, dont Ananké), w19-w21 (Sirène/Fée/Gorgonne Nouvelle).
-- **Cause** : ces cartes viennent du chantier contenu v3 (couloir 1, lots compagnons/divines/Sirènes), codées APRÈS le gel du périmètre image (271 arts).
-- **Paradoxe à corriger** : Kairos et Ananké ont DÉJÀ leurs vidéos WAN (`site-assets/fx-wai/wan21-kairos.webm`, `wan21-ananke.webm`) mais pas d'art fixe.
-- **Décision** : étendre le pipeline image à ces 38 (nouveau lot « contenu v3 », seeds 2150000+), verrous 3.2 applicables, inventaire consigné dans `docs/images/arts-manquants-contenu-v3.md`. À intégrer à la session 3.2.
-
-
-## 2026-11-12 : ACTÉ — vague 3.2 image (verrous R11-R14) : monstres réels, tenues correctes, pas de sang, visages au cas par cas ; LoRAs en test témoin
-
-- **Retour v3.1 de Marc-Olivier** : style, plancher de cadrage (poitrine complète) et parité VALIDÉS. Quatre défauts systémiques restants → verrous 3.2 consignés dans `docs/images/correction-prompts-v3.md` §6-7, régénération ciblée vague 3.2 (mêmes seeds, seed+1 aux retries).
-- **R11 — Monstres = monstres** : descriptions d'espèce de `species-map.json` réécrites en morphologie concrète, canon assumé = MTG / Seigneur des Anneaux (gobelin des Marées : petite créature verte noueuse à grandes oreilles, PAS une « créature mystique aquatique » ; fongus du Bosquet à la MTG ; cœur de la forêt = ent du LotR). **LoRAs Civitai (proposition Marc-Olivier, ACTÉE en expérimental)** : 2-4 LoRAs candidats (goblin, skeleton/undead, mermaid) testés sur 6 témoins chacun, poids 0.6-0.8, GARDÉS seulement si morphologie correcte ET style painterly inchangé (QA vision auto, pas d'arrêt humain) ; rejet = fallback description. Aucune régression de style acceptée pour gagner de la morphologie.
-- **R12 — Tenues correctes** : le jeu n'est PAS un mode explicite (arbitrage Marc-Olivier). Positif « fully clothed, practical adventurer outfit, modest fantasy attire, covered torso » + négatif `revealing clothing, exposed chest, cleavage, underboob, open shirt, bare torso, bandage wrap, loincloth` sur tous les humanoïdes.
-- **R13 — Pas de sang par défaut** : négatif global `blood splatter, gore, open wounds, blood stains` ; aucune carte whitelistée en 3.2 (whitelist `blood-ok` possible plus tard, par carte).
-- **R14 — Visages noirs tolérés au cas par cas** (arbitrage Marc-Olivier : « parfois cela donne un style sympa ») : plus de retry automatique ; le verrou « visage lisible » reste OBLIGATOIRE pour les nommées (character_dna) et les héros ; verdict visuel au QA pour les génériques.
-- **Correctifs résiduels 3.1 (QA vision couloir design, 20 cartes)** : `b3` (UR) toujours en demi-corps → retry full body ; `e14`/`g7` : vérifier `species-map.json` avant retry (images poussées semblent humanoïdes). **Signatures d'artiste (~25 %) → crop 4 % bas-droit systématique en post-traitement** sur toute la production, pas de régénération ; même medicine si un vrai cadre généré est confirmé (sur-signal « bordure » sur 5/20 vignettes à vérifier).
-- **Process** : test LoRA en tête de session (autonome, verdict dans le rapport), puis régénération ciblée (beast:true + espèces réécrites, humanoïdes tenues, cartes à sang), crop signatures, rapport unique `tools/out-v2/RAPPORT-vague3-2.md`. Pas de point d'arrêt.
-
-
-## 2026-11-12 : SESSION — PR #5 mergée (main `eeea5d5`) : parties multiples livrées en v1.35
-
-- **PR #5 mergée** : 4 slots de sauvegarde (`fondations-cards-v1.p0`…`.p3` + index `.slots`, `.bak` par partie), migration sans perte de la sauvegarde historique vers la Partie 1, panneau « Parties » sur l'Accueil (▶ Jouer / ✨ Nouvelle partie / ✏️ Renommer / 🗑 Supprimer à double confirmation), partie active mémorisée, FCSAVE1 inchangé. 171 tests verts, smoke 347 checks (B19/B20), digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000. Documentation à jour : CHANGELOG v1.35, HISTORY, roadmap, protocole IHM v1.35 (S23). Questions ouvertes restant balisées `[À TRANCHER — SESSION 12/11]` (4 slots / noms libres / active mémorisée).
-
-## 2026-11-12 : LIVRÉ — parties multiples (4 slots de sauvegarde), v1.35 : digests inchangés, défauts 12/11 appliqués
-
-- **Chantier exécuté** selon `docs/prompt-parties-multiples.md`, un commit FR par lot. **Lot 1 (stockage + migration)** : clés `fondations-cards-v1.p0`…`.p3` + index `.slots` + `.bak` par partie ; migration sans perte (sauvegarde historique → Partie 1, clés historiques conservées en repli de sécurité) ; flux réel v8 → v27 rejoué en smoke (B19). **Lot 2 (UI)** : panneau « Parties » sur l'Accueil (Jouer / Nouvelle partie / Renommer / Supprimer à double confirmation), sauvegarde de la partie en cours avant toute bascule, partie active mémorisée. Export FCSAVE1 inchangé (partie active). **Lot 3 (preuves)** : smoke enrichi B19 (18 checks stockage/migration/bascule) + B20 (12 checks panneau) = 347 checks, 171 tests verts.
-- **Défauts du 12/11 appliqués (aucun tranchage explicite)** : **4 emplacements** ; **noms libres**, défaut « Partie N » ; **partie active mémorisée** et rechargée au lancement. Questions ouvertes conservées : `[À TRANCHER — SESSION 12/11]` — nombre d'emplacements (défaut 4) ; noms libres vs fixes (défaut libres) ; active mémorisée vs choix à chaque lancement (défaut mémorisée).
-- **MESURE** : digests **inchangés `c62fcbd1…` 1281/3000 (0 exception, 0 marathon) et `5059e683…` 4236/10000** — chantier 100 % stockage/IHM, aucune maths de combat, équilibrage, économie ou contenu touché. Aucune consignation d'écart requise.
-
-## 2026-11-12 : SESSION — livraisons du couloir 1 mergées (PR #3 + PR #4) : correctifs lots 4-5 livrés, 4 specs des ACTÉS du 11/11 nuit PROPOSÉES
-
-- **PR #3 mergée** : correctifs ciblage lots 4-5 (gestes dissociés ℹ️/＋/−/✕, fiche carte complète avec rôle/zone/« dégâts (%) », collection au propre) — digests inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000, 171 tests, smoke 317 (3 échecs préexistants hors périmètre). Le chantier correctifs ciblage est donc **entièrement livré**.
-- **PR #4 mergée** : les 4 specs des ACTÉS du 11/11 nuit sont rédigées en **PROPOSÉ**, aucun code : `docs/design/spec-sets-equipement.md`, `spec-navigation-hub.md`, `spec-boutique-inventaire-onglets.md`, `spec-gating-acquisitions.md`. Chaque question non tranchée est balisée `[À TRANCHER — SESSION 12/11]` dans la section « Questions ouvertes » de chaque spec. **Rien ne se code avant la session.**
-
-## 2026-11-12 : MESURE — correctifs ciblage lots 4-5 livrés (IHM seule) : digests inchangés
-
-- **Lot 4** : gestes dissociés — fiche = appui court / appui long / ℹ️ (fonctionne même équipe pleine), ajouter/retirer = boutons explicites ＋/−/✕ (plus d'ajout au double-clic) ; fiche carte complète (badge de rôle, zone vs monocible, frappe en « dégâts (%) »). **Lot 5** : page Collection mise au propre (cellules possédées unifiées, titres cohérents, compteurs de naissances par bande de race, gestes = fiche). Smoke B17/B18 verts (317 checks, 3 échecs préexistants hors périmètre). 171 tests verts.
-- **MESURE** : digests **inchangés `c62fcbd1…` 1281/3000 et `5059e683…` 4236/10000** (0 exception, 0 marathon) — chantier 100 % IHM, contrainte tenue, aucune consignation d'écart requise.
-
-## 2026-11-12 : MESURE — refonte IA clôturée (v1.34) : digest final N = 3000 + N = 10 000, proposition de verrouillage de la nouvelle baseline
-
-- **Clôture du chantier** (spec `docs/design/refonte-ia-spec-plan.md`, audit `docs/design/refonte-ia-audit.md`) : lots 0-4 livrés, un commit FR par lot, chacun avec tests headless + MESURE N = 3000 dans la tolérance (lot 0 inchangé `f8a9f0bb…` 1359 ; lot 1 `910d3dc3…` 1337, −0,73 pt ; lot 2 `3811fda3…` 1219, −3,93 pts ; lot 3 `c62fcbd1…` 1281, +2,07 pts ; lot 4 inchangé). Prérequis correctifs ciblage livrés en amont (lots 1-3, digest inchangé). Smoke enrichi (section B16 : anti-triche par introspection + Auto/ennemi sur les 5 difficultés) : 306 checks, seuls les 3 échecs préexistants. 171 tests verts.
-- **MESURE finale** : N = 3000 **`c62fcbd1…` 1281/3000 (42,7 %, 0 exception, 0 marathon)** ; N = 10 000 **`5059e683…` 4236/10000 (42,4 %, 0 exception, 0 marathon)** — contre la mesure courante au lancement `f8a9f0bb…` 1359/3000 (45,3 %) et `978ed44b…` 4517/10000 (45,2 %) : écart total du chantier **2,6 points**, chaque lot dans la tolérance. **Aucune maths joueur touchée** — la baisse vient exclusivement de l'IA (ciblage utilité, sorts contextuels, profils de difficulté). MESURE consignsée, pas de recalibrage.
-- **PROPOSÉ (décision Marc-Olivier)** : verrouiller la nouvelle baseline **`c62fcbd1…` 1281/3000** et **`5059e683…` 4236/10000** à la validation finale (téléphone ET PC, protocole IHM v1.34). En attendant, la baseline verrouillée reste `f72106ff…`/`3f9fe198…`.
-
-## 2026-11-12 : MESURE — refonte IA lot 4 livré (garde-fous anti-blocage de l'errance) : digest inchangé
-
-- **Livré** : dans `stepErrance`, si le héros n'avance plus vers son waypoint pendant `ERRANCE_GUARDS.stuckAfter` (2 s, data `data/engine.json`) → repath A* vers le but ; après `repathMax` (2) échecs → abandon propre (chemin vidé, but abandonné = changement d'état). Aucune omniscience ajoutée (pas de poursuivant dans l'errance aujourd'hui ; règle « dernière position connue + réaction différée » notée dans l'audit pour le futur). Ni décor ni structure des zones touchés. 2 tests headless déterministes (stagnation → repath → abandon ; marche normale → 0 repath). 171 tests verts, smoke 299 (3 échecs préexistants).
-- **MESURE N = 3000** : digest **inchangé `c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** — l'errance n'entre pas dans le digest ; la non-régression est couverte par les tests d'errance. MESURE consignsée.
-
-## 2026-11-12 : MESURE — refonte IA lot 3 livré (graduation de l'intelligence par difficulté) : dans la tolérance
-
-- **Livré** : profil `ia.suboptimal` par difficulté en data (`data/difficulties.json` : Facile 0,5 → Normal 0,3 → Difficile 0,15 → Très difficile 0,05 → Enfer 0) ; `initCombat(..., { difficulty })` porte le profil + une graine IA dédiée (`iaRng`, déterministe, distincte du RNG de combat) ; à chaque décision (sort, cible), une part `suboptimal` des choix prend la deuxième meilleure option. Sans difficulté passée : utilité complète (rétro-compat). Le harnais digest et l'UI passent la difficulté de la marche. Défaut 12/11 appliqué : **pas d'IA par étage**, version difficultés actuelles. 2 tests headless déterministes. 169 tests verts, smoke 299 (3 échecs préexistants).
-- **MESURE N = 3000** : **`c62fcbd1…` 1281/3000 (0 exception, 0 marathon)** contre `3811fda3…` 1219/3000 (lot 2) — écart **2,07 points ≤ 5 points** : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
-
-## 2026-11-12 : MESURE — refonte IA lot 2 livré (choix de sort contextuel) : dans la tolérance
-
-- **Livré** : `pickSpell(u, ctx)` lit l'état public — soin si un allié est sous `SPELL_HEAL_THRESHOLD` (0,35), contrôle/malus sur la menace (`SPELL_CONTROL_BONUS`), burst si un kill est possible (`SPELL_KILL_BONUS`), sinon le plus efficace au coût (mult/coût) ; hystérésis `SPELL_HYSTERESIS` (sort en cours conservé dans la marge, mémorisé par unité). Poids en data (`data/engine.json`). S'applique aux deux camps (même fonction). Sans contexte : chemin historique inchangé. Règle d'économie « save for top » conservée. 4 tests headless déterministes. 167 tests verts, smoke 299 (3 échecs préexistants).
-- **MESURE N = 3000** : **`3811fda3…` 1219/3000 (0 exception, 0 marathon)** contre `910d3dc3…` 1337/3000 (lot 1) — écart **3,93 points ≤ 5 points**, 0 exception, 0 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
-
-## 2026-11-12 : MESURE — refonte IA lot 1 livré (utilité de ciblage + hystérésis) : dans la tolérance
-
-- **Livré** : `pickTargetByUtility` — score d'utilité partagé IA ennemie et Auto joueur (kill possible, opposition d'élément, menace = ATQ × `TARGET_THREAT_WEIGHT`, pénalité arrière protégé `TARGET_BACK_PENALTY`, − PV), poids en data (`data/engine.json`) ; hystérésis anti flip-flop `TARGET_HYSTERESIS` (cible en cours conservée dans la marge, mémorisée par camp dans l'état). Le chemin Auto joueur cesse de frapper `foes[0]`. 5 tests headless déterministes. 163 tests verts, smoke 299 (3 échecs préexistants).
-- **MESURE N = 3000** : **`910d3dc3…` 1337/3000 (0 exception, 1 marathon)** contre `f8a9f0bb…` 1359/3000 (lot 0) — écart **0,73 point ≤ 5 points**, 0 exception, 1 marathon : **dans la tolérance**. MESURE consignsée, aucune maths joueur touchée.
-
-## 2026-11-12 : MESURE — refonte IA lot 0 livré (chemin Auto des sorts alliés des lignées) : digest inchangé
-
-- **Livré** : en Auto (`action` null), un sort de lignée soin/boost/bouclier depuis une carte sans `effect` se résout par son rôle (soigne le plus blessé / atkBuff ligne avant / shield ligne avant, plafonds identiques au chemin Tactique). Le chemin Tactique ne bouge pas. 2 tests headless déterministes (soin, boost+bouclier). 158 tests verts, smoke 299 (3 échecs préexistants).
-- **MESURE N = 3000** : digest **inchangé `f8a9f0bb…` 1359/3000 (0 exception, 1 marathon)** contre la mesure courante du lancement — écart 0 point, dans la tolérance (≤ 5 points). Explication : à l'heuristique `pickSpell` (sort le plus cher abordable), la ligne support en Auto caste rarement le sort allié quand le solo est abordable ; le mécanisme est prouvé par tests sur états reconstitués. MESURE consignsée, aucun recalibrage.
-
-## 2026-11-12 : ACTÉ (Porte A refonte IA) — prérequis livré + tranchages par défaut de la session 12/11 consignés, Phase 2 lancée
-
-- **Prérequis** : le chantier correctifs ciblage (`docs/prompt-correctifs-ciblage.md`) est livré (lots 1-3 : fiche `cible` des 84 sorts de lignée, camp de ciblage depuis la fiche, sorts alliés de lignée résolus par rôle en Tactique) — digest inchangé `f8a9f0bb…` 1359/3000, 157 tests verts. Note : les lots 4-5 du prompt (bugs rapides IHM : gestes fiche/équipe, fiche carte complète) restent à faire, hors du périmètre de la refonte IA. Décision de portée : le rôle `manip` (famille vol) garde un camp non hostile (`1 allié`), cohérent avec `foeFacingSpell` et `resolveSpellEntry` — l'ensemble des sorts hostils est identique avant/après (test obligatoire vert).
-- **Phase 1 livrée** : `docs/design/refonte-ia-audit.md` + `docs/design/refonte-ia-spec-plan.md` (docs uniquement, build/tests/smoke/digest inchangés).
-- **Tranches de la session du 12/11 non tranchées explicitement** → **défauts appliqués et consignés ici** (Porte A du prompt) : (a) **variante (a) statu quo raretés/paliers** — l'IA optimise la victoire avec les paliers actuels, pas les niveaux 1→100 ; (b) **pas d'IA par étage** — le lot 3 reste en version difficultés actuelles (Facile → Enfer) ; (c) **go digest = OUI**, sous la tolérance du §4 du prompt (écart ≤ 5 points, 0 exception, ≤ 1 marathon à chaque MESURE N = 3000 ; N = 10 000 à la clôture).
-- **Règle du chantier** : chaque changement de mesure est une MESURE consignée ici, jamais un recalibrage caché ; les maths du côté joueur ne bougent pas ; l'IA ne lit que l'état public. Baseline de comparaison du chantier : la mesure courante au lancement de chaque lot (`f8a9f0bb…` 1359/3000, `978ed44b…` 4517/10000).
-
-## 2026-11-12 : ACTÉ — illustrations V3.1 publiées en doublon commutable (bouton 🖼️), assets 3.1-only par défaut partout
-
-- **Décision (v1.33)** : la relance 3.1 (271 cartes, verrous R8/R9/R10, rapport `tools/out-v2/RAPPORT-v31-session.md`) est publiée en second manifeste `assets-v3.1.json`, commutable avec V3.0 (`assets-v3.json`) via le bouton 🖼️ existant (`ART_MANIFESTS = { v3, v31 }`, choix persisté en localStorage `fondations-art-src`, défaut = v3). Objectif : comparer les cartes 3.0 vs 3.1 côte à côte.
-- **Assets existant uniquement en 3.1** (7 cartes série 3 g31/g32/k31/k32/p2/z31/z32 + 90 arts d'équipement série 3) : ajoutés au manifeste par défaut `assets-v3.json` → présents par défaut partout, le switch ne les retire pas.
-- **Déploiement** : la CI Pages publie `assets-v3.json` + `assets-v3.1.json`. Moteur/data inchangés : digest inchangé `f8a9f0bb…` 1359/3000 (MESURE, baseline verrouillée non touchée).
-
-> Règle : toute décision de design vit ici avec sa **date** et son **statut** (`ACTÉ` = s'applique aux data et au jeu ; `PISTE` = exploré, pas codé ; `PROPOSÉ` = en attente de Marc-Olivier). On ne contredit jamais un arbitrage ACTÉ : on propose une révision datée en dessous.
-
-## 2026-11-11 : MESURE — validation IHM réelle post-contenu v3 (protocole v1.33, headless Chromium via CDP) : VERT, 0 KO, 0 erreur console + nouveaux checks marchand v2
-
-- **Exécution réelle** (protocole `docs/validation-ihm.md` v1.33, driver `tools/validation-cdp.mjs` porté en v1.33) : Chromium headless (ms-playwright) piloté en CDP pur, jeu servi en staging Pages sur http://localhost:8080/ (index.html + assets-v3.json + fx/ + errance/), viewports 1440×900 et 390×844. **Résultat : 67 checks OK, 0 KO, 0 erreur console, 30 captures** dans `docs/captures-validation/v1.33/rapport-validation.md`. 3 checks INFO non bloquants, identiques à la v1.32 (bulle héroïne, gorgée de potion à confirmer visuellement, S9 Récompenses non conclu sur combat perdu au turbo).
