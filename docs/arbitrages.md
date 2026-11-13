@@ -1,5 +1,15 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 23) : MAQUETTE ÉCRAN DE COMBAT VALIDÉE par Marc-Olivier (« C'est bon pour moi ») — dernière retouche (vignettes alliées du boss) + PROMPT COULOIR 1 RÉDIGÉ
+
+- **Validation de Marc-Olivier (14/11)** : la maquette v2.3 (`docs/design/maquettes/ecran-combat-v2.html`) est VALIDÉE, avec une dernière retouche demandée : « sur l'exemple avec le boss, bien remettre les vignettes de mon côté correctement » → vignettes alliées du module boss RÉALIGNÉES symétriquement (mêmes positions que l'exemple standard : marges égales, ligne régulière, 22/147/272 px).
+- **PROMPT COULOIR 1 RÉDIGÉ** : `docs/prompt-repositionnement-ecran-combat.md` (3 lots, style maison) :
+  - **Lot 1** : ordre du tour en RAIL HORIZONTAL EN HAUT (deux camps, ennemis inclus, chip élargi boss, chip pointillé invocation) + compteur vague + vitesse/pause PERSISTANTS haut-droite ; paysage : statut en haut du rail, commandes en bas.
+  - **Lot 2** : fenêtre d'action → BARRE de commandes compacte ≤ 30 % écran (nom + PV/MP + boutons ≥ 44 px, indisponible grisé avec raison, invocation comme un sort) ; fiche flottante à la demande ; réserve ⇄ et mini-log inchangés.
+  - **Lot 3** : icônes ≥ 74 px, boss 118 px ; chiffres PV/PVmax + MP en clair, bouclier = barre dorée au-dessus de la barre PV + badge ; INVOCATIONS en PREMIÈRE LIGNE (rangée dédiée devant chaque camp, carrés 40 px cliquables, PV mini + ⏳) ; ciblage illuminé/grisé, feedback au-dessus de la cible ; géométrie sans chevauchement, camp allié symétrique.
+  - Invariants : terrain jamais recouvert ; digest INCHANGÉ attendu (baseline proposée PR #13 `3b11106f…`/`6c86838b…`, verrouillage en attente) ; moteur/data/calibrage/vitesses hors périmètre.
+- **Suite** : relais du prompt au couloir 1 (les correctifs sorts sont LIVRÉS, PR #13 → le chantier peut partir immédiatement) ; à la livraison : revue pilotage (preuves rejouées, digests, captures portrait/paysage/boss).
+
 ## 2026-11-14 (suite 22) : MAQUETTE ÉCRAN DE COMBAT v2.3 — invocations déplacées en PREMIÈRE LIGNE (retour de Marc-Olivier)
 
 - **Demande de Marc-Olivier (14/11, sur la v2.2)** : « Fais des petits carrés pour les invocations et mets-les devant, en première ligne, ça évitera de tout décaler ou de mettre par-dessus ».
@@ -241,13 +251,3 @@
 
 - **Revue indépendante rejouée** (`docs/historique/revue-v1.50.md`) : build OK, **252/252 tests verts**, smoke 276 PASS avant crash (dette du script, voir ci-dessous), **digests rejoués à l'identique** `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000, **baseline NON appliquée dans le code** (vérifié : les occurrences des digests dans `src/` sont le seul texte du changelog in-game), **site déployé md5 identique au build** (validation S26 possible directement dessus), CI verte (#270). Verdict : **CONFORME**.
 - **Question de Marc-Olivier sur l'écart digest (« les ennemis étaient toujours 3 max ? ») — RÉPONSE** : les vagues ennemies sont INCHANGÉES (2-3 par vague selon l'étage, `makeWave` inchangé) ; seul le camp joueur a changé. Dans le harnais de mesure, les équipes types (2 avant + 1 arrière = 3 combattants) passent à 2 actifs + 1 réserve (2 combattants) : un combattant de moins d'où −443/3000. En jeu réel, le tranchage 3+2 passe aussi de 5 cartes combattantes (avant+arrière) à 3 actifs : la baisse de puissance est réelle et VOLUÉ (combats plus rapides), compensée par le remplaçant K.O. gratuit, les repos et les potions. La mesure du harnais est volontairement pénalisante ; le S26 terrain dira si la courbe joue.
-- **[À TRANCHER] VALIDÉS par Marc-Olivier** : **SCHOOL_ELEMENT tel quel** (lame=Neutre, baume/appel/ferveur=Lumière, rempart=Nature, entrave/mauvais-oeil=Ombre, ruse=Eau) ; **tenue du héros = cuir sombre + liseré doré** (cosmétique, à peindre quand le couloir design passe).
-- **Baseline digest : arbitrage TOUJOURS EN ATTENTE** (proposition `9faff1b9…`/`6103e7b0…` sur la table, écart expliqué par le 3+2 ; verrouillage demandé à Marc-Olivier, aucune application sans lui).
-- **Chantiers en parallèle (décision de Marc-Olivier)** : (a) couloir 1 → `docs/prompt-correctifs-smoke-ia.md` (2 lots : smoke robuste à la date + échecs préexistants 43 B/45 e/B1 c/B29 h ; heuristique IA école-du-sort avec MESURE) ; (b) couloir pilotage → specs contenu v4, **`docs/design/spec-fusion-v4.md` LIVRÉE** (fusion DQM : forme tranchée intégrée, table de synthèse de familles avec hybrides sirène/dryade/demi-ange, défauts balisés [À TRANCHER] : rareté max des parents + surclassement hybride, plafonds +20 → +50 % par rareté, choix de 2-3 sorts hérités par le joueur, bâtiment « Autel des Lignées », 2 lots).
-- Dette consignée : **crash du smoke B9 c lié au seed de la date** (le check suppose une quête « tuer » au jour J) — défaut du SCRIPT, pas du jeu ; repris dans le prompt correctif.
-
-## 2026-11-12 : GRAND LANCEMENT — CLÔTURE (rapport final, v1.40 → v1.50)
-
-## 2026-11-13 : ARBITRÉ — vague 3.3 : relance complète base 3.1 + couche monstres, 3 LoRAs seulement, « enlève juste le sang »
-
-- **Verdict comparatif 3.1 vs 3.2 (Marc-Olivier, 13/11)** : la 3.1 a de meilleurs résultats GLOBAUX, sauf la génération de monstres (meilleure en 3.2). Diagnostic probable du rendu 3.2 : le positif R12 (« fully clothed, modest attire ») a uniformisé les costumes et le cumul négatif R12+R13 a explosé le canon « négatif court ~20 tags » (flou global).
