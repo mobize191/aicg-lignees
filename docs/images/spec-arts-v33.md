@@ -14,11 +14,12 @@
 
 - Descriptions d'espèce R11 (morphologie concrète canon MTG/LotR) : CONSERVÉES pour toutes les espèces beast:true + gobelin, fongus, undead/lich, banshee, sirène.
 - **LoRAs : UNIQUEMENT les 3 gagnants, appliqués uniquement à leurs espèces** :
-  1. **Leviathan XL** (`Leviatan.safetensors`, trigger `leviathan a sea monster`) : seaBehemoth/seaSerpent (e13 Léviathan, e14 Titan des Marées) + bêtes aquatiques massives (beastWater). Canon visuel : Léviathan du film « Atlantide, la cité perdue ».
+  1. **Leviathan XL** (`Leviatan.safetensors`, trigger `leviathan a sea monster`) : seaBehemoth/seaSerpent (e13 Léviathan, e14 Titan des Marées) + bêtes aquatiques massives (beastWater, **hors k2**, voir ci-dessous). Canon visuel : Léviathan du film « Atlantide, la cité perdue ».
   2. **Golems** (`Golems.safetensors`, triggers `Gol3em`, `Magma Golem`) : magmaGolem (f22 Vulcain), fireLord (f13) et espèces minérales/golemoïdes de la Forge.
   3. **Forest Guardians** (`Forest-Guardians-000014.safetensors`, triggers `FG-V2.0-Treant`, `FG-V2.0-Dryad`, `FG-V2.0-Spirit`) : treant (g7, g8 Cœur du Bosquet), dryad (g21 Vesna), fireflySpirit (g18 Adriel).
 - **LoRAs ABANDONNÉS en 3.3** (arbitrage 13/11, non régénérés avec LoRA) : goblin DND, wow-undead, banshee, cordyceps, creepy wolf, mermaid. Les espèces concernées (gobelin des Marées, morts-vivants de la Crypte, banshee Macha, fongus Mycola, bêtes sombres, sirènes) sont générées avec la **description R11 seule**.
 - Poids LoRA : reprendre le poids retenu en 3.2 si le rapport 3.2 le consigne, sinon 0.7 ; jamais 1.0.
+- **Exception k2 « Nymphe Croupie » (arbitrage 13/11, 3e tour — « elle ressemble à un monstre et pas du tout à une nymphe »)** : k2 SORT du lot beast:true. Nouvelle espèce `stagnantNymph` dans `species-map.json` (remplace `beastWater` pour cette carte), description R11 : `a decayed water nymph, a pale sickly female water spirit, murky grey-green mottled skin, long dripping hair tangled with black algae, faint webbed fingers, weeping milky eyes, mournful beautiful face, wearing a tattered waterlogged dress`. **Verrou R8 retiré pour cette carte** : ni positif « a beast, monstrous, claws, fangs, a wild non-humanoid creature », ni négatif humans/humanoid/human face ; **PAS de LoRA Leviathan** (k2 exclue des bêtes aquatiques massives). Genre 1girl, cadrage demi-corps / pose calme conservés, décor crypte inondée inchangé.
 
 ## 3. Sirènes (durcissement prompt, sans LoRA)
 
@@ -34,7 +35,7 @@ Constat 3.2 : sirènes avec des pieds. Sans LoRA mermaid en 3.3, durcissement pr
 ## 5. QA (méthode obligatoire)
 
 - Planches contact = détection d'amplitude UNIQUEMENT ; verdicts = image par image, échantillon ≥ 20 par lot, comptages en tête de rapport.
-- Comptages v3.3 : monstres humanoïdes (espèce par espèce), cartes avec sang, cadrage ≥ plancher (poitrine complète / full body M-L-UR), F/M, **sirènes avec pieds**, **léviathan conforme canon Atlantide**, golems conformes (Magma Golem lisible), treants/dryades conformes (Forest Guardians), style painterly sans dérive anime/3D (le point critique avec les LoRAs).
+- Comptages v3.3 : monstres humanoïdes (espèce par espèce), cartes avec sang, cadrage ≥ plancher (poitrine complète / full body M-L-UR), F/M, **sirènes avec pieds**, **k2 nymphe croupie = figure nymphique humanoïde mélancolique (PAS un monstre reptilien)**, **léviathan conforme canon Atlantide**, golems conformes (Magma Golem lisible), treants/dryades conformes (Forest Guardians), style painterly sans dérive anime/3D (le point critique avec les LoRAs).
 - Comparatif explicite sur les cartes monstres 3 LoRAs : **3.2 vs 3.3** (même seed si possible) pour prouver le gain.
 - Correctifs résiduels connus à re-vérifier : b3 (UR full body), e14/g7 (espèce dans species-map).
 
