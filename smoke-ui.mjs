@@ -230,6 +230,41 @@ async function main() {
     check('47 z 0 exception après ciblage v2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 52 : repositionnement écran combat (14/11, maquette v2.3 validée) ----------
+  {
+    setup(['v1', 'n2', 'n3'], 12); // v1 = famille Appel (sort avec bloc summon)
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(200);
+    const st52 = api._state();
+    check('52 a combat lancé pour le repositionnement', !!st52, '');
+    if (st52) {
+      const u52 = st52.team.avant.find((x) => x.cardId === 'v1');
+      if (u52) { u52.agi = 9999; u52.mana = u52.manaMax = 99; }
+      api._speed(6);
+      els.get('fight').click();
+      let am52 = null;
+      for (let w = 0; w < 120 && !am52; w++) { await wait(25); am52 = api._actEl(); }
+      check('52 b topbar : rail d’ordre + vitesse/pause persistants en haut', !!appEl.querySelector('#topbar #rail') && !!appEl.querySelector('#speedbar #speed') && !!appEl.querySelector('#speedbar #fight') && !!appEl.querySelector('#stage-chip'), '');
+      check('52 c barres PV/MP + chiffres en clair sur les pions', [...appEl.querySelectorAll('.pied')].some((p) => p.querySelector('.bars .bhp') && p.querySelector('.bars .bmp') && p.querySelector('.hp')), '');
+      if (u52 && am52 && api._prompt() && api._prompt().unit === u52) {
+        const k = u52.spells.findIndex((s) => s.summon);
+        const btn = am52.querySelectorAll('.act-spell')[k];
+        if (btn) { btn.click(); for (let w = 0; w < 160 && api._busy(); w++) await wait(25); await wait(80); }
+        api._draw(); await wait(40);
+        const sq = appEl.querySelector('.sq');
+        const inRow = [...appEl.querySelectorAll('.unit')].some((el) => (el.dataset.uid || '').includes('-inv') && !el.classList.contains('sq'));
+        const invN = st52.team.avant.filter((x) => x.uid.includes('-inv')).length;
+        check('52 d invocation en PREMIÈRE LIGNE (.front-row .sq, PV mini + badge ⏳ ttl), jamais dans une ligne', !!sq && !inRow && !!sq.querySelector('.sq-hp') && !!sq.querySelector('.sq-ttl'), `sq=${!!sq} inRow=${inRow} inv=${invN} btn=${!!btn} k=${k}`);
+      } else {
+        check('52 d invocation en PREMIÈRE LIGNE', false, `u52=${!!u52} am=${!!am52} prompt=${api._prompt() ? api._prompt().unit?.cardId : '?'}`);
+      }
+      check('52 e ciblage : pulse cibles valides + zones invalides grisées (CSS targeting)', html.includes('body.in-combat.targeting .unit:not(.targeted):not(.ko)') && html.includes('@keyframes targetpulse'), '');
+      check('52 f barre compacte 30dvh + boutons 44px + off grisé avec raison', html.includes('max-height: 30dvh') && html.includes('min-height: 44px') && html.includes('.off-reason'), '');
+    }
+    check('52 z 0 exception repositionnement', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
+
   // ---------- 50 : fiche type pilote la fenêtre (zone / tous) ----------
   {
     setup(['n1', 'n2', 'n3'], 12);
@@ -665,7 +700,7 @@ async function main() {
   check('45 b invariant : barre de commandes dans le flux, fenêtre d’action dans le flux (#act-slot borné 30dvh), aucun recouvrement', html.includes('body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }') && html.includes('body.in-combat .act-modal { position: static;') && !html.includes('max-height: 78dvh') && !html.includes('max-height: 56dvh') && !html.includes('#tac-panel') && !html.includes('max-height: 38dvh'), '');
   check('45 d menu ☰ en combat : navigation en surimpression opaque', html.includes('body.in-combat nav.open { position: fixed; top: 55px;') && html.includes('background: rgba(10, 14, 22, .98);'), '');
   // correctifs v1.51 lot 2 (point 9) : unités de combat encore plus grandes, desktop ET mobile
-  check('44 a one-screen : unités de combat agrandies (v1.51 : 30vw/180px desktop, 28vw/150px mobile) et panneau compact', html.includes('body.in-combat .unit { width: clamp(120px, 30vw, 180px); }') && html.includes('body.in-combat .unit { width: clamp(110px, 28vw, 150px); }') && html.includes('body.in-combat .unit.boss { width: clamp(150px, 38vw, 220px); }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
+    check('44 a one-screen : unités de combat >= 74px / boss >= 118px + nom de boss en gras (repositionnement 14/11 lot 3)', html.includes('body.in-combat .unit { width: clamp(96px, 22vw, 140px); }') && html.includes('body.in-combat .unit { width: clamp(84px, 20vw, 120px); }') && html.includes('body.in-combat .unit.boss { width: clamp(128px, 30vw, 180px); }') && html.includes('body.in-combat .unit.boss { width: clamp(118px, 28vw, 160px); }') && html.includes('body.in-combat .unit.boss .card.battle .name { font-weight: 900; }') && html.includes('body.in-combat .tac-btn { padding: 3px 6px; font-size: .68rem; }'), '');
   check('45 c pions v0.45 : format plus carré, image pleine, surimpression', html.includes('body.in-combat .card.battle { aspect-ratio: 5 / 6; }') && html.includes('body.in-combat .card.battle .cardfoot { padding: 2px 4px 4px; font-size: .62rem; gap: 2px 5px; }') && !html.includes('clamp(84px, 17vw, 108px)'), '');
   // UX 13/11 lot 2 : le journal devient un mini-log permanent (plus de max-height 20dvh tronqué)
   check('44 a one-screen : journal borné en mini-log permanent, rappels bas disparus', !html.includes('max-height: 20dvh') && !html.includes('-webkit-line-clamp'), '');
@@ -701,7 +736,7 @@ async function main() {
   const r4 = api.addCardIid(v4.iid);
   check('46 a le 4e exemplaire de la m\u00eame carte refus\u00e9', !r4.ok, String(r4 && r4.reason));
   // correctifs v1.51 lot 2 (point 9) : cartes de combat plus grandes — clamp(120px, 30vw, 180px) / boss clamp(150px, 38vw, 220px)
-  check('46 b pions combat 30vw (v1.51 lot 2 : cartes plus grandes)', html.includes('clamp(120px, 30vw, 180px)') && html.includes('clamp(150px, 38vw, 220px)'), '');
+  check('46 b pions combat >= 74px / boss >= 118px (repositionnement 14/11 lot 3)', html.includes('clamp(96px, 22vw, 140px)') && html.includes('clamp(128px, 30vw, 180px)') && html.includes('clamp(84px, 20vw, 120px)') && html.includes('clamp(118px, 28vw, 160px)'), '');
   check('46 b images de fond \u00e9claircies en combat', html.includes('brightness(1.12) contrast(1.04)'), '');
   // correctifs v1.51 lot 2 : plus de hero plein cadre tronqué en tête de fiche combat — la fiche unifiée rend l'illustration contenue (.modal-card)
   check('46 b fiche : plus de hero plein cadre tronqué en combat (fiche unifiée v1.51)', !html.includes('<div class="modal-hero full">'), '');

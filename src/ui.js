@@ -1909,8 +1909,16 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
   if ((c.atkBuff ?? 0) > 0) icons.push('<span class="st-ic up">⬆</span>');
   if (st.curse || st.stun > 0 || st.slow > 0 || st.dmgRed) icons.push('<span class="st-ic down">⬇</span>');
   if (c.shield > 0) icons.push('<span class="st-ic sh">🛡</span>');
+  // repositionnement 14/11 lot 3 : barres sur les pions (bouclier doré AU-DESSUS de la barre PV + badge chiffré, puis PV, puis MP)
+  const bars = battle
+    ? `<div class="bars">`
+      + (c.shield > 0 ? `<div class="bsh"><i style="width:${Math.min(100, Math.round((c.shield / (c.maxHp || 1)) * 100))}%"></i><b>🛡 ${c.shield}</b></div>` : '')
+      + `<div class="bhp"><i style="width:${Math.max(0, Math.min(100, Math.round((c.hp / (c.maxHp || 1)) * 100)))}%"></i></div>`
+      + (c.manaMax !== undefined ? `<div class="bmp"><i style="width:${Math.max(0, Math.min(100, Math.round(((c.mana ?? 0) / c.manaMax) * 100)))}%"></i></div>` : '')
+      + `</div>`
+    : '';
   const foot = battle
-    ? `<div class="pied"><span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
+    ? `<div class="pied">${bars}<span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
     : `<div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>`;
   return `<div class="card r-${c.rarity} t-${c.classe} ${c.element ? 'o-' + c.element : 'o-nul'} ${extraClass}${locked ? ' locked' : ''}">
     <div class="art">${artOf(c)}</div>
@@ -4039,6 +4047,7 @@ function syncFightBtn() {
 
 function clearActHighlights() {
   if (!combatApp) return;
+  document.body.classList.remove('targeting'); // repositionnement 14/11 lot 3 : fin du choix -> plus de grisé
   for (const el of combatApp.querySelectorAll('.unit')) el.classList.remove('targeted', 'zone2');
 }
 
@@ -4198,6 +4207,7 @@ function askActTarget(mode, pending) {
     return;
   }
   clearActHighlights();
+  document.body.classList.add('targeting'); // repositionnement 14/11 lot 3 : seules les cibles valides restent allumées (pulse), le reste est grisé
   for (const t of list) {
     const el = elOf(t.uid);
     if (el) el.classList.add('targeted');
@@ -4418,6 +4428,7 @@ function promptUnitAction(u, kind) {
       phase: 'action', unit: u, kind, mode: null, pending: null,
       pick: (choice) => {
         promptState = null;
+        if (choice && choice.targetUid) { const tel = elOf(choice.targetUid); if (tel) floatText(tel, '✔', 'buff'); } // confirmation au-dessus de la cible
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
         document.body.classList.remove('act-open');
@@ -4633,6 +4644,7 @@ function drawBoard() {
       row.appendChild(labEl);
     }
     for (const u of units) {
+      if (u.uid.includes('-inv')) continue; // repositionnement 14/11 lot 3 : les invocations ont leur rangée dédiée (front-row), jamais dans la ligne
       const c = unitEl(u);
       if (!u.alive) c.classList.add('ko');
       hpShown.set(u.uid, u.hp);
@@ -4640,13 +4652,53 @@ function drawBoard() {
     }
     el.appendChild(row);
   };
+
+  // rangée dédiée en PREMIÈRE LIGNE devant chaque camp (vers le centre du terrain) : petits carrés 40px
+  // à bordure pointillée, couleur de camp, cliquables (fiche), PV mini + badge ⏳ ttl — rien à décaler, rien par-dessus
+  const frontRow = (zone, allUnits, side) => {
+    const sums = allUnits.filter((u) => u.uid.includes('-inv'));
+    if (!sums.length) return;
+    const row = document.createElement('div');
+    row.className = 'front-row ' + side;
+    const labEl = document.createElement('div');
+    labEl.className = 'row-lab';
+    labEl.textContent = side === 'enemy' ? '▼ avant ennemi' : '▲ ligne avant';
+    row.appendChild(labEl);
+    for (const u of sums) {
+      const sq = document.createElement('div');
+      sq.className = 'unit sq ' + side + (u.alive ? '' : ' ko');
+      sq.dataset.uid = u.uid;
+      sq.setAttribute('data-uid', u.uid);
+      sq._unit = u;
+      const ttl = u.status?.ttl ?? '';
+      const cardDef = byIdSoft(u.cardId) ?? u;
+      sq.innerHTML = `<div class="sq-art">${artGlyph(cardDef)}</div>`
+        + `<div class="sq-hp"><i style="width:${Math.max(0, Math.min(100, Math.round((u.hp / (u.maxHp || 1)) * 100)))}%"></i></div>`
+        + (ttl !== '' ? `<div class="sq-ttl">⏳ ${ttl}</div>` : '');
+      hpShown.set(u.uid, u.hp);
+      sq.onclick = (ev) => {
+        if (state && !state.winner && promptState && promptState.phase === 'target') {
+          if (!u.alive) return;
+          const isEnemy = state.enemies.avant.includes(u) || state.enemies.arriere.includes(u);
+          if ((promptState.mode === 'enemy' || promptState.mode === 'zone') && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
+          if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
+          return;
+        }
+        openUnitModal(u, ev);
+      };
+      row.appendChild(sq);
+    }
+    if (side === 'enemy') zone.appendChild(row); else zone.insertBefore(row, zone.firstChild);
+  };
   
   
   
   line(enemyZone, [...state.enemies.avant], 'avant');
   line(enemyZone, [...state.enemies.arriere], 'arrière');
+  frontRow(enemyZone, [...state.enemies.avant, ...state.enemies.arriere], 'enemy');
   line(teamZone, [...state.team.avant], 'avant');
   line(teamZone, [...state.team.arriere], 'arrière');
+  frontRow(teamZone, [...state.team.avant, ...state.team.arriere], 'team');
   const resZone = combatApp.querySelector('#reserve-zone'); // Lot A : rail de réserve visible (2 emplacements)
   if (resZone) {
     resZone.innerHTML = '';
@@ -4720,6 +4772,8 @@ function updateHp(uid, delta) {
   const el = elOf(uid);
   const hpEl = el?.querySelector('.pied .hp') ?? el?.querySelector('.cardfoot .hp');
   if (hpEl) hpEl.textContent = `♥ ${shown}/${u.maxHp}`;
+  const sqBar = el?.querySelector('.sq-hp i'); // repositionnement 14/11 lot 3 : mini-barre PV des invocations
+  if (sqBar) sqBar.style.width = `${Math.max(0, Math.min(100, Math.round((shown / u.maxHp) * 100)))}%`;
 }
 
 // boucle v2 lot 4 : écran « Récompenses » après chaque combat — chaque gain cliquable, « Tout ramasser » referme

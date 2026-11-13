@@ -31,6 +31,7 @@ test('v1.51 lot 2 (c) : la fiche unifiée explicite la frappe de classe (splash 
 
 test('v1.51 lot 2 (d) : cartes de combat plus grandes (point 9) dans le shell', () => {
   const shell = readFileSync('src/shell.html', 'utf8');
-  assert.ok(shell.includes('clamp(120px, 30vw, 180px)'), 'unité combat 30vw max 180px');
-  assert.ok(shell.includes('clamp(150px, 38vw, 220px)'), 'boss combat 38vw max 220px');
+  // repositionnement 14/11 lot 3 : unités >= 74px, boss >= 118px (les anciennes valeurs 30vw/180px et 38vw/220px ont été remplacées)
+  assert.ok(shell.includes('clamp(96px, 22vw, 140px)') && shell.includes('clamp(84px, 20vw, 120px)'), 'unités combat >= 74px');
+  assert.ok(shell.includes('clamp(128px, 30vw, 180px)') && shell.includes('clamp(118px, 28vw, 160px)'), 'boss combat >= 118px');
 });
