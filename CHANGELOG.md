@@ -1,5 +1,9 @@
 # Changelog
 
+## [post-v1.51] — 2026-11-15 — Correctifs écran de combat v2 LIVRÉS (2 lots, pure UI) — « qui joue » lisible en 1 seconde, vide central supprimé
+
+Prompt `docs/prompt-correctifs-ecran-combat-v2.md` (retour terrain téléphone 15/11). **Lot 1** : l'unité active est surlignée SUR le terrain (pulse or + badge ▶ au-dessus de la vignette, alliés comme ennemis, tours auto compris), la chip `.acting` du rail d'ordre est renforcée et le rail scrolle automatiquement vers elle, la fenêtre d'action affiche le nom du combattant en gras + un badge or « ▶ à vous d'agir », et chaque tour automatique pose une étiquette du nom de l'unité au-dessus d'elle (jamais cumulée avec les dégâts flottants). **Lot 2** : le camp allié est ancré AU BAS du terrain (`margin: auto 0 0`) — bande morte mesurée 0 px, le vide résiduel tombe au centre entre les deux camps comme la maquette v2.3 ; le badge ⇄ réserve rejoint le camp allié. 279 tests, smoke 434 checks (section 53), sweep Playwright 28/28 (390×844 → 2560×1080, 0 recouvrement, 0 erreur console), **digests inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `docs/captures-validation/repositionnement-ecran/correctifs-v2-*`. Validation terrain Marc-Olivier en attente.
+
 ## [post-v1.51] — 2026-11-14 — Retour terrain PC : l'écran de combat remplit les grands écrans (was: unités trop petites, espace perdu)
 
 Sur écran large (≥ 1200px en paysage), les unités de combat sont à l'échelle du viewport (jusqu'à 250px, boss 340px) et les rangées s'étalent sur toute la largeur (`space-evenly`, marges symétriques) ; rail latéral élargi (min(430px, 26vw)). Pure présentation : 279 tests, smoke 421, sweep 43/43 (jusqu'à 2560×1080, app = 100 % de la largeur), **digests inchangés `3b11106f…` / `6c86838b…`**. Captures `docs/captures-validation/repositionnement-ecran/grand*`.

@@ -1,11 +1,16 @@
 # Journal des arbitrages et décisions
 
-## 2026-11-13 (suite 18) : TEST DES THÈMES D'ALT-ART — « Lignées au Repos » vs « Lignées au Crépuscule »
+## 2026-11-15 (suite 29) : CORRECTIFS ÉCRAN COMBAT v2 LIVRÉS (2 lots, pure UI) — « qui joue » lisible en 1 s + vide central supprimé — digest INCHANGÉ
+
+- **Lot 1 « qui joue »** (commit `ee7f3c3`) : unité active surlignée SUR le terrain (pulse or `actingPulse` + badge ▶ AU-DESSUS de la vignette, les deux camps, tours auto compris, posé par `renderRail`), chip `.acting` du rail renforcée (0,84 rem, fond or 0,34, ▶ 0,82 rem) + scroll auto vers la chip active ; fenêtre d'action : nom en gras 1,05 rem + badge or « ▶ à vous d'agir » ; tours auto : étiquette `.float.who` (nom de l'unité, top −30 px, remplacée à chaque tour — jamais cumulée avec les dégâts flottants).
+- **Lot 2 « ancrage bas »** (commit `9a4d61d`) : `#team-zone` en `margin: auto 0 0` → camp allié collé AU BAS du terrain, bande morte mesurée **0 px**, vide résiduel au CENTRE entre les camps (111 px à 390×844, 250 px à 1440×900) comme la maquette v2.3 ; badge ⇄ réserve ramené à côté du camp allié (absolute, plus fixed au milieu du vide) ; `safe center` retiré du bloc ≥ 1200px.
+- **Preuves** : build ok, 279 tests verts, smoke 434 checks TOUT PASSE (nouvelle section 53, 13 checks), sweep Playwright 28/28 (390×844, 844×390, 1440×900, 2560×1080 — 1 unité active sur le terrain = même uid que la chip `.acting` du rail, fenêtre jamais en recouvrement du terrain, 0 erreur console), **digests INCHANGÉS `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `docs/captures-validation/repositionnement-ecran/correctifs-v2-*`. Retour terrain Marc-Olivier (téléphone) attendu à la livraison.## 2026-11-13 (suite 18) : TEST DES THÈMES D'ALT-ART — « Lignées au Repos » vs « Lignées au Crépuscule »
 
 - **CHOISI par Marc-Olivier pour test comparatif** : thème A « Lignées au Repos » (scène de vie hors combat, canon Pokémon illustration rare) et thème B « Lignées au Crépuscule » (heure inversée du biome, canon MTG showcase). Le thème « Lignées en Rite » reste en réserve.
 - **Protocole témoin poussé** : `docs/images/test-themes-exception.md` — 12 cartes témoins (e1, e13, e17 Zikka, g21 Vesna, g8, k16, k2, z6, f21, n14, un compagnon, la Gorgonne), ~24 images, ~10-15 min ComfyUI, seeds +5 000 000, critères de verdict en 5 points (lisibilité sans légende, identité des nommées, espèce lisible, style sans dérive, viabilité sur non-humanoïdes).
 - Témoins visuels Mistral générés côté Vibe (gobelin Repos/Crépuscule, Vesna Repos/Crépuscule, liche Repos/Crépuscule) — aperçus de direction, pas de la DA WAI.
 - Le choix du thème gagnant (ou thème A en 3.4 + thème B en « 3.4 bis » du grand tableau) revient à Marc-Olivier après lecture des témoins.
+
 
 
 ## 2026-11-15 (suite 28) : « REMETS TOUS LES SCHÉMAS » — les 5 webs de biomes RESTAURÉS dans le v18 (10.11-10.15) ; web des Flots : QUESTION Léviathan en M, Pontos à retirer (trop humanoïde), les 2 boss du Donjon des Marées à créer (Hydre, Souverain) ; voie du zèle CONFIRMÉE au palier R (10.2 corrigé) ; enquête round 2 : Maïa et les Nécromanciens localisés, rien n'est perdu — digest INCHANGÉ (commit docs seul)

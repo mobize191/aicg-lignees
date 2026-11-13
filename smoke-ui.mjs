@@ -264,6 +264,42 @@ async function main() {
     check('52 z 0 exception repositionnement', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
+  // ---------- 53 : correctifs écran combat v2 lot 1 — « qui joue » lisible en 1 s (terrain + rail + fenêtre) ----------
+  {
+    check('53 a CSS unité active sur le terrain : pulse or + badge ▶ AU-DESSUS de la vignette', html.includes('.unit.acting .card { animation: actingPulse') && html.includes('@keyframes actingPulse') && html.includes('.unit.acting::after') && html.includes('.unit.sq.acting::after'), '');
+    check('53 b CSS rail : chip .acting renforcée (font .84rem, fond or .34, ▶ .82rem)', html.includes('.rail-chip.acting { border-color: #ffd54f; background: rgba(255, 213, 79, .34); color: #ffe9b0; font-size: .84rem;') && html.includes('.rail-chip.acting::before { content: "\\25B6"; color: #ffd54f; font-size: .82rem; }'), '');
+    check('53 c CSS fenêtre d\u2019action : .act-name gras 1.05rem + .acting-badge or', html.includes('.act-name { font-size: 1.05rem; font-weight: 900; }') && html.includes('.acting-badge { background: linear-gradient(135deg, #ffe082, #ffd54f); color: #241303;'), '');
+    check('53 d CSS étiquette flottante who décalée au-dessus des dégâts', html.includes('.float.who { top: -30px;'), '');
+    setup(['n1', 'n2', 'n3'], 12);
+    api._setAuto(true); api.go('#combat'); await wait(60);
+    api._setAuto(false); api.go('#combat'); await wait(200);
+    const st53 = api._state();
+    check('53 e combat lancé pour le test qui-joue', !!st53 && !st53.winner, '');
+    if (st53 && !st53.winner) {
+      api._speed(6);
+      els.get('fight').click();
+      let am53 = null;
+      for (let w = 0; w < 120 && !am53; w++) { await wait(25); am53 = api._actEl(); }
+      // stub : les sélecteurs composés (.unit.acting) ne marchent pas, on filtre via classList
+      const actingEl = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('acting'));
+      const chipActing = [...appEl.querySelectorAll('.rail-chip')].find((el) => el.classList.contains('acting'));
+      check('53 f unité active marquée SUR le terrain ET chip .acting dans le rail (même uid)', !!actingEl && !!chipActing && (actingEl.dataset.uid || (actingEl._unit && actingEl._unit.uid)) === (chipActing.dataset.uid || ''), `unit=${actingEl && (actingEl.dataset.uid || actingEl._unit?.uid)} chip=${chipActing && chipActing.dataset.uid}`);
+      check('53 g fenêtre d\u2019action : .act-name + badge .acting-badge « à vous d\u2019agir »', !!am53 && !!am53.querySelector('.act-name') && !!am53.querySelector('.acting-badge'), '');
+      const whoFloat = [...appEl.querySelectorAll('.float')].find((el) => el.classList.contains('who'));
+      check('53 h étiquette flottante .who posée au début du tour (au-dessus de l\u2019unité)', !!whoFloat, '');
+      // tour auto : pendant un round auto, l'acteur (allié ou ennemi) reste marqué sur le terrain
+      api._setAuto(true);
+      els.get('fight').click();
+      let sawActing = false;
+      for (let w = 0; w < 200 && !st53.winner && !sawActing; w++) { await wait(25); sawActing = [...appEl.querySelectorAll('.unit')].some((el) => el.classList.contains('acting')); }
+      check('53 i tour AUTO : unité active toujours marquée sur le terrain pendant le round', sawActing || !!st53.winner, `winner=${!!st53.winner}`);
+    }
+    check('53 j correctifs v2 lot 2 : camp allié ancré au bas du terrain (margin-top:auto sur #team-zone)', html.includes('body.in-combat #team-zone { margin: auto 0 0; }'), '');
+    check('53 k correctifs v2 lot 2 : plus de safe center sur #board (l\u2019ancrage bas gère la hauteur)', !html.includes('justify-content: safe center'), '');
+    check('53 l correctifs v2 lot 2 : badge réserve ancré à côté du camp allié (plus fixed au milieu du vide)', html.includes('body.in-combat .reserve-badge { position: absolute; left: 8px; bottom: 48px;') && !html.includes('top: 44%'), '');
+    check('53 z 0 exception correctifs v2 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+  }
+
 
   // ---------- 50 : fiche type pilote la fenêtre (zone / tous) ----------
   {

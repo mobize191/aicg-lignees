@@ -4026,6 +4026,9 @@ function renderRail(actorUid = null) {
   // repositionnement 14/11 lot 1 : rail horizontal persistant en haut — boss (chip élargi),
   // invocation (chip pointillé, elles jouent dans l'ordre), séparateur › vers la suite du tour
   const items = railItems();
+  // correctifs v2 lot 1 : l'acteur est aussi surligné SUR LE TERRAIN (les deux camps, tours auto compris)
+  for (const el of combatApp.querySelectorAll('.unit.acting')) el.classList.remove('acting');
+  if (actorUid) { const ael = elOf(actorUid); if (ael) ael.classList.add('acting'); }
   railEl.innerHTML = items.map((it, i) => {
     const u = it.u;
     const isActing = !!(actorUid && u.uid === actorUid);
@@ -4035,6 +4038,11 @@ function renderRail(actorUid = null) {
     const sep = isActing && i < items.length - 1 ? '<span class="rail-sep">\u203a</span>' : '';
     return `${sep}<div class="${cls}" data-uid="${u.uid}">${glyph}<span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
   }).join('');
+  // correctifs v2 lot 1 : scroll automatique du rail pour garder la chip active visible
+  if (actorUid) {
+    const chip = railEl.querySelector('.rail-chip.acting');
+    if (chip) chip.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
 }
 
 function fightLabel() {
@@ -4179,7 +4187,7 @@ function renderActModal(u, zoneHtml) {
   actBox.innerHTML = `
     <div class="act-head">
       <div class="act-art">${artOf(card)}</div>
-      <div class="act-title"><b>${u.name}</b> <span class="muted">— à vous d’agir</span><br>
+      <div class="act-title"><b class="act-name">${u.name}</b> <span class="chip acting-badge">▶ à vous d’agir</span><br>
       <span class="act-stats">♥ ${u.hp}/${u.maxHp} · ⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))} · ✦ ${u.mana}/${u.manaMax}</span></div>
       <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
@@ -4468,6 +4476,7 @@ async function runTacTurn() {
     const next = peekRound(state);
     if (!next || state.winner) break;
     renderRail(next.u.uid);
+    { const ael = elOf(next.u.uid); if (ael) { ael.querySelectorAll('.float.who').forEach((x) => x.remove()); floatText(ael, next.u.name, 'who'); } } // correctifs v2 lot 1 : QUI joue, lisible au-dessus de l'unité
     let choice = null;
     if (next.side === 'team') choice = await promptUnitAction(next.u, next.kind);
     if (choice === ACT_ABORT) { tacPaused = true; syncFightBtn(); renderRail(); return; }

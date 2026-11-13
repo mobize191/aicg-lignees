@@ -263,6 +263,21 @@ font-size: .95rem; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .6));
 animation: bop .6s ease infinite alternate;
 }
 @keyframes bop { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+/* correctifs v2 lot 1 : QUI joue lisible en 1 s — unité active surlignée SUR le terrain (deux camps, tours auto compris), badge ▶ AU-DESSUS de la vignette */
+.unit.acting { z-index: 6; }
+.unit.acting .card { animation: actingPulse 1.1s ease-in-out infinite; border-color: #ffd54f; }
+@keyframes actingPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(255, 213, 79, .95), 0 0 14px rgba(255, 213, 79, .55); }
+  50% { box-shadow: 0 0 0 5px #ffe082, 0 0 30px rgba(255, 213, 79, .95); }
+}
+.unit.acting::after {
+  content: "\25B6"; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); z-index: 7;
+  color: #241303; background: linear-gradient(135deg, #ffe082, #ffd54f); border-radius: 999px;
+  font-size: .7rem; font-weight: 900; padding: 2px 7px; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .65), 0 0 12px rgba(255, 213, 79, .8);
+  animation: bop .6s ease infinite alternate;
+}
+.unit.sq.acting::after { top: -10px; font-size: .55rem; padding: 1px 5px; }
 
 .float {
 position: absolute; top: -4px; left: 50%; transform: translateX(-50%); z-index: 8;
@@ -276,6 +291,8 @@ animation: floatup 1.5s ease-out forwards;
 .float.shield { color: #40c4ff; }
 .float.block { color: #40c4ff; font-size: 1rem; }
 .float.cast { color: #b39dff; }
+/* correctifs v2 lot 1 : étiquette du nom de l'unité active, TOUJOURS au-dessus des dégâts flottants (jamais cumulée) */
+.float.who { top: -30px; font-size: .78rem; font-weight: 800; color: #241303; background: linear-gradient(135deg, #ffe082, #ffd54f); padding: 2px 9px; border-radius: 999px; text-shadow: none; box-shadow: 0 2px 8px rgba(0, 0, 0, .6); }
 .float.fx-special { font-size: 1.5rem; color: #ffe082; text-shadow: 0 0 14px rgba(255, 213, 79, .95), 0 2px 6px rgba(0,0,0,.85); }
 .float.fx-crit { font-size: 1.7rem; color: #ffb300; text-shadow: 0 0 16px rgba(255, 179, 0, .95), 0 2px 6px rgba(0,0,0,.9); }
 /* Lot 2 : feedback 3 tiers */
@@ -879,6 +896,9 @@ body.in-combat .act-modal { max-height: 30dvh; }
 .act-art .art-img { width: 100%; height: 100%; object-fit: contain; }
 .act-art .glyph { font-size: 2.4rem; }
 .act-title { font-size: .92rem; line-height: 1.3; }
+/* correctifs v2 lot 1 : nom du combattant actif en gras +1 cran, « à vous d'agir » en badge or */
+.act-name { font-size: 1.05rem; font-weight: 900; }
+.acting-badge { background: linear-gradient(135deg, #ffe082, #ffd54f); color: #241303; border-color: transparent; font-weight: 900; }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
@@ -927,8 +947,9 @@ body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
 /* UX combat adaptatif 13/11 (lot 1) : la fenêtre d'action est DANS le flux, jamais en surimpression du terrain */
 body.in-combat #app { overflow: hidden; width: 100%; padding-bottom: 10px; }
-body.in-combat #board-col { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+body.in-combat #board-col { position: relative; flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+body.in-combat #team-zone { margin: auto 0 0; } /* correctifs v2 lot 2 : camp allié ancré AU BAS du terrain (marge basse 0, bande morte = 0 px), le vide résiduel reste au CENTRE entre les deux camps (maquette v2.3) */
 body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }
 body.in-combat #act-slot:empty { display: none; }
 body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 30dvh; overflow-y: auto; }
@@ -939,7 +960,7 @@ body.in-combat.act-open .unit.boss { width: clamp(100px, 22vw, 128px); }
 /* réserve cachée : badge latéral compact (compteur vivantes/total) à la place du rail */
 body.in-combat #reserve-zone { display: none; }
 .reserve-badge { display: none; }
-body.in-combat .reserve-badge { position: fixed; left: 8px; top: 44%; z-index: 40; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
+body.in-combat .reserve-badge { position: absolute; left: 8px; bottom: 48px; z-index: 40; /* correctifs v2 lot 2 : solidaire du camp allié (ancré en bas), jamais isolé dans le vide central */ display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
 body.in-combat .reserve-badge:active { background: rgba(77, 208, 225, .25); }
 body.in-combat .reserve-badge.empty { opacity: .45; }
 /* fiche flottante : ancrée au bord opposé de la fenêtre d'action, ne la ferme PAS */
@@ -977,7 +998,6 @@ body.in-combat .unit.boss { width: clamp(190px, 16vw, 360px); }
 body.in-combat.act-open .unit { width: clamp(140px, 10vw, 240px); }
 body.in-combat.act-open .unit.boss { width: clamp(180px, 13vw, 300px); }
 body.in-combat .row { gap: 14px; margin: 8px 0; justify-content: space-evenly; }
-body.in-combat #board { justify-content: safe center; } /* le plateau occupe aussi la hauteur, sans rogner le haut si ça déborde */
 body.in-combat #topbar { font-size: 1.05rem; }
 body.in-combat .rail-chip { font-size: .8rem; padding: 5px 12px; }
 }
@@ -1061,8 +1081,9 @@ body.in-combat #speedbar { flex: 0 0 auto; display: flex; align-items: center; g
 .rail-chip.mine { border-color: rgba(77, 208, 225, .55); box-shadow: 0 0 8px rgba(77, 208, 225, .2); }
 .rail-chip.foe { color: #ffb3bd; }
 .rail-chip.ko { opacity: .35; filter: grayscale(.7); }
-.rail-chip.acting { border-color: #ffd54f; background: rgba(255, 213, 79, .13); box-shadow: 0 0 12px rgba(255, 213, 79, .55); }
-.rail-chip.acting::before { content: "\25B6"; color: #ffd54f; font-size: .55rem; }
+.rail-chip.acting { border-color: #ffd54f; background: rgba(255, 213, 79, .34); color: #ffe9b0; font-size: .84rem; box-shadow: 0 0 16px rgba(255, 213, 79, .8); }
+.rail-chip.acting::before { content: "\25B6"; color: #ffd54f; font-size: .82rem; }
+.rail-chip.acting .rc-nm { max-width: 160px; }
 /* repositionnement 14/11 lot 3 : barres + chiffres sur les pions (bouclier doré AU-DESSUS de la barre PV + badge) */
 body.in-combat .pied .bars { display: flex; flex-direction: column; gap: 1px; margin-bottom: 2px; }
 body.in-combat .pied .bsh { position: relative; height: 5px; background: rgba(216, 180, 90, .25); border-radius: 3px; }
@@ -22785,6 +22806,9 @@ function renderRail(actorUid = null) {
   // repositionnement 14/11 lot 1 : rail horizontal persistant en haut — boss (chip élargi),
   // invocation (chip pointillé, elles jouent dans l'ordre), séparateur › vers la suite du tour
   const items = railItems();
+  // correctifs v2 lot 1 : l'acteur est aussi surligné SUR LE TERRAIN (les deux camps, tours auto compris)
+  for (const el of combatApp.querySelectorAll('.unit.acting')) el.classList.remove('acting');
+  if (actorUid) { const ael = elOf(actorUid); if (ael) ael.classList.add('acting'); }
   railEl.innerHTML = items.map((it, i) => {
     const u = it.u;
     const isActing = !!(actorUid && u.uid === actorUid);
@@ -22794,6 +22818,11 @@ function renderRail(actorUid = null) {
     const sep = isActing && i < items.length - 1 ? '<span class="rail-sep">\u203a</span>' : '';
     return `${sep}<div class="${cls}" data-uid="${u.uid}">${glyph}<span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
   }).join('');
+  // correctifs v2 lot 1 : scroll automatique du rail pour garder la chip active visible
+  if (actorUid) {
+    const chip = railEl.querySelector('.rail-chip.acting');
+    if (chip) chip.scrollIntoView({ block: 'nearest', inline: 'center' });
+  }
 }
 
 function fightLabel() {
@@ -22938,7 +22967,7 @@ function renderActModal(u, zoneHtml) {
   actBox.innerHTML = `
     <div class="act-head">
       <div class="act-art">${artOf(card)}</div>
-      <div class="act-title"><b>${u.name}</b> <span class="muted">— à vous d’agir</span><br>
+      <div class="act-title"><b class="act-name">${u.name}</b> <span class="chip acting-badge">▶ à vous d’agir</span><br>
       <span class="act-stats">♥ ${u.hp}/${u.maxHp} · ⚔ ${Math.max(0, Math.round(u.atk * (1 + u.atkBuff)))} · ✦ ${u.mana}/${u.manaMax}</span></div>
       <button type="button" class="btn ctrl act-reduce" title="Réduire ou rouvrir la fenêtre d’action">▾ réduire</button>
     </div>
@@ -23227,6 +23256,7 @@ async function runTacTurn() {
     const next = peekRound(state);
     if (!next || state.winner) break;
     renderRail(next.u.uid);
+    { const ael = elOf(next.u.uid); if (ael) { ael.querySelectorAll('.float.who').forEach((x) => x.remove()); floatText(ael, next.u.name, 'who'); } } // correctifs v2 lot 1 : QUI joue, lisible au-dessus de l'unité
     let choice = null;
     if (next.side === 'team') choice = await promptUnitAction(next.u, next.kind);
     if (choice === ACT_ABORT) { tacPaused = true; syncFightBtn(); renderRail(); return; }
