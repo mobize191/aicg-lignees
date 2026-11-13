@@ -357,39 +357,83 @@ function actTeamStriker(u, i, ctx, step) {
       const cand = (u.spells ?? [])[tacAct.idx ?? 0];
       if (cand && cand.cost <= u.mana) {
         u.mana -= cand.cost;
-        const side = spellSideOf(cand);
-        // T0.2 + correctifs ciblage lot 3 : un sort allié vise son camp (soi / 1 allié / l'équipe),
-        // résolu par son rôle (soin -> heal, boost/bouclier -> buff/bouclier) ; en auto le chemin historique reste un coup
+        // correctifs sorts lot 2 (TRANCHÉ 14/11) : une SIGNATURE (cat 'unique') se résout par la métadonnée de sa
+        // fiche (signatureMetaOfUnit, le même switch qu'applySupport côté ennemi) : TOUS les rôles en Tactique
+        const sigMeta = cand.cat === 'unique' ? signatureMetaOfUnit(u) : null;
+        const role = cand.role ?? sigMeta?.role ?? null;
+        const side = spellSideOf({ ...cand, ...(sigMeta?.cible ? { cible: sigMeta.cible } : {}) });
         if (side === 'self' || side === 'ally' || side === 'team') {
-          const role = cand.role ?? null;
           const t = side === 'ally' && tacAct.allyUid
             ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? u)
             : side === 'team'
               ? (ctx.teamAll().filter((a) => a.rang === 'avant' && a.alive)[0] ?? ctx.teamAll()[0] ?? u)
               : u;
-          if (role === 'soin') {
+          const effKind = u.effect ? u.effect.kind : null;
+          const big = !!cand.big || cand.cost >= 5;
+          const castEv = (fx) => ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big, fx, mana: u.mana });
+          if (role === 'invocation') {
+            spell = cand; // résolu par le bloc invocation partagé (castSummon) ci-dessous
+          } else if (role === 'soin' && effKind === 'revive') {
+            // signature résurrection : relève le premier K.O. de l'équipe à effect.value, sinon soin
+            const dead = ctx.teamAll().filter((a) => !a.alive && !(a.status && a.status.reviving));
+            if (dead.length) {
+              const dt = dead.sort((a, b) => b.maxHp - a.maxHp)[0];
+              dt.hp = Math.max(1, Math.round(dt.maxHp * (u.effect.value ?? M.REVIVE_DEFAULT)));
+              dt.alive = true;
+              castEv('heal');
+              ctx.events.push({ type: 'revive', side: 'team', sourceId: u.uid, targetId: dt.uid, amount: dt.hp });
+            } else {
+              const cible = tacAct.allyUid
+                ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
+                : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
+              const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
+              castEv('heal');
+              if (amount > 0) { cible.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' }); }
+            }
+          } else if (role === 'soin') {
             const cible = tacAct.allyUid
               ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
               : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
             const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'heal', mana: u.mana });
+            castEv('heal');
             if (amount > 0) {
               cible.hp += amount;
               ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' });
             }
           } else if (role === 'bouclier') {
             const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            castEv('atk');
             t.shield += amount;
             ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+          } else if (role === 'manip' && effKind === 'link') {
+            castEv('atk');
+            const libres = ctx.state.team.avant.filter((a) => a.alive && !a.linkedTo);
+            if (libres.length >= 2) {
+              const [a, b] = libres;
+              a.linkedTo = b.uid; a.linkTtl = 2; b.linkedTo = a.uid; b.linkTtl = 2;
+              ctx.events.push({ type: 'status', side: 'team', sourceId: u.uid, targetId: a.uid, kind: 'link', value: b.uid });
+            } else {
+              const value = Math.max(0, (cand.mult ?? 1) - 1);
+              t.atkBuff = (t.atkBuff ?? 0) + value;
+              ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            }
+          } else if (role === 'manip' && effKind === 'copy') {
+            castEv('atk');
+            if (ctx.state.lastEnemySpell) {
+              u.status.copy = { spell: { ...ctx.state.lastEnemySpell }, expiry: 2 };
+              ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'copy', value: u.status.copy.spell.name });
+            } else {
+              const value = Math.max(0, (cand.mult ?? 1) - 1); // aucun sort ennemi à copier : buff de repli
+              t.atkBuff = (t.atkBuff ?? 0) + value;
+              ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            }
           } else {
             const value = Math.max(0, (cand.mult ?? 1) - 1);
             t.atkBuff = (t.atkBuff ?? 0) + value;
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            castEv('atk');
             ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
           }
-          ctx.firstAttack = false;
-          return false;
+          if (role !== 'invocation') { ctx.firstAttack = false; return false; }
         }
         spell = cand;
       } else {
@@ -447,8 +491,13 @@ function actTeamStriker(u, i, ctx, step) {
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
   }
-  if (spell && u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') {
-    if (castSummon(u, team, mods, ctx.events, 'team')) {
+  // correctifs sorts lots 2+4 : un sort d'invocation déclenche castSummon. Lot 4 (14/11) : les sorts
+  // Appel/Pont (spell.summon en data, rôle invocation) invoquent VRAIMENT en Tactique ET en Auto
+  // (cohérence des chemins -> digest MESURÉ) ; les signatures de recrues (cat 'unique') restent
+  // réservées au Tactique (garde-fou tacAct) comme au lot 2.
+  const sigRole = spell && spell.cat === 'unique' ? (signatureMetaOfUnit(u)?.role ?? null) : null;
+  if (spell && ((u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') || spell.summon || spell.role === 'invocation' || (tacAct && sigRole === 'invocation'))) {
+    if (castSummon(u, team, mods, ctx.events, 'team', spell.summon ? { ...spell.summon, mult: spell.mult ?? 1 } : null)) {
       ctx.firstAttack = false;
       return false;
     }
@@ -503,7 +552,7 @@ function actTeamStriker(u, i, ctx, step) {
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
-    const larg = largeurOfSpellName(spell.name);
+    const larg = largeurOfSpell(spell); // lot 3 correctifs sorts : cran du porteur, jamais le max
     if (larg === 5) hitList = ctx.enemyAll();
     else if (larg === 3 && idx !== null) { const fl = foeLineOf(target); hitList = pickZoneTargets(fl, Math.max(0, fl.findIndex((x) => x.uid === target.uid))); }
   }
@@ -539,6 +588,27 @@ function actTeamStriker(u, i, ctx, step) {
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
+      }
+      // correctifs sorts lot 2 : signature hostile (cat 'unique') en Tactique -> le statut de la fiche
+      // (stun/slow/dot/curse de l'effet data) s'applique sur l'ennemi touché, EN PLUS des dégâts
+      if (tacAct && tacAct.kind === 'spell' && spell && spell.cat === 'unique' && tgt.alive && u.effect) {
+        const ek = u.effect.kind;
+        if (ek === 'stun') { tgt.status.stun = (tgt.status.stun ?? 0) + (u.effect.turns ?? 1); ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: u.effect.turns ?? 1 }); }
+        else if (ek === 'slow') { tgt.status.slow = Math.max(tgt.status.slow ?? 0, u.effect.turns ?? 2); ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'slow', value: u.effect.turns ?? 2 }); }
+        else if (ek === 'dot') { tgt.status.dot = { dmg: Math.max(1, Math.round(u.atk * (u.effect.pct ?? M.DOT_EFFECT_DEFAULT) * (spell.mult ?? 1))), turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg }); }
+        else if (ek === 'curse') { const v = (u.effect.value ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1); tgt.status.curse = { value: v, turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 }); }
+      }
+      // correctifs sorts lot 5 (TRANCHÉ 14/11) : badge contrôle/malus = le statut est posé EN PLUS des
+      // dégâts, en Tactique ET en Auto (jet de taux ; malus = curse de la valeur du sort, boss réduit de moitié)
+      if (spell && spell.taux != null && tgt.alive && ctx.state.rng() < spell.taux) {
+        if (spell.role === 'malus') {
+          const v = (spell.curse ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1);
+          tgt.status.curse = { value: v, turns: spell.tours ?? 2 };
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 });
+        } else {
+          tgt.status.stun = (tgt.status.stun ?? 0) + (spell.tours ?? 1);
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
       }
       if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
         const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));

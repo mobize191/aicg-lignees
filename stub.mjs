@@ -225,7 +225,7 @@ const API_PAIRS = {
   _prompt: '() => promptState',
   _busy: '() => busy',
   _speed: '(v) => { speedIdx = Math.max(0, Math.min(SPEEDS.length - 1, Number(v) || 0)); }',
-  _zoneWidthOf: '(name) => zoneWidthOf({ name })',
+  _zoneWidthOf: '(sp) => zoneWidthOf(typeof sp === "string" ? { name: sp } : sp)',
   _previewZone: '(uid) => { const el = elOf(uid); if (el) previewZone(el); }',
   _clearZone: '() => clearZonePreview()',
   _draw: '() => drawBoard()',

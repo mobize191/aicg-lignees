@@ -29,7 +29,7 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}) });
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}) });
 const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
   .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));

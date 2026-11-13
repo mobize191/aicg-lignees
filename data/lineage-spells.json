@@ -240,21 +240,30 @@
    "cost": 2,
    "mult": 1.4,
    "desc": "Une étincelle qui court plus vite que la flamme.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.25,
+   "tours": 2,
+   "curse": 0.15
   },
   {
    "name": "Flèche de Feu",
    "cost": 3,
    "mult": 1.6,
    "desc": "Une flèche enflammée qui accroche l’air.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.24,
+   "tours": 2,
+   "curse": 0.18
   },
   {
    "name": "Jet de Braise",
    "cost": 5,
    "mult": 1.9,
    "desc": "Un souffle de braises brûlantes arraché au foyer.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.22,
+   "tours": 2,
+   "curse": 0.21
   },
   {
    "name": "Fournaise",
@@ -262,7 +271,10 @@
    "mult": 2.6,
    "big": true,
    "desc": "Le sol s’ouvre et crache un cercle de feu.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.2,
+   "tours": 2,
+   "curse": 0.24
   },
   {
    "name": "Solen : Couronne de Feu",
@@ -270,7 +282,10 @@
    "mult": 3.4,
    "big": true,
    "desc": "Une couronne de flammes consume les rangs adverses.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.17,
+   "tours": 2,
+   "curse": 0.27
   },
   {
    "name": "Solen : Braise Éternelle",
@@ -278,7 +293,10 @@
    "mult": 4.5,
    "big": true,
    "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.15,
+   "tours": 2,
+   "curse": 0.3
   }
  ],
  "bosquet": [
@@ -287,21 +305,27 @@
    "cost": 2,
    "mult": 1.4,
    "desc": "Une épine sèche lancée du creux d’un fourré.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.25,
+   "tours": 1
   },
   {
    "name": "Lance d’Aubier",
    "cost": 3,
    "mult": 1.6,
    "desc": "Un éclat de bois vert durci par la sève.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.24,
+   "tours": 1
   },
   {
    "name": "Épine Vengeresse",
    "cost": 5,
    "mult": 1.9,
    "desc": "La forêt rend coup pour coup à qui la blesse.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.22,
+   "tours": 1
   },
   {
    "name": "Rafale d’Épines",
@@ -309,7 +333,9 @@
    "mult": 2.6,
    "big": true,
    "desc": "Une tempête de ronces ferme l’horizon.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.2,
+   "tours": 2
   },
   {
    "name": "Maïa : Danse des Feuilles",
@@ -317,7 +343,9 @@
    "mult": 3.4,
    "big": true,
    "desc": "Ses feuilles dansent autour de la proie, puis tombent.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.17,
+   "tours": 2
   },
   {
    "name": "Maïa : Cœur du Bosquet",
@@ -325,7 +353,9 @@
    "mult": 4.5,
    "big": true,
    "desc": "Le bosquet entier se lève et marche au combat.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.15,
+   "tours": 2
   }
  ],
  "crepuscule": [
@@ -335,7 +365,10 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignage Famille du Crépuscule, palier C.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.25,
+   "tours": 2,
+   "curse": 0.15
   },
   {
    "name": "Voile d’Ombre",
@@ -343,7 +376,10 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignage Famille du Crépuscule, palier UC.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.24,
+   "tours": 2,
+   "curse": 0.18
   },
   {
    "name": "Malédiction du Soir",
@@ -351,7 +387,10 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignage Famille du Crépuscule, palier R.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.22,
+   "tours": 2,
+   "curse": 0.21
   },
   {
    "name": "Danse des Ombres",
@@ -359,7 +398,10 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignage Famille du Crépuscule, palier SR.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.2,
+   "tours": 2,
+   "curse": 0.24
   },
   {
    "name": "Oubli Éternel",
@@ -367,7 +409,10 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignage Famille du Crépuscule, palier UR.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.17,
+   "tours": 2,
+   "curse": 0.27
   },
   {
    "name": "Nuit Sans Fin",
@@ -375,7 +420,10 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignage Famille du Crépuscule, palier L.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.15,
+   "tours": 2,
+   "curse": 0.3
   }
  ],
  "vol": [
@@ -385,7 +433,7 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier C.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Coup de Jarnac",
@@ -393,7 +441,7 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier UC.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Dague dans le Dos",
@@ -401,7 +449,7 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier R.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Fauchage",
@@ -409,7 +457,7 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier SR.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Embuscade",
@@ -417,7 +465,7 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier UR.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Coup de Grâce",
@@ -425,7 +473,7 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier L.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   }
  ],
  "zele": [
@@ -485,7 +533,12 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier C.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.35,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Élémentaire de Braise",
@@ -493,7 +546,12 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier UC.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.4,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Meute Spirituelle",
@@ -501,7 +559,12 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignage École des Invocations, palier R.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.45,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Portail",
@@ -509,7 +572,12 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier SR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.5,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Légion Céleste",
@@ -517,7 +585,12 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier UR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.55,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   },
   {
    "name": "Appel Suprême",
@@ -525,7 +598,12 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignage École des Invocations, palier L.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.6,
+    "ttl": 3,
+    "name": "Esprit de l’Appel"
+   }
   }
  ],
  "seuil": [
@@ -535,7 +613,9 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignée Arbitres du Seuil, palier C.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.25,
+   "tours": 1
   },
   {
    "name": "Sablier II",
@@ -543,7 +623,9 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignée Arbitres du Seuil, palier UC.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.24,
+   "tours": 1
   },
   {
    "name": "Sablier III",
@@ -551,7 +633,9 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignée Arbitres du Seuil, palier R.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.22,
+   "tours": 1
   },
   {
    "name": "Sablier IV",
@@ -559,7 +643,9 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignée Arbitres du Seuil, palier SR.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.2,
+   "tours": 2
   },
   {
    "name": "Sablier V",
@@ -567,7 +653,9 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignée Arbitres du Seuil, palier UR.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.17,
+   "tours": 2
   },
   {
    "name": "Sablier VI",
@@ -575,7 +663,9 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignée Arbitres du Seuil, palier L.",
-   "cible": "1 ennemi"
+   "cible": "1 ennemi",
+   "taux": 0.15,
+   "tours": 2
   }
  ],
  "miroir": [
@@ -635,7 +725,12 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier C.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.35,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil II",
@@ -643,7 +738,12 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier UC.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.4,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil III",
@@ -651,7 +751,12 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignée Tisseuses du Pont, palier R.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.45,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil IV",
@@ -659,7 +764,12 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier SR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.5,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil V",
@@ -667,7 +777,12 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier UR.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.55,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   },
   {
    "name": "Fil VI",
@@ -675,7 +790,12 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignée Tisseuses du Pont, palier L.",
-   "cible": "les renforts"
+   "cible": "les renforts",
+   "summon": {
+    "hpPct": 0.6,
+    "ttl": 3,
+    "name": "Fil d’Ananké"
+   }
   }
  ]
 }

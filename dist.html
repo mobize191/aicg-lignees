@@ -4176,6 +4176,7 @@ const DATA = {
    "CURSE_BOSS_FACTOR": 0.5,
    "REVIVE_DEFAULT": 0.5,
    "SUMMON_ATK_DEFAULT": 0.6,
+   "SUMMON_SPELL_ATK_RATIO": 0.5,
    "SUMMON_HP_DEFAULT": 0.5,
    "SUMMON_SPELL": {
     "name": "Frappe",
@@ -8133,8 +8134,11 @@ const DATA = {
     "cout": 4,
     "mult": 1.6,
     "classe": "Occultiste",
-    "desc": "L’occultiste marque sa proie d’un mauvais présage.",
-    "effet": "−20 % de précision × 2 tours"
+    "desc": "Malédiction : −20 % de dégâts infligés par la cible pendant 2 tours.",
+    "effet": "−20 % de dégâts × 2 tours",
+    "taux": 1,
+    "tours": 2,
+    "curse": 0.2
    }
   ],
   "lignee": [
@@ -9868,21 +9872,30 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "desc": "Une étincelle qui court plus vite que la flamme.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 2,
+    "curse": 0.15
    },
    {
     "name": "Flèche de Feu",
     "cost": 3,
     "mult": 1.6,
     "desc": "Une flèche enflammée qui accroche l’air.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 2,
+    "curse": 0.18
    },
    {
     "name": "Jet de Braise",
     "cost": 5,
     "mult": 1.9,
     "desc": "Un souffle de braises brûlantes arraché au foyer.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 2,
+    "curse": 0.21
    },
    {
     "name": "Fournaise",
@@ -9890,7 +9903,10 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Le sol s’ouvre et crache un cercle de feu.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2,
+    "curse": 0.24
    },
    {
     "name": "Solen : Couronne de Feu",
@@ -9898,7 +9914,10 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Une couronne de flammes consume les rangs adverses.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2,
+    "curse": 0.27
    },
    {
     "name": "Solen : Braise Éternelle",
@@ -9906,7 +9925,10 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2,
+    "curse": 0.3
    }
   ],
   "bosquet": [
@@ -9915,21 +9937,27 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "desc": "Une épine sèche lancée du creux d’un fourré.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 1
    },
    {
     "name": "Lance d’Aubier",
     "cost": 3,
     "mult": 1.6,
     "desc": "Un éclat de bois vert durci par la sève.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 1
    },
    {
     "name": "Épine Vengeresse",
     "cost": 5,
     "mult": 1.9,
     "desc": "La forêt rend coup pour coup à qui la blesse.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 1
    },
    {
     "name": "Rafale d’Épines",
@@ -9937,7 +9965,9 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Une tempête de ronces ferme l’horizon.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2
    },
    {
     "name": "Maïa : Danse des Feuilles",
@@ -9945,7 +9975,9 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Ses feuilles dansent autour de la proie, puis tombent.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2
    },
    {
     "name": "Maïa : Cœur du Bosquet",
@@ -9953,7 +9985,9 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Le bosquet entier se lève et marche au combat.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2
    }
   ],
   "crepuscule": [
@@ -9963,7 +9997,10 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier C.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 2,
+    "curse": 0.15
    },
    {
     "name": "Voile d’Ombre",
@@ -9971,7 +10008,10 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier UC.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 2,
+    "curse": 0.18
    },
    {
     "name": "Malédiction du Soir",
@@ -9979,7 +10019,10 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier R.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 2,
+    "curse": 0.21
    },
    {
     "name": "Danse des Ombres",
@@ -9987,7 +10030,10 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier SR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2,
+    "curse": 0.24
    },
    {
     "name": "Oubli Éternel",
@@ -9995,7 +10041,10 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier UR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2,
+    "curse": 0.27
    },
    {
     "name": "Nuit Sans Fin",
@@ -10003,7 +10052,10 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier L.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2,
+    "curse": 0.3
    }
   ],
   "vol": [
@@ -10013,7 +10065,7 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignage Famille du Vol, palier C.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    },
    {
     "name": "Coup de Jarnac",
@@ -10021,7 +10073,7 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignage Famille du Vol, palier UC.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    },
    {
     "name": "Dague dans le Dos",
@@ -10029,7 +10081,7 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignage Famille du Vol, palier R.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    },
    {
     "name": "Fauchage",
@@ -10037,7 +10089,7 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignage Famille du Vol, palier SR.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    },
    {
     "name": "Embuscade",
@@ -10045,7 +10097,7 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignage Famille du Vol, palier UR.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    },
    {
     "name": "Coup de Grâce",
@@ -10053,7 +10105,7 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignage Famille du Vol, palier L.",
-    "cible": "1 allié"
+    "cible": "1 ennemi"
    }
   ],
   "zele": [
@@ -10113,7 +10165,12 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignage École des Invocations, palier C.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.35,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    },
    {
     "name": "Élémentaire de Braise",
@@ -10121,7 +10178,12 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignage École des Invocations, palier UC.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.4,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    },
    {
     "name": "Meute Spirituelle",
@@ -10129,7 +10191,12 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignage École des Invocations, palier R.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.45,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    },
    {
     "name": "Portail",
@@ -10137,7 +10204,12 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignage École des Invocations, palier SR.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.5,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    },
    {
     "name": "Légion Céleste",
@@ -10145,7 +10217,12 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignage École des Invocations, palier UR.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.55,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    },
    {
     "name": "Appel Suprême",
@@ -10153,7 +10230,12 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignage École des Invocations, palier L.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.6,
+     "ttl": 3,
+     "name": "Esprit de l’Appel"
+    }
    }
   ],
   "seuil": [
@@ -10163,7 +10245,9 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier C.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 1
    },
    {
     "name": "Sablier II",
@@ -10171,7 +10255,9 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier UC.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 1
    },
    {
     "name": "Sablier III",
@@ -10179,7 +10265,9 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier R.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 1
    },
    {
     "name": "Sablier IV",
@@ -10187,7 +10275,9 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier SR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2
    },
    {
     "name": "Sablier V",
@@ -10195,7 +10285,9 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier UR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2
    },
    {
     "name": "Sablier VI",
@@ -10203,7 +10295,9 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier L.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2
    }
   ],
   "miroir": [
@@ -10263,7 +10357,12 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignée Tisseuses du Pont, palier C.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.35,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    },
    {
     "name": "Fil II",
@@ -10271,7 +10370,12 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignée Tisseuses du Pont, palier UC.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.4,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    },
    {
     "name": "Fil III",
@@ -10279,7 +10383,12 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignée Tisseuses du Pont, palier R.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.45,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    },
    {
     "name": "Fil IV",
@@ -10287,7 +10396,12 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignée Tisseuses du Pont, palier SR.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.5,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    },
    {
     "name": "Fil V",
@@ -10295,7 +10409,12 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignée Tisseuses du Pont, palier UR.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.55,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    },
    {
     "name": "Fil VI",
@@ -10303,7 +10422,12 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignée Tisseuses du Pont, palier L.",
-    "cible": "les renforts"
+    "cible": "les renforts",
+    "summon": {
+     "hpPct": 0.6,
+     "ttl": 3,
+     "name": "Fil d’Ananké"
+    }
    }
   ]
  },
@@ -14813,7 +14937,7 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}) });
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}) });
 const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
   .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
@@ -15446,7 +15570,7 @@ function strikeFoe(s, foes, mods, events, side, st, targetUid = null) {
 function castFoeSpell(s, spell, foes, mods, events, side, st, action = null) {
   const foeSide = side === 'team' ? 'enemies' : 'team';
   const foeLines = st ? (side === 'team' ? st.enemies : st.team) : null;
-  const larg = Number(spell.largeur ?? largeurOfSpellName(spell.name)) || 1;
+  const larg = largeurOfSpell(spell); // correctifs sorts lot 3 : largeur du cran du porteur, jamais le max
   const anchorUid = action && action.targetUid != null ? action.targetUid : null;
   const vivantes = foes.filter((f) => f.alive);
   const anchor = anchorUid != null
@@ -15817,21 +15941,34 @@ function resolveSignature(ownerId) {
   return entry.unique ? { unique: entry.unique } : { sort: entry.fusion, cran: entry.cran };
 }
 
-// lot 3 (fiche type) : la largeur max remplie d'un sort d'école, retrouvée par nom
-function largeurOfSpellName(name) {
+// correctifs sorts lot 3 (14/11) : la largeur vient du CRAN DU PORTEUR (sp.largeur, ou sp.cran
+// dans le sort d'école), JAMAIS du max des crans ; une signature sans cran d'école = monocible (1)
+function largeurOfSpell(sp) {
+  if (!sp) return 1;
+  const l0 = sp.largeur;
+  if (l0 != null) return (l0 === 'equipe' || l0 === 'equipe-renforcee') ? 4 : Number(l0) || 1;
+  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === sp.name);
+  if (def) {
+    if (sp.cran != null) {
+      const c = def.crans?.[sp.cran];
+      if (c && !c.vide) { const l = c.largeur; return (l === 'equipe' || l === 'equipe-renforcee') ? 4 : Number(l) || 1; }
+      return 1; // cran vide/inconnu -> monocible
+    }
+    return 1; // sort d'école sans cran (signature) -> monocible
+  }
   const entrees = [...(DATA.grimoire?.entrees ?? []), ...(DATA.grimoire?.communs ?? []), ...(DATA.grimoire?.race ?? [])];
-  const entree = entrees.find((s) => s.nom === name);
+  const entree = entrees.find((s) => s.nom === sp.name);
   if (entree) {
     if (entree.cible === 'zone') return 3;
     if (entree.cible === 'tous' || String(entree.cible).includes('tous')) return 5;
     if (String(entree.cible).includes('quipe')) return 4;
     return 1;
   }
-  const def = (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name);
-  if (!def) return 1;
-  const vals = Object.values(def.crans ?? {}).filter((c) => !c.vide).map((c) => c.largeur);
-  if (!vals.length) return 1;
-  return Math.max(...vals.map((l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : Number(l) || 1)));
+  return 1;
+}
+// compat nom seul : un nom sans porteur = pas de cran -> monocible pour les sorts d'école (lot 3)
+function largeurOfSpellName(name) {
+  return largeurOfSpell({ name });
 }
 
 // src/engine/combat.js : extrait du monolithe (phase 0, comportement inchange)
@@ -16193,39 +16330,83 @@ function actTeamStriker(u, i, ctx, step) {
       const cand = (u.spells ?? [])[tacAct.idx ?? 0];
       if (cand && cand.cost <= u.mana) {
         u.mana -= cand.cost;
-        const side = spellSideOf(cand);
-        // T0.2 + correctifs ciblage lot 3 : un sort allié vise son camp (soi / 1 allié / l'équipe),
-        // résolu par son rôle (soin -> heal, boost/bouclier -> buff/bouclier) ; en auto le chemin historique reste un coup
+        // correctifs sorts lot 2 (TRANCHÉ 14/11) : une SIGNATURE (cat 'unique') se résout par la métadonnée de sa
+        // fiche (signatureMetaOfUnit, le même switch qu'applySupport côté ennemi) : TOUS les rôles en Tactique
+        const sigMeta = cand.cat === 'unique' ? signatureMetaOfUnit(u) : null;
+        const role = cand.role ?? sigMeta?.role ?? null;
+        const side = spellSideOf({ ...cand, ...(sigMeta?.cible ? { cible: sigMeta.cible } : {}) });
         if (side === 'self' || side === 'ally' || side === 'team') {
-          const role = cand.role ?? null;
           const t = side === 'ally' && tacAct.allyUid
             ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? u)
             : side === 'team'
               ? (ctx.teamAll().filter((a) => a.rang === 'avant' && a.alive)[0] ?? ctx.teamAll()[0] ?? u)
               : u;
-          if (role === 'soin') {
+          const effKind = u.effect ? u.effect.kind : null;
+          const big = !!cand.big || cand.cost >= 5;
+          const castEv = (fx) => ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big, fx, mana: u.mana });
+          if (role === 'invocation') {
+            spell = cand; // résolu par le bloc invocation partagé (castSummon) ci-dessous
+          } else if (role === 'soin' && effKind === 'revive') {
+            // signature résurrection : relève le premier K.O. de l'équipe à effect.value, sinon soin
+            const dead = ctx.teamAll().filter((a) => !a.alive && !(a.status && a.status.reviving));
+            if (dead.length) {
+              const dt = dead.sort((a, b) => b.maxHp - a.maxHp)[0];
+              dt.hp = Math.max(1, Math.round(dt.maxHp * (u.effect.value ?? M.REVIVE_DEFAULT)));
+              dt.alive = true;
+              castEv('heal');
+              ctx.events.push({ type: 'revive', side: 'team', sourceId: u.uid, targetId: dt.uid, amount: dt.hp });
+            } else {
+              const cible = tacAct.allyUid
+                ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
+                : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
+              const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
+              castEv('heal');
+              if (amount > 0) { cible.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' }); }
+            }
+          } else if (role === 'soin') {
             const cible = tacAct.allyUid
               ? (ctx.teamAll().find((a) => a.uid === tacAct.allyUid && a.alive) ?? t)
               : [...ctx.teamAll()].sort((a, b) => a.hp - b.hp)[0] ?? u;
             const amount = Math.min(Math.max(1, Math.round(statOf(u) * (cand.mult ?? 1))), Math.max(0, cible.maxHp - cible.hp));
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'heal', mana: u.mana });
+            castEv('heal');
             if (amount > 0) {
               cible.hp += amount;
               ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' });
             }
           } else if (role === 'bouclier') {
             const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            castEv('atk');
             t.shield += amount;
             ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
+          } else if (role === 'manip' && effKind === 'link') {
+            castEv('atk');
+            const libres = ctx.state.team.avant.filter((a) => a.alive && !a.linkedTo);
+            if (libres.length >= 2) {
+              const [a, b] = libres;
+              a.linkedTo = b.uid; a.linkTtl = 2; b.linkedTo = a.uid; b.linkTtl = 2;
+              ctx.events.push({ type: 'status', side: 'team', sourceId: u.uid, targetId: a.uid, kind: 'link', value: b.uid });
+            } else {
+              const value = Math.max(0, (cand.mult ?? 1) - 1);
+              t.atkBuff = (t.atkBuff ?? 0) + value;
+              ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            }
+          } else if (role === 'manip' && effKind === 'copy') {
+            castEv('atk');
+            if (ctx.state.lastEnemySpell) {
+              u.status.copy = { spell: { ...ctx.state.lastEnemySpell }, expiry: 2 };
+              ctx.events.push({ type: 'status', side: 'team', targetId: u.uid, kind: 'copy', value: u.status.copy.spell.name });
+            } else {
+              const value = Math.max(0, (cand.mult ?? 1) - 1); // aucun sort ennemi à copier : buff de repli
+              t.atkBuff = (t.atkBuff ?? 0) + value;
+              ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
+            }
           } else {
             const value = Math.max(0, (cand.mult ?? 1) - 1);
             t.atkBuff = (t.atkBuff ?? 0) + value;
-            ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: cand.name, big: !!cand.big || cand.cost >= 5, fx: 'atk', mana: u.mana });
+            castEv('atk');
             ctx.events.push({ type: 'buff', side: 'team', sourceId: u.uid, targetId: t.uid, kind: 'atk', value, kindTag: 'special' });
           }
-          ctx.firstAttack = false;
-          return false;
+          if (role !== 'invocation') { ctx.firstAttack = false; return false; }
         }
         spell = cand;
       } else {
@@ -16283,8 +16464,13 @@ function actTeamStriker(u, i, ctx, step) {
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
   }
-  if (spell && u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') {
-    if (castSummon(u, team, mods, ctx.events, 'team')) {
+  // correctifs sorts lots 2+4 : un sort d'invocation déclenche castSummon. Lot 4 (14/11) : les sorts
+  // Appel/Pont (spell.summon en data, rôle invocation) invoquent VRAIMENT en Tactique ET en Auto
+  // (cohérence des chemins -> digest MESURÉ) ; les signatures de recrues (cat 'unique') restent
+  // réservées au Tactique (garde-fou tacAct) comme au lot 2.
+  const sigRole = spell && spell.cat === 'unique' ? (signatureMetaOfUnit(u)?.role ?? null) : null;
+  if (spell && ((u.classe === 'Invocateur' && u.effect && u.effect.kind === 'summon') || spell.summon || spell.role === 'invocation' || (tacAct && sigRole === 'invocation'))) {
+    if (castSummon(u, team, mods, ctx.events, 'team', spell.summon ? { ...spell.summon, mult: spell.mult ?? 1 } : null)) {
       ctx.firstAttack = false;
       return false;
     }
@@ -16339,7 +16525,7 @@ function actTeamStriker(u, i, ctx, step) {
   // lot 3 : en Tactique, la fiche du sort (largeur) élargit la frappe ; le chemin Auto ne bouge pas
   let hitList = [target];
   if (tacAct && tacAct.kind === 'spell' && spell) {
-    const larg = largeurOfSpellName(spell.name);
+    const larg = largeurOfSpell(spell); // lot 3 correctifs sorts : cran du porteur, jamais le max
     if (larg === 5) hitList = ctx.enemyAll();
     else if (larg === 3 && idx !== null) { const fl = foeLineOf(target); hitList = pickZoneTargets(fl, Math.max(0, fl.findIndex((x) => x.uid === target.uid))); }
   }
@@ -16375,6 +16561,27 @@ function actTeamStriker(u, i, ctx, step) {
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
+      }
+      // correctifs sorts lot 2 : signature hostile (cat 'unique') en Tactique -> le statut de la fiche
+      // (stun/slow/dot/curse de l'effet data) s'applique sur l'ennemi touché, EN PLUS des dégâts
+      if (tacAct && tacAct.kind === 'spell' && spell && spell.cat === 'unique' && tgt.alive && u.effect) {
+        const ek = u.effect.kind;
+        if (ek === 'stun') { tgt.status.stun = (tgt.status.stun ?? 0) + (u.effect.turns ?? 1); ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: u.effect.turns ?? 1 }); }
+        else if (ek === 'slow') { tgt.status.slow = Math.max(tgt.status.slow ?? 0, u.effect.turns ?? 2); ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'slow', value: u.effect.turns ?? 2 }); }
+        else if (ek === 'dot') { tgt.status.dot = { dmg: Math.max(1, Math.round(u.atk * (u.effect.pct ?? M.DOT_EFFECT_DEFAULT) * (spell.mult ?? 1))), turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg }); }
+        else if (ek === 'curse') { const v = (u.effect.value ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1); tgt.status.curse = { value: v, turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 }); }
+      }
+      // correctifs sorts lot 5 (TRANCHÉ 14/11) : badge contrôle/malus = le statut est posé EN PLUS des
+      // dégâts, en Tactique ET en Auto (jet de taux ; malus = curse de la valeur du sort, boss réduit de moitié)
+      if (spell && spell.taux != null && tgt.alive && ctx.state.rng() < spell.taux) {
+        if (spell.role === 'malus') {
+          const v = (spell.curse ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1);
+          tgt.status.curse = { value: v, turns: spell.tours ?? 2 };
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 });
+        } else {
+          tgt.status.stun = (tgt.status.stun ?? 0) + (spell.tours ?? 1);
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
       }
       if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
         const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
@@ -16958,23 +17165,37 @@ function pickZoneTargets(ligne, choix = null) {
 
 // src/engine/summon.js : extrait du monolithe (phase 0, comportement inchange)
 
-function castSummon(s, allies, mods, events, side) {
-  if ((s.summonBudget ?? 3) <= 0) return null;
+function castSummon(s, allies, mods, events, side, opts = null) {
   const pool = allies.avant;
-  if (pool.filter((u) => u.uid.includes('-inv') && u.alive).length >= 2) return null;
-  s.summonBudget = (s.summonBudget ?? 3) - 1;
+  const eff = s.effect ?? {};
+  // opts (sort de lignée avec summon en data) : hpPct/ttl du sort, ATQ = stat lanceur × mult × 0,5,
+  // un esprit actif MAX par lanceur (relancer remplace l'ancien), pas de budget
+  if (opts) {
+    for (const old of pool.filter((x) => x.uid.startsWith(`${s.uid}-inv`) && x.alive)) {
+      old.alive = false; old.hp = 0;
+      events.push({ type: 'expire', side, targetId: old.uid });
+    }
+    if (pool.filter((u) => u.uid.includes('-inv') && u.alive).length >= 2) return null;
+  } else {
+    if ((s.summonBudget ?? 3) <= 0) return null;
+    if (pool.filter((u) => u.uid.includes('-inv') && u.alive).length >= 2) return null;
+    s.summonBudget = (s.summonBudget ?? 3) - 1;
+  }
   const nb = pool.filter((u) => u.uid.includes('-inv')).length + 1;
   const hpBonus = side === 'team' ? (mods && mods.summonHp) || 0 : 0;
   const atkBonus = side === 'team' ? (mods && mods.summonAtk) || 0 : 0;
+  const atk = opts && opts.mult != null
+    ? Math.max(1, Math.round(statOf(s) * opts.mult * M.SUMMON_SPELL_ATK_RATIO * (1 + atkBonus)))
+    : Math.max(1, Math.round(s.atk * (eff.value ?? M.SUMMON_ATK_DEFAULT) * (1 + atkBonus)));
   const inv = makeUnit({
-    id: `${s.cardId}-inv`, name: s.effect.summonName ?? 'Invocation',
+    id: `${s.cardId}-inv`, name: opts?.name ?? eff.summonName ?? 'Invocation',
     rarity: 'C', classe: s.classe, element: s.element,
-    atk: Math.max(1, Math.round(s.atk * (s.effect.value ?? M.SUMMON_ATK_DEFAULT) * (1 + atkBonus))),
-    hp: Math.max(1, Math.round(s.maxHp * (s.effect.hpPct ?? M.SUMMON_HP_DEFAULT) * (1 + hpBonus))),
+    atk,
+    hp: Math.max(1, Math.round(s.maxHp * (opts?.hpPct ?? eff.hpPct ?? M.SUMMON_HP_DEFAULT) * (1 + hpBonus))),
   }, `${s.uid}-inv${nb}`);
   inv.spells = [{ ...M.SUMMON_SPELL }];
   inv.mana = 6; inv.manaMax = 6; inv.manaRegen = 2;
-  inv.status.ttl = s.effect.ttl ?? 3;
+  inv.status.ttl = opts?.ttl ?? eff.ttl ?? 3;
   pool.push(inv);
   events.push({ type: 'summon', side, sourceId: s.uid, targetId: inv.uid, name: inv.name });
   return inv;
@@ -22517,19 +22738,23 @@ function spellDefOfName(name) {
   return (DATA.grimoire?.ecole ?? []).find((s) => s.nom === name) ?? null;
 }
 function zoneLabelOf(sp) {
-  const def = spellDefOfName(sp?.name);
-  const cran = def?.crans?.II ?? def?.crans?.I;
-  const l = cran?.largeur;
+  // correctifs sorts lot 3 : la largeur affichée = celle du cran du sort (jamais le max des crans)
+  const l = zoneWidthOf(sp);
   if (l === 2) return 'zone de 2';
   if (l === 3) return 'zone de 3';
   if (l === 5) return 'tous les ennemis';
-  if (l === 'equipe') return "l'équipe";
+  if (l === 4) return "l'équipe";
   return '';
 }
 function zoneWidthOf(sp) {
-  const def = spellDefOfName(sp?.name);
-  const cran = def?.crans?.II ?? def?.crans?.I;
-  const l = Number(cran?.largeur);
+  const name = typeof sp === 'string' ? sp : sp?.name;
+  const def = spellDefOfName(name);
+  if (!def) return 1;
+  const obj = typeof sp === 'string' ? null : sp;
+  let l;
+  if (obj && obj.largeur != null) l = (obj.largeur === 'equipe' || obj.largeur === 'equipe-renforcee') ? 4 : Number(obj.largeur);
+  else if (obj && obj.cran != null) { const c = def.crans?.[obj.cran]; l = (c && !c.vide) ? Number(c.largeur) : 1; }
+  else l = 1; // sort d'école sans cran (signature) : monocible, jamais le max (lot 3)
   return Number.isFinite(l) && l >= 2 ? Math.min(l, 5) : 1;
 }
 
@@ -22561,7 +22786,7 @@ function spellMetaHtml(sp) {
   if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
   if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
-  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %');
+  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %' + (sp.tours ? ' · ' + sp.tours + (sp.tours > 1 ? ' tours' : ' tour') : ''));
   const zone = zoneLabelOf(sp);
   if (zone) bits.push(zone);
   else if (sp?.cible) bits.push(sp.cible);
@@ -24767,6 +24992,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['post-v1.51 : Correctifs sorts (TRANCH\u00c9 14/11)', 'Un sort fait d\u00e9sormais EXACTEMENT ce que sa fiche affiche (audit 309 sorts rejou\u00e9s : 0 anomalie, 85 avant). Lign\u00e9e du Vol = attaques ; signatures des recrues = l\u2019effet affich\u00e9 en Tactique ; largeur au cran du porteur ; Appel/Pont = vraie invocation ; badges contr\u00f4le/malus = effet pos\u00e9 EN PLUS des d\u00e9g\u00e2ts (stun 25 %\u219215 %, mal\u00e9diction \u221215 %\u2192\u221230 % \u00d7 2 tours, fiche \u00ab 25 % \u00b7 2 tours \u00bb). 279 tests, smoke 414, digests mesur\u00e9s `3b11106f\u2026` 871/3000 et `6c86838b\u2026` 2888/10000 (aucun recalibrage ; nouvelle baseline propos\u00e9e).'],
   ['v1.51 : Correctifs retours terrain (9e signalement)', 'Signatures des soigneurs = vrais soins ; Ascendance retirée (plus de bonus gravé à l\u2019évolution) ; défaite en Terres Sauvages = écran « retour au Port des Brumes » ; mana persistant entre les combats (prouvé par test). Fiche unifiée équipe/combat, badge élément réparé, cartes de combat plus grandes, frappe Mage/Occultiste explicitée. Plus d\u2019achat de cartes à l\u2019or : Guilde en jetons 🎫 uniquement. 266 tests, digests mesurés `4a5b0123\u2026` 861/3000 et `3f828555\u2026` 2864/10000 (aucun recalibrage).'],
   ['v1.51 : Switch 4 versions des illustrations (vague 3.3)', 'Le bouton 🖼️ cycle désormais V3 → V3.1 → V3.2 → V3.3 avec l’étiquette de version affichée sur le bouton, préférence persistée. Manifeste manquant = bouton grisé libellé, jamais d’erreur, version courante inchangée. Les 37 arts de la vague 3.3 sont aussi dans le manifeste par défaut assets-v3.json (présents partout). IHM seule : digest inchangé.'],
   ['v1.50 : Vérifications level design', 'Reachabilité prouvée par test : depuis chaque zone, le chemin atteint la porte du donjon, l\u2019autel, les jarres et le retour ville. Graphe d\u2019acquisition vérifié acyclique. Table de beats par zone en données (intensité + taux de rencontre). 252 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],

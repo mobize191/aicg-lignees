@@ -201,7 +201,8 @@ async function main() {
             if (teamUnit) teamUnit.click();
             await wait(30);
             check('47 d clic hors cible ne fait rien (fenêtre toujours en désignation)', before && !!api._actEl() && api._prompt().phase === 'target', '');
-            check('47 e donnée zone : Lame d’Écume vaut largeur 2', api._zoneWidthOf('Lame d’Écume') === 2, String(api._zoneWidthOf('Lame d’Écume')));
+            // correctifs sorts lot 3 : largeur = cran du porteur ; sans cran (nom seul) = 1, jamais le max des crans
+            check('47 e donnée zone : largeur au cran du porteur (cran II = 2, sans cran = 1)', api._zoneWidthOf({ name: 'Lame d’Écume', cran: 'II' }) === 2 && api._zoneWidthOf('Lame d’Écume') === 1, `cranII=${api._zoneWidthOf({ name: 'Lame d’Écume', cran: 'II' })} seul=${api._zoneWidthOf('Lame d’Écume')}`);
             const firstTargeted = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('targeted')) ?? null;
             if (firstTargeted) {
               api._clearZone();

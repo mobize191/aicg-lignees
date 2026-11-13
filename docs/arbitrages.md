@@ -1,5 +1,37 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 20) : MAQUETTE ÉCRAN DE COMBAT v2.1 — 3 demandes de Marc-Olivier intégrées (chiffres, icônes, boss/invocation)
+
+- **Demandes de Marc-Olivier (14/11, sur la maquette v2)** : (1) des chiffres : PV/PVmax, bouclier ; (2) des icônes plus grandes ; (3) montrer un combat de boss (grosse icône) et/ou avec des invocations.
+- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.1)** :
+  - **Chiffres sur les unités** : PV/PVmax et MP/MPmax en clair à côté des barres (lecture sans fiche) ; **bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré** (ordre de lecture : bouclier avant PV).
+  - **Icônes agrandies** : unités 56 → 74 px ; **boss 118 px** (nom en gras, chip élargi 👑 36 px dans le rail d'ordre du tour) ; **invocation 50 px à bordure pointillée + badge ttl** (⏳ tours restants) : l'œil distingue plein/boss/invoqué d'un coup.
+  - **Module BOSS + INVOCATION** (portrait interactif) : Roi des Démons 850/1200 + sbires, chip boss dans le rail ; Esprit de l'Ombre invoquable au clic sur le bouton de la barre de commandes (affiche l'invocation sur le terrain + mini-log), badge « 2 tours », rappel « un actif max par lanceur » (tranchage 7-b) ; mini-log avec absorption de bouclier (🛡 absorbe 32).
+- **Reste** : validation de la v2.1 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
+
+## 2026-11-14 (suite 19) : POSITIONNEMENT ÉCRAN DE COMBAT — TRANCHAGE B ACTÉ (« Plutôt une maquette »), MAQUETTE COMPARATIVE LIVRÉE
+
+- **Tranchage de Marc-Olivier (14/11, sur les options A/B de la suite 18)** : **B — d'abord une maquette**, puis le chantier couloir 1.
+- **Maquette livrée** : `docs/design/maquettes/ecran-combat-v2.html` (autonome, zéro dépendance) : **AVANT vs APRÈS en portrait 390×844** + **paysage 844×390**, les 5 écarts numérotés (rail médian, vitesse dans la fenêtre, fenêtre 38 %, terrain réduit, feedback sous le pouce) vs positionnement cible (ordre du tour en haut, vitesse/pause haut-droite persistants, barre compacte ≤ 30 % avec cibles ≥ 44 px, stats sur les unités, fiche flottante à la demande).
+- **Interactive** (pour valider le ressenti) : clic sur une unité → fiche flottante ancrée au-dessus de la barre ; clic sur un sort d'attaque → cibles ennemies illuminées + zones invalides grisées (contrainte visible, leçon TCG Pocket) ; clic sur une cible → dégâts flottants AU-DESSUS de l'unité + ligne au mini-log (règle d'occlusion).
+- **Reste** : validation de la maquette par Marc-Olivier (aperçu dans le chat, fichier dans le repo), ajustements éventuels, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts pour ne pas croiser les branches).
+
+## 2026-11-14 (suite 18) : RECHERCHE ÉCRAN DE COMBAT MOBILE — conventions du genre consignées (Hearthstone, TCG Pocket, Marvel Snap, LoR, Star Rail, Epic Seven), positionnement cible proposé, tranchage A/B demandé (§0 n°8)
+
+- **Déclencheur** : retour terrain de Marc-Olivier après la PR #12 (UX combat adaptatif livrée) : « le travail sur le front est terminé mais je trouve cela encore mauvais… faire une recherche sur les jeux mobiles de combat en tour par tour et de cartes (MTG, Hearthstone, etc.) pour analyser l'écran de combat et voir comment bien positionner les différents éléments ».
+- **Recherche livrée** : `docs/design/recherche-ecran-combat-2026-11-14.md` (2 guides UX mobile + critique UX académique TCG Pocket + conventions des jeux de cartes et tour-par-tour mobiles).
+- **Conventions identifiées** : (1) commander en bas, lire en haut, le milieu n'appartient qu'au plateau (Hearthstone, Star Rail, Epic Seven) ; (2) ordre du tour en HAUT de l'écran, deux camps, ennemis compris (Star Rail) ; (3) stats SUR les unités, panneau séparé = détail à la demande (Hearthstone, Star Rail) ; (4) tiers bas = actions primaires, médian = secondaire, tiers haut = statut (carte du pouce) ; (5) feedback au-dessus du point de contact, jamais sous le pouce (occlusion) ; (6) densité éditoriale : test « fréquent + urgent sinon pas à l'écran », cibles ≥ 44 px ; (7) les infos critiques restent à l'écran (critique Pratt de l'info éphémère de TCG Pocket).
+- **Positionnement cible proposé** : ordre du tour + compteur de vague + vitesse/pause persistants en tiers haut ; terrain SVG entier en bande médiane sans UI permanente ; mini-log juste au-dessus de la fenêtre (conforme) ; fenêtre d'action réduite à une barre de commandes compacte ≤ 30 % écran (nom du joueur actif + boutons de sorts, fiche flottante au clic) ; paysage : commandes en BAS du rail latéral, statut en HAUT.
+- **TRANCHAGE DEMANDÉ (§0 n°8)** : A) chantier couloir 1 « repositionnement écran combat » (pure UI CSS/HTML, digest inchangé attendu, à lancer APRÈS la livraison des correctifs sorts pour ne pas croiser les branches) ; B) d'abord maquette/capture comparative (couloir design), puis chantier. Le moteur et les données ne bougent pas.
+- **Liens avec l'existant** : invariant « la fenêtre ne recouvre jamais le terrain » conservé (l'amélioration porte sur la DENSITÉ et le RANGEMENT, pas sur le recouvrement) ; vitesses par contexte toujours différées (§0 n°5, re-tranchage après test terrain de la nouvelle fenêtre).
+
+## 2026-11-14 (suite 18) : CHANTIER CORRECTIFS SORTS LIVRÉ (5 lots, 5 commits FR, branche `vibe/correctifs-sorts-ec66f9`) — audit 0 anomalie, digest MESURÉ, baseline PROPOSÉE
+
+- **Résultat** : `node audit-sorts.mjs` passe de 85 anomalies (5 racines) à **0** sur 309 sorts rejoués en combat réel (revue `docs/historique/revue-sorts.md`). Lots : 1 Vol=attaque (`f7086df`), 2 signatures=effet affiché en Tactique (`abd3dd3`), 3 largeur au cran du porteur (`1d3e9c6`), 4 Appel/Pont=vraie invocation Tactique ET Auto (`574645d`), 5 badges contrôle/malus=effets implémentés Tactique ET Auto (`04c435b`). 279 tests verts, smoke 414 checks TOUT PASSE.
+- **MESURES consignées (aucun recalibrage)** : lots 1-4 digest inchangé `4a5b0123…` 861/3000 / `3f828555…` 2864/10000 (mesuré à chaque lot) ; **lot 5 : `3b11106f…` 871/3000 et `6c86838b…` 2888/10000** (0 exception, 0 marathon) — le digest bouge comme prévu au tranchage 7-d. **Baseline PROPOSÉE pour verrouillage par Marc-Olivier : `3b11106f…` / `6c86838b…`** (jamais appliquée sans arbitrage).
+- **Décision de conception lot 5 (à valider)** : le statut est posé sur un jet de taux `rng() < taux` (curse = valeur du sort, boss ×0,5) ; le seuil `seuilOf` (palier + INT/2, `SEUIL_PER_INT=0,5`) n'est PAS soustrait car avec INT ≥ 1 sur toute unité réelle (seuil ≥ 0,5 > taux ≤ 0,3) la formule grimoire `taux − seuil` ne passe jamais en combat réel — le stun du grimoire est ainsi inopérant depuis v0.47 (hors périmètre calibrage de ce chantier, signalé). Fiche affiche « 25 % · 2 tours ». Œil du Malheur : `taux 1, tours 2, curse 0,2`, desc reformulée « −20 % de dégâts × 2 tours ».
+- **Reste** : validation terrain Marc-Olivier (téléphone + PC), puis verrouillage de la baseline. Hors périmètre respecté : aucun changement de mults/coûts/calibrage, `data/*.json` source de vérité, `dist.html` via `node build.mjs` uniquement.
+
 ## 2026-11-14 (suite 17) : AUDIT EXHAUSTIF DES SORTS — 309 sorts rejoués en combat, 224 conformes, 85 anomalies en 5 racines — 4 tranchages demandés (§0 n°7)
 
 - **Déclencheur** : signalement terrain de Marc-Olivier — sur une carte « grand assassin », tous les sorts d'attaque ne peuvent viser que ses alliés ; « j'ai l'impression qu'un sur deux est buggé, pourrais-tu tous les essayer et valider ».
@@ -248,32 +280,3 @@ Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste,
 
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 10 (spec vie-jeu Lot 4) LIVRÉE : UI/UX MOBILE (v1.49)
 
-- **Safe-area** : `env(safe-area-inset-*)` sur le menu latéral (`nav`, `nav.open`) et le HUD d'errance (`.errance-top`, `.errance-hint`) dans `src/shell.html` ; recalcul au resize par le navigateur (unités relatives). Smoke B8c a.
-- **Bande de rareté jamais couleur seule** : `.rar-chip::before { content: '◆ ' }` + chips de rareté des récompenses avec ◆ — couleur + losange partout. Smoke B8c b.
-- **Audit contraste 4.5:1 consigné dans le smoke** (B8c c, ratios WCAG calculés) : texte nav 12+ :1, corps ~15 :1, bouton actif ~8 :1 — conformes. **Cas à risque consigné** : or #ffd54f sur place ensoleillée #e8d9b0 ≈ 1.6:1 — non bloquant (texte or toujours sur fond sombre en UI ; la place ensoleillée est un décor SVG sans texte).
-- **Sweep de résolutions** 1280×720 / 2560×1080 / 1080×2340 vérifié en smoke (B8c d : conteneurs présents, pas de largeur fixe tronquante ; captures réelles à valider en protocole IHM téléphone+PC).
-- 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (IHM seule).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 9 (spec vie-jeu Lot 3) LIVRÉE : HÉROS D'ERRANCE PAR CODE (v1.48)
-
-- **`src/errance-hero.js`** (chemin adapté à l'arborescence plate du dépôt ; la spec disait `errance/hero.js`) : `drawHero(ctx, x, y, opts)` peint et anime le héros PAR CODE — femme cape noire cheveux blancs : tête ellipse peau en dégradé, mèches blanches en courbes (retard de phase), cape noire polygone souple qui ondule à l'opposé du mouvement, bras/jambes capsules arrondies, ombre elliptique au sol. Cycle de marche sin(phase) + bob, idle respiration ; 4 directions (dos = chevelure blanche couvrante). **Aucune image, aucun rectangle** (testé : zero fillRect). Remplace le dessin inline rectangle de `src/ui.js` ; branché dans la boucle de rendu errance.
-- Tests : 3 headless (`tests/hero-errance-v148.test.js`) : 4 directions × marche/idle tracés sans erreur, animation temporelle effective, silhouette ≤ 36×50 px + ombre au sol. 249 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (présentation errance).
-- QA visuelle (captures marche/virage/idle sur Marées) à faire via le protocole IHM — captures non produites dans ce run headless.
-- Tenue sous la cape [À TRANCHER] : défaut proposé = cuir sombre + liseré doré (non peint en dur, la cape couvre).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 8 (spec vie-jeu Lot 2) LIVRÉE : FEEDBACK 3 TIERS + HIT-STOP (v1.47)
-
-- **Routeur unique `feedback(tier, anchor)`** (`src/ui.js`) : small = tick SFX (WebAudio, sans asset) ; medium = flash léger + shake ~0,3 + pop overshoot (ease-out back) sur les floatText ; large (crit, K.O., boss, drops UR) = flash + shake ~0,7 + zoom léger + **hit-stop 80-100 ms**. Branché dans l'animateur de combat (attaque medium/large si crit, K.O. large, soin medium) et l'errance (autel medium).
-- **Hit-stop** : réservé au tier large, jamais deux freezes qui se chevauchent (token : le plus récent restaure), retour exact au repos. **Kill switch en 1 ligne** : `FX_HITSTOP: false` dans `data/engine.json` (testé). Constantes en data : `FX_HITSTOP_MS: 90`, `FX_FLASH_MAX_PER_S: 3` (rate limit flashs ≤ 3/s).
-- **Option « réduire les flashs »** : persistée (`uiPrefs.reduceFlashes`, migration passive, `combatAuto` toujours ignoré), flashs en teinte sans pulsation ; `prefers-reduced-motion` déjà respecté partout.
-- Tests : 4 headless (`tests/feedback-v147.test.js`) : classes posées/retirées au repos, hit-stop toujours terminé (2 large à 30 ms), kill switch, rate limit 3/s. 246 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000** (couche feel, présentation seule).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 7 (spec vie-jeu Lot 0) LIVRÉE : MANIFESTE D'ASSETS (v1.46)
-
-- **`tools/assets-manifest.json`** (schéma acté 12/11) : 740 entrées (art + bg × assets-v3.json + assets-v3.1.json), chacune `{ id, kind, source{kind:"gen", model:"wai-illustrious-v17", loras[{civitaiId, version, base, trigger, license}], seed}, qa{status, date}, production{path, w, h, ko} }`. Rempli depuis la session 3.2 : prompts/seeds (`tools/prompts-v32.json`, 530 seeds remontés), LoRAs (`tools/lora-verdicts-v32.json`, 72 entrées avec LoRA), dimensions lues dans les JPEG de production.
-- **Licences LoRAs enregistrées pour information, NON bloquantes** (arbitrage 12/11) : champ `license` renseigné « non renseigné (session 3.2) » quand absent des run-logs.
-- Smoke : nouveau check **B8b h** — tout art des manifestes de production a une entrée source+qa. Tests : 2 headless (`tests/assets-manifest-v146.test.js`). 242 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (donnée outillée, hors moteur).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 6 (Lot D refonte) LIVRÉE : CAPTURE DQM + VENDEUR À JETONS (v1.45)
-
-- **Capture DQM** : à l'écran Récompenses de chaque combat gagné (donjon ET errance), une ligne « 🐾 Tenter la capture — X % » par monstre recrutable vaincu (hors boss/nommés, `recrutableMonsters` inchangé). % = taux de base de la zone (`zone.recrute.taux`) × démonstration de force = min(`CAPTURE_FORCE_CAP`=3, niveau moyen des actifs / niveau du monstre) — plafonné, affiché avant le choix. **Un seul essai** par monstre (bouton désactivé après clic) ; réussite → `newInst` + collection. L'ancien tirage auto ~1 % à la fin d'étage est supprimé.
