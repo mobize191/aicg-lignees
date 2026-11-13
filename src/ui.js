@@ -4089,7 +4089,7 @@ function spellMetaHtml(sp) {
   if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
   if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
-  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %');
+  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %' + (sp.tours ? ' · ' + sp.tours + (sp.tours > 1 ? ' tours' : ' tour') : ''));
   const zone = zoneLabelOf(sp);
   if (zone) bits.push(zone);
   else if (sp?.cible) bits.push(sp.cible);

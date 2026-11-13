@@ -598,6 +598,18 @@ function actTeamStriker(u, i, ctx, step) {
         else if (ek === 'dot') { tgt.status.dot = { dmg: Math.max(1, Math.round(u.atk * (u.effect.pct ?? M.DOT_EFFECT_DEFAULT) * (spell.mult ?? 1))), turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg }); }
         else if (ek === 'curse') { const v = (u.effect.value ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1); tgt.status.curse = { value: v, turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 }); }
       }
+      // correctifs sorts lot 5 (TRANCHÉ 14/11) : badge contrôle/malus = le statut est posé EN PLUS des
+      // dégâts, en Tactique ET en Auto (jet de taux ; malus = curse de la valeur du sort, boss réduit de moitié)
+      if (spell && spell.taux != null && tgt.alive && ctx.state.rng() < spell.taux) {
+        if (spell.role === 'malus') {
+          const v = (spell.curse ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1);
+          tgt.status.curse = { value: v, turns: spell.tours ?? 2 };
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 });
+        } else {
+          tgt.status.stun = (tgt.status.stun ?? 0) + (spell.tours ?? 1);
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
+      }
       if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
         const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: tgt.uid, targetId: u.uid, amount: back, kind: 'special', mana: tgt.mana, elem: null, side: 'enemies' });

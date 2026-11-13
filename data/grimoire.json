@@ -124,8 +124,11 @@
    "cout": 4,
    "mult": 1.6,
    "classe": "Occultiste",
-   "desc": "L’occultiste marque sa proie d’un mauvais présage.",
-   "effet": "−20 % de précision × 2 tours"
+   "desc": "Malédiction : −20 % de dégâts infligés par la cible pendant 2 tours.",
+   "effet": "−20 % de dégâts × 2 tours",
+   "taux": 1,
+   "tours": 2,
+   "curse": 0.2
   }
  ],
  "lignee": [

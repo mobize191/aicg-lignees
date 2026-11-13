@@ -8134,8 +8134,11 @@ const DATA = {
     "cout": 4,
     "mult": 1.6,
     "classe": "Occultiste",
-    "desc": "L’occultiste marque sa proie d’un mauvais présage.",
-    "effet": "−20 % de précision × 2 tours"
+    "desc": "Malédiction : −20 % de dégâts infligés par la cible pendant 2 tours.",
+    "effet": "−20 % de dégâts × 2 tours",
+    "taux": 1,
+    "tours": 2,
+    "curse": 0.2
    }
   ],
   "lignee": [
@@ -9869,21 +9872,30 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "desc": "Une étincelle qui court plus vite que la flamme.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 2,
+    "curse": 0.15
    },
    {
     "name": "Flèche de Feu",
     "cost": 3,
     "mult": 1.6,
     "desc": "Une flèche enflammée qui accroche l’air.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 2,
+    "curse": 0.18
    },
    {
     "name": "Jet de Braise",
     "cost": 5,
     "mult": 1.9,
     "desc": "Un souffle de braises brûlantes arraché au foyer.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 2,
+    "curse": 0.21
    },
    {
     "name": "Fournaise",
@@ -9891,7 +9903,10 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Le sol s’ouvre et crache un cercle de feu.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2,
+    "curse": 0.24
    },
    {
     "name": "Solen : Couronne de Feu",
@@ -9899,7 +9914,10 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Une couronne de flammes consume les rangs adverses.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2,
+    "curse": 0.27
    },
    {
     "name": "Solen : Braise Éternelle",
@@ -9907,7 +9925,10 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Un feu qui ne s’éteint plus, où que l’ennemi fuie.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2,
+    "curse": 0.3
    }
   ],
   "bosquet": [
@@ -9916,21 +9937,27 @@ const DATA = {
     "cost": 2,
     "mult": 1.4,
     "desc": "Une épine sèche lancée du creux d’un fourré.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 1
    },
    {
     "name": "Lance d’Aubier",
     "cost": 3,
     "mult": 1.6,
     "desc": "Un éclat de bois vert durci par la sève.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 1
    },
    {
     "name": "Épine Vengeresse",
     "cost": 5,
     "mult": 1.9,
     "desc": "La forêt rend coup pour coup à qui la blesse.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 1
    },
    {
     "name": "Rafale d’Épines",
@@ -9938,7 +9965,9 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Une tempête de ronces ferme l’horizon.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2
    },
    {
     "name": "Maïa : Danse des Feuilles",
@@ -9946,7 +9975,9 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Ses feuilles dansent autour de la proie, puis tombent.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2
    },
    {
     "name": "Maïa : Cœur du Bosquet",
@@ -9954,7 +9985,9 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Le bosquet entier se lève et marche au combat.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2
    }
   ],
   "crepuscule": [
@@ -9964,7 +9997,10 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier C.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 2,
+    "curse": 0.15
    },
    {
     "name": "Voile d’Ombre",
@@ -9972,7 +10008,10 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier UC.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 2,
+    "curse": 0.18
    },
    {
     "name": "Malédiction du Soir",
@@ -9980,7 +10019,10 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignage Famille du Crépuscule, palier R.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 2,
+    "curse": 0.21
    },
    {
     "name": "Danse des Ombres",
@@ -9988,7 +10030,10 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier SR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2,
+    "curse": 0.24
    },
    {
     "name": "Oubli Éternel",
@@ -9996,7 +10041,10 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier UR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2,
+    "curse": 0.27
    },
    {
     "name": "Nuit Sans Fin",
@@ -10004,7 +10052,10 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignage Famille du Crépuscule, palier L.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2,
+    "curse": 0.3
    }
   ],
   "vol": [
@@ -10194,7 +10245,9 @@ const DATA = {
     "mult": 1.4,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier C.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.25,
+    "tours": 1
    },
    {
     "name": "Sablier II",
@@ -10202,7 +10255,9 @@ const DATA = {
     "mult": 1.6,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier UC.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.24,
+    "tours": 1
    },
    {
     "name": "Sablier III",
@@ -10210,7 +10265,9 @@ const DATA = {
     "mult": 1.9,
     "big": false,
     "desc": "Sort de lignée Arbitres du Seuil, palier R.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.22,
+    "tours": 1
    },
    {
     "name": "Sablier IV",
@@ -10218,7 +10275,9 @@ const DATA = {
     "mult": 2.6,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier SR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.2,
+    "tours": 2
    },
    {
     "name": "Sablier V",
@@ -10226,7 +10285,9 @@ const DATA = {
     "mult": 3.4,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier UR.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.17,
+    "tours": 2
    },
    {
     "name": "Sablier VI",
@@ -10234,7 +10295,9 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Sort de lignée Arbitres du Seuil, palier L.",
-    "cible": "1 ennemi"
+    "cible": "1 ennemi",
+    "taux": 0.15,
+    "tours": 2
    }
   ],
   "miroir": [
@@ -14874,7 +14937,7 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}) });
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}) });
 const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
   .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
@@ -16507,6 +16570,18 @@ function actTeamStriker(u, i, ctx, step) {
         else if (ek === 'slow') { tgt.status.slow = Math.max(tgt.status.slow ?? 0, u.effect.turns ?? 2); ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'slow', value: u.effect.turns ?? 2 }); }
         else if (ek === 'dot') { tgt.status.dot = { dmg: Math.max(1, Math.round(u.atk * (u.effect.pct ?? M.DOT_EFFECT_DEFAULT) * (spell.mult ?? 1))), turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg }); }
         else if (ek === 'curse') { const v = (u.effect.value ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1); tgt.status.curse = { value: v, turns: u.effect.turns ?? 2 }; ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 }); }
+      }
+      // correctifs sorts lot 5 (TRANCHÉ 14/11) : badge contrôle/malus = le statut est posé EN PLUS des
+      // dégâts, en Tactique ET en Auto (jet de taux ; malus = curse de la valeur du sort, boss réduit de moitié)
+      if (spell && spell.taux != null && tgt.alive && ctx.state.rng() < spell.taux) {
+        if (spell.role === 'malus') {
+          const v = (spell.curse ?? M.CURSE_DEFAULT) * (tgt.boss ? M.CURSE_BOSS_FACTOR : 1);
+          tgt.status.curse = { value: v, turns: spell.tours ?? 2 };
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'curse', value: Math.round(v * 100) / 100 });
+        } else {
+          tgt.status.stun = (tgt.status.stun ?? 0) + (spell.tours ?? 1);
+          ctx.events.push({ type: 'status', side: 'enemies', sourceId: u.uid, targetId: tgt.uid, kind: 'stun', value: spell.tours ?? 1 });
+        }
       }
       if (tgt.alive && tgt.status && tgt.status.reflect && dmgT > 0) {
         const back = Math.max(1, Math.round(dmgT * tgt.status.reflect.pct));
@@ -22711,7 +22786,7 @@ function spellMetaHtml(sp) {
   if (roleLab) bits.push(roleLab);
   if (sp?.cat) bits.push('sort ' + (SPELL_CAT_LABEL[sp.cat] ?? sp.cat));
   if (sp?.mult) bits.push('\u00d7' + String(sp.mult).replace('.', ',') + ' ATQ');
-  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %');
+  if (sp?.taux) bits.push(Math.round(sp.taux * 100) + ' %' + (sp.tours ? ' · ' + sp.tours + (sp.tours > 1 ? ' tours' : ' tour') : ''));
   const zone = zoneLabelOf(sp);
   if (zone) bits.push(zone);
   else if (sp?.cible) bits.push(sp.cible);

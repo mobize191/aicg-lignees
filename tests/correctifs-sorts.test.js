@@ -99,3 +99,81 @@ test('lot 2 : en Auto, la signature bouclier d\u2019une recrue reste une frappe 
   assert.ok(r.events.some((e) => e.type === 'attack' || e.type === 'dodge'), 'Auto = frappe tent\u00e9e (comportement historique conserv\u00e9)');
   assert.ok(!r.events.some((e) => e.type === 'shield'), 'pas de bouclier en Auto');
 });
+
+// lot 5 : badges contrôle/malus = le statut est posé EN PLUS des dégâts (taux/tours en data),
+//         en Tactique ET en Auto ; Œil du Malheur (classe) passe taux/tours/curse via legacySpell
+
+const tanky = (st) => { for (const f of [...st.enemies.avant, ...st.enemies.arriere]) { f.hp = f.maxHp = 100000; } };
+
+test('lot 5 : sort Entrave (bosquet, taux 0,25 tours 1) -> dégâts + stun sur l’ennemi désigné en Tactique', () => {
+  const E = loadEngine();
+  const sp = ligneeSpell(E, 'bosquet', 'Trait d’Épine');
+  assert.equal(sp.taux, 0.25, 'taux en data (palier C)');
+  assert.equal(sp.tours, 1, 'tours en data');
+  assert.equal(sp.role, 'controle');
+  const st = E.initCombat({ avant: [{ ...E.getCard('t6'), spells: [sp] }], arriere: [] }, foesOf(E), 1, {});
+  const u = st.team.avant[0];
+  u.mana = u.manaMax = 20; u.manaRegen = 5; u.agi = 999;
+  tanky(st);
+  E.beginRound(st);
+  const foe = st.enemies.avant[0];
+  const hpBefore = foe.hp;
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: foe.uid });
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === foe.uid), 'le sort garde ses dégâts');
+  assert.ok(foe.hp < hpBefore, 'dégâts réels');
+  assert.ok(r.events.some((e) => e.type === 'status' && e.kind === 'stun' && e.targetId === foe.uid), 'event stun émis');
+  assert.ok((foe.status.stun ?? 0) >= 1, 'stun effectif sur la cible');
+});
+
+test('lot 5 : sort Mauvais-Œil (braise, curse 0,15 × 2 tours) -> dégâts + curse de la valeur du sort', () => {
+  const E = loadEngine();
+  const sp = ligneeSpell(E, 'braise', 'Étincelle Filante');
+  assert.equal(sp.taux, 0.25);
+  assert.equal(sp.tours, 2);
+  assert.equal(sp.curse, 0.15, 'valeur curse en data (palier C)');
+  assert.equal(sp.role, 'malus');
+  const st = E.initCombat({ avant: [{ ...E.getCard('t6'), spells: [sp] }], arriere: [] }, foesOf(E), 1, {});
+  const u = st.team.avant[0];
+  u.mana = u.manaMax = 20; u.manaRegen = 5; u.agi = 999;
+  tanky(st);
+  E.beginRound(st);
+  const foe = st.enemies.avant[0];
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: foe.uid });
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === foe.uid), 'le sort garde ses dégâts');
+  const ev = r.events.find((e) => e.type === 'status' && e.kind === 'curse' && e.targetId === foe.uid);
+  assert.ok(ev, 'event curse émis');
+  assert.equal(ev.value, 0.15, 'valeur curse = celle du sort');
+  assert.deepEqual(foe.status.curse, { value: 0.15, turns: 2 }, 'curse posée 2 tours');
+});
+
+test('lot 5 : en Auto, un sort à taux pose aussi le statut (cohérence des chemins Tactique/Auto)', () => {
+  const E = loadEngine();
+  const sp = ligneeSpell(E, 'seuil', 'Sablier I');
+  const st = E.initCombat({ avant: [{ ...E.getCard('t6'), spells: [sp] }], arriere: [] }, foesOf(E), 1, {});
+  const u = st.team.avant[0];
+  u.mana = u.manaMax = 20; u.manaRegen = 5; u.agi = 999;
+  tanky(st);
+  E.beginRound(st);
+  const r = E.stepRound(st, null); // Auto
+  assert.ok(r.events.some((e) => e.type === 'cast'), 'le sort est lancé en Auto');
+  assert.ok(r.events.some((e) => e.type === 'status' && e.kind === 'stun'), 'stun posé en Auto aussi');
+});
+
+test('lot 5 : Œil du Malheur (classe Occultiste) -> taux 1, tours 2, curse 0,2 en data, curse posée en combat', () => {
+  const E = loadEngine();
+  const def = E.DATA.grimoire.entrees.find((s) => s.id === 'oeil-du-malheur');
+  assert.equal(def.taux, 1);
+  assert.equal(def.tours, 2);
+  assert.equal(def.curse, 0.2);
+  assert.ok(def.desc.includes('dégâts'), 'desc reformulée (−20 % de dégâts × 2 tours)');
+  const sp = { name: def.nom, cost: def.cout, mult: def.mult, cat: 'classe', role: def.role, cible: def.cible, taux: def.taux, tours: def.tours, curse: def.curse };
+  const st = E.initCombat({ avant: [{ ...E.getCard('n12'), spells: [sp] }], arriere: [] }, foesOf(E), 47, {});
+  const u = st.team.avant[0];
+  u.mana = u.manaMax = 20; u.manaRegen = 5; u.agi = 999;
+  tanky(st);
+  E.beginRound(st);
+  const foe = st.enemies.avant[0];
+  const r = E.stepRound(st, { kind: 'spell', idx: 0, targetUid: foe.uid });
+  assert.ok(r.events.some((e) => e.type === 'attack' && e.targetId === foe.uid), 'dégâts conservés');
+  assert.deepEqual(foe.status.curse, { value: 0.2, turns: 2 }, 'curse −20 % × 2 tours posée (taux 1)');
+});
