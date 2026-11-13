@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 40) : SHINY — LES 3 ARBITRAGES TRANCHÉS PAR MARC-OLIVIER (taux 1/100, variance couplée, fusion « au moins un parent ») + réparation de la consignation shiny écrasée + le lot 1 du prompt v2 renvoie à la spec-gel-v1
+
+- **Les 3 propositions shiny TRANCHÉES par Marc-Olivier (15/11)** : **(1) taux = 1/100** à l'obtention de l'exemplaire (aligné sur le taux d'Exception des thèmes, suite 36) ; **(2) couplage variance VALIDÉ** : le shiny EST l'indicateur visible de la variance individuelle de stats (+3-5 % borné, un seul tirage porte les deux — étude §G) ; **(3) fusion : si AU MOINS UN parent est shiny, l'enfant l'est aussi**.
+- **Tranchage d'origine RÉTABLI** (la consignation suite 39 du couloir pilotage avait été écrasée par le push parallèle de la suite 39 gel v1 ; les DEUX suites 39 coexistent donc, gel côté arts, shiny côté pilotage) : **double image par carte — mode NORMAL + mode « shiny »** (version chromatique rare, précédent Pokémon), 4e version d'art en plus du classique/Repos/Obscures : fichier `{id}-s.jpg`, clé `"<id>-s"` au manifeste, génération côté couloir design ; marqueur visuel DISTINCT des thèmes Repos (sweep or 60°), Obscures (liseré rouge sombre) et des rares (105°) [reste une proposition : paillettes ✨ animées] ; badge « ✨ Shiny » en fiche ; compteur + filtre shiny en collection.
+- **PROMPT v2 MIS À JOUR (`docs/prompt-refonte-v2.md`, 11 lots)** : lot 8 SHINY figé avec les 3 tranchages (digest : MESURE attendue, la variance couplée +3-5 % est bornée mais mesurable) ; **lot 1 GEL renvoie désormais à `docs/design/spec-gel-v1.md` comme document d'exécution** (périmètre figé, ids, lots A-I ; digestion : INCHANGÉ attendu sur le gel data pur, cartes hors pools — l'impact digest arrive aux lots donjons/fusion qui peuplent les pools).
+- **Cohérence avec la suite 39 gel (couloir arts)** : la mention « donjons par famille (spec à écrire) » de la spec-gel §4 est corrigée → la spec est LIVRÉE (`spec-donjons-par-famille-v1.md`, suite 38), exécution au lot 5 du prompt. Le shiny s'appliquera aussi aux 49 cartes du gel dès le lot 8 (mêmes mécaniques, l'image `{id}-s.jpg` venant du couloir design).
+- La chasse à la carte parfaite est complète : variance stats (shiny) + thèmes Repos/Obscures (Exception 1/100) = trois couches de rareté, toutes lisibles en fiche, sans collision de marqueurs.
+
 ## 2026-11-15 (suite 39) : LE GEL v1 EST DÉCLARÉ — spec consolidée `spec-gel-v1.md` LIVRÉE (périmètre figé, ids corrigés, 2 arbitrages clos) + PAQUET DE GÉNÉRATION ARTS prêt à lancer (162 prompts ×3, gen-gel-v1.py) — digest INCHANGÉ (commit docs + tools)
 
 - **GEL v1 DÉCLARÉ par Marc-Olivier (« Parfait on gèle là pour la v1 »)** : la spec générale manquante (nommée dans spec-trappes §8) est livrée : **`docs/design/spec-gel-v1.md`** — §1 les 54 cartes figées avec ids et paliers (49 nouvelles + 5 re-arts canon v3.4 n14/p1/p5/p6/z8 ; retraits p2, p4, d8/d14 joueur) ; §2 les recâblages (n14 → d19/d24, n15 → d1/d7/d13 puis garde-fou, éveil lumière du mage retiré, z8 re-race, Légion/Clergé humaines, Dryades livrées, berges hors périmètre) ; §3 les lots d'exécution A-I avec le digest ; §4 la liste FERMEE du hors-périmètre v2 ; §5 les arts (le présent paquet).
@@ -202,40 +210,3 @@
 
 ## 2026-11-14 (suite 23) : MAQUETTE ÉCRAN DE COMBAT VALIDÉE par Marc-Olivier (« C'est bon pour moi ») — dernière retouche (vignettes alliées du boss) + PROMPT COULOIR 1 RÉDIGÉ
 
-- **Validation de Marc-Olivier (14/11)** : la maquette v2.3 (`docs/design/maquettes/ecran-combat-v2.html`) est VALIDÉE, avec une dernière retouche demandée : « sur l'exemple avec le boss, bien remettre les vignettes de mon côté correctement » → vignettes alliées du module boss RÉALIGNÉES symétriquement (mêmes positions que l'exemple standard : marges égales, ligne régulière, 22/147/272 px).
-- **PROMPT COULOIR 1 RÉDIGÉ** : `docs/prompt-repositionnement-ecran-combat.md` (3 lots, style maison) :
-  - **Lot 1** : ordre du tour en RAIL HORIZONTAL EN HAUT (deux camps, ennemis inclus, chip élargi boss, chip pointillé invocation) + compteur vague + vitesse/pause PERSISTANTS haut-droite ; paysage : statut en haut du rail, commandes en bas.
-  - **Lot 2** : fenêtre d'action → BARRE de commandes compacte ≤ 30 % écran (nom + PV/MP + boutons ≥ 44 px, indisponible grisé avec raison, invocation comme un sort) ; fiche flottante à la demande ; réserve ⇄ et mini-log inchangés.
-  - **Lot 3** : icônes ≥ 74 px, boss 118 px ; chiffres PV/PVmax + MP en clair, bouclier = barre dorée au-dessus de la barre PV + badge ; INVOCATIONS en PREMIÈRE LIGNE (rangée dédiée devant chaque camp, carrés 40 px cliquables, PV mini + ⏳) ; ciblage illuminé/grisé, feedback au-dessus de la cible ; géométrie sans chevauchement, camp allié symétrique.
-  - Invariants : terrain jamais recouvert ; digest INCHANGÉ attendu (baseline proposée PR #13 `3b11106f…`/`6c86838b…`, verrouillage en attente) ; moteur/data/calibrage/vitesses hors périmètre.
-- **Suite** : relais du prompt au couloir 1 (les correctifs sorts sont LIVRÉS, PR #13 → le chantier peut partir immédiatement) ; à la livraison : revue pilotage (preuves rejouées, digests, captures portrait/paysage/boss).
-
-## 2026-11-14 (suite 22) : MAQUETTE ÉCRAN DE COMBAT v2.3 — invocations déplacées en PREMIÈRE LIGNE (retour de Marc-Olivier)
-
-- **Demande de Marc-Olivier (14/11, sur la v2.2)** : « Fais des petits carrés pour les invocations et mets-les devant, en première ligne, ça évitera de tout décaler ou de mettre par-dessus ».
-- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.3)** : les petits carrés d'invocation ne sont plus rattachés sous l'icône du lanceur ; ils vivent dans une **RANGÉE DÉDIÉE « première ligne » devant chaque camp** (vers le centre du terrain) : **rien à décaler, rien par-dessus les unités**. Chaque camp a sa rangée : « ▲ ligne avant » alliée (au-dessus des alliés) et « ▼ avant ennemi » (sous les ennemis), de part et d'autre de la ligne de sol.
-- **Cohérence avec le tranchage 7-b** : « un esprit rejoint l'avant » — la première ligne est la position canonique des invocations dans le moteur.
-- **Exemples dans le module boss** : Lame Ardente du Roi en avant ennemi (⏳ 4, bordure rouge pointillée) ; côté allié, Lanterne Sacrée du Prêtre visible et Esprit de l'Ombre de l'Assassin qui apparaît dans la ligne avant au clic sur le bouton de la barre (+ chip pointillé 👁 dans le rail d'ordre). Les carrés restent cliquables (fiche, PV mini, badge ⏳) ; géométrie vérifiée : aucune rangée ne se touche (ennemis < avant ennemi < ligne de sol < ligne avant < alliés).
-- **Reste** : validation de la v2.3 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
-
-## 2026-11-14 (suite 21) : MAQUETTE ÉCRAN DE COMBAT v2.2 — chevauchements du module boss corrigés + invocations en petits carrés (retours de Marc-Olivier)
-
-- **Demandes de Marc-Olivier (14/11, sur la v2.1)** : (1) « attention avec le boss, tu as des icônes qui se chevauchent » ; (2) « un exemple avec des invocations, c'est-à-dire qu'on ajoute des petits carrés en plus ».
-- **Corrigé dans `docs/design/maquettes/ecran-combat-v2.html` (v2.2)** :
-  - **Module boss sans chevauchement** : sbires écartés du boss (Aiguillon gauche, boss centre 118 px, Brute droite, colonnes disjointes) ; alliés répartis sur toute la largeur (8/116/244 px).
-  - **Invocations = PETITS CARRÉS rattachés au lanceur** : carré 40 px à bordure pointillée SOUS l'icône du lanceur, cliquable → fiche de l'invocation (stats dérivées, ttl) ; PV mini + badge ⏳ tours restants sur le carré ; un actif max par lanceur (7-b) ; le bouton d'invocation vit dans la barre de commandes et le chip pointillé 👁 rejoint le rail d'ordre du tour.
-  - **Exemples montrés** : côté ennemi, le Roi des Démons porte sa Lame Ardente (⏳ 4) ; côté allié, le Prêtre porte déjà sa Lanterne Sacrée (⏳ 1) et l'Assassin invoque son Esprit de l'Ombre (⏳ 2) au clic sur le bouton de la barre ; le mini-log rend compte des invocations (frappe de la Lame Ardente, expiration de la Lanterne).
-- **Reste** : validation de la v2.2 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
-
-## 2026-11-14 (suite 20) : MAQUETTE ÉCRAN DE COMBAT v2.1 — 3 demandes de Marc-Olivier intégrées (chiffres, icônes, boss/invocation)
-
-- **Demandes de Marc-Olivier (14/11, sur la maquette v2)** : (1) des chiffres : PV/PVmax, bouclier ; (2) des icônes plus grandes ; (3) montrer un combat de boss (grosse icône) et/ou avec des invocations.
-- **Intégré dans `docs/design/maquettes/ecran-combat-v2.html` (v2.1)** :
-  - **Chiffres sur les unités** : PV/PVmax et MP/MPmax en clair à côté des barres (lecture sans fiche) ; **bouclier = fine barre dorée AU-DESSUS de la barre PV + badge chiffré** (ordre de lecture : bouclier avant PV).
-  - **Icônes agrandies** : unités 56 → 74 px ; **boss 118 px** (nom en gras, chip élargi 👑 36 px dans le rail d'ordre du tour) ; **invocation 50 px à bordure pointillée + badge ttl** (⏳ tours restants) : l'œil distingue plein/boss/invoqué d'un coup.
-  - **Module BOSS + INVOCATION** (portrait interactif) : Roi des Démons 850/1200 + sbires, chip boss dans le rail ; Esprit de l'Ombre invoquable au clic sur le bouton de la barre de commandes (affiche l'invocation sur le terrain + mini-log), badge « 2 tours », rappel « un actif max par lanceur » (tranchage 7-b) ; mini-log avec absorption de bouclier (🛡 absorbe 32).
-- **Reste** : validation de la v2.1 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
-
-## 2026-11-14 (suite 19) : POSITIONNEMENT ÉCRAN DE COMBAT — TRANCHAGE B ACTÉ (« Plutôt une maquette »), MAQUETTE COMPARATIVE LIVRÉE
-
-- **Tranchage de Marc-Olivier (14/11, sur les options A/B de la suite 18)** : **B — d'abord une maquette**, puis le chantier couloir 1.
