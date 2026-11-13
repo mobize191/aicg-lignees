@@ -1,3 +1,9 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 7 (spec vie-jeu Lot 0) LIVRÉE : MANIFESTE D'ASSETS (v1.46)
+
+- **`tools/assets-manifest.json`** (schéma acté 12/11) : 740 entrées (art + bg × assets-v3.json + assets-v3.1.json), chacune `{ id, kind, source{kind:"gen", model:"wai-illustrious-v17", loras[{civitaiId, version, base, trigger, license}], seed}, qa{status, date}, production{path, w, h, ko} }`. Rempli depuis la session 3.2 : prompts/seeds (`tools/prompts-v32.json`, 530 seeds remontés), LoRAs (`tools/lora-verdicts-v32.json`, 72 entrées avec LoRA), dimensions lues dans les JPEG de production.
+- **Licences LoRAs enregistrées pour information, NON bloquantes** (arbitrage 12/11) : champ `license` renseigné « non renseigné (session 3.2) » quand absent des run-logs.
+- Smoke : nouveau check **B8b h** — tout art des manifestes de production a une entrée source+qa. Tests : 2 headless (`tests/assets-manifest-v146.test.js`). 242 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000** (donnée outillée, hors moteur).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 6 (Lot D refonte) LIVRÉE : CAPTURE DQM + VENDEUR À JETONS (v1.45)
 
 - **Capture DQM** : à l'écran Récompenses de chaque combat gagné (donjon ET errance), une ligne « 🐾 Tenter la capture — X % » par monstre recrutable vaincu (hors boss/nommés, `recrutableMonsters` inchangé). % = taux de base de la zone (`zone.recrute.taux`) × démonstration de force = min(`CAPTURE_FORCE_CAP`=3, niveau moyen des actifs / niveau du monstre) — plafonné, affiché avant le choix. **Un seul essai** par monstre (bouton désactivé après clic) ; réussite → `newInst` + collection. L'ancien tirage auto ~1 % à la fin d'étage est supprimé.

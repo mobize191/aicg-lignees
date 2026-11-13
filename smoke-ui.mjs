@@ -1123,6 +1123,20 @@ async function main() {
     api.store.jetons = 0; api.store.gold = 99999;
     check('B8 f recrutement sans jetons refusé (l or ne suffit pas)', api.buyCompagnon(c.id) === false, '');
     check('B8 g 0 exception lot E3a', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+
+    // ---------- B8b : Lot 0 (vie-jeu) — manifeste d'assets tools/assets-manifest.json ----------
+    try {
+      const man = JSON.parse(readFileSync('tools/assets-manifest.json', 'utf8'));
+      const manIds = new Set(man.entries.map((e) => e.production.path + ':' + e.id));
+      const missing = [];
+      for (const mf of ['assets-v3.json', 'assets-v3.1.json']) {
+        const d = JSON.parse(readFileSync(mf, 'utf8'));
+        for (const kind of ['art', 'bg']) for (const aid of Object.keys(d[kind] ?? {})) {
+          if (!manIds.has(mf + ':' + aid)) missing.push(mf + ':' + aid);
+        }
+      }
+      check('B8b h Lot 0 : tout art des manifestes de production a une entrée source+qa', missing.length === 0 && man.entries.every((e) => e.source && e.source.kind && e.qa && e.qa.status), missing.slice(0, 5).join());
+    } catch (e) { check('B8b h Lot 0 : manifeste lisible et couvrant', false, e.message); }
   }
 
   {
