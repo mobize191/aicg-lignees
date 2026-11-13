@@ -1,5 +1,14 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 21) : MAQUETTE ÉCRAN DE COMBAT v2.2 — chevauchements du module boss corrigés + invocations en petits carrés (retours de Marc-Olivier)
+
+- **Demandes de Marc-Olivier (14/11, sur la v2.1)** : (1) « attention avec le boss, tu as des icônes qui se chevauchent » ; (2) « un exemple avec des invocations, c'est-à-dire qu'on ajoute des petits carrés en plus ».
+- **Corrigé dans `docs/design/maquettes/ecran-combat-v2.html` (v2.2)** :
+  - **Module boss sans chevauchement** : sbires écartés du boss (Aiguillon gauche, boss centre 118 px, Brute droite, colonnes disjointes) ; alliés répartis sur toute la largeur (8/116/244 px).
+  - **Invocations = PETITS CARRÉS rattachés au lanceur** : carré 40 px à bordure pointillée SOUS l'icône du lanceur, cliquable → fiche de l'invocation (stats dérivées, ttl) ; PV mini + badge ⏳ tours restants sur le carré ; un actif max par lanceur (7-b) ; le bouton d'invocation vit dans la barre de commandes et le chip pointillé 👁 rejoint le rail d'ordre du tour.
+  - **Exemples montrés** : côté ennemi, le Roi des Démons porte sa Lame Ardente (⏳ 4) ; côté allié, le Prêtre porte déjà sa Lanterne Sacrée (⏳ 1) et l'Assassin invoque son Esprit de l'Ombre (⏳ 2) au clic sur le bouton de la barre ; le mini-log rend compte des invocations (frappe de la Lame Ardente, expiration de la Lanterne).
+- **Reste** : validation de la v2.2 par Marc-Olivier, puis prompt couloir 1 « repositionnement écran combat » (pure UI, digest inchangé attendu, APRÈS la livraison des correctifs sorts).
+
 ## 2026-11-14 (suite 20) : MAQUETTE ÉCRAN DE COMBAT v2.1 — 3 demandes de Marc-Olivier intégrées (chiffres, icônes, boss/invocation)
 
 - **Demandes de Marc-Olivier (14/11, sur la maquette v2)** : (1) des chiffres : PV/PVmax, bouclier ; (2) des icônes plus grandes ; (3) montrer un combat de boss (grosse icône) et/ou avec des invocations.
@@ -250,33 +259,3 @@
 | 6 | D : capture + jetons | `aa513ea` | 240 | inchangé |
 | 7 | Lot 0 : manifeste assets | `67000b3` | 242 | inchangé |
 | 8 | Lot 2 : feedback 3 tiers + hit-stop | `82adef5` | 246 | inchangé |
-| 9 | Lot 3 : héros d'errance par code | `fa8e634` | 249 | inchangé |
-| 10 | Lot 4 : UI/UX mobile | `353b1f2` | 249 | inchangé |
-| 11 | Lot 5 : vérifications level design | `ed5a49f` | 252 verts | inchangé |
-
-Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste, sweep) ; échecs restants = préexistants (43 B, 45 e, B1 c, B29 h + crash B9 lié au changement de jour, identiques sur la baseline). 252/252 tests verts au final.
-
-**Baseline digest PROPOSÉE (cumul étapes 2+3+4), JAMAIS APPLIQUÉE sans arbitrage de Marc-Olivier** : `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000, vs baseline verrouillée `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000. Justification de l'écart (−443/3000, −1441/10000) : principalement l'étape 2 — les équipes du harnais (2 avant + 1 arrière) passent à 2 actifs + 1 réserve (un combattant de moins) ; étapes 3-4 quasi neutres en taux (835→838/3000, 2797→2795/10000). Verrouillage proposé avec la validation IHM S26.
-
-**Défauts appliqués aux questions ouvertes, [À TRANCHER]** :
-- SCHOOL_ELEMENT (mapping école → élément) : lame=Neutre, baume/appel/ferveur=Lumière, rempart=Nature, entrave/mauvais-oeil=Ombre, ruse=Eau.
-- Synergies de combat calculées sur les 3 actifs seuls (pas les 5).
-- Autel relève aussi les K.O. (comportement existant conservé, documenté).
-- Héros : fichier `src/errance-hero.js` (arbo plate du dépôt, spec disait `errance/hero.js`) ; tenue sous la cape = non peinte (couverte) — proposition cuir sombre + liseré doré.
-- Jetons : prix compagnons C 5 → UR 200 ; sources donjon bouclé +10, jalon +5, quêtes +1/+2/+4.
-- Hit-stop 90 ms, kill switch `FX_HITSTOP=false` en 1 ligne en data.
-
-**Conflits spec vs code signalés** : aucun bloquant. Note : l'heuristique de ciblage IA (utilité) lit encore l'élément de la carte, pas l'école du sort (impact marginal sur le choix de cible, dégâts eux bien école-du-sort).
-
-**Reste à valider par Marc-Olivier** : scénario IHM S26 (téléphone ET PC, captures héros 3 états + sweep), verrouillage de la baseline proposée, courbe de difficulté (Lot C : 3 actifs + survie persistante, pas de recalibrage fait).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 11 (spec vie-jeu Lot 5) LIVRÉE : VÉRIFICATIONS LEVEL DESIGN (v1.50)
-
-- **Reachabilité errance** : test headless génératif — depuis le spawn des 5 zones, le A* existant atteint porte de donjon, autel, CHAQUE jarre et le retour ville (tous atteignent, aucun soft-lock). `tests/leveldesign-v150.test.js`.
-- **Graphe d'acquisition** : check acyclicité — chaîne de donjons linéaire (req vers donjon existant, premier sans req), difficultés ordonnées, zones chaînées sans cycle, rencontres de zone = monstres existants. Aucune ressource derrière son propre déblocage.
-- **Table de beats par zone en data** : `zone.errance.beats = { intensite 0-1, encRate }` (Marées 0.2 → Zénith 1.0) ; la même table pilote le taux de rencontre lu par le moteur (`encRate`, inchangé) — aucun taux modifié donc **digest inchangé**.
-- 252 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000**.
-- Reste à valider en IHM (téléphone+PC) : captures héros 3 états + sweep résolutions (scénarios ajoutés à `docs/validation-ihm.md` en clôture).
-
-## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 10 (spec vie-jeu Lot 4) LIVRÉE : UI/UX MOBILE (v1.49)
-
