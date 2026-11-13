@@ -613,6 +613,42 @@ test('refonte IA lot 1 : enemyPickTarget avec état délègue à l\'utilité (r�
   assert.equal(E.enemyPickTarget(e, [weak, strong], 10, st).uid, 'e1', 'avec état : utilité + hystérésis');
 });
 
+// ---------- correctifs smoke+IA lot 2 : le scoring de ciblage lit l'ÉCOLE du sort, pas l'élément de la carte ----------
+test('lot 2 : sort d\u2019école Eau (ruse) lancé depuis une carte Feu cible la cible Feu, pas la Nature', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'Feu'); // carte Feu
+  const sortRuse = { name: 'Sournois', cost: 2, mult: 1.5, role: 'degats', ecole: 'ruse' }; // école ruse = Eau
+  const atkEl = E.atkElementOf(atk, sortRuse);
+  assert.equal(atkEl, 'Eau', 'élément effectif du coup = élément de l\u2019école du sort');
+  const cibleFeu = targetUnit('e1', 80, 5, 'avant', 'Feu');       // vulnérable à l'Eau
+  const cibleNature = targetUnit('e2', 80, 5, 'avant', 'Nature');  // vulnérable à la carte (Feu) mais pas au sort
+  const st = targetState([targetUnit('t1', 100, 10)], [cibleFeu, cibleNature]);
+  const t = E.pickTargetByUtility(atk, [cibleFeu, cibleNature], 10, st, 'enemies', atkEl);
+  assert.equal(t.uid, 'e1', 'la cible vulnérable à l\u2019école du sort gagne (opposition Eau > Feu), pas celle de la carte');
+});
+
+test('lot 2 : enemyPickTarget reçoit l\u2019élément effectif du coup (école du sort ennemi)', () => {
+  const E = loadEngine();
+  const e = targetUnit('a1', 100, 10, 'avant', 'Feu'); // carte Feu, sort d'école Eau
+  const cibleFeu = targetUnit('e1', 80, 5, 'avant', 'Feu');
+  const cibleNature = targetUnit('e2', 80, 5, 'avant', 'Nature');
+  const st = targetState([cibleFeu, cibleNature], [targetUnit('t1', 100, 10)]);
+  const t = E.enemyPickTarget(e, [cibleFeu, cibleNature], 10, st, 'Eau');
+  assert.equal(t.uid, 'e1', 'l\u2019IA ennemie cible la cible vulnérable à l\u2019école du sort joué');
+});
+
+test('lot 2 : frappe simple, c\u2019est l\u2019élément de la carte qui frappe qui score (Eau vs cible Feu)', () => {
+  const E = loadEngine();
+  const atk = targetUnit('a1', 100, 10, 'avant', 'Eau');
+  const atkEl = E.atkElementOf(atk, null);
+  assert.equal(atkEl, 'Eau', 'frappe simple = élément de la carte');
+  const feu = targetUnit('e1', 80, 5, 'avant', 'Feu');
+  const eau = targetUnit('e2', 80, 5, 'avant', 'Eau');
+  const st = targetState([targetUnit('t1', 100, 10)], [feu, eau]);
+  const t = E.pickTargetByUtility(atk, [feu, eau], 10, st, 'enemies', atkEl);
+  assert.equal(t.uid, 'e1', 'la cible de l\u2019élément opposé à la carte est préférée en frappe simple');
+});
+
 // ---------- refonte IA lot 2 : choix de sort contextuel ----------
 const spellCtx = (E, u, allies, foes) => ({ state: { turn: 1, rng: mulberry32(1), team: { avant: allies, arriere: [] }, enemies: { avant: foes, arriere: [] }, mods: {} }, allies: { avant: allies, arriere: [] }, foes, side: 'team' });
 

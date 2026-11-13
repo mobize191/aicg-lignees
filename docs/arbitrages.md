@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 : LOT 2 LIVRÉ — heuristique IA : école du sort dans le scoring de ciblage (MESURE consignée) — prompt `docs/prompt-correctifs-smoke-ia.md`
+
+- **Correctif** : `targetUtilityScore` / `pickTargetByUtility` / `enemyPickTarget` (`src/engine/combat.js`) scoraient avec l'élément de la **carte** ; elles recoivent désormais l'élément **effectif du coup** (`atkElementOf` : école du sort joué, frappe simple = élément de la carte), transmis depuis `strikeFoe` et `actEnemyStriker`. Les dégâts étaient déjà école-du-sort depuis l'étape 3 ; seul le choix de cible était faussé. Aucun changement des maths de combat, pas de recalibrage.
+- **Tests headless semés** (3 nouveaux, `tests/combat.test.js`) : sort d'école Eau (ruse) lancé depuis une carte Feu cible la cible **Feu** (vulnérable à l'Eau), pas la Nature (vulnérable à la carte) ; idem côté `enemyPickTarget` ; frappe simple = élément de la carte (Eau vs cible Feu préférée).
+- **MESURE** : build OK, **255 tests verts**, smoke **412 checks TOUT PASSE**, digests **MESURÉS `63d6edb4…` 833/3000 et `25e5316b…` 2787/10000** (0 exception, 0 marathon) vs baseline PROPOSÉE `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000 → écart **−5/3000 (−0,17 pt) et −8/10000 (−0,08 pt)**, dans la tolérance. **Aucune baseline appliquée** (verrouillage toujours en attente de Marc-Olivier), **pas de recalibrage**.
+
 ## 2026-11-13 : LOT 1 LIVRÉ — smoke robuste (script de test uniquement, jeu inchangé) — prompt `docs/prompt-correctifs-smoke-ia.md`
 
 - **B9 c crash selon la date** : `list.find(x => x.type === 'tuer')` plantait quand la petite quête du jour n'est pas « tuer ». Corrigé : la section progresse la **première quête non faite, quel que soit son type**, et vérifie **sa** récompense. Garde-fou ajouté (B9 h) : **7 dates simulées** (même seed FNV-1a que `seedOfDay`, même tirage que `quetesDuJour`) sans crash.
