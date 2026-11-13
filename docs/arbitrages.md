@@ -1,5 +1,10 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-14 (suite 23) : RETOUR TERRAIN PC (2e) — « encore une marge de progression » → polish grand écran (pure UI, digest inchangé)
+
+- **Correctif** (branche `vibe/grand-ecran-polish-ec66f9`) : en paysage ≥ 1200px, unités act-open relevées (`clamp(140px, 10vw, 240px)`, boss 300px ; fermées 280/360px), rail latéral ramené à `min(400px, 24vw)` (plus de plateau), plateau centré verticalement (`justify-content: safe center` — sans rogner le haut si débordement).
+- **Preuves** : 279 tests, smoke 421 TOUT PASSE, sweep Playwright 43/43 (2560×1080 : unités 240px, marges symétriques 345/345px, app = 100 % largeur, 0 recouvrement, 0 erreur console), **digests inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `polish-*`.
+
 ## 2026-11-13 (suite 17) : CANON TRANCHÉ — MTG pour mystiques/fongiques, D&D pour le divin
 
 - **TRANCHÉ par Marc-Olivier : MTG = canon de référence** (« un des très bons canons de jeu qui existe ») pour dryades, luciole/esprits, nymphes et créations fongiques ; **D&D** pour l'Astre Capiteux (solar = ange solaire AILÉ, ajout des ailes acté).
