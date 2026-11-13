@@ -1,5 +1,14 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 (suite 7) : ARBRES V18 — document de référence livré (inventaire exhaustif design vs jeu)
+
+> `docs/design/design-arbres-v18.md` devient la référence courante des arbres (remplace le v17 archivé comme document de repérage), établi depuis les data v1.51 : 150 cartes, 159 monstres, 14 familles, 15 naissances, 6 biomes. Quatre usages : (1) localiser chaque carte par famille/race/biome ; (2) voir les trous restants pour valider la v1 (anges et démons en tête) ; (3) poser la table de synthèse de la fusion DQM v4 ; (4) trancher les lignées uniques du début de jeu.
+
+- **Inventaire verrouillé** : les 15 naissances et leurs voies (4 novices, 5 Embryons, 3 Enge, Ange/Démon/Éveillé du Seuil), les 14 familles jouables complètes C → L (7 humaines, 4 v3, 3 divines joueur), mini-lignées/greffes/graines (séries a/b/c), les 6 biomes de monstres, le Séraphin et les lignées d'accueil des Enge (p-series, w19-w21), le gel v1 détaillé (≈ 39 cartes : 12 démons, 4 anges dévoyés, 4 paladin, 4 chevalier, 8 gorgones, 7 fées) et une checklist de validation de la v1.
+- **Fusion (PROPOSÉ, à trancher avant le lot 1 du couloir)** : catégories de la table de synthèse posées au §7 du v18 — même famille → même famille ; deux humaines → hasard sauf prédominante ; humaine + aquatique → sirène via Sirène Nouvelle (w19) ; humaine + ent → dryade via Pousse des Sèves (p3) ; humaine + ange → demi-ange (interim : Éveillé du Seuil n15) ; deux divines → hasard plafonné ; naissance N et mythique M → refus. **[À TRANCHER] humaine + démon** : hybride diable (symétrie du demi-ange) ou famille démon au hasard — recommandation : défaut « A » au lot 1, à poser en même temps que le lot d'arts du gel.
+- **Lignées uniques du début de jeu (PROPOSÉ, à trancher avec le lore du Lieur)** : 4 starters, une par novice — lame (Kenji), eau (Alix), aube (Léna), ombre (Kira) ; prédominance en fusion (marge déjà réservée par la spec v4) ; les non-choisies gated très tard en fin de jeu ; monstres recrutés et races supérieures (mystique/divine) NON gated. Questions ouvertes : fin de la prédominance, sortie de lignée de la 2e carte de départ, rôle narratif de la L du starter.
+- **Repère technique** : commit de docs seul → digest inchangé attendu contre la baseline verrouillée `9faff1b9…`/`6103e7b0…`.
+
 ## 2026-11-13 (suite 6) : RETOURS TERRAIN (9e signalement de Marc-Olivier) — 7 bugs confirmés, 1 expliqué, 1 à prouver + ASCENDANCE RETIRÉE
 
 > Diagnostics vérifiés dans le code par le couloir pilotage ; prompt pour le couloir 1 : `docs/prompt-correctifs-v1.51.md` (3 lots). Ordre couloir 1 : lots 1-3 du prompt smoke/IA (en cours), PUIS ce chantier, PUIS fusion DQM v4.
