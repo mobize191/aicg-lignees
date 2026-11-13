@@ -1,7 +1,5 @@
 # Journal des arbitrages et décisions
 
-<<<<<<< HEAD
-=======
 ## 2026-11-14 (suite 23) : RETOUR TERRAIN PC (2e) — « encore une marge de progression » → polish grand écran (pure UI, digest inchangé)
 
 - **Correctif** (branche `vibe/grand-ecran-polish-ec66f9`) : en paysage ≥ 1200px, unités act-open relevées (`clamp(140px, 10vw, 240px)`, boss 300px ; fermées 280/360px), rail latéral ramené à `min(400px, 24vw)` (plus de plateau), plateau centré verticalement (`justify-content: safe center` — sans rogner le haut si débordement).
@@ -18,7 +16,6 @@
 - **Annonce Marc-Olivier** : il ajoute les cartes manquantes en masse (la liste était très incomplète) ; ensuite préparation des prompts 3.4 (normales + spéciales), puis il construira un GRAND TABLEAU comparatif des versions 3 → 3.4 (+ 3.4 bis…) indiquant pour chaque version quelle image est la normale et laquelle est la spéciale → source de vérité pour le choix d'art par version.
 
 
->>>>>>> vibe/grand-ecran-polish-ec66f9
 ## 2026-11-14 (suite 22) : RETOUR TERRAIN PC — combat trop petit sur grand écran, espace perdu → CORRIGÉ (pure UI, digest inchangé)
 
 - **Signalement Marc-Olivier (PC, écran large ~2551px)** : « tout petit, beaucoup d'espace perdu » (capture fournie). Cause : en paysage, #app remplissait la largeur mais les unités restaient cappées (120-160px) et les rangées centrées → grand vide autour.
