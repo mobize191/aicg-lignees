@@ -1,3 +1,37 @@
+## 2026-11-12 : GRAND LANCEMENT — CLÔTURE (rapport final, v1.40 → v1.50)
+
+**Par étape** (un commit FR chacune, preuves : build + `node --test tests/*.test.js` + smoke + digests) :
+
+| Étape | Lot | Commit | Tests | Digest |
+|---|---|---|---|---|
+| 1 | v1.40 errance | `c03210a` | 214 verts (1 préexistant date) | inchangé `c62fcbd1…`/`5059e683…` |
+| 2 | A : formation 3+2 | `207044a` | 220 | MESURÉ `5bdb0c6d…` 822/3000, `1122225c…` 2787/10000 |
+| 3 | B : oppositions au sort + Nature | `5796663` | 225 | MESURÉ `daef2bca…` 835/3000, `883c1c18…` 2797/10000 |
+| 4 | Lot 1 : crits d'agilité | `60c6f7e` | 230 | MESURÉ `9faff1b9…` 838/3000, `6103e7b0…` 2795/10000 |
+| 5 | C : points de repos | `348d0de` | 234 | inchangé `9faff1b9…`/`6103e7b0…` |
+| 6 | D : capture + jetons | `aa513ea` | 240 | inchangé |
+| 7 | Lot 0 : manifeste assets | `67000b3` | 242 | inchangé |
+| 8 | Lot 2 : feedback 3 tiers + hit-stop | `82adef5` | 246 | inchangé |
+| 9 | Lot 3 : héros d'errance par code | `fa8e634` | 249 | inchangé |
+| 10 | Lot 4 : UI/UX mobile | `353b1f2` | 249 | inchangé |
+| 11 | Lot 5 : vérifications level design | `ed5a49f` | 252 verts | inchangé |
+
+Smoke : nouveaux checks B8b h (manifeste) et B8c a-d (safe-area, ◆, contraste, sweep) ; échecs restants = préexistants (43 B, 45 e, B1 c, B29 h + crash B9 lié au changement de jour, identiques sur la baseline). 252/252 tests verts au final.
+
+**Baseline digest PROPOSÉE (cumul étapes 2+3+4), JAMAIS APPLIQUÉE sans arbitrage de Marc-Olivier** : `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000, vs baseline verrouillée `c62fcbd1…` 1281/3000 / `5059e683…` 4236/10000. Justification de l'écart (−443/3000, −1441/10000) : principalement l'étape 2 — les équipes du harnais (2 avant + 1 arrière) passent à 2 actifs + 1 réserve (un combattant de moins) ; étapes 3-4 quasi neutres en taux (835→838/3000, 2797→2795/10000). Verrouillage proposé avec la validation IHM S26.
+
+**Défauts appliqués aux questions ouvertes, [À TRANCHER]** :
+- SCHOOL_ELEMENT (mapping école → élément) : lame=Neutre, baume/appel/ferveur=Lumière, rempart=Nature, entrave/mauvais-oeil=Ombre, ruse=Eau.
+- Synergies de combat calculées sur les 3 actifs seuls (pas les 5).
+- Autel relève aussi les K.O. (comportement existant conservé, documenté).
+- Héros : fichier `src/errance-hero.js` (arbo plate du dépôt, spec disait `errance/hero.js`) ; tenue sous la cape = non peinte (couverte) — proposition cuir sombre + liseré doré.
+- Jetons : prix compagnons C 5 → UR 200 ; sources donjon bouclé +10, jalon +5, quêtes +1/+2/+4.
+- Hit-stop 90 ms, kill switch `FX_HITSTOP=false` en 1 ligne en data.
+
+**Conflits spec vs code signalés** : aucun bloquant. Note : l'heuristique de ciblage IA (utilité) lit encore l'élément de la carte, pas l'école du sort (impact marginal sur le choix de cible, dégâts eux bien école-du-sort).
+
+**Reste à valider par Marc-Olivier** : scénario IHM S26 (téléphone ET PC, captures héros 3 états + sweep), verrouillage de la baseline proposée, courbe de difficulté (Lot C : 3 actifs + survie persistante, pas de recalibrage fait).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 11 (spec vie-jeu Lot 5) LIVRÉE : VÉRIFICATIONS LEVEL DESIGN (v1.50)
 
 - **Reachabilité errance** : test headless génératif — depuis le spawn des 5 zones, le A* existant atteint porte de donjon, autel, CHAQUE jarre et le retour ville (tous atteignent, aucun soft-lock). `tests/leveldesign-v150.test.js`.
