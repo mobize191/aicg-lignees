@@ -899,6 +899,13 @@ body.in-combat .act-modal { max-height: 30dvh; }
 /* correctifs v2 lot 1 : nom du combattant actif en gras +1 cran, « à vous d'agir » en badge or */
 .act-name { font-size: 1.05rem; font-weight: 900; }
 .acting-badge { background: linear-gradient(135deg, #ffe082, #ffd54f); color: #241303; border-color: transparent; font-weight: 900; }
+/* correctifs v3 lot 3 : bandeau d’état permanent dans la zone de commandement — « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » */
+#turn-banner { flex: 0 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; padding: 7px 12px; font-size: .88rem; font-weight: 800; background: rgba(16, 21, 33, .92); border-top: 2px solid rgba(255, 213, 79, .45); }
+#turn-banner .tb-now { color: #ffe9b0; }
+#turn-banner .tb-now b { color: #ffd54f; }
+#turn-banner .tb-next { color: #9fb0c8; font-weight: 600; font-size: .78rem; }
+#turn-banner .chip.mine { color: #4dd0e1; border-color: rgba(77, 208, 225, .5); }
+#turn-banner .chip.foe { color: #ffb3bd; border-color: rgba(255, 92, 108, .5); }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
@@ -22814,6 +22821,32 @@ function renderRail(actorUid = null) {
     const chip = railEl.querySelector('.rail-chip.acting');
     if (chip) chip.scrollIntoView({ block: 'nearest', inline: 'center' });
   }
+  lastActorUid = actorUid;
+  renderTurnBanner(actorUid); // correctifs v3 lot 3 : bandeau d'état permanent (qui joue + la file des suivants)
+}
+
+let lastActorUid = null;
+// correctifs v3 lot 3 : bandeau permanent DANS la zone de commandement — « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » ;
+// quand c'est au joueur, la fenêtre de commandes remplace le bandeau (même zone, hauteur fixe, terrain stable)
+function renderTurnBanner(actorUid) {
+  if (!combatApp) return;
+  const slot = combatApp.querySelector('#act-slot');
+  if (!slot) return;
+  let banner = slot.querySelector('#turn-banner');
+  if (actBox) { if (banner) banner.remove(); return; }
+  const items = railItems();
+  const idx = items.findIndex((it) => it.u.uid === actorUid);
+  const actor = idx >= 0 ? items[idx].u : null;
+  const nexts = (idx >= 0 ? items.slice(idx + 1) : items).filter((it) => it.u.alive).slice(0, 4).map((it) => it.u.name);
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.setAttribute('id', 'turn-banner');
+    slot.insertBefore(banner, slot.querySelector('#log') ?? null);
+  }
+  if (!actor) { banner.innerHTML = '<span class="tb-now">\u25b6 Pr\u00e9paration du tour\u2026</span>'; return; }
+  const side = items[idx].side === 'team' ? 'alli\u00e9' : 'ennemi';
+  const sideCls = items[idx].side === 'team' ? 'mine' : 'foe';
+  banner.innerHTML = `<span class="tb-now">\u25b6 Tour de <b>${actor.name}</b> <span class="chip ${sideCls}">${side}</span></span><span class="tb-next">ensuite : ${nexts.join(' \u203a ') || '\u2014'}</span>`;
 }
 
 function fightLabel() {
@@ -22942,6 +22975,7 @@ function bindTargetHover() {
 function closeActModal() {
   if (actBox) { actBox.remove(); actBox = null; }
   document.body.classList.remove('act-open');
+  renderTurnBanner(lastActorUid); // correctifs v3 lot 3 : le bandeau revient dans la zone permanente
   for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
   clearActHighlights();
   const ps = promptState;
@@ -22965,6 +22999,7 @@ function renderActModal(u, zoneHtml) {
     <div class="act-zone">${zoneHtml}</div>`;
   const actSlot = combatApp ? combatApp.querySelector('#act-slot') : null;
   const slot = actSlot ?? document.body; slot.insertBefore(actBox, slot.querySelector('#log') ?? null); // UX 13/11 lot 1 + correctifs v3 lot 2 : fenêtre DANS #act-slot, AVANT le mini-log (zone permanente)
+  renderTurnBanner(null); // correctifs v3 lot 3 : la fenêtre de commandes REMPLACE le bandeau dans la zone fixe
   document.body.classList.add('act-open');
   const redBtn = actBox.querySelector('.act-reduce');
   if (redBtn) redBtn.onclick = () => {
@@ -23211,6 +23246,7 @@ function promptUnitAction(u, kind) {
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
         document.body.classList.remove('act-open');
+        renderTurnBanner(lastActorUid); // correctifs v3 lot 3
         for (const o of document.body.querySelectorAll('.float-fiche')) o.remove();
         resolve(choice);
       },

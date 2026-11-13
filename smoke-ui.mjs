@@ -326,7 +326,29 @@ async function main() {
       const slot2 = appEl.querySelector('#act-slot');
       const kids = slot2 ? [...slot2.children].map((c) => c.className || c.id) : [];
       check('54 i lot 2 : fenêtre .act-modal insérée AVANT #log dans la zone fixe', !!am54 && slot2 && kids[0] === 'act-modal' && kids[kids.length - 1] === 'log', `kids=${kids.join(',')}`);
+      // lot 3 : la fenêtre remplace le bandeau dans la zone permanente
+      const slotB = appEl.querySelector('#act-slot');
+      check('54 j lot 3 : fenêtre ouverte -> bandeau #turn-banner MASQUÉ', !!am54 && !!(slotB && !slotB.querySelector('#turn-banner')), '');
+      const pass = am54 ? am54.querySelector('.act-pass') : null;
+      if (pass) pass.click();
+      // le bandeau vit pendant les tours sans fenêtre (ennemis) : scrutation fine, fenêtre fermée requise
+      let bannerBack = null, consistent = false;
+      for (let w = 0; w < 400 && !consistent; w++) {
+        await wait(10);
+        if (api._actEl()) continue; // fenêtre ouverte : le bandeau est masqué, on attend
+        bannerBack = appEl.querySelector('#turn-banner');
+        const chipA = [...appEl.querySelectorAll('.rail-chip')].find((el) => el.classList.contains('acting'));
+        const unitA = [...appEl.querySelectorAll('.unit')].find((el) => el.classList.contains('acting'));
+        const nmChip = chipA && chipA.querySelector('.rc-nm');
+        const bEl = bannerBack && bannerBack.querySelector('.tb-now b');
+        // bandeau et rail doivent toujours désigner le même combattant ; le terrain aussi quand il est marqué
+        if (bannerBack && bEl && nmChip && bEl.textContent === nmChip.textContent && (!unitA || (unitA._unit && bEl.textContent === unitA._unit.name))) consistent = true;
+      }
+      const bt = bannerBack ? (bannerBack.textContent || '') : '';
+      check('54 k lot 3 : bandeau « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » rendu dans la zone permanente', !!bannerBack && bt.includes('Tour de') && bt.includes('ensuite'), bt.slice(0, 90));
+      check('54 l lot 3 : bandeau + rail + terrain désignent TOUJOURS le même combattant', consistent, bt.slice(0, 90));
     }
+    check('54 m lot 3 CSS : #turn-banner + .tb-next (file des suivants) présents', html.includes('#turn-banner .tb-next') && html.includes('#turn-banner .tb-now'), '');
     check('54 z 0 exception correctifs v3 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 

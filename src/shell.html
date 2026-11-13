@@ -899,6 +899,13 @@ body.in-combat .act-modal { max-height: 30dvh; }
 /* correctifs v2 lot 1 : nom du combattant actif en gras +1 cran, « à vous d'agir » en badge or */
 .act-name { font-size: 1.05rem; font-weight: 900; }
 .acting-badge { background: linear-gradient(135deg, #ffe082, #ffd54f); color: #241303; border-color: transparent; font-weight: 900; }
+/* correctifs v3 lot 3 : bandeau d’état permanent dans la zone de commandement — « ▶ Tour de [Nom] » + « ensuite : X › Y › Z » */
+#turn-banner { flex: 0 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; padding: 7px 12px; font-size: .88rem; font-weight: 800; background: rgba(16, 21, 33, .92); border-top: 2px solid rgba(255, 213, 79, .45); }
+#turn-banner .tb-now { color: #ffe9b0; }
+#turn-banner .tb-now b { color: #ffd54f; }
+#turn-banner .tb-next { color: #9fb0c8; font-weight: 600; font-size: .78rem; }
+#turn-banner .chip.mine { color: #4dd0e1; border-color: rgba(77, 208, 225, .5); }
+#turn-banner .chip.foe { color: #ffb3bd; border-color: rgba(255, 92, 108, .5); }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
