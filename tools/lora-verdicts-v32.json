@@ -1,0 +1,76 @@
+{
+ "goblin": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "IL_10.safetensors",
+  "trigger": "g0bl1nr4ce"
+ },
+ "treant": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Treant"
+ },
+ "dryad": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Dryad"
+ },
+ "fireflySpirit": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Forest-Guardians-000014.safetensors",
+  "trigger": "FG-V2.0-Spirit"
+ },
+ "magmaGolem": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Golems.safetensors",
+  "trigger": "Magma Golem"
+ },
+ "seaBehemoth": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Leviatan.safetensors",
+  "trigger": "leviathan a sea monster"
+ },
+ "lich": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "wow-undead.safetensors",
+  "trigger": "xundeadx"
+ },
+ "reaper": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "wow-undead.safetensors",
+  "trigger": "xundeadx"
+ },
+ "undeadCaptain": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "wow-undead.safetensors",
+  "trigger": "xundeadx"
+ },
+ "widowGhost": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "wow-undead.safetensors",
+  "trigger": "xundeadx"
+ },
+ "banshee": {
+  "kept": false,
+  "reason": "dérive anime/3D (elfe pâle illustrée), tache rouge sur témoin w0.6-0 — style painterly non conservé"
+ },
+ "fungusQueen": {
+  "kept": false,
+  "reason": "produit un champignon géant, pas une créature fongique ; signatures artiste visibles en coin bas-droit"
+ },
+ "beastDark": {
+  "kept": true,
+  "weight": 0.7,
+  "file": "Creepy Wolf Monster (SFW-NSFW) - IL.safetensors",
+  "trigger": "CWM-WolfIL"
+ }
+}

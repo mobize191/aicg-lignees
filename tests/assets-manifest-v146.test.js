@@ -11,7 +11,7 @@ test('Lot 0 : le manifeste couvre tous les arts des manifestes de production ave
   const man = JSON.parse(readFileSync('tools/assets-manifest.json', 'utf8'));
   assert.ok(Array.isArray(man.entries) && man.entries.length > 0);
   const byKey = new Map(man.entries.map((e) => [e.production.path + ':' + e.id, e]));
-  for (const mf of ['assets-v3.json', 'assets-v3.1.json']) {
+  for (const mf of ['assets-v3.json', 'assets-v3.1.json', 'assets-v32.json', 'assets-v33.json']) { // v1.51 : 4 manifestes de production
     const d = JSON.parse(readFileSync(mf, 'utf8'));
     for (const kind of ['art', 'bg']) {
       for (const aid of Object.keys(d[kind] ?? {})) {

@@ -1,6 +1,6 @@
-# Prompt — correctifs smoke + heuristique IA (après le grand lancement, couloir 1)
+# Prompt — correctifs smoke + heuristique IA + UI réserve (après le grand lancement, couloir 1)
 
-Contexte : revue indépendante du couloir pilotage (`docs/historique/revue-v1.50.md`) — le grand lancement v1.39 → v1.50 est livré et conforme. Deux petites dettes restent, à régler en 2 lots, un commit FR par lot. Ces correctifs ne touchent NI les maths de combat, NI le flux de jeu du joueur (sauf le lot 2 sur le ciblage IA, à MESURER).
+Contexte : revue indépendante du couloir pilotage (`docs/historique/revue-v1.50.md`) — le grand lancement v1.39 → v1.50 est livré et conforme. Trois chantiers courts restent, en 3 lots, un commit FR par lot. Ces correctifs ne touchent NI les maths de combat, NI le flux de jeu du joueur (le lot 2, ciblage IA, est à MESURER ; le lot 3 est de la présentation pure — mécanique de réserve INCHANGÉE).
 
 ## Lot 1 — smoke robuste (script de test, pas le jeu)
 
@@ -11,8 +11,16 @@ Contexte : revue indépendante du couloir pilotage (`docs/historique/revue-v1.50
 ## Lot 2 — heuristique IA : école du sort, pas élément de la carte
 
 1. Conflit signalé en clôture du grand lancement : le scoring d'utilité (ciblage IA, refonte v1.34) lit encore **l'élément de la carte** au lieu de **l'école du sort** envisagé. Les dégâts sont bien calculés école-du-sort depuis l'étape 3 ; seul le choix de cible/sort est faussé. Corriger : pour chaque coup évalué, scorer avec l'élément EFFECTIF du coup (école du sort joué ; frappe simple = élément de la carte qui frappe).
-2. **MESURE digest 3000 + 10 000** : le ciblage change, les combats auto-résolus peuvent changer → MESURER et consigner l'écart vs la baseline PROPOSÉE `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000. **Aucune baseline appliquée sans arbitrage de Marc-Olivier. PAS de recalibrage.**
+2. **MESURE digest 3000 + 10 000** : le ciblage change, les combats auto-résolus peuvent changer → MESURER et consigner l'écart vs la baseline **VERROUILLÉE par Marc-Olivier (13/11)** : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000. **PAS de recalibrage** ; tout écart est consigné pour arbitrage avant tout nouveau verrouillage.
 3. Tests headless : l'IA préfère la cible la plus vulnérable à l'école du sort joué (cas construits : sort Eau vs cible Feu vs cible Neutre ; frappe simple vs cible de l'élément opposé).
 4. Docs : `docs/arbitrages.md` (entrée du lot), smoke inchangé sinon.
 
-Ordre : Lot 1 puis Lot 2. Discipline AGENT.md habituelle : un lot = un commit FR, `data/*.json` source de vérité, preuve = build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests MESURÉS au lot 2.
+## Lot 3 — UI combat : réserve CACHÉE sur le côté (tranchage Marc-Olivier)
+
+1. **Constat** : depuis v1.41, `#reserve-zone` peint un rail VISIBLE « réserve » (rangée dédiée sous la zone équipe, `src/ui.js` ~ligne 4594, commenté « Lot A : rail de réserve visible »). **Tranchage : cette rangée ne doit plus exister** — les cartes en réserve ne prennent plus de place sur l'écran de combat.
+2. **Remplacer par un contrôle compact latéral** : un badge/bouton sur le CÔTÉ de la zone équipe (ex. « Réserve (2/2) » avec mini-portraits ou simple compteur vivantes/total), qui ouvre le sélecteur d'échange EXISTANT (celui de l'action « Échanger » : l'entrante coûte le tour du sortant, PV/mana conservés). C'est de la présentation : la mécanique v1.41 (échange volontaire = action de tour, remplacement K.O. automatique et gratuit) reste TELLE QUELLE.
+3. Le contrôle doit refléter l'état (réserve vide → masqué ou grisé ; K.O. en réserve visibles dans le sélecteur), rester accessible sur mobile sans tronquer le HUD (safe-area déjà traitée en v1.49), et ne jamais cacher les rangées actives.
+4. Le sélecteur ouvert depuis le badge doit proposer l'échange uniquement quand c'est un tour joueur et que l'action « Échanger » est légale (mêmes gardes que l'action existante).
+5. Preuve : build + tests verts + smoke (section dédiée : badge réserve → sélecteur → échange effectué, badge masqué/grisé quand vide), **digest INCHANGÉ attendu** (présentation seule, aucune mécanique ni cible IA).
+
+Ordre : Lot 1 puis Lot 2 puis Lot 3. Discipline AGENT.md habituelle : un lot = un commit FR, `data/*.json` source de vérité, preuve = build + `node --test tests/*.test.js` + `node smoke-ui.mjs dist.html` + digests MESURÉS au lot 2, inchangés attendus aux lots 1 et 3. Ensuite, sans attendre de validation : enchaîner sur la fusion DQM selon `docs/design/spec-fusion-v4.md`.

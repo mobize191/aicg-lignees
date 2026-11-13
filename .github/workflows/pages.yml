@@ -33,6 +33,8 @@ jobs:
           cp dist.html site/index.html
           cp assets-v3.json site/assets-v3.json
           cp assets-v3.1.json site/assets-v3.1.json
+          cp assets-v32.json site/assets-v32.json
+          cp assets-v33.json site/assets-v33.json
           cp -r site-assets/fx site/fx
           cp -r site-assets/errance site/errance
       - uses: actions/upload-pages-artifact@v3

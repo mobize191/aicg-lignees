@@ -7,6 +7,9 @@ Prompt `docs/prompt-correctifs-v1.51.md`. **Lot 1 (moteur, MESURÉ)** : signatur
 ## [post-v1.50] — 2026-11-13 — Correctifs smoke + heuristique IA — LOT 1 LIVRÉ (smoke robuste)
 
 Prompt `docs/prompt-correctifs-smoke-ia.md`. **Lot 1 (script de test uniquement, jeu inchangé)** : B9 c ne cherche plus une quête « tuer » en dur (progresse la première quête non faite, quel que soit son type, + garde-fou B9 h sur 7 dates simulées) ; échecs préexistants traités avec justification en commentaire (43 B → 3 actifs + 2 réserve depuis v1.41 ; B1 c → prix débité + récompense de quête du jour ; B11 l → recrutement en jetons, jamais en or ; B29 h → date locale robuste au fuseau ; 45 e → assertions sémantiques ; crash `chr(233)` réparé). 252 tests, smoke **412 checks TOUT PASSE sans crash**. Digests inchangés `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000.
+## [1.51] — 2026-11-13 — Switch 4 versions des illustrations (vague 3.3) — LIVRÉ
+
+Le bouton 🖼️ cycle **V3 → V3.1 → V3.2 → V3.3** avec l’étiquette de version affichée sur le bouton, préférence persistée (`fondations-art-src`). `ART_MANIFESTS = { v3, v31, v32, v33 }` ; un manifeste manquant = bouton grisé libellé, jamais d’erreur, version courante inchangée. Les 37 arts de la vague 3.3 sont aussi ajoutés au manifeste par défaut `assets-v3.json` (présents dans toutes les versions). IHM seule : 256 tests (4 nouveaux, cycle complet + préférence persistée + manifeste manquant toléré), smoke S27 a-f, **digest inchangé `9faff1b9…` / `6103e7b0…`**. Protocole IHM v1.51 (scénario S27).
 
 ## [1.39] — 2026-11-12 — XP PAR COMBAT + fenêtre de fin de combat + SUPPRESSION DU MODE AUTO — LIVRÉE (2 lots)
 
