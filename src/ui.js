@@ -1909,8 +1909,16 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
   if ((c.atkBuff ?? 0) > 0) icons.push('<span class="st-ic up">⬆</span>');
   if (st.curse || st.stun > 0 || st.slow > 0 || st.dmgRed) icons.push('<span class="st-ic down">⬇</span>');
   if (c.shield > 0) icons.push('<span class="st-ic sh">🛡</span>');
+  // repositionnement 14/11 lot 3 : barres sur les pions (bouclier doré AU-DESSUS de la barre PV + badge chiffré, puis PV, puis MP)
+  const bars = battle
+    ? `<div class="bars">`
+      + (c.shield > 0 ? `<div class="bsh"><i style="width:${Math.min(100, Math.round((c.shield / (c.maxHp || 1)) * 100))}%"></i><b>🛡 ${c.shield}</b></div>` : '')
+      + `<div class="bhp"><i style="width:${Math.max(0, Math.min(100, Math.round((c.hp / (c.maxHp || 1)) * 100)))}%"></i></div>`
+      + (c.manaMax !== undefined ? `<div class="bmp"><i style="width:${Math.max(0, Math.min(100, Math.round(((c.mana ?? 0) / c.manaMax) * 100)))}%"></i></div>` : '')
+      + `</div>`
+    : '';
   const foot = battle
-    ? `<div class="pied"><span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
+    ? `<div class="pied">${bars}<span class="hp">♥ ${c.hp}${maxHp}</span><span class="atk">⚔ ${c.atk}</span>${mana}${icons.join('')}</div>`
     : `<div class="cardfoot"><span>⚔ ${c.atk}</span>${shield}<span class="hp">♥ ${c.hp}${maxHp}</span>${mana}</div>`;
   return `<div class="card r-${c.rarity} t-${c.classe} ${c.element ? 'o-' + c.element : 'o-nul'} ${extraClass}${locked ? ' locked' : ''}">
     <div class="art">${artOf(c)}</div>
@@ -4015,11 +4023,17 @@ function renderRail(actorUid = null) {
   if (!combatApp) return;
   const railEl = combatApp.querySelector('#rail');
   if (!railEl) return;
-  railEl.innerHTML = railItems().map((it) => {
+  // repositionnement 14/11 lot 1 : rail horizontal persistant en haut — boss (chip élargi),
+  // invocation (chip pointillé, elles jouent dans l'ordre), séparateur › vers la suite du tour
+  const items = railItems();
+  railEl.innerHTML = items.map((it, i) => {
     const u = it.u;
-    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', actorUid && u.uid === actorUid ? 'acting' : '', u.alive ? '' : 'ko']
+    const isActing = !!(actorUid && u.uid === actorUid);
+    const cls = ['rail-chip', it.side === 'team' ? 'mine' : 'foe', isActing ? 'acting' : '', u.alive ? '' : 'ko', u.boss ? 'boss' : '', u.uid.includes('-inv') ? 'summon' : '']
       .filter(Boolean).join(' ');
-    return `<div class="${cls}" data-uid="${u.uid}"><span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
+    const glyph = u.boss ? '<span class="rc-g">\ud83d\udc51</span>' : (u.uid.includes('-inv') ? '<span class="rc-g">\ud83d\udc3e</span>' : '');
+    const sep = isActing && i < items.length - 1 ? '<span class="rail-sep">\u203a</span>' : '';
+    return `${sep}<div class="${cls}" data-uid="${u.uid}">${glyph}<span class="rc-nm">${u.name}</span><span class="rc-agi">\u26a1${u.agi}</span></div>`;
   }).join('');
 }
 
@@ -4033,6 +4047,7 @@ function syncFightBtn() {
 
 function clearActHighlights() {
   if (!combatApp) return;
+  document.body.classList.remove('targeting'); // repositionnement 14/11 lot 3 : fin du choix -> plus de grisé
   for (const el of combatApp.querySelectorAll('.unit')) el.classList.remove('targeted', 'zone2');
 }
 
@@ -4192,6 +4207,7 @@ function askActTarget(mode, pending) {
     return;
   }
   clearActHighlights();
+  document.body.classList.add('targeting'); // repositionnement 14/11 lot 3 : seules les cibles valides restent allumées (pulse), le reste est grisé
   for (const t of list) {
     const el = elOf(t.uid);
     if (el) el.classList.add('targeted');
@@ -4347,7 +4363,8 @@ function actionButtonsHtml(u, kind) {
     parts.push(row(
       top('\u2726 ' + sp.name, spellBadgeHtml(uiSpellMeta(sp, byIdSoft(u.cardId))), '\u2726' + sp.cost)
       + `<span class="sort-meta">${spellMetaHtml(uiSpellMeta(sp, byIdSoft(u.cardId)))}${prevu}</span>`
-      + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
+      + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : '')
+      + (off ? `<span class="sort-desc off-reason">MP insuffisant (${u.mana}+${u.manaRegen}/${sp.cost})</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
   // Lot A : switch volontaire — l'entrant dépense le tour (n'agit pas ce tour-ci)
@@ -4411,6 +4428,7 @@ function promptUnitAction(u, kind) {
       phase: 'action', unit: u, kind, mode: null, pending: null,
       pick: (choice) => {
         promptState = null;
+        if (choice && choice.targetUid) { const tel = elOf(choice.targetUid); if (tel) floatText(tel, '✔', 'buff'); } // confirmation au-dessus de la cible
         clearActHighlights();
         if (actBox) { actBox.remove(); actBox = null; }
         document.body.classList.remove('act-open');
@@ -4510,7 +4528,7 @@ function openInfoModal(title, html) {
   document.body.appendChild(overlay);
 }
 
-function openUnitModal(u) {
+function openUnitModal(u, ev) {
   closeCardModal();
   const card = byIdSoft(u.cardId) ?? { id: u.cardId, name: u.name, spells: u.spells ?? [], effect: null };
   const st = u.status || {};
@@ -4535,6 +4553,10 @@ function openUnitModal(u) {
   if (st.reviving > 0) effRows.push(FX_DOC.revive());
   const overlay = document.createElement('div');
   overlay.className = actBox ? 'modal-overlay float-fiche' : 'modal-overlay'; // UX 13/11 : fiche FLOTTANTE pendant un choix, la fenêtre d'action reste ouverte
+  // repositionnement 14/11 lot 2 : ancrée au-dessus de la barre, côté OPPOSÉ au clic (jamais sous le pouce)
+  if (actBox && ev && typeof ev.clientX === 'number' && window.innerWidth) {
+    overlay.style.justifyContent = ev.clientX > window.innerWidth / 2 ? 'flex-start' : 'flex-end';
+  }
   const box = document.createElement('div');
   box.className = 'modal end-modal';
   box.innerHTML = ficheCoreHtml(card, {
@@ -4591,7 +4613,7 @@ function unitEl(u) {
   }
   
   
-  el.onclick = () => {
+  el.onclick = (ev) => {
     if (state && !state.winner && promptState && promptState.phase === 'target') {
       // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
       if (!u.alive) return;
@@ -4600,7 +4622,7 @@ function unitEl(u) {
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
       return;
     }
-    openUnitModal(u);
+    openUnitModal(u, ev);
   };
   return el;
 }
@@ -4622,6 +4644,7 @@ function drawBoard() {
       row.appendChild(labEl);
     }
     for (const u of units) {
+      if (u.uid.includes('-inv')) continue; // repositionnement 14/11 lot 3 : les invocations ont leur rangée dédiée (front-row), jamais dans la ligne
       const c = unitEl(u);
       if (!u.alive) c.classList.add('ko');
       hpShown.set(u.uid, u.hp);
@@ -4629,13 +4652,53 @@ function drawBoard() {
     }
     el.appendChild(row);
   };
+
+  // rangée dédiée en PREMIÈRE LIGNE devant chaque camp (vers le centre du terrain) : petits carrés 40px
+  // à bordure pointillée, couleur de camp, cliquables (fiche), PV mini + badge ⏳ ttl — rien à décaler, rien par-dessus
+  const frontRow = (zone, allUnits, side) => {
+    const sums = allUnits.filter((u) => u.uid.includes('-inv'));
+    if (!sums.length) return;
+    const row = document.createElement('div');
+    row.className = 'front-row ' + side;
+    const labEl = document.createElement('div');
+    labEl.className = 'row-lab';
+    labEl.textContent = side === 'enemy' ? '▼ avant ennemi' : '▲ ligne avant';
+    row.appendChild(labEl);
+    for (const u of sums) {
+      const sq = document.createElement('div');
+      sq.className = 'unit sq ' + side + (u.alive ? '' : ' ko');
+      sq.dataset.uid = u.uid;
+      sq.setAttribute('data-uid', u.uid);
+      sq._unit = u;
+      const ttl = u.status?.ttl ?? '';
+      const cardDef = byIdSoft(u.cardId) ?? u;
+      sq.innerHTML = `<div class="sq-art">${artGlyph(cardDef)}</div>`
+        + `<div class="sq-hp"><i style="width:${Math.max(0, Math.min(100, Math.round((u.hp / (u.maxHp || 1)) * 100)))}%"></i></div>`
+        + (ttl !== '' ? `<div class="sq-ttl">⏳ ${ttl}</div>` : '');
+      hpShown.set(u.uid, u.hp);
+      sq.onclick = (ev) => {
+        if (state && !state.winner && promptState && promptState.phase === 'target') {
+          if (!u.alive) return;
+          const isEnemy = state.enemies.avant.includes(u) || state.enemies.arriere.includes(u);
+          if ((promptState.mode === 'enemy' || promptState.mode === 'zone') && isEnemy) { promptState.pick({ ...promptState.pending, targetUid: u.uid }); return; }
+          if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
+          return;
+        }
+        openUnitModal(u, ev);
+      };
+      row.appendChild(sq);
+    }
+    if (side === 'enemy') zone.appendChild(row); else zone.insertBefore(row, zone.firstChild);
+  };
   
   
   
   line(enemyZone, [...state.enemies.avant], 'avant');
   line(enemyZone, [...state.enemies.arriere], 'arrière');
+  frontRow(enemyZone, [...state.enemies.avant, ...state.enemies.arriere], 'enemy');
   line(teamZone, [...state.team.avant], 'avant');
   line(teamZone, [...state.team.arriere], 'arrière');
+  frontRow(teamZone, [...state.team.avant, ...state.team.arriere], 'team');
   const resZone = combatApp.querySelector('#reserve-zone'); // Lot A : rail de réserve visible (2 emplacements)
   if (resZone) {
     resZone.innerHTML = '';
@@ -4709,6 +4772,8 @@ function updateHp(uid, delta) {
   const el = elOf(uid);
   const hpEl = el?.querySelector('.pied .hp') ?? el?.querySelector('.cardfoot .hp');
   if (hpEl) hpEl.textContent = `♥ ${shown}/${u.maxHp}`;
+  const sqBar = el?.querySelector('.sq-hp i'); // repositionnement 14/11 lot 3 : mini-barre PV des invocations
+  if (sqBar) sqBar.style.width = `${Math.max(0, Math.min(100, Math.round((shown / u.maxHp) * 100)))}%`;
 }
 
 // boucle v2 lot 4 : écran « Récompenses » après chaque combat — chaque gain cliquable, « Tout ramasser » referme
@@ -5751,17 +5816,20 @@ function renderCombat(root, opts = {}) {
     .concat(discovery ? [`<button type="button" class="info-chip" data-info="disc" title="Bonus de découverte">🌱</button>`] : [])
     .join(' ');
   combatApp.innerHTML = `
+    <div id="topbar">
+      <div class="rail-wrap"><div class="rail" id="rail"></div><span class="chip" id="stage-chip">${defi ? 'D\u00e9fi divin' : `\u00c9tage ${store.stage}/${d.floors}`}</span></div>
+      <div id="speedbar">
+        <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
+        <button class="btn big" id="fight">${fightLabel()}</button>
+      </div>
+    </div>
     <div id="board-col">
     <h2>${defi ? `🌟 ${d.name}` : `${d.name} — étage ${store.stage}/${d.floors}${isBossFloor ? ' 👑 BOSS' : ''} <span class="chip">${(DIFFICULTIES[store.diff - 1] ?? DIFFICULTIES[0]).name}</span>`} <span class="muted">(Équipe ${store.activeTeam + 1})</span> ${infoChips}</h2>
     <div id="controls">
-      ${defi ? '' : `<span class="chip">Étage ${store.stage}/${d.floors}</span>`}
-      <button class="btn ctrl" id="speed">Vitesse : ${SPEED_LABELS[speedIdx]}</button>
       <button class="btn ctrl" id="flash" title="Sans éclats plein écran ni hit-stop">${reduceFlashes ? 'Flashs : réduits' : 'Flashs : complets'}</button>
       <button class="btn ctrl" id="fx-toggle" title="Vidéos des sorts signature (webm)">🎬 FX : ${fxOn() ? 'on' : 'off'}</button>
       <button class="btn ctrl" id="bag" title="Boire une potion hors combat (entre les étages)">🧪 Objets (${totalPotions()})</button>
-      <button class="btn big" id="fight">${fightLabel()}</button>
     </div>
-    <div class="rail-wrap"><div class="rail" id="rail"></div></div>
     <button type="button" class="reserve-badge" id="reserve-badge" title="R\u00e9serve \u2014 choisir une carte \u00e0 faire entrer (l'\u00e9change co\u00fbte le tour)">\u21c4 <span id="reserve-count">0/0</span></button>
     <div id="board">
     <div class="enemy-zone" id="enemy-zone"></div>
@@ -6295,6 +6363,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['post-v1.51 : Repositionnement écran de combat (maquette v2.3 validée 14/11)', 'Commander en bas, lire en haut : rail d\u2019ordre horizontal + vitesse/pause persistants EN HAUT, barre de commandes compacte \u2264 30 % (boutons 44 px, indispo grisé avec la raison), unités plus grandes avec PV/MP et bouclier en clair, invocations en première ligne, cibles en pulse. La barre ne recouvre jamais le terrain. 279 tests, smoke 421, digest inchangé.'],
   ['post-v1.51 : Correctifs sorts (TRANCH\u00c9 14/11)', 'Un sort fait d\u00e9sormais EXACTEMENT ce que sa fiche affiche (audit 309 sorts rejou\u00e9s : 0 anomalie, 85 avant). Lign\u00e9e du Vol = attaques ; signatures des recrues = l\u2019effet affich\u00e9 en Tactique ; largeur au cran du porteur ; Appel/Pont = vraie invocation ; badges contr\u00f4le/malus = effet pos\u00e9 EN PLUS des d\u00e9g\u00e2ts (stun 25 %\u219215 %, mal\u00e9diction \u221215 %\u2192\u221230 % \u00d7 2 tours, fiche \u00ab 25 % \u00b7 2 tours \u00bb). 279 tests, smoke 414, digests mesur\u00e9s `3b11106f\u2026` 871/3000 et `6c86838b\u2026` 2888/10000 (aucun recalibrage ; nouvelle baseline propos\u00e9e).'],
   ['v1.51 : Correctifs retours terrain (9e signalement)', 'Signatures des soigneurs = vrais soins ; Ascendance retirée (plus de bonus gravé à l\u2019évolution) ; défaite en Terres Sauvages = écran « retour au Port des Brumes » ; mana persistant entre les combats (prouvé par test). Fiche unifiée équipe/combat, badge élément réparé, cartes de combat plus grandes, frappe Mage/Occultiste explicitée. Plus d\u2019achat de cartes à l\u2019or : Guilde en jetons 🎫 uniquement. 266 tests, digests mesurés `4a5b0123\u2026` 861/3000 et `3f828555\u2026` 2864/10000 (aucun recalibrage).'],
   ['v1.51 : Switch 4 versions des illustrations (vague 3.3)', 'Le bouton 🖼️ cycle désormais V3 → V3.1 → V3.2 → V3.3 avec l’étiquette de version affichée sur le bouton, préférence persistée. Manifeste manquant = bouton grisé libellé, jamais d’erreur, version courante inchangée. Les 37 arts de la vague 3.3 sont aussi dans le manifeste par défaut assets-v3.json (présents partout). IHM seule : digest inchangé.'],
