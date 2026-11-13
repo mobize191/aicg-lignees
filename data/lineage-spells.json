@@ -385,7 +385,7 @@
    "mult": 1.4,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier C.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Coup de Jarnac",
@@ -393,7 +393,7 @@
    "mult": 1.6,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier UC.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Dague dans le Dos",
@@ -401,7 +401,7 @@
    "mult": 1.9,
    "big": false,
    "desc": "Sort de lignage Famille du Vol, palier R.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Fauchage",
@@ -409,7 +409,7 @@
    "mult": 2.6,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier SR.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Embuscade",
@@ -417,7 +417,7 @@
    "mult": 3.4,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier UR.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   },
   {
    "name": "Coup de Grâce",
@@ -425,7 +425,7 @@
    "mult": 4.5,
    "big": true,
    "desc": "Sort de lignage Famille du Vol, palier L.",
-   "cible": "1 allié"
+   "cible": "1 ennemi"
   }
  ],
  "zele": [

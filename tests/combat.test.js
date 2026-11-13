@@ -415,7 +415,7 @@ test('correctifs ciblage lot 1 (repro A) : les 84 sorts de lign\u00e9e ont une f
   assert.equal(n, 84, '84 sorts de lign\u00e9e couverts');
 });
 
-test('correctifs ciblage lot 1 : foeFacingSpell vrai pour exactement les m\u00eames sorts (r\u00f4les hostils inchang\u00e9s)', () => {
+test('correctifs ciblage lot 1 + correctifs sorts lot 1 : foeFacingSpell suit la FICHE (cible ennemi/zone/tous OU r\u00f4le hostile)', () => {
   const E = loadEngine();
   const FAMILY_SPELLS = E.DATA['lineage-spells'];
   const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
@@ -425,7 +425,10 @@ test('correctifs ciblage lot 1 : foeFacingSpell vrai pour exactement les m\u00ea
     const role = (SCHOOLS[FAM_SCHOOL[fam]] ?? {}).role;
     for (const sp of arr) {
       const assembled = { ...sp, cat: 'lign\u00e9e', ecole: FAM_SCHOOL[fam], role };
-      assert.equal(E.foeFacingSpell(assembled), HOSTILE.has(role), `${sp.name} (${role}) : foeFacingSpell = ${HOSTILE.has(role)}`);
+      // correctifs sorts lot 1 (TRANCH\u00c9 14/11) : la lign\u00e9e du Vol est une attaque -> cible \u00ab 1 ennemi \u00bb,
+      // donc foeFacingSpell vrai pour elle aussi (avant : cible \u00ab 1 alli\u00e9 \u00bb = buff, bug Tactique)
+      const ficheHostile = HOSTILE.has(role) || ['enemy', 'zone', 'all'].includes(E.spellSideOf(assembled));
+      assert.equal(E.foeFacingSpell(assembled), ficheHostile, `${sp.name} (${role}, cible=${sp.cible}) : foeFacingSpell = ${ficheHostile}`);
     }
   }
 });
