@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 36) : BUG « combat de zone affiché comme un donjon » CORRIGÉ (pure UI) — digest INCHANGÉ
+
+- **Signalement Marc-Olivier** : combat lancé dans les Terres Sauvages -> l'écran croit être en donjon (« Antre des Marées — étage 1/10 »).
+- **Cause racine** : `startZoneFight` pose `store.dungeon = dungeonOfZone(zone)` (nécessaire au pool de monstres/rewards) et l'en-tête du combat lisait ce champ sans distinguer le genre de combat.
+- **Correctif** (branche `vibe/zone-header-fix-ec66f9`) : en combat de zone (`store.zoneFight && !store.zoneFight.donjon`), le h2 affiche « ⚔ {nature de la zone} — combat de zone » et le `#stage-chip` « ⚔ Combat de zone » ; le détail de la récompense or dit « combat de zone ». Run donjon et entrée de donjon depuis l'errance (`donjon: true`) inchangés. Test headless `tests/zone-header-v4.test.js` (3 phases). Preuves : build, 280 tests, smoke 450 PASS, **digests INCHANGÉS `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**.
+
 ## 2026-11-15 (suite 36) : LA 3.4 DEVIENT « GRAND LANCEMENT » — le gel v18 ENTIER dans le périmètre arts + thèmes d'exception ÉLARGIS : CLASSIQUE + REPOS + OBSCURES pour TOUTES les cartes — canons MTG/D&D des nouvelles espèces VÉRIFIÉS
 
 - **Décision Marc-Olivier (15/11)** : « on va tout lancer d'un coup » — plus de test témoin séparé : la vague 3.4 couvre **l'intégralité du catalogue** avec **3 illustrations par carte** : le **classique** (canon, incl. correctifs d'espèces + gel v18) + le thème **« Lignées au Repos »** + le thème **« Lignées Obscures »**. Le thème « Crépuscule » est DIFFÉRÉ (candidat 3.4 bis du grand tableau comparatif).

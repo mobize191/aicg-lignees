@@ -1,5 +1,9 @@
 # Changelog
 
+## [post-v1.51] — 2026-11-15 — Correctif : un combat de zone (Terres Sauvages) ne s'affiche plus comme un donjon
+
+L'en-tête du combat affichait le donjon associé à la zone (« étage 1/10 ») pendant une rencontre de l'errance. Désormais : « ⚔ {zone} — combat de zone » dans le titre et « ⚔ Combat de zone » dans le chip d'étape ; les runs de donjon (y compris l'entrée du donjon depuis l'errance) sont inchangés. 280 tests (nouveau test headless 3 phases), smoke 450 checks, **digests inchangés `3b11106f…` / `6c86838b…`**.
+
 ## [post-v1.51] — 2026-11-15 — Correctif écran de combat v4 (3e retour terrain téléphone) : tout tient sur l'écran, plus de scroll pour voir les deux équipes
 
 Les cartes de combat restent en grand format mais sont désormais bornées par la hauteur aussi (`min(28vw, 11dvh)` en portrait, ~93 px sur 390×844 ; 14dvh en paysage) : les rangées ne wrappent plus et les deux camps tiennent entièrement dans le terrain, fenêtre de commandes ouverte comme en mode bandeau (seul le menu de choix des sorts défile en interne). Zone de commandement ramenée à `min(25dvh, 240px)`, marges resserrées (constantes, le terrain reste stable au pixel). Mesuré : `scrollHeight == clientHeight` sur 390×844, 844×390, 1440×900 et 2560×1080. 279 tests, smoke 450 checks, sweep Playwright 46/46, **digests inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `correctifs-v4-*`.
