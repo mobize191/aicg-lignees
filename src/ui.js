@@ -4353,7 +4353,8 @@ function actionButtonsHtml(u, kind) {
     parts.push(row(
       top('\u2726 ' + sp.name, spellBadgeHtml(uiSpellMeta(sp, byIdSoft(u.cardId))), '\u2726' + sp.cost)
       + `<span class="sort-meta">${spellMetaHtml(uiSpellMeta(sp, byIdSoft(u.cardId)))}${prevu}</span>`
-      + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : ''),
+      + (sp.desc ? `<span class="sort-desc">${sp.desc}</span>` : '')
+      + (off ? `<span class="sort-desc off-reason">MP insuffisant (${u.mana}+${u.manaRegen}/${sp.cost})</span>` : ''),
       'act-spell' + (off ? ' off' : ''), ` data-k="${k}"`));
   });
   // Lot A : switch volontaire — l'entrant dépense le tour (n'agit pas ce tour-ci)
@@ -4516,7 +4517,7 @@ function openInfoModal(title, html) {
   document.body.appendChild(overlay);
 }
 
-function openUnitModal(u) {
+function openUnitModal(u, ev) {
   closeCardModal();
   const card = byIdSoft(u.cardId) ?? { id: u.cardId, name: u.name, spells: u.spells ?? [], effect: null };
   const st = u.status || {};
@@ -4541,6 +4542,10 @@ function openUnitModal(u) {
   if (st.reviving > 0) effRows.push(FX_DOC.revive());
   const overlay = document.createElement('div');
   overlay.className = actBox ? 'modal-overlay float-fiche' : 'modal-overlay'; // UX 13/11 : fiche FLOTTANTE pendant un choix, la fenêtre d'action reste ouverte
+  // repositionnement 14/11 lot 2 : ancrée au-dessus de la barre, côté OPPOSÉ au clic (jamais sous le pouce)
+  if (actBox && ev && typeof ev.clientX === 'number' && window.innerWidth) {
+    overlay.style.justifyContent = ev.clientX > window.innerWidth / 2 ? 'flex-start' : 'flex-end';
+  }
   const box = document.createElement('div');
   box.className = 'modal end-modal';
   box.innerHTML = ficheCoreHtml(card, {
@@ -4597,7 +4602,7 @@ function unitEl(u) {
   }
   
   
-  el.onclick = () => {
+  el.onclick = (ev) => {
     if (state && !state.winner && promptState && promptState.phase === 'target') {
       // phase de désignation : un clic hors cible ne fait rien (pas de fiche ouverte)
       if (!u.alive) return;
@@ -4606,7 +4611,7 @@ function unitEl(u) {
       if (promptState.mode === 'ally' && !isEnemy) { promptState.pick({ ...promptState.pending, allyUid: u.uid }); return; }
       return;
     }
-    openUnitModal(u);
+    openUnitModal(u, ev);
   };
   return el;
 }

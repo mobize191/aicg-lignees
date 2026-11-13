@@ -833,8 +833,8 @@ nav { display: none; }
 nav.open { display: flex; flex-direction: column; gap: 2px; padding: 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); padding-left: calc(6px + env(safe-area-inset-left)); padding-right: calc(6px + env(safe-area-inset-right)); }
 nav.open a { flex: 0 0 auto; text-align: left; padding: 10px 12px; font-size: .92rem; }
 /* v0.46.1 : fenêtre d'action tactile — boutons 44 px, fenêtre plus haute, ✕ toujours visible */
-/* UX combat adaptatif 13/11 : panneau bas BORNÉ à 38dvh (plus jamais 78 % de recouvrement) */
-body.in-combat .act-modal { max-height: 38dvh; }
+/* repositionnement 14/11 lot 2 : barre de commandes compacte BORNÉE à 30dvh */
+body.in-combat .act-modal { max-height: 30dvh; }
 .act-modal .tac-btn { min-height: 44px; padding: 10px 14px; font-size: .82rem; }
 .act-modal .act-target { min-height: 44px; }
 .act-modal .act-lab { font-size: .9rem; }
@@ -882,6 +882,14 @@ body.in-combat .act-modal { max-height: 38dvh; }
 .act-stats { font-size: .8rem; color: #9fd8a8; }
 .act-zone { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 8px; }
 .act-head .act-reduce { margin-left: auto; flex: 0 0 auto; }
+/* repositionnement 14/11 lot 2 : barre de commandes compacte — tête réduite, boutons en grille >= 44 px, indispo grisé AVEC la raison */
+body.in-combat .act-head { gap: 8px; margin-bottom: 4px; }
+body.in-combat .act-art { flex: 0 0 44px; width: 44px; height: 44px; border-radius: 8px; }
+body.in-combat .act-art .glyph { font-size: 1.6rem; }
+body.in-combat .act-zone { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); align-items: stretch; margin-top: 6px; }
+body.in-combat .act-zone .act-row { margin: 0; }
+body.in-combat .act-row.off { opacity: .5; filter: grayscale(.55); }
+body.in-combat .off-reason { color: #ff9d9d; }
 .act-modal.reduced { padding-bottom: 10px; }
 .act-modal.reduced .act-zone { display: none; }
 .act-lab { width: 100%; margin: 0 0 2px; font-size: .82rem; }
@@ -920,9 +928,9 @@ body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, bo
 body.in-combat #app { overflow: hidden; width: 100%; padding-bottom: 10px; }
 body.in-combat #board-col { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
-body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 38dvh; }
+body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }
 body.in-combat #act-slot:empty { display: none; }
-body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 38dvh; overflow-y: auto; }
+body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 30dvh; overflow-y: auto; }
 /* terrain rétréci mais COMPLET quand la fenêtre est ouverte */
 body.in-combat.act-open .row-lab { display: none; }
 body.in-combat.act-open .unit { width: clamp(52px, 14vw, 84px); }
