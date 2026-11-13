@@ -294,7 +294,10 @@ async function main() {
       for (let w = 0; w < 200 && !st53.winner && !sawActing; w++) { await wait(25); sawActing = [...appEl.querySelectorAll('.unit')].some((el) => el.classList.contains('acting')); }
       check('53 i tour AUTO : unité active toujours marquée sur le terrain pendant le round', sawActing || !!st53.winner, `winner=${!!st53.winner}`);
     }
-    check('53 z 0 exception correctifs v2 lot 1', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    check('53 j correctifs v2 lot 2 : camp allié ancré au bas du terrain (margin-top:auto sur #team-zone)', html.includes('body.in-combat #team-zone { margin: auto 0 0; }'), '');
+    check('53 k correctifs v2 lot 2 : plus de safe center sur #board (l\u2019ancrage bas gère la hauteur)', !html.includes('justify-content: safe center'), '');
+    check('53 l correctifs v2 lot 2 : badge réserve ancré à côté du camp allié (plus fixed au milieu du vide)', html.includes('body.in-combat .reserve-badge { position: absolute; left: 8px; bottom: 48px;') && !html.includes('top: 44%'), '');
+    check('53 z 0 exception correctifs v2 lots 1+2', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
 

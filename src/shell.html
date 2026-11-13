@@ -947,8 +947,9 @@ body.in-combat .card.battle .pied { padding: 2px 3px 3px; font-size: .58rem; gap
 body.in-combat .card.battle .rar-chip, body.in-combat .card.battle .lvl-chip, body.in-combat .card.battle .badge { font-size: .55rem; padding: 1px 5px; }
 /* UX combat adaptatif 13/11 (lot 1) : la fenêtre d'action est DANS le flux, jamais en surimpression du terrain */
 body.in-combat #app { overflow: hidden; width: 100%; padding-bottom: 10px; }
-body.in-combat #board-col { flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
+body.in-combat #board-col { position: relative; flex: 1 1 auto; min-height: 0; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 body.in-combat #board { flex: 1 1 auto; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
+body.in-combat #team-zone { margin: auto 0 0; } /* correctifs v2 lot 2 : camp allié ancré AU BAS du terrain (marge basse 0, bande morte = 0 px), le vide résiduel reste au CENTRE entre les deux camps (maquette v2.3) */
 body.in-combat #act-slot { flex: 0 0 auto; display: flex; max-height: 30dvh; }
 body.in-combat #act-slot:empty { display: none; }
 body.in-combat .act-modal { position: static; flex: 1 1 auto; width: 100%; max-height: 30dvh; overflow-y: auto; }
@@ -959,7 +960,7 @@ body.in-combat.act-open .unit.boss { width: clamp(100px, 22vw, 128px); }
 /* réserve cachée : badge latéral compact (compteur vivantes/total) à la place du rail */
 body.in-combat #reserve-zone { display: none; }
 .reserve-badge { display: none; }
-body.in-combat .reserve-badge { position: fixed; left: 8px; top: 44%; z-index: 40; display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
+body.in-combat .reserve-badge { position: absolute; left: 8px; bottom: 48px; z-index: 40; /* correctifs v2 lot 2 : solidaire du camp allié (ancré en bas), jamais isolé dans le vide central */ display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border-radius: 999px; border: 1px solid rgba(77, 208, 225, .45); background: rgba(16, 21, 33, .92); color: #bfe8ff; font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(0, 0, 0, .5); }
 body.in-combat .reserve-badge:active { background: rgba(77, 208, 225, .25); }
 body.in-combat .reserve-badge.empty { opacity: .45; }
 /* fiche flottante : ancrée au bord opposé de la fenêtre d'action, ne la ferme PAS */
@@ -997,7 +998,6 @@ body.in-combat .unit.boss { width: clamp(190px, 16vw, 360px); }
 body.in-combat.act-open .unit { width: clamp(140px, 10vw, 240px); }
 body.in-combat.act-open .unit.boss { width: clamp(180px, 13vw, 300px); }
 body.in-combat .row { gap: 14px; margin: 8px 0; justify-content: space-evenly; }
-body.in-combat #board { justify-content: safe center; } /* le plateau occupe aussi la hauteur, sans rogner le haut si ça déborde */
 body.in-combat #topbar { font-size: 1.05rem; }
 body.in-combat .rail-chip { font-size: .8rem; padding: 5px 12px; }
 }
