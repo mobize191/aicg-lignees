@@ -971,12 +971,13 @@ body.in-combat.act-open .unit.boss { width: clamp(74px, 15dvh, 96px); }
 }
 /* retour terrain 14/11 (PC grand écran) : le combat remplit la largeur, unités à l'échelle, rail élargi */
 @media (orientation: landscape) and (min-width: 1200px) {
-body.in-combat #app { grid-template-columns: 1fr min(430px, 26vw); }
-body.in-combat .unit { width: clamp(150px, 12vw, 250px); }
-body.in-combat .unit.boss { width: clamp(190px, 16vw, 340px); }
-body.in-combat.act-open .unit { width: clamp(120px, 9vw, 190px); }
-body.in-combat.act-open .unit.boss { width: clamp(160px, 12vw, 250px); }
+body.in-combat #app { grid-template-columns: 1fr min(400px, 24vw); }
+body.in-combat .unit { width: clamp(150px, 12vw, 280px); }
+body.in-combat .unit.boss { width: clamp(190px, 16vw, 360px); }
+body.in-combat.act-open .unit { width: clamp(140px, 10vw, 240px); }
+body.in-combat.act-open .unit.boss { width: clamp(180px, 13vw, 300px); }
 body.in-combat .row { gap: 14px; margin: 8px 0; justify-content: space-evenly; }
+body.in-combat #board { justify-content: safe center; } /* le plateau occupe aussi la hauteur, sans rogner le haut si ça déborde */
 body.in-combat #topbar { font-size: 1.05rem; }
 body.in-combat .rail-chip { font-size: .8rem; padding: 5px 12px; }
 }

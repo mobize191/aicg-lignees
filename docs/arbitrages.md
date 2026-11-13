@@ -1,5 +1,24 @@
 # Journal des arbitrages et décisions
 
+<<<<<<< HEAD
+=======
+## 2026-11-14 (suite 23) : RETOUR TERRAIN PC (2e) — « encore une marge de progression » → polish grand écran (pure UI, digest inchangé)
+
+- **Correctif** (branche `vibe/grand-ecran-polish-ec66f9`) : en paysage ≥ 1200px, unités act-open relevées (`clamp(140px, 10vw, 240px)`, boss 300px ; fermées 280/360px), rail latéral ramené à `min(400px, 24vw)` (plus de plateau), plateau centré verticalement (`justify-content: safe center` — sans rogner le haut si débordement).
+- **Preuves** : 279 tests, smoke 421 TOUT PASSE, sweep Playwright 43/43 (2560×1080 : unités 240px, marges symétriques 345/345px, app = 100 % largeur, 0 recouvrement, 0 erreur console), **digests inchangés `3b11106f…` 871/3000 / `6c86838b…` 2888/10000**. Captures `polish-*`.
+
+## 2026-11-13 (suite 17) : CANON TRANCHÉ — MTG pour mystiques/fongiques, D&D pour le divin
+
+- **TRANCHÉ par Marc-Olivier : MTG = canon de référence** (« un des très bons canons de jeu qui existe ») pour dryades, luciole/esprits, nymphes et créations fongiques ; **D&D** pour l'Astre Capiteux (solar = ange solaire AILÉ, ajout des ailes acté).
+- **Dryades** : canon MTG — femme-esprit d'arbre, peau d'écorce, cheveux de feuilles ; **bois de cerf RETIRÉS** (non-canon). **Nymphe croupie** : nymphe MTG (esprit féminin gracieux de l'eau) + corruption croupie conservée. **Adriel/luciole** : esprit de lumière MTG.
+- **Gorgone = Méduse MTG, PRÉCISION CRITIQUE** : une FEMME aux CHEVEUX DE SERPENTS — **pas la méduse-animale (jellyfish), qu'il est interdit de représenter**.
+- **Mycola + toutes les créations fongiques** : canon MTG fungus NON-HUMANOÏDE (le « mushroom girl » du prompt était une contradiction avec species-map ; Mycola régénérée en 3.4).
+- **f13 Seigneur des Cendres** : canon efreet HUMANOÏDE (fini le « beast-like ») ; régénéré en 3.4.
+- **Bug bosses + 2 cartes Marées** (hydre 3 têtes, souverain) : intégré à la spec 3.4, impact digest balisé.
+- **Annonce Marc-Olivier** : il ajoute les cartes manquantes en masse (la liste était très incomplète) ; ensuite préparation des prompts 3.4 (normales + spéciales), puis il construira un GRAND TABLEAU comparatif des versions 3 → 3.4 (+ 3.4 bis…) indiquant pour chaque version quelle image est la normale et laquelle est la spéciale → source de vérité pour le choix d'art par version.
+
+
+>>>>>>> vibe/grand-ecran-polish-ec66f9
 ## 2026-11-14 (suite 22) : RETOUR TERRAIN PC — combat trop petit sur grand écran, espace perdu → CORRIGÉ (pure UI, digest inchangé)
 
 - **Signalement Marc-Olivier (PC, écran large ~2551px)** : « tout petit, beaucoup d'espace perdu » (capture fournie). Cause : en paysage, #app remplissait la largeur mais les unités restaient cappées (120-160px) et les rangées centrées → grand vide autour.
