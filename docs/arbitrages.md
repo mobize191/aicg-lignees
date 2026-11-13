@@ -1,3 +1,11 @@
+## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 11 (spec vie-jeu Lot 5) LIVRÉE : VÉRIFICATIONS LEVEL DESIGN (v1.50)
+
+- **Reachabilité errance** : test headless génératif — depuis le spawn des 5 zones, le A* existant atteint porte de donjon, autel, CHAQUE jarre et le retour ville (tous atteignent, aucun soft-lock). `tests/leveldesign-v150.test.js`.
+- **Graphe d'acquisition** : check acyclicité — chaîne de donjons linéaire (req vers donjon existant, premier sans req), difficultés ordonnées, zones chaînées sans cycle, rencontres de zone = monstres existants. Aucune ressource derrière son propre déblocage.
+- **Table de beats par zone en data** : `zone.errance.beats = { intensite 0-1, encRate }` (Marées 0.2 → Zénith 1.0) ; la même table pilote le taux de rencontre lu par le moteur (`encRate`, inchangé) — aucun taux modifié donc **digest inchangé**.
+- 252 tests verts. **DIGEST INCHANGÉ : `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000**.
+- Reste à valider en IHM (téléphone+PC) : captures héros 3 états + sweep résolutions (scénarios ajoutés à `docs/validation-ihm.md` en clôture).
+
 ## 2026-11-12 : GRAND LANCEMENT — ÉTAPE 10 (spec vie-jeu Lot 4) LIVRÉE : UI/UX MOBILE (v1.49)
 
 - **Safe-area** : `env(safe-area-inset-*)` sur le menu latéral (`nav`, `nav.open`) et le HUD d'errance (`.errance-top`, `.errance-hint`) dans `src/shell.html` ; recalcul au resize par le navigateur (unités relatives). Smoke B8c a.

@@ -14163,7 +14163,12 @@ const DATA = {
     "waveSize": [
      2,
      3
-    ]
+    ],
+    "beats": {
+     "intensite": 0.2,
+     "encRate": 0.16,
+     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+    }
    }
   },
   {
@@ -14296,7 +14301,12 @@ const DATA = {
     "waveSize": [
      2,
      3
-    ]
+    ],
+    "beats": {
+     "intensite": 0.4,
+     "encRate": 0.17,
+     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+    }
    }
   },
   {
@@ -14421,7 +14431,12 @@ const DATA = {
     "waveSize": [
      2,
      3
-    ]
+    ],
+    "beats": {
+     "intensite": 0.55,
+     "encRate": 0.15,
+     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+    }
    }
   },
   {
@@ -14563,7 +14578,12 @@ const DATA = {
     "waveSize": [
      2,
      3
-    ]
+    ],
+    "beats": {
+     "intensite": 0.75,
+     "encRate": 0.18,
+     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+    }
    }
   },
   {
@@ -14704,7 +14724,12 @@ const DATA = {
     "waveSize": [
      2,
      3
-    ]
+    ],
+    "beats": {
+     "intensite": 1,
+     "encRate": 0.2,
+     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+    }
    }
   }
  ]
@@ -24505,6 +24530,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['v1.50 : Vérifications level design', 'Reachabilité prouvée par test : depuis chaque zone, le chemin atteint la porte du donjon, l\u2019autel, les jarres et le retour ville. Graphe d\u2019acquisition vérifié acyclique. Table de beats par zone en données (intensité + taux de rencontre). 252 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.49 : UI mobile : safe-area, losanges de rareté, contraste audité', 'Le menu latéral et le HUD d\u2019errance respectent les encoches (env safe-area-inset). Les bandes de rareté affichent un losange ◆ en plus de la couleur. Audit de contraste WCAG consigné dans le smoke (textes conformes 4.5:1 ; or sur place ensoleillée = cas décoratif consigné). Sweep 1280×720 / 2560×1080 / 1080×2340 vérifié. 249 tests, digests inchangés `9faff1b9\u2026` / `6103e7b0\u2026`.'],
   ['v1.48 : Un vrai héros dans les Terres Sauvages', 'Le héros d\u2019errance est désormais peint et animé par code : une femme à la cape noire et aux cheveux blancs, bras et jambes qui balancent en marchant, cape qui ondule, respiration au repos, quatre directions — plus aucun rectangle. 249 tests, digest inchangé `9faff1b9\u2026` 838/3000.'],
   ['v1.47 : Feedback 3 tiers + hit-stop', 'Un point de routage unique pour les effets : petit (tick sonore), moyen (flash léger + secousse + pop), grand (crit, K.O., boss : flash + secousse forte + zoom + hit-stop de 90 ms, jamais deux pauses qui se chevauchent). Nouveau réglage « réduire les flashs » (persisté) : teinte sans pulsation, au plus 3 flashs par seconde. Désactivable en une ligne (`FX_HITSTOP` en données). 246 tests, digests inchangés `9faff1b9\u2026` 838/3000 et `6103e7b0\u2026` 2795/10000.'],

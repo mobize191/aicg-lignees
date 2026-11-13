@@ -230,7 +230,12 @@
    "waveSize": [
     2,
     3
-   ]
+   ],
+   "beats": {
+    "intensite": 0.2,
+    "encRate": 0.16,
+    "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+   }
   }
  },
  {
@@ -363,7 +368,12 @@
    "waveSize": [
     2,
     3
-   ]
+   ],
+   "beats": {
+    "intensite": 0.4,
+    "encRate": 0.17,
+    "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+   }
   }
  },
  {
@@ -488,7 +498,12 @@
    "waveSize": [
     2,
     3
-   ]
+   ],
+   "beats": {
+    "intensite": 0.55,
+    "encRate": 0.15,
+    "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+   }
   }
  },
  {
@@ -630,7 +645,12 @@
    "waveSize": [
     2,
     3
-   ]
+   ],
+   "beats": {
+    "intensite": 0.75,
+    "encRate": 0.18,
+    "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+   }
   }
  },
  {
@@ -771,7 +791,12 @@
    "waveSize": [
     2,
     3
-   ]
+   ],
+   "beats": {
+    "intensite": 1.0,
+    "encRate": 0.2,
+    "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
+   }
   }
  }
 ]
