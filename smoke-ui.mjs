@@ -2,6 +2,7 @@
 // Usage : node smoke-ui.mjs [dist.html]
 import { readFileSync } from 'node:fs';
 import { bootDist, wait } from './stub.mjs';
+import { mulberry32 } from './tests/helpers/rng.js';
 
 const file = process.argv[2] ?? 'dist.html';
 const html = readFileSync(file, 'utf8');
@@ -87,7 +88,8 @@ async function main() {
   check('43 B zones team/enemy rendues', !!tz && !!ez, '');
   if (tz && ez) {
     check('43 B deux rangées par camp (avant + arrière)', tz.querySelectorAll('.row').length === 2 && ez.querySelectorAll('.row').length === 2, tz.querySelectorAll('.row').length + '/' + ez.querySelectorAll('.row').length);
-    check('43 B 5 cartes posées', tz.querySelectorAll('.unit').length === 5, String(tz.querySelectorAll('.unit').length));
+    // depuis v1.41 (formation 3 actifs + 2 réserve) seules les 3 cartes actives sont sur le plateau ; les 2 réserve restent hors ciblage
+    check('43 B 3 cartes actives posées (formation 3+2, les 2 réserve hors plateau depuis v1.41)', tz.querySelectorAll('.unit').length === 3, String(tz.querySelectorAll('.unit').length));
   }
   const rowsT = tz ? [...tz.querySelectorAll('.row')] : [];
   const rowsE = ez ? [...ez.querySelectorAll('.row')] : [];
@@ -657,7 +659,7 @@ async function main() {
   check('44 c la classe in-combat est posée par le routeur', html.includes("document.body.classList.toggle('in-combat', hash === '#combat')"), '');
   check('44 c changelog v0.44 écrit', html.includes('v0.44 : Le combat plein écran'), '');
   check('45 a emojis réparés : aucun code brut \\U0001F9xx, vrai 🤖 présent', !html.includes('\\U0001F9') && html.includes('🤖') && html.includes('🧭'), '');
-  check('45 e sorts spéciaux : bandeau non couvrant (pas de voile plein écran)', html.includes('.special-overlay {\nposition: fixed; inset: 0; z-index: 70; pointer-events: none;\ndisplay: flex; align-items: flex-start; justify-content: center;\npadding-top: 9dvh;\nanimation: fadein .2s ease;\n}') && !html.includes('background: rgba(5, 7, 12, .72);') && html.includes('.special-txt { min-width: 0; }') && html.includes('.special-art { position: relative; flex: 0 0 92px; width: 92px; height: 116px;'), '');
+  check('45 e sorts spéciaux : bandeau non couvrant (pointer-events: none, aucun fond sur .special-overlay)', (() => { const ovRule = (html.match(/\.special-overlay\s*\{[^}]*\}/) ?? [''])[0]; return /pointer-events:\s*none/.test(ovRule) && !/background/.test(ovRule) && /\.special-txt\s*\{\s*min-width:\s*0/.test(html) && /\.special-art\s*\{[^}]*position:\s*relative/.test(html); })(), (html.match(/\.special-overlay\s*\{[^}]*\}/) ?? [''])[0].slice(0, 120)); // assertions sémantiques plutôt qu'une chaîne CSS exacte (fragile à toute évolution de la feuille)
   check('45 f changelog v0.45 écrit', html.includes('v0.45 : Rien de caché, des pions à voir'), '');
   mem.clear();
   setup(['a1', 'g9', 'd2', 'n3', 'a29'], 15);
@@ -744,8 +746,12 @@ async function main() {
     const buyBtns = els.get('app').querySelectorAll('[data-buy]');
     check('B1 b boutique : rayon potions rendu avec prix en or', shopHtml.includes('Boutique') && shopHtml.includes('or') && buyBtns.length === 4, shopHtml.slice(0, 120));
     const buyBtn = buyBtns.find((b) => b.dataset.buy === 'soin30') ?? null;
+    const goldBefore = store.gold;
+    // la quête « acheter » du jour (seed de la date) peut se terminer sur cet achat et ajouter son or : on l'anticipe
+    const qa = api.ensureQuetes().find((x) => x.type === 'acheter' && !x.done) ?? null;
     if (buyBtn) { buyBtn.click(); await wait(20); }
-    check('B1 c achat : stock +1 et or débité (50 or)', api.potionCount('soin30') === 1 && store.gold === 450, `stock=${api.potionCount('soin30')} gold=${store.gold}`);
+    const expectedGold = goldBefore - 50 + (qa && qa.done ? qa.or : 0); // comportement réel Boutique v2 : prix débité, + récompense de quête du jour si accomplie
+    check('B1 c achat : stock +1 et or débité du prix (50 or, + quête « acheter » du jour si elle tombe dessus)', api.potionCount('soin30') === 1 && store.gold === expectedGold, `stock=${api.potionCount('soin30')} gold=${store.gold} attendu=${expectedGold}`);
 
     // action Objet dans la fenêtre d'action
     setup(['n1', 'n3'], 10);
@@ -1092,7 +1098,9 @@ async function main() {
       check('B29 f makeWave respecte waveSize [2,2] (toujours 2 monstres, 0 support étage 1)', wA.avant.length === 2 && wA.arriere.length === 0, `${wA.avant.length}/${wA.arriere.length}`);
       const ids = (c) => api.makeWave(api.waveSeedFor('marees', 1, c), 1, 'marees', 1).avant.map((m) => m.id).join(',');
       check('B29 g deux compteurs différents -> deux vagues distinctes ; même compteur -> même vague', ids(1) !== ids(2) && ids(1) === ids(1), `${ids(1)} vs ${ids(2)}`);
-      const today = new Date().toISOString().slice(0, 10);
+      // même construction de date locale que todayKey() (getFullYear/getMonth/getDate), robuste au fuseau horaire
+      const dNow = new Date();
+      const today = `${dNow.getFullYear()}-${String(dNow.getMonth() + 1).padStart(2, '0')}-${String(dNow.getDate()).padStart(2, '0')}`;
       const legacy = (() => { let h = 7; for (const ch of `${today}|marees|1`) h = (Math.imul(h, 31) + ch.charCodeAt(0)) >>> 0; return h; })();
       check('B29 h sans extra, waveSeedFor = hash historique (donjons classiques inchangés)', api.waveSeedFor('marees', 1) === legacy, `${api.waveSeedFor('marees', 1)} vs ${legacy}`);
     }
@@ -1173,9 +1181,9 @@ async function main() {
     check('B9 b quêtes du jour rendues avec barre de progression', doc.body.querySelectorAll('.quest-row').length === 3 && !!doc.body.querySelector('.quest-bar'), '');
     api.store.gold = 0;
     const gold0 = api.store.gold;
-    const q = list.find((x) => x.type === 'tuer');
-    api.questProgress('tuer', q.n);
-    check('B9 c quête accomplie : +or, done=true', q.done === true && api.store.gold === gold0 + q.or, `or=${api.store.gold}`);
+    const q = list.find((x) => !x.done); // première quête non faite, quel que soit son type (dépend du seed de la date — ne plus chercher 'tuer' en dur)
+    api.questProgress(q.type, q.n);
+    check('B9 c quête accomplie (son type, sa récompense) : +or, done=true', q.done === true && api.store.gold === gold0 + q.or, `type=${q.type} or=${api.store.gold}`);
     check('B9 d pas de bonus de complétion tant que les 3 ne sont pas faites', api.store.quetes.bonusDone === false && api.pierreCount() === 0, '');
     const rest = list.filter((x) => !x.done);
     for (const r of rest) api.questProgress(r.type, r.n);
@@ -1185,6 +1193,31 @@ async function main() {
     const list2 = api.ensureQuetes();
     check('B9 f changement de jour : quêtes remises à zéro', api.store.quetes.day !== '1999-01-01' && list2.every((x) => !x.done && x.progress === 0), '');
     check('B9 g 0 exception lot E4', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
+    // garde-fou : la section B9 ne dépend plus du type tiré — 7 dates simulées (même seed FNV-1a que seedOfDay,
+    // même tirage que quetesDuJour), progression de la 1re quête quel que soit son type, sans crash
+    const fnv = (k) => { let h = 2166136261; for (let i = 0; i < k.length; i++) { h ^= k.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+    const quetesPourDate = (d) => {
+      const rng = mulberry32(fnv(d));
+      const pick = (arr) => { const pool = (arr ?? []).filter((q) => !q.errance); return pool.length ? pool[Math.floor(rng() * pool.length)] : null; };
+      const g = pick(api.QUETES.grandes);
+      return [pick(api.QUETES.petites), pick(api.QUETES.moyennes), g].filter(Boolean).map((q) => ({ ...q, progress: 0, done: false }));
+    };
+    const nowD = new Date();
+    const realToday = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, '0')}-${String(nowD.getDate()).padStart(2, '0')}`;
+    let crash7 = 0, ok7 = 0; const typesVus = new Set();
+    for (const d of ['2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14']) {
+      try {
+        api.store.quetes = { day: realToday, list: quetesPourDate(d), bonusDone: false }; // day = aujourd'hui réel : ensureQuetes garde la liste simulée
+        api.store.gold = 0;
+        const l7 = api.store.quetes.list;
+        const q7 = l7.find((x) => !x.done);
+        if (!q7) throw new Error('pas de quête tirée');
+        typesVus.add(q7.type);
+        api.questProgress(q7.type, q7.n);
+        if (q7.done === true && api.store.gold === q7.or) ok7++;
+      } catch (e) { crash7++; }
+    }
+    check('B9 h 7 dates simulées : 1re quête (tout type) accomplie sans crash, +or selon son montant', crash7 === 0 && ok7 === 7, `ok=${ok7}/7 crash=${crash7} types=${[...typesVus].join(',')}`);
   }
 
   {
@@ -1256,8 +1289,10 @@ async function main() {
     const off = api.compagnonsDuJour();
     store.gold = 5000;
     const g1 = store.gold;
+    const jetons0 = store.jetons ?? 0;
     api.buyCompagnon(off[0].id);
-    check('B11 l recrutement compagnon à la Guilde : or déduit, +1 carte', store.gold === g1 - api.compagnonPrix(off[0]) && store.instances.length === 3, `or=${store.gold} inst=${store.instances.length}`);
+    // économie v2 lot D : le recrutement se paie en JETONS, jamais en or — gold inchangé est le comportement voulu, pas un bug
+    check('B11 l recrutement compagnon à la Guilde : jetons débités, or inchangé, +1 carte', (store.jetons ?? 0) === jetons0 - api.compagnonPrix(off[0]) && store.gold === g1 && store.instances.length === 3, `jetons=${store.jetons} or=${store.gold} inst=${store.instances.length}`);
     api.go('#inventaire');
     await wait(30);
     const invHtml = els.get('app').innerHTML;
@@ -1418,7 +1453,7 @@ async function main() {
     check('B15 g page Personnage : onglets Équipe + Inventaire + bouton retour', !!els.get('app').querySelector('#tab-equipe') && !!els.get('app').querySelector('#tab-inventaire') && !!els.get('app').querySelector('#perso-back'), '');
     check('B15 h onglet Équipe actif : 3 actifs + 2 réserve, plus de boutons 3+2/2+3',
       !els.get('app').querySelector('#form-3-2') && !els.get('app').querySelector('#form-2-3')
-      && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('r' + chr(233) + 'serve'), '');
+      && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('réserve'), '');
     els.get('app').querySelector('#tab-inventaire').click();
     await wait(20);
     check('B15 i onglet Inventaire rend potions/matériaux/équipement', !!els.get('app').querySelector('#inv-back') && (els.get('app').querySelector('#perso-body')?._innerHTML ?? '').includes('Potions'), '');

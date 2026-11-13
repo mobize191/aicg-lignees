@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-13 : LOT 1 LIVRÉ — smoke robuste (script de test uniquement, jeu inchangé) — prompt `docs/prompt-correctifs-smoke-ia.md`
+
+- **B9 c crash selon la date** : `list.find(x => x.type === 'tuer')` plantait quand la petite quête du jour n'est pas « tuer ». Corrigé : la section progresse la **première quête non faite, quel que soit son type**, et vérifie **sa** récompense. Garde-fou ajouté (B9 h) : **7 dates simulées** (même seed FNV-1a que `seedOfDay`, même tirage que `quetesDuJour`) sans crash.
+- **Échecs préexistants traités, chacun justifié en commentaire** : « 43 B » attendu à jour (depuis v1.41 : 3 actifs + 2 réserve, seules les 3 actives sur le plateau) ; « B1 c » aligné sur le comportement réel (prix 50 or débité + récompense de la quête « acheter » du jour si elle tombe dessus — le jeu n'est pas en faute) ; « B11 l » aligné sur l'économie v2 (recrutement Guilde en **jetons**, jamais en or) ; « B29 h » rendu robuste au fuseau (même construction de date locale que `todayKey()`) ; « 45 e » passé en assertions sémantiques (pointer-events none, pas de fond sur `.special-overlay`) au lieu d'une chaîne CSS exacte. Bonus : `chr(233)` non défini dans le script (crash B15 h) → littéral « réserve ».
+- **Preuve** : build OK, 252 tests verts, smoke **412 checks TOUT PASSE sans crash**, digests **inchangés `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000**.
+
 ## 2026-11-13 : REVUE PILOTAGE DU GRAND LANCEMENT (v1.39 → v1.50) — CONFORME + 2 TRANCHAGES [À TRANCHER] VALIDÉS + PARALLÉLISME
 
 - **Revue indépendante rejouée** (`docs/historique/revue-v1.50.md`) : build OK, **252/252 tests verts**, smoke 276 PASS avant crash (dette du script, voir ci-dessous), **digests rejoués à l'identique** `9faff1b9…` 838/3000 / `6103e7b0…` 2795/10000, **baseline NON appliquée dans le code** (vérifié : les occurrences des digests dans `src/` sont le seul texte du changelog in-game), **site déployé md5 identique au build** (validation S26 possible directement dessus), CI verte (#270). Verdict : **CONFORME**.

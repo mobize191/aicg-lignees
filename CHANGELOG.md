@@ -1,5 +1,9 @@
 # Changelog
 
+## [post-v1.50] — 2026-11-13 — Correctifs smoke + heuristique IA — LOT 1 LIVRÉ (smoke robuste)
+
+Prompt `docs/prompt-correctifs-smoke-ia.md`. **Lot 1 (script de test uniquement, jeu inchangé)** : B9 c ne cherche plus une quête « tuer » en dur (progresse la première quête non faite, quel que soit son type, + garde-fou B9 h sur 7 dates simulées) ; échecs préexistants traités avec justification en commentaire (43 B → 3 actifs + 2 réserve depuis v1.41 ; B1 c → prix débité + récompense de quête du jour ; B11 l → recrutement en jetons, jamais en or ; B29 h → date locale robuste au fuseau ; 45 e → assertions sémantiques ; crash `chr(233)` réparé). 252 tests, smoke **412 checks TOUT PASSE sans crash**. Digests inchangés `9faff1b9…` 838/3000 et `6103e7b0…` 2795/10000.
+
 ## [1.39] — 2026-11-12 — XP PAR COMBAT + fenêtre de fin de combat + SUPPRESSION DU MODE AUTO — LIVRÉE (2 lots)
 
 ## [1.40] — 2026-11-12 — Correctif errance : les interactions se déclenchent au clic — LIVRÉ
