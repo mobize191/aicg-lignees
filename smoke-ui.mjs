@@ -1753,7 +1753,7 @@ async function main() {
         mem.get('fondations-art-src') === 'v31' && b.textContent === '🖼️ V3.2' && b.classList.contains('off') && errors.length === errBefore,
         `pref=${mem.get('fondations-art-src')} tag=${b.textContent} off=${b.classList.contains('off')}`);
       ctx.fetch = origFetch;
-      mem.removeItem('fondations-art-src');
+      mem.delete('fondations-art-src'); // mem est une Map (pas un Storage) : removeItem n'existe pas — crash S27 sinon
     }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
