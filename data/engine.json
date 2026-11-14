@@ -512,7 +512,9 @@
   "appel",
   "seuil",
   "miroir",
-  "pont"
+  "pont",
+  "paladin",
+  "chevalerie"
  ],
  "FAM_SCHOOL": {
   "eau": "lame",
@@ -531,7 +533,9 @@
   "pont": "appel",
   "chair": "vice",
   "puissance": "fureur",
-  "devoyes": "orgueil"
+  "devoyes": "orgueil",
+  "paladin": "ferveur",
+  "chevalerie": "rempart"
  },
  "moteur": {
   "MANA_START_RATIO": 0.6,

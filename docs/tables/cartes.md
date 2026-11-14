@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**152 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 20, Mage 33, Occultiste 17, Prêtre 42.
+**160 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 28, Mage 33, Occultiste 17, Prêtre 42.
 
 Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + valeur). L'element et la famille sont absents des cartes non-elementaires.
 
@@ -51,7 +51,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | w21 | Gorgonne Nouvelle | C | Neutre | - | 9 | 48 | 8 | 4 | ombre | Regard Pétrifiant | - |
 | w7 | Lame Miroir | C | Neutre | - | 9 | 46 | 8 | 4 | miroir | Frappe Réfléchie | - |
 
-## Classe Guerrier (20)
+## Classe Guerrier (28)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -63,6 +63,10 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | a38 | Raboteur de Berges | C | Neutre | - | 10 | 62 | 7 | 4 | eau | Coup de Rame | - |
 | a47 | Charpentier des Berges | UC | Neutre | - | 13 | 76 | 9 | 5 | eau | Coup d’Étrave | - |
 | a48 | Maître Charpentier | R | Neutre | - | 17 | 88 | 12 | 7 | eau | Rampe de Lancement | - |
+| a50 | Paladin | R | Neutre | - | 13 | 72 | 9 | 5 | paladin | Serment de Lumière | shield 25 |
+| a51 | Paladin Sacré | SR | Neutre | - | 16 | 80 | 11 | 6 | paladin | Croisade | shield 30 |
+| a52 | Paladine Sacrée | UR | Neutre | - | 20 | 88 | 14 | 8 | paladin | Égide Ardente | shield 40 |
+| a53 | Isaure, Égide de l’Aube | L | Neutre | - | 24 | 100 | 17 | 10 | paladin | Égide de l’Aube | shield 60 |
 | a6 | Épéiste Errant | R | Neutre | - | 12 | 75 | 8 | 5 | lame | - | - |
 | a9 | Pilier Mécanique | R | Neutre | - | 11 | 80 | 8 | 4 | bouclier | Charge Hydraulique | - |
 | b1 | Yuki, Brise-Lame | SR | Neutre | - | 24 | 82 | 17 | 10 | lame | - | - |
@@ -72,6 +76,10 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n5 | Embryon des Eaux | N | - | - | 9 | 60 | 6 | 4 | - | Bruissement d’Écume | - |
 | s11 | Argus, Rempart Éveillé | UR | Neutre | - | 6 | 92 | 4 | 2 | bouclier | - | shield 55 |
 | s12 | Argus, Forteresse Vivante | L | Neutre | - | 7 | 115 | 5 | 3 | bouclier | - | shield 75 |
+| s15 | Chevalier | R | Neutre | - | 13 | 72 | 9 | 5 | chevalerie | Rempart Vivant | shield 25 |
+| s16 | Chevalière du Rempart | SR | Neutre | - | 16 | 80 | 11 | 6 | chevalerie | Muraille | shield 30 |
+| s17 | Gardienne du Rempart | UR | Neutre | - | 20 | 88 | 14 | 8 | chevalerie | Gardienne Éternelle | shield 40 |
+| s18 | Kiri l’Invincible | L | Neutre | - | 24 | 100 | 17 | 10 | chevalerie | Lame Invincible | shield 60 |
 | s4 | Gardien-Mécanique | C | Neutre | - | 2 | 55 | 1 | 1 | bouclier | - | shield 15 |
 | s6 | Sentinelle d’Acier | R | Neutre | - | 4 | 62 | 3 | 2 | bouclier | - | shield 25 |
 | w1 | Garde du Seuil | C | Neutre | - | 8 | 60 | 6 | 3 | seuil | Interdiction | - |
@@ -203,6 +211,8 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | seuil | Arbitres du Seuil | w1 Garde du Seuil -> w2 Servante du Sablier -> w3 Huissier de l’Entre-Deux -> w4 Juge des Heures -> w5 Maître des Sabliers -> w6 Kairos, Juge Éternel | p5, p7, p8, p6 |
 | miroir | Chœur Miroir | w7 Lame Miroir -> w8 Choriste Miroir -> w9 Prisme du Chœur -> w10 Miroir Antiphonique -> w11 Chef du Chœur -> w12 Écho, Refrain Absolu | - |
 | pont | Tisseuses du Pont | w13 Fileuse du Pont -> w14 Aiguille du Pont -> w15 Brodeuse des Liens -> w16 Tisseuse des Nœuds -> w17 Architecte du Pont -> w18 Ananké, Gardienne des Rives | - |
+| paladin | La voie du Paladin | a50 Paladin -> a51 Paladin Sacré -> a52 Paladine Sacrée -> a53 Isaure, Égide de l’Aube | - |
+| chevalerie | La Chevalerie du Rempart | s15 Chevalier -> s16 Chevalière du Rempart -> s17 Gardienne du Rempart -> s18 Kiri l’Invincible | - |
 
 ## Evolutions (data/evolutions.json)
 
@@ -300,6 +310,12 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | d33 | d34 | le fléau grandit |
 | d34 | d35 | le fléau porte la peste |
 | d35 | d36 | Peste, Mère des Fléaux |
+| a30 Spadassin Vigilant | a6 Épéiste Errant | fidèle au sabre |
+| a30 Spadassin Vigilant | a50 Paladin | la lumière — le paladin |
+| a50 Paladin | a51 Paladin Sacré | fidèle à la lumière |
+| a50 Paladin | u3 Croisé de l’Aube | le zèle — Croisé de l’Aube |
+| s14 Garde du Rempart | s6 Sentinelle d’Acier | fidèle au bouclier |
+| s14 Garde du Rempart | s15 Chevalier | la voie du rempart — la chevalerie |
 
 ## Soudures solos (data/solo-steps.json)
 

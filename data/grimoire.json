@@ -671,6 +671,78 @@
    "mult": 4.5,
    "big": true,
    "desc": "L’Empyrée elle-même chute."
+  },
+  {
+   "famille": "paladin",
+   "palier": "R",
+   "sort": "Croisade Blanche",
+   "cout": 5,
+   "mult": 1.8,
+   "big": false,
+   "desc": "La croisade ébrèche les ténèbres."
+  },
+  {
+   "famille": "paladin",
+   "palier": "SR",
+   "sort": "Mur de Lumière",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Un rempart de lumière frappe l’ennemi."
+  },
+  {
+   "famille": "paladin",
+   "palier": "UR",
+   "sort": "Isaure : Égide Ardente",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "L’égide de l’aube s’abat."
+  },
+  {
+   "famille": "paladin",
+   "palier": "L",
+   "sort": "Aube Absolue",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "L’aube ne se lève qu’une fois."
+  },
+  {
+   "famille": "chevalerie",
+   "palier": "R",
+   "sort": "Forteresse Mobile",
+   "cout": 5,
+   "mult": 1.8,
+   "big": false,
+   "desc": "Le rempart avance et frappe."
+  },
+  {
+   "famille": "chevalerie",
+   "palier": "SR",
+   "sort": "Siège Inébranlable",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le siège devient assaut."
+  },
+  {
+   "famille": "chevalerie",
+   "palier": "UR",
+   "sort": "Kiri : Lame du Serment",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "La lame invincible du chevalier."
+  },
+  {
+   "famille": "chevalerie",
+   "palier": "L",
+   "sort": "Muraille Absolue",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Rien ne passe."
   }
  ],
  "ecole": [

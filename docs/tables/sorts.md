@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (16), `lignee` (60), `uniques` (41).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (16), `lignee` (68), `uniques` (41).
 
 ## Sorts communs (2)
 
@@ -53,7 +53,7 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | grondement-demoniaque | Grondement Démoniaque | fureur | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 | eclair-de-lorgueil | Éclair de l’Orgueil | orgueil | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 
-## Sorts de lignee (60)
+## Sorts de lignee (68)
 
 Un sort par palier de famille, appris en montant la lignee.
 
@@ -119,6 +119,14 @@ Un sort par palier de famille, appris en montant la lignee.
 | devoyes | SR | Châtiment Renversé | 9 | 2.6 | true | Le châtiment retombe sur l’agresseur. |
 | devoyes | UR | Voûte Renversée | 14 | 3.4 | true | La voûte céleste s’effondre sur l’ennemi. |
 | devoyes | L | Chute de l’Empyrée | 20 | 4.5 | true | L’Empyrée elle-même chute. |
+| paladin | R | Croisade Blanche | 5 | 1.8 | false | La croisade ébrèche les ténèbres. |
+| paladin | SR | Mur de Lumière | 9 | 2.6 | true | Un rempart de lumière frappe l’ennemi. |
+| paladin | UR | Isaure : Égide Ardente | 14 | 3.4 | true | L’égide de l’aube s’abat. |
+| paladin | L | Aube Absolue | 20 | 4.5 | true | L’aube ne se lève qu’une fois. |
+| chevalerie | R | Forteresse Mobile | 5 | 1.8 | false | Le rempart avance et frappe. |
+| chevalerie | SR | Siège Inébranlable | 9 | 2.6 | true | Le siège devient assaut. |
+| chevalerie | UR | Kiri : Lame du Serment | 14 | 3.4 | true | La lame invincible du chevalier. |
+| chevalerie | L | Muraille Absolue | 20 | 4.5 | true | Rien ne passe. |
 
 ## Sorts uniques (41)
 
@@ -205,6 +213,8 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | chair | Frôlement du Vice / Regard de Luxure / Haleine du Gouffre / Charme de l’Abysse / Asmodia : Danse des Vices / Désir Absolu |
 | puissance | Grondement des Fosses / Coup des Fosses / Cri de Fureur / Terreur Majeure / Belzébuth : Couronne de Fureur / Ultime Fureur |
 | devoyes | Éclat Dévoyé / Bannière Renversée / Zénith Fêlé / Châtiment Renversé / Voûte Renversée / Chute de l’Empyrée |
+| paladin | Lumière du Serment / Frappe Consacrée / Croisade Blanche / Mur de Lumière / Isaure : Égide Ardente / Aube Absolue |
+| chevalerie | Coup de Bouclier / Charge du Rempart / Forteresse Mobile / Siège Inébranlable / Kiri : Lame du Serment / Muraille Absolue |
 
 ## Fusions de monstres (data/fusion-map.json)
 

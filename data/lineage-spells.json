@@ -938,5 +938,99 @@
    "desc": "L’Empyrée elle-même chute.",
    "cible": "1 ennemi"
   }
+ ],
+ "paladin": [
+  {
+   "name": "Lumière du Serment",
+   "cost": 2,
+   "mult": 1.4,
+   "desc": "La première lueur du paladin.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Frappe Consacrée",
+   "cost": 3,
+   "mult": 1.6,
+   "desc": "Un coup béni par l’aube.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Croisade Blanche",
+   "cost": 5,
+   "mult": 1.8,
+   "desc": "La croisade ébrèche les ténèbres.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Mur de Lumière",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Un rempart de lumière frappe l’ennemi.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Isaure : Égide Ardente",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "L’égide de l’aube s’abat.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Aube Absolue",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "L’aube ne se lève qu’une fois.",
+   "cible": "1 ennemi"
+  }
+ ],
+ "chevalerie": [
+  {
+   "name": "Coup de Bouclier",
+   "cost": 2,
+   "mult": 1.4,
+   "desc": "Le bouclier répond présent.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Charge du Rempart",
+   "cost": 3,
+   "mult": 1.6,
+   "desc": "Une charge qui ne recule pas.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Forteresse Mobile",
+   "cost": 5,
+   "mult": 1.8,
+   "desc": "Le rempart avance et frappe.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Siège Inébranlable",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le siège devient assaut.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Kiri : Lame du Serment",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "La lame invincible du chevalier.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Muraille Absolue",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Rien ne passe.",
+   "cible": "1 ennemi"
+  }
  ]
 }

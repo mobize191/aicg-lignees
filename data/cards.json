@@ -2283,5 +2283,157 @@
   "family": "seuil",
   "agi": 7,
   "int": 11
+ },
+ {
+  "id": "a50",
+  "name": "Paladin",
+  "rarity": "R",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 13,
+  "hp": 72,
+  "soloSpell": "Serment de Lumière",
+  "soloCost": 5,
+  "soloMult": 1.8,
+  "agi": 9,
+  "int": 5,
+  "effect": {
+   "kind": "shield",
+   "value": 25
+  },
+  "family": "paladin"
+ },
+ {
+  "id": "a51",
+  "name": "Paladin Sacré",
+  "rarity": "SR",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 16,
+  "hp": 80,
+  "soloSpell": "Croisade",
+  "soloCost": 9,
+  "soloMult": 2.6,
+  "agi": 11,
+  "int": 6,
+  "effect": {
+   "kind": "shield",
+   "value": 30
+  },
+  "family": "paladin"
+ },
+ {
+  "id": "a52",
+  "name": "Paladine Sacrée",
+  "rarity": "UR",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 20,
+  "hp": 88,
+  "soloSpell": "Égide Ardente",
+  "soloCost": 14,
+  "soloMult": 3.4,
+  "agi": 14,
+  "int": 8,
+  "effect": {
+   "kind": "shield",
+   "value": 40
+  },
+  "family": "paladin"
+ },
+ {
+  "id": "a53",
+  "name": "Isaure, Égide de l’Aube",
+  "rarity": "L",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 24,
+  "hp": 100,
+  "soloSpell": "Égide de l’Aube",
+  "soloCost": 6,
+  "soloMult": 2,
+  "agi": 17,
+  "int": 10,
+  "effect": {
+   "kind": "shield",
+   "value": 60
+  },
+  "family": "paladin"
+ },
+ {
+  "id": "s15",
+  "name": "Chevalier",
+  "rarity": "R",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 13,
+  "hp": 72,
+  "soloSpell": "Rempart Vivant",
+  "soloCost": 5,
+  "soloMult": 1.8,
+  "agi": 9,
+  "int": 5,
+  "effect": {
+   "kind": "shield",
+   "value": 25
+  },
+  "family": "chevalerie"
+ },
+ {
+  "id": "s16",
+  "name": "Chevalière du Rempart",
+  "rarity": "SR",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 16,
+  "hp": 80,
+  "soloSpell": "Muraille",
+  "soloCost": 9,
+  "soloMult": 2.6,
+  "agi": 11,
+  "int": 6,
+  "effect": {
+   "kind": "shield",
+   "value": 30
+  },
+  "family": "chevalerie"
+ },
+ {
+  "id": "s17",
+  "name": "Gardienne du Rempart",
+  "rarity": "UR",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 20,
+  "hp": 88,
+  "soloSpell": "Gardienne Éternelle",
+  "soloCost": 14,
+  "soloMult": 3.4,
+  "agi": 14,
+  "int": 8,
+  "effect": {
+   "kind": "shield",
+   "value": 40
+  },
+  "family": "chevalerie"
+ },
+ {
+  "id": "s18",
+  "name": "Kiri l’Invincible",
+  "rarity": "L",
+  "classe": "Guerrier",
+  "element": "Neutre",
+  "atk": 24,
+  "hp": 100,
+  "soloSpell": "Lame Invincible",
+  "soloCost": 6,
+  "soloMult": 2,
+  "agi": 17,
+  "int": 10,
+  "effect": {
+   "kind": "shield",
+   "value": 60
+  },
+  "family": "chevalerie"
  }
 ]

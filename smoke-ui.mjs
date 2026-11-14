@@ -1059,12 +1059,27 @@ async function main() {
         const to = api.DATA.cards.find((c) => c.id === t.to) ?? api.DATA.monsters?.find((c) => c.id === t.to);
         if (!from || !to) continue;
         const pct = api.noLossPctOf(from, to);
-        const mm = (lvl) => 1 + 0.1 * (lvl - 1);
-        const atk10 = from.atk * mm(10) * (1 + pct / 100);
-        const hp10 = from.hp * mm(10) * (1 + pct / 100);
-        const atk1 = to.atk * mm(1);
-        const hp1 = to.hp * mm(1);
-        if (atk10 < atk1 - 1e-9 || hp10 < hp1 - 1e-9) worst = `${from.id}->${t.to} pct=${pct}`;
+        // meme calcul que le moteur (classeMods + cran de race) : une evolution peut changer de classe (gel lot E : s14 Pretre -> s15 Guerrier)
+        const mm = (lvl) => 1 + (api.DATA.engine.LEVEL_BONUS ?? 0.1) * (lvl - 1);
+        const EN = api.DATA.engine;
+        const raceOf = (c) => {
+          if (EN.RACE_DIVINE_IDS.includes(c.id)) return 'divine';
+          if (EN.RACE_MYSTIQUE_IDS.includes(c.id)) return 'mystique';
+          if (EN.RACE_MONSTRE_IDS.includes(c.id)) return 'monstre';
+          if (!c.dungeon) return 'humaine';
+          if (EN.RACE_HUMAINE_DUNGEON_IDS.includes(c.id)) return 'humaine';
+          return 'monstre';
+        };
+        const raw = (c, lvl) => {
+          const cm = EN.CLASSE_MODS[c.classe] ?? EN.CLASSE_DEFAULT;
+          const tr = api.DATA.trees[raceOf(c)] ?? {};
+          const cran = Number((tr.crans ?? {})[String(tr.rang)] ?? 0);
+          return { atk: c.atk * mm(lvl) * (1 + cm.atkPct) * (1 + cran / 100), hp: c.hp * mm(lvl) * (1 + cm.hpPct) * (1 + cran / 100) };
+        };
+        const a = raw(from, 10); const b = raw(to, 1);
+        // semantique moteur : la cible au niv. 1, boostée du pct noLoss, couvre la source au niv. 10
+        const atk1 = b.atk * (1 + pct / 100); const hp1 = b.hp * (1 + pct / 100);
+        if (atk1 < a.atk - 1e-9 || hp1 < a.hp - 1e-9) worst = `${from.id}->${t.to} pct=${pct}`;
       }
     }
     check('B5 c palier sans perte nette sur toutes les évolutions (simulation)', worst === null, worst ?? 'ok');

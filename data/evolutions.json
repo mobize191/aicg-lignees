@@ -502,5 +502,35 @@
    "to": "d36",
    "voie": "Peste, Mère des Fléaux"
   }
+ ],
+ "a30": [
+  {
+   "to": "a6",
+   "voie": "fidèle au sabre"
+  },
+  {
+   "to": "a50",
+   "voie": "la lumière — le paladin"
+  }
+ ],
+ "a50": [
+  {
+   "to": "a51",
+   "voie": "fidèle à la lumière"
+  },
+  {
+   "to": "u3",
+   "voie": "le zèle — Croisé de l’Aube"
+  }
+ ],
+ "s14": [
+  {
+   "to": "s6",
+   "voie": "fidèle au bouclier"
+  },
+  {
+   "to": "s15",
+   "voie": "la voie du rempart — la chevalerie"
+  }
  ]
 }

@@ -228,5 +228,25 @@
    "w18"
   ],
   "future": []
+ },
+ "paladin": {
+  "name": "La voie du Paladin",
+  "steps": [
+   "a50",
+   "a51",
+   "a52",
+   "a53"
+  ],
+  "future": []
+ },
+ "chevalerie": {
+  "name": "La Chevalerie du Rempart",
+  "steps": [
+   "s15",
+   "s16",
+   "s17",
+   "s18"
+  ],
+  "future": []
  }
 }
