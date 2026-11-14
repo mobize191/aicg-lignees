@@ -2033,7 +2033,7 @@ function artKeyOf(c) {
 
 function artOf(c) {
   const k = artKeyOf(c);
-  const cls = c && c.exception ? 'art-img exception' : 'art-img';
+  const cls = c && (c.exception === 'r' || c.exception === 'o') ? 'art-img exception exception-' + c.exception : 'art-img'; // v3.4 E2 : marqueur par thème
   if (k && ART[k]) return `<img class="${cls}" src="${ART[k]}" alt="${c.name}" loading="lazy">`;
 
   return `<div class="glyph">${GLYPH[c.classe] ?? '★'}</div>`;
@@ -2060,8 +2060,11 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
     if (!badge) { badge = '✨ Shiny'; badgeClass = 'shiny'; }
   }
   // v3.4 Exception (suite 61) : badge « ✦ Exception » à côté du badge shiny (coexistence possible) ; le marqueur d'art est posé par artOf (.exception)
-  let badgeEx = '';
-  if ((c.exception === 'r' || c.exception === 'o') && !locked) badgeEx = '✦ Exception';
+  let badgeEx = '', badgeExClass = '';
+  if ((c.exception === 'r' || c.exception === 'o') && !locked) { // v3.4 E2 : badge par thème
+    badgeEx = c.exception === 'r' ? '✦ Repos' : '✧ Obscure';
+    badgeExClass = 'exception exception-' + c.exception;
+  }
   const mana = c.manaMax !== undefined ? `<span class="mana">✦ ${c.mana}/${c.manaMax}</span>` : '';
   const maxHp = c.maxHp !== undefined ? `/${c.maxHp}` : '';
   const shield = c.shield > 0 ? `<span class="sh">🛡 ${c.shield}</span>` : '';
@@ -2088,7 +2091,7 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
     <div class="rar-chip">${c.rarity}</div>
     ${c.level ? `<div class="lvl-chip">Nv ${c.level}</div>` : ''}
     ${badge ? `<div class="badge ${badgeClass}">${badge}</div>` : ''}
-    ${badgeEx ? `<div class="badge exception">${badgeEx}</div>` : ''}
+    ${badgeEx ? `<div class="badge ${badgeExClass}">${badgeEx}</div>` : ''}
     <div class="cardbody">
       <div class="name">${c.name}</div>
       <div class="meta"><span>${GLYPH[c.classe] ?? ''} ${c.classe}</span>${c.element ? `<span>${EL_GLYPH[c.element] ?? ''} ${c.element}</span>` : '<span>⚪ Neutre</span>'}</div>

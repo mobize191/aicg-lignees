@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { loadEngine, loadData } from './helpers/load.mjs';
 import { bootDist, wait } from '../stub.mjs';
 
@@ -134,14 +135,21 @@ test('E1 UI : newInst pose exception, instCard propage, artKeyOf chaîné, badge
   assert.equal(api.artKeyOf({ id: 'n1', exception: 'o' }), 'n1', 'fallback propre : pas de -o au manifeste -> classique (jamais de glyph cassé)');
   assert.equal(api.artKeyOf({ id: 'n1', exception: 'r', shiny: true }), 'n1-s', 'shiny prioritaire sur exception');
   const artEx = api.artOf({ id: 'n1', name: 'x', classe: 'Mage', exception: 'r' });
-  assert.ok(artEx.includes('art-repos.jpg') && /class="art-img exception/.test(artEx), 'art -r + classe marqueur');
-  // badge cardFront (coexiste avec le shiny)
+  const artExO = api.artOf({ id: 'n1', name: 'x', classe: 'Mage', exception: 'o' });
+  assert.ok(artEx.includes('art-repos.jpg') && /class="art-img exception exception-r"/.test(artEx), 'art -r + marqueur par thème exception-r');
+  assert.ok(/class="art-img exception exception-o"/.test(artExO), 'marqueur par thème exception-o (fallback art classique)');
+  // badge cardFront par thème (coexiste avec le shiny)
   const front = api.cardFront({ ...api.byId('n1'), level: 3, exception: 'r' });
-  assert.ok(front.includes('✦ Exception') && /badge exception/.test(front));
+  assert.ok(front.includes('✦ Repos') && /badge exception exception-r/.test(front));
+  const frontO = api.cardFront({ ...api.byId('n1'), level: 3, exception: 'o' });
+  assert.ok(frontO.includes('✧ Obscure') && /badge exception exception-o/.test(frontO));
   const frontBoth = api.cardFront({ ...api.byId('n1'), level: 3, exception: 'o', shiny: true });
-  assert.ok(frontBoth.includes('✦ Exception') && frontBoth.includes('✨ Shiny'), 'coexistence shiny + Exception');
+  assert.ok(frontBoth.includes('✧ Obscure') && frontBoth.includes('✨ Shiny'), 'coexistence shiny + Exception');
   const frontPlain = api.cardFront({ ...api.byId('n1'), level: 3 });
-  assert.ok(!frontPlain.includes('✦ Exception'));
+  assert.ok(!frontPlain.includes('✦') && !frontPlain.includes('✧'));
+  // CSS par thème embarquée dans le dist (B2)
+  const dist = readFileSync('dist.html', 'utf8');
+  assert.ok(dist.includes('.art-img.exception-o') && dist.includes('box-shadow: inset 0 0 0 2px rgba(140, 20, 32, .55)') && dist.includes('@keyframes exception-sheen-o') && dist.includes('.art-img.exception-r') && dist.includes('prefers-reduced-motion: no-preference'), 'marqueurs CSS par thème dans le dist');
   // apposition seedée : même seed -> même texte, préfixe « — », texte de la table
   const a1 = api.exceptionApposition('n1', 'r', 'marees', api.mulberry32(5));
   const a2 = api.exceptionApposition('n1', 'r', 'marees', api.mulberry32(5));

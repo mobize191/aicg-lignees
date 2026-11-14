@@ -25,7 +25,7 @@
 
 1. `node build.mjs` → dist régénéré (le build est déterministe : deux builds sans changement donnent le même fichier).
 2. `node --test` → tous les tests verts (379 à ce jour).
-3. `node smoke-ui.mjs dist.html` → tous les checks verts (496 à ce jour).
+3. `node smoke-ui.mjs dist.html` → tous les checks verts (498 à ce jour).
 4. `node combat-digest.mjs dist.html 3000` → digest et victoires comparés à la baseline ; notés dans `docs/roadmap.md` si le gameplay bouge.
 5. Si `data/` a bougé : `node tools/gen-tables.mjs` puis commit des tableaux.
 

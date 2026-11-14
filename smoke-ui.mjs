@@ -2039,10 +2039,12 @@ async function main() {
       api.setArt(`${cidE}-r`, 'art-repos.jpg');
       check('S31bis c artKeyOf chaîné shiny > exception > classique (fallback propre si -o absent)', api.artKeyOf({ id: cidE }) === cidE && api.artKeyOf({ id: cidE, exception: 'r' }) === `${cidE}-r` && api.artKeyOf({ id: cidE, exception: 'o' }) === cidE && api.artKeyOf({ id: cidE, exception: 'r', shiny: true }) === `${cidE}-s`, '');
       const artEx = api.artOf({ id: cidE, name: 'x', classe: 'Guerrier', exception: 'r' });
-      check('S31bis d artOf : art -r rendu + classe marqueur .exception', artEx.includes('art-repos.jpg') && /class="art-img exception/.test(artEx), artEx.slice(0, 120));
+      const artExO = api.artOf({ id: cidE, name: 'x', classe: 'Guerrier', exception: 'o' });
+      check('S31bis d artOf : art -r rendu + marqueur par thème (exception-r / exception-o)', artEx.includes('art-repos.jpg') && /class="art-img exception exception-r"/.test(artEx) && /class="art-img exception exception-o"/.test(artExO), artEx.slice(0, 120));
       const frontEx = api.cardFront({ ...api.byId(cidE), level: 3, exception: 'r' });
+      const frontExO = api.cardFront({ ...api.byId(cidE), level: 3, exception: 'o' });
       const frontBoth = api.cardFront({ ...api.byId(cidE), level: 3, exception: 'o', shiny: true });
-      check('S31bis e cardFront : badge « ✦ Exception » coexistant avec « ✨ Shiny »', frontEx.includes('✦ Exception') && /badge exception/.test(frontEx) && frontBoth.includes('✦ Exception') && frontBoth.includes('✨ Shiny'), '');
+      check('S31bis e cardFront : badges par thème « ✦ Repos » / « ✧ Obscure », coexistant avec « ✨ Shiny »', frontEx.includes('✦ Repos') && /badge exception exception-r/.test(frontEx) && frontExO.includes('✧ Obscure') && /badge exception exception-o/.test(frontExO) && frontBoth.includes('✧ Obscure') && frontBoth.includes('✨ Shiny'), '');
       instE.exception = 'r';
       api.go('#equipe'); await wait(30);
       const eqHtmlE = els.get('app')._innerHTML;
@@ -2085,6 +2087,8 @@ async function main() {
       const ap2 = api.exceptionApposition('n1', 'r', 'marees', api.mulberry32(5));
       check('S31bis l apposition seedée (même seed = même texte, préfixe « — »)', ap1 === ap2 && ap1.startsWith(' — ') && ap1.length > 4, ap1);
       check('S31bis m 0 exception lot E1', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+      check('S31bis n CSS par thème dans le dist : .exception-r (sweep or) + .exception-o (liseré rouge sombre inset + sheen rouge) + prefers-reduced-motion conservé', html.includes('.art-img.exception-r') && html.includes('.art-img.exception-o') && html.includes('box-shadow: inset 0 0 0 2px rgba(140, 20, 32, .55)') && html.includes('@keyframes exception-sheen-o') && html.includes('prefers-reduced-motion: no-preference') && html.includes('.badge.exception-o'), '');
+      check('S31bis o badges CSS par thème présents (.badge.exception-r/.exception-o)', html.includes('.badge.exception-r') && html.includes('.badge.exception-o') && html.includes('.chip.exception-o'), '');
     }
 
     // S31 — lot 9 XP 1-100 : courbe cubique (n^3), table de minutes, niveaux de donjon étirés sur la grille v1
