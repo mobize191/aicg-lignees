@@ -18,8 +18,8 @@ test('lot 8 : bloc SHINY en data — taux 1/100 (TRANCHÉ suite 40), bornes 3-5 
   assert.equal(CFG.artSuffixe, '-s', 'manifeste : fichier {id}-s.jpg, clé "<id>-s"');
   assert.ok(Number.isInteger(CFG.migrationSeed));
   assert.deepEqual(E.SHINY_CFG, CFG, 'alias SHINY_CFG exposé au moteur/UI');
-  assert.equal(E.DATA.engine.CURRENT_VERSION, 32);
-  assert.equal(E.DATA.engine.SAVE_VERSION, 32);
+  assert.equal(E.DATA.engine.CURRENT_VERSION, 33); // v33 : migration Exception (suite 61)
+  assert.equal(E.DATA.engine.SAVE_VERSION, 33);
 });
 
 test('lot 8 : rollShiny — un seul tirage porte les deux (drapeau + bonus borné)', () => {
@@ -129,7 +129,7 @@ test('lot 8 : migration v31 -> v32 — chaque exemplaire existant tire sa versio
     ],
   };
   const out = E.migrate(JSON.parse(JSON.stringify(save)));
-  assert.equal(out.version, 32);
+  assert.equal(out.version, 33);
   assert.equal(out.gold, 500, 'non destructif');
   for (const inst of out.instances) {
     assert.equal(typeof inst.shiny, 'boolean', 'drapeau posé');
@@ -142,9 +142,9 @@ test('lot 8 : migration v31 -> v32 — chaque exemplaire existant tire sa versio
   // idempotent : une instance déjà shinée n'est pas re-tirée
   const deja = E.migrate({ version: 32, instances: [{ iid: 1, id: 'n1', lvl: 1, shiny: true, shinyBonus: 0.05 }] });
   assert.equal(deja.instances[0].shinyBonus, 0.05, 'shiny existant conservé tel quel');
-  // la chaîne v30 -> v32 passe par v31 (éclats -> or) puis v32 (tirage shiny)
+  // la chaîne v30 -> v33 passe par v31 (éclats -> or), v32 (tirage shiny), v33 (tirage Exception)
   const old = E.migrate({ version: 30, instances: [{ iid: 1, id: 'n1', lvl: 5 }], gold: 10, items: { 'eclat-regression': 2 } });
-  assert.equal(old.version, 32);
+  assert.equal(old.version, 33);
   assert.equal(old.gold, 10 + 2 * data.engine.FUSION.eclatRegressionOr);
   assert.equal(typeof old.instances[0].shiny, 'boolean');
 });

@@ -242,6 +242,9 @@ const API_PAIRS = {
   allMonsters: 'allMonsters',
   spellSideOf: 'spellSideOf',
   waveSeedFor: 'waveSeedFor',
+  rollException: 'rollException', exceptionTheme: 'exceptionTheme', exceptionApposition: 'exceptionApposition', EXCEPTION_CFG: 'EXCEPTION_CFG',
+  artKeyOf: 'artKeyOf', instCard: 'instCard', exceptionCount: 'exceptionCount', cardHasException: 'cardHasException', universeOfCard: 'universeOfCard',
+  migrate: 'migrate', snapshot: 'snapshot', restore: 'restore',
 };
 
 export function bootDist(file, extraPairs = {}) {

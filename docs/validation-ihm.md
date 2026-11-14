@@ -12,9 +12,9 @@ git clone https://github.com/mobize191/aicg-lignees.git
 cd aicg-lignees
 # Node 20+ requis pour le harnas
 node build.mjs                                # build déterministe : dist.html régénéré
-node --test                                   # 364 tests verts attendus
+node --test                                   # 379 tests verts attendus
 node smoke-ui.mjs dist.html                   # smoke complet : PASS attendus (crash B9 possible selon la date — dette connue, correctif en cours)
-node combat-digest.mjs dist.html 3000         # MESURE courante : d630d83e… 419/3000, 0 exception, 0 marathon (référence en vigueur 29c995da… 733/3000 jusqu'au verrouillage ; nouvelle baseline PROPOSÉE d630d83e…/584f5d16… suite 55)
+node combat-digest.mjs dist.html 3000         # MESURE courante : d630d83e… 419/3000, 0 exception, 0 marathon (baseline VERROUILLÉE suite 60 par Marc-Olivier)
 node combat-digest.mjs dist.html 10000        # MESURE N = 10 000 courante : 584f5d16… 1419/10000 (0 exception, 0 marathon)
 # servir le jeu en reproduisant le déploiement Pages (le chargeur d'assets a besoin de http, pas de file://)
 mkdir -p .site && cp dist.html .site/index.html && cp assets-v3.json assets-v3.1.json .site/ && cp -r site-assets/fx .site/fx && cp -r site-assets/errance .site/errance

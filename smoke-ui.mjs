@@ -2025,6 +2025,68 @@ async function main() {
       check('S30 k 0 exception lot 8', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
     }
 
+    // S31bis — Exception v3.4 (lot E1, suite 61) : tirage à l'obtention, art chaîné shiny > exception > classique, badge, compteur + filtre, fusion, migration v33, apposition seedée
+    {
+      const errBefore = errors.length;
+      const cfgE = api.EXCEPTION_CFG;
+      check('S31bis a bloc EXCEPTION en data (taux 1/100, themeR 0,5, seed entier) + versions 33', cfgE.taux === 0.01 && cfgE.themeR === 0.5 && Number.isInteger(cfgE.migrationSeed) && api.DATA.engine.CURRENT_VERSION === 33 && api.DATA.engine.SAVE_VERSION === 33, JSON.stringify(cfgE));
+      const cidE = api.CATALOG.find((c) => c.rarity === 'C')?.id ?? 'n1';
+      const nE0 = api.store.instances.length;
+      const instE = api.newInst(cidE);
+      check('S31bis b newInst tire exception à l’obtention (null | r | o)', api.store.instances.length === nE0 + 1 && (instE.exception === null || instE.exception === 'r' || instE.exception === 'o'), JSON.stringify(instE.exception));
+      api.setArt(cidE, 'art-classic.jpg');
+      api.setArt(`${cidE}-s`, 'art-shiny.jpg');
+      api.setArt(`${cidE}-r`, 'art-repos.jpg');
+      check('S31bis c artKeyOf chaîné shiny > exception > classique (fallback propre si -o absent)', api.artKeyOf({ id: cidE }) === cidE && api.artKeyOf({ id: cidE, exception: 'r' }) === `${cidE}-r` && api.artKeyOf({ id: cidE, exception: 'o' }) === cidE && api.artKeyOf({ id: cidE, exception: 'r', shiny: true }) === `${cidE}-s`, '');
+      const artEx = api.artOf({ id: cidE, name: 'x', classe: 'Guerrier', exception: 'r' });
+      check('S31bis d artOf : art -r rendu + classe marqueur .exception', artEx.includes('art-repos.jpg') && /class="art-img exception/.test(artEx), artEx.slice(0, 120));
+      const frontEx = api.cardFront({ ...api.byId(cidE), level: 3, exception: 'r' });
+      const frontBoth = api.cardFront({ ...api.byId(cidE), level: 3, exception: 'o', shiny: true });
+      check('S31bis e cardFront : badge « ✦ Exception » coexistant avec « ✨ Shiny »', frontEx.includes('✦ Exception') && /badge exception/.test(frontEx) && frontBoth.includes('✦ Exception') && frontBoth.includes('✨ Shiny'), '');
+      instE.exception = 'r';
+      api.go('#equipe'); await wait(30);
+      const eqHtmlE = els.get('app')._innerHTML;
+      check('S31bis f équipe : compteur « ✦ N exceptions » rendu à côté du shiny', /✦ \d+ exceptions/.test(eqHtmlE) && /✨ \d+ shiny/.test(eqHtmlE), (eqHtmlE.match(/✦ \d+ exceptions/) ?? ['?'])[0]);
+      const fb2 = els.get('app').querySelector('#open-filters');
+      if (fb2 && fb2.onclick) { fb2.onclick(); await wait(20); }
+      const exChips = [...doc.querySelectorAll('.chip')].filter((c) => c.dataset.fkey === 'exception').map((c) => c.textContent.trim());
+      check('S31bis g filtre « ✦ Exceptions seules » dans la modale de filtres', exChips.some((t) => t.includes('Exceptions seules')), exChips.join('|'));
+      const apply2 = doc.querySelector('#filt-apply');
+      if (apply2 && apply2.onclick) { apply2.onclick(); await wait(20); }
+      const countsE = {}; for (const i of api.store.instances) countsE[i.id] = (countsE[i.id] ?? 0) + 1;
+      const teamIidsE = new Set((api.store.team?.slots ?? []).filter(Boolean));
+      const rarOkE = (i) => !teamIidsE.has(i.iid) && (countsE[i.id] ?? 0) >= 2 && (api.byId(i.id)?.rarity ?? 'N') !== 'N' && (api.byId(i.id)?.rarity ?? '') !== 'M';
+      const qA = api.store.instances.find(rarOkE);
+      const qB = api.store.instances.find((i) => rarOkE(i) && i.iid !== qA?.iid);
+      let exHeriteOk = false, exFusOk = false, exNoH = false;
+      if (qA && qB) {
+        qA.exception = 'o';
+        const planE = api.fusionPreview(qA, qB, api.mulberry32(123));
+        exHeriteOk = planE.ok && planE.exceptionHerite === true;
+        if (planE.ok) {
+          const resE = api.doFusion(api.store.instances, qA.iid, qB.iid, [], planE, { teamIids: [...teamIidsE], ownedOf: (id) => api.store.instances.filter((i) => i.id === id).length, rng: api.mulberry32(8) });
+          exFusOk = !!resE.ok && (resE.enfant?.exception === 'r' || resE.enfant?.exception === 'o');
+          qA.exception = null;
+          const planE2 = api.fusionPreview(qA, qB, api.mulberry32(124));
+          if (planE2.ok) {
+            const resE2 = api.doFusion(api.store.instances, qA.iid, qB.iid, [], planE2, { teamIids: [...teamIidsE], ownedOf: (id) => api.store.instances.filter((i) => i.id === id).length, rng: api.mulberry32(9) });
+            exNoH = !!resE2.ok && resE2.enfant?.exception === undefined;
+          }
+        }
+      }
+      check('S31bis h aperçu de fusion annonce l’héritage Exception (exceptionHerite)', exHeriteOk, '');
+      check('S31bis i fusion : au moins un parent Exception => enfant Exception (thème re-tiré 50/50)', exFusOk, '');
+      check('S31bis j aucun parent Exception => enfant sans Exception', exNoH, '');
+      const save32 = { version: 32, gold: 5, instances: [{ iid: 1, id: 'n1', lvl: 3, shiny: false, shinyBonus: 0 }, { iid: 2, id: 'a1', lvl: 2, exception: 'r' }] };
+      const m1 = api.migrate(JSON.parse(JSON.stringify(save32)));
+      const m2 = api.migrate(JSON.parse(JSON.stringify(save32)));
+      check('S31bis k migration v32 -> v33 : version 33, exception posée (null|r|o), flag existant conservé, idempotente (2 passes)', m1.version === 33 && m1.instances.every((i) => i.exception === null || i.exception === 'r' || i.exception === 'o') && m1.instances[1].exception === 'r' && JSON.stringify(m1.instances.map((i) => i.exception)) === JSON.stringify(m2.instances.map((i) => i.exception)), JSON.stringify(m1.instances.map((i) => i.exception)));
+      const ap1 = api.exceptionApposition('n1', 'r', 'marees', api.mulberry32(5));
+      const ap2 = api.exceptionApposition('n1', 'r', 'marees', api.mulberry32(5));
+      check('S31bis l apposition seedée (même seed = même texte, préfixe « — »)', ap1 === ap2 && ap1.startsWith(' — ') && ap1.length > 4, ap1);
+      check('S31bis m 0 exception lot E1', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
     // S31 — lot 9 XP 1-100 : courbe cubique (n^3), table de minutes, niveaux de donjon étirés sur la grille v1
     {
       const errBefore = errors.length;

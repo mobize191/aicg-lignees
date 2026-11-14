@@ -693,7 +693,7 @@ function combatMaxOf(inst) {
   if (!c) return null;
   const n = c.family ? (store.shards[c.family] ?? 0) : 0;
   const m = n > 0 ? shardMult(n) : 1; // éclats de famille fondus : bonus de stats
-  let base = { ...c, shiny: !!inst.shiny };
+  let base = { ...c, shiny: !!inst.shiny, exception: inst.exception === 'r' || inst.exception === 'o' ? inst.exception : null };
   base = { ...base, atk: Math.max(1, Math.round(base.atk * m)), hp: Math.max(1, Math.round(base.hp * m)) };
   base = applyShinyStats(base, shinyBonusOf(inst)); // lot 8 : variance shiny bornée de l'exemplaire
   if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
@@ -788,7 +788,9 @@ function syncCount(id) {
 function newInst(id, lvl = 1, xp = 0) {
   // lot 8 shiny (suite 40) : chaque exemplaire tire sa version a l'obtention — un seul tirage porte le drapeau et le bonus borné
   const s = rollShiny(uiRand, SHINY_CFG);
-  const inst = { iid: store.instanceSeq++, id, lvl, xp, name: '', acc: [], isNew: true, shiny: s.shiny, shinyBonus: s.bonus };
+  // v3.4 Exception (suite 61) : tirage unique à l'obtention, porté par l'exemplaire, cosmétique pure (coexiste avec le shiny)
+  const ex = rollException(uiRand, EXCEPTION_CFG) ? exceptionTheme(uiRand, EXCEPTION_CFG) : null;
+  const inst = { iid: store.instanceSeq++, id, lvl, xp, name: '', acc: [], isNew: true, shiny: s.shiny, shinyBonus: s.bonus, exception: ex };
   store.instances.push(inst);
   syncCount(id);
   return inst;
@@ -797,11 +799,14 @@ function newInst(id, lvl = 1, xp = 0) {
 function shinyBonusOf(inst) { return inst && inst.shiny ? (inst.shinyBonus ?? 0) : 0; }
 function shinyCount() { return store.instances.filter((i) => i.shiny).length; }
 function cardHasShiny(id) { return instsOf(id).some((i) => i.shiny); }
+// v3.4 Exception (suite 61) : helpers miroir du shiny (compteur + présence par carte)
+function exceptionCount() { return store.instances.filter((i) => i.exception === 'r' || i.exception === 'o').length; }
+function cardHasException(id) { return instsOf(id).some((i) => i.exception === 'r' || i.exception === 'o'); }
 // fiche d'un exemplaire : stats de base boostées par la variance shiny + drapeau pour l'art/le badge
 function instCard(c, inst) {
   const b = shinyBonusOf(inst);
   const cc = b > 0 ? applyShinyStats(c, b) : c;
-  return { ...cc, level: inst.lvl, ...statsAt(cc, inst.lvl), shiny: !!inst.shiny, shinyBonus: b };
+  return { ...cc, level: inst.lvl, ...statsAt(cc, inst.lvl), shiny: !!inst.shiny, shinyBonus: b, exception: inst.exception === 'r' || inst.exception === 'o' ? inst.exception : null };
 }
 function bestInstOf(id) {
   const list = instsOf(id);
@@ -1193,6 +1198,7 @@ function restore(data) {
         isNew: raw.isNew === true,
         shiny: raw.shiny === true, // lot 8 : version shiny de l'exemplaire (migration v32 pour les anciennes sauvegardes)
         shinyBonus: Number.isFinite(raw.shinyBonus) ? raw.shinyBonus : 0,
+        exception: raw.exception === 'r' || raw.exception === 'o' ? raw.exception : null, // v3.4 : thème Exception de l'exemplaire (migration v33 pour les anciennes sauvegardes)
       };
       store.instanceSeq = Math.max(store.instanceSeq, inst.iid + 1);
       if (raw.iid !== inst.iid) iidRemap.set(raw.iid, inst.iid); // correctifs-bots : clé legacy → iid entier
@@ -1978,11 +1984,10 @@ function clearNewOf(id) {
   for (const i of instsOf(id)) i.isNew = false;
 }
 
-// v3.4 : mécanique Exception — taux 1/100 à l'obtention, tirage 50% Repos / 50% Obscures
-// Le statut se transfère à la fusion. L'art utilisé est ART[id+'-r'] ou ART[id+'-o'] (fallback propre sur classique).
-const EXCEPTION_RATE = 100; // 1/100
-function rollException(rng) { return rng() < 1 / EXCEPTION_RATE; }
-function exceptionTheme(rng) { return rng() < 0.5 ? 'r' : 'o'; }
+// v3.4 : mécanique Exception — taux en data (EXCEPTION.taux, 1/100), tirage 50% Repos / 50% Obscures.
+// rollException/exceptionTheme vivent dans src/engine/progression.js (partagés avec la migration v32 -> v33) ;
+// ici : tables d'appositions + apposition seedée. Le statut se transfère à la fusion.
+// L'art utilisé est ART[id+'-r'] ou ART[id+'-o'] (fallback propre sur classique).
 // Appositions choisies dans des tables par axe et par thème en data (jamais de texte aléatoire)
 const EXCEPTION_APPOSITIONS = {
   r: { // Repos -> action/lieu de vie
@@ -1998,10 +2003,15 @@ const EXCEPTION_APPOSITIONS = {
     default: [' des Ombres', ' de Lumière Noire', ' du Crépuscule Intérieur', ' Renversé', ' Corrompu', ' Purifié'],
   },
 };
-function exceptionApposition(id, theme, universe) {
+function exceptionApposition(id, theme, universe, rng = uiRand) {
   const table = EXCEPTION_APPOSITIONS[theme]?.[universe] || EXCEPTION_APPOSITIONS[theme]?.default || [];
   if (!table.length) return '';
-  return ' — ' + table[Math.floor(Math.random() * table.length)];
+  return ' — ' + table[Math.floor(rng() * table.length)];
+}
+// univers d'apposition d'une carte : donjon (monstres, cartes divines) ou biome, sinon 'default'
+function universeOfCard(card) {
+  const u = card?.dungeon ?? (card?.biome && card.biome !== 'recrues' ? card.biome : null);
+  return (u && Object.hasOwn(EXCEPTION_APPOSITIONS.r, u)) ? u : 'default';
 }
 
 
@@ -2012,6 +2022,11 @@ function artKeyOf(c) {
   if (c.shiny) {
     const sk = id + (SHINY_CFG.artSuffixe ?? '-s');
     if (ART[sk]) return sk;
+  }
+  // v3.4 Exception (suite 61) : art thématique "<id>-" / "<id>-o" si présent, après le shiny (priorité), fallback classique
+  if (c.exception === 'r' || c.exception === 'o') {
+    const ek = id + '-' + c.exception;
+    if (ART[ek]) return ek;
   }
   return id;
 }
@@ -2044,6 +2059,9 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
     extraClass += ' shiny';
     if (!badge) { badge = '✨ Shiny'; badgeClass = 'shiny'; }
   }
+  // v3.4 Exception (suite 61) : badge « ✦ Exception » à côté du badge shiny (coexistence possible) ; le marqueur d'art est posé par artOf (.exception)
+  let badgeEx = '';
+  if ((c.exception === 'r' || c.exception === 'o') && !locked) badgeEx = '✦ Exception';
   const mana = c.manaMax !== undefined ? `<span class="mana">✦ ${c.mana}/${c.manaMax}</span>` : '';
   const maxHp = c.maxHp !== undefined ? `/${c.maxHp}` : '';
   const shield = c.shield > 0 ? `<span class="sh">🛡 ${c.shield}</span>` : '';
@@ -2070,6 +2088,7 @@ function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = f
     <div class="rar-chip">${c.rarity}</div>
     ${c.level ? `<div class="lvl-chip">Nv ${c.level}</div>` : ''}
     ${badge ? `<div class="badge ${badgeClass}">${badge}</div>` : ''}
+    ${badgeEx ? `<div class="badge exception">${badgeEx}</div>` : ''}
     <div class="cardbody">
       <div class="name">${c.name}</div>
       <div class="meta"><span>${GLYPH[c.classe] ?? ''} ${c.classe}</span>${c.element ? `<span>${EL_GLYPH[c.element] ?? ''} ${c.element}</span>` : '<span>⚪ Neutre</span>'}</div>
@@ -2474,13 +2493,14 @@ function openEquipPicker(card, slot) {
 function ficheCoreHtml(card, { level = null, unit = null, inst = null, ownedInfo = '', extra = '' } = {}) {
   // lot 8 shiny (suite 40) : la fiche affiche le badge et les stats boostées de l'exemplaire shiny
   const sb = inst && inst.shiny && !unit ? (inst.shinyBonus ?? 0) : 0;
+  const ex = inst?.exception || unit?.exception || null; // v3.4 : thème Exception de l'exemplaire (fiche + combat)
   const sc = sb > 0 ? applyShinyStats(card, sb) : card;
   const lvl = level ?? levelOf(card.id);
   const cm = CLASSE_MODS[card?.classe] ?? {};
   const st = unit
     ? { atk: Math.max(0, Math.round(unit.atk * (1 + (unit.atkBuff || 0)))), hp: unit.hp, maxHp: unit.maxHp, agi: unit.agi ?? '—', int: unit.int ?? '—' }
     : { ...statsAt(sc, lvl), agi: inst?.agi ?? '—', int: inst?.int ?? '—' };
-  const art = `<div class="modal-card">${cardFront({ ...sc, level: lvl, ...statsAt(sc, lvl), shiny: !!(inst?.shiny || unit?.shiny) }, { extraClass: 'big' + (hasArt({ ...sc, shiny: !!(inst?.shiny || unit?.shiny) }) ? ' unit-art' : '') })}</div>`;
+  const art = `<div class="modal-card">${cardFront({ ...sc, level: lvl, ...statsAt(sc, lvl), shiny: !!(inst?.shiny || unit?.shiny), exception: ex === 'r' || ex === 'o' ? ex : null }, { extraClass: 'big' + (hasArt({ ...sc, shiny: !!(inst?.shiny || unit?.shiny), exception: ex === 'r' || ex === 'o' ? ex : null }) ? ' unit-art' : '') })}</div>`;
   const sub = [card?.classe, card?.element ?? 'Neutre', card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : null].filter(Boolean).join(' · ');
   const manaPart = unit ? ` &nbsp; ✦ Mana <b>${unit.mana}/${unit.manaMax}</b>` : '';
   const buffNote = unit && unit.atkBuff ? ` <span class="muted">(+${Math.round(unit.atkBuff * 100)} % ce tour)</span>` : '';
@@ -2493,7 +2513,7 @@ function ficheCoreHtml(card, { level = null, unit = null, inst = null, ownedInfo
     : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus.</p>`;
   return `${art}
     <div class="modal-info">
-      <h3>${card.name} <span class="lvl-chip">Nv ${lvl}</span>${unit?.boss ? ' <span class="chip">BOSS</span>' : ''}${(inst?.shiny || unit?.shiny) ? ` <span class="chip shiny-chip">✨ Shiny +${Math.round((inst?.shinyBonus ?? 0) * 100)} % stats</span>` : ''}</h3>
+      <h3>${card.name}${ex ? exceptionApposition(card.id, ex, universeOfCard(card), uiRand) : ''} <span class="lvl-chip">Nv ${lvl}</span>${unit?.boss ? ' <span class="chip">BOSS</span>' : ''}${(inst?.shiny || unit?.shiny) ? ` <span class="chip shiny-chip">✨ Shiny +${Math.round((inst?.shinyBonus ?? 0) * 100)} % stats</span>` : ''}${ex ? ` <span class="chip exception-chip exception-${ex}">${ex === 'r' ? '✦ Repos' : '✧ Obscure'}</span>` : ''}</h3>
       <p class="muted">${sub}${ownedInfo}</p>
       <p class="statline">⚔ ATQ <b>${st.atk}</b>${buffNote}${strikeNote} &nbsp; ♥ PV <b>${st.hp}${st.maxHp != null ? '/' + st.maxHp : ''}</b> &nbsp; ⚡ AGI <b>${st.agi}</b> &nbsp; 🧠 INT <b>${st.int}</b>${manaPart}</p>
       ${classeNote}
@@ -3572,7 +3592,7 @@ function artGlyph(c) {
 
 
 
-let filters = { classe: null, element: null, niv: null, rar: null, shiny: null }; 
+let filters = { classe: null, element: null, niv: null, rar: null, shiny: null, exception: null }; 
 
 function addCardIid(iid) {
   const inst = byIid(iid);
@@ -3648,7 +3668,7 @@ function slotsHtml() {
     const inst = iid ? byIid(iid) : null;
     if (inst) {
       const c = byId(inst.id);
-      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront(instCard(c, inst), { extraClass: hasArt({ ...c, shiny: !!inst.shiny }) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button></div>`;
+      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront(instCard(c, inst), { extraClass: hasArt({ ...c, shiny: !!inst.shiny, exception: inst.exception || null }) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button></div>`;
     }
     return `<div class="slot empty" data-idx="${i}"></div>`;
   };
@@ -3698,6 +3718,7 @@ function filtersMenuHtml(draft) {
     <div class="fgroup">${chip('niv', null, 'Tous niveaux')}${chip('niv', 2, 'Nv ≥ 2')}${chip('niv', 3, 'Nv ≥ 3')}${chip('niv', 5, 'Nv ≥ 5')}</div>
     <div class="fgroup">${chip('rar', null, 'Toutes raretés')}${['C', 'UC', 'R', 'SR', 'UR', 'L', 'M'].map((v) => chip('rar', v, v)).join('')}</div>
     <div class="fgroup">${chip('shiny', null, 'Tous')}${chip('shiny', 1, '✨ Shiny seuls')}</div>
+    <div class="fgroup">${chip('exception', null, 'Tous')}${chip('exception', 1, '✦ Exceptions seules')}</div>
   </div>
   <p class="muted">Sélectionnez vos filtres, puis validez : ils s'appliquent à la grille. Appuyez en dehors pour fermer sans rien changer.</p>`;
 }
@@ -3742,6 +3763,7 @@ function ownedCards() {
     .filter((c) => (!filters.niv || levelOf(c.id) >= Number(filters.niv)))
     .filter((c) => (!filters.rar || c.rarity === filters.rar))
     .filter((c) => (!filters.shiny || cardHasShiny(c.id))) // lot 8 : filtre shiny
+    .filter((c) => (!filters.exception || cardHasException(c.id))) // v3.4 : filtre Exception
     .sort((a, b) => RANK[a.rarity] - RANK[b.rarity] || a.name.localeCompare(b.name));
 }
 
@@ -3828,10 +3850,11 @@ function renderEquipe(root) {
   const visible = ownedCards();
   const nFiltered = owned.length - visible.length;
   const cells = visible
-    .map((c) => instsOf(c.id).filter((inst) => !filters.shiny || inst.shiny) // lot 8 : filtre shiny par exemplaire
+    .map((c) => instsOf(c.id).filter((inst) => (!filters.shiny || inst.shiny) && (!filters.exception || inst.exception)) // lot 8 shiny + v3.4 Exception : filtres par exemplaire
       .map((inst) => {
         const inTeam = iidInTeam(inst.iid);
-        const cc = instCard(c, inst); // lot 8 : stats + art + badge shiny de l'exemplaire
+        const cc = instCard(c, inst); // lot 8 + v3.4 : stats + art + badge de l'exemplaire (shiny, Exception)
+        if (cc.exception) cc.name = c.name + exceptionApposition(c.id, cc.exception, universeOfCard(c), uiRand); // apposition affichée une fois, jamais persistée
         return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront(cc, { extraClass: hasArt(cc) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
       })
       .join(''))
@@ -3845,7 +3868,7 @@ function renderEquipe(root) {
     ${synPanel()}
     ${owned.length === 0
       ? '<p class="empty-collection muted">Votre collection est vide — recrutez à la Guilde (jetons 🎫), en quêtes ou en donjon !</p>'
-      : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''}) · ✨ ${shinyCount()} shiny</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
+      : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''}) · ✨ ${shinyCount()} shiny · ✦ ${exceptionCount()} exceptions</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
         ? `<p class="empty-collection">Aucune carte ne correspond aux filtres actifs (${owned.length} possédée${owned.length > 1 ? 's' : ''}). <button class="btn" id="reset-filters">Réinitialiser les filtres</button></p>`
         : `<div class="grid">${cells}</div>`}`}`;
 
@@ -3858,7 +3881,7 @@ function renderEquipe(root) {
   root.querySelector('#team-next')?.addEventListener('click', () => switchTeam(1));
   // Lot A : plus de bascule 2-3/3-2 (3 actifs + 2 réserve) ; le champ formation reste en save pour compatibilité
   root.querySelector('#reset-filters')?.addEventListener('click', () => {
-    filters = { classe: null, element: null, niv: null, rar: null, shiny: null };
+    filters = { classe: null, element: null, niv: null, rar: null, shiny: null, exception: null };
     renderEquipe(root);
   });
   const filtBtn = root.querySelector('#open-filters');
@@ -3961,9 +3984,11 @@ function ownedCell(id, title = 'Voir la fiche') {
   const c = byId(id);
   const n = ownedOf(id);
   const sh = cardHasShiny(id); // lot 8 : la cellule porte le marqueur shiny si un exemplaire l'est
+  const exI = instsOf(id).find((i) => i.exception === 'r' || i.exception === 'o'); // v3.4 : marqueur Exception si un exemplaire l'est
+  const ex = exI ? exI.exception : null;
   return `<div class="fam-card owned" data-id="${id}" title="${title}">
-    ${cardFront({ ...c, level: levelOf(id), shiny: sh }, { extraClass: hasArt({ ...c, shiny: sh }) ? 'unit-art' : '' })}
-    ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}${sh ? '<span class="owned-badge shiny-badge">✨</span>' : ''}
+    ${cardFront({ ...c, level: levelOf(id), shiny: sh, exception: ex, ...(ex ? { name: c.name + exceptionApposition(id, ex, universeOfCard(c), uiRand) } : {}) }, { extraClass: hasArt({ ...c, shiny: sh, exception: ex }) ? 'unit-art' : '' })}
+    ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}${sh ? '<span class="owned-badge shiny-badge">✨</span>' : ''}${ex ? '<span class="owned-badge exception-badge">✦</span>' : ''}
   </div>`;
 }
 
@@ -4105,7 +4130,7 @@ function renderCollection(root) {
     })
     .join('') + solosSeen.map((c) => seenCell(c.id)).join('');
   root.innerHTML = `
-    <h2>Collection <span class="muted">${discovered}/${CATALOG.length} dévoilées · ✨ ${shinyCount()} shiny</span></h2>
+    <h2>Collection <span class="muted">${discovered}/${CATALOG.length} dévoilées · ✨ ${shinyCount()} shiny · ✦ ${exceptionCount()} exceptions</span></h2>
     <p class="muted">Le catalogue est organis\u00e9 comme la hi\u00e9rarchie des races : l\u2019humaine (la base), la monstre (+10 % de stats), la mystique (+20 %), la divine (+30 %). Chaque maillon se d\u00e9voile quand vous le poss\u00e9dez ; le sommet d\u2019une lign\u00e9e reste un myst\u00e8re jusqu\u2019\u00e0 son UR.</p>
     <h3 class="race-band">${RACE_GLYPH.humaine} Race humaine — la base <span class="muted">${solosOwned.length + raceGroup('humaine').filter((c) => ownedOf(c.id) > 0).length} portes d\u2019entr\u00e9e</span></h3>
     <div class="fam">
@@ -5995,7 +6020,7 @@ function renderCombat(root, opts = {}) {
   const cards = store.team.slots.filter(Boolean).map((iid) => {
     const inst = byIid(iid);
     if (!inst) return null;
-    let base = { ...withShards(byId(inst.id)), shiny: !!inst.shiny }; // lot 8 : drapeau shiny de l'exemplaire
+    let base = { ...withShards(byId(inst.id)), shiny: !!inst.shiny, exception: inst.exception === 'r' || inst.exception === 'o' ? inst.exception : null }; // lot 8 + v3.4 : drapeaux de l'exemplaire (shiny, Exception)
     base = applyShinyStats(base, shinyBonusOf(inst)); // lot 8 : variance individuelle bornée +3-5 % sur les 5 stats
     if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
     const eb = equipBonusOfCard(inst.id);
@@ -6475,7 +6500,7 @@ function renderAutel(root) {
       const raceLabel = p.demon ? 'divine (DÉMON — 15 %)' : (RACE_LABEL[p.raceCible] ?? p.raceCible);
       panel = `<div class="syn-panel"><h3>Aperçu de la fusion (mystère des lignées)</h3>
         <p>Race cible : <b>${raceLabel}</b>${p.biomeCible && p.biomeCible !== 'divin' ? ` · biome ${p.biomeCible}` : ''}${p.saut ? ' · saut de race' : ' · lignée parentale'}</p>
-        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1${p.shinyHerite ? ' · ✨ l’enfant sera shiny (au moins un parent shiny)' : ''}</p>
+        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1${p.shinyHerite ? ' · ✨ l’enfant sera shiny (au moins un parent shiny)' : ''}${p.exceptionHerite ? ' · ✦ l’enfant sera Exception (au moins un parent Exception)' : ''}</p>
         <p>Sorts hérités (max ${p.sortsMax}, jamais la signature de l'enfant) :</p>
         <div class="row" style="flex-wrap:wrap">${p.sorts.map((s) => `<label class="chip"><input type="checkbox" class="autel-sort" value="${s.key}"> ${s.name} (${s.cost}✦${s.mult ? ' ×' + s.mult : ''})</label>`).join('') || '<span class="muted">aucun</span>'}</div>
         <div class="row" style="margin-top:8px">
@@ -6552,7 +6577,7 @@ function renderForge(root) {
         : `<button class="btn small" disabled>${inst.lvl < 10 ? `Niveau ${inst.lvl}/10 requis \u2014 l\u2019XP vient des donjons` : (isEveil ? `${have}/${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${have}/${n} \u00e9clats ${GEM_LABEL[tier]} d\u2019\u00e9l\u00e9ment ${elt}`)}</button>`;
     }).join(' ');
     evoRows.push(`<div class="forge-row">
-    <div class="forge-card" data-open="${inst.id}">${cardFront(instCard(card, inst), { extraClass: hasArt({ ...card, shiny: !!inst.shiny }) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
+    <div class="forge-card" data-open="${inst.id}">${cardFront(instCard(card, inst), { extraClass: hasArt({ ...card, shiny: !!inst.shiny, exception: inst.exception || null }) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
     <div class="forge-acts">
       <p class="muted">${card.name} \u2014 <b>Nv ${inst.lvl}/20\u00b7 ${st.atk} / PV ${st.hp}</p>
       <p class="muted">${isEveil ? `\u00c9veiller` : `\u00c9voluer`} en <b>${nextNames}</b> : niveau 10 atteint + ${isEveil ? `${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${n} \u00e9clat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} dans l\u2019\u00e9l\u00e9ment de la forme choisie`} \u2014 la nouvelle forme repart niveau 1 et GARDE les sorts accumul\u00e9s.</p>
@@ -6676,6 +6701,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['Exception v3.4 (lot E1) : 1 exemplaire sur 100 est une EXCEPTION (thème Repos -r ou Obscures -o du manifeste v3.4) — cosmétique pure qui coexiste avec le ✨ Shiny, se transmet à la fusion et se sauvegarde (migration v33).', 'Art thématique <id>-r / <id>-o chaîné après le shiny, badge ✦, apposition du thème en fiche et collection, compteur ✦ + filtre « Exceptions seules ».'],
   ['correctifs bots-v1.52 : 500 bots jouent le jeu en boucle', 'Le harnas bots-boucle.mjs simule des PARTIES COMPLÈTES (donjons joués comme un joueur, errance top-down, économie boutique/guilde/forge, fusion à l’Autel, navigation, save → load comparé) avec des invariants vérifiés après CHAQUE action : 500 bots en essaim (29 735 actions, 13 441 combats, 72 fusions, 780 achats, 3 629 captures DQM, 1 019 zones débloquées) : 0 exception, 0 anomalie — contre 447 anomalies et 336 exceptions pour 150 bots sur le dist d’origine. Quatre correctifs : enfant de fusion avec iid ENTIER (plus jamais « fus-A-B », migration des vieilles sauvegardes), 3 exemplaires par carte en équipe préservés au rechargement, PV/mana max hors combat = VRAI plafond de combat (cran de race, éclats de famille, shiny, fusion, équipement, mana enrichi par l’INT), buyCompagnon refuse gracieusement un id inconnu. 371 tests, smoke 483, digest INCHANGÉ d630d83e… 419/3000.'],
   ['Refonte v2 CLÔTURÉE (lots 0-9, prompt docs/prompt-refonte-v2.md)', 'Rééquilibrage M1 (5 stats, INT pilote les sorts, défense en ratio, cran de race 5/10/15 % PV), gel v1 (54 cartes figées en data), donjons par famille (13 donjons carte 1 + 3 divins, difficulté Royale +10), fusion v4 (Autel des Lignées), menus v2 (cibles 44 px, retour systématique), SHINY (1/100 à l’obtention, variance +3-5 % couplée, art « <id>-s », fusion héréditaire), XP 1-100 (courbe cubique n^3, niveaux de donjon étirés sur la grille v1). 355 tests, smoke 483, validateur 0 erreur, digests 29c995da… 733/3000 et bce556b3… 2420/10000 (0 exception, 0 marathon) — nouvelle baseline PROPOSÉE au verrouillage.'],
   ['post-v1.51 : Repositionnement écran de combat (maquette v2.3 validée 14/11)', 'Commander en bas, lire en haut : rail d\u2019ordre horizontal + vitesse/pause persistants EN HAUT, barre de commandes compacte \u2264 30 % (boutons 44 px, indispo grisé avec la raison), unités plus grandes avec PV/MP et bouclier en clair, invocations en première ligne, cibles en pulse. La barre ne recouvre jamais le terrain. 279 tests, smoke 421, digest inchangé.'],

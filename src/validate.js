@@ -195,6 +195,14 @@ function validate(data, errors) {
   if (!(Number(data.engine?.moteur?.LEGACY_LEVEL_CAP) >= 1)) push('moteur.LEGACY_LEVEL_CAP invalide', 'EXI-DATA-7');
   // correctifs-eq v2 lot 2 : signatures hybrides des monstres soigneurs (soinPct = fraction des degats rendus)
   if (!(Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) > 0 && Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) < 1)) push('moteur.SIGNATURE_SOIN_PCT hors bornes (]0-1[)', 'EXI-DATA-8');
+  // v3.4 Exception (suite 61) : bloc EXCEPTION en data (taux du tirage, seuil du thème Repos, seed de migration)
+  const EX = data.engine?.EXCEPTION ?? null;
+  if (!EX) push('bloc EXCEPTION manquant dans engine.json', 'EXI-DATA-9');
+  else {
+    if (!(EX.taux > 0 && EX.taux <= 1)) push('EXCEPTION.taux hors bornes (]0-1])', 'EXI-DATA-9');
+    if (!(EX.themeR > 0 && EX.themeR < 1)) push('EXCEPTION.themeR hors bornes (]0-1[)', 'EXI-DATA-9');
+    if (!Number.isInteger(EX.migrationSeed)) push('EXCEPTION.migrationSeed non entier', 'EXI-DATA-9');
+  }
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();

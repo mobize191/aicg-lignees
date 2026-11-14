@@ -64,9 +64,9 @@ test('J9 : provocation à charges — l’IA ennemie vise le provocateur', () =>
 test('J10 : plus de cap de soin en data ; migration v30', () => {
   assert.equal(E.DATA.engine.moteur.HEAL_CAP_RATIO, undefined, 'cap de soin retiré');
   assert.ok(E.DATA.engine.moteur.SHIELD_CAP_RATIO > 0, 'le bouclier garde son propre cap');
-  assert.equal(E.DATA.engine.CURRENT_VERSION, 32); // lot 8 shiny : migration v31 -> v32
+  assert.equal(E.DATA.engine.CURRENT_VERSION, 33); // v33 : migration v31 -> v32 shiny, v32 -> v33 Exception (suite 61)
   const out = E.migrate({ version: 29, instances: [], gold: 1 });
-  assert.equal(out.version, 32);
+  assert.equal(out.version, 33);
 });
 
 test('moteur v2 : validateur 0 erreur', () => {

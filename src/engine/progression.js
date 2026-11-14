@@ -306,6 +306,16 @@ function applyShinyStats(card, bonus) {
   for (const k of ['def', 'agi', 'int']) if (Number.isFinite(card[k])) out[k] = card[k] * m;
   return out;
 }
+// v3.4 Exception (suite 61) : tirage cosmétique de l'exemplaire (thèmes Repos -r / Obscures -o), taux en data.
+// Partagé avec la migration v32 -> v33 (migrate.js) : un seul tirage porte le thème, 50/50 r/o.
+function rollException(rng, cfg = EXCEPTION_CFG) {
+  const taux = cfg.taux ?? 0;
+  return taux > 0 && rng() < taux;
+}
+function exceptionTheme(rng, cfg = EXCEPTION_CFG) {
+  const t = cfg.themeR;
+  return (Number.isFinite(t) ? rng() < t : rng() * 2 < 1) ? 'r' : 'o';
+}
 function fusionPreview(instA, instB, rng, opts = {}) {
   const F = FUSION_CFG;
   const cardA = getCard(instA.id) ?? getMonster(instA.id);
@@ -372,6 +382,7 @@ function fusionPreview(instA, instB, rng, opts = {}) {
     bonusAtk, bonusHp, sorts, sortsMax,
     parentA: { iid: instA.iid, id: cardA.id, name: cardA.name }, parentB: { iid: instB.iid, id: cardB.id, name: cardB.name },
     shinyHerite: !!(instA.shiny || instB.shiny), // lot 8 suite 40 (TRANCHE) : au moins un parent shiny -> enfant shiny
+    exceptionHerite: !!((instA.exception === 'r' || instA.exception === 'o') || (instB.exception === 'r' || instB.exception === 'o')), // v3.4 Exception : au moins un parent Exception -> enfant Exception
   };
 }
 // garde-fous + application : parents consommés, enfant niveau 1, sorts choisis, bonus de stats plafonné
@@ -399,6 +410,10 @@ function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
   const loS = cfgS.bonusMin ?? 0, hiS = cfgS.bonusMax ?? loS;
   const rS = opts.rng ? opts.rng() : 1;
   const shinyBonus = shiny ? loS + rS * Math.max(0, hiS - loS) : 0;
+  // v3.4 Exception (suite 61) : héritage miroir du shiny, indépendant (cumul possible) ;
+  // au moins un parent Exception => enfant Exception, thème re-tiré 50/50 r/o
+  const exHerite = (instA.exception === 'r' || instA.exception === 'o') || (instB.exception === 'r' || instB.exception === 'o');
+  const exception = exHerite ? exceptionTheme(opts.rng ?? (() => 1), EXCEPTION_CFG) : null;
   const enfant = {
     // correctifs-bots : l'enfant naît avec un iid ENTIER quand l'appelant en fournit un (childIid) ;
     // l'ancien `fus-A-B` cassait byIid, les slots d'équipe et la persistance PV/mana au save/load
@@ -408,6 +423,7 @@ function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
     ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
     ...(instA.voie ? { voie: instA.voie } : {}),
     ...(shiny ? { shiny: true, shinyBonus } : {}),
+    ...(exception ? { exception } : {}),
     isNew: true,
   };
   const reste = instances.filter((i) => i.iid !== iidA && i.iid !== iidB);

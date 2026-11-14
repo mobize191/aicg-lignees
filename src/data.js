@@ -152,6 +152,9 @@ const FUSION_CFG = E.FUSION ?? {};
 // lot 8 shiny (suite 40) : taux du tirage, bornes de la variance individuelle, suffixe d'art, seed de migration
 const SHINY_CFG = E.SHINY ?? {};
 
+// v3.4 Exception (suite 61) : taux du tirage, seuil du thème Repos, seed de migration
+const EXCEPTION_CFG = E.EXCEPTION ?? {};
+
 // lot 9 XP 1-100 : courbe cubique (total n^3) + table de minutes par niveau (tranches de la grille v1)
 const XP_CFG = E.XP ?? {};
 
