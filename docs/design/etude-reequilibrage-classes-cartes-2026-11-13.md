@@ -343,3 +343,40 @@ Conflits et précautions : les cibles M1/M2 (bandes de win rate, hits-to-kill) s
 7. **Le cran de race : TRANCHÉ le 13/11 au soir (J4).** Allégé, porté par les PV seulement, piste 5/10/15 % (ou 3/6/9) : à calibrer au harnas (attendu ~+1 à +3 pts par palier).
 8. **Les 3 voies : TRANCHÉ le 13/11 au soir (J8).** Les 5 classes sont gardées comme saveurs des voies : Prêtre = mix guerrier-mage, Occultiste = mix mage-assassin.
 9. **La borne du soin : TRANCHÉ le 13/11 au soir (J10).** Cap en pourcentage retiré ; borne = le mana, qui ne se régénère pas complètement entre combats (persistance des pertes, retour à l'autel). La garde 150 tours reste dans le harnas comme détecteur.
+
+## Validation de la refonte v2 (14/11/2026)
+
+La refonte v2 livrée (lots 1-10, rapport [`refonte-v2-rapport.md`](https://github.com/mobize191/aicg-lignees/blob/main/docs/historique/refonte-v2-rapport.md), baseline PROPOSÉE `29c995da…` 733/3000) a été auditée et re-mesurée intégralement au harnas (protocole v3, N = 3000/ligne, niveau projeté `stretchLevel(12)` = 45), avec deux études rejouables commitées : [`tools/etude-v2-validation.mjs`](https://github.com/mobize191/aicg-lignees/blob/main/tools/etude-v2-validation.mjs) (I1, J4, D, trios) et [`tools/etude-v2-sensibilite.mjs`](https://github.com/mobize191/aicg-lignees/blob/main/tools/etude-v2-sensibilite.mjs) (levier INT du Mage), plus [`tools/etude-v2-pretres.mjs`](https://github.com/mobize191/aicg-lignees/blob/main/tools/etude-v2-pretres.mjs) (prêtres monstres au chemin canonique `byId`).
+
+### Reproduction des preuves : tout est identique
+
+- Digest 3000 rejoué : **`29c995da…` 733/3000, 0 exception, 0 marathon**, au caractère près. Tableau M1 complet (UC/R/SR/UR × 5 classes) : les 20 lignes sont reproduites au dixième de point. La chaîne de preuve du rapport de clôture est honnête et rejouable.
+- Conformité aux arbitrages vérifiée dans le code et en runtime : J1 (l'INT pilote les sorts, la défense ratio `K/(K+def)` avec `DEF_K` 10), J5 (Boule de Feu 2 mana ×1,2 sur INT, toujours disponible), J6 (crans par niveau 2/5/9/14 + grimoires de zone câblés), J7 (`synergies.json` vidé, sorts de trio Harmonie/Éclipse), J9 (Mur Inflexible `taunt: 2` sur toute la ligne Rempart, Argus s11/s12), J10 (cap de soin supprimé, bouclier plafonné 35 %), J4 (le cran ne touche plus l'ATQ : z4/f4 à atk effectif identique, PV seuls +5/10/15 %).
+
+### Mesures : ce qui tient les cibles
+
+| Mesure (protocole v3, N = 3000) | Avant refonte | v2 | Verdict |
+| --- | --- | --- | --- |
+| Mono-classe R Guerrier (cible 70-80 %) | 78,6 % | **76,0 %** | ✔ |
+| Mono-classe R Assassin (cible 60-70 %) | 67,4 % | **58,9 %** | limite basse (−1,1 pt) |
+| Supports R sous le plafond 40-50 % | 6,5 / 6,4 % | **31,1 / 31,2 %** | ✔ (bande 25-40 % visée Phase 1) |
+| Écart max UR (G-vs-O) | 11,8 pts | **14,3 pts** | resserré ✔ (le Mage reste dernier) |
+| Cran de race par palier de 10 % (J4, cible ~+1-3 pts) | +6 à +8 pts | **+2,6 à +4,4 pts** (z4→f4 +4,4 ; f11→k13 +2,6 ; z17→d4 +1,0) | ✔ |
+| Coût d'un slot soigneur (2× a48 + s5 vs 3× a48) | −8,7 pts | **−5,1 pts** | ✔ amélioré (hybrides) |
+| Coût d'un slot tank (s6) | −7,7 pts | **−6,0 pts** | ✔ (provocation en place) |
+| Sort de trio en première ligne (Harmonie, G/A/P) | n/a | **+6,1 pts** (72,4 vs 66,3 %) | ✔ réel |
+| Marathons sur lignes cartes | 33 (3× Diacre) | **0 partout** | ✔ |
+| INT = levier du Mage (sensibilité) | atk ×1,25 = +6,7 pts | **+55 % INT = +11,3 pts ; +29 % ATQ = 0,0 pt** | ✔ J1/B1 parfaitement câblé |
+
+### Mesures : les 4 écarts à traiter avant verrouillage de la baseline
+
+1. **Le Mage est hors cible, et la racine est la data INT, pas le moteur.** Mono-classe R : **27,7 %** (cible 60-70), UC 18,3 %, SR 53,6 %. Le moteur v2 a déplacé la puissance du Mage vers l'INT (mesuré : +29 % ATQ = effet nul, +55 % INT = +11,3 pts), mais la data n'a pas suivi : INT 11 au R quand le Guerrier a atk 17, PV 70 contre 88, et le `strike` 0,8 conservé (J3 : seuls `atkPct`/`hpPct` ont été mis à zéro, les frappes M/P/O gardent 0,8/0,7/0,6). Sensibilité mesurée : INT 14 → 32,8 %, INT 17 → 39,0 %, INT 24 → 52,4 % : la cible n'est pas atteignable par l'INT seule, il faut aussi traiter PV et/ou strike dans le même lot.
+2. **I1 est rompu dans l'autre sens : le monstre recruté est passé SOUS la carte humaine.** Mono-classe R monstres : k4 64,2 % (vs a48 76,0 %, −11,8 pts), f11 42,7 % (vs a41 58,9 %, −16,2 pts), e25 18,3 % (vs q3 31,2 %), z17 30,9 % (vs a8 27,7 %, seul alignement). Avant refonte l'écart G était de −5,7 pts : le cran allégé (PV seuls) a retiré aux monstres leur ATQ effective sans compensation de budget. Le contrat I1 (monstre ≈ carte à rareté et classe égales) demande soit une remontée des bases monstres, soit un cran PV plus généreux pour les recrutables.
+3. **La pathologie marathon n'est pas éradiquée côté monstres : le lot non négociable de I1 n'est pas vérifié.** 3× Diacre du Plein Jour (z24, Prêtre monstre R, signature de soin) : **8,9 % et 42 marathons/3000** (33 avant), par le chemin canonique du jeu (`byId` : signature + commun soin + Boule de Feu). Les signatures bouclier ne marathonnent pas (e8 18,0 %, d9 19,7 %, 0 marathon) : le point chaud est le **soin pur monstre** (z24, z10 Serre-Soleil), avec le cap de soin retiré (J10) et une régénération de mana par tour qui alimente le stall indéfiniment dans un même combat. Le « 0 marathon partout » du rapport de clôture est exact mais ne couvrait que les cartes joueur. La vigilance J10 de l'étude (fatigue type PP sur les sorts de soin en réserve) est réalisée ; la moindre des corrections : donner aux Prêtres monstres un sort de dégâts/hybride (J11 prévoyait « chaque soigneur a un sort de dégâts dès les bas niveaux », implémenté pour les cartes, pas pour les signatures monstres).
+4. **Le plateau commun des trios n'est pas atteint au R.** G/A/P 72,4 % ; G/M/O 57,1 % ; M/A/P (Éclipse) 54,0 % ; M/P/O 38,7 % : **33,7 pts d'écart** pour une cible de « même plateau ». Tout trio contenant le Guerrier fait 57-72 %, tout trio de lanceurs 39-54 % : c'est le Mage du point 1 qui tire tout vers le bas. Sur la cible par difficulté, le trio G/A/P donne d1 84,7 / d2 73,8 / d3 58,6 % (facile/normal 70-80 ✔, difficile ~50 % légèrement au-dessus).
+
+À noter aussi : le digest global passe de 871/3000 (29,0 %) à 733/3000 (24,4 %), attendu et consigné (les supports monstres relevés sont aussi des vagues ennemies plus coriaces : conséquence I1 actée), mais c'est un paramètre à garder en tête au moment du verrouillage : la difficulté des donjons a mécaniquement monté.
+
+### Recommandation sur la baseline PROPOSÉE
+
+**Différer le verrouillage de `29c995da…`/`bce556b3…` le temps d'un micro-lot data** (une seule re-mesure, M6 respecté) : (1) INT des Mages à parité d'ATQ Guerrier par palier (R : 11 → ~17-19) +PV/strike dans le même lot, (2) hybride ou sort de dégâts pour les signatures de soin monstres, (3) compensation de budget des monstres recrutables (I1). Les trois sont des corrections de data pure, sans moteur : une session, une baseline. Si le verrouillage est préféré maintenant, l'ouvrir immédiatement après en micro-lot prioritaire, le Mage R à 27,7 % contre une cible de 60-70 % étant le seul écart vraiment visible en jeu.
