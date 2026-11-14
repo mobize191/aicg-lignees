@@ -1912,6 +1912,35 @@ async function main() {
       mem.delete('fondations-art-src'); // mem est une Map (pas un Storage) : removeItem n'existe pas — crash S27 sinon
     }
 
+    // S28 — lot 6 fusion v4 : Autel des Lignées de bout en bout (sélection, aperçu mystère, double confirmation)
+    {
+      const errBefore = errors.length;
+      // seed : deux exemplaires d'une carte C hors équipe (garde-fou « unique » à passer)
+      const teamIds0 = new Set((api.store.team?.slots ?? []).filter(Boolean).map((iid) => api.store.instances.find((i) => i.iid === iid)?.id));
+      const seedId = api.CATALOG.find((c) => c.rarity === 'C' && !teamIds0.has(c.id))?.id;
+      if (seedId) api.store.instances.push({ iid: 'smoke-dup-1', id: seedId, lvl: 10, xp: 0, acc: [] }, { iid: 'smoke-dup-2', id: seedId, lvl: 10, xp: 0, acc: [] });
+      const before = api.store.instances.length;
+      // deux cartes hors équipe, avec au moins 2 exemplaires chacune (garde-fou unique)
+      const counts = {};
+      for (const i of api.store.instances) counts[i.id] = (counts[i.id] ?? 0) + 1;
+      const teamIids = new Set((api.store.team?.slots ?? []).filter(Boolean));
+      const elig = api.store.instances.filter((i) => !teamIids.has(i.iid) && (counts[i.id] ?? 0) >= 2 && (api.byId(i.id)?.rarity ?? 'N') !== 'N' && (api.byId(i.id)?.rarity ?? '') !== 'M');
+      check('S28 a 2 cartes éligibles pour la fusion', elig.length >= 2, elig.map((i) => i.id).join(','));
+      api.go('#autel');
+      await wait(40);
+      const rows = els.get('app').querySelectorAll('.autel-row');
+      check('S28 b écran Autel des Lignées rendu (hub + liste)', els.get('app')._innerHTML.includes('Autel des Lignées') && rows.length >= 2, `${rows.length} lignes`);
+      const pick = (iid) => { const el = [...els.get('app').querySelectorAll('.autel-row')].find((r) => r.dataset.autelIid === iid); if (el) el.onclick(); };
+      pick(elig[0].iid); await wait(20); pick(elig[1].iid); await wait(20);
+      const panel = els.get('app')._innerHTML;
+      check('S28 c aperçu mystère (race/lignée/palier/plafond, identité masquée)', /Aperçu de la fusion/.test(panel) && /Race cible/.test(panel) && /plafond/.test(panel), panel.slice(0, 120));
+      const btn = els.get('app').querySelector('#autel-confirm');
+      check('S28 d bouton fusion présent', !!btn);
+      if (btn) { btn.onclick(); await wait(20); const b2 = els.get('app').querySelector('#autel-confirm'); check('S28 e double confirmation', !!b2 && /Confirmer définitivement/.test(b2.textContent), b2 && b2.textContent); if (b2) { b2.onclick(); await wait(30); } }
+      check('S28 f fusion appliquée : 2 parents consommés, 1 enfant ajouté', api.store.instances.length === before - 1, `${before} -> ${api.store.instances.length}`);
+      check('S28 g 0 exception lot 6', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

@@ -3235,6 +3235,7 @@ function renderHome(root) {
       <a class="btn gold-frame" href="#terres"><span class="ic">🌿</span>Terres Sauvages</a>
       <a class="btn gold-frame" href="#boutique"><span class="ic">🛒</span>Boutique</a>
       <a class="btn gold-frame" href="#forge"><span class="ic">🛡️</span>Guilde</a>
+      <a class="btn gold-frame" href="#autel"><span class="ic">⚗️</span>Autel des Lignées</a>
       <a class="btn gold-frame" href="#quetes"><span class="ic">📜</span>Quêtes</a>
       <a class="btn gold-frame" href="#personnage"><span class="ic">🧝</span>Personnage</a>
       <a class="btn gold-frame" href="#collection"><span class="ic">🎴</span>Collection</a>
@@ -5840,7 +5841,8 @@ function renderCombat(root, opts = {}) {
   const cards = store.team.slots.filter(Boolean).map((iid) => {
     const inst = byIid(iid);
     if (!inst) return null;
-    const base = withShards(byId(inst.id));
+    let base = withShards(byId(inst.id));
+    if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
     const eb = equipBonusOfCard(inst.id);
     const equip = {
       atkPct: eb.atkPct + teamBonus.atkPct,
@@ -6289,6 +6291,81 @@ function forgeEvolve(iid, to = null) {
   questProgress('evoluer');
   toast(`\u2713 \u00c9volution : ${byId(r.nextId).name}${r.inherited ? ` \u2014 ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''} !`);
   openRevealModal([r.nextId], { title: '\u2b50 \u00c9VOLUTION !', subtitle: 'La carte devient sa nouvelle forme.', note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer' });
+}
+
+// lot 6 fusion v4 (spec-fusion-v4 lot 2) : l'Autel des Lignées — deux cartes -> un enfant,
+// aperçu mystère (race/famille cible, palier, plafond, sorts), double confirmation
+let autelSel = [];
+let autelPlan = null;
+let autelConfirm = false;
+function renderAutel(root) {
+  const teamIids = new Set((store.team?.slots ?? []).filter(Boolean));
+  const list = store.instances.filter((i) => !teamIids.has(i.iid));
+  const rows = list.map((inst) => {
+    const c = byId(inst.id);
+    const sel = autelSel.includes(inst.iid);
+    return `<div class="forge-row autel-row ${sel ? 'sel' : ''}" data-autel-iid="${inst.iid}" style="cursor:pointer">
+      <div class="forge-card">${cardFront({ ...c, level: inst.lvl }, {})}</div>
+      <div class="forge-acts"><p class="muted"><b>${c.name}</b> — ${RARITY_LABEL[c.rarity] ?? c.rarity} · Nv ${inst.lvl}${inst.fusionBonus ? ` · +${inst.fusionBonus.atk} ATQ/+${inst.fusionBonus.hp} PV (fusion)` : ''}</p></div>
+    </div>`;
+  }).join('') || '<p class="muted">Aucune carte disponible (hors équipe active).</p>';
+  let panel = '<p class="muted">Sélectionnez deux cartes de la collection (hors équipe active) pour voir l’aperçu de la fusion. Les deux parents sont consommés.</p>';
+  if (autelSel.length === 2) {
+    const a = store.instances.find((i) => i.iid === autelSel[0]);
+    const b = store.instances.find((i) => i.iid === autelSel[1]);
+    if (!autelPlan && a && b) autelPlan = fusionPreview(a, b, uiRand);
+    const p = autelPlan;
+    if (p && p.ok) {
+      const famLabel = p.familleHasard ? `? (${(p.candidatsFamille ?? []).join(' / ')})` : (p.familleId ?? '?');
+      const raceLabel = p.demon ? 'divine (DÉMON — 15 %)' : (RACE_LABEL[p.raceCible] ?? p.raceCible);
+      panel = `<div class="syn-panel"><h3>Aperçu de la fusion (mystère des lignées)</h3>
+        <p>Race cible : <b>${raceLabel}</b>${p.biomeCible && p.biomeCible !== 'divin' ? ` · biome ${p.biomeCible}` : ''}${p.saut ? ' · saut de race' : ' · lignée parentale'}</p>
+        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1</p>
+        <p>Sorts hérités (max ${p.sortsMax}, jamais la signature de l'enfant) :</p>
+        <div class="row" style="flex-wrap:wrap">${p.sorts.map((s) => `<label class="chip"><input type="checkbox" class="autel-sort" value="${s.key}"> ${s.name} (${s.cost}✦${s.mult ? ' ×' + s.mult : ''})</label>`).join('') || '<span class="muted">aucun</span>'}</div>
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn big gold" id="autel-confirm">${autelConfirm ? '⚠ Confirmer définitivement (parents consommés)' : 'Fusionner →'}</button>
+          <button type="button" class="btn ghost" id="autel-reset">Annuler</button>
+        </div></div>`;
+    } else {
+      panel = `<p class="muted">${p ? p.reason : 'aperçu indisponible'}</p>`;
+    }
+  }
+  root.innerHTML = `
+    <h2><button type="button" class="back" id="autel-back" title="Retour à l'accueil">←</button> ⚗️ Autel des Lignées</h2>
+    <p class="muted">Fusion DQM : deux cartes jouables → un enfant niveau 1 (25 % des stats cumulées des parents, plafonné par la rareté de l'enfant, 2-3 sorts hérités). L'identité exacte de l'enfant reste masquée jusqu'à la confirmation.</p>
+    ${panel}
+    <div class="forge-list">${rows}</div>`;
+  root.querySelector('#autel-back').onclick = () => { autelSel = []; autelPlan = null; autelConfirm = false; go('#accueil'); };
+  const rst = root.querySelector('#autel-reset');
+  if (rst) rst.onclick = () => { autelSel = []; autelPlan = null; autelConfirm = false; renderAutel(root); };
+  root.querySelectorAll('.autel-row').forEach((el) => {
+    el.onclick = () => {
+      const iid = el.dataset.autelIid;
+      if (autelSel.includes(iid)) autelSel = autelSel.filter((x) => x !== iid);
+      else if (autelSel.length < 2) autelSel.push(iid);
+      autelPlan = null; autelConfirm = false;
+      renderAutel(root);
+    };
+  });
+  const btn = root.querySelector('#autel-confirm');
+  if (btn) btn.onclick = () => {
+    if (!autelConfirm) { autelConfirm = true; renderAutel(root); return; }
+    const a = store.instances.find((i) => i.iid === autelSel[0]);
+    const b = store.instances.find((i) => i.iid === autelSel[1]);
+    if (!a || !b || !autelPlan) return;
+    const choix = [...root.querySelectorAll('.autel-sort:checked')].map((c) => c.value);
+    const res = doFusion(store.instances, autelSel[0], autelSel[1], choix, autelPlan, {
+      teamIids: [...teamIids],
+      ownedOf: (id) => store.instances.filter((i) => i.id === id).length,
+    });
+    if (!res.ok) { toast('✗ ' + res.reason, 'warn'); return; }
+    store.instances = res.instances;
+    autelSel = []; autelPlan = null; autelConfirm = false;
+    save();
+    toast('✦ Fusion réussie : un nouvel exemplaire rejoint la collection (Nv 1).');
+    renderAutel(root);
+  };
 }
 
 function renderForge(root) {
@@ -6768,6 +6845,7 @@ registerRoute('#equipe', renderEquipe);
 registerRoute('#personnage', renderPersonnage);
 registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
+registerRoute('#autel', renderAutel);
 registerRoute('#donjons', renderDonjons);
 registerRoute('#quetes', renderQuetes);
 registerRoute('#terres', renderTerres);

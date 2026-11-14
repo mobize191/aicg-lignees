@@ -135,22 +135,19 @@ test('T1.3 révisé (économie v2 lot E3b) : les jetons de génération sont sup
   assert.ok(data.engine.N_DROP_RATE > 0 && data.engine.N_DROP_RATE < 0.05, 'le drop de naissance en donjon reste tres bas');
 });
 
-// ---------- lot 5 : mécanismes spéciaux des arbres (EXI-M) ----------
-test('lot 5 : régression consomme l\u2019Éclat et spawne une nouvelle carte, l\u2019ancienne reste (EXI-M-1)', () => {
+// ---------- lot 5/6 : mécanismes spéciaux des arbres (EXI-M) ----------
+test('lot 6 (spec-fusion-v4 §2.5) : la RÉGRESSION MEURT — plus d’entrée a17, plus de type, éclats convertis en or', () => {
   const E = loadEngine();
-  const entry = E.evoEntryOf('a17', 'a20');
-  assert.equal(entry.type, 'regression');
-  const inst = { iid: 'i1', id: 'a17', lvl: 10, xp: 0, acc: [{ name: 'Tranche-Monde' }] };
-  const ctx = { items: { 'eclat-regression': 1 }, owned: ['a17'], events: [] };
-  const r = E.applySpecialEvo(inst, entry, ctx);
-  assert.ok(r.ok && r.spawned, 'regression appliquée');
-  assert.equal(r.spawned.id, 'a20');
-  assert.equal(ctx.items['eclat-regression'], 0, 'éclat consommé');
-  assert.equal(inst.id, 'a17', 'l\u2019ancienne carte reste');
-  assert.equal(r.spawned.acc.length, 1, '100 % des sorts conservés');
-  // sans l'éclat : refusé
-  const r2 = E.applySpecialEvo(inst, entry, { items: {}, owned: ['a17'], events: [] });
-  assert.equal(r2.ok, false, 'condition non remplie = refusé');
+  assert.equal(E.evoEntryOf('a17', 'a20'), null, 'entrée de régression a17 -> a20 supprimée');
+  assert.ok(!E.DATA.engine.EVO_TYPES.includes('regression'), 'type regression retiré des EVO_TYPES');
+  const entry = { type: 'regression', to: 'a20', condition: { kind: 'item', id: 'eclat-regression', n: 1 } };
+  const r = E.applySpecialEvo({ iid: 'i1', id: 'a17', lvl: 10, acc: [] }, entry, { items: { 'eclat-regression': 1 }, owned: ['a17'], events: [] });
+  assert.ok(!r || !r.ok || r.type !== 'regression', 'plus de branche regression');
+  // migration v30 -> v31 : éclats de régression en stock -> or (suite 24)
+  const out = E.migrate({ version: 30, instances: [], gold: 100, items: { 'eclat-regression': 3 } });
+  assert.equal(out.version, 31);
+  assert.equal(out.gold, 100 + 3 * E.DATA.engine.FUSION.eclatRegressionOr, '3 éclats x 500 or');
+  assert.equal(out.items['eclat-regression'], undefined, 'éclats consommés par la migration');
 });
 
 test('lot 5 : fusion consomme 2 exemplaires, malédiction transforme sans choix, secrète floutée (EXI-M-1/3)', () => {

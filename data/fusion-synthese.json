@@ -1,0 +1,36 @@
+{
+ "defaut": {
+  "famille": "A",
+  "rarete": "max"
+ },
+ "paires": {
+  "aube|zele": {
+   "famille": "hasard",
+   "rarete": "max"
+  },
+  "lame|eau": {
+   "famille": "hasard",
+   "rarete": "max"
+  },
+  "ombre|crepuscule": {
+   "famille": "hasard",
+   "rarete": "max"
+  },
+  "bouclier|chevalerie": {
+   "famille": "hasard",
+   "rarete": "max"
+  },
+  "bosquet|seuil": {
+   "famille": "hasard",
+   "rarete": "max"
+  },
+  "lame|vol": {
+   "famille": "eau",
+   "rarete": "max"
+  },
+  "aube|appel": {
+   "famille": "zele",
+   "rarete": "max"
+  }
+ }
+}

@@ -222,12 +222,8 @@ function conditionOk(cond, ctx) {
 function applySpecialEvo(inst, entry, ctx = {}) {
   if (!entry || entry.type === 'standard') return null;
   if (!conditionOk(entry.condition, ctx)) return { ok: false, reason: 'condition non remplie' };
-  if (entry.type === 'regression') {
-    if (ctx.items && entry.condition?.kind === 'item') ctx.items[entry.condition.id] -= (entry.condition.n ?? 1);
-    const to = getCard(entry.to) ?? getMonster(entry.to);
-    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, acc: [...(inst.acc ?? [])] };
-    return { ok: true, spawned, type: 'regression' };
-  }
+  // lot 6 (spec-fusion-v4 §2.5) : le type « regression » MEURT — refusé explicitement, plus d'entrée en data
+  if (entry.type === 'regression') return { ok: false, reason: 'type regression retiré (fusion v4)' };
   if (entry.type === 'fusion') {
     return { ok: true, consumed: (entry.condition?.n ?? 2), type: 'fusion', to: entry.to };
   }
@@ -249,4 +245,143 @@ function applySpecialEvo(inst, entry, ctx = {}) {
 function evoLabelOf(from, to) {
   const e = evoEntryOf(from, to);
   return e && e.type === 'secrete' ? '??' : (e?.voie || to);
+}
+
+// ===== Fusion DQM v4 (lot 6, spec-fusion-v4) : deux cartes jouables -> un enfant =====
+// La couche race décide du TYPE d'enfant (cycle monstre->mystique->divine->monstre, l'humain
+// est le catalyseur), la table de synthèse (data/fusion-synthese.json) désigne la lignñe.
+const RACE_CYCLE = { monstre: 'mystique', mystique: 'divine', divine: 'monstre' };
+const BIOMES = ['marees', 'forge', 'bosquet', 'crypte', 'zenith'];
+
+function synthesePaire(famA, famB) {
+  const syn = DATA['fusion-synthese'] ?? {};
+  const key = [famA ?? '', famB ?? ''].sort().join('|');
+  return syn.paires?.[key] ?? syn.defaut ?? { famille: 'A', rarete: 'max' };
+}
+function biomeOfFamille(fam, rng) {
+  const b = (FUSION_CFG.biomeParFamille ?? {})[fam];
+  if (b && b !== 'hasard') return b;
+  return BIOMES[Math.floor(rng() * BIOMES.length)];
+}
+// enfant possible pour une race + rareté : monstre du biome (ou divin), sinon carte de famille
+function cardEnfantOf(raceCible, rarete, familleId, biomeCible, rng, fallbackCard = null) {
+  if (raceCible === 'monstre' || raceCible === 'mystique' || raceCible === 'divine') {
+    const poolBiome = biomeCible && biomeCible !== 'divin'
+      ? MONSTERS.filter((m) => m.dungeon === biomeCible)
+      : MONSTERS.filter((m) => m.dungeon === 'divin');
+    const byRace = poolBiome.filter((m) => raceOfCard(m) === raceCible && m.rarity === rarete);
+    const anyRace = poolBiome.filter((m) => m.rarity === rarete);
+    const pool = byRace.length ? byRace : anyRace;
+    if (pool.length) return { ...pool[Math.floor(rng() * pool.length)], kind: 'monstre' };
+  }
+  // lignée parentale : la famille désignée (ou celle d'un parent), au palier de la rareté
+  const fam = FAMILIES[familleId] ?? null;
+  if (fam) {
+    const steps = fam.steps ?? [];
+    const idx = Math.min(RANK[rarete] ?? 0, steps.length - 1);
+    const id = steps[Math.max(0, idx)];
+    const c = getCard(id);
+    if (c) return { ...c, kind: 'carte' };
+  }
+  if (fallbackCard) return { ...fallbackCard, kind: 'carte' }; // parent sans famille : on reste sur sa carte
+  return null;
+}
+// aperçu complet et déterministe (tous les jets sont faits ici, rejouables par seed) :
+// la fenêtre de fusion montre la race cible, la famille cible (ou « ? » + candidats), le palier,
+// le plafond et les sorts héritables — jamais l'identité exacte de l'enfant (mystère des lignées)
+function fusionPreview(instA, instB, rng, opts = {}) {
+  const F = FUSION_CFG;
+  const cardA = getCard(instA.id) ?? getMonster(instA.id);
+  const cardB = getCard(instB.id) ?? getMonster(instB.id);
+  if (!cardA || !cardB) return { ok: false, reason: 'carte inconnue' };
+  const raceA = raceOfCard(cardA), raceB = raceOfCard(cardB);
+  let raceCible = null, demon = false, biomeCible = null, saut = false;
+  const humain = raceA === 'humaine' ? cardA : raceB === 'humaine' ? cardB : null;
+  const autre = raceA === 'humaine' ? cardB : cardA;
+  const raceAutre = raceA === 'humaine' ? raceB : raceA;
+  if (humain && raceAutre !== 'humaine') {
+    if (rng() < (F.sautRate ?? 0)) {
+      saut = true;
+      if (raceAutre === 'divine') {
+        if (rng() < (F.demonRate ?? 0)) { demon = true; raceCible = 'divine'; biomeCible = 'divin'; }
+        else { raceCible = 'monstre'; biomeCible = biomeOfFamille(humain.family, rng); }
+      } else {
+        raceCible = RACE_CYCLE[raceAutre] ?? raceAutre;
+        biomeCible = biomeOfFamille(humain.family, rng); // saut réussi : le biome vient de la famille humaine
+      }
+    } else {
+      raceCible = (rng() * 2) < 1 ? raceA : raceB; // échec du saut : lignée d'un parent
+    }
+  } else {
+    raceCible = (rng() * 2) < 1 ? raceA : raceB; // pas d'humain (ou 2 humains) : pas de saut
+  }
+  const syn = synthesePaire(cardA.family, cardB.family);
+  let familleId = null, candidats = [];
+  const famA = cardA.family ?? cardB.family ?? null;
+  const famB = cardB.family ?? cardA.family ?? null;
+  if (syn.famille === 'hasard') { candidats = [...new Set([famA, famB].filter(Boolean))]; familleId = candidats.length ? candidats[Math.floor(rng() * candidats.length)] : null; }
+  else if (syn.famille === 'A' || syn.famille === 'B') familleId = (syn.famille === 'A' ? famA : famB);
+  else familleId = syn.famille;
+  const rarA = RANK[cardA.rarity] ?? 0, rarB = RANK[cardB.rarity] ?? 0;
+  const rarete = syn.rarete === 'max' ? (rarA >= rarB ? cardA.rarity : cardB.rarity) : syn.rarete;
+  // saut réussi avec un humain -> vrai monstre de la race cible ; sinon lignée d'un parent (carte de famille)
+  const enfant = (saut && humain) ? cardEnfantOf(raceCible, rarete, familleId, biomeCible, rng, humain) : cardEnfantOf('humaine', rarete, familleId, null, rng, cardA.family ? cardA : cardB);
+  if (!enfant) return { ok: false, reason: 'aucune lignée trouvée' };
+  const stA = statsAt(cardA, instA.lvl ?? 1), stB = statsAt(cardB, instB.lvl ?? 1);
+  const plafond = (F.plafonds ?? {})[rarete] ?? 0;
+  const pct = F.statsPct ?? 0;
+  const bonusAtk = Math.round(Math.min(pct * (stA.atk + stB.atk), plafond * enfant.atk));
+  const bonusHp = Math.round(Math.min(pct * (stA.hp + stB.hp), plafond * enfant.hp));
+  // sorts héritables : sorts des deux parents, jamais la signature de l'enfant
+  const sigEnfant = enfant.soloSpell ?? null;
+  const vus = new Set(); const sorts = [];
+  for (const inst of [instA, instB]) {
+    const base = getCard(inst.id) ?? getMonster(inst.id);
+    for (const sp of [...(inst.acc ?? []), ...((base && base.spells) ?? [])]) {
+      const r = resolveSpellEntry(sp);
+      if (!r || !r.name) continue;
+      const k = spellKeyOf(r);
+      if (k && vus.has(k)) continue;
+      if (sigEnfant && r.name === sigEnfant) continue;
+      if (k) vus.add(k);
+      sorts.push({ key: k ?? r.name, name: r.name, cost: r.cost, mult: r.mult, brut: sp });
+    }
+  }
+  const sortsMax = (rarA >= RANK.SR && rarB >= RANK.SR) ? (F.sortsMaxSR ?? 3) : (F.sortsMax ?? 2);
+  return {
+    ok: true, raceCible, demon, biomeCible, saut, familleId, candidatsFamille: candidats,
+    familleHasard: syn.famille === 'hasard', rarete, plafondPct: plafond,
+    childId: enfant.id, childKind: enfant.kind, childName: demon ? '??' : enfant.name,
+    bonusAtk, bonusHp, sorts, sortsMax,
+    parentA: { iid: instA.iid, id: cardA.id, name: cardA.name }, parentB: { iid: instB.iid, id: cardB.id, name: cardB.name },
+  };
+}
+// garde-fous + application : parents consommés, enfant niveau 1, sorts choisis, bonus de stats plafonné
+function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
+  const teamIids = new Set(opts.teamIids ?? []);
+  const instA = instances.find((i) => i.iid === iidA);
+  const instB = instances.find((i) => i.iid === iidB);
+  if (!instA || !instB || iidA === iidB) return { ok: false, reason: 'sélection invalide' };
+  const cardA = getCard(instA.id) ?? getMonster(instA.id);
+  const cardB = getCard(instB.id) ?? getMonster(instB.id);
+  if (!cardA || !cardB) return { ok: false, reason: 'carte inconnue' };
+  if (cardA.rarity === 'N' && cardB.rarity === 'N') return { ok: false, reason: 'deux naissances N ne fusionnent pas' };
+  if (cardA.rarity === 'M' || cardB.rarity === 'M') return { ok: false, reason: 'un M ne fusionne pas' };
+  if (teamIids.has(iidA) || teamIids.has(iidB)) return { ok: false, reason: 'carte en équipe active refusée' };
+  if (opts.ownedOf) {
+    if ((opts.ownedOf(instA.id) ?? 0) <= 1 || (opts.ownedOf(instB.id) ?? 0) <= 1) return { ok: false, reason: 'exemplaire unique de collection refusé' };
+  }
+  if (!plan || !plan.ok || plan.parentA.iid !== iidA || plan.parentB.iid !== iidB) return { ok: false, reason: 'aperçu invalide' };
+  const dispo = new Map(plan.sorts.map((s) => [s.key, s]));
+  const acc = (choixSorts ?? []).slice(0, plan.sortsMax).filter((k) => dispo.has(k)).map((k) => ({ ...dispo.get(k).brut }));
+  const enfant = {
+    iid: `fus-${iidA}-${iidB}`, id: plan.childId, lvl: 1, xp: 0,
+    acc,
+    ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
+    ...(instA.voie ? { voie: instA.voie } : {}),
+    isNew: true,
+  };
+  const reste = instances.filter((i) => i.iid !== iidA && i.iid !== iidB);
+  reste.push(enfant);
+  return { ok: true, enfant, instances: reste, consumed: [iidA, iidB] };
 }

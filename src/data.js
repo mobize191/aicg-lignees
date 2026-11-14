@@ -144,6 +144,9 @@ const SORTS_NIVEAU = E.SORTS_NIVEAU ?? {};
 const HYBRIDES_NIVEAU = E.HYBRIDES_NIVEAU ?? {};
 const SORTS_TRIO = E.SORTS_TRIO ?? [];
 
+// lot 6 fusion v4 (spec-fusion-v4) : règles de fusion en data (saut de race, plafonds, biome par famille)
+const FUSION_CFG = E.FUSION ?? {};
+
 // v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
 const FX_SPELLS = E.FX_SPELLS;
 const MONSTER_FAMS = DATA['monster-families'];

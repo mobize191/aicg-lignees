@@ -237,18 +237,6 @@
    }
   }
  ],
- "a17": [
-  {
-   "to": "a20",
-   "voie": "la régression",
-   "type": "regression",
-   "condition": {
-    "kind": "item",
-    "id": "eclat-regression",
-    "n": 1
-   }
-  }
- ],
  "a27": [
   {
    "to": "a28",

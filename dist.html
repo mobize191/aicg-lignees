@@ -5045,10 +5045,10 @@ const DATA = {
   "LEVEL_BONUS": 0.08,
   "LEVEL_CAP": 20,
   "DMG_REDUCTION_MAX": 0.8,
-  "SAVE_VERSION": 30,
+  "SAVE_VERSION": 31,
   "SAVE_KEY": "fondations-cards-v1",
   "SAVE_SLOTS": 4,
-  "CURRENT_VERSION": 30,
+  "CURRENT_VERSION": 31,
   "RACE_DIVINE_IDS": [
    "d1",
    "d2",
@@ -5196,7 +5196,6 @@ const DATA = {
    "standard",
    "partage",
    "convergence",
-   "regression",
    "chute",
    "malediction",
    "evenement",
@@ -5535,7 +5534,41 @@ const DATA = {
      ]
     }
    }
-  ]
+  ],
+  "FUSION": {
+   "sautRate": 0.55,
+   "demonRate": 0.15,
+   "statsPct": 0.25,
+   "sortsMax": 2,
+   "sortsMaxSR": 3,
+   "eclatRegressionOr": 500,
+   "plafonds": {
+    "C": 0.2,
+    "UC": 0.25,
+    "R": 0.3,
+    "SR": 0.35,
+    "UR": 0.4,
+    "L": 0.5
+   },
+   "biomeParFamille": {
+    "eau": "marees",
+    "vol": "marees",
+    "braise": "forge",
+    "bosquet": "bosquet",
+    "bouclier": "bosquet",
+    "ombre": "crypte",
+    "crepuscule": "crypte",
+    "chevalerie": "crypte",
+    "aube": "zenith",
+    "zele": "zenith",
+    "appel": "zenith",
+    "paladin": "zenith",
+    "lame": "hasard",
+    "seuil": "divin",
+    "miroir": "divin",
+    "pont": "divin"
+   }
+  }
  },
  "equipment": {
   "pieces": [
@@ -8028,18 +8061,6 @@ const DATA = {
     }
    }
   ],
-  "a17": [
-   {
-    "to": "a20",
-    "voie": "la régression",
-    "type": "regression",
-    "condition": {
-     "kind": "item",
-     "id": "eclat-regression",
-     "n": 1
-    }
-   }
-  ],
   "a27": [
    {
     "to": "a28",
@@ -9525,6 +9546,42 @@ const DATA = {
      "fusion": "guet-des-fonds",
      "cran": "II"
     }
+   }
+  }
+ },
+ "fusion-synthese": {
+  "defaut": {
+   "famille": "A",
+   "rarete": "max"
+  },
+  "paires": {
+   "aube|zele": {
+    "famille": "hasard",
+    "rarete": "max"
+   },
+   "lame|eau": {
+    "famille": "hasard",
+    "rarete": "max"
+   },
+   "ombre|crepuscule": {
+    "famille": "hasard",
+    "rarete": "max"
+   },
+   "bouclier|chevalerie": {
+    "famille": "hasard",
+    "rarete": "max"
+   },
+   "bosquet|seuil": {
+    "famille": "hasard",
+    "rarete": "max"
+   },
+   "lame|vol": {
+    "famille": "eau",
+    "rarete": "max"
+   },
+   "aube|appel": {
+    "famille": "zele",
+    "rarete": "max"
    }
   }
  },
@@ -18157,6 +18214,9 @@ const SORTS_NIVEAU = E.SORTS_NIVEAU ?? {};
 const HYBRIDES_NIVEAU = E.HYBRIDES_NIVEAU ?? {};
 const SORTS_TRIO = E.SORTS_TRIO ?? [];
 
+// lot 6 fusion v4 (spec-fusion-v4) : règles de fusion en data (saut de race, plafonds, biome par famille)
+const FUSION_CFG = E.FUSION ?? {};
+
 // v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
 const FX_SPELLS = E.FX_SPELLS;
 const MONSTER_FAMS = DATA['monster-families'];
@@ -18315,6 +18375,15 @@ function validate(data, errors) {
   for (const z of data.zones ?? []) {
     if (z.donjon && !(data.dungeons ?? []).some((d) => d.id === z.donjon)) push(`la zone ${z.id} pointe un donjon inconnu ${z.donjon}`, 'EXI-DJ-1');
   }
+  // lot 6 fusion v4 : table de synthèse — familles connues (cartes ou monstres)
+  const famsConnues = new Set([...Object.keys(data.families ?? {}), ...Object.values(data['monster-families'] ?? {}).flatMap((f) => (f ?? []).map((x) => x.name))]);
+  for (const [key, p] of Object.entries(data['fusion-synthese']?.paires ?? {})) {
+    for (const f of key.split('|')) if (f && !famsConnues.has(f)) push(`fusion-synthese : famille inconnue ${f} (paire ${key})`, 'EXI-DJ-2');
+    if (p.famille && p.famille !== 'A' && p.famille !== 'B' && p.famille !== 'hasard' && !famsConnues.has(p.famille)) push(`fusion-synthese : cible inconnue ${p.famille} (paire ${key})`, 'EXI-DJ-2');
+  }
+  const F = data.engine?.FUSION ?? {};
+  if (F.sautRate != null && !(F.sautRate > 0 && F.sautRate <= 1)) push('FUSION.sautRate hors bornes', 'EXI-DJ-2');
+  if (F.demonRate != null && !(F.demonRate >= 0 && F.demonRate <= 1)) push('FUSION.demonRate hors bornes', 'EXI-DJ-2');
   const gemTiers = new Set(data.engine?.GEM_TIERS ?? []);
   const sortsEcoleIds = new Set((data.grimoire?.ecole ?? []).map((s) => s.id));
   for (const z of data.zones ?? []) {
@@ -20710,12 +20779,8 @@ function conditionOk(cond, ctx) {
 function applySpecialEvo(inst, entry, ctx = {}) {
   if (!entry || entry.type === 'standard') return null;
   if (!conditionOk(entry.condition, ctx)) return { ok: false, reason: 'condition non remplie' };
-  if (entry.type === 'regression') {
-    if (ctx.items && entry.condition?.kind === 'item') ctx.items[entry.condition.id] -= (entry.condition.n ?? 1);
-    const to = getCard(entry.to) ?? getMonster(entry.to);
-    const spawned = { ...inst, iid: `${inst.iid}-reg`, id: entry.to, lvl: 1, xp: 0, acc: [...(inst.acc ?? [])] };
-    return { ok: true, spawned, type: 'regression' };
-  }
+  // lot 6 (spec-fusion-v4 §2.5) : le type « regression » MEURT — refusé explicitement, plus d'entrée en data
+  if (entry.type === 'regression') return { ok: false, reason: 'type regression retiré (fusion v4)' };
   if (entry.type === 'fusion') {
     return { ok: true, consumed: (entry.condition?.n ?? 2), type: 'fusion', to: entry.to };
   }
@@ -20737,6 +20802,145 @@ function applySpecialEvo(inst, entry, ctx = {}) {
 function evoLabelOf(from, to) {
   const e = evoEntryOf(from, to);
   return e && e.type === 'secrete' ? '??' : (e?.voie || to);
+}
+
+// ===== Fusion DQM v4 (lot 6, spec-fusion-v4) : deux cartes jouables -> un enfant =====
+// La couche race décide du TYPE d'enfant (cycle monstre->mystique->divine->monstre, l'humain
+// est le catalyseur), la table de synthèse (data/fusion-synthese.json) désigne la lignñe.
+const RACE_CYCLE = { monstre: 'mystique', mystique: 'divine', divine: 'monstre' };
+const BIOMES = ['marees', 'forge', 'bosquet', 'crypte', 'zenith'];
+
+function synthesePaire(famA, famB) {
+  const syn = DATA['fusion-synthese'] ?? {};
+  const key = [famA ?? '', famB ?? ''].sort().join('|');
+  return syn.paires?.[key] ?? syn.defaut ?? { famille: 'A', rarete: 'max' };
+}
+function biomeOfFamille(fam, rng) {
+  const b = (FUSION_CFG.biomeParFamille ?? {})[fam];
+  if (b && b !== 'hasard') return b;
+  return BIOMES[Math.floor(rng() * BIOMES.length)];
+}
+// enfant possible pour une race + rareté : monstre du biome (ou divin), sinon carte de famille
+function cardEnfantOf(raceCible, rarete, familleId, biomeCible, rng, fallbackCard = null) {
+  if (raceCible === 'monstre' || raceCible === 'mystique' || raceCible === 'divine') {
+    const poolBiome = biomeCible && biomeCible !== 'divin'
+      ? MONSTERS.filter((m) => m.dungeon === biomeCible)
+      : MONSTERS.filter((m) => m.dungeon === 'divin');
+    const byRace = poolBiome.filter((m) => raceOfCard(m) === raceCible && m.rarity === rarete);
+    const anyRace = poolBiome.filter((m) => m.rarity === rarete);
+    const pool = byRace.length ? byRace : anyRace;
+    if (pool.length) return { ...pool[Math.floor(rng() * pool.length)], kind: 'monstre' };
+  }
+  // lignée parentale : la famille désignée (ou celle d'un parent), au palier de la rareté
+  const fam = FAMILIES[familleId] ?? null;
+  if (fam) {
+    const steps = fam.steps ?? [];
+    const idx = Math.min(RANK[rarete] ?? 0, steps.length - 1);
+    const id = steps[Math.max(0, idx)];
+    const c = getCard(id);
+    if (c) return { ...c, kind: 'carte' };
+  }
+  if (fallbackCard) return { ...fallbackCard, kind: 'carte' }; // parent sans famille : on reste sur sa carte
+  return null;
+}
+// aperçu complet et déterministe (tous les jets sont faits ici, rejouables par seed) :
+// la fenêtre de fusion montre la race cible, la famille cible (ou « ? » + candidats), le palier,
+// le plafond et les sorts héritables — jamais l'identité exacte de l'enfant (mystère des lignées)
+function fusionPreview(instA, instB, rng, opts = {}) {
+  const F = FUSION_CFG;
+  const cardA = getCard(instA.id) ?? getMonster(instA.id);
+  const cardB = getCard(instB.id) ?? getMonster(instB.id);
+  if (!cardA || !cardB) return { ok: false, reason: 'carte inconnue' };
+  const raceA = raceOfCard(cardA), raceB = raceOfCard(cardB);
+  let raceCible = null, demon = false, biomeCible = null, saut = false;
+  const humain = raceA === 'humaine' ? cardA : raceB === 'humaine' ? cardB : null;
+  const autre = raceA === 'humaine' ? cardB : cardA;
+  const raceAutre = raceA === 'humaine' ? raceB : raceA;
+  if (humain && raceAutre !== 'humaine') {
+    if (rng() < (F.sautRate ?? 0)) {
+      saut = true;
+      if (raceAutre === 'divine') {
+        if (rng() < (F.demonRate ?? 0)) { demon = true; raceCible = 'divine'; biomeCible = 'divin'; }
+        else { raceCible = 'monstre'; biomeCible = biomeOfFamille(humain.family, rng); }
+      } else {
+        raceCible = RACE_CYCLE[raceAutre] ?? raceAutre;
+        biomeCible = biomeOfFamille(humain.family, rng); // saut réussi : le biome vient de la famille humaine
+      }
+    } else {
+      raceCible = (rng() * 2) < 1 ? raceA : raceB; // échec du saut : lignée d'un parent
+    }
+  } else {
+    raceCible = (rng() * 2) < 1 ? raceA : raceB; // pas d'humain (ou 2 humains) : pas de saut
+  }
+  const syn = synthesePaire(cardA.family, cardB.family);
+  let familleId = null, candidats = [];
+  const famA = cardA.family ?? cardB.family ?? null;
+  const famB = cardB.family ?? cardA.family ?? null;
+  if (syn.famille === 'hasard') { candidats = [...new Set([famA, famB].filter(Boolean))]; familleId = candidats.length ? candidats[Math.floor(rng() * candidats.length)] : null; }
+  else if (syn.famille === 'A' || syn.famille === 'B') familleId = (syn.famille === 'A' ? famA : famB);
+  else familleId = syn.famille;
+  const rarA = RANK[cardA.rarity] ?? 0, rarB = RANK[cardB.rarity] ?? 0;
+  const rarete = syn.rarete === 'max' ? (rarA >= rarB ? cardA.rarity : cardB.rarity) : syn.rarete;
+  // saut réussi avec un humain -> vrai monstre de la race cible ; sinon lignée d'un parent (carte de famille)
+  const enfant = (saut && humain) ? cardEnfantOf(raceCible, rarete, familleId, biomeCible, rng, humain) : cardEnfantOf('humaine', rarete, familleId, null, rng, cardA.family ? cardA : cardB);
+  if (!enfant) return { ok: false, reason: 'aucune lignée trouvée' };
+  const stA = statsAt(cardA, instA.lvl ?? 1), stB = statsAt(cardB, instB.lvl ?? 1);
+  const plafond = (F.plafonds ?? {})[rarete] ?? 0;
+  const pct = F.statsPct ?? 0;
+  const bonusAtk = Math.round(Math.min(pct * (stA.atk + stB.atk), plafond * enfant.atk));
+  const bonusHp = Math.round(Math.min(pct * (stA.hp + stB.hp), plafond * enfant.hp));
+  // sorts héritables : sorts des deux parents, jamais la signature de l'enfant
+  const sigEnfant = enfant.soloSpell ?? null;
+  const vus = new Set(); const sorts = [];
+  for (const inst of [instA, instB]) {
+    const base = getCard(inst.id) ?? getMonster(inst.id);
+    for (const sp of [...(inst.acc ?? []), ...((base && base.spells) ?? [])]) {
+      const r = resolveSpellEntry(sp);
+      if (!r || !r.name) continue;
+      const k = spellKeyOf(r);
+      if (k && vus.has(k)) continue;
+      if (sigEnfant && r.name === sigEnfant) continue;
+      if (k) vus.add(k);
+      sorts.push({ key: k ?? r.name, name: r.name, cost: r.cost, mult: r.mult, brut: sp });
+    }
+  }
+  const sortsMax = (rarA >= RANK.SR && rarB >= RANK.SR) ? (F.sortsMaxSR ?? 3) : (F.sortsMax ?? 2);
+  return {
+    ok: true, raceCible, demon, biomeCible, saut, familleId, candidatsFamille: candidats,
+    familleHasard: syn.famille === 'hasard', rarete, plafondPct: plafond,
+    childId: enfant.id, childKind: enfant.kind, childName: demon ? '??' : enfant.name,
+    bonusAtk, bonusHp, sorts, sortsMax,
+    parentA: { iid: instA.iid, id: cardA.id, name: cardA.name }, parentB: { iid: instB.iid, id: cardB.id, name: cardB.name },
+  };
+}
+// garde-fous + application : parents consommés, enfant niveau 1, sorts choisis, bonus de stats plafonné
+function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
+  const teamIids = new Set(opts.teamIids ?? []);
+  const instA = instances.find((i) => i.iid === iidA);
+  const instB = instances.find((i) => i.iid === iidB);
+  if (!instA || !instB || iidA === iidB) return { ok: false, reason: 'sélection invalide' };
+  const cardA = getCard(instA.id) ?? getMonster(instA.id);
+  const cardB = getCard(instB.id) ?? getMonster(instB.id);
+  if (!cardA || !cardB) return { ok: false, reason: 'carte inconnue' };
+  if (cardA.rarity === 'N' && cardB.rarity === 'N') return { ok: false, reason: 'deux naissances N ne fusionnent pas' };
+  if (cardA.rarity === 'M' || cardB.rarity === 'M') return { ok: false, reason: 'un M ne fusionne pas' };
+  if (teamIids.has(iidA) || teamIids.has(iidB)) return { ok: false, reason: 'carte en équipe active refusée' };
+  if (opts.ownedOf) {
+    if ((opts.ownedOf(instA.id) ?? 0) <= 1 || (opts.ownedOf(instB.id) ?? 0) <= 1) return { ok: false, reason: 'exemplaire unique de collection refusé' };
+  }
+  if (!plan || !plan.ok || plan.parentA.iid !== iidA || plan.parentB.iid !== iidB) return { ok: false, reason: 'aperçu invalide' };
+  const dispo = new Map(plan.sorts.map((s) => [s.key, s]));
+  const acc = (choixSorts ?? []).slice(0, plan.sortsMax).filter((k) => dispo.has(k)).map((k) => ({ ...dispo.get(k).brut }));
+  const enfant = {
+    iid: `fus-${iidA}-${iidB}`, id: plan.childId, lvl: 1, xp: 0,
+    acc,
+    ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
+    ...(instA.voie ? { voie: instA.voie } : {}),
+    isNew: true,
+  };
+  const reste = instances.filter((i) => i.iid !== iidA && i.iid !== iidB);
+  reste.push(enfant);
+  return { ok: true, enfant, instances: reste, consumed: [iidA, iidB] };
 }
 
 // src/errance.js — errance top-down (zone témoin Marées puis généralisation)
@@ -21976,11 +22180,23 @@ function v28to29(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28, 28: v28to29, 29: v29to30 };
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28, 28: v28to29, 29: v29to30, 30: v30to31 };
 // v29 -> v30 (moteur v2, refonte v2 lot 2) : 5 stats — la défense est lue dans les data (champ def),
 // les stats des unités existantes sont recalculées à l'instanciation. Non destructif.
 function v29to30(s) {
   s.version = 30;
+  return s;
+}
+
+// v30 -> v31 (lot 6 fusion v4, spec-fusion-v4 §2.5) : la régression meurt, les éclats de
+// régression en stock sont convertis en OR (tranchage suite 24), non destructif.
+function v30to31(s) {
+  s.version = 31;
+  const n = Number(s.items?.['eclat-regression'] ?? 0);
+  if (n > 0) {
+    s.gold = (s.gold ?? 0) + n * (DATA.engine.FUSION?.eclatRegressionOr ?? 0);
+    delete s.items['eclat-regression'];
+  }
   return s;
 }
 
@@ -25232,6 +25448,7 @@ function renderHome(root) {
       <a class="btn gold-frame" href="#terres"><span class="ic">🌿</span>Terres Sauvages</a>
       <a class="btn gold-frame" href="#boutique"><span class="ic">🛒</span>Boutique</a>
       <a class="btn gold-frame" href="#forge"><span class="ic">🛡️</span>Guilde</a>
+      <a class="btn gold-frame" href="#autel"><span class="ic">⚗️</span>Autel des Lignées</a>
       <a class="btn gold-frame" href="#quetes"><span class="ic">📜</span>Quêtes</a>
       <a class="btn gold-frame" href="#personnage"><span class="ic">🧝</span>Personnage</a>
       <a class="btn gold-frame" href="#collection"><span class="ic">🎴</span>Collection</a>
@@ -27837,7 +28054,8 @@ function renderCombat(root, opts = {}) {
   const cards = store.team.slots.filter(Boolean).map((iid) => {
     const inst = byIid(iid);
     if (!inst) return null;
-    const base = withShards(byId(inst.id));
+    let base = withShards(byId(inst.id));
+    if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
     const eb = equipBonusOfCard(inst.id);
     const equip = {
       atkPct: eb.atkPct + teamBonus.atkPct,
@@ -28286,6 +28504,81 @@ function forgeEvolve(iid, to = null) {
   questProgress('evoluer');
   toast(`\u2713 \u00c9volution : ${byId(r.nextId).name}${r.inherited ? ` \u2014 ${r.inherited} sort${r.inherited > 1 ? 's' : ''} h\u00e9rit\u00e9${r.inherited > 1 ? 's' : ''}` : ''} !`);
   openRevealModal([r.nextId], { title: '\u2b50 \u00c9VOLUTION !', subtitle: 'La carte devient sa nouvelle forme.', note: 'Touchez la carte pour d\u00e9couvrir sa nouvelle forme.', cta: 'Continuer' });
+}
+
+// lot 6 fusion v4 (spec-fusion-v4 lot 2) : l'Autel des Lignées — deux cartes -> un enfant,
+// aperçu mystère (race/famille cible, palier, plafond, sorts), double confirmation
+let autelSel = [];
+let autelPlan = null;
+let autelConfirm = false;
+function renderAutel(root) {
+  const teamIids = new Set((store.team?.slots ?? []).filter(Boolean));
+  const list = store.instances.filter((i) => !teamIids.has(i.iid));
+  const rows = list.map((inst) => {
+    const c = byId(inst.id);
+    const sel = autelSel.includes(inst.iid);
+    return `<div class="forge-row autel-row ${sel ? 'sel' : ''}" data-autel-iid="${inst.iid}" style="cursor:pointer">
+      <div class="forge-card">${cardFront({ ...c, level: inst.lvl }, {})}</div>
+      <div class="forge-acts"><p class="muted"><b>${c.name}</b> — ${RARITY_LABEL[c.rarity] ?? c.rarity} · Nv ${inst.lvl}${inst.fusionBonus ? ` · +${inst.fusionBonus.atk} ATQ/+${inst.fusionBonus.hp} PV (fusion)` : ''}</p></div>
+    </div>`;
+  }).join('') || '<p class="muted">Aucune carte disponible (hors équipe active).</p>';
+  let panel = '<p class="muted">Sélectionnez deux cartes de la collection (hors équipe active) pour voir l’aperçu de la fusion. Les deux parents sont consommés.</p>';
+  if (autelSel.length === 2) {
+    const a = store.instances.find((i) => i.iid === autelSel[0]);
+    const b = store.instances.find((i) => i.iid === autelSel[1]);
+    if (!autelPlan && a && b) autelPlan = fusionPreview(a, b, uiRand);
+    const p = autelPlan;
+    if (p && p.ok) {
+      const famLabel = p.familleHasard ? `? (${(p.candidatsFamille ?? []).join(' / ')})` : (p.familleId ?? '?');
+      const raceLabel = p.demon ? 'divine (DÉMON — 15 %)' : (RACE_LABEL[p.raceCible] ?? p.raceCible);
+      panel = `<div class="syn-panel"><h3>Aperçu de la fusion (mystère des lignées)</h3>
+        <p>Race cible : <b>${raceLabel}</b>${p.biomeCible && p.biomeCible !== 'divin' ? ` · biome ${p.biomeCible}` : ''}${p.saut ? ' · saut de race' : ' · lignée parentale'}</p>
+        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1</p>
+        <p>Sorts hérités (max ${p.sortsMax}, jamais la signature de l'enfant) :</p>
+        <div class="row" style="flex-wrap:wrap">${p.sorts.map((s) => `<label class="chip"><input type="checkbox" class="autel-sort" value="${s.key}"> ${s.name} (${s.cost}✦${s.mult ? ' ×' + s.mult : ''})</label>`).join('') || '<span class="muted">aucun</span>'}</div>
+        <div class="row" style="margin-top:8px">
+          <button type="button" class="btn big gold" id="autel-confirm">${autelConfirm ? '⚠ Confirmer définitivement (parents consommés)' : 'Fusionner →'}</button>
+          <button type="button" class="btn ghost" id="autel-reset">Annuler</button>
+        </div></div>`;
+    } else {
+      panel = `<p class="muted">${p ? p.reason : 'aperçu indisponible'}</p>`;
+    }
+  }
+  root.innerHTML = `
+    <h2><button type="button" class="back" id="autel-back" title="Retour à l'accueil">←</button> ⚗️ Autel des Lignées</h2>
+    <p class="muted">Fusion DQM : deux cartes jouables → un enfant niveau 1 (25 % des stats cumulées des parents, plafonné par la rareté de l'enfant, 2-3 sorts hérités). L'identité exacte de l'enfant reste masquée jusqu'à la confirmation.</p>
+    ${panel}
+    <div class="forge-list">${rows}</div>`;
+  root.querySelector('#autel-back').onclick = () => { autelSel = []; autelPlan = null; autelConfirm = false; go('#accueil'); };
+  const rst = root.querySelector('#autel-reset');
+  if (rst) rst.onclick = () => { autelSel = []; autelPlan = null; autelConfirm = false; renderAutel(root); };
+  root.querySelectorAll('.autel-row').forEach((el) => {
+    el.onclick = () => {
+      const iid = el.dataset.autelIid;
+      if (autelSel.includes(iid)) autelSel = autelSel.filter((x) => x !== iid);
+      else if (autelSel.length < 2) autelSel.push(iid);
+      autelPlan = null; autelConfirm = false;
+      renderAutel(root);
+    };
+  });
+  const btn = root.querySelector('#autel-confirm');
+  if (btn) btn.onclick = () => {
+    if (!autelConfirm) { autelConfirm = true; renderAutel(root); return; }
+    const a = store.instances.find((i) => i.iid === autelSel[0]);
+    const b = store.instances.find((i) => i.iid === autelSel[1]);
+    if (!a || !b || !autelPlan) return;
+    const choix = [...root.querySelectorAll('.autel-sort:checked')].map((c) => c.value);
+    const res = doFusion(store.instances, autelSel[0], autelSel[1], choix, autelPlan, {
+      teamIids: [...teamIids],
+      ownedOf: (id) => store.instances.filter((i) => i.id === id).length,
+    });
+    if (!res.ok) { toast('✗ ' + res.reason, 'warn'); return; }
+    store.instances = res.instances;
+    autelSel = []; autelPlan = null; autelConfirm = false;
+    save();
+    toast('✦ Fusion réussie : un nouvel exemplaire rejoint la collection (Nv 1).');
+    renderAutel(root);
+  };
 }
 
 function renderForge(root) {
@@ -28765,6 +29058,7 @@ registerRoute('#equipe', renderEquipe);
 registerRoute('#personnage', renderPersonnage);
 registerRoute('#collection', renderCollection);
 registerRoute('#forge', renderForge);
+registerRoute('#autel', renderAutel);
 registerRoute('#donjons', renderDonjons);
 registerRoute('#quetes', renderQuetes);
 registerRoute('#terres', renderTerres);

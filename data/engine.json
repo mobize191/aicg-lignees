@@ -355,10 +355,10 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 30,
+ "SAVE_VERSION": 31,
  "SAVE_KEY": "fondations-cards-v1",
  "SAVE_SLOTS": 4,
- "CURRENT_VERSION": 30,
+ "CURRENT_VERSION": 31,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",
@@ -506,7 +506,6 @@
   "standard",
   "partage",
   "convergence",
-  "regression",
   "chute",
   "malediction",
   "evenement",
@@ -845,5 +844,39 @@
     ]
    }
   }
- ]
+ ],
+ "FUSION": {
+  "sautRate": 0.55,
+  "demonRate": 0.15,
+  "statsPct": 0.25,
+  "sortsMax": 2,
+  "sortsMaxSR": 3,
+  "eclatRegressionOr": 500,
+  "plafonds": {
+   "C": 0.2,
+   "UC": 0.25,
+   "R": 0.3,
+   "SR": 0.35,
+   "UR": 0.4,
+   "L": 0.5
+  },
+  "biomeParFamille": {
+   "eau": "marees",
+   "vol": "marees",
+   "braise": "forge",
+   "bosquet": "bosquet",
+   "bouclier": "bosquet",
+   "ombre": "crypte",
+   "crepuscule": "crypte",
+   "chevalerie": "crypte",
+   "aube": "zenith",
+   "zele": "zenith",
+   "appel": "zenith",
+   "paladin": "zenith",
+   "lame": "hasard",
+   "seuil": "divin",
+   "miroir": "divin",
+   "pont": "divin"
+  }
+ }
 }

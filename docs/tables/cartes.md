@@ -267,7 +267,6 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n15 Éveillé du Seuil | d7 | la voie du Chœur Miroir — la Réflexion |
 | n15 Éveillé du Seuil | d13 | la voie du Pont — le Liage |
 | a34 Braconnier des Quais | e3 | la malédiction des quais |
-| a17 Kenji, Sabre Céleste | a20 Mage de la Fournaise | la régression |
 | a27 Maïa, Lame du Bosquet | a28 Maïa, Déesse du Bosquet | la fusion du Bosquet |
 | p1 Jeune Séraphin | d6 | l’équilibre |
 | p1 Jeune Séraphin | p5 Séraphin, Porteur de Lumière | la voie céleste — le Porteur de Lumière |

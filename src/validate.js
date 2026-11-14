@@ -105,6 +105,15 @@ function validate(data, errors) {
   for (const z of data.zones ?? []) {
     if (z.donjon && !(data.dungeons ?? []).some((d) => d.id === z.donjon)) push(`la zone ${z.id} pointe un donjon inconnu ${z.donjon}`, 'EXI-DJ-1');
   }
+  // lot 6 fusion v4 : table de synthèse — familles connues (cartes ou monstres)
+  const famsConnues = new Set([...Object.keys(data.families ?? {}), ...Object.values(data['monster-families'] ?? {}).flatMap((f) => (f ?? []).map((x) => x.name))]);
+  for (const [key, p] of Object.entries(data['fusion-synthese']?.paires ?? {})) {
+    for (const f of key.split('|')) if (f && !famsConnues.has(f)) push(`fusion-synthese : famille inconnue ${f} (paire ${key})`, 'EXI-DJ-2');
+    if (p.famille && p.famille !== 'A' && p.famille !== 'B' && p.famille !== 'hasard' && !famsConnues.has(p.famille)) push(`fusion-synthese : cible inconnue ${p.famille} (paire ${key})`, 'EXI-DJ-2');
+  }
+  const F = data.engine?.FUSION ?? {};
+  if (F.sautRate != null && !(F.sautRate > 0 && F.sautRate <= 1)) push('FUSION.sautRate hors bornes', 'EXI-DJ-2');
+  if (F.demonRate != null && !(F.demonRate >= 0 && F.demonRate <= 1)) push('FUSION.demonRate hors bornes', 'EXI-DJ-2');
   const gemTiers = new Set(data.engine?.GEM_TIERS ?? []);
   const sortsEcoleIds = new Set((data.grimoire?.ecole ?? []).map((s) => s.id));
   for (const z of data.zones ?? []) {
