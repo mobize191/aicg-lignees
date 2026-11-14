@@ -400,7 +400,10 @@ function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
   const rS = opts.rng ? opts.rng() : 1;
   const shinyBonus = shiny ? loS + rS * Math.max(0, hiS - loS) : 0;
   const enfant = {
-    iid: `fus-${iidA}-${iidB}`, id: plan.childId, lvl: 1, xp: 0,
+    // correctifs-bots : l'enfant naît avec un iid ENTIER quand l'appelant en fournit un (childIid) ;
+    // l'ancien `fus-A-B` cassait byIid, les slots d'équipe et la persistance PV/mana au save/load
+    iid: Number.isInteger(opts.childIid) && opts.childIid > 0 ? opts.childIid : `fus-${iidA}-${iidB}`,
+    id: plan.childId, lvl: 1, xp: 0,
     acc,
     ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
     ...(instA.voie ? { voie: instA.voie } : {}),

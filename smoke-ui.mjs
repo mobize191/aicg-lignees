@@ -1410,6 +1410,10 @@ async function main() {
     const allBtn = doc.body.querySelector('#recomp-all');
     if (allBtn) { allBtn.click(); await wait(30); }
     check('B11 i « Tout ramasser » referme la modale', !doc.body.querySelector('.recomp-overlay'), '');
+    // correctifs-bots : laisser le pipeline asynchrone de victoire se poser (replay des événements +
+    // chaîne « étage suivant » à 90 ms) avant de naviguer — sinon il repeint #app en écran de combat
+    // au moment du check j et la page Quêtes rend 0 ligne (course, pas une régression de rendu)
+    await wait(230);
     api.go('#quetes');
     await wait(30);
     check('B11 j page Quêtes : 3 quêtes du jour rendues', els.get('app').querySelectorAll('.quest-row').length === 3, String(els.get('app').querySelectorAll('.quest-row').length));
