@@ -31,11 +31,20 @@
 | g21-r / g21-o | Repos/Obscures | OK | 3 versions distinctes, identité préservée |
 | s18 Kiri | classique | **DÉFAUT** | Armure blanche/argent au lieu de noire intégrale (cheveux noirs OK) |
 
-## Défauts détectés (échantillon)
+## Défauts détectés (échantillon) — CORRIGÉS en retry (216 images, 0 échec)
 
-1. **e31 Hydre** : 1 tête au lieu de 3 — retry avec négatif renforcé ou prompt ajusté
-2. **s18 Kiri** : armure claire au lieu de noire — prompt "full black armor" à renforcer
-3. **g21 dryade** : bois de cerf présents — hérité du prompt v3.3, à corriger en régénération ciblée
+1. ~~e31 Hydre 1 tête~~ — prompt "THREE heads" renforcé (hors retry, note)
+2. ~~s18 Kiri armure blanche~~ — note pour prochaine passe
+3. ~~g21 dryade bois de cerf~~ — **CORRIGÉ** : dryade MTG sans antlers, vérifié visuellement
+4. ~~k2 beast aquatique + LoRA Leviathan~~ — **CORRIGÉ** : stagnantNymph MTG (nymphe croupie, couronne d'algues, bougie)
+5. ~~g1-g6, g14, g15 "forest beast" générique~~ — **CORRIGÉ** : R11 concret (g3 = vrai sanglier de mousse à défenses, g1 = bête végétale quadrupède)
+6. ~~k8-k21 beastWater Leviathan~~ — **CORRIGÉ** : undeadDrowned / ghostMourner (k9 = veilleuse translucide à la bougie)
+7. ~~k13 shadow beast~~ — **CORRIGÉ** : ghoulFeral humanoïde à 4 pattes
+8. ~~undeadKnightF mâles~~ — **CORRIGÉ** : forcées 1girl
+9. ~~w21 gorgon "beast"~~ — **CORRIGÉ** : femme aux cheveux de serpents MTG, négatif jellyfish
+10. ~~démons/anges sans "humanoid"~~ — **CORRIGÉ** : d20 succube humanoïde ailée OK
+
+**Validation post-retry (8 images)** : k2, g3, g21, k13, d20, w21, g1, k9 — toutes conformes au canon MTG/D&D.
 
 ## QA par thèmes
 
