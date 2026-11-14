@@ -70,8 +70,7 @@
    "a fungal creature in the style of Magic: The Gathering fungus, mushroom caps and fungal growths on a stocky non-human body, spore clouds, no human face, no human anatomy"
   ],
   "dryad": [
-   "dryad",
-   "a graceful tree spirit woman, smooth bark-like skin, living leaf and vine hair, moss and flowers"
+   "a dryad in the style of Magic: The Gathering, a graceful tree-spirit woman, smooth bark-like skin, living leaves and vines for hair, slender humanoid silhouette fused with her tree, moss and flowers — NO antlers"
   ],
   "fireflySpirit": [
    "firefly spirit, a young woman with glowing translucent wings, light motes, leaf and flower crown, fair skin"
@@ -303,6 +302,30 @@
   ],
   "merSovereign": [
    "a colossal crowned sea-beast king, barnacled crown of shipwrecks, crustacean plates, trident of bone, royal kelp mantle"
+  ],
+  "undead": [
+   "an undead creature, reanimated corpse, no living flesh, glowing dead eyes, tattered grave clothes"
+  ],
+  "ghost": [
+   "a translucent ghost, incorporeal spectral figure, pale glowing ectoplasm, floating, no solid body"
+  ],
+  "stagnantNymph": [
+   "a stagnant nymph in the style of Magic: The Gathering, a graceful feminine water spirit, black algae hair, milky eyes, drowned bride dress, spectral fallen beauty, corrupted grace"
+  ],
+  "ghoulFeral": [
+   "a feral ghoul, a humanoid zombie that lost its humanity, crawling on all fours like a beast, torn skin, exposed teeth, mindless hunger"
+  ],
+  "ghoulRisen": [
+   "a risen ghoul, a humanoid zombie keeping some humanity, standing upright, tattered clothes, hollow eyes, partially decayed face"
+  ],
+  "carrionBeast": [
+   "a carrion beast, a reanimated DEAD ANIMAL quadruped (not a living wolf), rotting carcass, exposed ribs, glowing scavenger eyes, undead tags explicit, not a living canine"
+  ],
+  "ghostMourner": [
+   "a ghost mourner, a female spirit keeping vigil over the drowned, translucent pale figure in tattered veil, wailing softly, floating above water"
+  ],
+  "undeadDrowned": [
+   "a drowned undead, a waterlogged corpse reanimated, seaweed hair, bloated pale skin, tattered sailor clothes, glowing dead eyes, aquatic undead"
   ]
  },
  "antiTags": {
@@ -340,6 +363,12 @@
    "giant",
    "colossal",
    "human-sized"
+  ],
+  "dryad": [
+   "antlers",
+   "deer antlers",
+   "wooden antlers",
+   "animal horns"
   ]
  },
  "families": {
@@ -1019,6 +1048,111 @@
    "extra": "long straight black hair, a full black plate armor, a sheathed sword at rest, unhelmeted",
    "note": "L du chevalier (NOMMÉE suite 24) — ref s17 (Gardienne du Rempart) ; art alternatif « robe blanche immaculée » = sa version Exception",
    "ipa": "s17"
+  },
+  "k1": {
+   "name": "k1",
+   "species": "carrionBeast",
+   "gender": null,
+   "age": null,
+   "beast": true
+  },
+  "k2": {
+   "name": "k2",
+   "species": "stagnantNymph",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k3": {
+   "name": "k3",
+   "species": "undead",
+   "gender": "1boy",
+   "age": "an adult"
+  },
+  "k5": {
+   "name": "k5",
+   "species": "ghost",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k6": {
+   "name": "k6",
+   "species": "banshee",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k8": {
+   "name": "k8",
+   "species": "undeadDrowned",
+   "gender": "1boy",
+   "age": "an adult"
+  },
+  "k9": {
+   "name": "k9",
+   "species": "ghostMourner",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k10": {
+   "name": "k10",
+   "species": "ghostMourner",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k11": {
+   "name": "k11",
+   "species": "ghostMourner",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k12": {
+   "name": "k12",
+   "species": "ghostMourner",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k13": {
+   "name": "k13",
+   "species": "ghoulFeral",
+   "gender": "1boy",
+   "age": "an adult",
+   "beast": true
+  },
+  "k15": {
+   "name": "k15",
+   "species": "ghoulRisen",
+   "gender": "1boy",
+   "age": "an adult"
+  },
+  "k16": {
+   "name": "k16",
+   "species": "lich",
+   "gender": "1boy",
+   "age": "ancient elder"
+  },
+  "k18": {
+   "name": "k18",
+   "species": "ghost",
+   "gender": "1girl",
+   "age": "an adult"
+  },
+  "k20": {
+   "name": "k20",
+   "species": "undeadDrowned",
+   "gender": "1boy",
+   "age": "an adult"
+  },
+  "k21": {
+   "name": "k21",
+   "species": "undeadDrowned",
+   "gender": "1boy",
+   "age": "an adult"
+  },
+  "g13": {
+   "name": "g13",
+   "species": "treant",
+   "gender": null,
+   "age": null,
+   "beast": true
   }
  },
  "genericRules": {
@@ -1134,5 +1268,14 @@
    "trigger": "leviathan a sea monster",
    "weight": 0.7
   }
+ },
+ "R11_BY_CARD": {
+  "g1": "a crawling fern beast, a quadruped vegetal creature of woven ferns and thorns, no canine traits, moss-covered plant body, chlorophyll veins",
+  "g2": "a giant hostile firefly insect, a massive glowing beetle with luminescent abdomen, chitinous wings, mandibles, insectoid not mammal",
+  "g3": "a REAL moss boar, a quadruped suidae with moss growing on its back, tusks, bristly hide, forest boar not wolf",
+  "g4": "a bramble and rampart golem, a humanoid-ish vegetal construct of thorny vines and living wood, no animal traits",
+  "g5": "a translucent photosynthesis being, a vegetal humanoid of light and chlorophyll, glowing green veins, ethereal plant spirit",
+  "g14": "a fungal golem, a stocky construct of mushroom caps and mycelium, stone-fungus hybrid, no human face",
+  "g15": "a humanoid mycelium mass, a fungal humanoid of tangled hyphae and mushroom caps, non-human anatomy"
  }
 }
