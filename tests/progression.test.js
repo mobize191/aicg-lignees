@@ -29,11 +29,11 @@ test('les crans de race +10/+20/+30 s\u2019appliquent aux stats, par données un
   const E = loadEngine();
   const uMonstre = E.makeUnit(E.getCard('n5'));
   const uDivine = E.makeUnit(E.getCard('n13'));
-  assert.equal(uMonstre.cranPct, 10);
-  assert.equal(uDivine.cranPct, 30);
+  assert.equal(uMonstre.cranPct, 5, 'J4 : cran allégé 5/10/15');
+  assert.equal(uDivine.cranPct, 15);
   const base = E.getCard('n5');
-  const cm = E.classeMods(base);
-  assert.equal(uMonstre.atk, Math.max(1, Math.round(base.atk * (1 + cm.atkPct) * 1.10)));
+  assert.equal(uMonstre.atk, Math.max(1, Math.round(base.atk)), 'J3/J4 : le cran ne touche plus l ATQ');
+  assert.equal(uMonstre.maxHp, Math.max(1, Math.round(base.hp * 1.05)), 'J4 : le cran porte sur les PV');
   // modifier le cran dans une copie des données change le résultat proportionnellement
   const dir = 'tests/fixtures/data-crans';
   const data = loadData();
@@ -44,7 +44,8 @@ test('les crans de race +10/+20/+30 s\u2019appliquent aux stats, par données un
   const E2 = loadEngine(dir);
   const u2 = E2.makeUnit(E2.getCard('n5'));
   assert.equal(u2.cranPct, 12);
-  assert.equal(u2.atk, Math.max(1, Math.round(base.atk * (1 + cm.atkPct) * 1.12)));
+  assert.equal(u2.atk, Math.max(1, Math.round(base.atk)), 'le cran ne touche pas l ATQ (J4)');
+  assert.equal(u2.maxHp, Math.max(1, Math.round(base.hp * 1.12)), 'le cran se lit sur les PV');
   rmSync(dir, { recursive: true, force: true });
 });
 

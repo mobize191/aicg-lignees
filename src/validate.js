@@ -63,7 +63,7 @@ function validate(data, errors) {
   const nomsEveils = new Set();
   for (const [race, tree] of Object.entries(data.trees ?? {})) {
     for (const [cran, pct] of Object.entries(tree.crans ?? {})) {
-      if (![0, 10, 20, 30].includes(pct)) push(`la race ${race} a un cran ${cran} à ${pct} % (attendu 0/10/20/30)`, 'EXI-P1-1');
+      if (![0, 5, 10, 15].includes(pct)) push(`la race ${race} a un cran ${cran} à ${pct} % (attendu 0/5/10/15)`, 'EXI-P1-1');
     }
     for (const ev of tree.eveils ?? []) {
       if (!allIds.has(ev.de)) push(`l'éveil de ${race} part de la carte inconnue ${ev.de}`, 'EXI-P1-1');

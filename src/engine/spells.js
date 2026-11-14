@@ -212,7 +212,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
           events.push({ type: 'heal', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
         }
       } else if (role === 'bouclier') {
-        const amount = Math.min(Math.round(statOf(s) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        const amount = Math.min(Math.round(statOf(s) * (spell.mult ?? 1)), Math.round(t.maxHp * M.SHIELD_CAP_RATIO));
         events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big, fx: 'atk', mana: s.mana });
         t.shield += amount;
         events.push({ type: 'shield', side, sourceId: s.uid, targetId: t.uid, amount, kind: 'special' });
@@ -244,7 +244,7 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   
   
   
-  const cap = (t) => Math.round(t.maxHp * M.HEAL_CAP_RATIO);
+  const cap = (t) => Math.max(0, t.maxHp - t.hp); // J10 moteur v2 : plus de cap de soin, borne = mana persistant
   const effKind = s.effect ? s.effect.kind : null;
   if (effKind === 'heal') {
     const value = Math.round(s.effect.value * (1 + (side === 'team' ? mods.healPct || 0 : 0)) * mult);

@@ -28,3 +28,4 @@
 
 28   # numero de version du format de sauvegarde (structure du champ)
 29   # numero de version du format de sauvegarde (structure du champ)
+30   # numero de version du format de sauvegarde (structure du champ)

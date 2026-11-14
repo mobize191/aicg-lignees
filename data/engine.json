@@ -96,8 +96,8 @@
  },
  "CLASSE_MODS": {
   "Guerrier": {
-   "atkPct": 0.1,
-   "hpPct": 0.15,
+   "atkPct": 0,
+   "hpPct": 0,
    "strike": 1,
    "dodge": 0,
    "exec": 0,
@@ -107,8 +107,8 @@
    "shieldOnHit": 0.05
   },
   "Assassin": {
-   "atkPct": 0.05,
-   "hpPct": -0.1,
+   "atkPct": 0,
+   "hpPct": 0,
    "strike": 1,
    "dodge": 0.15,
    "exec": 0.25,
@@ -118,18 +118,18 @@
    "shieldOnHit": 0
   },
   "Mage": {
-   "atkPct": 0.05,
-   "hpPct": -0.05,
+   "atkPct": 0,
+   "hpPct": 0,
    "strike": 0.8,
    "dodge": 0,
    "exec": 0,
    "execBelow": 0,
-   "splash": 0.4,
+   "splash": 0,
    "wave": false,
    "shieldOnHit": 0
   },
   "Prêtre": {
-   "atkPct": -0.15,
+   "atkPct": 0,
    "hpPct": 0,
    "strike": 0.7,
    "dodge": 0,
@@ -140,7 +140,7 @@
    "shieldOnHit": 0
   },
   "Occultiste": {
-   "atkPct": -0.2,
+   "atkPct": 0,
    "hpPct": 0,
    "strike": 0.6,
    "dodge": 0,
@@ -355,10 +355,10 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 29,
+ "SAVE_VERSION": 30,
  "SAVE_KEY": "fondations-cards-v1",
  "SAVE_SLOTS": 4,
- "CURRENT_VERSION": 29,
+ "CURRENT_VERSION": 30,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",
@@ -609,7 +609,6 @@
   "DAILY_RACE_HUM": 0.5,
   "DAILY_RACE_MONSTRE": 0.8,
   "DAILY_RACE_MYSTIQUE": 0.95,
-  "HEAL_CAP_RATIO": 0.35,
   "LINK_SHARE": 0.5,
   "LINK_BUFF_SHARE": 0.5,
   "DOT_EFFECT_DEFAULT": 0.4,
@@ -675,7 +674,25 @@
   "CRIT_BASE": 0.05,
   "CRIT_PER_AGI": 0.01,
   "CRIT_CAP": 0.3,
-  "CRIT_MULT": 1.5
+  "CRIT_MULT": 1.5,
+  "DEF_K": 10,
+  "DEF_RATIOS": {
+   "Guerrier": 0.6,
+   "Assassin": 0.3,
+   "Mage": 0.25,
+   "Prêtre": 0.45,
+   "Occultiste": 0.3,
+   "Invocateur": 0.3,
+   "gardien": 0.8
+  },
+  "BASE_SPELL": {
+   "name": "Boule de Feu",
+   "cost": 2,
+   "mult": 1.2
+  },
+  "TAUNT_CHARGES": 2,
+  "TAUNT_TURNS": 3,
+  "SHIELD_CAP_RATIO": 0.35
  },
  "profils": {
   "Guerrier": {

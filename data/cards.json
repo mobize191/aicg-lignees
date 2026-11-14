@@ -11,7 +11,8 @@
   "agi": 6,
   "int": 3,
   "biome": "recrues",
-  "element": "Neutre"
+  "element": "Neutre",
+  "def": 5
  },
  {
   "id": "n2",
@@ -25,7 +26,8 @@
   "agi": 4,
   "int": 6,
   "biome": "recrues",
-  "element": "Neutre"
+  "element": "Neutre",
+  "def": 2
  },
  {
   "id": "n3",
@@ -43,7 +45,8 @@
   "agi": 2,
   "int": 3,
   "biome": "recrues",
-  "element": "Neutre"
+  "element": "Neutre",
+  "def": 2
  },
  {
   "id": "n4",
@@ -57,7 +60,8 @@
   "agi": 8,
   "int": 4,
   "biome": "recrues",
-  "element": "Neutre"
+  "element": "Neutre",
+  "def": 3
  },
  {
   "id": "n5",
@@ -70,7 +74,8 @@
   "raciale": true,
   "agi": 6,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 5
  },
  {
   "id": "n6",
@@ -83,7 +88,8 @@
   "raciale": true,
   "agi": 5,
   "int": 8,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 3
  },
  {
   "id": "n7",
@@ -100,7 +106,8 @@
   "raciale": true,
   "agi": 4,
   "int": 6,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 3
  },
  {
   "id": "n8",
@@ -113,7 +120,8 @@
   "raciale": true,
   "agi": 9,
   "int": 4,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 3
  },
  {
   "id": "n9",
@@ -126,7 +134,8 @@
   "raciale": true,
   "agi": 5,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 2
  },
  {
   "id": "n10",
@@ -139,7 +148,8 @@
   "raciale": true,
   "agi": 5,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 2
  },
  {
   "id": "n11",
@@ -156,7 +166,8 @@
   "raciale": true,
   "agi": 3,
   "int": 5,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 3
  },
  {
   "id": "n12",
@@ -169,7 +180,8 @@
   "raciale": true,
   "agi": 5,
   "int": 7,
-  "biome": "recrues"
+  "biome": "recrues",
+  "def": 3
  },
  {
   "id": "n13",
@@ -188,7 +200,8 @@
   "raciale": true,
   "agi": 3,
   "int": 5,
-  "biome": "divin"
+  "biome": "divin",
+  "def": 3
  },
  {
   "id": "n14",
@@ -203,7 +216,8 @@
   "raciale": true,
   "agi": 9,
   "int": 4,
-  "biome": "divin"
+  "biome": "divin",
+  "def": 3
  },
  {
   "id": "n15",
@@ -217,7 +231,8 @@
   "raciale": true,
   "agi": 4,
   "int": 6,
-  "biome": "divin"
+  "biome": "divin",
+  "def": 2
  },
  {
   "id": "a1",
@@ -229,7 +244,8 @@
   "hp": 60,
   "family": "lame",
   "agi": 6,
-  "int": 3
+  "int": 3,
+  "def": 5
  },
  {
   "id": "a30",
@@ -241,7 +257,8 @@
   "hp": 67,
   "family": "lame",
   "agi": 7,
-  "int": 4
+  "int": 4,
+  "def": 6
  },
  {
   "id": "a6",
@@ -253,7 +270,8 @@
   "hp": 75,
   "family": "lame",
   "agi": 8,
-  "int": 5
+  "int": 5,
+  "def": 7
  },
  {
   "id": "a10",
@@ -265,7 +283,8 @@
   "hp": 90,
   "family": "lame",
   "agi": 13,
-  "int": 7
+  "int": 7,
+  "def": 11
  },
  {
   "id": "a15",
@@ -277,7 +296,8 @@
   "hp": 95,
   "family": "lame",
   "agi": 21,
-  "int": 12
+  "int": 12,
+  "def": 18
  },
  {
   "id": "a17",
@@ -289,7 +309,8 @@
   "hp": 105,
   "family": "lame",
   "agi": 28,
-  "int": 16
+  "int": 16,
+  "def": 24
  },
  {
   "id": "a2",
@@ -301,7 +322,8 @@
   "hp": 45,
   "family": "ombre",
   "agi": 9,
-  "int": 4
+  "int": 4,
+  "def": 3
  },
  {
   "id": "a31",
@@ -313,7 +335,8 @@
   "hp": 50,
   "family": "ombre",
   "agi": 11,
-  "int": 5
+  "int": 5,
+  "def": 4
  },
  {
   "id": "a7",
@@ -325,7 +348,8 @@
   "hp": 55,
   "family": "ombre",
   "agi": 14,
-  "int": 6
+  "int": 6,
+  "def": 5
  },
  {
   "id": "a12",
@@ -337,7 +361,8 @@
   "hp": 60,
   "family": "ombre",
   "agi": 20,
-  "int": 9
+  "int": 9,
+  "def": 7
  },
  {
   "id": "a16",
@@ -349,7 +374,8 @@
   "hp": 72,
   "family": "ombre",
   "agi": 29,
-  "int": 13
+  "int": 13,
+  "def": 10
  },
  {
   "id": "a18",
@@ -361,7 +387,8 @@
   "hp": 88,
   "family": "ombre",
   "agi": 38,
-  "int": 17
+  "int": 17,
+  "def": 13
  },
  {
   "id": "a5",
@@ -373,7 +400,8 @@
   "hp": 42,
   "family": "eau",
   "agi": 5,
-  "int": 7
+  "int": 7,
+  "def": 2
  },
  {
   "id": "a29",
@@ -385,7 +413,8 @@
   "hp": 46,
   "family": "eau",
   "agi": 6,
-  "int": 9
+  "int": 9,
+  "def": 3
  },
  {
   "id": "a8",
@@ -397,7 +426,8 @@
   "hp": 50,
   "family": "eau",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 4
  },
  {
   "id": "a11",
@@ -409,7 +439,8 @@
   "hp": 65,
   "family": "eau",
   "agi": 10,
-  "int": 16
+  "int": 16,
+  "def": 5
  },
  {
   "id": "a13",
@@ -421,7 +452,8 @@
   "hp": 80,
   "family": "eau",
   "agi": 14,
-  "int": 22
+  "int": 22,
+  "def": 7
  },
  {
   "id": "a14",
@@ -433,7 +465,8 @@
   "hp": 100,
   "family": "eau",
   "agi": 19,
-  "int": 30
+  "int": 30,
+  "def": 10
  },
  {
   "id": "a3",
@@ -448,7 +481,8 @@
   "agi": 4,
   "int": 6,
   "biome": "recrues",
-  "family": "bouclier"
+  "family": "bouclier",
+  "def": 3
  },
  {
   "id": "a4",
@@ -462,7 +496,8 @@
   "agi": 5,
   "int": 7,
   "biome": "recrues",
-  "family": "braise"
+  "family": "braise",
+  "def": 2
  },
  {
   "id": "a9",
@@ -476,7 +511,8 @@
   "agi": 8,
   "int": 4,
   "biome": "recrues",
-  "family": "bouclier"
+  "family": "bouclier",
+  "def": 7
  },
  {
   "id": "s1",
@@ -492,7 +528,8 @@
    "value": 18
   },
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "def": 1
  },
  {
   "id": "s13",
@@ -508,7 +545,8 @@
    "value": 22
   },
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "def": 1
  },
  {
   "id": "s5",
@@ -524,7 +562,8 @@
    "value": 26
   },
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "def": 1
  },
  {
   "id": "s8",
@@ -540,7 +579,8 @@
    "value": 40
   },
   "agi": 2,
-  "int": 3
+  "int": 3,
+  "def": 2
  },
  {
   "id": "s9",
@@ -556,7 +596,8 @@
    "value": 58
   },
   "agi": 3,
-  "int": 4
+  "int": 4,
+  "def": 2
  },
  {
   "id": "s10",
@@ -572,7 +613,8 @@
    "value": 80
   },
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "def": 3
  },
  {
   "id": "s4",
@@ -588,7 +630,8 @@
    "value": 15
   },
   "agi": 1,
-  "int": 1
+  "int": 1,
+  "def": 1
  },
  {
   "id": "s14",
@@ -604,7 +647,8 @@
    "value": 20
   },
   "agi": 2,
-  "int": 2
+  "int": 2,
+  "def": 1
  },
  {
   "id": "s6",
@@ -620,7 +664,8 @@
    "value": 25
   },
   "agi": 3,
-  "int": 2
+  "int": 2,
+  "def": 2
  },
  {
   "id": "s7",
@@ -636,7 +681,8 @@
    "value": 0.25
   },
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "def": 2
  },
  {
   "id": "s11",
@@ -652,7 +698,8 @@
    "value": 55
   },
   "agi": 4,
-  "int": 2
+  "int": 2,
+  "def": 4
  },
  {
   "id": "s12",
@@ -668,7 +715,8 @@
    "value": 75
   },
   "agi": 5,
-  "int": 3
+  "int": 3,
+  "def": 4
  },
  {
   "id": "a19",
@@ -680,7 +728,8 @@
   "hp": 43,
   "family": "braise",
   "agi": 5,
-  "int": 7
+  "int": 7,
+  "def": 2
  },
  {
   "id": "a32",
@@ -692,7 +741,8 @@
   "hp": 47,
   "family": "braise",
   "agi": 6,
-  "int": 9
+  "int": 9,
+  "def": 3
  },
  {
   "id": "a20",
@@ -704,7 +754,8 @@
   "hp": 51,
   "family": "braise",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 4
  },
  {
   "id": "a21",
@@ -723,7 +774,8 @@
   },
   "family": "braise",
   "agi": 11,
-  "int": 17
+  "int": 17,
+  "def": 5
  },
  {
   "id": "a22",
@@ -735,7 +787,8 @@
   "hp": 80,
   "family": "braise",
   "agi": 15,
-  "int": 23
+  "int": 23,
+  "def": 7
  },
  {
   "id": "a23",
@@ -747,7 +800,8 @@
   "hp": 100,
   "family": "braise",
   "agi": 20,
-  "int": 31
+  "int": 31,
+  "def": 10
  },
  {
   "id": "a24",
@@ -759,7 +813,8 @@
   "hp": 46,
   "family": "bosquet",
   "agi": 9,
-  "int": 4
+  "int": 4,
+  "def": 3
  },
  {
   "id": "a33",
@@ -771,7 +826,8 @@
   "hp": 51,
   "family": "bosquet",
   "agi": 11,
-  "int": 5
+  "int": 5,
+  "def": 4
  },
  {
   "id": "a25",
@@ -783,7 +839,8 @@
   "hp": 56,
   "family": "bosquet",
   "agi": 14,
-  "int": 6
+  "int": 6,
+  "def": 5
  },
  {
   "id": "a26",
@@ -795,7 +852,8 @@
   "hp": 61,
   "family": "bosquet",
   "agi": 20,
-  "int": 9
+  "int": 9,
+  "def": 7
  },
  {
   "id": "a27",
@@ -807,7 +865,8 @@
   "hp": 72,
   "family": "bosquet",
   "agi": 29,
-  "int": 13
+  "int": 13,
+  "def": 10
  },
  {
   "id": "a28",
@@ -819,7 +878,8 @@
   "hp": 88,
   "family": "bosquet",
   "agi": 38,
-  "int": 17
+  "int": 17,
+  "def": 13
  },
  {
   "id": "s2",
@@ -837,7 +897,8 @@
   "agi": 1,
   "int": 2,
   "biome": "recrues",
-  "family": "aube"
+  "family": "aube",
+  "def": 1
  },
  {
   "id": "s3",
@@ -855,7 +916,8 @@
   "agi": 5,
   "int": 2,
   "biome": "recrues",
-  "family": "ombre"
+  "family": "ombre",
+  "def": 2
  },
  {
   "id": "a34",
@@ -869,7 +931,8 @@
   "agi": 8,
   "int": 4,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 3
  },
  {
   "id": "a35",
@@ -887,7 +950,8 @@
   "agi": 1,
   "int": 2,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 1
  },
  {
   "id": "a36",
@@ -901,7 +965,8 @@
   "agi": 11,
   "int": 5,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 4
  },
  {
   "id": "a37",
@@ -915,7 +980,8 @@
   "agi": 7,
   "int": 3,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 2
  },
  {
   "id": "a38",
@@ -929,7 +995,8 @@
   "agi": 7,
   "int": 4,
   "biome": "recrues",
-  "family": "eau"
+  "family": "eau",
+  "def": 6
  },
  {
   "id": "a39",
@@ -947,7 +1014,8 @@
   "agi": 2,
   "int": 2,
   "biome": "recrues",
-  "family": "bouclier"
+  "family": "bouclier",
+  "def": 1
  },
  {
   "id": "a40",
@@ -967,7 +1035,8 @@
   "agi": 12,
   "int": 5,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 4
  },
  {
   "id": "a41",
@@ -987,7 +1056,8 @@
   "agi": 15,
   "int": 7,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 5
  },
  {
   "id": "a42",
@@ -1011,7 +1081,8 @@
   "agi": 2,
   "int": 2,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 1
  },
  {
   "id": "a43",
@@ -1035,7 +1106,8 @@
   "agi": 2,
   "int": 3,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 2
  },
  {
   "id": "a44",
@@ -1055,7 +1127,8 @@
   "agi": 14,
   "int": 6,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 5
  },
  {
   "id": "a45",
@@ -1075,7 +1148,8 @@
   "agi": 10,
   "int": 4,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 3
  },
  {
   "id": "a46",
@@ -1095,7 +1169,8 @@
   "agi": 14,
   "int": 6,
   "biome": "recrues",
-  "family": "vol"
+  "family": "vol",
+  "def": 5
  },
  {
   "id": "a47",
@@ -1115,7 +1190,8 @@
   "agi": 9,
   "int": 5,
   "biome": "recrues",
-  "family": "eau"
+  "family": "eau",
+  "def": 8
  },
  {
   "id": "a48",
@@ -1135,7 +1211,8 @@
   "agi": 12,
   "int": 7,
   "biome": "recrues",
-  "family": "eau"
+  "family": "eau",
+  "def": 10
  },
  {
   "id": "a49",
@@ -1159,7 +1236,8 @@
   "agi": 2,
   "int": 3,
   "biome": "recrues",
-  "family": "bouclier"
+  "family": "bouclier",
+  "def": 2
  },
  {
   "id": "b1",
@@ -1172,7 +1250,8 @@
   "family": "lame",
   "branch": true,
   "agi": 17,
-  "int": 10
+  "int": 10,
+  "def": 14
  },
  {
   "id": "b2",
@@ -1185,7 +1264,8 @@
   "family": "ombre",
   "branch": true,
   "agi": 23,
-  "int": 10
+  "int": 10,
+  "def": 8
  },
  {
   "id": "b3",
@@ -1198,7 +1278,8 @@
   "family": "eau",
   "branch": true,
   "agi": 11,
-  "int": 18
+  "int": 18,
+  "def": 6
  },
  {
   "id": "b4",
@@ -1215,7 +1296,8 @@
    "value": 46
   },
   "agi": 2,
-  "int": 3
+  "int": 3,
+  "def": 2
  },
  {
   "id": "b5",
@@ -1232,7 +1314,8 @@
    "value": 44
   },
   "agi": 3,
-  "int": 4
+  "int": 4,
+  "def": 2
  },
  {
   "id": "b6",
@@ -1245,7 +1328,8 @@
   "family": "braise",
   "branch": true,
   "agi": 12,
-  "int": 18
+  "int": 18,
+  "def": 6
  },
  {
   "id": "b7",
@@ -1258,7 +1342,8 @@
   "family": "bosquet",
   "branch": true,
   "agi": 23,
-  "int": 10
+  "int": 10,
+  "def": 8
  },
  {
   "id": "p1",
@@ -1279,7 +1364,8 @@
   "agi": 4,
   "int": 6,
   "biome": "divin",
-  "note": " renommé Jeune Séraphin (ACTÉ 10/11, id inchangé)"
+  "note": " renommé Jeune Séraphin (ACTÉ 10/11, id inchangé)",
+  "def": 4
  },
  {
   "id": "p3",
@@ -1296,7 +1382,8 @@
   "voie": "voie sylvestre — les Dryades",
   "agi": 3,
   "int": 4,
-  "family": "bosquet"
+  "family": "bosquet",
+  "def": 2
  },
  {
   "id": "q1",
@@ -1310,7 +1397,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Griffe Nocturne — geste de palier C",
   "agi": 4,
-  "int": 6
+  "int": 6,
+  "def": 2
  },
  {
   "id": "q2",
@@ -1324,7 +1412,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Voile d’Ombre — geste de palier UC",
   "agi": 5,
-  "int": 8
+  "int": 8,
+  "def": 3
  },
  {
   "id": "q3",
@@ -1338,7 +1427,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Malédiction du Soir — geste de palier R",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 4
  },
  {
   "id": "q4",
@@ -1352,7 +1442,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Danse des Ombres — geste de palier SR",
   "agi": 10,
-  "int": 16
+  "int": 16,
+  "def": 6
  },
  {
   "id": "q5",
@@ -1366,7 +1457,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Oubli Éternel — geste de palier UR",
   "agi": 14,
-  "int": 22
+  "int": 22,
+  "def": 8
  },
  {
   "id": "q6",
@@ -1380,7 +1472,8 @@
   "voie": "famille du crépuscule",
   "soloSpell": "Nuit Sans Fin — geste de palier L",
   "agi": 18,
-  "int": 29
+  "int": 29,
+  "def": 11
  },
  {
   "id": "t1",
@@ -1394,7 +1487,8 @@
   "voie": "famille du vol",
   "soloSpell": "Larcin Agile — geste de palier C",
   "agi": 7,
-  "int": 3
+  "int": 3,
+  "def": 2
  },
  {
   "id": "t2",
@@ -1408,7 +1502,8 @@
   "voie": "famille du vol",
   "soloSpell": "Coup de Jarnac — geste de palier UC",
   "agi": 9,
-  "int": 4
+  "int": 4,
+  "def": 3
  },
  {
   "id": "t3",
@@ -1422,7 +1517,8 @@
   "voie": "famille du vol",
   "soloSpell": "Dague dans le Dos — geste de palier R",
   "agi": 13,
-  "int": 6
+  "int": 6,
+  "def": 4
  },
  {
   "id": "t4",
@@ -1436,7 +1532,8 @@
   "voie": "famille du vol",
   "soloSpell": "Fauchage — geste de palier SR",
   "agi": 18,
-  "int": 8
+  "int": 8,
+  "def": 6
  },
  {
   "id": "t5",
@@ -1450,7 +1547,8 @@
   "voie": "famille du vol",
   "soloSpell": "Embuscade — geste de palier UR",
   "agi": 24,
-  "int": 11
+  "int": 11,
+  "def": 8
  },
  {
   "id": "t6",
@@ -1464,7 +1562,8 @@
   "voie": "famille du vol",
   "soloSpell": "Coup de Grâce — geste de palier L",
   "agi": 32,
-  "int": 14
+  "int": 14,
+  "def": 11
  },
  {
   "id": "u1",
@@ -1478,7 +1577,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Étincelle de Foi — geste de palier C",
   "agi": 4,
-  "int": 6
+  "int": 6,
+  "def": 4
  },
  {
   "id": "u2",
@@ -1492,7 +1592,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Hymne du Matin — geste de palier UC",
   "agi": 5,
-  "int": 8
+  "int": 8,
+  "def": 5
  },
  {
   "id": "u3",
@@ -1506,7 +1607,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Bénédiction du Jour — geste de palier R",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 6
  },
  {
   "id": "u4",
@@ -1520,7 +1622,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Croisade — geste de palier SR",
   "agi": 10,
-  "int": 16
+  "int": 16,
+  "def": 9
  },
  {
   "id": "u5",
@@ -1534,7 +1637,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Aurore Radieuse — geste de palier UR",
   "agi": 14,
-  "int": 22
+  "int": 22,
+  "def": 12
  },
  {
   "id": "u6",
@@ -1548,7 +1652,8 @@
   "voie": "famille du zèle",
   "soloSpell": "Lumière Éternelle — geste de palier L",
   "agi": 18,
-  "int": 29
+  "int": 29,
+  "def": 16
  },
  {
   "id": "v1",
@@ -1562,7 +1667,8 @@
   "voie": "école des invocations",
   "soloSpell": "Appel Mineur — geste de palier C",
   "agi": 4,
-  "int": 6
+  "int": 6,
+  "def": 2
  },
  {
   "id": "v2",
@@ -1576,7 +1682,8 @@
   "voie": "école des invocations",
   "soloSpell": "Élémentaire de Braise — geste de palier UC",
   "agi": 5,
-  "int": 8
+  "int": 8,
+  "def": 3
  },
  {
   "id": "v3",
@@ -1590,7 +1697,8 @@
   "voie": "école des invocations",
   "soloSpell": "Meute Spirituelle — geste de palier R",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 4
  },
  {
   "id": "v4",
@@ -1604,7 +1712,8 @@
   "voie": "école des invocations",
   "soloSpell": "Portail — geste de palier SR",
   "agi": 10,
-  "int": 16
+  "int": 16,
+  "def": 5
  },
  {
   "id": "v5",
@@ -1618,7 +1727,8 @@
   "voie": "école des invocations",
   "soloSpell": "Légion Céleste — geste de palier UR",
   "agi": 14,
-  "int": 22
+  "int": 22,
+  "def": 7
  },
  {
   "id": "v6",
@@ -1632,7 +1742,8 @@
   "voie": "école des invocations",
   "soloSpell": "Appel Suprême — geste de palier L",
   "agi": 18,
-  "int": 29
+  "int": 29,
+  "def": 9
  },
  {
   "id": "c1",
@@ -1645,7 +1756,8 @@
   "family": "lame",
   "branch": true,
   "agi": 21,
-  "int": 12
+  "int": 12,
+  "def": 18
  },
  {
   "id": "c8",
@@ -1658,7 +1770,8 @@
   "family": "lame",
   "branch": true,
   "agi": 28,
-  "int": 16
+  "int": 16,
+  "def": 24
  },
  {
   "id": "c2",
@@ -1671,7 +1784,8 @@
   "family": "ombre",
   "branch": true,
   "agi": 29,
-  "int": 13
+  "int": 13,
+  "def": 10
  },
  {
   "id": "c9",
@@ -1684,7 +1798,8 @@
   "family": "ombre",
   "branch": true,
   "agi": 38,
-  "int": 17
+  "int": 17,
+  "def": 13
  },
  {
   "id": "c3",
@@ -1697,7 +1812,8 @@
   "family": "eau",
   "branch": true,
   "agi": 14,
-  "int": 22
+  "int": 22,
+  "def": 7
  },
  {
   "id": "c10",
@@ -1710,7 +1826,8 @@
   "family": "eau",
   "branch": true,
   "agi": 19,
-  "int": 30
+  "int": 30,
+  "def": 10
  },
  {
   "id": "c4",
@@ -1727,7 +1844,8 @@
   "effect": {
    "kind": "heal",
    "value": 58
-  }
+  },
+  "def": 2
  },
  {
   "id": "c11",
@@ -1744,7 +1862,8 @@
   "effect": {
    "kind": "heal",
    "value": 80
-  }
+  },
+  "def": 3
  },
  {
   "id": "c5",
@@ -1761,7 +1880,8 @@
   "effect": {
    "kind": "shield",
    "value": 55
-  }
+  },
+  "def": 3
  },
  {
   "id": "c12",
@@ -1778,7 +1898,8 @@
   "effect": {
    "kind": "shield",
    "value": 75
-  }
+  },
+  "def": 3
  },
  {
   "id": "c6",
@@ -1791,7 +1912,8 @@
   "family": "braise",
   "branch": true,
   "agi": 15,
-  "int": 23
+  "int": 23,
+  "def": 7
  },
  {
   "id": "c13",
@@ -1804,7 +1926,8 @@
   "family": "braise",
   "branch": true,
   "agi": 20,
-  "int": 31
+  "int": 31,
+  "def": 10
  },
  {
   "id": "c7",
@@ -1817,7 +1940,8 @@
   "family": "bosquet",
   "branch": true,
   "agi": 29,
-  "int": 13
+  "int": 13,
+  "def": 10
  },
  {
   "id": "c14",
@@ -1830,7 +1954,8 @@
   "family": "bosquet",
   "branch": true,
   "agi": 38,
-  "int": 17
+  "int": 17,
+  "def": 13
  },
  {
   "id": "w1",
@@ -1843,7 +1968,8 @@
   "family": "seuil",
   "agi": 6,
   "int": 3,
-  "soloSpell": "Interdiction"
+  "soloSpell": "Interdiction",
+  "def": 5
  },
  {
   "id": "w2",
@@ -1860,7 +1986,8 @@
    "kind": "slow"
   },
   "soloSpell": "Sable Glissant",
-  "soloCost": 8
+  "soloCost": 8,
+  "def": 1
  },
  {
   "id": "w3",
@@ -1878,7 +2005,8 @@
    "count": 1
   },
   "soloSpell": "Sentence Lente",
-  "soloCost": 6
+  "soloCost": 6,
+  "def": 1
  },
  {
   "id": "w4",
@@ -1893,7 +2021,8 @@
   "int": 12,
   "soloSpell": "Balance du Temps",
   "soloCost": 5,
-  "soloMult": 1.8
+  "soloMult": 1.8,
+  "def": 4
  },
  {
   "id": "w5",
@@ -1913,7 +2042,8 @@
   },
   "soloSpell": "Sablier Ensorcelé",
   "soloCost": 6,
-  "soloMult": 2
+  "soloMult": 2,
+  "def": 1
  },
  {
   "id": "w6",
@@ -1932,7 +2062,8 @@
   "soloMult": 2,
   "family": "seuil",
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "def": 2
  },
  {
   "id": "w7",
@@ -1945,7 +2076,8 @@
   "family": "miroir",
   "agi": 8,
   "int": 4,
-  "soloSpell": "Frappe Réfléchie"
+  "soloSpell": "Frappe Réfléchie",
+  "def": 3
  },
  {
   "id": "w8",
@@ -1960,7 +2092,8 @@
   "int": 10,
   "soloSpell": "Voix Doubles",
   "soloCost": 4,
-  "soloMult": 1.6
+  "soloMult": 1.6,
+  "def": 3
  },
  {
   "id": "w9",
@@ -1977,7 +2110,8 @@
    "kind": "shield",
    "value": 22
   },
-  "soloSpell": "Reflet Protecteur"
+  "soloSpell": "Reflet Protecteur",
+  "def": 1
  },
  {
   "id": "w10",
@@ -1994,7 +2128,8 @@
    "kind": "copy"
   },
   "soloSpell": "Chant Miroir",
-  "soloCost": 6
+  "soloCost": 6,
+  "def": 1
  },
  {
   "id": "w11",
@@ -2013,7 +2148,8 @@
    "turns": 2
   },
   "soloSpell": "Renvoi en Chœur",
-  "soloCost": 6
+  "soloCost": 6,
+  "def": 2
  },
  {
   "id": "w12",
@@ -2031,7 +2167,8 @@
   "soloMult": 2,
   "family": "miroir",
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "def": 2
  },
  {
   "id": "w13",
@@ -2044,7 +2181,8 @@
   "family": "pont",
   "agi": 7,
   "int": 3,
-  "soloSpell": "Fil Tendu"
+  "soloSpell": "Fil Tendu",
+  "def": 2
  },
  {
   "id": "w14",
@@ -2061,7 +2199,8 @@
    "kind": "shield",
    "value": 17
   },
-  "soloSpell": "Point Serré"
+  "soloSpell": "Point Serré",
+  "def": 1
  },
  {
   "id": "w15",
@@ -2076,7 +2215,8 @@
   "int": 6,
   "soloSpell": "Point de Croix",
   "soloCost": 5,
-  "soloMult": 1.8
+  "soloMult": 1.8,
+  "def": 5
  },
  {
   "id": "w16",
@@ -2093,7 +2233,8 @@
    "kind": "link"
   },
   "soloSpell": "Nœud d’Or",
-  "soloCost": 6
+  "soloCost": 6,
+  "def": 1
  },
  {
   "id": "w17",
@@ -2110,7 +2251,8 @@
    "kind": "link"
   },
   "soloSpell": "Deux Rives",
-  "soloCost": 5
+  "soloCost": 5,
+  "def": 2
  },
  {
   "id": "w18",
@@ -2128,7 +2270,8 @@
   "soloMult": 2,
   "family": "pont",
   "agi": 3,
-  "int": 5
+  "int": 5,
+  "def": 2
  },
  {
   "id": "p5",
@@ -2146,7 +2289,8 @@
   "soloCost": 5,
   "family": "seuil",
   "agi": 5,
-  "int": 8
+  "int": 8,
+  "def": 5
  },
  {
   "id": "p6",
@@ -2165,7 +2309,8 @@
   "soloMult": 2,
   "family": "seuil",
   "agi": 6,
-  "int": 10
+  "int": 10,
+  "def": 5
  },
  {
   "id": "w19",
@@ -2179,7 +2324,8 @@
   "family": "eau",
   "agi": 4,
   "int": 6,
-  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Brumes"
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Brumes",
+  "def": 2
  },
  {
   "id": "w20",
@@ -2193,7 +2339,8 @@
   "family": "bosquet",
   "agi": 4,
   "int": 6,
-  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Bois"
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Bois",
+  "def": 2
  },
  {
   "id": "w21",
@@ -2207,7 +2354,8 @@
   "family": "ombre",
   "agi": 8,
   "int": 4,
-  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Caveaux"
+  "note": "commune de la Crypte — lignée d'accueil de l'Enge des Caveaux",
+  "def": 3
  },
  {
   "id": "p7",
@@ -2226,7 +2374,8 @@
   "soloMult": 1.8,
   "family": "seuil",
   "agi": 6,
-  "int": 10
+  "int": 10,
+  "def": 5
  },
  {
   "id": "p8",
@@ -2245,7 +2394,8 @@
   "soloMult": 2.6,
   "family": "seuil",
   "agi": 7,
-  "int": 11
+  "int": 11,
+  "def": 6
  },
  {
   "id": "a50",
@@ -2264,7 +2414,8 @@
    "kind": "shield",
    "value": 25
   },
-  "family": "paladin"
+  "family": "paladin",
+  "def": 8
  },
  {
   "id": "a51",
@@ -2283,7 +2434,8 @@
    "kind": "shield",
    "value": 30
   },
-  "family": "paladin"
+  "family": "paladin",
+  "def": 10
  },
  {
   "id": "a52",
@@ -2302,7 +2454,8 @@
    "kind": "shield",
    "value": 40
   },
-  "family": "paladin"
+  "family": "paladin",
+  "def": 12
  },
  {
   "id": "a53",
@@ -2321,7 +2474,8 @@
    "kind": "shield",
    "value": 60
   },
-  "family": "paladin"
+  "family": "paladin",
+  "def": 14
  },
  {
   "id": "s15",
@@ -2340,7 +2494,8 @@
    "kind": "shield",
    "value": 25
   },
-  "family": "chevalerie"
+  "family": "chevalerie",
+  "def": 8
  },
  {
   "id": "s16",
@@ -2359,7 +2514,8 @@
    "kind": "shield",
    "value": 30
   },
-  "family": "chevalerie"
+  "family": "chevalerie",
+  "def": 10
  },
  {
   "id": "s17",
@@ -2378,7 +2534,8 @@
    "kind": "shield",
    "value": 40
   },
-  "family": "chevalerie"
+  "family": "chevalerie",
+  "def": 12
  },
  {
   "id": "s18",
@@ -2397,6 +2554,7 @@
    "kind": "shield",
    "value": 60
   },
-  "family": "chevalerie"
+  "family": "chevalerie",
+  "def": 14
  }
 ]

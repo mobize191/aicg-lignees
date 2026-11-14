@@ -2515,6 +2515,7 @@ function openSynergyModal() {
     types
       .map((t) => {
         const s = SYNERGIES[t];
+        if (!s) return '';
         return `<div class="syn t1"><b>${t}</b><br>
           <span class="muted">Palier 1 (2 cartes) :</span> ${s[1].desc}<br>
           <span class="muted">Palier 2 (4 cartes) :</span> ${s[2].desc}</div>`;
@@ -3501,12 +3502,11 @@ function synPanel() {
     return `<div class="syn-panel"><h3>Synergies ${help}</h3><p class="muted">Aucune synergie active \u2014 m\u00e9langez classes et \u00e9l\u00e9ments.</p></div>`;
   }
   const items = entries
-    .map(([type, tier]) => `<div class="syn t${tier}"><b>${type}</b> ${tierLabel(tier)} \u2014 ${SYNERGIES[type][tier].desc}</div>`)
+    .map(([type, tier]) => `<div class="syn t${tier}"><b>${type}</b> ${tierLabel(tier)} \u2014 ${SYNERGIES[type]?.[tier]?.desc ?? ''}</div>`)
     .join('');
   const divCount = units.filter((u) => u.race === 'divine').length;
-  const divineLine = divCount >= 2
-    ? `<div class="syn t1"><b>\ud83c\udf1f Divin</b> \u2014 ${divCount} cartes divines : +10 % d\u00e9g\u00e2ts ET +10 % soins en combat.</div>`
-    : '';
+  // J7 (moteur v2) : le bonus de paire divine est supprimé avec les synergies « 2 exemplaires »
+  const divineLine = '';
   return `<div class="syn-panel"><h3>Synergies ${help}</h3>${items}${divineLine}</div>`;
 }
 
@@ -4621,6 +4621,7 @@ function statusChipsHtml(u) {
   if (st.copy && st.copy.spell) out.push(`<span class="chip st">\u29c9 ${st.copy.spell.name ?? 'copi\u00e9'}</span>`);
   if (u.linkedTo) out.push(`<span class="chip st">\ud83d\udd17 ${u.linkTtl || ''}</span>`);
   if (st.reviving > 0) out.push(`<span class="chip st">\u2728 ${st.reviving}</span>`);
+  if (st.taunt && st.taunt.charges > 0) out.push(`<span class="chip st">\ud83e\uddef provocation \u00d7${st.taunt.charges}</span>`);
   return out.join('');
 }
 
@@ -6561,10 +6562,13 @@ function renderGlossaire(root) {
     const mobs = CATALOG.filter((c) => c.dungeon === d.id);
     return groupSection(`${d.icon} ${d.name}`, mobs);
   });
-  const synRows = [...CLASSES, ...ELEMENTS].map((t) => {
-    const icon = GLYPH[t] ?? EL_GLYPH[t] ?? '';
-    return `<tr><td>${icon} ${t}</td><td>${SYNERGIES[t][1].desc}</td><td>${SYNERGIES[t][2].desc}</td></tr>`;
-  }).join('');
+  const synTypes = [...CLASSES, ...ELEMENTS].filter((t) => SYNERGIES[t]);
+  const synRows = synTypes.length
+    ? synTypes.map((t) => {
+        const icon = GLYPH[t] ?? EL_GLYPH[t] ?? '';
+        return `<tr><td>${icon} ${t}</td><td>${SYNERGIES[t][1].desc}</td><td>${SYNERGIES[t][2].desc}</td></tr>`;
+      }).join('')
+    : '<tr><td colspan="3" class="muted">Synergies « 2 exemplaires » supprimées (moteur v2, J7) — remplacées par les sorts de trio (à venir).</td></tr>';
   const classRows = CLASSES.map((cl) => `<tr><td>${GLYPH[cl]} ${cl}</td><td>${CLASS_DOC[cl].stats}</td><td>${CLASS_DOC[cl].desc}</td></tr>`).join('');
   const diffRows = DIFFICULTIES.map((D) => `<tr><td>${D.name}</td><td>${D.minR}+</td><td>${D.boss5} / ${D.boss10}</td><td>×${D.pts}</td><td>${GEM_LABEL[BOSS_GEM[D.id][0]]} (+1 brut)</td><td>${GEM_LABEL[BOSS_GEM[D.id][1]]} (+2 bruts)</td><td>${Math.round((REG_ECLAT_RATE[D.id] || 0) * 100)} %</td></tr>`).join('');
   const evoSentence = Object.keys(EVO_COST).map((r) => `${r} → ${r === 'L' ? 'M' : NEXT_RAR[r]} : ${EVO_COST[r][1]} éclats ${GEM_LABEL[EVO_COST[r][0]]} de l’élément de la carte`).join(' ; ');

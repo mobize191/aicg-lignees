@@ -75,12 +75,16 @@ test('BEATEN_BY est l\u2019inverse de BEATS', () => {
   }
 });
 
-test('teamModifiers active un palier avec 2 membres de meme type', () => {
+test('teamModifiers : J7 moteur v2 — plus aucune synergie « 2 exemplaires » (synergies.json vidé)', () => {
   const E = loadEngine();
   const a = E.makeUnit(E.getCard('n1'));
   const b = E.makeUnit(E.getCard('a30'));
-  const mods = E.teamModifiers([a, b]);
-  assert.ok(mods.tiers.size > 0);
+  const c = E.makeUnit(E.getCard('n13'));
+  const d = E.makeUnit(E.getCard('n14'));
+  const mods = E.teamModifiers([a, b, c, d]);
+  assert.equal(mods.tiers.size, 0, 'aucun palier de synergie');
+  assert.equal(mods.atkPct ?? 0, 0, 'plus de bonus de type');
+  assert.equal(mods.dmgPct ?? 0, 0, 'plus de bonus de paire divine (2 divines présentes)');
 });
 
 test('statsAt applique le bonus de niveau (LEVEL_BONUS en donnees)', () => {

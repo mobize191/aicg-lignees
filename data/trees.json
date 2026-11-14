@@ -101,7 +101,7 @@
  "monstre": {
   "rang": 1,
   "crans": {
-   "1": 10
+   "1": 5
   },
   "eveils": [
    {
@@ -200,7 +200,7 @@
  "mystique": {
   "rang": 2,
   "crans": {
-   "2": 20
+   "2": 10
   },
   "eveils": [
    {
@@ -257,7 +257,7 @@
  "divine": {
   "rang": 3,
   "crans": {
-   "3": 30
+   "3": 15
   },
   "eveils": [
    {

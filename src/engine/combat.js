@@ -13,11 +13,14 @@ function makeUnit(card, uid = card.id, level = null) {
     uid, cardId: card.id, name: card.name, rarity: card.rarity,
     classe: card.classe, element: card.element, race: raceOfCard(card),
     cranPct,
-    atk: Math.max(1, Math.round(card.atk * m * (1 + cm.atkPct) * (1 + cranPct / 100) * (1 + (eq?.atkPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
-    hp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
-    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cm.hpPct) * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
-    agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.agiPct ?? 0)))),
-    int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + cranPct / 100) * (1 + (eq?.intPct ?? 0)))),
+    // moteur v2 (J1-J4) : 5 stats ; J3 les mods atkPct/hpPct de classe ne s'appliquent plus (data lisible) ;
+    // J4 le cran de race ne porte plus que sur les PV
+    atk: Math.max(1, Math.round(card.atk * m * (1 + (eq?.atkPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
+    hp: Math.max(1, Math.round(card.hp * m * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
+    maxHp: Math.max(1, Math.round(card.hp * m * (1 + cranPct / 100) * (1 + (eq?.hpPct ?? 0)) * (1 + (card.noLossPct ?? 0) / 100))),
+    def: Math.max(1, Math.round((card.def ?? Math.max(1, Math.round(card.atk * ((M.DEF_RATIOS ?? {})[card.classe] ?? 0)))) * m * (1 + (eq?.defPct ?? 0)))),
+    agi: Math.max(1, Math.round((card.agi ?? Math.round(card.atk * M.AGI_RATIO)) * m * (1 + (eq?.agiPct ?? 0)))),
+    int: Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m * (1 + (eq?.intPct ?? 0)))),
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
@@ -33,6 +36,10 @@ function makeUnit(card, uid = card.id, level = null) {
     linkedTo: null,
     linkTtl: 0,
   };
+  // J5 (moteur v2) : attaque magique de base « boule de feu » pour les profils lanceurs, sur l'INT (en data)
+  if (statPrincipaleOf(card.classe) === 'int' && M.BASE_SPELL) {
+    u.spells.push({ name: M.BASE_SPELL.name, cost: M.BASE_SPELL.cost, mult: M.BASE_SPELL.mult, cat: 'commun', role: 'degats', cible: '1 ennemi', desc: 'L’attaque magique de base, portée par l’INT.' });
+  }
   if (card.phoenix) u.status.phoenix = { ...card.phoenix };
   // T4.5 : le mana monte avec l'intelligence (formules en données, plafonnées à +50 % du palier)
   const manaBase = card.mana ?? SOLO_MANA.max;
@@ -54,11 +61,8 @@ function teamModifiers(units) {
     }
   }
   
-  const divines = units.filter((u) => u && u.race === 'divine');
-  if (divines.length >= 2) {
-    mods.dmgPct = (mods.dmgPct ?? 0) + M.DIVINE_PAIR_BONUS;
-    mods.healPct = (mods.healPct ?? 0) + M.DIVINE_PAIR_BONUS;
-  }
+  // J7 (moteur v2) : les synergies « 2 exemplaires » sont supprimées (data/synergies.json vidé),
+  // y compris le bonus de paire divine — remplacé plus tard par les sorts de trio (lot 4)
   return mods;
 }
 
@@ -127,6 +131,9 @@ function rangAtkMult(state, side, u) {
 }
 
 function applyDamage(target, dmg, events, side, reviveCtx = null, isHit = false, opts = null) {
+  // moteur v2 (J2) : défense ratio dmg × K/(K+def), jamais d'immunité (K en data)
+  const defK = M.DEF_K ?? 10;
+  if (target.def > 0) dmg = Math.max(1, Math.round(dmg * defK / (defK + target.def)));
   if (opts && opts.state && backProtected(opts.state, side, target, !!opts.zone)) {
     dmg = Math.max(1, Math.round(dmg * M.RANG_BACK_DMG_PCT));
   }
@@ -195,6 +202,10 @@ function tickStatuses(state, events) {
         applyDamage(u, amount, events, side, { allies: others() }, false, { state });
         d.turns -= 1;
         if (d.turns <= 0) delete st.dot;
+      }
+      if (st.taunt) {
+        st.taunt.turns -= 1;
+        if (st.taunt.turns <= 0 || st.taunt.charges <= 0) delete st.taunt;
       }
       if (st.copy && st.copy.spell) {
         st.copy.expiry -= 1;
@@ -401,7 +412,7 @@ function actTeamStriker(u, i, ctx, step) {
               ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: cible.uid, amount, kind: 'special' });
             }
           } else if (role === 'bouclier') {
-            const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+            const amount = Math.min(Math.round(statOf(u) * (cand.mult ?? 1)), Math.round(t.maxHp * M.SHIELD_CAP_RATIO));
             castEv('atk');
             t.shield += amount;
             ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
@@ -474,7 +485,7 @@ function actTeamStriker(u, i, ctx, step) {
         ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big, fx: 'heal', mana: u.mana });
         if (amount > 0) { t.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' }); }
       } else if (role === 'bouclier') {
-        const amount = Math.min(Math.round(statOf(u) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        const amount = Math.min(Math.round(statOf(u) * (spell.mult ?? 1)), Math.round(t.maxHp * M.SHIELD_CAP_RATIO));
         ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big, fx: 'atk', mana: u.mana });
         t.shield += amount;
         ctx.events.push({ type: 'shield', side: 'team', sourceId: u.uid, targetId: t.uid, amount, kind: 'special' });
@@ -490,6 +501,12 @@ function actTeamStriker(u, i, ctx, step) {
   }
   if (spell) {
     ctx.events.push({ type: 'cast', side: 'team', sourceId: u.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: u.mana });
+    // J9 (moteur v2) : provocation à charges — le lanceur attire les coups ennemis
+    if (spell.taunt) {
+      const n = typeof spell.taunt === 'number' ? spell.taunt : (M.TAUNT_CHARGES ?? 2);
+      u.status.taunt = { charges: (u.status.taunt?.charges ?? 0) + n, turns: M.TAUNT_TURNS ?? 3 };
+      ctx.events.push({ type: 'status', side: 'team', sourceId: u.uid, targetId: u.uid, kind: 'taunt', value: u.status.taunt.charges });
+    }
   }
   // correctifs sorts lots 2+4 : un sort d'invocation déclenche castSummon. Lot 4 (14/11) : les sorts
   // Appel/Pont (spell.summon en data, rôle invocation) invoquent VRAIMENT en Tactique ET en Auto
@@ -503,7 +520,9 @@ function actTeamStriker(u, i, ctx, step) {
     }
   }
   const cSelf = u.status && u.status.curse ? u.status.curse.value : 0;
-  let dmg = Math.max(1, Math.round(u.atk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage * rangAtkMult(ctx.state, 'team', u)));
+  // J1 (moteur v2) : l'INT pilote les sorts des profils lanceurs, l'ATQ la frappe simple
+  const baseAtk = spell && statPrincipaleOf(u.classe) === 'int' ? u.int : u.atk;
+  let dmg = Math.max(1, Math.round(baseAtk * (1 + (mods.atkPct || 0) + u.atkBuff) * (1 + (mods.dmgPct || 0)) * (spell ? spell.mult : classeMods(u).strike) * (1 - cSelf) * ctx.rage * rangAtkMult(ctx.state, 'team', u)));
   u.atkBuff = 0;
   if (u.ronde) dmg = Math.max(1, Math.round(dmg * (1 + M.RONDE_RATE * Math.min(u.ronde, M.RONDE_CAP))));
   if (u.gimmick === 'belier' && !u.belierUsed) {
@@ -673,6 +692,14 @@ function targetUtilityScore(attacker, t, dmgBase, st, side, atkEl = attacker.ele
 // reste vivante et dans la marge TARGET_HYSTERESIS du meilleur score (skill utility-ai : inertie)
 function pickTargetByUtility(attacker, targets, dmgBase, st, side, atkEl = attacker.element) {
   if (!targets.length) return null;
+  // J9 (moteur v2) : provocation à charges — un défenseur qui provoque est visé d'abord
+  const provoked = targets.filter((t) => t.alive && t.status && t.status.taunt && t.status.taunt.charges > 0);
+  if (provoked.length) {
+    const t = provoked.sort((a, b) => b.status.taunt.charges - a.status.taunt.charges)[0];
+    t.status.taunt.charges -= 1;
+    if (st) { st.lastTarget = st.lastTarget ?? {}; st.lastTarget[side] = t.uid; }
+    return t;
+  }
   const ranked = targets
     .map((t) => ({ item: t, score: targetUtilityScore(attacker, t, dmgBase, st, side, atkEl) }))
     .sort((a, b) => b.score - a.score);
@@ -735,7 +762,7 @@ function actEnemyStriker(e, ctx) {
         ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big, fx: 'heal', mana: e.mana });
         if (amount > 0) { t.hp += amount; ctx.events.push({ type: 'heal', side: 'enemies', sourceId: e.uid, targetId: t.uid, amount, kind: 'special' }); }
       } else if (eRole === 'bouclier') {
-        const amount = Math.min(Math.round(statOf(e) * (spell.mult ?? 1)), Math.round(t.maxHp * M.HEAL_CAP_RATIO));
+        const amount = Math.min(Math.round(statOf(e) * (spell.mult ?? 1)), Math.max(0, t.maxHp - t.hp));
         ctx.events.push({ type: 'cast', side: 'enemies', sourceId: e.uid, name: spell.name, big, fx: 'atk', mana: e.mana });
         t.shield += amount;
         ctx.events.push({ type: 'shield', side: 'enemies', sourceId: e.uid, targetId: t.uid, amount, kind: 'special' });
@@ -761,7 +788,8 @@ function actEnemyStriker(e, ctx) {
   const belierBoost = e.gimmick === 'belier' && !e.belierUsed ? M.BELIER_BOOST : 1;
   if (belierBoost > 1) e.belierUsed = true;
   const eCurse = e.status && e.status.curse ? e.status.curse.value : 0;
-  const dmgBase = Math.max(1, Math.round(e.atk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
+  const eBaseAtk = spell && statPrincipaleOf(e.classe) === 'int' ? e.int : e.atk;
+  const dmgBase = Math.max(1, Math.round(eBaseAtk * (1 - ctx.reduction('team')) * (spell ? spell.mult : cmE.strike) * (1 - eCurse) * ctx.rage * belierBoost * rangAtkMult(ctx.state, 'enemies', e)));
   const kind = spell ? 'special' : 'basic';
   const eAtkEl = atkElementOf(e, spell); // Lot B : idem côté ennemis
   const target = enemyPickTarget(e, targets, dmgBase, ctx.state, eAtkEl);

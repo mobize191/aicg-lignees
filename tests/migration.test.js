@@ -277,12 +277,12 @@ test('v1.51 lot 1 : migration v28 -> v29 retire l\u2019ascendance des instances 
     gold: 7,
   };
   const out = E.migrate(structuredClone(s));
-  assert.equal(out.version, 29);
+  assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.equal(out.version, E.DATA.engine.CURRENT_VERSION);
   assert.equal('asc' in out.instances[0], false, 'asc supprimé de l\u2019instance');
   assert.equal('asc' in out.instances[1], false);
   assert.equal(out.instances[0].lvl, 12, 'le reste de l\u2019instance est intact');
   assert.equal(out.gold, 7);
   const again = E.migrate(structuredClone(out));
-  assert.equal(again.version, 29, 'idempotent');
+  assert.equal(again.version, E.DATA.engine.CURRENT_VERSION, 'idempotent');
 });

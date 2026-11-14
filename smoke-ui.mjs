@@ -1071,10 +1071,10 @@ async function main() {
           return 'monstre';
         };
         const raw = (c, lvl) => {
-          const cm = EN.CLASSE_MODS[c.classe] ?? EN.CLASSE_DEFAULT;
           const tr = api.DATA.trees[raceOf(c)] ?? {};
           const cran = Number((tr.crans ?? {})[String(tr.rang)] ?? 0);
-          return { atk: c.atk * mm(lvl) * (1 + cm.atkPct) * (1 + cran / 100), hp: c.hp * mm(lvl) * (1 + cm.hpPct) * (1 + cran / 100) };
+          // moteur v2 : J3 plus de mods de classe, J4 cran sur les PV seulement
+          return { atk: c.atk * mm(lvl), hp: c.hp * mm(lvl) * (1 + cran / 100) };
         };
         const a = raw(from, 10); const b = raw(to, 1);
         // semantique moteur : la cible au niv. 1, boostée du pct noLoss, couvre la source au niv. 10

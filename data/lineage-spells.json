@@ -206,8 +206,9 @@
    "name": "Mur Inflexible",
    "cost": 5,
    "mult": 2.2,
-   "desc": "Là où elle se tient, la ligne ne cède jamais.",
-   "cible": "l’équipe"
+   "desc": "L’endroit où elle se tient ne cède jamais : provocation (2 charges, les ennemis la visent d’abord).",
+   "cible": "l’équipe",
+   "taunt": 2
   },
   {
    "name": "Barrière Runique",

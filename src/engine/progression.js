@@ -64,11 +64,11 @@ function noLossPctOf(fromCard, toCard) {
   // calcul sur les valeurs non arrondies (les classes ont des atkPct négatifs), +1 pt de marge d'arrondi
   const raw = (c, lvl) => {
     const mm = 1 + LEVEL_BONUS * (lvl - 1);
-    const cm = classeMods(c);
     const cran = cranPctOfRace(raceOfCard(c));
+    // moteur v2 : J3 plus de mods de classe, J4 cran sur les PV seulement
     return {
-      atk: c.atk * mm * (1 + cm.atkPct) * (1 + cran / 100),
-      hp: c.hp * mm * (1 + cm.hpPct) * (1 + cran / 100),
+      atk: c.atk * mm,
+      hp: c.hp * mm * (1 + cran / 100),
     };
   };
   const a = raw(fromCard, 10);
