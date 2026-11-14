@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 50, exécution couloir 1) : MERGE main (v3.4 couloir arts) DANS vibe/refonte-v2-ff7146 — conflits résolus en combinant les deux côtés — digest 3000 INCHANGÉ `29c995da…` 733/3000 — 355 tests, smoke 483, validateur 0 erreur
+
+- **Merge `origin/main` (v3.4 : switch 5 versions d'illustrations + mécanique Exception + BOSS_CARD_MAP + déploiement assets-v34.json) dans la branche refonte v2.** 2 conflits résolus en combinant : (1) `src/engine/combat.js` — sélection du boss : `royale.boss` (lot 5) > `BOSS_CARD_MAP` (v3.4) > `bossPaliers` > `bossCards`, variance de stats conservée ; (2) `src/ui.js` — `artKeyOf` shiny (lot 8, clé `<id>-s`) + variantes Exception `-r`/`-o` (v3.4) chaînées, fallback art classique pour les deux.
+- **EXI-MOD-1 réparé sur le code v3.4** : `BOSS_CARD_MAP` en dur dans `src/engine/combat.js` (ids e31/e32…) dupliquait exactement `dungeons.bossCards` en data — la map est désormais dérivée des données (`Object.fromEntries(DUNGEONS.map(d => [d.id, d.bossCards ?? {}]))`), comportement identique, 0 valeur de design en dur.
+- **Tests/smoke mis à jour au cycle 5 versions** (V3→V3.1→V3.2→V3.3→V3.4→V3, manifeste `assets-v34.json`) : `tests/art-switch-v33.test.js` et smoke S27 a/d/e — le code v3.4 était arrivé sur main sans ces mises à jour (la CI ne joue que le déploiement Pages).
+- **Preuves rejouées sur l'arbre fusionné** : build ✔, 355/355 tests ✔, smoke 483 TOUT PASSE ✔, validateur 0 erreur ✔, digest 3000 **INCHANGÉ `29c995da…` 733/3000** (0 exception, 0 marathon) — les changements v3.4 sont arts/CSS/boss (map identique lue en data), aucune maths de combat touchée. Baseline proposée suite 49 inchangée.
+
 ## 2026-11-15 (suite 49, exécution couloir 1) : LOT 10 CLÔTURE DE LA REFONTE v2 — digests finaux 3000 `29c995da…` 733/3000 et 10000 `bce556b3…` 2420/10000 (0 exception, 0 marathon) — PROPOSITION DE NOUVELLE BASELINE (unique, M6) au verrouillage par Marc-Olivier — statut PROPOSÉ
 
 - **Chaîne de preuve finale rejouée** : `node build.mjs` ✔ ; `node --test tests/*.test.js` **355/355 verts** ✔ ; `node smoke-ui.mjs dist.html` **483 checks TOUT PASSE** (S28 fusion v4, S29 menus v2, S30 shiny, S31 XP 1-100) ✔ ; validateur `validate()` **0 erreur** (EXI-DATA-1…7, EXI-DJ-1/2, allowlist EXI-MOD-1 vert) ✔ ; `node tools/gen-tables.mjs` tables régénérées ✔.

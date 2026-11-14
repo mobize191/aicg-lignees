@@ -1873,7 +1873,7 @@ async function main() {
     // ---------- v1.51 : switch 4 versions des illustrations (vague 3.3) ----------
     {
       const distHtml = readFileSync('dist.html', 'utf8');
-      check('S27 a ART_MANIFESTS 4 versions dans le dist (v3/v31/v32/v33)', distHtml.includes("v32: 'assets-v32.json'") && distHtml.includes("v33: 'assets-v33.json'"), '');
+      check('S27 a ART_MANIFESTS 5 versions dans le dist (v3/v31/v32/v33/v34)', distHtml.includes("v32: 'assets-v32.json'") && distHtml.includes("v33: 'assets-v33.json'") && distHtml.includes("v34: 'assets-v34.json'"), '');
       const b = els.get('art-src-btn');
       check('S27 b bouton 🖼️ présent avec étiquette de version V3', !!b && b.textContent === '🖼️ V3', b && b.textContent);
       const src = readFileSync('src/shell.html', 'utf8');
@@ -1881,23 +1881,23 @@ async function main() {
       // cycle complet avec fetch simulé (4 manifestes servis)
       const manifests = {
         'assets-v3.json': { art: {}, bg: {} }, 'assets-v3.1.json': { art: {}, bg: {} },
-        'assets-v32.json': { art: {}, bg: {} }, 'assets-v33.json': { art: {}, bg: {} },
+        'assets-v32.json': { art: {}, bg: {} }, 'assets-v33.json': { art: {}, bg: {} }, 'assets-v34.json': { art: {}, bg: {} },
       };
       const origFetch = ctx.fetch;
       ctx.fetch = (url) => {
         const m = manifests[String(url)];
         return Promise.resolve(m ? { ok: true, json: () => Promise.resolve(m) } : { ok: false, json: () => Promise.resolve({}) });
       };
-      const seq = ['v31', 'v32', 'v33', 'v3'];
-      const tags = ['🖼️ V3.1', '🖼️ V3.2', '🖼️ V3.3', '🖼️ V3'];
+      const seq = ['v31', 'v32', 'v33', 'v34', 'v3'];
+      const tags = ['🖼️ V3.1', '🖼️ V3.2', '🖼️ V3.3', '🖼️ V3.4', '🖼️ V3'];
       let cycleOk = true, tagOk = true;
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         b.click();
         await wait(60);
         if (mem.get('fondations-art-src') !== seq[i]) cycleOk = false;
         if (b.textContent !== tags[i]) tagOk = false;
       }
-      check('S27 d cycle complet V3→V3.1→V3.2→V3.3→V3 persisté (fondations-art-src)', cycleOk, mem.get('fondations-art-src'));
+      check('S27 d cycle complet V3→V3.1→V3.2→V3.3→V3.4→V3 persisté (fondations-art-src)', cycleOk, mem.get('fondations-art-src'));
       check('S27 e étiquette de version sur le bouton à chaque étape', tagOk, b.textContent);
       // manifeste manquant : bouton grisé libellé, version courante inchangée
       mem.set('fondations-art-src', 'v31');

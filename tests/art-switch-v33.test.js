@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { bootDist, wait } from '../stub.mjs';
 
-// v1.51 (vague 3.3) : switch 4 versions des illustrations — cycle V3 → V3.1 → V3.2 → V3.3,
+// v1.51 (vagues 3.3/3.4) : switch 5 versions des illustrations — cycle V3 → V3.1 → V3.2 → V3.3 → V3.4,
 // étiquette de version sur le bouton 🖼️, préférence persistée (fondations-art-src),
 // manifeste manquant = bouton grisé libellé, jamais d'erreur, version courante inchangée.
 
@@ -15,6 +15,7 @@ const MANIFESTS = {
   'assets-v3.1.json': { art: { a1: 'data:image/jpeg;base64,BBB' }, bg: {} },
   'assets-v32.json': { art: { a1: 'data:image/jpeg;base64,CCC' }, bg: {} },
   'assets-v33.json': { art: { a1: 'data:image/jpeg;base64,DDD' }, bg: {} },
+  'assets-v34.json': { art: { a1: 'data:image/jpeg;base64,EEE' }, bg: {} },
 };
 
 function bootWithFetch(manifests) {
@@ -26,22 +27,22 @@ function bootWithFetch(manifests) {
   return r;
 }
 
-test('v1.51 (a) : ART_MANIFESTS = 4 versions dans l’ordre du cycle, étiquettes de bouton', () => {
+test('v1.51 (a) : ART_MANIFESTS = 5 versions dans l’ordre du cycle, étiquettes de bouton', () => {
   const src = uiSrc();
-  assert.ok(src.includes("const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json', v32: 'assets-v32.json', v33: 'assets-v33.json' };"), '4 manifestes');
-  assert.ok(src.includes("const ART_SRC_TAG = { v3: 'V3', v31: 'V3.1', v32: 'V3.2', v33: 'V3.3' };"), 'étiquettes V3/V3.1/V3.2/V3.3');
+  assert.ok(src.includes("const ART_MANIFESTS = { v3: 'assets-v3.json', v31: 'assets-v3.1.json', v32: 'assets-v32.json', v33: 'assets-v33.json', v34: 'assets-v34.json' };"), '5 manifestes');
+  assert.ok(src.includes("const ART_SRC_TAG = { v3: 'V3', v31: 'V3.1', v32: 'V3.2', v33: 'V3.3', v34: 'V3.4' };"), 'étiquettes V3/V3.1/V3.2/V3.3/V3.4');
   const d = distSrc();
-  assert.ok(d.includes("v32: 'assets-v32.json'") && d.includes("v33: 'assets-v33.json'"), 'dist à jour');
+  assert.ok(d.includes("v32: 'assets-v32.json'") && d.includes("v33: 'assets-v33.json'") && d.includes("v34: 'assets-v34.json'"), 'dist à jour');
 });
 
-test('v1.51 (b) : cycle complet V3 → V3.1 → V3.2 → V3.3 → V3, préférence persistée, étiquette sur le bouton', async () => {
+test('v1.51 (b) : cycle complet V3 → V3.1 → V3.2 → V3.3 → V3.4 → V3, préférence persistée, étiquette sur le bouton', async () => {
   const { doc, mem } = bootWithFetch(MANIFESTS);
   await wait(120); // laisser start() attacher le listener du bouton
   const btn = doc.getElementById('art-src-btn');
   assert.ok(btn, 'bouton présent');
-  const seq = ['v31', 'v32', 'v33', 'v3'];
-  const tags = ['🖼️ V3.1', '🖼️ V3.2', '🖼️ V3.3', '🖼️ V3'];
-  for (let i = 0; i < 4; i++) {
+  const seq = ['v31', 'v32', 'v33', 'v34', 'v3'];
+  const tags = ['🖼️ V3.1', '🖼️ V3.2', '🖼️ V3.3', '🖼️ V3.4', '🖼️ V3'];
+  for (let i = 0; i < 5; i++) {
     btn.click();
     await wait(60);
     assert.equal(mem.get('fondations-art-src'), seq[i], 'préférence persistée ' + seq[i]);
@@ -50,12 +51,12 @@ test('v1.51 (b) : cycle complet V3 → V3.1 → V3.2 → V3.3 → V3, préféren
   }
 });
 
-test('v1.51 (c) : préférence persistée relue au boot (v33 rechargée = V3.3)', async () => {
+test('v1.51 (c) : préférence persistée relue au boot (v34 rechargée = V3.4, reboucle sur V3)', async () => {
   const { doc, mem } = bootWithFetch(MANIFESTS);
   await wait(120);
-  mem.set('fondations-art-src', 'v33');
+  mem.set('fondations-art-src', 'v34');
   const btn = doc.getElementById('art-src-btn');
-  btn.click(); // v33 -> v3 (cycle reboucle)
+  btn.click(); // v34 -> v3 (cycle reboucle)
   await wait(60);
   assert.equal(mem.get('fondations-art-src'), 'v3', 'cycle depuis v33 reboucle sur v3');
   assert.equal(btn.textContent, '🖼️ V3');

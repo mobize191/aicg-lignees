@@ -1081,6 +1081,10 @@ function spreadAt(stage) {
   return 3;
 }
 
+// v3.4 lot bug bosses (suite 16, livré avec la 3.4) : mapping boss -> carte dédiée (plus de renommage aléatoire)
+// v3.4 : carte de boss dédiée par donjon x étage — lue dans les données (dungeons.bossCards), jamais en dur (EXI-MOD-1)
+const BOSS_CARD_MAP = Object.fromEntries(DUNGEONS.map((d) => [d.id, d.bossCards ?? {}]));
+
 function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, waveSizeRange = null) { // v1.38 lot 2 : waveSizeRange = [min,max] en data (combats de zone)
   const rng = mulberry32(hashSeed(seed, stage));
   const dungeon = dungeonById(dungeonId);
@@ -1117,11 +1121,11 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
     const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
-    // gel lot I (suite 16) : boss non aléatoire — la carte dédiée du donjon (bossCards en data)
-    // lot 5 : escalier de boss (bossPaliers), et boss de la difficult Royale quand present
+    // gel lot I (suite 16) + lot 5 : escalier de boss (bossPaliers), boss de la Royale quand present
+    // v3.4 : BOSS_CARD_MAP (carte dédiée donjon x étage) prioritaire hors Royale, fallback bossPaliers/bossCards
     const bossCardId = (royale && dungeon.royale?.boss) ? dungeon.royale.boss
-      : (dungeon.bossPaliers?.find((bp) => bp.floor === stage)?.ref ?? dungeon.bossCards?.[String(stage)]);
-    const bossCard = bossCardId ? MONSTERS.find((m) => m.id === bossCardId) : null;
+      : (BOSS_CARD_MAP[dungeonId]?.[stage] ?? dungeon.bossPaliers?.find((bp) => bp.floor === stage)?.ref ?? dungeon.bossCards?.[String(stage)]);
+    const bossCard = bossCardId ? (MONSTERS.find((m) => m.id === bossCardId) ?? POOL.find((c) => c.id === bossCardId)) : null;
     const boss = bossCard
       ? { ...bossCard, level: levelFor(bossCard.rarity, true), atk: Math.max(1, Math.round(bossCard.atk * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * atkMult)), hp: Math.max(1, Math.round(bossCard.hp * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * hpMult)) }
       : scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
