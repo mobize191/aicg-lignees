@@ -1670,6 +1670,22 @@ function registerRoute(hash, fn) {
 let suppressHash = false; 
 
 let lastHash = '';
+// lot 7 menus v2 : bouton retour injecté sur tout écran de hub qui n'en a pas (hors accueil et combat)
+function ensureBackButton(hash) {
+  if (hash === '#accueil' || hash === '#combat') return;
+  const app = document.getElementById('app');
+  if (!app || app.querySelector('.back')) return;
+  const back = document.createElement('button');
+  back.type = 'button';
+  back.className = 'back';
+  back.title = 'Retour à l\u2019accueil';
+  back.textContent = '\u2190';
+  back.onclick = () => go('#accueil');
+  const h2 = app.querySelector('h2');
+  if (h2) h2.insertBefore(back, h2.firstChild);
+  else { const h = document.createElement('h2'); h.appendChild(back); app.prepend(h); }
+}
+
 function go(hash) {
   // Lot C : retour au hub-ville (Accueil) depuis une autre page = repos gratuit ; le boot (lastHash vide) ne soigne pas
   if (hash === '#accueil' && lastHash && lastHash !== '#accueil' && store.runState.active) {
@@ -1680,6 +1696,7 @@ function go(hash) {
   if (lastHash === '#combat' && hash !== '#combat' && store.zoneFight) { store.zoneFight = null; save(); }
   lastHash = hash;
   (routes[hash] || routes['#accueil'])(document.getElementById('app'));
+  ensureBackButton(hash); // lot 7 menus v2 : retour au clic systématique, sans cul-de-sac
   document.body.classList.toggle('in-combat', hash === '#combat');
   if (hash !== '#combat') closeActModal();
   updatePtsBadge();

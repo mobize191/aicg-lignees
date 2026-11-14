@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 46, exécution couloir 1) : LOT 7 MENUS v2 LIVRÉ (pure UI) — digest 3000 INCHANGÉ `4b74c806…` 731/3000 — 0 exception, 0 marathon
+
+- **Cibles tactiles ≥ 44 px** : `.btn` de base passe en `min-height:44px` + `inline-flex` centré ; le media `max-width:600px` qui réduisait les boutons à 32 px passe à 44 px (aussi `.back`/`.btn-link` et `#menu-btn` 44x44).
+- **Cohérence mobile 390×844** : nouveau bloc `@media (max-width:520px)` — hub-menu en 2 colonnes, dungeon-grid en 1 colonne, forge-row empilées, h2 réduits, padding #app ajusté.
+- **Retour au clic systématique** : `ensureBackButton(hash)` appelé dans `go()` — tout écran de hub sans `.back` en reçoit un (injecté dans le h2, retour `#accueil`), hors accueil et combat : plus de cul-de-sac.
+- **Captures avant/après** : `tools/captures-menus-v2.mjs` → `docs/captures-validation/menus-v2/` (12 écrans x avant/après, snapshots DOM 390x844 via le harnais stub ; 7 écrans gagnent le bouton retour). Le sandbox n'a pas de Chromium : captures pixel à rejouer avec Playwright côté CI (procédure en tête du dépôt), les snapshots DOM couvrent la diff.
+- **Smoke étendu dédié** : section S29 (CSS 44px base+mobile, bloc 520px, 11 routes hub rendent, `.back` partout, 0 exception). **MESURE** : digest 3000 **INCHANGÉ `4b74c806…` 731/3000** (0 exception, 0 marathon) — pure UI conforme. 342 tests verts, smoke 463 TOUT PASSE. Baseline de référence inchangée (`3b11106f…` 871/3000 / `6c86838b…` 2888/10000).
+
 ## 2026-11-15 (suite 45, exécution couloir 1) : LOT 6 FUSION v4 LIVRÉE (spec-fusion-v4 lots 1-2 : data + moteur + UI Autel des Lignées) — digest 3000 INCHANGÉ `4b74c806…` 731/3000 (MESURE de contrôle conforme à la spec) — 0 exception, 0 marathon
 
 - **Data** : `data/fusion-synthese.json` (table de synthèse : paires -> famille A/B/hasard/cible + rareté max, défaut A) ; bloc `FUSION` en data (sautRate 0,55, demonRate 0,15, statsPct 0,25, sortsMax 2 / sortsMaxSR 3, plafonds C..L 20-50 %, biomeParFamille selon v18 §7.2, eclatRegressionOr 500). Validateur EXI-DJ-2 (familles connues, taux en 0-1).

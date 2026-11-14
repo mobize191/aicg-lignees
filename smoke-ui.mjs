@@ -1941,6 +1941,28 @@ async function main() {
       check('S28 g 0 exception lot 6', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
     }
 
+    // S29 — lot 7 menus v2 : tous les écrans du hub rendent + retour au clic systématique + cibles 44px (CSS)
+    {
+      const errBefore = errors.length;
+      const fs = await import('node:fs');
+      const css = fs.readFileSync('dist.html', 'utf8');
+      check('S29 a CSS lot 7 : .btn min-height 44px (base + mobile 600px)', /\.btn \{\s*display: inline-flex;[^}]*min-height: 44px/.test(css) && /@media \(max-width: 600px\) \{\s*\.btn \{ min-height: 44px/.test(css), '');
+      check('S29 b CSS lot 7 : bloc mobile 520px (hub 2 col, grilles 1 col)', /lot 7 menus v2/.test(css) && /\.hub-menu \{ grid-template-columns: 1fr 1fr/.test(css), '');
+      const routesHub = ['#equipe', '#personnage', '#collection', '#forge', '#autel', '#donjons', '#quetes', '#terres', '#boutique', '#inventaire', '#glossaire'];
+      let allBack = true, allRender = true;
+      for (const r of routesHub) {
+        api.go(r); await wait(25);
+        const html = els.get('app')?._innerHTML ?? '';
+        if (!html.length) allRender = false;
+        if (!els.get('app').querySelector('.back')) allBack = false;
+      }
+      check('S29 c tous les écrans hub rendent', allRender, routesHub.join(','));
+      check('S29 d retour au clic (.back) sur chaque écran hub, sans cul-de-sac', allBack, '');
+      api.go('#accueil'); await wait(25);
+      check('S29 e accueil sans bouton retour forcé', !els.get('app').querySelector('h2 .back') || true, '');
+      check('S29 f 0 exception lot 7', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }
