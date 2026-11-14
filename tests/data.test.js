@@ -126,7 +126,7 @@ test('contenu v3 lot C7 — familles divines joueur (seuil/miroir/pont C→L), m
   assert.equal(data.cards.find((c) => c.id === 'w6').name, 'Kairos, Juge Éternel', 'L seuil côté joueur (nom distinct du monstre d6)');
   // maillons du Jeune Séraphin : p1 → p5 (UR) → p6 (L)
   assert.ok(E.evoTargetsOf('p1').includes('p5'), 'p1 évolue vers p5');
-  assert.equal(E.nextFormOf('p5'), 'p6', 'p5 évolue vers p6');
+  assert.equal(E.nextFormOf('p5'), 'p7', 'p5 -> p7 (chaine celeste gel lot D)'); assert.equal(E.nextFormOf('p7'), 'p8'); assert.equal(E.nextFormOf('p8'), 'p6');
   assert.equal(data.cards.find((c) => c.id === 'p6').rarity, 'L');
   // lignées d'accueil des Enge : 3 communes C, voies depuis n10/n11/n12
   const enge = { n10: 'w19', n11: 'w20', n12: 'w21' };

@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**150 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 20, Mage 33, Occultiste 17, Prêtre 40.
+**152 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 20, Mage 33, Occultiste 17, Prêtre 42.
 
 Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + valeur). L'element et la famille sont absents des cartes non-elementaires.
 
@@ -136,7 +136,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | w5 | Maître des Sabliers | UR | Neutre | - | 4 | 66 | 2 | 3 | seuil | Sablier Ensorcelé | curse 0.25 |
 | w6 | Kairos, Juge Éternel | L | Neutre | - | 6 | 92 | 3 | 5 | seuil | Sentence Éternelle | stun |
 
-## Classe Prêtre (40)
+## Classe Prêtre (42)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -160,8 +160,10 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | p2 | Ange Gardien | C | Lumière | - | 6 | 58 | 3 | 5 | aube | Éclat d’Aube | heal 20 |
 | p3 | Pousse des Sèves | C | Neutre | - | 5 | 60 | 3 | 4 | bosquet | - | heal 16 |
 | p4 | Fidèle du Jour | C | Neutre | - | 6 | 58 | 3 | 5 | zele | - | heal 18 |
-| p5 | Séraphin, Porteur de Lumière | UR | Neutre | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
-| p6 | Séraphin, Chérubin Éveillé | L | Neutre | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
+| p5 | Séraphin, Porteur de Lumière | R | Neutre | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
+| p6 | Séraphin, Archange Ultime | L | Neutre | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
+| p7 | Ange de Lumière | SR | Lumière | - | 12 | 88 | 6 | 10 | seuil | Éclat d’Aile | heal 30 |
+| p8 | Archange | UR | Lumière | - | 14 | 96 | 7 | 11 | seuil | Jugement Ailé | heal 30 |
 | s1 | Novice de l’Aube | C | Neutre | - | 3 | 50 | 2 | 2 | aube | - | heal 18 |
 | s10 | Léna, Aube Éternelle | L | Neutre | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
 | s13 | Servante de l’Aube | UC | Neutre | - | 3 | 55 | 2 | 2 | aube | - | heal 22 |
@@ -198,7 +200,7 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | vol | Famille du Vol | t1 Mercenaire -> t2 Pillard -> t3 Brigand -> t4 Grand Brigand -> t5 Fléau des Routes -> t6 Gadianton, Chef des Brigands | a34, a35, a36, a37, a40, a41, a42, a43, a44, a45, a46 |
 | zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Lémion, Chef de la Légion Solaire | p4 |
 | appel | École des Invocations | v1 Apprenti Invocateur -> v2 Conjurateur -> v3 Évocateur -> v4 Maître des Esprits -> v5 Seigneur des Élémentaires -> v6 Archimage de l’Appel | - |
-| seuil | Arbitres du Seuil | w1 Garde du Seuil -> w2 Servante du Sablier -> w3 Huissier de l’Entre-Deux -> w4 Juge des Heures -> w5 Maître des Sabliers -> w6 Kairos, Juge Éternel | p5, p6 |
+| seuil | Arbitres du Seuil | w1 Garde du Seuil -> w2 Servante du Sablier -> w3 Huissier de l’Entre-Deux -> w4 Juge des Heures -> w5 Maître des Sabliers -> w6 Kairos, Juge Éternel | p5, p7, p8, p6 |
 | miroir | Chœur Miroir | w7 Lame Miroir -> w8 Choriste Miroir -> w9 Prisme du Chœur -> w10 Miroir Antiphonique -> w11 Chef du Chœur -> w12 Écho, Refrain Absolu | - |
 | pont | Tisseuses du Pont | w13 Fileuse du Pont -> w14 Aiguille du Pont -> w15 Brodeuse des Liens -> w16 Tisseuse des Nœuds -> w17 Architecte du Pont -> w18 Ananké, Gardienne des Rives | - |
 
@@ -342,6 +344,8 @@ Les solos sans voie montent d'un cran au palier indique.
 | c6 Ember, Flamme Vive | c13 Ember, Soleil Captif | L |
 | b7 Sylve, Écorce Vive | c7 Sylve, Griffe Sylvestre | UR |
 | c7 Sylve, Griffe Sylvestre | c14 Sylve, Âme du Bosquet | L |
-| p1 Jeune Séraphin | p5 Séraphin, Porteur de Lumière | UR |
-| p5 Séraphin, Porteur de Lumière | p6 Séraphin, Chérubin Éveillé | L |
+| p1 Jeune Séraphin | p5 Séraphin, Porteur de Lumière | R |
+| p5 Séraphin, Porteur de Lumière | p7 Ange de Lumière | SR |
+| p7 Ange de Lumière | p8 Archange | UR |
+| p8 Archange | p6 Séraphin, Archange Ultime | L |
 

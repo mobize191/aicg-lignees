@@ -3392,7 +3392,7 @@ const DATA = {
   {
    "id": "p5",
    "name": "Séraphin, Porteur de Lumière",
-   "rarity": "UR",
+   "rarity": "R",
    "classe": "Prêtre",
    "element": "Neutre",
    "atk": 10,
@@ -3409,7 +3409,7 @@ const DATA = {
   },
   {
    "id": "p6",
-   "name": "Séraphin, Chérubin Éveillé",
+   "name": "Séraphin, Archange Ultime",
    "rarity": "L",
    "classe": "Prêtre",
    "element": "Neutre",
@@ -3467,6 +3467,44 @@ const DATA = {
    "agi": 8,
    "int": 4,
    "note": "commune de la Crypte — lignée d'accueil de l'Enge des Caveaux"
+  },
+  {
+   "id": "p7",
+   "name": "Ange de Lumière",
+   "rarity": "SR",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "atk": 12,
+   "hp": 88,
+   "effect": {
+    "kind": "heal",
+    "value": 30
+   },
+   "soloSpell": "Éclat d’Aile",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "family": "seuil",
+   "agi": 6,
+   "int": 10
+  },
+  {
+   "id": "p8",
+   "name": "Archange",
+   "rarity": "UR",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "atk": 14,
+   "hp": 96,
+   "effect": {
+    "kind": "heal",
+    "value": 30
+   },
+   "soloSpell": "Jugement Ailé",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "family": "seuil",
+   "agi": 7,
+   "int": 11
   }
  ],
  "difficulties": [
@@ -4085,7 +4123,9 @@ const DATA = {
    "d37",
    "d38",
    "d39",
-   "d40"
+   "d40",
+   "p7",
+   "p8"
   ],
   "RACE_MYSTIQUE_IDS": [
    "n10",
@@ -7411,6 +7451,8 @@ const DATA = {
    ],
    "future": [
     "p5",
+    "p7",
+    "p8",
     "p6"
    ]
   },
@@ -14963,7 +15005,9 @@ const DATA = {
   "b7": "c7",
   "c7": "c14",
   "p1": "p5",
-  "p5": "p6"
+  "p5": "p7",
+  "p7": "p8",
+  "p8": "p6"
  },
  "synergies": {
   "Guerrier": {
