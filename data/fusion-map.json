@@ -714,6 +714,21 @@
    },
    "d36": {
     "unique": "souffle-noir"
+   },
+   "d37": {
+    "fusion": "eclair-de-lorgueil",
+    "cran": "I"
+   },
+   "d38": {
+    "fusion": "eclair-de-lorgueil",
+    "cran": "III"
+   },
+   "d39": {
+    "fusion": "eclair-de-lorgueil",
+    "cran": "IV"
+   },
+   "d40": {
+    "unique": "lumiere-noire"
    }
   }
  },

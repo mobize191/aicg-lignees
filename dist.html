@@ -4081,7 +4081,11 @@ const DATA = {
    "d33",
    "d34",
    "d35",
-   "d36"
+   "d36",
+   "d37",
+   "d38",
+   "d39",
+   "d40"
   ],
   "RACE_MYSTIQUE_IDS": [
    "n10",
@@ -4206,7 +4210,8 @@ const DATA = {
    "miroir": "rempart",
    "pont": "appel",
    "chair": "vice",
-   "puissance": "fureur"
+   "puissance": "fureur",
+   "devoyes": "orgueil"
   },
   "moteur": {
    "MANA_START_RATIO": 0.6,
@@ -4429,7 +4434,8 @@ const DATA = {
    "ferveur": "Lumière",
    "ruse": "Eau",
    "vice": "Ombre",
-   "fureur": "Feu"
+   "fureur": "Feu",
+   "orgueil": "Lumière"
   },
   "CAPTURE_FORCE_CAP": 3,
   "CAPTURE_FORCE_FLOOR": 0.5,
@@ -6983,6 +6989,11 @@ const DATA = {
     "to": "p5",
     "voie": "la voie céleste — le Porteur de Lumière",
     "type": "standard"
+   },
+   {
+    "to": "d37",
+    "voie": "la mauvaise volonté — les anges dévoyés",
+    "type": "standard"
    }
   ],
   "q1": [
@@ -8144,6 +8155,21 @@ const DATA = {
     },
     "d36": {
      "unique": "souffle-noir"
+    },
+    "d37": {
+     "fusion": "eclair-de-lorgueil",
+     "cran": "I"
+    },
+    "d38": {
+     "fusion": "eclair-de-lorgueil",
+     "cran": "III"
+    },
+    "d39": {
+     "fusion": "eclair-de-lorgueil",
+     "cran": "IV"
+    },
+    "d40": {
+     "unique": "lumiere-noire"
     }
    }
   },
@@ -8904,6 +8930,60 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "La fureur absolue."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "C",
+    "sort": "Éclat Dévoyé",
+    "cout": 2,
+    "mult": 1.4,
+    "big": false,
+    "desc": "Un éclat de lumière tombée du ciel."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "UC",
+    "sort": "Bannière Renversée",
+    "cout": 3,
+    "mult": 1.6,
+    "big": false,
+    "desc": "La bannière des cieux s’est retournée : malédiction (2 tours)."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "R",
+    "sort": "Zénith Fêlé",
+    "cout": 5,
+    "mult": 1.8,
+    "big": false,
+    "desc": "Le zénith se fissure et ralentit l’ennemi (2 tours)."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "SR",
+    "sort": "Châtiment Renversé",
+    "cout": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "Le châtiment retombe sur l’agresseur."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "UR",
+    "sort": "Voûte Renversée",
+    "cout": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "La voûte céleste s’effondre sur l’ennemi."
+   },
+   {
+    "famille": "devoyes",
+    "palier": "L",
+    "sort": "Chute de l’Empyrée",
+    "cout": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "L’Empyrée elle-même chute."
    }
   ],
   "ecole": [
@@ -9348,6 +9428,34 @@ const DATA = {
     "id": "grondement-demoniaque",
     "nom": "Grondement Démoniaque",
     "ecole": "fureur",
+    "role": "degats",
+    "crans": {
+     "I": {
+      "cout": 3,
+      "largeur": 1,
+      "mult": 1.5
+     },
+     "II": {
+      "cout": 4,
+      "largeur": 2,
+      "mult": 1.8
+     },
+     "III": {
+      "cout": 5,
+      "largeur": 3,
+      "mult": 2.2
+     },
+     "IV": {
+      "cout": 6,
+      "largeur": 5,
+      "mult": 2.6
+     }
+    }
+   },
+   {
+    "id": "eclair-de-lorgueil",
+    "nom": "Éclair de l’Orgueil",
+    "ecole": "orgueil",
     "role": "degats",
     "crans": {
      "I": {
@@ -10086,6 +10194,21 @@ const DATA = {
     "cran": "IV",
     "delta": {
      "desc": "malédiction (2 tours)"
+    }
+   },
+   {
+    "id": "lumiere-noire",
+    "nom": "Lumière Noire",
+    "carte": "d40",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 6,
+    "mult": 2,
+    "desc": "La signature de l’Astre Rayonnant : la lumière qui brûle.",
+    "base": "eclair-de-lorgueil",
+    "cran": "IV",
+    "delta": {
+     "desc": "la lumière se retourne"
     }
    }
   ]
@@ -11024,6 +11147,53 @@ const DATA = {
     "desc": "La fureur absolue.",
     "cible": "1 ennemi"
    }
+  ],
+  "devoyes": [
+   {
+    "name": "Éclat Dévoyé",
+    "cost": 2,
+    "mult": 1.4,
+    "desc": "Un éclat de lumière tombée du ciel.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Bannière Renversée",
+    "cost": 3,
+    "mult": 1.6,
+    "desc": "La bannière des cieux s’est retournée : malédiction (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Zénith Fêlé",
+    "cost": 5,
+    "mult": 1.8,
+    "desc": "Le zénith se fissure et ralentit l’ennemi (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Châtiment Renversé",
+    "cost": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "Le châtiment retombe sur l’agresseur.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Voûte Renversée",
+    "cost": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "La voûte céleste s’effondre sur l’ennemi.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Chute de l’Empyrée",
+    "cost": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "L’Empyrée elle-même chute.",
+    "cible": "1 ennemi"
+   }
   ]
  },
  "marchand": {
@@ -11475,6 +11645,17 @@ const DATA = {
       "d34",
       "d35",
       "d36"
+     ]
+    ]
+   },
+   {
+    "name": "Les Dévoyés (camp ange)",
+    "lines": [
+     [
+      "d37",
+      "d38",
+      "d39",
+      "d40"
      ]
     ]
    }
@@ -13239,12 +13420,13 @@ const DATA = {
    "name": "Astre Capiteux",
    "rarity": "M",
    "classe": "Mage",
-   "element": "Feu",
+   "element": "Lumière",
    "atk": 53,
    "hp": 144,
    "soloSpell": "Couronnement",
    "agi": 27,
-   "int": 42
+   "int": 42,
+   "fam": "devoyes"
   },
   {
    "id": "z13",
@@ -14353,6 +14535,73 @@ const DATA = {
    "soloMult": 2,
    "agi": 8,
    "int": 12
+  },
+  {
+   "id": "d37",
+   "dungeon": "divin",
+   "fam": "devoyes",
+   "name": "Ange Ardent",
+   "rarity": "R",
+   "classe": "Guerrier",
+   "element": "Feu",
+   "atk": 13,
+   "hp": 72,
+   "soloSpell": "Éclat Dévoyé",
+   "soloCost": 2,
+   "soloMult": 1.4,
+   "agi": 9,
+   "int": 5
+  },
+  {
+   "id": "d38",
+   "dungeon": "divin",
+   "fam": "devoyes",
+   "name": "Ange du Zénith",
+   "rarity": "SR",
+   "classe": "Guerrier",
+   "element": "Lumière",
+   "atk": 16,
+   "hp": 80,
+   "effect": {
+    "kind": "slow"
+   },
+   "soloSpell": "Zénith Fêlé",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "agi": 11,
+   "int": 6
+  },
+  {
+   "id": "d39",
+   "dungeon": "divin",
+   "fam": "devoyes",
+   "name": "Astre Vaillant",
+   "rarity": "UR",
+   "classe": "Guerrier",
+   "element": "Lumière",
+   "atk": 20,
+   "hp": 88,
+   "soloSpell": "Voûte Renversée",
+   "soloCost": 14,
+   "soloMult": 3.4,
+   "agi": 14,
+   "int": 8
+  },
+  {
+   "id": "d40",
+   "dungeon": "divin",
+   "fam": "devoyes",
+   "name": "Astre Rayonnant",
+   "rarity": "L",
+   "classe": "Prêtre",
+   "element": "Lumière",
+   "atk": 14,
+   "hp": 94,
+   "soloSpell": "Lumière Noire",
+   "soloCost": 6,
+   "soloMult": 2,
+   "agi": 7,
+   "int": 11
   }
  ],
  "potions": {
@@ -14657,6 +14906,20 @@ const DATA = {
     "voies": [
      "la puissance",
      "la fureur"
+    ]
+   }
+  },
+  "orgueil": {
+   "nom": "l'Orgueil",
+   "role": "degats",
+   "ouvrePar": {
+    "profils": [
+     "Guerrier",
+     "Prêtre"
+    ],
+    "voies": [
+     "mauvaise volonté",
+     "dévoyé"
     ]
    }
   }
@@ -15070,7 +15333,8 @@ const DATA = {
       },
       {
        "id": "mauvaise-volonte",
-       "nom": "la mauvaise volonté (les anges dévoyés)"
+       "nom": "la mauvaise volonté (les anges dévoyés)",
+       "vivante": true
       }
      ]
     },

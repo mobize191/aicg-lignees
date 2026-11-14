@@ -1757,12 +1757,13 @@
   "name": "Astre Capiteux",
   "rarity": "M",
   "classe": "Mage",
-  "element": "Feu",
+  "element": "Lumière",
   "atk": 53,
   "hp": 144,
   "soloSpell": "Couronnement",
   "agi": 27,
-  "int": 42
+  "int": 42,
+  "fam": "devoyes"
  },
  {
   "id": "z13",
@@ -2871,5 +2872,72 @@
   "soloMult": 2,
   "agi": 8,
   "int": 12
+ },
+ {
+  "id": "d37",
+  "dungeon": "divin",
+  "fam": "devoyes",
+  "name": "Ange Ardent",
+  "rarity": "R",
+  "classe": "Guerrier",
+  "element": "Feu",
+  "atk": 13,
+  "hp": 72,
+  "soloSpell": "Éclat Dévoyé",
+  "soloCost": 2,
+  "soloMult": 1.4,
+  "agi": 9,
+  "int": 5
+ },
+ {
+  "id": "d38",
+  "dungeon": "divin",
+  "fam": "devoyes",
+  "name": "Ange du Zénith",
+  "rarity": "SR",
+  "classe": "Guerrier",
+  "element": "Lumière",
+  "atk": 16,
+  "hp": 80,
+  "effect": {
+   "kind": "slow"
+  },
+  "soloSpell": "Zénith Fêlé",
+  "soloCost": 5,
+  "soloMult": 1.8,
+  "agi": 11,
+  "int": 6
+ },
+ {
+  "id": "d39",
+  "dungeon": "divin",
+  "fam": "devoyes",
+  "name": "Astre Vaillant",
+  "rarity": "UR",
+  "classe": "Guerrier",
+  "element": "Lumière",
+  "atk": 20,
+  "hp": 88,
+  "soloSpell": "Voûte Renversée",
+  "soloCost": 14,
+  "soloMult": 3.4,
+  "agi": 14,
+  "int": 8
+ },
+ {
+  "id": "d40",
+  "dungeon": "divin",
+  "fam": "devoyes",
+  "name": "Astre Rayonnant",
+  "rarity": "L",
+  "classe": "Prêtre",
+  "element": "Lumière",
+  "atk": 14,
+  "hp": 94,
+  "soloSpell": "Lumière Noire",
+  "soloCost": 6,
+  "soloMult": 2,
+  "agi": 7,
+  "int": 11
  }
 ]

@@ -261,6 +261,7 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | a27 Maïa, Lame du Bosquet | a28 Maïa, Déesse du Bosquet | la fusion du Bosquet |
 | p1 Jeune Séraphin | d6 | l’équilibre |
 | p1 Jeune Séraphin | p5 Séraphin, Porteur de Lumière | la voie céleste — le Porteur de Lumière |
+| p1 Jeune Séraphin | d37 | la mauvaise volonté — les anges dévoyés |
 | q1 Novice du Crépuscule | q2 Disciple du Crépuscule | famille du crépuscule |
 | q2 Disciple du Crépuscule | q3 Prêtre du Crépuscule | famille du crépuscule |
 | q3 Prêtre du Crépuscule | q4 Servante du Crépuscule | famille du crépuscule |

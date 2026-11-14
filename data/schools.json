@@ -137,5 +137,19 @@
     "la fureur"
    ]
   }
+ },
+ "orgueil": {
+  "nom": "l'Orgueil",
+  "role": "degats",
+  "ouvrePar": {
+   "profils": [
+    "Guerrier",
+    "Prêtre"
+   ],
+   "voies": [
+    "mauvaise volonté",
+    "dévoyé"
+   ]
+  }
  }
 }

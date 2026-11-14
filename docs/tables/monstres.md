@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**177 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
+**181 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
 
 ## Donjon bosquet (23)
 
@@ -86,7 +86,7 @@
 | Chevalerie Défunte | k23 -> k24 -> k4 ; k25 -> k26 -> k27 ; k28 -> k29 -> k30 | - | - |
 | Gobelins des Caveaux | k31 -> k32 | - | - |
 
-## Donjon divin (36)
+## Donjon divin (40)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -120,7 +120,11 @@
 | d34 | Grand Fléau | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Rugissement du Fléau | - |
 | d35 | Porte-Peste | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Voix de l’Abysse | - |
 | d36 | Peste, Mère des Fléaux | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Souffle Noir | curse 0.25 |
+| d37 | Ange Ardent | R | Guerrier | Feu | - | 13 | 72 | 9 | 5 | Éclat Dévoyé | - |
+| d38 | Ange du Zénith | SR | Guerrier | Lumière | - | 16 | 80 | 11 | 6 | Zénith Fêlé | slow |
+| d39 | Astre Vaillant | UR | Guerrier | Lumière | - | 20 | 88 | 14 | 8 | Voûte Renversée | - |
 | d4 | Juge des Heures | R | Mage | Lumière | - | 15 | 72 | 8 | 12 | Balance du Temps | - |
+| d40 | Astre Rayonnant | L | Prêtre | Lumière | - | 14 | 94 | 7 | 11 | Lumière Noire | - |
 | d5 | Maître des Sabliers | SR | Occultiste | Lumière | - | 4 | 66 | 2 | 3 | Sablier Ensorcelé | curse 0.25 |
 | d6 | Kairos, Arbitre du Seuil | L | Occultiste | Lumière | - | 6 | 92 | 3 | 5 | Arrêt du Temps | stun |
 | d7 | Lame Miroir | C | Assassin | Eau | - | 9 | 46 | 8 | 4 | Frappe Réfléchie | - |
@@ -136,6 +140,7 @@
 | Tisseuses du Pont | d13 -> d15 ; d16 -> d17 -> d18 | - | - |
 | La Chair (camp démon) | d19 -> d20 -> d21 -> d22 -> d23 ; d29 -> d30 -> d31 -> d32 | - | - |
 | La Puissance (camp démon) | d24 -> d25 -> d26 -> d27 -> d28 ; d33 -> d34 -> d35 -> d36 | - | - |
+| Les Dévoyés (camp ange) | d37 -> d38 -> d39 -> d40 | - | - |
 
 ## Donjon forge (24)
 
@@ -251,7 +256,7 @@
 | z5 | Voulige d’Aube | SR | Mage | Lumière | - | 21 | 62 | 11 | 17 | Falaise de Lumière | - |
 | z6 | Phénix du Zénith | UR | Mage | Feu | - | 29 | 78 | 15 | 23 | Pluie de Feu | - |
 | z7 | Héraut du Zénith | L | Guerrier | Lumière | - | 41 | 103 | 29 | 16 | Sentence Solaire | - |
-| z8 | Astre Capiteux | M | Mage | Feu | - | 53 | 144 | 27 | 42 | Couronnement | - |
+| z8 | Astre Capiteux | M | Mage | Lumière | - | 53 | 144 | 27 | 42 | Couronnement | - |
 | z9 | Chantre du Zénith | C | Prêtre | Lumière | - | 2 | 50 | 1 | 2 | Hymne du Matin | heal 16 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)

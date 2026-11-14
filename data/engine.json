@@ -399,7 +399,11 @@
   "d33",
   "d34",
   "d35",
-  "d36"
+  "d36",
+  "d37",
+  "d38",
+  "d39",
+  "d40"
  ],
  "RACE_MYSTIQUE_IDS": [
   "n10",
@@ -524,7 +528,8 @@
   "miroir": "rempart",
   "pont": "appel",
   "chair": "vice",
-  "puissance": "fureur"
+  "puissance": "fureur",
+  "devoyes": "orgueil"
  },
  "moteur": {
   "MANA_START_RATIO": 0.6,
@@ -747,7 +752,8 @@
   "ferveur": "Lumière",
   "ruse": "Eau",
   "vice": "Ombre",
-  "fureur": "Feu"
+  "fureur": "Feu",
+  "orgueil": "Lumière"
  },
  "CAPTURE_FORCE_CAP": 3,
  "CAPTURE_FORCE_FLOOR": 0.5,

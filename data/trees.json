@@ -264,7 +264,8 @@
      },
      {
       "id": "mauvaise-volonte",
-      "nom": "la mauvaise volonté (les anges dévoyés)"
+      "nom": "la mauvaise volonté (les anges dévoyés)",
+      "vivante": true
      }
     ]
    },

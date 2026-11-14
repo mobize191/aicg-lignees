@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (15), `lignee` (54), `uniques` (40).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (16), `lignee` (60), `uniques` (41).
 
 ## Sorts communs (2)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (15)
+## Sorts d'ecolage (16)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -51,8 +51,9 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | hymne | Hymne | ferveur | boost | - | I : 3 / 1 ; taux 25% ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; IV : 6 / equipe-renforcee ; taux 20% |
 | frisson-du-vice | Frisson du Vice | vice | malus | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 | grondement-demoniaque | Grondement Démoniaque | fureur | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
+| eclair-de-lorgueil | Éclair de l’Orgueil | orgueil | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 
-## Sorts de lignee (54)
+## Sorts de lignee (60)
 
 Un sort par palier de famille, appris en montant la lignee.
 
@@ -112,8 +113,14 @@ Un sort par palier de famille, appris en montant la lignee.
 | puissance | SR | Terreur Majeure | 9 | 2.6 | true | La terreur majeure : dégâts et malédiction (2 tours). |
 | puissance | UR | Belzébuth : Couronne de Fureur | 14 | 3.4 | true | Le roi couronne sa fureur d’un coup dévastateur. |
 | puissance | L | Ultime Fureur | 20 | 4.5 | true | La fureur absolue. |
+| devoyes | C | Éclat Dévoyé | 2 | 1.4 | false | Un éclat de lumière tombée du ciel. |
+| devoyes | UC | Bannière Renversée | 3 | 1.6 | false | La bannière des cieux s’est retournée : malédiction (2 tours). |
+| devoyes | R | Zénith Fêlé | 5 | 1.8 | false | Le zénith se fissure et ralentit l’ennemi (2 tours). |
+| devoyes | SR | Châtiment Renversé | 9 | 2.6 | true | Le châtiment retombe sur l’agresseur. |
+| devoyes | UR | Voûte Renversée | 14 | 3.4 | true | La voûte céleste s’effondre sur l’ennemi. |
+| devoyes | L | Chute de l’Empyrée | 20 | 4.5 | true | L’Empyrée elle-même chute. |
 
-## Sorts uniques (40)
+## Sorts uniques (41)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -157,6 +164,7 @@ Un sort par palier de famille, appris en montant la lignee.
 | sceptre-du-jugement | Sceptre du Jugement | d28 | degats | 1 ennemi | 6 | 2 | La signature de Belzébuth : jugement et étourdissement. |
 | devoration-totale | Dévoration Totale | d32 | degats | 1 ennemi | 9 | 2.2 | La signature de Famine : tout dévorer. |
 | souffle-noir | Souffle Noir | d36 | degats | 1 ennemi | 6 | 2 | La signature de Peste : un souffle de malédiction. |
+| lumiere-noire | Lumière Noire | d40 | degats | 1 ennemi | 6 | 2 | La signature de l’Astre Rayonnant : la lumière qui brûle. |
 
 ## Ecoles (data/schools.json)
 
@@ -174,6 +182,7 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | ruse | la Ruse | manip | Assassin | voie du vol, voie des quais |
 | vice | le Vice | malus | Occultiste, Assassin | la chair, le désir |
 | fureur | la Fureur | degats | Guerrier, Occultiste | la puissance, la fureur |
+| orgueil | l'Orgueil | degats | Guerrier, Prêtre | mauvaise volonté, dévoyé |
 
 ## Catalogue brut par famille (data/lineage-spells.json)
 
@@ -195,6 +204,7 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | pont | Fil I / Fil II / Fil III / Fil IV / Fil V / Fil VI |
 | chair | Frôlement du Vice / Regard de Luxure / Haleine du Gouffre / Charme de l’Abysse / Asmodia : Danse des Vices / Désir Absolu |
 | puissance | Grondement des Fosses / Coup des Fosses / Cri de Fureur / Terreur Majeure / Belzébuth : Couronne de Fureur / Ultime Fureur |
+| devoyes | Éclat Dévoyé / Bannière Renversée / Zénith Fêlé / Châtiment Renversé / Voûte Renversée / Chute de l’Empyrée |
 
 ## Fusions de monstres (data/fusion-map.json)
 
@@ -411,6 +421,10 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | d28 | - | - |
 | d32 | - | - |
 | d36 | - | - |
+| d37 | eclair-de-lorgueil | I |
+| d38 | eclair-de-lorgueil | III |
+| d39 | eclair-de-lorgueil | IV |
+| d40 | - | - |
 
 ### Donjon recrues
 

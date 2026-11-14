@@ -617,6 +617,60 @@
    "mult": 4.5,
    "big": true,
    "desc": "La fureur absolue."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "C",
+   "sort": "Éclat Dévoyé",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Un éclat de lumière tombée du ciel."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "UC",
+   "sort": "Bannière Renversée",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "La bannière des cieux s’est retournée : malédiction (2 tours)."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "R",
+   "sort": "Zénith Fêlé",
+   "cout": 5,
+   "mult": 1.8,
+   "big": false,
+   "desc": "Le zénith se fissure et ralentit l’ennemi (2 tours)."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "SR",
+   "sort": "Châtiment Renversé",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le châtiment retombe sur l’agresseur."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "UR",
+   "sort": "Voûte Renversée",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "La voûte céleste s’effondre sur l’ennemi."
+  },
+  {
+   "famille": "devoyes",
+   "palier": "L",
+   "sort": "Chute de l’Empyrée",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "L’Empyrée elle-même chute."
   }
  ],
  "ecole": [
@@ -1061,6 +1115,34 @@
    "id": "grondement-demoniaque",
    "nom": "Grondement Démoniaque",
    "ecole": "fureur",
+   "role": "degats",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "mult": 1.5
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "mult": 1.8
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "mult": 2.2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "mult": 2.6
+    }
+   }
+  },
+  {
+   "id": "eclair-de-lorgueil",
+   "nom": "Éclair de l’Orgueil",
+   "ecole": "orgueil",
    "role": "degats",
    "crans": {
     "I": {
@@ -1799,6 +1881,21 @@
    "cran": "IV",
    "delta": {
     "desc": "malédiction (2 tours)"
+   }
+  },
+  {
+   "id": "lumiere-noire",
+   "nom": "Lumière Noire",
+   "carte": "d40",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 6,
+   "mult": 2,
+   "desc": "La signature de l’Astre Rayonnant : la lumière qui brûle.",
+   "base": "eclair-de-lorgueil",
+   "cran": "IV",
+   "delta": {
+    "desc": "la lumière se retourne"
    }
   }
  ]
