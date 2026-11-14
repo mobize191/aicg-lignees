@@ -328,26 +328,29 @@ test('boucle v2 lot 1 : action Objet en combat — la gorgée coûte le tour (st
   assert.ok(!r.done || st.winner, 'le tour est consommé comme une action');
 });
 
-test('boucle v2 lot 2 : niveaux de donjon 1 → 25, un par marche (donjon majeur × mode)', () => {
+test('lot 9 : niveaux de donjon étirés sur la grille v1 (1-100), 25 marches historiques projetées ×4', () => {
   const E = loadEngine();
   const seen = new Set();
   const majeurs = E.DATA.dungeons.filter((d) => d.majeur);
   for (const d of majeurs) {
     for (const df of E.DATA.difficulties) {
       const lv = E.dungeonLevelOf(d.id, df.id);
-      assert.ok(lv >= 1 && lv <= 25, `niveau ${lv} dans 1..25`);
+      assert.ok(lv >= 1 && lv <= E.stretchLevel(25), `niveau ${lv} dans 1..${E.stretchLevel(25)}`);
       assert.ok(!seen.has(lv), `niveau ${lv} unique (marche ${d.id} × ${df.name})`);
       seen.add(lv);
     }
   }
   assert.equal(seen.size, 25, '25 marches');
   assert.equal(E.dungeonLevelOf('marees', 1), 1);
-  assert.equal(E.dungeonLevelOf('zenith', 5), 25);
-  // lot 5 : les donjons de famille hors grille rendent leur palier (et +10 en Royale)
+  assert.equal(E.dungeonLevelOf('zenith', 5), E.stretchLevel(25), 'zenith diff 5 = stretch(25)');
+  // lot 5 + lot 9 : les donjons de famille rendent leur palier étiré (et +10 en Royale, hors étirement)
   for (const d of E.DATA.dungeons.filter((x) => !x.majeur)) {
-    assert.equal(E.dungeonLevelOf(d.id, 2), d.palier, `${d.id} rend son palier`);
-    assert.equal(E.dungeonLevelOf(d.id, 'royale'), d.palier + 10, `${d.id} royale +10`);
+    assert.equal(E.dungeonLevelOf(d.id, 2), E.stretchLevel(d.palier), `${d.id} rend son palier étiré`);
+    assert.equal(E.dungeonLevelOf(d.id, 'royale'), E.stretchLevel(d.palier) + 10, `${d.id} royale +10`);
   }
+  // les divins (95-100, déjà sur la grille v1) ne sont PAS ré-étirés
+  assert.equal(E.dungeonLevelOf('donjon-equilibre', 1), 100);
+  assert.equal(E.dungeonLevelOf('donjon-equilibre', 'royale'), 110);
 });
 
 test('boucle v2 lot 2 : les vagues suivent la bande de rareté de la marche, boss haut de bande', () => {
@@ -396,17 +399,30 @@ test('boucle v2 lot 4 : makeUnit applique les bonus d\'équipement en % (stats d
   assert.ok(withEq.maxHp > base.maxHp, 'PV boostés');
   assert.ok(withEq.agi > base.agi, 'AGI boostée');
   assert.equal(withEq.manaRegen, base.manaRegen + 2, 'régén mana du talisman ajoutée');
-  assert.equal(Math.round(base.atk * 1.15), withEq.atk, 'bonus appliqué sur la stat de base (arrondi)');
+  const m10 = 1 + E.DATA.engine.LEVEL_BONUS * 9; // lot 9 : LEVEL_BONUS aplati (0,02) sur la grille 1-100
+  assert.equal(Math.round(E.getCard('n1').atk * m10 * 1.15), withEq.atk, 'bonus appliqué sur la stat de base (arrondi)');
 });
 
-test('boucle v2 lot 5 : courbe XP échelle longue — xpToNext croît avec le niveau (données XP_GROWTH)', () => {
+test('lot 9 : courbe XP cubique 1-100 (total n^3, précédent Pokémon) + table de minutes — données XP', () => {
   const E = loadEngine();
-  const g = E.DATA.engine.moteur.XP_GROWTH;
-  assert.ok(g > 0, 'XP_GROWTH en data');
-  const xp = (lvl) => Math.max(1, Math.round(lvl * (1 + g * (lvl - 1))));
-  assert.equal(xp(1), 1);
+  assert.equal(E.DATA.engine.LEVEL_CAP, 100, 'cap de niveau 100');
+  assert.equal(E.DATA.engine.XP.courbe, 'cubique');
+  // la vraie formule du jeu (ui.js) : (lvl+1)^3 - lvl^3
+  const xp = (lvl) => { const n = lvl + 1; return Math.max(1, n * n * n - lvl * lvl * lvl); };
+  assert.equal(xp(1), 7);
+  assert.equal(xp(99), 29701);
   assert.ok(xp(10) > xp(5) && xp(5) > xp(2) && xp(2) > xp(1), 'strictement croissante');
-  assert.ok(xp(19) >= 4 * 19, 'les hauts niveaux demandent bien plus (échelle longue 25 marches)');
+  let total = 0;
+  for (let l = 1; l < 100; l++) total += xp(l);
+  assert.equal(total, 1000000 - 1, 'total 1 -> 100 = 100^3 - 1 = 999 999 XP (télescopage de la courbe n^3)');
+  // table de minutes par niveau (tranches de la grille v1) en data
+  const mt = E.DATA.engine.XP.minutesParTranche;
+  assert.deepEqual(Object.keys(mt), ['1-25', '26-50', '51-75', '76-100']);
+  assert.ok(Object.values(mt).every((v) => v > 0) && mt['76-100'] > mt['1-25'], 'minutes croissantes par tranche');
+  // étirement des niveaux de donjon : courbe de stats préservée (LEVEL_BONUS x stretch = 0.08 historique)
+  assert.equal(E.DATA.engine.LEVEL_BONUS, 0.02);
+  assert.equal(E.DATA.engine.moteur.DUNGEON_LEVEL_STRETCH, 4);
+  assert.equal(0.02 * 4, 0.08, 'préservation de la courbe de stats sur la grille étirée');
 });
 
 test('correctifs ciblage lot 1 (repro A) : les sorts de lign\u00e9e (6 par famille) ont une fiche de camp (assembl\u00e9s comme ui.js)', () => {

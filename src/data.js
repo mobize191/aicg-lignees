@@ -150,6 +150,9 @@ const FUSION_CFG = E.FUSION ?? {};
 // lot 8 shiny (suite 40) : taux du tirage, bornes de la variance individuelle, suffixe d'art, seed de migration
 const SHINY_CFG = E.SHINY ?? {};
 
+// lot 9 XP 1-100 : courbe cubique (total n^3) + table de minutes par niveau (tranches de la grille v1)
+const XP_CFG = E.XP ?? {};
+
 // v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
 const FX_SPELLS = E.FX_SPELLS;
 const MONSTER_FAMS = DATA['monster-families'];

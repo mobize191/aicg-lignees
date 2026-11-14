@@ -21,7 +21,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | SOLO_MANA | {"max":10,"regen":2} |
 | EVO_COST | {"C":["brut",3],"UC":["poli",2],"R":["poli",4],"SR":["grave",2],"UR":["grave",4],"L":["eternel",10]} |
 | TEAM_MAX | 5 |
-| LEVEL_CAP | 20 |
+| LEVEL_CAP | 100 |
 | DMG_REDUCTION_MAX | 0.8 |
 | SAVE_VERSION | 32 |
 | VERSION | "1.0" |

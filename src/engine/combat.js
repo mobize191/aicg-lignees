@@ -1019,10 +1019,11 @@ function dungeonLevelOf(dungeonId, diff = 1) {
   const n = DIFFICULTIES.length;
   // lot 5 : les donjons de famille ont leur palier propre (hors grille 25 marches des majeurs)
   if (!d.majeur && d.palier != null) {
-    return d.palier + (diff === 'royale' ? (M.ROYALE_LEVEL_BONUS ?? 10) : 0);
+    return stretchLevel(d.palier) + (diff === 'royale' ? (M.ROYALE_LEVEL_BONUS ?? 10) : 0);
   }
   const base = (d.tier ?? 0) * n + Math.max(1, Math.min(n, Number(diff) || 1));
-  return diff === 'royale' ? base + (M.ROYALE_LEVEL_BONUS ?? 10) : base;
+  // lot 9 : la grille des majeurs est étirée sur la grille v1 (1-100) via stretchLevel
+  return diff === 'royale' ? stretchLevel(base) + (M.ROYALE_LEVEL_BONUS ?? 10) : stretchLevel(base);
 }
 
 // bande de rareté d'une marche, en données (bande[0] → bande[1])
@@ -1048,8 +1049,18 @@ function levelAt(stage, rarity = 'C', boss = false) {
   return 1 + Math.floor(M.LEVEL_STAGE_RATIO * (stage - 1)) + (RANK[rarity] ?? 0) + (boss ? 2 : 0);
 }
 
+// lot 9 XP 1-100 : niveaux de donjon étirés sur la grille v1 — les marches historiques (<= LEGACY_LEVEL_CAP)
+// sont projetées affine 1+(l-1)*STRETCH ; les paliers déjà posés sur la grille v1 (divins 95-100) restent tels quels
+function stretchLevel(lvl) {
+  const l = Math.max(1, lvl ?? 1);
+  const cap = M.LEGACY_LEVEL_CAP ?? 25;
+  if (l > cap) return l;
+  const s = M.DUNGEON_LEVEL_STRETCH ?? 1;
+  return 1 + Math.round((l - 1) * s);
+}
+
 function levelIn(dungeon, stage, rarity = 'C', boss = false) {
-  return levelAt(stage, rarity, boss) + Math.round(dungeon.tier * M.DUNGEON_TIER_LEVEL_MULT);
+  return stretchLevel(levelAt(stage, rarity, boss) + Math.round(dungeon.tier * M.DUNGEON_TIER_LEVEL_MULT));
 }
 
 function hashSeed(seed, stage) {

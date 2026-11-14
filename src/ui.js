@@ -320,7 +320,33 @@ const storage = makeSafeStorage();
 
 // boucle v2 lot 5 : courbe d'XP recalibrée sur l'échelle longue (25 marches) — croissance
 // par niveau en données (XP_GROWTH), simulée au digest ; pas de gel à paliers (refusé)
-const xpToNext = (lvl) => Math.max(1, Math.round(lvl * (1 + (M.XP_GROWTH ?? 0) * (lvl - 1))));
+// lot 9 XP 1-100 : courbe cubique (total n^3, précédent Pokémon) quand XP.courbe = cubique en données ;
+// sinon courbe quadratique historique (XP_GROWTH). Le digest ne simule pas l'XP : pas d'impact digest.
+const xpToNext = (lvl) => {
+  if ((XP_CFG.courbe ?? M.XP_COURBE ?? '') === 'cubique') {
+    const n = lvl + 1;
+    return Math.max(1, n * n * n - lvl * lvl * lvl);
+  }
+  return Math.max(1, Math.round(lvl * (1 + (M.XP_GROWTH ?? 0) * (lvl - 1))));
+};
+// lot 9 : table de minutes par niveau (tranches de la grille v1 en données) -> minutes cibles pour la tranche du niveau
+function minutesCibleOf(lvl) {
+  const t = XP_CFG.minutesParTranche ?? {};
+  for (const [band, min] of Object.entries(t)) {
+    const parts = String(band).split('-').map(Number);
+    if (parts.length === 2 && lvl >= parts[0] && lvl <= parts[1]) return Number(min) || 0;
+  }
+  const vals = Object.values(t).map(Number).filter((v) => v > 0);
+  return vals.length ? vals[vals.length - 1] : 0;
+}
+// fraction du niveau courant gagnée par combat = minutesParCombat / (minutes de la tranche / niveaux par tranche)
+function xpFracOfLevel(lvl) {
+  const npt = XP_CFG.niveauxParTranche ?? 25;
+  const mc = XP_CFG.minutesParCombat ?? 1;
+  const m = minutesCibleOf(lvl);
+  if (!(m > 0)) return 1;
+  return Math.max(0.01, (npt * mc) / m);
+}
 ;
 ;
 ;
@@ -2471,7 +2497,7 @@ function renderCardModal(overlay, card, opts, feedbackText = '') {
       </div>`;
     }).join('');
     exemplairesBlock = `<h4>Exemplaires (${instsOf(card.id).length})</h4>
-      <p class="muted">Chaque exemplaire monte SES propres niveaux (1 \u00e0 20) en donjon : \u00e9tages franchis \u00d7 difficult\u00e9 \u00d7 1,5 si victoire, fatigue quotidienne par carte (plancher 25 %). Chaque forme garde son nom de carte : l\u2019identit\u00e9 reste lisible.</p>
+      <p class="muted">Chaque exemplaire monte SES propres niveaux (1 \u00e0 100) en donjon : \u00e9tages franchis \u00d7 difficult\u00e9 \u00d7 1,5 si victoire, fatigue quotidienne par carte (plancher 25 %). Chaque forme garde son nom de carte : l\u2019identit\u00e9 reste lisible.</p>
       <div class="inst-list">${rows}</div>`;
   }
 
@@ -5648,10 +5674,12 @@ async function animate(events, ms, gen = null) {
             if (!inst) continue;
             const isReserve = slotsNow.indexOf(iid) >= 3; // Lot A : la réserve gagne reserveXpMult × l'XP
             const mult = xpMultFor(iid) * (isReserve ? (DATA.engine.reserveXpMult ?? 0.5) : 1);
-            const r = addXpI(iid, baseXp * mult);
+            // lot 9 XP 1-100 : l'XP du combat = fraction du niveau courant (table de minutes) x base
+            const gainXp = xpFracOfLevel(inst.lvl) * xpToNext(inst.lvl) * baseXp;
+            const r = addXpI(iid, gainXp * mult);
             const nm = byId(inst.id).name;
             xpParts.push(`${nm} → Nv ${r.level}${mult < 1 ? ` (${Math.round(mult * 100)} % XP)` : ''}`);
-            runLog.xp.push({ name: nm, level: r.level, mult, gain: Math.round(baseXp * mult * 10) / 10 });
+            runLog.xp.push({ name: nm, level: r.level, mult, gain: Math.round(gainXp * mult * 10) / 10 });
           }
           runLog.xpBase = Math.round(((runLog.xpBase ?? 0) + baseXp) * 10) / 10;
           if (finalClear || !won || !!store.zoneFight) registerXpRun(iids); // fatigue comptée une fois par run (comme avant) : le mult reste constant sur tout le run
@@ -6486,7 +6514,7 @@ function renderForge(root) {
 
   root.innerHTML = `
     <h2>🛡️ La Guilde <span class="muted">— évolutions, autel, compagnons</span></h2>
-    <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-20) propre. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
+    <p class="muted">Depuis v0.33.1, chaque exemplaire est une carte individuelle : son niveau (1-100) propre. Les cartes naissent à la Forge (jetons typés, autel, défi du jour) : plus de boutique, plus de captures. L\u2019\u00e9volution exige un exemplaire de niveau 10 + des \u00e9clats : l\u2019or n\u2019ach\u00e8te jamais la puissance. La carte DEVIENT sa nouvelle forme, repart niveau 1 et garde ses sorts accumul\u00e9s.</p>
     <h3>\u00c9volutions ${evoRows.length ? `(${evoRows.length})` : ''}</h3>
     ${evoRows.length ? evoRows.join('') : '<p class="muted fam-hint">Aucune \u00e9volution disponible : recrutez des cartes (Guilde en jetons, quêtes, donjon) et montez-les au niveau 10 en donjon.</p>'}
     <h3>\u00c9clats d\u2019\u00e9volution en r\u00e9serve</h3>
@@ -6776,7 +6804,7 @@ function renderGlossaire(root) {
       <ul class="glo-list">${STATUS_DOC.map(([i, n, d]) => `<li><b>${i} ${n}</b> : ${d}</li>`).join('')}</ul>
       <h3>Niveaux et progression</h3>
       <ul class="glo-list">
-        <li><b>Niveaux par exemplaire</b> : chaque exemplaire vit SES propres niveaux, de 1 à 20 (+8 % d’ATQ et de PV par niveau), plus son nom personnel, et ses sorts. L’XP vient des donjons (voir la section Ascension).</li>
+        <li><b>Niveaux par exemplaire</b> : chaque exemplaire vit SES propres niveaux, de 1 à 100 (+2 % d’ATQ et de PV par niveau), plus son nom personnel, et ses sorts. L’XP vient des donjons (voir la section Ascension).</li>
         <li><b>Doublons</b> : ils ne nourrissent plus — 5 exemplaires libres d’une même rareté s’échangent à l’autel contre 1 carte de rareté supérieure.</li>
         <li><b>Évoluer</b> : dès le niveau 10, avec des éclats d’évolution de l’élément de la carte (jamais d’or), depuis la fiche ou la Forge. Monstres et cartes divines suivent la même règle le long de leur ligne de famille.</li>
       </ul>
@@ -6839,7 +6867,7 @@ function renderGlossaire(root) {
     <details class="glo-sec">
       <summary>⭐ Ascension, autel et fatigue (v0.33)</summary>
       <ul class="glo-list">
-        <li><b>Niveaux 1 à 20 par exemplaire</b> : +8 % d’ATQ et de PV par niveau. L’XP vient des donjons : étages franchis × multiplicateur de difficulté (×1 Facile … ×${DIFFICULTIES[4].pts} Enfer) ×1,5 si victoire, créditée à chaque exemplaire de l’équipe.</li>
+        <li><b>Niveaux 1 à 100 par exemplaire</b> : +2 % d’ATQ et de PV par niveau (courbe aplatie sur la grille v1). L’XP vient des donjons : étages franchis × multiplicateur de difficulté (×1 Facile … ×${DIFFICULTIES[4].pts} Enfer) ×1,5 si victoire, créditée à chaque exemplaire de l’équipe.</li>
         <li><b>Fatigue quotidienne par carte</b> : chaque run baisse l’XP d’un exemplaire de 10 % (100 %, 90 %, 80 %… plancher 25 %). Reset la nuit.</li>
         <li><b>Évolution dès le niveau 10</b> : le coût se paie en éclats d’évolution de l’élément de la carte, jamais en or : ${evoSentence}. L’exemplaire repart niveau 1 dans sa forme supérieure, garde son nom et cumule les sorts de ses formes passées.</li>
         <li><b>Le choix de la voie (v0.36)</b> : à la première évolution, chaque Novice choisit sa discipline — l’épéiste ouvre le guerrier, la protection ou la sylvestre ; le mage choisit son élément (ou la lumière : l’élue rejoint la lignée du prêtre) ; le prêtre choisit la foi ou la garde ; le voleur l’assassinat, les quais ou la fête. Un choix est définitif pour l’exemplaire, une autre copie peut prendre une autre voie. Le novice sans élément paie dans l’élément de la voie choisie.</li>

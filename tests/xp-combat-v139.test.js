@@ -94,7 +94,9 @@ test('v1.39 lot 1 (combat) : un combat de donjon gagné distribue l\'XP immédia
   const rl = api._runLog();
   assert.ok(rl && rl.xp.length === TEAM.length, 'une entrée XP par personnage dans le log du run, avant l\'étage 2');
   // base = 1 étage × DIFFX.pts(1) × 1,5 victoire × 0,8 × 2 découverte = 2,4 ; mult fatigue = 1 (run neuf)
-  assert.ok(Math.abs(gainsOf(rl, api.byId(inst.id).name) - 2.4) < 1e-6, `gain = base par combat (2,4), pas stages × base : ${gainsOf(rl, api.byId(inst.id).name)}`);
+  // lot 9 XP 1-100 : gain = fraction du niveau courant (table de minutes) × xpToNext(niveau) × base
+  const expectedGain = Math.round(api.xpFracOfLevel(lvl0) * api.xpToNext(lvl0) * 2.4 * 10) / 10; // log arrondi au 0,1
+  assert.ok(Math.abs(gainsOf(rl, api.byId(inst.id).name) - expectedGain) < 1e-6, `gain = frac(Nv ${lvl0}) × xpToNext(Nv ${lvl0}) × base (2,4) : attendu ${expectedGain}, obtenu ${gainsOf(rl, api.byId(inst.id).name)}`);
 });
 
 test('v1.39 lot 1 (run 5 étages) : l\'XP totale du run = 5 × la base par combat = l\'ancienne formule (stages × base) — test comparatif', async (t) => {
@@ -102,11 +104,14 @@ test('v1.39 lot 1 (run 5 étages) : l\'XP totale du run = 5 × la base par comba
   t.after(() => { doc?.body?.querySelector('#recomp-all')?.click(); api.go('#accueil'); api.store.errance = null; });
   await enterDungeon(api, doc);
   const iid = api.store.team.slots[0];
-  const nm = api.byId(api.byIid(iid).id).name;
+  const inst = api.byIid(iid);
+  const nm = api.byId(inst.id).name;
   const base = 1 * 1 * 1.5 * 0.8 * 2; // DIFFX.pts=1 (Facile) × victoire × 0,8 × découverte, 1 étage
+  let expectedTotal = 0; // lot 9 : gain par combat = frac(niveau) × xpToNext(niveau) × base (le niveau évolue)
   let st = api._state();
   for (let stage = 1; stage <= 5; stage++) {
     assert.ok(st && !st.winner, `étage ${stage} lancé`);
+    expectedTotal += Math.round(api.xpFracOfLevel(inst.lvl) * api.xpToNext(inst.lvl) * base * 10) / 10;
     weakenEnemies(api);
     st = await playOut(api, els);
     await wait(400);
@@ -114,8 +119,8 @@ test('v1.39 lot 1 (run 5 étages) : l\'XP totale du run = 5 × la base par comba
     if (stage < 5) st = await closeRecompAndWaitNext(api, doc, st); // « Tout ramasser » -> chaîne vers l'étage suivant
   }
   const total = gainsOf(api._runLog(), nm);
-  // comparatif documenté : ancienne formule = runLog.stages(5) × base(1 étage) × mult ; nouvelle = 5 combats × base × mult
-  assert.ok(Math.abs(total - 5 * base) < 1e-6, `total run = 5 × base (${5 * base}), obtenu ${total}`);
+  // lot 9 : total run = Σ par combat de frac(niveau courant) × xpToNext(niveau courant) × base × mult
+  assert.ok(Math.abs(total - expectedTotal) < 1e-6, `total run = Σ frac×xpToNext×base (${expectedTotal}), obtenu ${total}`);
 });
 
 test('v1.39 lot 1 (défaite donjon) : le combat perdu ne distribue rien, l\'XP des combats gagnés reste acquise', async (t) => {
@@ -177,8 +182,10 @@ test('v1.39 lot 1 (zone défaite) : une défaite de zone distribue aussi l\'XP (
   await wait(400);
   assert.equal(st.winner, 'enemies');
   assert.ok(inst.xp > xp0 || inst.lvl > 1, `XP distribuée malgré la défaite de zone (xp ${xp0} -> ${inst.xp})`);
-  // base défaite = 1 × 1 × 1 × 0,8 × 2 découverte = 1,6
-  assert.ok(Math.abs(gainsOf(api._runLog(), api.byId(inst.id).name) - 1.6) < 1e-6, 'coefficient défaite ×1 appliqué');
+  // base défaite = 1 × 1 × 1 × 0,8 × 2 découverte = 1,6 ; lot 9 : gain = frac(niveau) × xpToNext(niveau) × base
+  const lvlZ = inst.lvl;
+  const expectedDefaite = Math.round(api.xpFracOfLevel(lvlZ) * api.xpToNext(lvlZ) * 1.6 * 10) / 10; // log arrondi au 0,1
+  assert.ok(Math.abs(gainsOf(api._runLog(), api.byId(inst.id).name) - expectedDefaite) < 1e-6, `coefficient défaite ×1 appliqué (attendu ${expectedDefaite}, obtenu ${gainsOf(api._runLog(), api.byId(inst.id).name)})`);
   api.store.errance = null;
 });
 

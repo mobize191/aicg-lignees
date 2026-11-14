@@ -36,9 +36,11 @@ for (let n = 0; n < N; n++) {
     // lot 8 shiny (suite 40) : chaque carte de l'équipe tire sa version shiny (seedé par n) —
     // la variance couplée +3-5 % doit rester mesurable dans le digest (taux 1/100)
     const rngShiny = api.mulberry32(seed * 7919 + 17);
+    // lot 9 XP 1-100 : les niveaux d'équipe suivent le même étirement sur la grille v1 que les vagues
+    // (stretchLevel), pour mesurer les mêmes rapports de force ; LEVEL_BONUS 0.02 x stretch 4 = 0.08 historique
     const mkCard = ([id, lvl]) => {
       const r = api.rollShiny(rngShiny, api.SHINY_CFG);
-      const base = { ...api.byId(id), level: lvl, shiny: r.shiny };
+      const base = { ...api.byId(id), level: api.stretchLevel(lvl), shiny: r.shiny };
       return r.shiny ? api.applyShinyStats(base, r.bonus) : base;
     };
     const teamCards = {

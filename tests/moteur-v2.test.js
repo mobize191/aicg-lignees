@@ -12,7 +12,7 @@ const E = loadEngine();
 test('J1/J2 : 5 stats — def en data et ratio K/(K+def) dans applyDamage', () => {
   const u = E.makeUnit(E.getCard('a1'), 'u1', 10);
   assert.ok(u.def > 0, 'def calculée');
-  assert.equal(u.def, Math.max(1, Math.round(E.getCard('a1').def * (1 + 0.08 * 9))));
+  assert.equal(u.def, Math.max(1, Math.round(E.getCard('a1').def * (1 + E.DATA.engine.LEVEL_BONUS * 9)))); // lot 9 : LEVEL_BONUS en data (0,02 sur la grille 1-100)
   const t = { uid: 't', hp: 1000, maxHp: 1000, alive: true, shield: 0, def: 10, status: {} };
   const ev = [];
   E.applyDamage(t, 20, ev, 'team');

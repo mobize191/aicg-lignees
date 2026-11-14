@@ -53,11 +53,11 @@ async function main() {
     check('soudure ' + from + ' -> ' + to, api.SOLO_STEPS[from] === to, api.SOLO_STEPS[from]);
   }
 
-  // ---------- cap 20 ----------
+  // ---------- cap 100 (lot 9 XP 1-100) ----------
   mem.clear();
   const capInst = api.newInst('a1', 19);
-  api.addXpI(capInst.iid, 100000);
-  check('cap niveau 20 par exemplaire', capInst.lvl <= 20, String(capInst.lvl));
+  api.addXpI(capInst.iid, 2000000);
+  check('cap niveau 100 par exemplaire (lot 9)', capInst.lvl <= 100 && capInst.lvl === api.DATA.engine.LEVEL_CAP, String(capInst.lvl));
 
   // ---------- grammaire des sorts (43 A) ----------
   const sp1 = api.byId('n1').spells.map((s) => s.name);
@@ -950,7 +950,7 @@ async function main() {
   // ---------- boucle v2 lot 2 : niveaux de donjon et bandes de rareté ----------
   {
     mem.clear();
-    check('B2 a 25 marches 1..25 (majeurs) + palier propre aux donjons de famille (lot 5)', (() => { const v = new Set(); for (const d of api.DUNGEONS.filter((x) => x.majeur)) for (const df of api.DIFFICULTIES) v.add(api.dungeonLevelOf(d.id, df.id)); const fams = api.DUNGEONS.filter((x) => !x.majeur); return v.size === 25 && Math.min(...v) === 1 && Math.max(...v) === 25 && fams.length === 8 && fams.every((d) => api.dungeonLevelOf(d.id, 2) === d.palier && api.dungeonLevelOf(d.id, 'royale') === d.palier + 10); })(), '');
+    check('B2 a 25 marches étirées sur la grille v1 (majeurs, lot 9) + palier étiré des familles (lot 5)', (() => { const v = new Set(); for (const d of api.DUNGEONS.filter((x) => x.majeur)) for (const df of api.DIFFICULTIES) v.add(api.dungeonLevelOf(d.id, df.id)); const fams = api.DUNGEONS.filter((x) => !x.majeur); return v.size === 25 && Math.min(...v) === 1 && Math.max(...v) === api.stretchLevel(25) && fams.length === 8 && fams.every((d) => api.dungeonLevelOf(d.id, 2) === api.stretchLevel(d.palier) && api.dungeonLevelOf(d.id, 'royale') === api.stretchLevel(d.palier) + 10); })(), '');
     api.go('#donjons');
     await wait(40);
     const dgHtml = els.get('app')?._innerHTML ?? '';
@@ -1083,7 +1083,7 @@ async function main() {
       }
     }
     check('B5 c palier sans perte nette sur toutes les évolutions (simulation)', worst === null, worst ?? 'ok');
-    check('B5 d courbe XP recalibrée (lvl 1 -> 1, croissance quadratique en data)', api.xpToNext(1) === 1 && api.xpToNext(10) === Math.round(10 * (1 + 0.25 * 9)) && api.xpToNext(10) > 10, `${api.xpToNext(1)}/${api.xpToNext(10)}`);
+    check('B5 d courbe XP cubique 1-100 (lot 9, total n^3) : 1->7, 5->91, 10->331, strictement croissante', api.xpToNext(1) === 7 && api.xpToNext(5) === 91 && api.xpToNext(10) === 331 && api.xpToNext(10) > api.xpToNext(5) && api.xpToNext(5) > api.xpToNext(1), `${api.xpToNext(1)}/${api.xpToNext(5)}/${api.xpToNext(10)}`);
     check('B5 e 0 exception lot 5', errors.length === 0, errors.map((e) => e.message).join('|').slice(0, 150));
   }
 
@@ -2019,6 +2019,26 @@ async function main() {
         keys30.every((k) => uShiny[k] >= uPlain[k]) && uShiny.hp > uPlain.hp && uShiny.atk > uPlain.atk && keys30.every((k) => uShiny[k] <= Math.ceil(uPlain[k] * 1.06)),
         `${uPlain.atk}->${uShiny.atk} ATQ, ${uPlain.hp}->${uShiny.hp} PV`);
       check('S30 k 0 exception lot 8', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
+    // S31 — lot 9 XP 1-100 : courbe cubique (n^3), table de minutes, niveaux de donjon étirés sur la grille v1
+    {
+      const errBefore = errors.length;
+      const eng = api.DATA.engine;
+      check('S31 a data lot 9 : LEVEL_CAP 100, XP.courbe cubique, stretch x4, LEVEL_BONUS 0.02', eng.LEVEL_CAP === 100 && eng.XP.courbe === 'cubique' && eng.moteur.DUNGEON_LEVEL_STRETCH === 4 && eng.LEVEL_BONUS === 0.02, JSON.stringify({ cap: eng.LEVEL_CAP, courbe: eng.XP.courbe, stretch: eng.moteur.DUNGEON_LEVEL_STRETCH, bonus: eng.LEVEL_BONUS }));
+      check('S31 b xpToNext cubique (ui réel) : 1->7, 2->19, 99->29701', api.xpToNext(1) === 7 && api.xpToNext(2) === 19 && api.xpToNext(99) === 29701, `${api.xpToNext(1)}/${api.xpToNext(2)}/${api.xpToNext(99)}`);
+      let tot31 = 0; for (let l = 1; l < 100; l++) tot31 += api.xpToNext(l);
+      check('S31 c cumul XP 1->100 = 100^3 - 1 = 999 999 (télescopage n^3)', tot31 === 999999, String(tot31));
+      check('S31 d stretchLevel : 1->1, 25->97, 95->95 (divins inchangés)', api.stretchLevel(1) === 1 && api.stretchLevel(25) === 97 && api.stretchLevel(95) === 95, '');
+      check('S31 e table de minutes : xpFracOfLevel décroissante (45 min puis 180 min par tranche de 25 niv)', api.xpFracOfLevel(1) === 25 / 45 && api.xpFracOfLevel(90) === 25 / 180 && api.xpFracOfLevel(1) > api.xpFracOfLevel(90), `${api.xpFracOfLevel(1)} vs ${api.xpFracOfLevel(90)}`);
+      const card31 = api.byId('a1');
+      const uProj = api.makeUnit({ ...card31, level: api.stretchLevel(20) });
+      check('S31 f courbe de stats préservée : stretch(20) avec 0.02 == ancien niveau 20 avec 0.08', uProj.atk === Math.max(1, Math.round(card31.atk * (1 + 0.08 * 19))) && uProj.hp === Math.max(1, Math.round(card31.hp * (1 + 0.08 * 19))), `${uProj.atk} ATQ / ${uProj.hp} PV`);
+      check('S31 g dungeonLevelOf étiré : zenith diff 5 = 97, divin = 95 inchangé', api.dungeonLevelOf('zenith', 5) === 97 && api.dungeonLevelOf('donjon-demons', 1) === 95, '');
+      const capI = api.newInst('a1', 19);
+      api.addXpI(capI.iid, 2000000);
+      check('S31 h cap 100 atteint par XP (courbe cubique)', capI.lvl === 100, String(capI.lvl));
+      check('S31 i 0 exception lot 9', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
     }
 
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);

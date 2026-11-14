@@ -352,8 +352,8 @@
  ],
  "TEAM_MAX": 5,
  "OPP_BONUS": 0.25,
- "LEVEL_BONUS": 0.08,
- "LEVEL_CAP": 20,
+ "LEVEL_BONUS": 0.02,
+ "LEVEL_CAP": 100,
  "DMG_REDUCTION_MAX": 0.8,
  "SAVE_VERSION": 32,
  "SAVE_KEY": "fondations-cards-v1",
@@ -692,7 +692,10 @@
   "TAUNT_CHARGES": 2,
   "TAUNT_TURNS": 3,
   "SHIELD_CAP_RATIO": 0.35,
-  "ROYALE_LEVEL_BONUS": 10
+  "ROYALE_LEVEL_BONUS": 10,
+  "XP_COURBE": "cubique",
+  "DUNGEON_LEVEL_STRETCH": 4,
+  "LEGACY_LEVEL_CAP": 25
  },
  "profils": {
   "Guerrier": {
@@ -885,5 +888,16 @@
   "bonusMax": 0.05,
   "artSuffixe": "-s",
   "migrationSeed": 20261115
+ },
+ "XP": {
+  "courbe": "cubique",
+  "minutesParCombat": 1,
+  "niveauxParTranche": 25,
+  "minutesParTranche": {
+   "1-25": 45,
+   "26-50": 90,
+   "51-75": 135,
+   "76-100": 180
+  }
  }
 }

@@ -74,12 +74,12 @@ test('lot 5 : difficulté Royale — +10 niveaux sur les vagues et boss royal du
   assert.equal(bN.avant[0].id ?? bN.avant[0].cardId, dj.bossPaliers[0].ref, 'boss normale = escalier');
   assert.equal(bR.avant[0].id ?? bR.avant[0].cardId, dj.royale.boss, 'boss royale = tête royale');
   assert.ok(bR.avant[0].boss, 'boss flagué');
-  // dungeonLevelOf : majeurs en grille 25, familles = palier, royale +10
+  // dungeonLevelOf : majeurs étirés sur la grille v1 (lot 9), familles = palier étiré, royale +10 hors étirement
   assert.equal(E.dungeonLevelOf('marees', 1), 1);
-  assert.equal(E.dungeonLevelOf('zenith', 5), 25);
-  assert.equal(E.dungeonLevelOf('gobelins-ecumes', 2), 3);
-  assert.equal(E.dungeonLevelOf('gobelins-ecumes', 'royale'), 13);
-  assert.equal(E.dungeonLevelOf('donjon-equilibre', 1), 100);
+  assert.equal(E.dungeonLevelOf('zenith', 5), E.stretchLevel(25));
+  assert.equal(E.dungeonLevelOf('gobelins-ecumes', 2), E.stretchLevel(3));
+  assert.equal(E.dungeonLevelOf('gobelins-ecumes', 'royale'), E.stretchLevel(3) + 10);
+  assert.equal(E.dungeonLevelOf('donjon-equilibre', 1), 100); // divin déjà sur la grille v1 : non ré-étiré
   assert.equal(E.dungeonLevelOf('donjon-equilibre', 'royale'), 110);
 });
 

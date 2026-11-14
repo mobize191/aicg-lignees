@@ -180,6 +180,19 @@ function validate(data, errors) {
     if (typeof SH.artSuffixe !== 'string' || !SH.artSuffixe.length) push('SHINY.artSuffixe invalide', 'EXI-DATA-6');
     if (!Number.isInteger(SH.migrationSeed)) push('SHINY.migrationSeed non entier', 'EXI-DATA-6');
   }
+  // lot 9 XP 1-100 : courbe cubique + table de minutes par niveau + étirement des niveaux de donjon (grille v1)
+  const XP9 = data.engine?.XP ?? null;
+  if (!XP9) push('bloc XP manquant dans engine.json', 'EXI-DATA-7');
+  else {
+    if (!['cubique', 'quadratique'].includes(XP9.courbe ?? '')) push('XP.courbe inconnue (cubique|quadratique)', 'EXI-DATA-7');
+    const mt = XP9.minutesParTranche ?? XP9.minutesParNiveau ?? null;
+    if (!mt || !Object.entries(mt).length || !Object.values(mt).every((v) => Number(v) > 0)) push('XP.minutesParTranche invalide (tranches de niveaux > 0)', 'EXI-DATA-7');
+    if (!(Number(XP9.minutesParCombat) > 0)) push('XP.minutesParCombat invalide', 'EXI-DATA-7');
+    if (!(Number(XP9.niveauxParTranche) >= 1)) push('XP.niveauxParTranche invalide', 'EXI-DATA-7');
+  }
+  if (!(Number(data.engine?.LEVEL_CAP) >= 20)) push('LEVEL_CAP < 20 (progression 1-100 attendue)', 'EXI-DATA-7');
+  if (!(Number(data.engine?.moteur?.DUNGEON_LEVEL_STRETCH) >= 1)) push('moteur.DUNGEON_LEVEL_STRETCH < 1', 'EXI-DATA-7');
+  if (!(Number(data.engine?.moteur?.LEGACY_LEVEL_CAP) >= 1)) push('moteur.LEGACY_LEVEL_CAP invalide', 'EXI-DATA-7');
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();
