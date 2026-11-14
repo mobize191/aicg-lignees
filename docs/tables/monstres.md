@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**196 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
+**198 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
 
 ## Donjon bosquet (30)
 
@@ -196,7 +196,7 @@
 | Enfants de la Braise | f14 -> f15 -> f4 ; f9 -> f6 -> f22 ; f5 -> f23 -> f12 | - | - |
 | Gobelin des Fumées | f2 -> f24 | - | - |
 
-## Donjon marees (30)
+## Donjon marees (32)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -224,6 +224,8 @@
 | e29 | Gardienne des Récifs | UR | Guerrier | Eau | - | 27 | 80 | 19 | 11 | Corail Vengeur | - |
 | e3 | Pillard des Récifs | UC | Assassin | Eau | - | 11 | 52 | 10 | 4 | Morsure des Récifs | - |
 | e30 | Thalassa, Reine des Récifs | L | Assassin | Eau | - | 37 | 102 | 33 | 15 | Colère des Récifs | - |
+| e31 | Hydre des Marées | L | Guerrier | Eau | - | 30 | 130 | 21 | 12 | Morsure Hydrique | - |
+| e32 | Souverain des Marées | L | Guerrier | Eau | - | 34 | 150 | 24 | 14 | Couronne des Marées | - |
 | e4 | Sergent des Brumes | R | Guerrier | Eau | - | 14 | 74 | 10 | 6 | Brise-Garde | - |
 | e5 | Prophète des Marées | SR | Mage | Eau | - | 20 | 62 | 10 | 16 | Vision Noyée | - |
 | e6 | Avatar de l’Abîme | UR | Mage | Eau | - | 28 | 78 | 14 | 22 | Étreinte de l’Abîme | - |

@@ -3179,5 +3179,39 @@
   "agi": 8,
   "int": 12,
   "horsPool": true
+ },
+ {
+  "id": "e31",
+  "dungeon": "marees",
+  "name": "Hydre des Marées",
+  "rarity": "L",
+  "classe": "Guerrier",
+  "element": "Eau",
+  "atk": 30,
+  "hp": 130,
+  "soloSpell": "Morsure Hydrique",
+  "soloCost": 9,
+  "soloMult": 2.6,
+  "beast": true,
+  "horsPool": true,
+  "agi": 21,
+  "int": 12
+ },
+ {
+  "id": "e32",
+  "dungeon": "marees",
+  "name": "Souverain des Marées",
+  "rarity": "L",
+  "classe": "Guerrier",
+  "element": "Eau",
+  "atk": 34,
+  "hp": 150,
+  "soloSpell": "Couronne des Marées",
+  "soloCost": 6,
+  "soloMult": 2,
+  "beast": true,
+  "horsPool": true,
+  "agi": 24,
+  "int": 14
  }
 ]

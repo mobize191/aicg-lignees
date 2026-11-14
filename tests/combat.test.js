@@ -357,12 +357,14 @@ test('boucle v2 lot 2 : les vagues suivent la bande de rareté de la marche, bos
         assert.ok(R[u.rarity] <= R[b1] + 1, `monstre ${u.id} ${u.rarity} <= ${b1} (diff ${df.id})`);
       }
     }
+    // gel lot I (suite 16) : le boss est la carte dédiée du donjon (bossCards), à sa propre rareté
+    const dg = E.DATA.dungeons.find((d) => d.id === 'marees');
     const w5 = E.makeWave(99, 5, 'marees', df.id);
     const boss5 = w5.avant.find((u) => u.boss);
-    assert.equal(boss5.rarity, df.boss5, `boss5 = ${df.boss5} en diff ${df.id}`);
+    assert.equal(boss5.id, dg.bossCards['5'], `boss5 = carte dédiée ${dg.bossCards['5']} (diff ${df.id})`);
     const w10 = E.makeWave(99, 10, 'marees', df.id);
     const boss10 = w10.avant.find((u) => u.boss);
-    assert.equal(boss10.rarity, df.boss10, `boss10 = haut de bande ${df.boss10} en diff ${df.id}`);
+    assert.equal(boss10.id, dg.bossCards['10'], `boss10 = carte dédiée ${dg.bossCards['10']} (diff ${df.id})`);
   }
 });
 

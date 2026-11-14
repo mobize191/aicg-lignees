@@ -3743,6 +3743,10 @@ const DATA = {
    "bossNames": {
     "5": "Hydre des Marées",
     "10": "Souverain des Marées"
+   },
+   "bossCards": {
+    "5": "e31",
+    "10": "e32"
    }
   },
   {
@@ -3762,6 +3766,10 @@ const DATA = {
    "bossNames": {
     "5": "Maître des Fours",
     "10": "Seigneur des Cendres"
+   },
+   "bossCards": {
+    "5": "f23",
+    "10": "f13"
    }
   },
   {
@@ -3786,6 +3794,10 @@ const DATA = {
    "bossNames": {
     "5": "Mycola, Reine des Spores",
     "10": "Cœur du Bosquet"
+   },
+   "bossCards": {
+    "5": "g16",
+    "10": "g8"
    }
   },
   {
@@ -3808,6 +3820,10 @@ const DATA = {
    "bossNames": {
     "5": "Goule des Caveaux",
     "10": "La Mort, Faucheuse des Tombes"
+   },
+   "bossCards": {
+    "5": "k13",
+    "10": "k17"
    }
   },
   {
@@ -3830,6 +3846,10 @@ const DATA = {
    "bossNames": {
     "5": "Phénix du Zénith",
     "10": "Astre Capiteux"
+   },
+   "bossCards": {
+    "5": "z6",
+    "10": "z8"
    }
   }
  ],
@@ -7795,6 +7815,14 @@ const DATA = {
     },
     "e30": {
      "unique": "colere-des-recifs"
+    },
+    "e31": {
+     "fusion": "etreinte-des-profondeurs",
+     "cran": "IV"
+    },
+    "e32": {
+     "fusion": "etreinte-des-profondeurs",
+     "cran": "IV"
     }
    }
   },
@@ -15337,6 +15365,40 @@ const DATA = {
    "agi": 8,
    "int": 12,
    "horsPool": true
+  },
+  {
+   "id": "e31",
+   "dungeon": "marees",
+   "name": "Hydre des Marées",
+   "rarity": "L",
+   "classe": "Guerrier",
+   "element": "Eau",
+   "atk": 30,
+   "hp": 130,
+   "soloSpell": "Morsure Hydrique",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "beast": true,
+   "horsPool": true,
+   "agi": 21,
+   "int": 12
+  },
+  {
+   "id": "e32",
+   "dungeon": "marees",
+   "name": "Souverain des Marées",
+   "rarity": "L",
+   "classe": "Guerrier",
+   "element": "Eau",
+   "atk": 34,
+   "hp": 150,
+   "soloSpell": "Couronne des Marées",
+   "soloCost": 6,
+   "soloMult": 2,
+   "beast": true,
+   "horsPool": true,
+   "agi": 24,
+   "int": 14
   }
  ],
  "potions": {
@@ -19032,7 +19094,12 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
     const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
-    const boss = scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
+    // gel lot I (suite 16) : boss non aléatoire — la carte dédiée du donjon (bossCards en data)
+    const bossCardId = dungeon.bossCards?.[String(stage)];
+    const bossCard = bossCardId ? MONSTERS.find((m) => m.id === bossCardId) : null;
+    const boss = bossCard
+      ? { ...bossCard, level: levelFor(bossCard.rarity, true), atk: Math.max(1, Math.round(bossCard.atk * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * atkMult)), hp: Math.max(1, Math.round(bossCard.hp * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * hpMult)) }
+      : scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
     boss.name = dungeon.bossNames?.[stage] ?? boss.name;
     boss.boss = true;
     boss.final = isFinal;

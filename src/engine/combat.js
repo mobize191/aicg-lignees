@@ -1035,7 +1035,12 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
     const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
-    const boss = scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
+    // gel lot I (suite 16) : boss non aléatoire — la carte dédiée du donjon (bossCards en data)
+    const bossCardId = dungeon.bossCards?.[String(stage)];
+    const bossCard = bossCardId ? MONSTERS.find((m) => m.id === bossCardId) : null;
+    const boss = bossCard
+      ? { ...bossCard, level: levelFor(bossCard.rarity, true), atk: Math.max(1, Math.round(bossCard.atk * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * atkMult)), hp: Math.max(1, Math.round(bossCard.hp * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * hpMult)) }
+      : scaled(POOL, hpMult, atkMult, RANK[bossRarity], RANK[bossRarity]);
     boss.name = dungeon.bossNames?.[stage] ?? boss.name;
     boss.boss = true;
     boss.final = isFinal;

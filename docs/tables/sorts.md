@@ -254,6 +254,8 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | e22 | - | - |
 | e28 | - | - |
 | e30 | - | - |
+| e31 | etreinte-des-profondeurs | IV |
+| e32 | etreinte-des-profondeurs | IV |
 
 ### Donjon forge
 
