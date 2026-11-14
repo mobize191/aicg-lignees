@@ -171,6 +171,15 @@ function validate(data, errors) {
   for (const tr of data.engine?.SORTS_TRIO ?? []) {
     if (!tr.nom || !(tr.cout >= 1) || !(tr.mult > 0)) push(`SORTS_TRIO : entree invalide (${tr.nom ?? 'sans nom'})`, 'EXI-DATA-5');
   }
+  // lot 8 shiny (suite 40) : bloc SHINY en data, bornes coherentes
+  const SH = data.engine?.SHINY ?? null;
+  if (!SH) push('bloc SHINY manquant dans engine.json', 'EXI-DATA-6');
+  else {
+    if (!(SH.taux > 0 && SH.taux <= 1)) push('SHINY.taux hors bornes (]0-1])', 'EXI-DATA-6');
+    if (!(SH.bonusMin > 0 && SH.bonusMax >= SH.bonusMin && SH.bonusMax <= 1)) push('SHINY.bonusMin/bonusMax hors bornes (0 < min <= max <= 1)', 'EXI-DATA-6');
+    if (typeof SH.artSuffixe !== 'string' || !SH.artSuffixe.length) push('SHINY.artSuffixe invalide', 'EXI-DATA-6');
+    if (!Number.isInteger(SH.migrationSeed)) push('SHINY.migrationSeed non entier', 'EXI-DATA-6');
+  }
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();

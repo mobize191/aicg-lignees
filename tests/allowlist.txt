@@ -4,6 +4,7 @@
 100   # base des pourcentages (structure du champ)
 200   # garde-fou de boucle (structure du champ)
 31   # constante de hachage du seed (structure du champ)
+32   # numero de version du format de sauvegarde (structure du champ)
 15   # constante interne du RNG mulberry32 (structure du champ)
 61   # constante interne du RNG mulberry32 (structure du champ)
 14   # constante interne du RNG mulberry32 (structure du champ)

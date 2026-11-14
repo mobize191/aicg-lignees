@@ -30,6 +30,7 @@ function makeUnit(card, uid = card.id, level = null) {
     manaRegen: 0,
     boss: !!card.boss,
     final: !!card.final,
+    shiny: !!card.shiny, // lot 8 suite 40 : l'exemplaire shiny porte sa variance (+3-5 % de stats) dans ses stats de combat
     gimmick: card.gimmick ?? null,
     ronde: 0,
     status: card.effect && card.effect.kind === 'copy' ? { copy: { spell: null, expiry: 0 } } : {},

@@ -143,9 +143,9 @@ test('lot 6 (spec-fusion-v4 §2.5) : la RÉGRESSION MEURT — plus d’entrée a
   const entry = { type: 'regression', to: 'a20', condition: { kind: 'item', id: 'eclat-regression', n: 1 } };
   const r = E.applySpecialEvo({ iid: 'i1', id: 'a17', lvl: 10, acc: [] }, entry, { items: { 'eclat-regression': 1 }, owned: ['a17'], events: [] });
   assert.ok(!r || !r.ok || r.type !== 'regression', 'plus de branche regression');
-  // migration v30 -> v31 : éclats de régression en stock -> or (suite 24)
+  // migration v30 -> v32 (v31 : éclats de régression en stock -> or, suite 24 ; v32 : tirage shiny, lot 8)
   const out = E.migrate({ version: 30, instances: [], gold: 100, items: { 'eclat-regression': 3 } });
-  assert.equal(out.version, 31);
+  assert.equal(out.version, 32);
   assert.equal(out.gold, 100 + 3 * E.DATA.engine.FUSION.eclatRegressionOr, '3 éclats x 500 or');
   assert.equal(out.items['eclat-regression'], undefined, 'éclats consommés par la migration');
 });

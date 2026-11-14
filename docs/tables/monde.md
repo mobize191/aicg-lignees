@@ -23,7 +23,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | TEAM_MAX | 5 |
 | LEVEL_CAP | 20 |
 | DMG_REDUCTION_MAX | 0.8 |
-| SAVE_VERSION | 31 |
+| SAVE_VERSION | 32 |
 | VERSION | "1.0" |
 | RACE_MOD | {"humaine":0,"monstre":0.1,"mystique":0.2,"divine":0.3} |
 | CLASSE_MODS | {"Guerrier":{"atkPct":0,"hpPct":0,"strike":1,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0.05},"Assassin":{"atkPct":0,"hpPct":0,"strike":1,"dodge":0.15,"exec":0.25,"execBelow":0.35,"splash":0,"wave":false,"shieldOnHit":0},"Mage":{"atkPct":0,"hpPct":0,"strike":0.8,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0},"Prêtre":{"atkPct":0,"hpPct":0,"strike":0.7,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0},"Occultiste":{"atkPct":0,"hpPct":0,"strike":0.6,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":true,"shieldOnHit":0}} |

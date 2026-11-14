@@ -289,6 +289,23 @@ function cardEnfantOf(raceCible, rarete, familleId, biomeCible, rng, fallbackCar
 // aperçu complet et déterministe (tous les jets sont faits ici, rejouables par seed) :
 // la fenêtre de fusion montre la race cible, la famille cible (ou « ? » + candidats), le palier,
 // le plafond et les sorts héritables — jamais l'identité exacte de l'enfant (mystère des lignées)
+// lot 8 shiny (suite 40) : tirage de la version d'un exemplaire a l'obtention (drop, capture, naissance, jeton, fusion)
+// un seul tirage porte les deux : le drapeau shiny ET la variance individuelle bornee (+3-5 % de stats)
+function rollShiny(rng, cfg = SHINY_CFG) {
+  const taux = cfg.taux ?? 0;
+  if (!(taux > 0) || rng() >= taux) return { shiny: false, bonus: 0 };
+  const lo = cfg.bonusMin ?? 0;
+  const hi = cfg.bonusMax ?? lo;
+  return { shiny: true, bonus: lo + rng() * Math.max(0, hi - lo) };
+}
+// lot 8 : applique la variance individuelle bornee sur les 5 stats de base de la fiche (le moteur arrondit ensuite)
+function applyShinyStats(card, bonus) {
+  if (!card || !(bonus > 0)) return card;
+  const m = 1 + bonus;
+  const out = { ...card, atk: card.atk * m, hp: card.hp * m };
+  for (const k of ['def', 'agi', 'int']) if (Number.isFinite(card[k])) out[k] = card[k] * m;
+  return out;
+}
 function fusionPreview(instA, instB, rng, opts = {}) {
   const F = FUSION_CFG;
   const cardA = getCard(instA.id) ?? getMonster(instA.id);
@@ -354,6 +371,7 @@ function fusionPreview(instA, instB, rng, opts = {}) {
     childId: enfant.id, childKind: enfant.kind, childName: demon ? '??' : enfant.name,
     bonusAtk, bonusHp, sorts, sortsMax,
     parentA: { iid: instA.iid, id: cardA.id, name: cardA.name }, parentB: { iid: instB.iid, id: cardB.id, name: cardB.name },
+    shinyHerite: !!(instA.shiny || instB.shiny), // lot 8 suite 40 (TRANCHE) : au moins un parent shiny -> enfant shiny
   };
 }
 // garde-fous + application : parents consommés, enfant niveau 1, sorts choisis, bonus de stats plafonné
@@ -374,11 +392,19 @@ function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
   if (!plan || !plan.ok || plan.parentA.iid !== iidA || plan.parentB.iid !== iidB) return { ok: false, reason: 'aperçu invalide' };
   const dispo = new Map(plan.sorts.map((s) => [s.key, s]));
   const acc = (choixSorts ?? []).slice(0, plan.sortsMax).filter((k) => dispo.has(k)).map((k) => ({ ...dispo.get(k).brut }));
+  // lot 8 suite 40 (TRANCHE) : si au moins un parent est shiny, l'enfant l'est aussi ;
+  // le bonus de variance est re-tire dans la meme borne a la fusion (l'obtention de l'enfant)
+  const shiny = !!(instA.shiny || instB.shiny);
+  const cfgS = SHINY_CFG;
+  const loS = cfgS.bonusMin ?? 0, hiS = cfgS.bonusMax ?? loS;
+  const rS = opts.rng ? opts.rng() : 1;
+  const shinyBonus = shiny ? loS + rS * Math.max(0, hiS - loS) : 0;
   const enfant = {
     iid: `fus-${iidA}-${iidB}`, id: plan.childId, lvl: 1, xp: 0,
     acc,
     ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
     ...(instA.voie ? { voie: instA.voie } : {}),
+    ...(shiny ? { shiny: true, shinyBonus } : {}),
     isNew: true,
   };
   const reste = instances.filter((i) => i.iid !== iidA && i.iid !== iidB);

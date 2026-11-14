@@ -1963,6 +1963,64 @@ async function main() {
       check('S29 f 0 exception lot 7', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
     }
 
+    // S30 — lot 8 shiny : tirage à l'obtention, marqueur, collection (compteur + filtre), art <id>-s + fallback, fusion héritée
+    {
+      const errBefore = errors.length;
+      const cfg = api.SHINY_CFG;
+      check('S30 a bloc SHINY en data (taux 1/100, bornes 3-5 %, suffixe -s)', cfg.taux === 0.01 && cfg.bonusMin === 0.03 && cfg.bonusMax === 0.05 && cfg.artSuffixe === '-s', JSON.stringify(cfg));
+      const n0 = api.store.instances.length;
+      const cid0 = api.CATALOG.find((c) => c.rarity === 'C')?.id ?? 'n1';
+      api.newInst(cid0);
+      const inst = api.store.instances[api.store.instances.length - 1];
+      check('S30 b newInst tire shiny + shinyBonus à l’obtention (un seul tirage porte les deux)', api.store.instances.length === n0 + 1 && typeof inst.shiny === 'boolean' && Number.isFinite(inst.shinyBonus) && (!inst.shiny || (inst.shinyBonus >= cfg.bonusMin && inst.shinyBonus <= cfg.bonusMax)), JSON.stringify({ shiny: inst.shiny, b: inst.shinyBonus }));
+      inst.shiny = true; inst.shinyBonus = 0.05; // forcé pour le rendu
+      api.go('#equipe'); await wait(30);
+      const eqHtml = els.get('app')._innerHTML;
+      check('S30 c équipe : compteur « ✨ N shiny », badge « ✨ Shiny » et classe .shiny rendus', /✨ \d+ shiny/.test(eqHtml) && eqHtml.includes('✨ Shiny') && /class="card[^"]* shiny/.test(eqHtml), (eqHtml.match(/✨ \d+ shiny/) ?? ['?'])[0]);
+      const fb = els.get('app').querySelector('#open-filters');
+      if (fb && fb.onclick) { fb.onclick(); await wait(20); }
+      const shinyChips = [...doc.querySelectorAll('.chip')].filter((c) => c.dataset.fkey === 'shiny').map((c) => c.textContent.trim());
+      check('S30 d filtre shiny dans la modale de filtres (Tous / ✨ Shiny seuls)', shinyChips.some((t) => t.includes('Shiny')), shinyChips.join('|'));
+      const apply = doc.querySelector('#filt-apply');
+      if (apply && apply.onclick) { apply.onclick(); await wait(20); }
+      api.setArt(cid0, 'art-classic.jpg');
+      const artN = api.artOf({ id: cid0, name: 'x', classe: 'Guerrier' });
+      const artS0 = api.artOf({ id: cid0, name: 'x', classe: 'Guerrier', shiny: true });
+      api.setArt(`${cid0}${cfg.artSuffixe}`, 'art-shiny.jpg');
+      const artS = api.artOf({ id: cid0, name: 'x', classe: 'Guerrier', shiny: true });
+      check('S30 e art shiny : clé "<id>-s" si présente, fallback = art classique sinon', artN.includes('art-classic.jpg') && artS0.includes('art-classic.jpg') && artS.includes('art-shiny.jpg') && api.hasArt({ id: cid0, shiny: true }), '');
+      const front = api.cardFront({ ...api.byId(cid0), level: 3, shiny: true });
+      const frontPlain = api.cardFront({ ...api.byId(cid0), level: 3 });
+      check('S30 f cardFront : badge « ✨ Shiny » + classe .shiny uniquement en shiny', front.includes('✨ Shiny') && /class="card[^"]* shiny/.test(front) && !frontPlain.includes('✨ Shiny'), '');
+      const counts = {}; for (const i of api.store.instances) counts[i.id] = (counts[i.id] ?? 0) + 1;
+      const teamIids = new Set((api.store.team?.slots ?? []).filter(Boolean));
+      const rarOk = (i) => !teamIids.has(i.iid) && (counts[i.id] ?? 0) >= 2 && (api.byId(i.id)?.rarity ?? 'N') !== 'N' && (api.byId(i.id)?.rarity ?? '') !== 'M';
+      const pA = api.store.instances.find(rarOk);
+      const pB = api.store.instances.find((i) => rarOk(i) && i.iid !== pA?.iid);
+      let heriteOk = false, fusOk = false, bonusOk = false;
+      if (pA && pB) {
+        pA.shiny = true; pA.shinyBonus = 0.05;
+        const plan = api.fusionPreview(pA, pB, api.mulberry32(99));
+        heriteOk = plan.ok && plan.shinyHerite === true;
+        if (plan.ok) {
+          const res = api.doFusion(api.store.instances, pA.iid, pB.iid, [], plan, { teamIids: [...teamIids], ownedOf: (id) => api.store.instances.filter((i) => i.id === id).length, rng: api.mulberry32(7) });
+          fusOk = !!res.ok && res.enfant?.shiny === true;
+          bonusOk = fusOk && res.enfant.shinyBonus >= cfg.bonusMin && res.enfant.shinyBonus <= cfg.bonusMax;
+        }
+      }
+      check('S30 g aperçu de fusion annonce l’héritage shiny (shinyHerite)', heriteOk, '');
+      check('S30 h fusion TRANCHÉE : au moins un parent shiny => enfant shiny', fusOk, '');
+      check('S30 i bonus shiny de l’enfant re-tiré dans la borne [3 %, 5 %]', bonusOk, '');
+      const card = api.byId(cid0);
+      const uPlain = api.makeUnit({ ...card, level: 20 });
+      const uShiny = api.makeUnit(api.applyShinyStats({ ...card, level: 20, shiny: true }, 0.05), 's', 20);
+      const keys30 = ['atk', 'hp', 'maxHp', 'def', 'agi', 'int'];
+      check('S30 j variance shiny mesurable en combat (stats jamais réduites, PV/ATQ strictement up, bornées)',
+        keys30.every((k) => uShiny[k] >= uPlain[k]) && uShiny.hp > uPlain.hp && uShiny.atk > uPlain.atk && keys30.every((k) => uShiny[k] <= Math.ceil(uPlain[k] * 1.06)),
+        `${uPlain.atk}->${uShiny.atk} ATQ, ${uPlain.hp}->${uShiny.hp} PV`);
+      check('S30 k 0 exception lot 8', errors.length === errBefore, errors.map((e) => e.message).join('|').slice(0, 150));
+    }
+
   console.log(fails === 0 ? `SCÉNARIOS : TOUT PASSE (${total} checks)` : `SCÉNARIOS : ${fails} ÉCHEC(S) / ${total}`);
   process.exit(fails === 0 ? 0 : 1);
 }

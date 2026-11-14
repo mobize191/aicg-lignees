@@ -726,10 +726,22 @@ function syncCount(id) {
   else store.collection.delete(id);
 }
 function newInst(id, lvl = 1, xp = 0) {
-  const inst = { iid: store.instanceSeq++, id, lvl, xp, name: '', acc: [], isNew: true };
+  // lot 8 shiny (suite 40) : chaque exemplaire tire sa version a l'obtention — un seul tirage porte le drapeau et le bonus borné
+  const s = rollShiny(uiRand, SHINY_CFG);
+  const inst = { iid: store.instanceSeq++, id, lvl, xp, name: '', acc: [], isNew: true, shiny: s.shiny, shinyBonus: s.bonus };
   store.instances.push(inst);
   syncCount(id);
   return inst;
+}
+// lot 8 shiny (suite 40) : helpers d'exemplaire
+function shinyBonusOf(inst) { return inst && inst.shiny ? (inst.shinyBonus ?? 0) : 0; }
+function shinyCount() { return store.instances.filter((i) => i.shiny).length; }
+function cardHasShiny(id) { return instsOf(id).some((i) => i.shiny); }
+// fiche d'un exemplaire : stats de base boostées par la variance shiny + drapeau pour l'art/le badge
+function instCard(c, inst) {
+  const b = shinyBonusOf(inst);
+  const cc = b > 0 ? applyShinyStats(c, b) : c;
+  return { ...cc, level: inst.lvl, ...statsAt(cc, inst.lvl), shiny: !!inst.shiny, shinyBonus: b };
 }
 function bestInstOf(id) {
   const list = instsOf(id);
@@ -1115,6 +1127,8 @@ function restore(data) {
         agi: Number.isFinite(raw.agi) ? raw.agi : undefined,
         int: Number.isFinite(raw.int) ? raw.int : undefined,
         isNew: raw.isNew === true,
+        shiny: raw.shiny === true, // lot 8 : version shiny de l'exemplaire (migration v32 pour les anciennes sauvegardes)
+        shinyBonus: Number.isFinite(raw.shinyBonus) ? raw.shinyBonus : 0,
       };
       store.instanceSeq = Math.max(store.instanceSeq, inst.iid + 1);
       store.instances.push(inst);
@@ -1895,15 +1909,26 @@ function clearNewOf(id) {
   for (const i of instsOf(id)) i.isNew = false;
 }
 
-function artOf(c) {
+function artKeyOf(c) {
   const id = c ? (c.cardId ?? c.id) : null;
-  if (id && ART[id]) return `<img class="art-img" src="${ART[id]}" alt="${c.name}" loading="lazy">`;
+  if (!id) return null;
+  // lot 8 shiny : manifeste étendu, clé "<id>-s" ; fallback = l'art classique tant que l'image shiny manque
+  if (c.shiny) {
+    const sk = id + (SHINY_CFG.artSuffixe ?? '-s');
+    if (ART[sk]) return sk;
+  }
+  return id;
+}
+
+function artOf(c) {
+  const k = artKeyOf(c);
+  if (k && ART[k]) return `<img class="art-img" src="${ART[k]}" alt="${c.name}" loading="lazy">`;
   return `<div class="glyph">${GLYPH[c.classe] ?? '★'}</div>`;
 }
 
 function hasArt(c) {
-  const id = c ? (c.cardId ?? c.id) : null;
-  return !!(id && ART[id]);
+  const k = artKeyOf(c);
+  return !!(k && ART[k]);
 }
 
 function setArt(id, url) {
@@ -1916,6 +1941,11 @@ function roleChip(role) {
 }
 
 function cardFront(c, { badge = '', badgeClass = '', extraClass = '', locked = false } = {}) {
+  // lot 8 shiny (suite 40) : marqueur visuel distinct (paillettes animées .shiny) + badge « ✨ Shiny »
+  if (c.shiny && !locked) {
+    extraClass += ' shiny';
+    if (!badge) { badge = '✨ Shiny'; badgeClass = 'shiny'; }
+  }
   const mana = c.manaMax !== undefined ? `<span class="mana">✦ ${c.mana}/${c.manaMax}</span>` : '';
   const maxHp = c.maxHp !== undefined ? `/${c.maxHp}` : '';
   const shield = c.shield > 0 ? `<span class="sh">🛡 ${c.shield}</span>` : '';
@@ -2344,12 +2374,15 @@ function openEquipPicker(card, slot) {
 // la variante « effets actifs » via opts.extra ; la frappe de classe (splash Mage, wave Occultiste)
 // est explicitée dans la fiche.
 function ficheCoreHtml(card, { level = null, unit = null, inst = null, ownedInfo = '', extra = '' } = {}) {
+  // lot 8 shiny (suite 40) : la fiche affiche le badge et les stats boostées de l'exemplaire shiny
+  const sb = inst && inst.shiny && !unit ? (inst.shinyBonus ?? 0) : 0;
+  const sc = sb > 0 ? applyShinyStats(card, sb) : card;
   const lvl = level ?? levelOf(card.id);
   const cm = CLASSE_MODS[card?.classe] ?? {};
   const st = unit
     ? { atk: Math.max(0, Math.round(unit.atk * (1 + (unit.atkBuff || 0)))), hp: unit.hp, maxHp: unit.maxHp, agi: unit.agi ?? '—', int: unit.int ?? '—' }
-    : { ...statsAt(card, lvl), agi: inst?.agi ?? '—', int: inst?.int ?? '—' };
-  const art = `<div class="modal-card">${cardFront({ ...card, level: lvl, ...statsAt(card, lvl) }, { extraClass: 'big' + (hasArt(card) ? ' unit-art' : '') })}</div>`;
+    : { ...statsAt(sc, lvl), agi: inst?.agi ?? '—', int: inst?.int ?? '—' };
+  const art = `<div class="modal-card">${cardFront({ ...sc, level: lvl, ...statsAt(sc, lvl), shiny: !!(inst?.shiny || unit?.shiny) }, { extraClass: 'big' + (hasArt({ ...sc, shiny: !!(inst?.shiny || unit?.shiny) }) ? ' unit-art' : '') })}</div>`;
   const sub = [card?.classe, card?.element ?? 'Neutre', card?.rarity ? (RARITY_LABEL[card.rarity] ?? card.rarity) : null].filter(Boolean).join(' · ');
   const manaPart = unit ? ` &nbsp; ✦ Mana <b>${unit.mana}/${unit.manaMax}</b>` : '';
   const buffNote = unit && unit.atkBuff ? ` <span class="muted">(+${Math.round(unit.atkBuff * 100)} % ce tour)</span>` : '';
@@ -2362,7 +2395,7 @@ function ficheCoreHtml(card, { level = null, unit = null, inst = null, ownedInfo
     : `<p class="statline">⚪ Neutre — hors oppositions : ni bonus ni malus.</p>`;
   return `${art}
     <div class="modal-info">
-      <h3>${card.name} <span class="lvl-chip">Nv ${lvl}</span>${unit?.boss ? ' <span class="chip">BOSS</span>' : ''}</h3>
+      <h3>${card.name} <span class="lvl-chip">Nv ${lvl}</span>${unit?.boss ? ' <span class="chip">BOSS</span>' : ''}${(inst?.shiny || unit?.shiny) ? ` <span class="chip shiny-chip">✨ Shiny +${Math.round((inst?.shinyBonus ?? 0) * 100)} % stats</span>` : ''}</h3>
       <p class="muted">${sub}${ownedInfo}</p>
       <p class="statline">⚔ ATQ <b>${st.atk}</b>${buffNote}${strikeNote} &nbsp; ♥ PV <b>${st.hp}${st.maxHp != null ? '/' + st.maxHp : ''}</b> &nbsp; ⚡ AGI <b>${st.agi}</b> &nbsp; 🧠 INT <b>${st.int}</b>${manaPart}</p>
       ${classeNote}
@@ -3441,7 +3474,7 @@ function artGlyph(c) {
 
 
 
-let filters = { classe: null, element: null, niv: null, rar: null }; 
+let filters = { classe: null, element: null, niv: null, rar: null, shiny: null }; 
 
 function addCardIid(iid) {
   const inst = byIid(iid);
@@ -3517,7 +3550,7 @@ function slotsHtml() {
     const inst = iid ? byIid(iid) : null;
     if (inst) {
       const c = byId(inst.id);
-      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button></div>`;
+      return `<div class="slot" data-idx="${i}" title="Fiche : appui court, appui long ou ℹ️ · Retirer : bouton ✕">${cardFront(instCard(c, inst), { extraClass: hasArt({ ...c, shiny: !!inst.shiny }) ? 'unit-art' : '' })}<button type="button" class="cell-btn slot-out" data-act="out" title="Retirer de l’équipe">✕</button></div>`;
     }
     return `<div class="slot empty" data-idx="${i}"></div>`;
   };
@@ -3566,6 +3599,7 @@ function filtersMenuHtml(draft) {
     <div class="fgroup">${chip('element', null, 'Tous éléments')}${uniq('element').map((v) => chip('element', v, v)).join('')}</div>
     <div class="fgroup">${chip('niv', null, 'Tous niveaux')}${chip('niv', 2, 'Nv ≥ 2')}${chip('niv', 3, 'Nv ≥ 3')}${chip('niv', 5, 'Nv ≥ 5')}</div>
     <div class="fgroup">${chip('rar', null, 'Toutes raretés')}${['C', 'UC', 'R', 'SR', 'UR', 'L', 'M'].map((v) => chip('rar', v, v)).join('')}</div>
+    <div class="fgroup">${chip('shiny', null, 'Tous')}${chip('shiny', 1, '✨ Shiny seuls')}</div>
   </div>
   <p class="muted">Sélectionnez vos filtres, puis validez : ils s'appliquent à la grille. Appuyez en dehors pour fermer sans rien changer.</p>`;
 }
@@ -3609,6 +3643,7 @@ function ownedCards() {
     .filter((c) => (!filters.element || c.element === filters.element))
     .filter((c) => (!filters.niv || levelOf(c.id) >= Number(filters.niv)))
     .filter((c) => (!filters.rar || c.rarity === filters.rar))
+    .filter((c) => (!filters.shiny || cardHasShiny(c.id))) // lot 8 : filtre shiny
     .sort((a, b) => RANK[a.rarity] - RANK[b.rarity] || a.name.localeCompare(b.name));
 }
 
@@ -3695,10 +3730,11 @@ function renderEquipe(root) {
   const visible = ownedCards();
   const nFiltered = owned.length - visible.length;
   const cells = visible
-    .map((c) => instsOf(c.id)
+    .map((c) => instsOf(c.id).filter((inst) => !filters.shiny || inst.shiny) // lot 8 : filtre shiny par exemplaire
       .map((inst) => {
         const inTeam = iidInTeam(inst.iid);
-        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront({ ...c, level: inst.lvl, ...statsAt(c, inst.lvl) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
+        const cc = instCard(c, inst); // lot 8 : stats + art + badge shiny de l'exemplaire
+        return `<div class="gcell cat ${inTeam ? 'dimmed' : ''}" data-iid="${inst.iid}" data-id="${c.id}" title="Fiche : appui court, appui long ou ℹ️ · ${inTeam ? 'Retirer de l’équipe : bouton −' : 'Ajouter à l’équipe : bouton ＋'}">${cardFront(cc, { extraClass: hasArt(cc) ? 'unit-art' : '' })}<span class="cell-actions"><button type="button" class="cell-btn" data-act="fiche" title="Voir la fiche">ℹ️</button><button type="button" class="cell-btn" data-act="${inTeam ? 'out' : 'in'}" title="${inTeam ? 'Retirer de l’équipe' : 'Ajouter à l’équipe'}">${inTeam ? '−' : '＋'}</button></span>${inTeam ? `<span class="in-team">en équipe</span>` : ''}${anyNewOf(c.id) ? `<span class="new-badge" title="Nouvelle carte !">✨</span>` : ''}</div>`;
       })
       .join(''))
     .join('');
@@ -3711,7 +3747,7 @@ function renderEquipe(root) {
     ${synPanel()}
     ${owned.length === 0
       ? '<p class="empty-collection muted">Votre collection est vide — recrutez à la Guilde (jetons 🎫), en quêtes ou en donjon !</p>'
-      : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''})</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
+      : `<h3>Ma collection (${owned.length} carte${owned.length > 1 ? 's' : ''} possédée${owned.length > 1 ? 's' : ''}${nFiltered ? `, ${visible.length} affichée${visible.length > 1 ? 's' : ''} après filtres` : ''}) · ✨ ${shinyCount()} shiny</h3><button type="button" class="btn small" id="open-filters">⚙️ Filtres${activeFilterCount() ? ` (${activeFilterCount()})` : ''}</button>${visible.length === 0
         ? `<p class="empty-collection">Aucune carte ne correspond aux filtres actifs (${owned.length} possédée${owned.length > 1 ? 's' : ''}). <button class="btn" id="reset-filters">Réinitialiser les filtres</button></p>`
         : `<div class="grid">${cells}</div>`}`}`;
 
@@ -3724,7 +3760,7 @@ function renderEquipe(root) {
   root.querySelector('#team-next')?.addEventListener('click', () => switchTeam(1));
   // Lot A : plus de bascule 2-3/3-2 (3 actifs + 2 réserve) ; le champ formation reste en save pour compatibilité
   root.querySelector('#reset-filters')?.addEventListener('click', () => {
-    filters = { classe: null, element: null, niv: null, rar: null };
+    filters = { classe: null, element: null, niv: null, rar: null, shiny: null };
     renderEquipe(root);
   });
   const filtBtn = root.querySelector('#open-filters');
@@ -3826,9 +3862,10 @@ function ownedOf(id) {
 function ownedCell(id, title = 'Voir la fiche') {
   const c = byId(id);
   const n = ownedOf(id);
+  const sh = cardHasShiny(id); // lot 8 : la cellule porte le marqueur shiny si un exemplaire l'est
   return `<div class="fam-card owned" data-id="${id}" title="${title}">
-    ${cardFront({ ...c, level: levelOf(id) }, { extraClass: hasArt(c) ? 'unit-art' : '' })}
-    ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}
+    ${cardFront({ ...c, level: levelOf(id), shiny: sh }, { extraClass: hasArt({ ...c, shiny: sh }) ? 'unit-art' : '' })}
+    ${n > 1 ? `<span class="owned-badge">×${n}</span>` : ''}${sh ? '<span class="owned-badge shiny-badge">✨</span>' : ''}
   </div>`;
 }
 
@@ -3970,7 +4007,7 @@ function renderCollection(root) {
     })
     .join('') + solosSeen.map((c) => seenCell(c.id)).join('');
   root.innerHTML = `
-    <h2>Collection <span class="muted">${discovered}/${CATALOG.length} dévoilées</span></h2>
+    <h2>Collection <span class="muted">${discovered}/${CATALOG.length} dévoilées · ✨ ${shinyCount()} shiny</span></h2>
     <p class="muted">Le catalogue est organis\u00e9 comme la hi\u00e9rarchie des races : l\u2019humaine (la base), la monstre (+10 % de stats), la mystique (+20 %), la divine (+30 %). Chaque maillon se d\u00e9voile quand vous le poss\u00e9dez ; le sommet d\u2019une lign\u00e9e reste un myst\u00e8re jusqu\u2019\u00e0 son UR.</p>
     <h3 class="race-band">${RACE_GLYPH.humaine} Race humaine — la base <span class="muted">${solosOwned.length + raceGroup('humaine').filter((c) => ownedOf(c.id) > 0).length} portes d\u2019entr\u00e9e</span></h3>
     <div class="fam">
@@ -5858,7 +5895,8 @@ function renderCombat(root, opts = {}) {
   const cards = store.team.slots.filter(Boolean).map((iid) => {
     const inst = byIid(iid);
     if (!inst) return null;
-    let base = withShards(byId(inst.id));
+    let base = { ...withShards(byId(inst.id)), shiny: !!inst.shiny }; // lot 8 : drapeau shiny de l'exemplaire
+    base = applyShinyStats(base, shinyBonusOf(inst)); // lot 8 : variance individuelle bornée +3-5 % sur les 5 stats
     if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
     const eb = equipBonusOfCard(inst.id);
     const equip = {
@@ -6337,7 +6375,7 @@ function renderAutel(root) {
       const raceLabel = p.demon ? 'divine (DÉMON — 15 %)' : (RACE_LABEL[p.raceCible] ?? p.raceCible);
       panel = `<div class="syn-panel"><h3>Aperçu de la fusion (mystère des lignées)</h3>
         <p>Race cible : <b>${raceLabel}</b>${p.biomeCible && p.biomeCible !== 'divin' ? ` · biome ${p.biomeCible}` : ''}${p.saut ? ' · saut de race' : ' · lignée parentale'}</p>
-        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1</p>
+        <p>Lignée : <b>${famLabel}</b> · palier <b>${RARITY_LABEL[p.rarete] ?? p.rarete}</b> · plafond de stats <b>+${Math.round(p.plafondPct * 100)} %</b> (bonus prévu +${p.bonusAtk} ATQ / +${p.bonusHp} PV) · enfant niveau 1${p.shinyHerite ? ' · ✨ l’enfant sera shiny (au moins un parent shiny)' : ''}</p>
         <p>Sorts hérités (max ${p.sortsMax}, jamais la signature de l'enfant) :</p>
         <div class="row" style="flex-wrap:wrap">${p.sorts.map((s) => `<label class="chip"><input type="checkbox" class="autel-sort" value="${s.key}"> ${s.name} (${s.cost}✦${s.mult ? ' ×' + s.mult : ''})</label>`).join('') || '<span class="muted">aucun</span>'}</div>
         <div class="row" style="margin-top:8px">
@@ -6375,6 +6413,7 @@ function renderAutel(root) {
     const res = doFusion(store.instances, autelSel[0], autelSel[1], choix, autelPlan, {
       teamIids: [...teamIids],
       ownedOf: (id) => store.instances.filter((i) => i.id === id).length,
+      rng: uiRand, // lot 8 : re-tire le bonus shiny borné de l'enfant
     });
     if (!res.ok) { toast('✗ ' + res.reason, 'warn'); return; }
     store.instances = res.instances;
@@ -6412,7 +6451,7 @@ function renderForge(root) {
         : `<button class="btn small" disabled>${inst.lvl < 10 ? `Niveau ${inst.lvl}/10 requis \u2014 l\u2019XP vient des donjons` : (isEveil ? `${have}/${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${have}/${n} \u00e9clats ${GEM_LABEL[tier]} d\u2019\u00e9l\u00e9ment ${elt}`)}</button>`;
     }).join(' ');
     evoRows.push(`<div class="forge-row">
-    <div class="forge-card" data-open="${inst.id}">${cardFront({ ...card, level: inst.lvl, atk: st.atk, hp: st.hp }, { extraClass: hasArt(card) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
+    <div class="forge-card" data-open="${inst.id}">${cardFront(instCard(card, inst), { extraClass: hasArt({ ...card, shiny: !!inst.shiny }) ? 'unit-art' : '' })}${anyNewOf(card.id) ? `<span class="new-badge" title="Nouvelle carte !">\u2728</span>` : ''}</div>
     <div class="forge-acts">
       <p class="muted">${card.name} \u2014 <b>Nv ${inst.lvl}/20\u00b7 ${st.atk} / PV ${st.hp}</p>
       <p class="muted">${isEveil ? `\u00c9veiller` : `\u00c9voluer`} en <b>${nextNames}</b> : niveau 10 atteint + ${isEveil ? `${n} pierre${n > 1 ? 's' : ''} d\u2019\u00e9veil` : `${n} \u00e9clat${n > 1 ? 's' : ''} ${GEM_LABEL[tier]} dans l\u2019\u00e9l\u00e9ment de la forme choisie`} \u2014 la nouvelle forme repart niveau 1 et GARDE les sorts accumul\u00e9s.</p>

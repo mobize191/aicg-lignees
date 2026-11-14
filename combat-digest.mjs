@@ -33,9 +33,17 @@ for (let n = 0; n < N; n++) {
     diff = 1 + (n % 3);
     seed = n + 1;
     const wave = api.makeWave(seed, stage, dg, diff);
+    // lot 8 shiny (suite 40) : chaque carte de l'équipe tire sa version shiny (seedé par n) —
+    // la variance couplée +3-5 % doit rester mesurable dans le digest (taux 1/100)
+    const rngShiny = api.mulberry32(seed * 7919 + 17);
+    const mkCard = ([id, lvl]) => {
+      const r = api.rollShiny(rngShiny, api.SHINY_CFG);
+      const base = { ...api.byId(id), level: lvl, shiny: r.shiny };
+      return r.shiny ? api.applyShinyStats(base, r.bonus) : base;
+    };
     const teamCards = {
-      avant: team.avant.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
-      arriere: team.arriere.map(([id, lvl]) => ({ ...api.byId(id), level: lvl })),
+      avant: team.avant.map(mkCard),
+      arriere: team.arriere.map(mkCard),
     };
     const state = api.initCombat(teamCards, wave, seed, {}, { difficulty: diff }); // lot 3 refonte IA : profil par difficulté
     while (!state.winner && tours < GARDE) { api.resolveTurn(state); tours++; }

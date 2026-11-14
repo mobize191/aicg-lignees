@@ -245,7 +245,7 @@ function v28to29(s) {
   return s;
 }
 
-const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28, 28: v28to29, 29: v29to30, 30: v30to31 };
+const MIGRATIONS = { 8: v8to9, 9: v9to10, 10: v10to11, 11: v11to12, 12: v12to13, 13: v13to14, 14: v14to15, 15: v15to16, 16: v16to17, 17: v17to18, 18: v18to19, 19: v19to20, 20: v20to21, 21: v21to22, 22: v22to23, 23: v23to24, 24: v24to25, 25: v25to26, 26: v26to27, 27: v27to28, 28: v28to29, 29: v29to30, 30: v30to31, 31: v31to32 };
 // v29 -> v30 (moteur v2, refonte v2 lot 2) : 5 stats — la défense est lue dans les data (champ def),
 // les stats des unités existantes sont recalculées à l'instanciation. Non destructif.
 function v29to30(s) {
@@ -261,6 +261,23 @@ function v30to31(s) {
   if (n > 0) {
     s.gold = (s.gold ?? 0) + n * (DATA.engine.FUSION?.eclatRegressionOr ?? 0);
     delete s.items['eclat-regression'];
+  }
+  return s;
+}
+
+// v31 -> v32 (lot 8 shiny, suite 40) : chaque exemplaire existant tire sa version (seed fixe en data),
+// un seul tirage porte le drapeau et le bonus borne. Non destructif (champs ajoutes seulement).
+function v31to32(s) {
+  s.version = 32;
+  const cfg = DATA.engine.SHINY ?? {};
+  if (Array.isArray(s.instances)) {
+    const rng = mulberry32(cfg.migrationSeed ?? 1);
+    for (const inst of s.instances) {
+      if (!inst || typeof inst !== 'object' || inst.shiny !== undefined) continue;
+      const r = rollShiny(rng, cfg);
+      inst.shiny = r.shiny;
+      inst.shinyBonus = r.bonus;
+    }
   }
   return s;
 }

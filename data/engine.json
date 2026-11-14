@@ -355,10 +355,10 @@
  "LEVEL_BONUS": 0.08,
  "LEVEL_CAP": 20,
  "DMG_REDUCTION_MAX": 0.8,
- "SAVE_VERSION": 31,
+ "SAVE_VERSION": 32,
  "SAVE_KEY": "fondations-cards-v1",
  "SAVE_SLOTS": 4,
- "CURRENT_VERSION": 31,
+ "CURRENT_VERSION": 32,
  "RACE_DIVINE_IDS": [
   "d1",
   "d2",
@@ -878,5 +878,12 @@
    "miroir": "divin",
    "pont": "divin"
   }
+ },
+ "SHINY": {
+  "taux": 0.01,
+  "bonusMin": 0.03,
+  "bonusMax": 0.05,
+  "artSuffixe": "-s",
+  "migrationSeed": 20261115
  }
 }
