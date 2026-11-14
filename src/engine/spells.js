@@ -187,7 +187,17 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
   if (spell && foes.length && (foeFacingSpell(spell) || (hostileSig && action.targetUid != null))) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
+    const ev0 = events.length;
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
+    // correctifs-eq v2 lot 2 : signature hybride soin+degats (soinPct) — rend soinPct des degats a l'allie le plus blesse (J11)
+    if (spell.soinPct) {
+      const dealt = events.slice(ev0).filter((e) => e.type === 'attack' && e.sourceId === s.uid).reduce((a, e) => a + e.amount, 0);
+      const hurt = [...allies.avant, ...allies.arriere].filter((u) => u.alive && u.hp < u.maxHp).sort((a, b) => a.hp - b.hp)[0];
+      if (hurt && dealt > 0) {
+        const amount = Math.min(Math.max(1, Math.round(dealt * spell.soinPct)), Math.max(0, hurt.maxHp - hurt.hp));
+        if (amount > 0) { hurt.hp += amount; events.push({ type: 'heal', side, sourceId: s.uid, targetId: hurt.uid, amount, kind: 'special' }); }
+      }
+    }
     return;
   }
   // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)

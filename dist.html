@@ -5419,6 +5419,7 @@ const DATA = {
    "TAUNT_CHARGES": 2,
    "TAUNT_TURNS": 3,
    "SHIELD_CAP_RATIO": 0.35,
+   "SIGNATURE_SOIN_PCT": 0.5,
    "ROYALE_LEVEL_BONUS": 10,
    "XP_COURBE": "cubique",
    "DUNGEON_LEVEL_STRETCH": 4,
@@ -18306,6 +18307,8 @@ function spellSideOf(sp) {
 function signatureMetaOf(def) {
   if (def.soloRole || def.soloCible) return { role: def.soloRole ?? null, cible: def.soloCible ?? null };
   // correctifs v1.51 lot 1 : une carte soigeuse a une signature de SOIN, prioritaire sur le défaut dégâts
+  // correctifs-eq v2 lot 2 : un MONSTRE soigneur (fiche de DATA.monsters) a une signature HYBRIDE degats + soinPct (J11)
+  if (def.effect?.kind === 'heal' && RAW.some((m) => m.id === def.id)) return { role: 'degats', cible: '1 ennemi' };
   if (def.effect?.kind === 'heal' || def.effect?.kind === 'revive') return { role: 'soin', cible: '1 allié' };
   if (def.soloMult != null || def.soloDot) return { role: 'degats', cible: '1 ennemi' };
   switch (def.effect?.kind ?? null) {
@@ -18329,7 +18332,7 @@ function signatureMetaOfUnit(u) {
 
 const MONSTERS = RAW.map((m) => ({
   ...m,
-  spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), ...(m.effect && m.effect.kind === 'heal' ? { role: 'soin', cible: '1 allié' } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
+  spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), ...(m.effect && m.effect.kind === 'heal' ? { role: 'degats', cible: '1 ennemi', soinPct: M.SIGNATURE_SOIN_PCT } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
   mana: MONSTER_MANA.max,
   manaRegen: MONSTER_MANA.regen,
 }));
@@ -18529,6 +18532,8 @@ function validate(data, errors) {
   if (!(Number(data.engine?.LEVEL_CAP) >= 20)) push('LEVEL_CAP < 20 (progression 1-100 attendue)', 'EXI-DATA-7');
   if (!(Number(data.engine?.moteur?.DUNGEON_LEVEL_STRETCH) >= 1)) push('moteur.DUNGEON_LEVEL_STRETCH < 1', 'EXI-DATA-7');
   if (!(Number(data.engine?.moteur?.LEGACY_LEVEL_CAP) >= 1)) push('moteur.LEGACY_LEVEL_CAP invalide', 'EXI-DATA-7');
+  // correctifs-eq v2 lot 2 : signatures hybrides des monstres soigneurs (soinPct = fraction des degats rendus)
+  if (!(Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) > 0 && Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) < 1)) push('moteur.SIGNATURE_SOIN_PCT hors bornes (]0-1[)', 'EXI-DATA-8');
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();
@@ -18984,7 +18989,17 @@ function applySupport(s, allies, mods, events, side, foes = [], st = null, actio
   // retour terrain : un sort hostile se resout sur les ennemis, quelle que soit la ligne qui le lance
   if (spell && foes.length && (foeFacingSpell(spell) || (hostileSig && action.targetUid != null))) {
     events.push({ type: 'cast', side, sourceId: s.uid, name: spell.name, big: !!spell.big || spell.cost >= 5, fx: 'atk', mana: s.mana });
+    const ev0 = events.length;
     castFoeSpell(s, spell, foes, mods, events, side, st, action);
+    // correctifs-eq v2 lot 2 : signature hybride soin+degats (soinPct) — rend soinPct des degats a l'allie le plus blesse (J11)
+    if (spell.soinPct) {
+      const dealt = events.slice(ev0).filter((e) => e.type === 'attack' && e.sourceId === s.uid).reduce((a, e) => a + e.amount, 0);
+      const hurt = [...allies.avant, ...allies.arriere].filter((u) => u.alive && u.hp < u.maxHp).sort((a, b) => a.hp - b.hp)[0];
+      if (hurt && dealt > 0) {
+        const amount = Math.min(Math.max(1, Math.round(dealt * spell.soinPct)), Math.max(0, hurt.maxHp - hurt.hp));
+        if (amount > 0) { hurt.hp += amount; events.push({ type: 'heal', side, sourceId: s.uid, targetId: hurt.uid, amount, kind: 'special' }); }
+      }
+    }
     return;
   }
   // correctifs ciblage lot 3 + refonte IA lot 0 : un sort allié de lignée (soin/boost/bouclier)
@@ -20180,6 +20195,7 @@ function actEnemyStriker(e, ctx) {
   const eHits = targets.some((t) => t.status && t.status.slow > 0) ? 2 : 1;
   let dmgFinal = dmg;
   let died = false;
+  let dealtE = 0; // correctifs-eq v2 lot 2 : total des degats reels, base du soin des signatures hybrides (soinPct)
   if (!spell && cmE.wave) {
     for (const t of targets.filter((t) => t !== target)) {
       if (!t.alive) continue;
@@ -20190,6 +20206,7 @@ function actEnemyStriker(e, ctx) {
       const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element) * (critW ? M.CRIT_MULT : 1)));
       ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies', ...(critW ? { crit: true } : {}) });
       died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit: critW }) || died;
+      dealtE += d2;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
@@ -20221,6 +20238,7 @@ function actEnemyStriker(e, ctx) {
         applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state });
       } else {
         died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit }) || died;
+        dealtE += dmgFinal;
       }
       if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
         const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
@@ -20241,6 +20259,14 @@ function actEnemyStriker(e, ctx) {
         u.hp += amount;
         ctx.events.push({ type: 'heal', side: 'team', sourceId: target.uid, targetId: u.uid, amount, kind: 'special' });
       }
+    }
+  }
+  // correctifs-eq v2 lot 2 : signature hybride des monstres soigneurs (frappe + soinPct) — symétrique du bloc équipe (J11)
+  if (spell && spell.soinPct && dealtE > 0) {
+    const hurtE = ctx.enemyAll().filter((a) => a.alive && a.hp < a.maxHp).sort((a, b) => a.hp - b.hp)[0];
+    if (hurtE) {
+      const amount = Math.min(Math.max(1, Math.round(dealtE * spell.soinPct)), Math.max(0, hurtE.maxHp - hurtE.hp));
+      if (amount > 0) { hurtE.hp += amount; ctx.events.push({ type: 'heal', side: 'enemies', sourceId: e.uid, targetId: hurtE.uid, amount, kind: 'special' }); }
     }
   }
   if (!ctx.teamAll().length) { ctx.finish('enemies'); return true; }

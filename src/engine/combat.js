@@ -836,6 +836,7 @@ function actEnemyStriker(e, ctx) {
   const eHits = targets.some((t) => t.status && t.status.slow > 0) ? 2 : 1;
   let dmgFinal = dmg;
   let died = false;
+  let dealtE = 0; // correctifs-eq v2 lot 2 : total des degats reels, base du soin des signatures hybrides (soinPct)
   if (!spell && cmE.wave) {
     for (const t of targets.filter((t) => t !== target)) {
       if (!t.alive) continue;
@@ -846,6 +847,7 @@ function actEnemyStriker(e, ctx) {
       const d2 = Math.max(1, Math.round(dmgBase * rf2 * elementMult(eAtkEl, t.element) * (critW ? M.CRIT_MULT : 1)));
       ctx.events.push({ type: 'attack', sourceId: e.uid, targetId: t.uid, amount: d2, kind, mana: e.mana, elem: elementTag(eAtkEl, t.element), side: 'enemies', ...(critW ? { crit: true } : {}) });
       died = applyDamage(t, d2, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit: critW }) || died;
+      dealtE += d2;
       if (t.alive && t.status && t.status.reflect && d2 > 0) {
         const back = Math.max(1, Math.round(d2 * t.status.reflect.pct));
         ctx.events.push({ type: 'attack', sourceId: t.uid, targetId: e.uid, amount: back, kind: 'special', mana: t.mana, elem: null, side: 'team' });
@@ -877,6 +879,7 @@ function actEnemyStriker(e, ctx) {
         applyDamage(partner, half, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state });
       } else {
         died = applyDamage(target, dmgFinal, ctx.events, 'team', { allies: ctx.teamAll() }, true, { state: ctx.state, crit }) || died;
+        dealtE += dmgFinal;
       }
       if (target.alive && target.status && target.status.reflect && dmgFinal > 0) {
         const back = Math.max(1, Math.round(dmgFinal * target.status.reflect.pct));
@@ -897,6 +900,14 @@ function actEnemyStriker(e, ctx) {
         u.hp += amount;
         ctx.events.push({ type: 'heal', side: 'team', sourceId: target.uid, targetId: u.uid, amount, kind: 'special' });
       }
+    }
+  }
+  // correctifs-eq v2 lot 2 : signature hybride des monstres soigneurs (frappe + soinPct) — symétrique du bloc équipe (J11)
+  if (spell && spell.soinPct && dealtE > 0) {
+    const hurtE = ctx.enemyAll().filter((a) => a.alive && a.hp < a.maxHp).sort((a, b) => a.hp - b.hp)[0];
+    if (hurtE) {
+      const amount = Math.min(Math.max(1, Math.round(dealtE * spell.soinPct)), Math.max(0, hurtE.maxHp - hurtE.hp));
+      if (amount > 0) { hurtE.hp += amount; ctx.events.push({ type: 'heal', side: 'enemies', sourceId: e.uid, targetId: hurtE.uid, amount, kind: 'special' }); }
     }
   }
   if (!ctx.teamAll().length) { ctx.finish('enemies'); return true; }

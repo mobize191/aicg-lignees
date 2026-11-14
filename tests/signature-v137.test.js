@@ -48,8 +48,11 @@ test('v1.37 lot 6 (c) : le comportement Auto est inchangé — objets runtime sa
     for (const sp of m.spells ?? []) {
       if (sp.cat !== 'unique') continue;
       if (m.effect && m.effect.kind === 'heal') {
-        assert.equal(sp.role, 'soin', `runtime ${m.id} : signature de soigneur = soin`);
-        assert.equal(sp.cible, '1 allié');
+        // correctifs-eq v2 lot 2 : signature de soigneur MONSTRE = hybride degats + soinPct (J11)
+        assert.equal(sp.role, 'degats', `runtime ${m.id} : signature hybride = degats`);
+        assert.equal(sp.cible, '1 ennemi');
+        assert.equal(sp.soinPct, E.DATA.engine.moteur.SIGNATURE_SOIN_PCT, `runtime ${m.id} : soinPct embarque`);
+        assert.equal(E.spellSideOf(sp), 'enemy');
         continue;
       }
       assert.equal(sp.role, undefined, `runtime ${m.id} : pas de role embarqué`);
@@ -78,14 +81,18 @@ test('v1.51 lot 1 (a) : signatureMetaOf d\u2019une carte soigeuse = soin/1 alli�
   }
 });
 
-test('v1.51 lot 1 (b) : les monstres soigneurs embarquent role soin sur leur signature runtime', () => {
+test('v1.51 lot 1 (b) + correctifs-eq v2 lot 2 : les monstres soigneurs ont une signature HYBRIDE (degats + soinPct)', () => {
   const E = loadEngine();
   const healMons = E.allMonsters().filter((m) => m.effect && m.effect.kind === 'heal' && m.soloSpell);
   assert.ok(healMons.length >= 14, `${healMons.length} monstres soigneurs`);
   for (const m of healMons) {
     const sig = (m.spells ?? []).find((sp) => sp.cat === 'unique');
-    assert.equal(sig.role, 'soin', `${m.id} : signature runtime = soin`);
-    assert.equal(E.spellSideOf(sig), 'ally');
+    assert.equal(sig.role, 'degats', `${m.id} : signature runtime = degats (frappe)`);
+    assert.equal(sig.soinPct, E.DATA.engine.moteur.SIGNATURE_SOIN_PCT, `${m.id} : soinPct = SIGNATURE_SOIN_PCT`);
+    assert.equal(E.spellSideOf(sig), 'enemy', `${m.id} : cible ennemie`);
+    const meta = E.signatureMetaOf(m);
+    assert.equal(meta.role, 'degats', `${m.id} : metadonnee = degats (coherent avec le runtime)`);
+    assert.equal(meta.cible, '1 ennemi');
   }
 });
 

@@ -178,6 +178,8 @@ function spellSideOf(sp) {
 function signatureMetaOf(def) {
   if (def.soloRole || def.soloCible) return { role: def.soloRole ?? null, cible: def.soloCible ?? null };
   // correctifs v1.51 lot 1 : une carte soigeuse a une signature de SOIN, prioritaire sur le défaut dégâts
+  // correctifs-eq v2 lot 2 : un MONSTRE soigneur (fiche de DATA.monsters) a une signature HYBRIDE degats + soinPct (J11)
+  if (def.effect?.kind === 'heal' && RAW.some((m) => m.id === def.id)) return { role: 'degats', cible: '1 ennemi' };
   if (def.effect?.kind === 'heal' || def.effect?.kind === 'revive') return { role: 'soin', cible: '1 allié' };
   if (def.soloMult != null || def.soloDot) return { role: 'degats', cible: '1 ennemi' };
   switch (def.effect?.kind ?? null) {
@@ -201,7 +203,7 @@ function signatureMetaOfUnit(u) {
 
 const MONSTERS = RAW.map((m) => ({
   ...m,
-  spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), ...(m.effect && m.effect.kind === 'heal' ? { role: 'soin', cible: '1 allié' } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
+  spells: [ { ...COMMON_SPELLS[!!(m.effect && m.effect.kind === 'heal') ? 'support' : 'attaque'] }, { name: m.soloSpell, cost: m.soloCost ?? 3, mult: m.soloMult ?? 1.5, ...(m.soloDot ? { dot: m.soloDot } : {}), ...(m.effect && m.effect.kind === 'heal' ? { role: 'degats', cible: '1 ennemi', soinPct: M.SIGNATURE_SOIN_PCT } : {}), cat: 'unique', desc: 'Le geste signature de ce monstre.' } ],
   mana: MONSTER_MANA.max,
   manaRegen: MONSTER_MANA.regen,
 }));

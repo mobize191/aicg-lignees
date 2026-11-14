@@ -28,3 +28,6 @@ function run(label, id) {
 run('MONSTRE R Pretre 3x e8 Matriarche des Recifs (byId)', 'e8');
 run('MONSTRE R Pretre 3x d9 Prisme du Choeur (byId)', 'd9');
 run('MONSTRE R Occultiste 3x e25 Voix du Large (byId, controle)', 'e25');
+// correctifs-eq v2 lot 2 : cibles d'acceptation — plus jamais de marathon sur les soigneurs purs
+run('MONSTRE R Pretre 3x z24 Diacre du Plein Jour (byId)', 'z24');
+run('MONSTRE R Pretre 3x z10 Serre-Soleil (byId)', 'z10');

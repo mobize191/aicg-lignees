@@ -193,6 +193,8 @@ function validate(data, errors) {
   if (!(Number(data.engine?.LEVEL_CAP) >= 20)) push('LEVEL_CAP < 20 (progression 1-100 attendue)', 'EXI-DATA-7');
   if (!(Number(data.engine?.moteur?.DUNGEON_LEVEL_STRETCH) >= 1)) push('moteur.DUNGEON_LEVEL_STRETCH < 1', 'EXI-DATA-7');
   if (!(Number(data.engine?.moteur?.LEGACY_LEVEL_CAP) >= 1)) push('moteur.LEGACY_LEVEL_CAP invalide', 'EXI-DATA-7');
+  // correctifs-eq v2 lot 2 : signatures hybrides des monstres soigneurs (soinPct = fraction des degats rendus)
+  if (!(Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) > 0 && Number(data.engine?.moteur?.SIGNATURE_SOIN_PCT) < 1)) push('moteur.SIGNATURE_SOIN_PCT hors bornes (]0-1[)', 'EXI-DATA-8');
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();
