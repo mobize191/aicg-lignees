@@ -1,5 +1,13 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 61, retries vague 3.4) : LOT RETRY CHANTEER LIVRÉ — 7 images remplacées dans `assets-v34.json` (clés existantes, 1059 clés inchangé), seeds consignés dans `seeds-v34.csv`
+
+- **Lot lancé** : e31 ×3 (seeds 2150086/7150086/12150086), s18 ×3 (2150087/7150087/12150087), e14-r (7150088) — génération 7/7 OK, 0 échec, ~40 s/image (`/tmp/gen-v34-retry2.log`).
+- **Seconde passe** (seeds 2150090/7150090/12150090, `/tmp/gen-v34-retry2b.log`, 3/3 OK) sur e31-r, e31-o, e14-r après QA vision du 1er essai.
+- **QA vision retries** : e31 classique **OK** (3 têtes visibles), e31-o **OK** (3 têtes), e31-r **2 têtes visibles** (résiduel, 2 passes faites), s18 ×3 **OK** (armure noire mate, plus de blanc/argent), e14-r **OK** (colosse endormi sur le fond marin, gueule fermée — scène de vie créature), e14-o vérifié **pas de dérive d'identité** (carapace/yeux rouges/gueule conservés).
+- **d28 Belzébuth (lot optionnel)** : EN ATTENTE du tranchage de Marc-Olivier — seeds réservés 2150089/7150089/12150089, non consommés.
+- Paramètres canon §15 inchangés (WAI-Illustrious v17, Euler a, 28 steps, CFG 5.5, hires ×1.25, ADetailer 0.32, crop signature 4 % bas-droit). Manifeste re-pushé, déploiement Pages relancé par la CI.
+
 ## 2026-11-15 (suite 60, pilotage) : BASELINE VERROUILLÉE PAR MARC-OLIVIER — `d630d83e…` 419/3000 + `584f5d16…` 1419/10000 devient LA référence officielle ; les 4 tranchages d'équilibre ouverts TRANCHÉS : (a) calibration des vagues par palier LANCÉE, (b) kit Assassin à harmoniser, (c) trios différés après (a), (d) soloMult soigneurs ACTIVÉ — prompt `docs/prompt-correctifs-equilibre-v3.md` livré au couloir 1
 
 - **VERROUILLAGE (acté par Marc-Olivier, à la suite du check indépendant suite 58)** : `d630d83e222ef0d6de51366475e39ba0ce14a1e046e3e8f9f4fbcaccae629f7e` 419/3000 et `584f5d16e20e7cef31402dce7bc2e7f34eede388197bc159991afcf821c50e7f` 1419/10000 (0 exception, 0 marathon) deviennent la baseline VERROUILLÉE. La référence `29c995da…`/`bce556b3…` est retirée. M6 : tout chantier qui fait bouger le digest mesure, consigne et PROPOSE, jamais de verrouillage sans Marc-Olivier.

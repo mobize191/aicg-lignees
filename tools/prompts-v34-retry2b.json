@@ -1,0 +1,47 @@
+[
+ {
+  "file": "e31-r.jpg",
+  "id": "e31",
+  "theme": "repos",
+  "seed": 7150090,
+  "positive": "a massive multi-headed sea hydra, exactly three serpentine heads on long separate necks, all three heads fully visible and clearly distinct from each other, scaled hide, fins, coral crowns, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, peaceful slice-of-life moment at the heart of the reef, resting calmly on the seabed among the coral, all three necks curved gently, all three heads relaxed and fully visible, small fish swimming around, serene calm mood, no combat, no menace, intricate background, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, slice-of-life illustration, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, single head, two heads, one-headed creature, single head, two heads, one-headed creature, two-headed creature, hidden heads",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ },
+ {
+  "file": "e31-o.jpg",
+  "id": "e31",
+  "theme": "obscures",
+  "seed": 12150090,
+  "positive": "a massive multi-headed sea hydra, exactly three serpentine heads on long separate necks, all three heads fully visible and clearly distinct from each other, scaled hide, fins, coral crowns, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, with ember fire magic glowing around them, with an inverted spectral aura, colors reversed, ominous powerful aura, dynamic action pose, signature effect, intricate background, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, single head, two heads, one-headed creature, single head, two heads, one-headed creature, two-headed creature, hidden heads",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ },
+ {
+  "file": "e14-r.jpg",
+  "id": "e14",
+  "theme": "repos",
+  "seed": 7150090,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, lying down sleeping peacefully on the seabed, eyes gently closed, mouth closed, completely relaxed, small fish swimming around its massive frame, warm sunbeams filtering through the water, serene relaxed mood, no combat, no menace, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, slice-of-life illustration, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, attacking, menacing pose, open mouth, bared teeth, glaring eyes, dramatic confrontation, roaring, lunging",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ }
+]
