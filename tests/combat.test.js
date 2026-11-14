@@ -401,7 +401,7 @@ test('boucle v2 lot 5 : courbe XP échelle longue — xpToNext croît avec le ni
   assert.ok(xp(19) >= 4 * 19, 'les hauts niveaux demandent bien plus (échelle longue 25 marches)');
 });
 
-test('correctifs ciblage lot 1 (repro A) : les 84 sorts de lign\u00e9e ont une fiche de camp (assembl\u00e9s comme ui.js)', () => {
+test('correctifs ciblage lot 1 (repro A) : les sorts de lign\u00e9e (6 par famille) ont une fiche de camp (assembl\u00e9s comme ui.js)', () => {
   const E = loadEngine();
   const FAMILY_SPELLS = E.DATA['lineage-spells'];
   const FAM_SCHOOL = E.DATA.engine.FAM_SCHOOL;
@@ -416,7 +416,7 @@ test('correctifs ciblage lot 1 (repro A) : les 84 sorts de lign\u00e9e ont une f
       n++;
     }
   }
-  assert.equal(n, 84, '84 sorts de lign\u00e9e couverts');
+  assert.equal(n, Object.keys(FAMILY_SPELLS).length * 6, 'tous les sorts de lign\u00e9e couverts (6 par famille)');
 });
 
 test('correctifs ciblage lot 1 + correctifs sorts lot 1 : foeFacingSpell suit la FICHE (cible ennemi/zone/tous OU r\u00f4le hostile)', () => {

@@ -10,109 +10,109 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a12 | Fantôme du Sanctuaire | SR | Ombre | - | 22 | 60 | 20 | 9 | ombre | - | - |
-| a16 | Kira, Reine des Ombres | UR | Ombre | - | 32 | 72 | 29 | 13 | ombre | - | - |
-| a18 | Kira, Nuit Sans Fin | L | Ombre | - | 42 | 88 | 38 | 17 | ombre | - | - |
-| a2 | Rôdeur des Ombres | C | Ombre | - | 10 | 45 | 9 | 4 | ombre | - | - |
-| a24 | Traqueur du Bosquet | C | Terre | - | 10 | 46 | 9 | 4 | bosquet | - | - |
-| a25 | Chasseur du Bosquet | R | Terre | - | 15 | 56 | 14 | 6 | bosquet | - | - |
-| a26 | Prédateur Sylvestre | SR | Terre | - | 22 | 61 | 20 | 9 | bosquet | - | - |
-| a27 | Maïa, Lame du Bosquet | UR | Terre | - | 32 | 72 | 29 | 13 | bosquet | - | - |
-| a28 | Maïa, Déesse du Bosquet | L | Terre | - | 42 | 88 | 38 | 17 | bosquet | - | - |
-| a31 | Guetteur Crépusculaire | UC | Ombre | - | 12 | 50 | 11 | 5 | ombre | - | - |
-| a33 | Pisteur du Bosquet | UC | Terre | - | 12 | 51 | 11 | 5 | bosquet | - | - |
-| a34 | Braconnier des Quais | C | Eau | - | 9 | 47 | 8 | 4 | vol | Flèche de Brume | - |
-| a36 | Éclaireur des Dunes | UC | Terre | - | 12 | 49 | 11 | 5 | vol | Pas de Sable | - |
-| a37 | Jongleur de Fête | C | Lumière | - | 8 | 44 | 7 | 3 | vol | Bottes Cachées | - |
-| a40 | Chasseur des Quais | UC | Eau | - | 13 | 56 | 12 | 5 | vol | Volée de Bruine | - |
-| a41 | Maître des Brumes | R | Eau | - | 17 | 66 | 15 | 7 | vol | Rideau de Brume | - |
-| a44 | Guide des Dunes | R | Terre | - | 16 | 60 | 14 | 6 | vol | Mirage du Désert | - |
-| a45 | Artiste de Fête | UC | Lumière | - | 11 | 54 | 10 | 4 | vol | Daguenaud | - |
-| a46 | Maître Jongleur | R | Lumière | - | 15 | 63 | 14 | 6 | vol | Carrousel de Lames | - |
-| a7 | Faucheur des Ombres | R | Ombre | - | 15 | 55 | 14 | 6 | ombre | - | - |
-| b2 | Onyx, Fil de Nuit | SR | Ombre | - | 26 | 66 | 23 | 10 | ombre | - | - |
-| b7 | Sylve, Écorce Vive | SR | Terre | - | 25 | 72 | 23 | 10 | bosquet | - | - |
-| c14 | Sylve, Âme du Bosquet | L | Terre | - | 42 | 88 | 38 | 17 | bosquet | - | - |
-| c2 | Onyx, Lame Funeste | UR | Ombre | - | 32 | 72 | 29 | 13 | ombre | - | - |
-| c7 | Sylve, Griffe Sylvestre | UR | Terre | - | 32 | 72 | 29 | 13 | bosquet | - | - |
-| c9 | Onyx, Ombre Éternelle | L | Ombre | - | 42 | 88 | 38 | 17 | ombre | - | - |
+| a12 | Fantôme du Sanctuaire | SR | Neutre | - | 22 | 60 | 20 | 9 | ombre | - | - |
+| a16 | Kira, Reine des Ombres | UR | Neutre | - | 32 | 72 | 29 | 13 | ombre | - | - |
+| a18 | Kira, Nuit Sans Fin | L | Neutre | - | 42 | 88 | 38 | 17 | ombre | - | - |
+| a2 | Rôdeur des Ombres | C | Neutre | - | 10 | 45 | 9 | 4 | ombre | - | - |
+| a24 | Traqueur du Bosquet | C | Neutre | - | 10 | 46 | 9 | 4 | bosquet | - | - |
+| a25 | Chasseur du Bosquet | R | Neutre | - | 15 | 56 | 14 | 6 | bosquet | - | - |
+| a26 | Prédateur Sylvestre | SR | Neutre | - | 22 | 61 | 20 | 9 | bosquet | - | - |
+| a27 | Maïa, Lame du Bosquet | UR | Neutre | - | 32 | 72 | 29 | 13 | bosquet | - | - |
+| a28 | Maïa, Déesse du Bosquet | L | Neutre | - | 42 | 88 | 38 | 17 | bosquet | - | - |
+| a31 | Guetteur Crépusculaire | UC | Neutre | - | 12 | 50 | 11 | 5 | ombre | - | - |
+| a33 | Pisteur du Bosquet | UC | Neutre | - | 12 | 51 | 11 | 5 | bosquet | - | - |
+| a34 | Braconnier des Quais | C | Neutre | - | 9 | 47 | 8 | 4 | vol | Flèche de Brume | - |
+| a36 | Éclaireur des Dunes | UC | Neutre | - | 12 | 49 | 11 | 5 | vol | Pas de Sable | - |
+| a37 | Jongleur de Fête | C | Neutre | - | 8 | 44 | 7 | 3 | vol | Bottes Cachées | - |
+| a40 | Chasseur des Quais | UC | Neutre | - | 13 | 56 | 12 | 5 | vol | Volée de Bruine | - |
+| a41 | Maître des Brumes | R | Neutre | - | 17 | 66 | 15 | 7 | vol | Rideau de Brume | - |
+| a44 | Guide des Dunes | R | Neutre | - | 16 | 60 | 14 | 6 | vol | Mirage du Désert | - |
+| a45 | Artiste de Fête | UC | Neutre | - | 11 | 54 | 10 | 4 | vol | Daguenaud | - |
+| a46 | Maître Jongleur | R | Neutre | - | 15 | 63 | 14 | 6 | vol | Carrousel de Lames | - |
+| a7 | Faucheur des Ombres | R | Neutre | - | 15 | 55 | 14 | 6 | ombre | - | - |
+| b2 | Onyx, Fil de Nuit | SR | Neutre | - | 26 | 66 | 23 | 10 | ombre | - | - |
+| b7 | Sylve, Écorce Vive | SR | Neutre | - | 25 | 72 | 23 | 10 | bosquet | - | - |
+| c14 | Sylve, Âme du Bosquet | L | Neutre | - | 42 | 88 | 38 | 17 | bosquet | - | - |
+| c2 | Onyx, Lame Funeste | UR | Neutre | - | 32 | 72 | 29 | 13 | ombre | - | - |
+| c7 | Sylve, Griffe Sylvestre | UR | Neutre | - | 32 | 72 | 29 | 13 | bosquet | - | - |
+| c9 | Onyx, Ombre Éternelle | L | Neutre | - | 42 | 88 | 38 | 17 | ombre | - | - |
 | n14 | Démon | C | Ombre | - | 10 | 52 | 9 | 4 | - | Trait de Vice | - |
-| n4 | Voleur Novice | N | - | - | 9 | 47 | 8 | 4 | - | Larcin Rapide | - |
+| n4 | Voleur Novice | N | Neutre | - | 9 | 47 | 8 | 4 | - | Larcin Rapide | - |
 | n8 | Embryon des Ténèbres | N | - | - | 10 | 50 | 9 | 4 | - | Griffes Noires | - |
-| s3 | Veilleur d’Acier | C | Ombre | - | 5 | 45 | 5 | 2 | ombre | Œil du Stratège | atkBuff 0.15 |
-| t1 | Mercenaire | C | Ombre | - | 8 | 55 | 7 | 3 | vol | Larcin Agile — geste de palier C | - |
-| t2 | Pillard | UC | Ombre | - | 10 | 62 | 9 | 4 | vol | Coup de Jarnac — geste de palier UC | - |
-| t3 | Brigand | R | Ombre | - | 14 | 70 | 13 | 6 | vol | Dague dans le Dos — geste de palier R | - |
-| t4 | Grand Brigand | SR | Ombre | - | 20 | 78 | 18 | 8 | vol | Fauchage — geste de palier SR | - |
-| t5 | Fléau des Routes | UR | Ombre | - | 27 | 88 | 24 | 11 | vol | Embuscade — geste de palier UR | - |
-| t6 | Gadianton, Chef des Brigands | L | Ombre | - | 36 | 105 | 32 | 14 | vol | Coup de Grâce — geste de palier L | - |
-| w13 | Fileuse du Pont | C | Terre | - | 8 | 58 | 7 | 3 | pont | Fil Tendu | - |
-| w15 | Brodeuse des Liens | R | Terre | - | 15 | 70 | 14 | 6 | pont | Point de Croix | - |
-| w21 | Gorgonne Nouvelle | C | Ombre | - | 9 | 48 | 8 | 4 | ombre | Regard Pétrifiant | - |
-| w7 | Lame Miroir | C | Eau | - | 9 | 46 | 8 | 4 | miroir | Frappe Réfléchie | - |
+| s3 | Veilleur d’Acier | C | Neutre | - | 5 | 45 | 5 | 2 | ombre | Œil du Stratège | atkBuff 0.15 |
+| t1 | Mercenaire | C | Neutre | - | 8 | 55 | 7 | 3 | vol | Larcin Agile — geste de palier C | - |
+| t2 | Pillard | UC | Neutre | - | 10 | 62 | 9 | 4 | vol | Coup de Jarnac — geste de palier UC | - |
+| t3 | Brigand | R | Neutre | - | 14 | 70 | 13 | 6 | vol | Dague dans le Dos — geste de palier R | - |
+| t4 | Grand Brigand | SR | Neutre | - | 20 | 78 | 18 | 8 | vol | Fauchage — geste de palier SR | - |
+| t5 | Fléau des Routes | UR | Neutre | - | 27 | 88 | 24 | 11 | vol | Embuscade — geste de palier UR | - |
+| t6 | Gadianton, Chef des Brigands | L | Neutre | - | 36 | 105 | 32 | 14 | vol | Coup de Grâce — geste de palier L | - |
+| w13 | Fileuse du Pont | C | Neutre | - | 8 | 58 | 7 | 3 | pont | Fil Tendu | - |
+| w15 | Brodeuse des Liens | R | Neutre | - | 15 | 70 | 14 | 6 | pont | Point de Croix | - |
+| w21 | Gorgonne Nouvelle | C | Neutre | - | 9 | 48 | 8 | 4 | ombre | Regard Pétrifiant | - |
+| w7 | Lame Miroir | C | Neutre | - | 9 | 46 | 8 | 4 | miroir | Frappe Réfléchie | - |
 
 ## Classe Guerrier (20)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a1 | Épéiste en Herbe | C | Feu | - | 8 | 60 | 6 | 3 | lame | - | - |
-| a10 | Bretteur du Zénith | SR | Feu | - | 18 | 90 | 13 | 7 | lame | - | - |
-| a15 | Kenji, Lame Éternelle | UR | Feu | - | 30 | 95 | 21 | 12 | lame | - | - |
-| a17 | Kenji, Sabre Céleste | L | Feu | - | 40 | 105 | 28 | 16 | lame | - | - |
-| a30 | Spadassin Vigilant | UC | Feu | - | 10 | 67 | 7 | 4 | lame | - | - |
-| a38 | Raboteur de Berges | C | Eau | - | 10 | 62 | 7 | 4 | eau | Coup de Rame | - |
-| a47 | Charpentier des Berges | UC | Eau | - | 13 | 76 | 9 | 5 | eau | Coup d’Étrave | - |
-| a48 | Maître Charpentier | R | Eau | - | 17 | 88 | 12 | 7 | eau | Rampe de Lancement | - |
-| a6 | Épéiste Errant | R | Feu | - | 12 | 75 | 8 | 5 | lame | - | - |
-| a9 | Pilier Mécanique | R | Terre | - | 11 | 80 | 8 | 4 | bouclier | Charge Hydraulique | - |
-| b1 | Yuki, Brise-Lame | SR | Feu | - | 24 | 82 | 17 | 10 | lame | - | - |
-| c1 | Yuki, Lame Ardente | UR | Feu | - | 30 | 95 | 21 | 12 | lame | - | - |
-| c8 | Yuki, Sabre de l’Aurore | L | Feu | - | 40 | 105 | 28 | 16 | lame | - | - |
-| n1 | Épéiste Novice | N | - | - | 8 | 55 | 6 | 3 | - | Prise de Garde | - |
+| a1 | Épéiste en Herbe | C | Neutre | - | 8 | 60 | 6 | 3 | lame | - | - |
+| a10 | Bretteur du Zénith | SR | Neutre | - | 18 | 90 | 13 | 7 | lame | - | - |
+| a15 | Kenji, Lame Éternelle | UR | Neutre | - | 30 | 95 | 21 | 12 | lame | - | - |
+| a17 | Kenji, Sabre Céleste | L | Neutre | - | 40 | 105 | 28 | 16 | lame | - | - |
+| a30 | Spadassin Vigilant | UC | Neutre | - | 10 | 67 | 7 | 4 | lame | - | - |
+| a38 | Raboteur de Berges | C | Neutre | - | 10 | 62 | 7 | 4 | eau | Coup de Rame | - |
+| a47 | Charpentier des Berges | UC | Neutre | - | 13 | 76 | 9 | 5 | eau | Coup d’Étrave | - |
+| a48 | Maître Charpentier | R | Neutre | - | 17 | 88 | 12 | 7 | eau | Rampe de Lancement | - |
+| a6 | Épéiste Errant | R | Neutre | - | 12 | 75 | 8 | 5 | lame | - | - |
+| a9 | Pilier Mécanique | R | Neutre | - | 11 | 80 | 8 | 4 | bouclier | Charge Hydraulique | - |
+| b1 | Yuki, Brise-Lame | SR | Neutre | - | 24 | 82 | 17 | 10 | lame | - | - |
+| c1 | Yuki, Lame Ardente | UR | Neutre | - | 30 | 95 | 21 | 12 | lame | - | - |
+| c8 | Yuki, Sabre de l’Aurore | L | Neutre | - | 40 | 105 | 28 | 16 | lame | - | - |
+| n1 | Épéiste Novice | N | Neutre | - | 8 | 55 | 6 | 3 | - | Prise de Garde | - |
 | n5 | Embryon des Eaux | N | - | - | 9 | 60 | 6 | 4 | - | Bruissement d’Écume | - |
-| s11 | Argus, Rempart Éveillé | UR | Terre | - | 6 | 92 | 4 | 2 | bouclier | - | shield 55 |
-| s12 | Argus, Forteresse Vivante | L | Terre | - | 7 | 115 | 5 | 3 | bouclier | - | shield 75 |
-| s4 | Gardien-Mécanique | C | Terre | - | 2 | 55 | 1 | 1 | bouclier | - | shield 15 |
-| s6 | Sentinelle d’Acier | R | Terre | - | 4 | 62 | 3 | 2 | bouclier | - | shield 25 |
-| w1 | Garde du Seuil | C | Lumière | - | 8 | 60 | 6 | 3 | seuil | Interdiction | - |
+| s11 | Argus, Rempart Éveillé | UR | Neutre | - | 6 | 92 | 4 | 2 | bouclier | - | shield 55 |
+| s12 | Argus, Forteresse Vivante | L | Neutre | - | 7 | 115 | 5 | 3 | bouclier | - | shield 75 |
+| s4 | Gardien-Mécanique | C | Neutre | - | 2 | 55 | 1 | 1 | bouclier | - | shield 15 |
+| s6 | Sentinelle d’Acier | R | Neutre | - | 4 | 62 | 3 | 2 | bouclier | - | shield 25 |
+| w1 | Garde du Seuil | C | Neutre | - | 8 | 60 | 6 | 3 | seuil | Interdiction | - |
 
 ## Classe Mage (33)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a11 | Sorcière des Océans | SR | Eau | - | 20 | 65 | 10 | 16 | eau | - | - |
-| a13 | Alix, Archimage des Marées | UR | Eau | - | 28 | 80 | 14 | 22 | eau | - | - |
-| a14 | Alix, Déesse de l’Eau | L | Eau | - | 38 | 100 | 19 | 30 | eau | - | - |
-| a19 | Allumeur de Braises | C | Feu | - | 9 | 43 | 5 | 7 | braise | - | - |
-| a20 | Mage de la Fournaise | R | Feu | - | 14 | 51 | 7 | 11 | braise | - | - |
-| a21 | Invocateur de Fournaise | SR | Feu | - | 21 | 65 | 11 | 17 | braise | - | summon 0.6 (ttl 3) |
-| a22 | Solen, Archimage de la Braise | UR | Feu | - | 29 | 80 | 15 | 23 | braise | - | - |
-| a23 | Solen, Roi des Braises | L | Feu | - | 39 | 100 | 20 | 31 | braise | - | - |
-| a29 | Adepte des Rivières | UC | Eau | - | 11 | 46 | 6 | 9 | eau | - | - |
-| a32 | Veilleur de Braise | UC | Feu | - | 11 | 47 | 6 | 9 | braise | - | - |
-| a4 | Étincelle Vive | C | Feu | - | 9 | 40 | 5 | 7 | braise | Trait Incandescent | - |
-| a5 | Apprentie des Rivières | C | Eau | - | 9 | 42 | 5 | 7 | eau | - | - |
-| a8 | Sorcière des Rivières | R | Eau | - | 14 | 50 | 7 | 11 | eau | - | - |
-| b3 | Naïa, Sourcéleine | SR | Eau | - | 22 | 76 | 11 | 18 | eau | - | - |
-| b6 | Ember, Cœur de Fournaise | SR | Feu | - | 23 | 74 | 12 | 18 | braise | - | - |
-| c10 | Naïa, Marée Éternelle | L | Eau | - | 38 | 100 | 19 | 30 | eau | - | - |
-| c13 | Ember, Soleil Captif | L | Feu | - | 39 | 100 | 20 | 31 | braise | - | - |
-| c3 | Naïa, Source du Large | UR | Eau | - | 28 | 80 | 14 | 22 | eau | - | - |
-| c6 | Ember, Flamme Vive | UR | Feu | - | 29 | 80 | 15 | 23 | braise | - | - |
+| a11 | Sorcière des Océans | SR | Neutre | - | 20 | 65 | 10 | 16 | eau | - | - |
+| a13 | Alix, Archimage des Marées | UR | Neutre | - | 28 | 80 | 14 | 22 | eau | - | - |
+| a14 | Alix, Déesse de l’Eau | L | Neutre | - | 38 | 100 | 19 | 30 | eau | - | - |
+| a19 | Allumeur de Braises | C | Neutre | - | 9 | 43 | 5 | 7 | braise | - | - |
+| a20 | Mage de la Fournaise | R | Neutre | - | 14 | 51 | 7 | 11 | braise | - | - |
+| a21 | Invocateur de Fournaise | SR | Neutre | - | 21 | 65 | 11 | 17 | braise | - | summon 0.6 (ttl 3) |
+| a22 | Solen, Archimage de la Braise | UR | Neutre | - | 29 | 80 | 15 | 23 | braise | - | - |
+| a23 | Solen, Roi des Braises | L | Neutre | - | 39 | 100 | 20 | 31 | braise | - | - |
+| a29 | Adepte des Rivières | UC | Neutre | - | 11 | 46 | 6 | 9 | eau | - | - |
+| a32 | Veilleur de Braise | UC | Neutre | - | 11 | 47 | 6 | 9 | braise | - | - |
+| a4 | Étincelle Vive | C | Neutre | - | 9 | 40 | 5 | 7 | braise | Trait Incandescent | - |
+| a5 | Apprentie des Rivières | C | Neutre | - | 9 | 42 | 5 | 7 | eau | - | - |
+| a8 | Sorcière des Rivières | R | Neutre | - | 14 | 50 | 7 | 11 | eau | - | - |
+| b3 | Naïa, Sourcéleine | SR | Neutre | - | 22 | 76 | 11 | 18 | eau | - | - |
+| b6 | Ember, Cœur de Fournaise | SR | Neutre | - | 23 | 74 | 12 | 18 | braise | - | - |
+| c10 | Naïa, Marée Éternelle | L | Neutre | - | 38 | 100 | 19 | 30 | eau | - | - |
+| c13 | Ember, Soleil Captif | L | Neutre | - | 39 | 100 | 20 | 31 | braise | - | - |
+| c3 | Naïa, Source du Large | UR | Neutre | - | 28 | 80 | 14 | 22 | eau | - | - |
+| c6 | Ember, Flamme Vive | UR | Neutre | - | 29 | 80 | 15 | 23 | braise | - | - |
 | n10 | Enge des Brumes | N | - | - | 9 | 56 | 5 | 7 | - | Voile de Brume | - |
-| n2 | Mage Novice | N | - | - | 7 | 48 | 4 | 6 | - | Étincelle d’Étude | - |
+| n2 | Mage Novice | N | Neutre | - | 7 | 48 | 4 | 6 | - | Étincelle d’Étude | - |
 | n6 | Embryon des Flammes | N | - | - | 10 | 52 | 5 | 8 | - | Souffle de Braise | - |
 | n9 | Embryon des Cieux | N | - | - | 9 | 54 | 5 | 7 | - | Rafale Céleste | - |
-| s7 | Bastion Arcanique | SR | Terre | - | 6 | 58 | 3 | 5 | bouclier | - | atkBuff 0.25 |
-| v1 | Apprenti Invocateur | C | Lumière | - | 8 | 55 | 4 | 6 | appel | Appel Mineur — geste de palier C | - |
-| v2 | Conjurateur | UC | Lumière | - | 10 | 62 | 5 | 8 | appel | Élémentaire de Braise — geste de palier UC | - |
-| v3 | Évocateur | R | Lumière | - | 14 | 70 | 7 | 11 | appel | Meute Spirituelle — geste de palier R | - |
-| v4 | Maître des Esprits | SR | Lumière | - | 20 | 78 | 10 | 16 | appel | Portail — geste de palier SR | - |
-| v5 | Seigneur des Élémentaires | UR | Lumière | - | 27 | 88 | 14 | 22 | appel | Légion Céleste — geste de palier UR | - |
-| v6 | Archimage de l’Appel | L | Lumière | - | 36 | 105 | 18 | 29 | appel | Appel Suprême — geste de palier L | - |
-| w20 | Fée Nouvelle | C | Lumière | - | 7 | 46 | 4 | 6 | bosquet | Lueur des Bois | - |
-| w4 | Juge des Heures | SR | Lumière | - | 15 | 72 | 8 | 12 | seuil | Balance du Temps | - |
-| w8 | Choriste Miroir | UC | Eau | - | 12 | 50 | 6 | 10 | miroir | Voix Doubles | - |
+| s7 | Bastion Arcanique | SR | Neutre | - | 6 | 58 | 3 | 5 | bouclier | - | atkBuff 0.25 |
+| v1 | Apprenti Invocateur | C | Neutre | - | 8 | 55 | 4 | 6 | appel | Appel Mineur — geste de palier C | - |
+| v2 | Conjurateur | UC | Neutre | - | 10 | 62 | 5 | 8 | appel | Élémentaire de Braise — geste de palier UC | - |
+| v3 | Évocateur | R | Neutre | - | 14 | 70 | 7 | 11 | appel | Meute Spirituelle — geste de palier R | - |
+| v4 | Maître des Esprits | SR | Neutre | - | 20 | 78 | 10 | 16 | appel | Portail — geste de palier SR | - |
+| v5 | Seigneur des Élémentaires | UR | Neutre | - | 27 | 88 | 14 | 22 | appel | Légion Céleste — geste de palier UR | - |
+| v6 | Archimage de l’Appel | L | Neutre | - | 36 | 105 | 18 | 29 | appel | Appel Suprême — geste de palier L | - |
+| w20 | Fée Nouvelle | C | Neutre | - | 7 | 46 | 4 | 6 | bosquet | Lueur des Bois | - |
+| w4 | Juge des Heures | SR | Neutre | - | 15 | 72 | 8 | 12 | seuil | Balance du Temps | - |
+| w8 | Choriste Miroir | UC | Neutre | - | 12 | 50 | 6 | 10 | miroir | Voix Doubles | - |
 
 ## Classe Occultiste (17)
 
@@ -120,66 +120,66 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | n12 | Enge des Caveaux | N | - | - | 9 | 53 | 5 | 7 | - | Froid du Caveau | - |
 | n15 | Éveillé du Seuil | C | - | - | 8 | 55 | 4 | 6 | - | Regard du Seuil | - |
-| q1 | Novice du Crépuscule | C | Ombre | - | 8 | 55 | 4 | 6 | crepuscule | Griffe Nocturne — geste de palier C | - |
-| q2 | Disciple du Crépuscule | UC | Ombre | - | 10 | 62 | 5 | 8 | crepuscule | Voile d’Ombre — geste de palier UC | - |
-| q3 | Prêtre du Crépuscule | R | Ombre | - | 14 | 70 | 7 | 11 | crepuscule | Malédiction du Soir — geste de palier R | - |
-| q4 | Servante du Crépuscule | SR | Ombre | - | 20 | 78 | 10 | 16 | crepuscule | Danse des Ombres — geste de palier SR | - |
-| q5 | Grande Prêtresse de l’Ombre | UR | Ombre | - | 27 | 88 | 14 | 22 | crepuscule | Oubli Éternel — geste de palier UR | - |
-| q6 | Vesperine, Reine de la Nuit | L | Ombre | - | 36 | 105 | 18 | 29 | crepuscule | Nuit Sans Fin — geste de palier L | - |
-| w10 | Miroir Antiphonique | SR | Eau | - | 4 | 66 | 2 | 3 | miroir | Chant Miroir | copy |
-| w12 | Écho, Refrain Absolu | L | Eau | - | 6 | 92 | 3 | 5 | miroir | Refrain Absolu | copy |
-| w16 | Tisseuse des Nœuds | SR | Terre | - | 4 | 66 | 2 | 3 | pont | Nœud d’Or | link |
-| w18 | Ananké, Gardienne des Rives | L | Terre | - | 6 | 92 | 3 | 5 | pont | Destin Gardé | link |
-| w19 | Sirène Nouvelle | C | Eau | - | 7 | 50 | 4 | 6 | eau | Berceuse des Brumes | - |
-| w2 | Servante du Sablier | UC | Lumière | - | 2 | 50 | 1 | 2 | seuil | Sable Glissant | slow |
-| w3 | Huissier de l’Entre-Deux | R | Lumière | - | 3 | 54 | 2 | 2 | seuil | Sentence Lente | stun |
-| w5 | Maître des Sabliers | UR | Lumière | - | 4 | 66 | 2 | 3 | seuil | Sablier Ensorcelé | curse 0.25 |
-| w6 | Kairos, Juge Éternel | L | Lumière | - | 6 | 92 | 3 | 5 | seuil | Sentence Éternelle | stun |
+| q1 | Novice du Crépuscule | C | Neutre | - | 8 | 55 | 4 | 6 | crepuscule | Griffe Nocturne — geste de palier C | - |
+| q2 | Disciple du Crépuscule | UC | Neutre | - | 10 | 62 | 5 | 8 | crepuscule | Voile d’Ombre — geste de palier UC | - |
+| q3 | Prêtre du Crépuscule | R | Neutre | - | 14 | 70 | 7 | 11 | crepuscule | Malédiction du Soir — geste de palier R | - |
+| q4 | Servante du Crépuscule | SR | Neutre | - | 20 | 78 | 10 | 16 | crepuscule | Danse des Ombres — geste de palier SR | - |
+| q5 | Grande Prêtresse de l’Ombre | UR | Neutre | - | 27 | 88 | 14 | 22 | crepuscule | Oubli Éternel — geste de palier UR | - |
+| q6 | Vesperine, Reine de la Nuit | L | Neutre | - | 36 | 105 | 18 | 29 | crepuscule | Nuit Sans Fin — geste de palier L | - |
+| w10 | Miroir Antiphonique | SR | Neutre | - | 4 | 66 | 2 | 3 | miroir | Chant Miroir | copy |
+| w12 | Écho, Refrain Absolu | L | Neutre | - | 6 | 92 | 3 | 5 | miroir | Refrain Absolu | copy |
+| w16 | Tisseuse des Nœuds | SR | Neutre | - | 4 | 66 | 2 | 3 | pont | Nœud d’Or | link |
+| w18 | Ananké, Gardienne des Rives | L | Neutre | - | 6 | 92 | 3 | 5 | pont | Destin Gardé | link |
+| w19 | Sirène Nouvelle | C | Neutre | - | 7 | 50 | 4 | 6 | eau | Berceuse des Brumes | - |
+| w2 | Servante du Sablier | UC | Neutre | - | 2 | 50 | 1 | 2 | seuil | Sable Glissant | slow |
+| w3 | Huissier de l’Entre-Deux | R | Neutre | - | 3 | 54 | 2 | 2 | seuil | Sentence Lente | stun |
+| w5 | Maître des Sabliers | UR | Neutre | - | 4 | 66 | 2 | 3 | seuil | Sablier Ensorcelé | curse 0.25 |
+| w6 | Kairos, Juge Éternel | L | Neutre | - | 6 | 92 | 3 | 5 | seuil | Sentence Éternelle | stun |
 
 ## Classe Prêtre (40)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a3 | Garde-Promesse | C | Eau | - | 7 | 65 | 4 | 6 | bouclier | Serment Protecteur | - |
-| a35 | Palefrenière Errante | C | Terre | - | 2 | 52 | 1 | 2 | vol | Litière Douce | heal 14 |
-| a39 | Veilleuse du Guet | UC | Lumière | - | 3 | 54 | 2 | 2 | bouclier | Lanterne du Guet | heal 20 |
-| a42 | Écuyère des Routes | UC | Terre | - | 3 | 62 | 2 | 2 | vol | Selle Réconfortante | heal 20 |
-| a43 | Première Écuyère | R | Terre | - | 4 | 72 | 2 | 3 | vol | Bénédiction du Chemin | heal 28 |
-| a49 | Capitaine du Guet | R | Lumière | - | 4 | 66 | 2 | 3 | bouclier | Ronde Éclairée | heal 30 |
-| b4 | Aïna, Voix du Matin | SR | Lumière | - | 4 | 78 | 2 | 3 | aube | - | heal 46 |
-| b5 | Roc, Épaule du Monde | SR | Terre | - | 5 | 96 | 3 | 4 | bouclier | - | shield 44 |
-| c11 | Aïna, Aurore Immortelle | L | Lumière | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
-| c12 | Roc, Rempart du Monde | L | Terre | - | 7 | 115 | 4 | 6 | bouclier | - | shield 75 |
-| c4 | Aïna, Chant de l’Aube | UR | Lumière | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
-| c5 | Roc, Montagne Vivante | UR | Terre | - | 6 | 92 | 3 | 5 | bouclier | - | shield 55 |
+| a3 | Garde-Promesse | C | Neutre | - | 7 | 65 | 4 | 6 | bouclier | Serment Protecteur | - |
+| a35 | Palefrenière Errante | C | Neutre | - | 2 | 52 | 1 | 2 | vol | Litière Douce | heal 14 |
+| a39 | Veilleuse du Guet | UC | Neutre | - | 3 | 54 | 2 | 2 | bouclier | Lanterne du Guet | heal 20 |
+| a42 | Écuyère des Routes | UC | Neutre | - | 3 | 62 | 2 | 2 | vol | Selle Réconfortante | heal 20 |
+| a43 | Première Écuyère | R | Neutre | - | 4 | 72 | 2 | 3 | vol | Bénédiction du Chemin | heal 28 |
+| a49 | Capitaine du Guet | R | Neutre | - | 4 | 66 | 2 | 3 | bouclier | Ronde Éclairée | heal 30 |
+| b4 | Aïna, Voix du Matin | SR | Neutre | - | 4 | 78 | 2 | 3 | aube | - | heal 46 |
+| b5 | Roc, Épaule du Monde | SR | Neutre | - | 5 | 96 | 3 | 4 | bouclier | - | shield 44 |
+| c11 | Aïna, Aurore Immortelle | L | Neutre | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
+| c12 | Roc, Rempart du Monde | L | Neutre | - | 7 | 115 | 4 | 6 | bouclier | - | shield 75 |
+| c4 | Aïna, Chant de l’Aube | UR | Neutre | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
+| c5 | Roc, Montagne Vivante | UR | Neutre | - | 6 | 92 | 3 | 5 | bouclier | - | shield 55 |
 | n11 | Enge des Bois | N | - | - | 6 | 60 | 3 | 5 | - | Souffle des Sèves | heal 18 |
 | n13 | Ange | C | Lumière | - | 6 | 58 | 3 | 5 | - | Éclat d’Aube | heal 20 |
-| n3 | Prêtre Novice | N | - | - | 4 | 52 | 2 | 3 | - | Bénédiction Modeste | heal 18 |
+| n3 | Prêtre Novice | N | Neutre | - | 4 | 52 | 2 | 3 | - | Bénédiction Modeste | heal 18 |
 | n7 | Embryon du Vivant | N | - | - | 7 | 62 | 4 | 6 | - | Sève Voleuse | heal 16 |
 | p1 | Jeune Séraphin | UC | Lumière | - | 8 | 66 | 4 | 6 | - | Éclat d’Aube | heal 24 |
 | p2 | Ange Gardien | C | Lumière | - | 6 | 58 | 3 | 5 | aube | Éclat d’Aube | heal 20 |
-| p3 | Pousse des Sèves | C | Terre | - | 5 | 60 | 3 | 4 | bosquet | - | heal 16 |
-| p4 | Fidèle du Jour | C | Lumière | - | 6 | 58 | 3 | 5 | zele | - | heal 18 |
-| p5 | Séraphin, Porteur de Lumière | UR | Lumière | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
-| p6 | Séraphin, Chérubin Éveillé | L | Lumière | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
-| s1 | Novice de l’Aube | C | Lumière | - | 3 | 50 | 2 | 2 | aube | - | heal 18 |
-| s10 | Léna, Aube Éternelle | L | Lumière | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
-| s13 | Servante de l’Aube | UC | Lumière | - | 3 | 55 | 2 | 2 | aube | - | heal 22 |
-| s14 | Garde du Rempart | UC | Terre | - | 3 | 58 | 2 | 2 | bouclier | - | shield 20 |
-| s2 | Médecin de Camp | C | Lumière | - | 2 | 48 | 1 | 2 | aube | Baume Apaisant | heal 16 |
-| s5 | Prêtresse de l’Aube | R | Lumière | - | 3 | 60 | 2 | 2 | aube | - | heal 26 |
-| s8 | Grande Prêtresse de l’Aube | SR | Lumière | - | 4 | 70 | 2 | 3 | aube | - | heal 40 |
-| s9 | Léna, Avatar de l’Aurore | UR | Lumière | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
-| u1 | Fidèle du Matin | C | Lumière | - | 8 | 55 | 4 | 6 | zele | Étincelle de Foi — geste de palier C | - |
-| u2 | Écuyer Fervent | UC | Lumière | - | 10 | 62 | 5 | 8 | zele | Hymne du Matin — geste de palier UC | - |
-| u3 | Croisé de l’Aube | R | Lumière | - | 14 | 70 | 7 | 11 | zele | Bénédiction du Jour — geste de palier R | - |
-| u4 | Chapelain du Jour | SR | Lumière | - | 20 | 78 | 10 | 16 | zele | Croisade — geste de palier SR | - |
-| u5 | Arbalétrier Doré | UR | Lumière | - | 27 | 88 | 14 | 22 | zele | Aurore Radieuse — geste de palier UR | - |
-| u6 | Lémion, Chef de la Légion Solaire | L | Lumière | - | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
-| w11 | Chef du Chœur | UR | Eau | - | 5 | 74 | 3 | 4 | miroir | Renvoi en Chœur | reflect 0.3 |
-| w14 | Aiguille du Pont | UC | Terre | - | 3 | 54 | 2 | 2 | pont | Point Serré | shield 17 |
-| w17 | Architecte du Pont | UR | Terre | - | 5 | 74 | 3 | 4 | pont | Deux Rives | link |
-| w9 | Prisme du Chœur | R | Eau | - | 3 | 60 | 2 | 2 | miroir | Reflet Protecteur | shield 22 |
+| p3 | Pousse des Sèves | C | Neutre | - | 5 | 60 | 3 | 4 | bosquet | - | heal 16 |
+| p4 | Fidèle du Jour | C | Neutre | - | 6 | 58 | 3 | 5 | zele | - | heal 18 |
+| p5 | Séraphin, Porteur de Lumière | UR | Neutre | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
+| p6 | Séraphin, Chérubin Éveillé | L | Neutre | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
+| s1 | Novice de l’Aube | C | Neutre | - | 3 | 50 | 2 | 2 | aube | - | heal 18 |
+| s10 | Léna, Aube Éternelle | L | Neutre | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
+| s13 | Servante de l’Aube | UC | Neutre | - | 3 | 55 | 2 | 2 | aube | - | heal 22 |
+| s14 | Garde du Rempart | UC | Neutre | - | 3 | 58 | 2 | 2 | bouclier | - | shield 20 |
+| s2 | Médecin de Camp | C | Neutre | - | 2 | 48 | 1 | 2 | aube | Baume Apaisant | heal 16 |
+| s5 | Prêtresse de l’Aube | R | Neutre | - | 3 | 60 | 2 | 2 | aube | - | heal 26 |
+| s8 | Grande Prêtresse de l’Aube | SR | Neutre | - | 4 | 70 | 2 | 3 | aube | - | heal 40 |
+| s9 | Léna, Avatar de l’Aurore | UR | Neutre | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
+| u1 | Fidèle du Matin | C | Neutre | - | 8 | 55 | 4 | 6 | zele | Étincelle de Foi — geste de palier C | - |
+| u2 | Écuyer Fervent | UC | Neutre | - | 10 | 62 | 5 | 8 | zele | Hymne du Matin — geste de palier UC | - |
+| u3 | Croisé de l’Aube | R | Neutre | - | 14 | 70 | 7 | 11 | zele | Bénédiction du Jour — geste de palier R | - |
+| u4 | Chapelain du Jour | SR | Neutre | - | 20 | 78 | 10 | 16 | zele | Croisade — geste de palier SR | - |
+| u5 | Arbalétrier Doré | UR | Neutre | - | 27 | 88 | 14 | 22 | zele | Aurore Radieuse — geste de palier UR | - |
+| u6 | Lémion, Chef de la Légion Solaire | L | Neutre | - | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
+| w11 | Chef du Chœur | UR | Neutre | - | 5 | 74 | 3 | 4 | miroir | Renvoi en Chœur | reflect 0.3 |
+| w14 | Aiguille du Pont | UC | Neutre | - | 3 | 54 | 2 | 2 | pont | Point Serré | shield 17 |
+| w17 | Architecte du Pont | UR | Neutre | - | 5 | 74 | 3 | 4 | pont | Deux Rives | link |
+| w9 | Prisme du Chœur | R | Neutre | - | 3 | 60 | 2 | 2 | miroir | Reflet Protecteur | shield 22 |
 
 ## Familles de lignee (data/families.json)
 
@@ -213,7 +213,7 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n1 Épéiste Novice | a33 Pisteur du Bosquet | voie sylvestre |
 | n2 Mage Novice | a29 Adepte des Rivières | les flots — l’Eau |
 | n2 Mage Novice | a32 Veilleur de Braise | la fournaise — le Feu |
-| n2 Mage Novice | a33 Pisteur du Bosquet | les Sylvains — la Terre |
+| n2 Mage Novice | a33 Pisteur du Bosquet | les Sylvains — la Nature |
 | n2 Mage Novice | s13 Servante de l’Aube | la lumière — l’élue de l’Aube |
 | n2 Mage Novice | a31 Guetteur Crépusculaire | l’ombre — l’élue du Crépuscule |
 | n2 Mage Novice | v1 Apprenti Invocateur | l’appel — Apprenti Invocateur |
@@ -252,6 +252,8 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n9 Embryon des Cieux | z23 | la voie du plein jour — le Clergé |
 | n13 Ange | p1 Jeune Séraphin | l’éveil du service — le Jeune Séraphin |
 | n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
+| n14 Démon | d19 | la voie de la chair — les succubes |
+| n14 Démon | d24 | la voie de la puissance — les gouffres |
 | n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |
 | a34 Braconnier des Quais | e3 | la malédiction des quais |
 | a17 Kenji, Sabre Céleste | a20 Mage de la Fournaise | la régression |
@@ -278,6 +280,22 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | v3 Évocateur | v4 Maître des Esprits | école des invocations |
 | v4 Maître des Esprits | v5 Seigneur des Élémentaires | école des invocations |
 | v5 Seigneur des Élémentaires | v6 Archimage de l’Appel | école des invocations |
+| d19 | d20 | la chair — la voie des succubes |
+| d19 | d29 | la trappe — le Gouffre des Vices |
+| d20 | d21 | fidèle à la chair |
+| d21 | d22 | fidèle à la chair |
+| d22 | d23 | la reine du Désir |
+| d29 | d30 | la trappe s’enfonce |
+| d30 | d31 | la trappe s’ouvre |
+| d31 | d32 | Famine, la nommée de la trappe |
+| d24 | d25 | la puissance — les fosses |
+| d24 | d33 | la trappe — le Fléau Démoniaque |
+| d25 | d26 | fidèle à la puissance |
+| d26 | d27 | fidèle à la puissance |
+| d27 | d28 | Belzébuth, roi des Démons |
+| d33 | d34 | le fléau grandit |
+| d34 | d35 | le fléau porte la peste |
+| d35 | d36 | Peste, Mère des Fléaux |
 
 ## Soudures solos (data/solo-steps.json)
 

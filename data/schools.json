@@ -109,5 +109,33 @@
     "voie des quais"
    ]
   }
+ },
+ "vice": {
+  "nom": "le Vice",
+  "role": "malus",
+  "ouvrePar": {
+   "profils": [
+    "Occultiste",
+    "Assassin"
+   ],
+   "voies": [
+    "la chair",
+    "le désir"
+   ]
+  }
+ },
+ "fureur": {
+  "nom": "la Fureur",
+  "role": "degats",
+  "ouvrePar": {
+   "profils": [
+    "Guerrier",
+    "Occultiste"
+   ],
+   "voies": [
+    "la puissance",
+    "la fureur"
+   ]
+  }
  }
 }

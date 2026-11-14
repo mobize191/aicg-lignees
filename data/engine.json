@@ -383,7 +383,25 @@
   "n14",
   "n15",
   "p1",
-  "p2"
+  "p2",
+  "d19",
+  "d20",
+  "d21",
+  "d22",
+  "d23",
+  "d24",
+  "d25",
+  "d26",
+  "d27",
+  "d28",
+  "d29",
+  "d30",
+  "d31",
+  "d32",
+  "d33",
+  "d34",
+  "d35",
+  "d36"
  ],
  "RACE_MYSTIQUE_IDS": [
   "n10",
@@ -506,7 +524,9 @@
   "appel": "appel",
   "seuil": "entrave",
   "miroir": "rempart",
-  "pont": "appel"
+  "pont": "appel",
+  "chair": "vice",
+  "puissance": "fureur"
  },
  "moteur": {
   "MANA_START_RATIO": 0.6,
@@ -727,7 +747,9 @@
   "entrave": "Ombre",
   "mauvais-oeil": "Ombre",
   "ferveur": "Lumière",
-  "ruse": "Eau"
+  "ruse": "Eau",
+  "vice": "Ombre",
+  "fureur": "Feu"
  },
  "CAPTURE_FORCE_CAP": 3,
  "CAPTURE_FORCE_FLOOR": 0.5,

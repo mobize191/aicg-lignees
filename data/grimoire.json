@@ -509,6 +509,114 @@
    "mult": 4.5,
    "big": true,
    "desc": "Le bosquet entier se lève et marche au combat."
+  },
+  {
+   "famille": "chair",
+   "palier": "C",
+   "sort": "Frôlement du Vice",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "Un contact glacé qui sème le doute dans l’ennemi."
+  },
+  {
+   "famille": "chair",
+   "palier": "UC",
+   "sort": "Regard de Luxure",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Un regard qui brûle : malédiction d’ATQ −25 % (2 tours)."
+  },
+  {
+   "famille": "chair",
+   "palier": "R",
+   "sort": "Haleine du Gouffre",
+   "cout": 5,
+   "mult": 1.8,
+   "big": false,
+   "desc": "Un souffle de fosse qui ralentit (2 tours)."
+  },
+  {
+   "famille": "chair",
+   "palier": "SR",
+   "sort": "Charme de l’Abysse",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le charme abyssal : dégâts et malédiction (2 tours)."
+  },
+  {
+   "famille": "chair",
+   "palier": "UR",
+   "sort": "Asmodia : Danse des Vices",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "La reine danse : ses vices frappent l’ennemi."
+  },
+  {
+   "famille": "chair",
+   "palier": "L",
+   "sort": "Désir Absolu",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Le désir dévorant, ultime."
+  },
+  {
+   "famille": "puissance",
+   "palier": "C",
+   "sort": "Grondement des Fosses",
+   "cout": 2,
+   "mult": 1.4,
+   "big": false,
+   "desc": "La terre elle-même gronde contre l’ennemi."
+  },
+  {
+   "famille": "puissance",
+   "palier": "UC",
+   "sort": "Coup des Fosses",
+   "cout": 3,
+   "mult": 1.6,
+   "big": false,
+   "desc": "Un coup de poing venu des profondeurs."
+  },
+  {
+   "famille": "puissance",
+   "palier": "R",
+   "sort": "Cri de Fureur",
+   "cout": 5,
+   "mult": 1.8,
+   "big": false,
+   "desc": "Un cri qui étourdit (1 tour)."
+  },
+  {
+   "famille": "puissance",
+   "palier": "SR",
+   "sort": "Terreur Majeure",
+   "cout": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "La terreur majeure : dégâts et malédiction (2 tours)."
+  },
+  {
+   "famille": "puissance",
+   "palier": "UR",
+   "sort": "Belzébuth : Couronne de Fureur",
+   "cout": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Le roi couronne sa fureur d’un coup dévastateur."
+  },
+  {
+   "famille": "puissance",
+   "palier": "L",
+   "sort": "Ultime Fureur",
+   "cout": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "La fureur absolue."
   }
  ],
  "ecole": [
@@ -918,6 +1026,62 @@
      "cout": 6,
      "largeur": "equipe-renforcee",
      "taux": 0.2
+    }
+   }
+  },
+  {
+   "id": "frisson-du-vice",
+   "nom": "Frisson du Vice",
+   "ecole": "vice",
+   "role": "malus",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "mult": 1.5
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "mult": 1.8
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "mult": 2.2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "mult": 2.6
+    }
+   }
+  },
+  {
+   "id": "grondement-demoniaque",
+   "nom": "Grondement Démoniaque",
+   "ecole": "fureur",
+   "role": "degats",
+   "crans": {
+    "I": {
+     "cout": 3,
+     "largeur": 1,
+     "mult": 1.5
+    },
+    "II": {
+     "cout": 4,
+     "largeur": 2,
+     "mult": 1.8
+    },
+    "III": {
+     "cout": 5,
+     "largeur": 3,
+     "mult": 2.2
+    },
+    "IV": {
+     "cout": 6,
+     "largeur": 5,
+     "mult": 2.6
     }
    }
   }
@@ -1576,6 +1740,66 @@
     "desc": "tous les alliés sont liés à 50 %"
    },
    "desc": "Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %)."
+  },
+  {
+   "id": "extase-interdite",
+   "nom": "Extase Interdite",
+   "carte": "d23",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 6,
+   "mult": 2,
+   "desc": "La signature d’Asmodia : extase et malédiction.",
+   "base": "frisson-du-vice",
+   "cran": "IV",
+   "delta": {
+    "desc": "malédiction d’ATQ (2 tours)"
+   }
+  },
+  {
+   "id": "sceptre-du-jugement",
+   "nom": "Sceptre du Jugement",
+   "carte": "d28",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 6,
+   "mult": 2,
+   "desc": "La signature de Belzébuth : jugement et étourdissement.",
+   "base": "grondement-demoniaque",
+   "cran": "IV",
+   "delta": {
+    "desc": "étourdissement (1 tour)"
+   }
+  },
+  {
+   "id": "devoration-totale",
+   "nom": "Dévoration Totale",
+   "carte": "d32",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 9,
+   "mult": 2.2,
+   "desc": "La signature de Famine : tout dévorer.",
+   "base": "frisson-du-vice",
+   "cran": "IV",
+   "delta": {
+    "desc": "la gueule avale tout"
+   }
+  },
+  {
+   "id": "souffle-noir",
+   "nom": "Souffle Noir",
+   "carte": "d36",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 6,
+   "mult": 2,
+   "desc": "La signature de Peste : un souffle de malédiction.",
+   "base": "grondement-demoniaque",
+   "cran": "IV",
+   "delta": {
+    "desc": "malédiction (2 tours)"
+   }
   }
  ]
 }

@@ -797,5 +797,99 @@
     "name": "Fil d’Ananké"
    }
   }
+ ],
+ "chair": [
+  {
+   "name": "Frôlement du Vice",
+   "cost": 2,
+   "mult": 1.4,
+   "desc": "Un contact glacé qui sème le doute dans l’ennemi.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Regard de Luxure",
+   "cost": 3,
+   "mult": 1.6,
+   "desc": "Un regard qui brûle : malédiction d’ATQ −25 % (2 tours).",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Haleine du Gouffre",
+   "cost": 5,
+   "mult": 1.8,
+   "desc": "Un souffle de fosse qui ralentit (2 tours).",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Charme de l’Abysse",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "Le charme abyssal : dégâts et malédiction (2 tours).",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Asmodia : Danse des Vices",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "La reine danse : ses vices frappent l’ennemi.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Désir Absolu",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "Le désir dévorant, ultime.",
+   "cible": "1 ennemi"
+  }
+ ],
+ "puissance": [
+  {
+   "name": "Grondement des Fosses",
+   "cost": 2,
+   "mult": 1.4,
+   "desc": "La terre elle-même gronde contre l’ennemi.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Coup des Fosses",
+   "cost": 3,
+   "mult": 1.6,
+   "desc": "Un coup de poing venu des profondeurs.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Cri de Fureur",
+   "cost": 5,
+   "mult": 1.8,
+   "desc": "Un cri qui étourdit (1 tour).",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Terreur Majeure",
+   "cost": 9,
+   "mult": 2.6,
+   "big": true,
+   "desc": "La terreur majeure : dégâts et malédiction (2 tours).",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Belzébuth : Couronne de Fureur",
+   "cost": 14,
+   "mult": 3.4,
+   "big": true,
+   "desc": "Le roi couronne sa fureur d’un coup dévastateur.",
+   "cible": "1 ennemi"
+  },
+  {
+   "name": "Ultime Fureur",
+   "cost": 20,
+   "mult": 4.5,
+   "big": true,
+   "desc": "La fureur absolue.",
+   "cible": "1 ennemi"
+  }
  ]
 }

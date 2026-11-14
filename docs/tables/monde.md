@@ -9,11 +9,11 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | constante | valeur |
 | --- | --- |
 | CLASSES | ["Guerrier","Mage","Prêtre","Assassin","Occultiste"] |
-| ELEMENTS | ["Feu","Eau","Terre","Ombre","Lumière"] |
+| ELEMENTS | ["Feu","Eau","Nature","Ombre","Lumière"] |
 | RACES | ["humaine","monstre","mystique","divine"] |
 | RACE_LABEL | {"humaine":"Humaine","monstre":"Monstre","mystique":"Mystique","divine":"Divine"} |
-| BEATS | {"Feu":"Terre","Terre":"Eau","Eau":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
-| BEATEN_BY | {"Feu":"Eau","Eau":"Terre","Terre":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
+| BEATS | {"Feu":"Nature","Nature":"Eau","Eau":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
+| BEATEN_BY | {"Feu":"Eau","Eau":"Nature","Nature":"Feu","Lumière":"Ombre","Ombre":"Lumière"} |
 | PALIERS | [2,4] |
 | RARITY_POWER | {"N":0.9,"C":1,"UC":1.08,"R":1.16,"SR":1.26,"UR":1.38,"L":1.52} |
 | FAMILY_MANA | [{"max":8,"regen":2},{"max":11,"regen":3},{"max":14,"regen":3},{"max":22,"regen":5},{"max":30,"regen":6},{"max":40,"regen":8}] |
@@ -23,7 +23,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | TEAM_MAX | 5 |
 | LEVEL_CAP | 20 |
 | DMG_REDUCTION_MAX | 0.8 |
-| SAVE_VERSION | 27 |
+| SAVE_VERSION | 29 |
 | VERSION | "1.0" |
 | RACE_MOD | {"humaine":0,"monstre":0.1,"mystique":0.2,"divine":0.3} |
 | CLASSE_MODS | {"Guerrier":{"atkPct":0.1,"hpPct":0.15,"strike":1,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0.05},"Assassin":{"atkPct":0.05,"hpPct":-0.1,"strike":1,"dodge":0.15,"exec":0.25,"execBelow":0.35,"splash":0,"wave":false,"shieldOnHit":0},"Mage":{"atkPct":0.05,"hpPct":-0.05,"strike":0.8,"dodge":0,"exec":0,"execBelow":0,"splash":0.4,"wave":false,"shieldOnHit":0},"Prêtre":{"atkPct":-0.15,"hpPct":0,"strike":0.7,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":false,"shieldOnHit":0},"Occultiste":{"atkPct":-0.2,"hpPct":0,"strike":0.6,"dodge":0,"exec":0,"execBelow":0,"splash":0,"wave":true,"shieldOnHit":0}} |
@@ -33,9 +33,9 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 
 | id | nom | etages | tier | types | icone | eclats (shards) | boss |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| marees | L’Antre des Marées | 10 | 0 | Eau/Terre | 🌊 | a34, a38, a35, a36 | et.5 : Hydre des Marées ; et.10 : Souverain des Marées |
+| marees | L’Antre des Marées | 10 | 0 | Eau/Nature | 🌊 | a34, a38, a35, a36 | et.5 : Hydre des Marées ; et.10 : Souverain des Marées |
 | forge | La Forge Cendrée | 10 | 1 | Feu/Ombre | 🔥 | - | et.5 : Maître des Fours ; et.10 : Seigneur des Cendres |
-| bosquet | Le Bosquet Vermeil | 10 | 2 | Terre/Lumière | 🌿 | a35, a36, a37, a39 | et.5 : Mycola, Reine des Spores ; et.10 : Cœur du Bosquet |
+| bosquet | Le Bosquet Vermeil | 10 | 2 | Nature/Lumière | 🌿 | a35, a36, a37, a39 | et.5 : Mycola, Reine des Spores ; et.10 : Cœur du Bosquet |
 | crypte | La Crypte Noyée | 10 | 3 | Ombre/Eau | 💀 | a34, a38 | et.5 : Goule des Caveaux ; et.10 : La Mort, Faucheuse des Tombes |
 | zenith | Le Zénith Ardent | 10 | 4 | Lumière/Feu | ☀️ | a37, a39 | et.5 : Phénix du Zénith ; et.10 : Astre Capiteux |
 
@@ -65,7 +65,7 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | brulure | Feu | forge | pourcentage de la vie max par tour, contre le seuil de la cible |
 | corrosion | Eau | marees | pourcentage de la vie max par tour, contre le seuil de la cible |
 | poison | Ombre | crypte | pourcentage de la vie max par tour, contre le seuil de la cible |
-| seve | Terre | bosquet | sève rongeuse : pourcentage de la vie max par tour, contre le seuil de la cible |
+| seve | Nature | bosquet | sève rongeuse : pourcentage de la vie max par tour, contre le seuil de la cible |
 
 ## Zones d'errance (data/zones.json)
 
@@ -90,7 +90,7 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 | n1 | a33 | voie sylvestre | standard | - |
 | n2 | a29 | les flots — l’Eau | standard | - |
 | n2 | a32 | la fournaise — le Feu | standard | - |
-| n2 | a33 | les Sylvains — la Terre | standard | - |
+| n2 | a33 | les Sylvains — la Nature | standard | - |
 | n2 | s13 | la lumière — l’élue de l’Aube | standard | - |
 | n2 | a31 | l’ombre — l’élue du Crépuscule | standard | - |
 | n3 | s13 | la lumière — la foi | standard | - |
@@ -134,6 +134,8 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 | n13 | p1 | l’éveil du service — le Jeune Séraphin | remplace | - |
 | n14 | d8 | la voie du Chœur Miroir — la Réflexion | standard | - |
 | n15 | d14 | la voie du Pont — le Liage | standard | - |
+| n14 | d19 | la voie de la chair — les succubes | standard | - |
+| n14 | d24 | la voie de la puissance — les gouffres | standard | - |
 
 ## Synergies d'equipe (data/synergies.json)
 
@@ -147,6 +149,6 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 | Feu | +10 % PV équipe | Vengeance : attaquants +20 % ATK quand une carte tombe |
 | Eau | +10 % ATQ de l’équipe (la stat ⚔ des cartes) | Les supports ciblent 2 unités |
 | Ombre | -10 % dégâts subis | -25 % dégâts subis |
-| Terre | +15 % ATQ de l’équipe (la stat ⚔ des cartes) | Bouclier 10 % PV max au départ |
+| Nature | +15 % ATQ de l’équipe (la stat ⚔ des cartes) | Bouclier 10 % PV max au départ |
 | Lumière | +10 % dégâts finaux (après l’ATQ, multiplie tout) | Régén 3 % PV max / tour |
 

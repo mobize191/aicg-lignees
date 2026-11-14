@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (13), `lignee` (42), `uniques` (36).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (15), `lignee` (54), `uniques` (40).
 
 ## Sorts communs (2)
 
@@ -19,7 +19,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | decharge-arcanique | Décharge Arcanique | Mage | lame | degats | zone | 5 | 1.65 | Le mage vide un fragment de mana en un trait brut. |
 | onde-consacree | Onde Consacrée | Prêtre | baume | soin | l’équipe | 3 | 1.3 | Le soin du prêtre : une onde qui referme les plaies. |
 | frappe-dans-le-dos | Frappe dans le Dos | Assassin | lame | degats | 1 ennemi | 4 | 1.7 | L’assassin frappe là où l’on ne regarde pas. |
-| oeil-du-malheur | Œil du Malheur | Occultiste | mauvais-oeil | malus | 1 ennemi | 4 | 1.6 | L’occultiste marque sa proie d’un mauvais présage. |
+| oeil-du-malheur | Œil du Malheur | Occultiste | mauvais-oeil | malus | 1 ennemi | 4 | 1.6 | Malédiction : −20 % de dégâts infligés par la cible pendant 2 tours. |
 
 ## Sorts de race (4)
 
@@ -30,7 +30,7 @@ Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `ent
 | vol-en-rase-mottes | Vol en Rase-Mottes | enge | ruse | degats | 1 ennemi | 3 | 1.5 | L’enge plonge du ciel et remonte avant la riposte. |
 | ferveur-celeste | Ferveur Céleste | divine | ferveur | boost | 1 allié | 3 | 1.5 | Une onction des camps divins qui aiguise le geste. |
 
-## Sorts d'ecolage (13)
+## Sorts d'ecolage (15)
 
 Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contigues, ou `equipe`/`equipe-renforcee`).
 
@@ -49,8 +49,10 @@ Appris en ecolant une zone. Le `cran` monte le cout et la largeur (cibles contig
 | morsure-putride | Morsure Putride | mauvais-oeil | malus | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / 3 ; taux 15%, 2 tour(s) ; IV : 6 / 5 ; taux 10%, 2 tour(s) |
 | renvoi-celeste | Renvoi Céleste | rempart | renvoi | - | I : 3 / 1 ; taux 25%, 2 tour(s) ; II : 4 / 2 ; taux 20%, 2 tour(s) ; III : 5 / equipe ; taux 15%, 2 tour(s) ; IV : 6 / equipe-renforcee ; taux 20%, 2 tour(s) |
 | hymne | Hymne | ferveur | boost | - | I : 3 / 1 ; taux 25% ; II : 4 / 2 ; taux 20% ; III : 5 / equipe ; IV : 6 / equipe-renforcee ; taux 20% |
+| frisson-du-vice | Frisson du Vice | vice | malus | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
+| grondement-demoniaque | Grondement Démoniaque | fureur | degats | - | I : 3 / 1 ; x1.5 ; II : 4 / 2 ; x1.8 ; III : 5 / 3 ; x2.2 ; IV : 6 / 5 ; x2.6 |
 
-## Sorts de lignee (42)
+## Sorts de lignee (54)
 
 Un sort par palier de famille, appris en montant la lignee.
 
@@ -98,8 +100,20 @@ Un sort par palier de famille, appris en montant la lignee.
 | bosquet | SR | Rafale d’Épines | 9 | 2.6 | true | Une tempête de ronces ferme l’horizon. |
 | bosquet | UR | Maïa : Danse des Feuilles | 14 | 3.4 | true | Ses feuilles dansent autour de la proie, puis tombent. |
 | bosquet | L | Maïa : Cœur du Bosquet | 20 | 4.5 | true | Le bosquet entier se lève et marche au combat. |
+| chair | C | Frôlement du Vice | 2 | 1.4 | false | Un contact glacé qui sème le doute dans l’ennemi. |
+| chair | UC | Regard de Luxure | 3 | 1.6 | false | Un regard qui brûle : malédiction d’ATQ −25 % (2 tours). |
+| chair | R | Haleine du Gouffre | 5 | 1.8 | false | Un souffle de fosse qui ralentit (2 tours). |
+| chair | SR | Charme de l’Abysse | 9 | 2.6 | true | Le charme abyssal : dégâts et malédiction (2 tours). |
+| chair | UR | Asmodia : Danse des Vices | 14 | 3.4 | true | La reine danse : ses vices frappent l’ennemi. |
+| chair | L | Désir Absolu | 20 | 4.5 | true | Le désir dévorant, ultime. |
+| puissance | C | Grondement des Fosses | 2 | 1.4 | false | La terre elle-même gronde contre l’ennemi. |
+| puissance | UC | Coup des Fosses | 3 | 1.6 | false | Un coup de poing venu des profondeurs. |
+| puissance | R | Cri de Fureur | 5 | 1.8 | false | Un cri qui étourdit (1 tour). |
+| puissance | SR | Terreur Majeure | 9 | 2.6 | true | La terreur majeure : dégâts et malédiction (2 tours). |
+| puissance | UR | Belzébuth : Couronne de Fureur | 14 | 3.4 | true | Le roi couronne sa fureur d’un coup dévastateur. |
+| puissance | L | Ultime Fureur | 20 | 4.5 | true | La fureur absolue. |
 
-## Sorts uniques (36)
+## Sorts uniques (40)
 
 | id | nom | carte porteuse | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -139,6 +153,10 @@ Un sort par palier de famille, appris en montant la lignee.
 | arret-du-temps | Arrêt du Temps | d6 | controle | tous les ennemis | 7 | - | Kairos, Arbitre du Seuil : le temps s’arrête sur toute la ligne ennemie. |
 | refrain-eternel | Refrain Éternel | d12 | boost | l’équipe | 6 | - | Écho, Voix Miroir : le refrain du chœur ne s’éteint pas. |
 | destin-tisse | Destin Tissé | d18 | manip | l’équipe | 6 | - | Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %). |
+| extase-interdite | Extase Interdite | d23 | degats | 1 ennemi | 6 | 2 | La signature d’Asmodia : extase et malédiction. |
+| sceptre-du-jugement | Sceptre du Jugement | d28 | degats | 1 ennemi | 6 | 2 | La signature de Belzébuth : jugement et étourdissement. |
+| devoration-totale | Dévoration Totale | d32 | degats | 1 ennemi | 9 | 2.2 | La signature de Famine : tout dévorer. |
+| souffle-noir | Souffle Noir | d36 | degats | 1 ennemi | 6 | 2 | La signature de Peste : un souffle de malédiction. |
 
 ## Ecoles (data/schools.json)
 
@@ -154,6 +172,8 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | mauvais-oeil | le Mauvais Œil | malus | Occultiste | l’ombre, voie du caveau |
 | ferveur | la Ferveur | boost | Guerrier, Prêtre | voie du guerrier, la foi, voie du zèle |
 | ruse | la Ruse | manip | Assassin | voie du vol, voie des quais |
+| vice | le Vice | malus | Occultiste, Assassin | la chair, le désir |
+| fureur | la Fureur | degats | Guerrier, Occultiste | la puissance, la fureur |
 
 ## Catalogue brut par famille (data/lineage-spells.json)
 
@@ -173,6 +193,8 @@ Les verrous d'ouverture : une ecole s'ouvre par PROFIL (classe de carte) ou par 
 | seuil | Sablier I / Sablier II / Sablier III / Sablier IV / Sablier V / Sablier VI |
 | miroir | Reflet I / Reflet II / Reflet III / Reflet IV / Reflet V / Reflet VI |
 | pont | Fil I / Fil II / Fil III / Fil IV / Fil V / Fil VI |
+| chair | Frôlement du Vice / Regard de Luxure / Haleine du Gouffre / Charme de l’Abysse / Asmodia : Danse des Vices / Désir Absolu |
+| puissance | Grondement des Fosses / Coup des Fosses / Cri de Fureur / Terreur Majeure / Belzébuth : Couronne de Fureur / Ultime Fureur |
 
 ## Fusions de monstres (data/fusion-map.json)
 
@@ -371,6 +393,24 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | n15 | oeil-du-malheur | II |
 | p1 | onde-consacree | II |
 | p2 | onde-consacree | II |
+| d19 | frisson-du-vice | I |
+| d20 | frisson-du-vice | II |
+| d21 | frisson-du-vice | III |
+| d22 | frisson-du-vice | IV |
+| d29 | frisson-du-vice | III |
+| d30 | frisson-du-vice | IV |
+| d31 | grondement-demoniaque | III |
+| d24 | grondement-demoniaque | I |
+| d25 | grondement-demoniaque | II |
+| d26 | grondement-demoniaque | III |
+| d27 | grondement-demoniaque | IV |
+| d33 | frisson-du-vice | II |
+| d34 | grondement-demoniaque | II |
+| d35 | grondement-demoniaque | IV |
+| d23 | - | - |
+| d28 | - | - |
+| d32 | - | - |
+| d36 | - | - |
 
 ### Donjon recrues
 

@@ -646,6 +646,74 @@
    "p2": {
     "fusion": "onde-consacree",
     "cran": "II"
+   },
+   "d19": {
+    "fusion": "frisson-du-vice",
+    "cran": "I"
+   },
+   "d20": {
+    "fusion": "frisson-du-vice",
+    "cran": "II"
+   },
+   "d21": {
+    "fusion": "frisson-du-vice",
+    "cran": "III"
+   },
+   "d22": {
+    "fusion": "frisson-du-vice",
+    "cran": "IV"
+   },
+   "d29": {
+    "fusion": "frisson-du-vice",
+    "cran": "III"
+   },
+   "d30": {
+    "fusion": "frisson-du-vice",
+    "cran": "IV"
+   },
+   "d31": {
+    "fusion": "grondement-demoniaque",
+    "cran": "III"
+   },
+   "d24": {
+    "fusion": "grondement-demoniaque",
+    "cran": "I"
+   },
+   "d25": {
+    "fusion": "grondement-demoniaque",
+    "cran": "II"
+   },
+   "d26": {
+    "fusion": "grondement-demoniaque",
+    "cran": "III"
+   },
+   "d27": {
+    "fusion": "grondement-demoniaque",
+    "cran": "IV"
+   },
+   "d33": {
+    "fusion": "frisson-du-vice",
+    "cran": "II"
+   },
+   "d34": {
+    "fusion": "grondement-demoniaque",
+    "cran": "II"
+   },
+   "d35": {
+    "fusion": "grondement-demoniaque",
+    "cran": "IV"
+   },
+   "d23": {
+    "unique": "extase-interdite"
+   },
+   "d28": {
+    "unique": "sceptre-du-jugement"
+   },
+   "d32": {
+    "unique": "devoration-totale"
+   },
+   "d36": {
+    "unique": "souffle-noir"
    }
   }
  },

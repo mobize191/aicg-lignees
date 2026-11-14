@@ -281,6 +281,20 @@
     "voie": "la voie du Pont — le Liage",
     "effet": "standard",
     "ecoles": []
+   },
+   {
+    "de": "n14",
+    "vers": "d19",
+    "voie": "la voie de la chair — les succubes",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n14",
+    "vers": "d24",
+    "voie": "la voie de la puissance — les gouffres",
+    "effet": "standard",
+    "ecoles": []
    }
   ]
  }

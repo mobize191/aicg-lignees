@@ -2,34 +2,34 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**159 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
+**177 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
 
 ## Donjon bosquet (23)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| g1 | Rampant du Fougeron | C | Assassin | Terre | - | 8 | 58 | 7 | 3 | Étreinte de Racines | - |
-| g10 | Druidesse des Sèves | R | Mage | Terre | - | 3 | 62 | 2 | 2 | Sève Vitale | summon 0.5 |
+| g1 | Rampant du Fougeron | C | Assassin | Nature | - | 8 | 58 | 7 | 3 | Étreinte de Racines | - |
+| g10 | Druidesse des Sèves | R | Mage | Nature | - | 3 | 62 | 2 | 2 | Sève Vitale | summon 0.5 |
 | g11 | Oracle des Clairières | SR | Prêtre | Lumière | - | 4 | 68 | 2 | 3 | Voûte de Clairière | shield 38 |
-| g12 | Bergère des Sèves | UC | Prêtre | Terre | - | 3 | 54 | 2 | 2 | Claie de Branches | shield 18 |
-| g13 | Semeur Sylvestre | SR | Mage | Terre | - | 21 | 64 | 11 | 17 | Sève Éveillée | summon 0.6 |
-| g14 | Mycolithe | SR | Occultiste | Terre | - | 20 | 66 | 10 | 16 | Spores Vampires | - |
-| g15 | Mycélium Vivant | UR | Occultiste | Terre | - | 28 | 80 | 14 | 22 | Filaments Rongeants | - |
-| g16 | Mycola, Reine des Spores | L | Occultiste | Terre | - | 37 | 100 | 19 | 30 | Nuée de Spores | - |
+| g12 | Bergère des Sèves | UC | Prêtre | Nature | - | 3 | 54 | 2 | 2 | Claie de Branches | shield 18 |
+| g13 | Semeur Sylvestre | SR | Mage | Nature | - | 21 | 64 | 11 | 17 | Sève Éveillée | summon 0.6 |
+| g14 | Mycolithe | SR | Occultiste | Nature | - | 20 | 66 | 10 | 16 | Spores Vampires | - |
+| g15 | Mycélium Vivant | UR | Occultiste | Nature | - | 28 | 80 | 14 | 22 | Filaments Rongeants | - |
+| g16 | Mycola, Reine des Spores | L | Occultiste | Nature | - | 37 | 100 | 19 | 30 | Nuée de Spores | - |
 | g17 | Dryade Radieuse | UR | Prêtre | Lumière | - | 5 | 76 | 3 | 4 | Rosée Radieuse | heal 48 |
 | g18 | Adriel, Lumignole des Clairières | L | Prêtre | Lumière | - | 6 | 92 | 3 | 5 | Première Clarté | revive 0.6 |
 | g19 | Dryade du Sous-Bois | SR | Occultiste | Ombre | - | 4 | 64 | 2 | 3 | Ombre Tissée | slow |
 | g2 | Luciole Hargneuse | C | Mage | Lumière | - | 9 | 45 | 5 | 7 | Éclat Vif | - |
 | g20 | Rôdeuse des Sous-Bois | UR | Assassin | Ombre | - | 29 | 76 | 26 | 12 | Lames de Branchage | - |
 | g21 | Vesna, Dryade du Sous-Bois | L | Assassin | Ombre | - | 38 | 96 | 34 | 15 | Nuit des Sèves | - |
-| g3 | Sanglier de Mousse | UC | Guerrier | Terre | - | 11 | 54 | 8 | 4 | Culbute de Mousse | - |
-| g31 | Gobelin des Mousses | C | Assassin | Terre | - | 8 | 56 | 7 | 3 | Griffe de Mousse | - |
-| g32 | Gobelin des Racines | UC | Guerrier | Terre | - | 11 | 54 | 8 | 4 | Coup de Racine | - |
-| g4 | Gardien des Remparts Verts | R | Guerrier | Terre | - | 14 | 74 | 10 | 6 | Fronde de Ronce | - |
+| g3 | Sanglier de Mousse | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Culbute de Mousse | - |
+| g31 | Gobelin des Mousses | C | Assassin | Nature | - | 8 | 56 | 7 | 3 | Griffe de Mousse | - |
+| g32 | Gobelin des Racines | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Coup de Racine | - |
+| g4 | Gardien des Remparts Verts | R | Guerrier | Nature | - | 14 | 74 | 10 | 6 | Fronde de Ronce | - |
 | g5 | Prisme Vivant | SR | Mage | Lumière | - | 21 | 63 | 11 | 17 | Rayon Prismatique | - |
-| g6 | Colosse Sylvestre | UR | Guerrier | Terre | - | 29 | 82 | 20 | 12 | Poing Séculaire | - |
+| g6 | Colosse Sylvestre | UR | Guerrier | Nature | - | 29 | 82 | 20 | 12 | Poing Séculaire | - |
 | g7 | Patriarche du Bosquet | L | Guerrier | Lumière | - | 40 | 104 | 28 | 16 | Aube Foliaire | - |
-| g8 | Cœur du Bosquet | M | Guerrier | Terre | - | 53 | 146 | 37 | 21 | Racine-Monde | - |
+| g8 | Cœur du Bosquet | M | Guerrier | Nature | - | 53 | 146 | 37 | 21 | Racine-Monde | - |
 | g9 | Lueur Bienveillante | C | Prêtre | Lumière | - | 2 | 50 | 1 | 2 | Baume Lumineux | heal 15 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
@@ -86,7 +86,7 @@
 | Chevalerie Défunte | k23 -> k24 -> k4 ; k25 -> k26 -> k27 ; k28 -> k29 -> k30 | - | - |
 | Gobelins des Caveaux | k31 -> k32 | - | - |
 
-## Donjon divin (18)
+## Donjon divin (36)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -94,14 +94,32 @@
 | d10 | Miroir Antiphonique | SR | Occultiste | Eau | - | 4 | 66 | 2 | 3 | Chant Miroir | copy |
 | d11 | Chef du Chœur | UR | Prêtre | Eau | - | 5 | 74 | 3 | 4 | Renvoi en Chœur | reflect 0.3 |
 | d12 | Écho, Voix Miroir | L | Occultiste | Eau | - | 6 | 92 | 3 | 5 | Refrain Éternel | copy |
-| d13 | Fileuse du Pont | C | Assassin | Terre | - | 8 | 58 | 7 | 3 | Fil Tendu | - |
-| d14 | Aiguille du Pont | UC | Prêtre | Terre | - | 3 | 54 | 2 | 2 | Point Serré | shield 17 |
-| d15 | Brodeuse des Liens | R | Assassin | Terre | - | 15 | 70 | 14 | 6 | Point de Croix | - |
-| d16 | Tisseuse des Nœuds | SR | Occultiste | Terre | - | 4 | 66 | 2 | 3 | Nœud d’Or | link |
-| d17 | Architecte du Pont | UR | Prêtre | Terre | - | 5 | 74 | 3 | 4 | Deux Rives | link |
-| d18 | Ananké, Tisseuse du Pont | L | Occultiste | Terre | - | 6 | 92 | 3 | 5 | Destin Tissé | link |
+| d13 | Fileuse du Pont | C | Assassin | Nature | - | 8 | 58 | 7 | 3 | Fil Tendu | - |
+| d14 | Aiguille du Pont | UC | Prêtre | Nature | - | 3 | 54 | 2 | 2 | Point Serré | shield 17 |
+| d15 | Brodeuse des Liens | R | Assassin | Nature | - | 15 | 70 | 14 | 6 | Point de Croix | - |
+| d16 | Tisseuse des Nœuds | SR | Occultiste | Nature | - | 4 | 66 | 2 | 3 | Nœud d’Or | link |
+| d17 | Architecte du Pont | UR | Prêtre | Nature | - | 5 | 74 | 3 | 4 | Deux Rives | link |
+| d18 | Ananké, Tisseuse du Pont | L | Occultiste | Nature | - | 6 | 92 | 3 | 5 | Destin Tissé | link |
+| d19 | Démon du Désir | UC | Assassin | Ombre | - | 11 | 52 | 10 | 4 | Frôlement du Vice | - |
 | d2 | Servante du Sablier | C | Occultiste | Lumière | - | 2 | 50 | 1 | 2 | Sable Glissant | slow |
+| d20 | Succube | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Regard de Luxure | curse 0.25 |
+| d21 | Grande Succube | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Haleine du Gouffre | slow |
+| d22 | Dame du Désir | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Charme de l’Abysse | curse 0.25 |
+| d23 | Asmodia, Reine du Désir | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Extase Interdite | curse 0.25 |
+| d24 | Démon des Fosses | UC | Guerrier | Ombre | - | 10 | 66 | 7 | 4 | Grondement des Fosses | - |
+| d25 | Démon Majeur | R | Guerrier | Ombre | - | 13 | 72 | 9 | 5 | Coup des Fosses | - |
+| d26 | Seigneur Démon | SR | Guerrier | Ombre | - | 16 | 80 | 11 | 6 | Cri de Fureur | stun |
+| d27 | Prince Démon | UR | Guerrier | Ombre | - | 20 | 88 | 14 | 8 | Terreur Majeure | curse 0.25 |
+| d28 | Belzébuth, Roi des Démons | L | Guerrier | Ombre | - | 24 | 100 | 17 | 10 | Sceptre du Jugement | stun |
+| d29 | Gouffre des Vices | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Gouffre Murmurant | slow |
 | d3 | Huissier de l’Entre-Deux | UC | Occultiste | Lumière | - | 3 | 54 | 2 | 2 | Sentence Lente | stun |
+| d30 | Grand Gouffre | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Souffle des Vices | - |
+| d31 | Gueule de l’Abysse | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Morsure du Gouffre | - |
+| d32 | Famine | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Dévoration Totale | - |
+| d33 | Fléau Démoniaque | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Écho des Fosses | - |
+| d34 | Grand Fléau | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Rugissement du Fléau | - |
+| d35 | Porte-Peste | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Voix de l’Abysse | - |
+| d36 | Peste, Mère des Fléaux | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Souffle Noir | curse 0.25 |
 | d4 | Juge des Heures | R | Mage | Lumière | - | 15 | 72 | 8 | 12 | Balance du Temps | - |
 | d5 | Maître des Sabliers | SR | Occultiste | Lumière | - | 4 | 66 | 2 | 3 | Sablier Ensorcelé | curse 0.25 |
 | d6 | Kairos, Arbitre du Seuil | L | Occultiste | Lumière | - | 6 | 92 | 3 | 5 | Arrêt du Temps | stun |
@@ -116,6 +134,8 @@
 | Arbitres du Seuil | d1 -> d2 -> d3 ; d4 -> d5 -> d6 | - | - |
 | Chœur Miroir | d7 -> d8 -> d9 ; d10 -> d11 -> d12 | - | - |
 | Tisseuses du Pont | d13 -> d14 -> d15 ; d16 -> d17 -> d18 | - | - |
+| La Chair (camp démon) | d19 -> d20 -> d21 -> d22 -> d23 ; d29 -> d30 -> d31 -> d32 | - | - |
+| La Puissance (camp démon) | d24 -> d25 -> d26 -> d27 -> d28 ; d33 -> d34 -> d35 -> d36 | - | - |
 
 ## Donjon forge (24)
 
@@ -160,19 +180,19 @@
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | e1 | Gobelin des Marées | C | Guerrier | Eau | - | 8 | 58 | 6 | 3 | Jet d’Écume | - |
 | e10 | Veuve des Récifs | UC | Prêtre | Eau | - | 2 | 54 | 1 | 2 | Larme Salée | heal 18 |
-| e11 | Crabe des Berges | UC | Guerrier | Terre | - | 11 | 55 | 8 | 4 | Pince de Silex | - |
-| e12 | Gardien des Galets | SR | Guerrier | Terre | - | 21 | 66 | 15 | 8 | Colère Sismique | - |
+| e11 | Crabe des Berges | UC | Guerrier | Nature | - | 11 | 55 | 8 | 4 | Pince de Silex | - |
+| e12 | Gardien des Galets | SR | Guerrier | Nature | - | 21 | 66 | 15 | 8 | Colère Sismique | - |
 | e13 | Léviathan, Colère du Gouffre | L | Guerrier | Eau | - | 38 | 108 | 27 | 15 | Marée Noire | - |
 | e14 | Titan des Marées | M | Guerrier | Eau | - | 52 | 145 | 36 | 21 | Abîme Absolu | - |
-| e15 | Ancien des Berges | SR | Prêtre | Terre | - | 4 | 70 | 2 | 3 | Mur de Galet | shield 40 |
+| e15 | Ancien des Berges | SR | Prêtre | Nature | - | 4 | 70 | 2 | 3 | Mur de Galet | shield 40 |
 | e16 | Grand Chaman des Écumes | UR | Occultiste | Eau | - | 26 | 72 | 13 | 21 | Rituel des Écumes | - |
 | e17 | Zikka, Chaman des Écumes | L | Occultiste | Eau | - | 35 | 98 | 18 | 28 | Songe des Profondeurs | - |
 | e18 | Roi des Écumes | UR | Guerrier | Eau | - | 27 | 82 | 19 | 11 | Frappe Royale | - |
 | e19 | Griknir, Roi des Écumes | L | Guerrier | Eau | - | 37 | 110 | 26 | 15 | Couronne des Écumes | - |
 | e2 | Tirailleur des Récifs | C | Mage | Eau | - | 7 | 46 | 4 | 6 | Trait de Corail | - |
 | e20 | Rôdeur des Fonds | R | Assassin | Eau | - | 14 | 70 | 13 | 6 | Vigie des Flots | - |
-| e21 | Protecteur des Berges | UR | Guerrier | Terre | - | 5 | 78 | 4 | 2 | Écran de Galets | shield 52 |
-| e22 | Pontos, Aîné des Berges | L | Prêtre | Terre | - | 6 | 88 | 3 | 5 | Bénédiction des Berges | heal 58 |
+| e21 | Protecteur des Berges | UR | Guerrier | Nature | - | 5 | 78 | 4 | 2 | Écran de Galets | shield 52 |
+| e22 | Pontos, Aîné des Berges | L | Prêtre | Nature | - | 6 | 88 | 3 | 5 | Bénédiction des Berges | heal 58 |
 | e23 | Sirène Nouvelle | C | Occultiste | Eau | - | 2 | 48 | 1 | 2 | Berceuse des Récifs | heal 14 |
 | e24 | Chanteuse des Récifs | UC | Occultiste | Eau | - | 3 | 52 | 2 | 2 | Marée Traîtresse | slow |
 | e25 | Voix du Large | R | Occultiste | Eau | - | 3 | 58 | 2 | 2 | Chant Paralysant | stun |

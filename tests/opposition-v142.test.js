@@ -7,10 +7,10 @@ import { loadEngine } from './helpers/load.mjs';
 // contre élément inné de la cible), frappe simple = élément de la carte, humains Neutres,
 // « Terre » renommé « Nature » (topologie inchangée). SCHOOL_ELEMENT en data [À TRANCHER : mapping proposé].
 
-test('Lot B : SCHOOL_ELEMENT couvre les 8 écoles et retombe sur les éléments du cercle', () => {
+test('Lot B : SCHOOL_ELEMENT couvre toutes les écoles et retombe sur les éléments du cercle', () => {
   const E = loadEngine();
   const schools = Object.keys(E.DATA.schools ?? {});
-  assert.equal(schools.length, 8);
+  assert.ok(schools.length >= 8, 'au moins les 8 ecoles historiques');
   for (const sc of schools) {
     const el = E.schoolElementOf({ ecole: sc });
     assert.ok(el, 'école ' + sc + ' a un élément');
@@ -54,7 +54,7 @@ test('Lot B : frappe simple = élément de la carte ; un humain (Neutre) ne fait
 test('Lot B : renommage exhaustif — plus aucun élément « Terre » dans data/ (hors changelog in-game)', () => {
   for (const f of readdirSync('data').filter((f) => f.endsWith('.json'))) {
     const txt = readFileSync('data/' + f, 'utf8');
-    assert.ok(!/Terre(?!s)/.test(txt), f + ' contient encore « Terre »');
+    assert.ok(!/\bTerre(?!s)\b/.test(txt), f + ' contient encore « Terre »');
   }
   const E = loadEngine();
   assert.ok(!('Terre' in E.DATA.engine.BEATS));

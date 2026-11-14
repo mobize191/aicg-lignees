@@ -4065,7 +4065,25 @@ const DATA = {
    "n14",
    "n15",
    "p1",
-   "p2"
+   "p2",
+   "d19",
+   "d20",
+   "d21",
+   "d22",
+   "d23",
+   "d24",
+   "d25",
+   "d26",
+   "d27",
+   "d28",
+   "d29",
+   "d30",
+   "d31",
+   "d32",
+   "d33",
+   "d34",
+   "d35",
+   "d36"
   ],
   "RACE_MYSTIQUE_IDS": [
    "n10",
@@ -4188,7 +4206,9 @@ const DATA = {
    "appel": "appel",
    "seuil": "entrave",
    "miroir": "rempart",
-   "pont": "appel"
+   "pont": "appel",
+   "chair": "vice",
+   "puissance": "fureur"
   },
   "moteur": {
    "MANA_START_RATIO": 0.6,
@@ -4409,7 +4429,9 @@ const DATA = {
    "entrave": "Ombre",
    "mauvais-oeil": "Ombre",
    "ferveur": "Lumière",
-   "ruse": "Eau"
+   "ruse": "Eau",
+   "vice": "Ombre",
+   "fureur": "Feu"
   },
   "CAPTURE_FORCE_CAP": 3,
   "CAPTURE_FORCE_FLOOR": 0.5,
@@ -6885,6 +6907,14 @@ const DATA = {
    {
     "to": "d8",
     "voie": "la voie du Chœur Miroir — la Réflexion"
+   },
+   {
+    "to": "d19",
+    "voie": "la voie de la chair — les succubes"
+   },
+   {
+    "to": "d24",
+    "voie": "la voie de la puissance — les gouffres"
    }
   ],
   "n15": [
@@ -7071,6 +7101,98 @@ const DATA = {
    {
     "to": "v6",
     "voie": "école des invocations"
+   }
+  ],
+  "d19": [
+   {
+    "to": "d20",
+    "voie": "la chair — la voie des succubes"
+   },
+   {
+    "to": "d29",
+    "voie": "la trappe — le Gouffre des Vices"
+   }
+  ],
+  "d20": [
+   {
+    "to": "d21",
+    "voie": "fidèle à la chair"
+   }
+  ],
+  "d21": [
+   {
+    "to": "d22",
+    "voie": "fidèle à la chair"
+   }
+  ],
+  "d22": [
+   {
+    "to": "d23",
+    "voie": "la reine du Désir"
+   }
+  ],
+  "d29": [
+   {
+    "to": "d30",
+    "voie": "la trappe s’enfonce"
+   }
+  ],
+  "d30": [
+   {
+    "to": "d31",
+    "voie": "la trappe s’ouvre"
+   }
+  ],
+  "d31": [
+   {
+    "to": "d32",
+    "voie": "Famine, la nommée de la trappe"
+   }
+  ],
+  "d24": [
+   {
+    "to": "d25",
+    "voie": "la puissance — les fosses"
+   },
+   {
+    "to": "d33",
+    "voie": "la trappe — le Fléau Démoniaque"
+   }
+  ],
+  "d25": [
+   {
+    "to": "d26",
+    "voie": "fidèle à la puissance"
+   }
+  ],
+  "d26": [
+   {
+    "to": "d27",
+    "voie": "fidèle à la puissance"
+   }
+  ],
+  "d27": [
+   {
+    "to": "d28",
+    "voie": "Belzébuth, roi des Démons"
+   }
+  ],
+  "d33": [
+   {
+    "to": "d34",
+    "voie": "le fléau grandit"
+   }
+  ],
+  "d34": [
+   {
+    "to": "d35",
+    "voie": "le fléau porte la peste"
+   }
+  ],
+  "d35": [
+   {
+    "to": "d36",
+    "voie": "Peste, Mère des Fléaux"
    }
   ]
  },
@@ -7952,6 +8074,74 @@ const DATA = {
     "p2": {
      "fusion": "onde-consacree",
      "cran": "II"
+    },
+    "d19": {
+     "fusion": "frisson-du-vice",
+     "cran": "I"
+    },
+    "d20": {
+     "fusion": "frisson-du-vice",
+     "cran": "II"
+    },
+    "d21": {
+     "fusion": "frisson-du-vice",
+     "cran": "III"
+    },
+    "d22": {
+     "fusion": "frisson-du-vice",
+     "cran": "IV"
+    },
+    "d29": {
+     "fusion": "frisson-du-vice",
+     "cran": "III"
+    },
+    "d30": {
+     "fusion": "frisson-du-vice",
+     "cran": "IV"
+    },
+    "d31": {
+     "fusion": "grondement-demoniaque",
+     "cran": "III"
+    },
+    "d24": {
+     "fusion": "grondement-demoniaque",
+     "cran": "I"
+    },
+    "d25": {
+     "fusion": "grondement-demoniaque",
+     "cran": "II"
+    },
+    "d26": {
+     "fusion": "grondement-demoniaque",
+     "cran": "III"
+    },
+    "d27": {
+     "fusion": "grondement-demoniaque",
+     "cran": "IV"
+    },
+    "d33": {
+     "fusion": "frisson-du-vice",
+     "cran": "II"
+    },
+    "d34": {
+     "fusion": "grondement-demoniaque",
+     "cran": "II"
+    },
+    "d35": {
+     "fusion": "grondement-demoniaque",
+     "cran": "IV"
+    },
+    "d23": {
+     "unique": "extase-interdite"
+    },
+    "d28": {
+     "unique": "sceptre-du-jugement"
+    },
+    "d32": {
+     "unique": "devoration-totale"
+    },
+    "d36": {
+     "unique": "souffle-noir"
     }
    }
   },
@@ -8604,6 +8794,114 @@ const DATA = {
     "mult": 4.5,
     "big": true,
     "desc": "Le bosquet entier se lève et marche au combat."
+   },
+   {
+    "famille": "chair",
+    "palier": "C",
+    "sort": "Frôlement du Vice",
+    "cout": 2,
+    "mult": 1.4,
+    "big": false,
+    "desc": "Un contact glacé qui sème le doute dans l’ennemi."
+   },
+   {
+    "famille": "chair",
+    "palier": "UC",
+    "sort": "Regard de Luxure",
+    "cout": 3,
+    "mult": 1.6,
+    "big": false,
+    "desc": "Un regard qui brûle : malédiction d’ATQ −25 % (2 tours)."
+   },
+   {
+    "famille": "chair",
+    "palier": "R",
+    "sort": "Haleine du Gouffre",
+    "cout": 5,
+    "mult": 1.8,
+    "big": false,
+    "desc": "Un souffle de fosse qui ralentit (2 tours)."
+   },
+   {
+    "famille": "chair",
+    "palier": "SR",
+    "sort": "Charme de l’Abysse",
+    "cout": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "Le charme abyssal : dégâts et malédiction (2 tours)."
+   },
+   {
+    "famille": "chair",
+    "palier": "UR",
+    "sort": "Asmodia : Danse des Vices",
+    "cout": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "La reine danse : ses vices frappent l’ennemi."
+   },
+   {
+    "famille": "chair",
+    "palier": "L",
+    "sort": "Désir Absolu",
+    "cout": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "Le désir dévorant, ultime."
+   },
+   {
+    "famille": "puissance",
+    "palier": "C",
+    "sort": "Grondement des Fosses",
+    "cout": 2,
+    "mult": 1.4,
+    "big": false,
+    "desc": "La terre elle-même gronde contre l’ennemi."
+   },
+   {
+    "famille": "puissance",
+    "palier": "UC",
+    "sort": "Coup des Fosses",
+    "cout": 3,
+    "mult": 1.6,
+    "big": false,
+    "desc": "Un coup de poing venu des profondeurs."
+   },
+   {
+    "famille": "puissance",
+    "palier": "R",
+    "sort": "Cri de Fureur",
+    "cout": 5,
+    "mult": 1.8,
+    "big": false,
+    "desc": "Un cri qui étourdit (1 tour)."
+   },
+   {
+    "famille": "puissance",
+    "palier": "SR",
+    "sort": "Terreur Majeure",
+    "cout": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "La terreur majeure : dégâts et malédiction (2 tours)."
+   },
+   {
+    "famille": "puissance",
+    "palier": "UR",
+    "sort": "Belzébuth : Couronne de Fureur",
+    "cout": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "Le roi couronne sa fureur d’un coup dévastateur."
+   },
+   {
+    "famille": "puissance",
+    "palier": "L",
+    "sort": "Ultime Fureur",
+    "cout": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "La fureur absolue."
    }
   ],
   "ecole": [
@@ -9013,6 +9311,62 @@ const DATA = {
       "cout": 6,
       "largeur": "equipe-renforcee",
       "taux": 0.2
+     }
+    }
+   },
+   {
+    "id": "frisson-du-vice",
+    "nom": "Frisson du Vice",
+    "ecole": "vice",
+    "role": "malus",
+    "crans": {
+     "I": {
+      "cout": 3,
+      "largeur": 1,
+      "mult": 1.5
+     },
+     "II": {
+      "cout": 4,
+      "largeur": 2,
+      "mult": 1.8
+     },
+     "III": {
+      "cout": 5,
+      "largeur": 3,
+      "mult": 2.2
+     },
+     "IV": {
+      "cout": 6,
+      "largeur": 5,
+      "mult": 2.6
+     }
+    }
+   },
+   {
+    "id": "grondement-demoniaque",
+    "nom": "Grondement Démoniaque",
+    "ecole": "fureur",
+    "role": "degats",
+    "crans": {
+     "I": {
+      "cout": 3,
+      "largeur": 1,
+      "mult": 1.5
+     },
+     "II": {
+      "cout": 4,
+      "largeur": 2,
+      "mult": 1.8
+     },
+     "III": {
+      "cout": 5,
+      "largeur": 3,
+      "mult": 2.2
+     },
+     "IV": {
+      "cout": 6,
+      "largeur": 5,
+      "mult": 2.6
      }
     }
    }
@@ -9671,6 +10025,66 @@ const DATA = {
      "desc": "tous les alliés sont liés à 50 %"
     },
     "desc": "Ananké, Tisseuse du Pont : elle tisse le destin de toute l’équipe (lien 50 %)."
+   },
+   {
+    "id": "extase-interdite",
+    "nom": "Extase Interdite",
+    "carte": "d23",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 6,
+    "mult": 2,
+    "desc": "La signature d’Asmodia : extase et malédiction.",
+    "base": "frisson-du-vice",
+    "cran": "IV",
+    "delta": {
+     "desc": "malédiction d’ATQ (2 tours)"
+    }
+   },
+   {
+    "id": "sceptre-du-jugement",
+    "nom": "Sceptre du Jugement",
+    "carte": "d28",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 6,
+    "mult": 2,
+    "desc": "La signature de Belzébuth : jugement et étourdissement.",
+    "base": "grondement-demoniaque",
+    "cran": "IV",
+    "delta": {
+     "desc": "étourdissement (1 tour)"
+    }
+   },
+   {
+    "id": "devoration-totale",
+    "nom": "Dévoration Totale",
+    "carte": "d32",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 9,
+    "mult": 2.2,
+    "desc": "La signature de Famine : tout dévorer.",
+    "base": "frisson-du-vice",
+    "cran": "IV",
+    "delta": {
+     "desc": "la gueule avale tout"
+    }
+   },
+   {
+    "id": "souffle-noir",
+    "nom": "Souffle Noir",
+    "carte": "d36",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 6,
+    "mult": 2,
+    "desc": "La signature de Peste : un souffle de malédiction.",
+    "base": "grondement-demoniaque",
+    "cran": "IV",
+    "delta": {
+     "desc": "malédiction (2 tours)"
+    }
    }
   ]
  },
@@ -10514,6 +10928,100 @@ const DATA = {
      "name": "Fil d’Ananké"
     }
    }
+  ],
+  "chair": [
+   {
+    "name": "Frôlement du Vice",
+    "cost": 2,
+    "mult": 1.4,
+    "desc": "Un contact glacé qui sème le doute dans l’ennemi.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Regard de Luxure",
+    "cost": 3,
+    "mult": 1.6,
+    "desc": "Un regard qui brûle : malédiction d’ATQ −25 % (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Haleine du Gouffre",
+    "cost": 5,
+    "mult": 1.8,
+    "desc": "Un souffle de fosse qui ralentit (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Charme de l’Abysse",
+    "cost": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "Le charme abyssal : dégâts et malédiction (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Asmodia : Danse des Vices",
+    "cost": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "La reine danse : ses vices frappent l’ennemi.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Désir Absolu",
+    "cost": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "Le désir dévorant, ultime.",
+    "cible": "1 ennemi"
+   }
+  ],
+  "puissance": [
+   {
+    "name": "Grondement des Fosses",
+    "cost": 2,
+    "mult": 1.4,
+    "desc": "La terre elle-même gronde contre l’ennemi.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Coup des Fosses",
+    "cost": 3,
+    "mult": 1.6,
+    "desc": "Un coup de poing venu des profondeurs.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Cri de Fureur",
+    "cost": 5,
+    "mult": 1.8,
+    "desc": "Un cri qui étourdit (1 tour).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Terreur Majeure",
+    "cost": 9,
+    "mult": 2.6,
+    "big": true,
+    "desc": "La terreur majeure : dégâts et malédiction (2 tours).",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Belzébuth : Couronne de Fureur",
+    "cost": 14,
+    "mult": 3.4,
+    "big": true,
+    "desc": "Le roi couronne sa fureur d’un coup dévastateur.",
+    "cible": "1 ennemi"
+   },
+   {
+    "name": "Ultime Fureur",
+    "cost": 20,
+    "mult": 4.5,
+    "big": true,
+    "desc": "La fureur absolue.",
+    "cible": "1 ennemi"
+   }
   ]
  },
  "marchand": {
@@ -10931,6 +11439,42 @@ const DATA = {
       "d16",
       "d17",
       "d18"
+     ]
+    ]
+   },
+   {
+    "name": "La Chair (camp démon)",
+    "lines": [
+     [
+      "d19",
+      "d20",
+      "d21",
+      "d22",
+      "d23"
+     ],
+     [
+      "d29",
+      "d30",
+      "d31",
+      "d32"
+     ]
+    ]
+   },
+   {
+    "name": "La Puissance (camp démon)",
+    "lines": [
+     [
+      "d24",
+      "d25",
+      "d26",
+      "d27",
+      "d28"
+     ],
+     [
+      "d33",
+      "d34",
+      "d35",
+      "d36"
      ]
     ]
    }
@@ -13478,6 +14022,337 @@ const DATA = {
    "soloSpell": "Lame Solaire",
    "agi": 8,
    "int": 5
+  },
+  {
+   "id": "d19",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Démon du Désir",
+   "rarity": "UC",
+   "classe": "Assassin",
+   "element": "Ombre",
+   "atk": 11,
+   "hp": 52,
+   "soloSpell": "Frôlement du Vice",
+   "soloCost": 2,
+   "soloMult": 1.4,
+   "agi": 10,
+   "int": 4
+  },
+  {
+   "id": "d20",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Succube",
+   "rarity": "R",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 10,
+   "hp": 66,
+   "effect": {
+    "kind": "curse",
+    "value": 0.25,
+    "turns": 2
+   },
+   "soloSpell": "Regard de Luxure",
+   "soloCost": 3,
+   "soloMult": 1.6,
+   "agi": 5,
+   "int": 8
+  },
+  {
+   "id": "d21",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Grande Succube",
+   "rarity": "SR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 11,
+   "hp": 72,
+   "effect": {
+    "kind": "slow"
+   },
+   "soloSpell": "Haleine du Gouffre",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "agi": 6,
+   "int": 9
+  },
+  {
+   "id": "d22",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Dame du Désir",
+   "rarity": "UR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 13,
+   "hp": 82,
+   "effect": {
+    "kind": "curse",
+    "value": 0.25,
+    "turns": 2
+   },
+   "soloSpell": "Charme de l’Abysse",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "agi": 7,
+   "int": 10
+  },
+  {
+   "id": "d23",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Asmodia, Reine du Désir",
+   "rarity": "L",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 15,
+   "hp": 94,
+   "effect": {
+    "kind": "curse",
+    "value": 0.25,
+    "turns": 2
+   },
+   "soloSpell": "Extase Interdite",
+   "soloCost": 6,
+   "soloMult": 2,
+   "agi": 8,
+   "int": 12
+  },
+  {
+   "id": "d29",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Gouffre des Vices",
+   "rarity": "R",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 10,
+   "hp": 66,
+   "effect": {
+    "kind": "slow"
+   },
+   "soloSpell": "Gouffre Murmurant",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "beast": true,
+   "agi": 5,
+   "int": 8
+  },
+  {
+   "id": "d30",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Grand Gouffre",
+   "rarity": "SR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 11,
+   "hp": 72,
+   "soloSpell": "Souffle des Vices",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "beast": true,
+   "agi": 6,
+   "int": 9
+  },
+  {
+   "id": "d31",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Gueule de l’Abysse",
+   "rarity": "UR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 13,
+   "hp": 82,
+   "soloSpell": "Morsure du Gouffre",
+   "soloCost": 14,
+   "soloMult": 3.4,
+   "beast": true,
+   "agi": 7,
+   "int": 10
+  },
+  {
+   "id": "d32",
+   "dungeon": "divin",
+   "fam": "chair",
+   "name": "Famine",
+   "rarity": "L",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 15,
+   "hp": 94,
+   "soloSpell": "Dévoration Totale",
+   "soloCost": 9,
+   "soloMult": 2.2,
+   "beast": true,
+   "agi": 8,
+   "int": 12
+  },
+  {
+   "id": "d24",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Démon des Fosses",
+   "rarity": "UC",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 10,
+   "hp": 66,
+   "soloSpell": "Grondement des Fosses",
+   "soloCost": 2,
+   "soloMult": 1.4,
+   "agi": 7,
+   "int": 4
+  },
+  {
+   "id": "d25",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Démon Majeur",
+   "rarity": "R",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 13,
+   "hp": 72,
+   "soloSpell": "Coup des Fosses",
+   "soloCost": 3,
+   "soloMult": 1.6,
+   "agi": 9,
+   "int": 5
+  },
+  {
+   "id": "d26",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Seigneur Démon",
+   "rarity": "SR",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 16,
+   "hp": 80,
+   "effect": {
+    "kind": "stun",
+    "count": 1
+   },
+   "soloSpell": "Cri de Fureur",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "agi": 11,
+   "int": 6
+  },
+  {
+   "id": "d27",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Prince Démon",
+   "rarity": "UR",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 20,
+   "hp": 88,
+   "effect": {
+    "kind": "curse",
+    "value": 0.25,
+    "turns": 2
+   },
+   "soloSpell": "Terreur Majeure",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "agi": 14,
+   "int": 8
+  },
+  {
+   "id": "d28",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Belzébuth, Roi des Démons",
+   "rarity": "L",
+   "classe": "Guerrier",
+   "element": "Ombre",
+   "atk": 24,
+   "hp": 100,
+   "effect": {
+    "kind": "stun",
+    "count": 1
+   },
+   "soloSpell": "Sceptre du Jugement",
+   "soloCost": 6,
+   "soloMult": 2,
+   "agi": 17,
+   "int": 10
+  },
+  {
+   "id": "d33",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Fléau Démoniaque",
+   "rarity": "R",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 10,
+   "hp": 66,
+   "soloSpell": "Écho des Fosses",
+   "soloCost": 5,
+   "soloMult": 1.8,
+   "agi": 5,
+   "int": 8
+  },
+  {
+   "id": "d34",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Grand Fléau",
+   "rarity": "SR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 11,
+   "hp": 72,
+   "soloSpell": "Rugissement du Fléau",
+   "soloCost": 9,
+   "soloMult": 2.6,
+   "agi": 6,
+   "int": 9
+  },
+  {
+   "id": "d35",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Porte-Peste",
+   "rarity": "UR",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 13,
+   "hp": 82,
+   "soloSpell": "Voix de l’Abysse",
+   "soloCost": 14,
+   "soloMult": 3.4,
+   "agi": 7,
+   "int": 10
+  },
+  {
+   "id": "d36",
+   "dungeon": "divin",
+   "fam": "puissance",
+   "name": "Peste, Mère des Fléaux",
+   "rarity": "L",
+   "classe": "Occultiste",
+   "element": "Ombre",
+   "atk": 15,
+   "hp": 94,
+   "effect": {
+    "kind": "curse",
+    "value": 0.25,
+    "turns": 2
+   },
+   "soloSpell": "Souffle Noir",
+   "soloCost": 6,
+   "soloMult": 2,
+   "agi": 8,
+   "int": 12
   }
  ],
  "potions": {
@@ -13754,6 +14629,34 @@ const DATA = {
     "voies": [
      "voie du vol",
      "voie des quais"
+    ]
+   }
+  },
+  "vice": {
+   "nom": "le Vice",
+   "role": "malus",
+   "ouvrePar": {
+    "profils": [
+     "Occultiste",
+     "Assassin"
+    ],
+    "voies": [
+     "la chair",
+     "le désir"
+    ]
+   }
+  },
+  "fureur": {
+   "nom": "la Fureur",
+   "role": "degats",
+   "ouvrePar": {
+    "profils": [
+     "Guerrier",
+     "Occultiste"
+    ],
+    "voies": [
+     "la puissance",
+     "la fureur"
     ]
    }
   }
@@ -14182,6 +15085,20 @@ const DATA = {
      "de": "n15",
      "vers": "d14",
      "voie": "la voie du Pont — le Liage",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n14",
+     "vers": "d19",
+     "voie": "la voie de la chair — les succubes",
+     "effet": "standard",
+     "ecoles": []
+    },
+    {
+     "de": "n14",
+     "vers": "d24",
+     "voie": "la voie de la puissance — les gouffres",
      "effet": "standard",
      "ecoles": []
     }

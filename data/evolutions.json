@@ -206,6 +206,14 @@
   {
    "to": "d8",
    "voie": "la voie du Chœur Miroir — la Réflexion"
+  },
+  {
+   "to": "d19",
+   "voie": "la voie de la chair — les succubes"
+  },
+  {
+   "to": "d24",
+   "voie": "la voie de la puissance — les gouffres"
   }
  ],
  "n15": [
@@ -392,6 +400,98 @@
   {
    "to": "v6",
    "voie": "école des invocations"
+  }
+ ],
+ "d19": [
+  {
+   "to": "d20",
+   "voie": "la chair — la voie des succubes"
+  },
+  {
+   "to": "d29",
+   "voie": "la trappe — le Gouffre des Vices"
+  }
+ ],
+ "d20": [
+  {
+   "to": "d21",
+   "voie": "fidèle à la chair"
+  }
+ ],
+ "d21": [
+  {
+   "to": "d22",
+   "voie": "fidèle à la chair"
+  }
+ ],
+ "d22": [
+  {
+   "to": "d23",
+   "voie": "la reine du Désir"
+  }
+ ],
+ "d29": [
+  {
+   "to": "d30",
+   "voie": "la trappe s’enfonce"
+  }
+ ],
+ "d30": [
+  {
+   "to": "d31",
+   "voie": "la trappe s’ouvre"
+  }
+ ],
+ "d31": [
+  {
+   "to": "d32",
+   "voie": "Famine, la nommée de la trappe"
+  }
+ ],
+ "d24": [
+  {
+   "to": "d25",
+   "voie": "la puissance — les fosses"
+  },
+  {
+   "to": "d33",
+   "voie": "la trappe — le Fléau Démoniaque"
+  }
+ ],
+ "d25": [
+  {
+   "to": "d26",
+   "voie": "fidèle à la puissance"
+  }
+ ],
+ "d26": [
+  {
+   "to": "d27",
+   "voie": "fidèle à la puissance"
+  }
+ ],
+ "d27": [
+  {
+   "to": "d28",
+   "voie": "Belzébuth, roi des Démons"
+  }
+ ],
+ "d33": [
+  {
+   "to": "d34",
+   "voie": "le fléau grandit"
+  }
+ ],
+ "d34": [
+  {
+   "to": "d35",
+   "voie": "le fléau porte la peste"
+  }
+ ],
+ "d35": [
+  {
+   "to": "d36",
+   "voie": "Peste, Mère des Fléaux"
   }
  ]
 }

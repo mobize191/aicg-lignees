@@ -40,7 +40,7 @@ async function main() {
   const expectedVoies = {
     n5: ['e3', 'e11'], n6: ['f3', 'f15', 'f24'], n7: ['g3', 'g12'], n8: ['k3', 'k12', 'k24'],
     n10: ['e24', 'w19'], n11: ['g12', 'w20'], n12: ['k3', 'k12', 'k24', 'w21'],
-    n9: ['z3', 'z16', 'z23'], n13: ['p1'], n14: ['d8'], n15: ['d14'],
+    n9: ['z3', 'z16', 'z23'], n13: ['p1'], n14: ['d8', 'd19', 'd24'], n15: ['d14'],
   };
   for (const [id, tos] of Object.entries(expectedVoies)) {
     const got = (api.EVO_CHOICES[id] ?? []).map((x) => x.to);
@@ -1409,6 +1409,7 @@ async function main() {
     const off = api.compagnonsDuJour();
     store.gold = 5000;
     const g1 = store.gold;
+    store.jetons = 500; // lot 0 refonte v2 : captures relevées décalent le stream RNG ; on pose les jetons comme en B8 c
     const jetons0 = store.jetons ?? 0;
     api.buyCompagnon(off[0].id);
     // économie v2 lot D : le recrutement se paie en JETONS, jamais en or — gold inchangé est le comportement voulu, pas un bug
