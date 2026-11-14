@@ -251,10 +251,11 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | n9 Embryon des Cieux | z16 | la voie du feu céleste — les Phénix |
 | n9 Embryon des Cieux | z23 | la voie du plein jour — le Clergé |
 | n13 Ange | p1 Jeune Séraphin | l’éveil du service — le Jeune Séraphin |
-| n14 Démon | d8 | la voie du Chœur Miroir — la Réflexion |
 | n14 Démon | d19 | la voie de la chair — les succubes |
 | n14 Démon | d24 | la voie de la puissance — les gouffres |
-| n15 Éveillé du Seuil | d14 | la voie du Pont — le Liage |
+| n15 Éveillé du Seuil | d1 | la voie du Seuil — les Arbitres |
+| n15 Éveillé du Seuil | d7 | la voie du Chœur Miroir — la Réflexion |
+| n15 Éveillé du Seuil | d13 | la voie du Pont — le Liage |
 | a34 Braconnier des Quais | e3 | la malédiction des quais |
 | a17 Kenji, Sabre Céleste | a20 Mage de la Fournaise | la régression |
 | a27 Maïa, Lame du Bosquet | a28 Maïa, Déesse du Bosquet | la fusion du Bosquet |

@@ -132,8 +132,8 @@
 | lignee | lignes | side | mythique |
 | --- | --- | --- | --- |
 | Arbitres du Seuil | d1 -> d2 -> d3 ; d4 -> d5 -> d6 | - | - |
-| Chœur Miroir | d7 -> d8 -> d9 ; d10 -> d11 -> d12 | - | - |
-| Tisseuses du Pont | d13 -> d14 -> d15 ; d16 -> d17 -> d18 | - | - |
+| Chœur Miroir | d7 -> d9 ; d10 -> d11 -> d12 | - | - |
+| Tisseuses du Pont | d13 -> d15 ; d16 -> d17 -> d18 | - | - |
 | La Chair (camp démon) | d19 -> d20 -> d21 -> d22 -> d23 ; d29 -> d30 -> d31 -> d32 | - | - |
 | La Puissance (camp démon) | d24 -> d25 -> d26 -> d27 -> d28 ; d33 -> d34 -> d35 -> d36 | - | - |
 

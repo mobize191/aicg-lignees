@@ -270,20 +270,6 @@
    },
    {
     "de": "n14",
-    "vers": "d8",
-    "voie": "la voie du Chœur Miroir — la Réflexion",
-    "effet": "standard",
-    "ecoles": []
-   },
-   {
-    "de": "n15",
-    "vers": "d14",
-    "voie": "la voie du Pont — le Liage",
-    "effet": "standard",
-    "ecoles": []
-   },
-   {
-    "de": "n14",
     "vers": "d19",
     "voie": "la voie de la chair — les succubes",
     "effet": "standard",
@@ -293,6 +279,27 @@
     "de": "n14",
     "vers": "d24",
     "voie": "la voie de la puissance — les gouffres",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n15",
+    "vers": "d1",
+    "voie": "la voie du Seuil — les Arbitres",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n15",
+    "vers": "d7",
+    "voie": "la voie du Chœur Miroir — la Réflexion",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "n15",
+    "vers": "d13",
+    "voie": "la voie du Pont — le Liage",
     "effet": "standard",
     "ecoles": []
    }

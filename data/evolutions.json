@@ -204,10 +204,6 @@
  ],
  "n14": [
   {
-   "to": "d8",
-   "voie": "la voie du Chœur Miroir — la Réflexion"
-  },
-  {
    "to": "d19",
    "voie": "la voie de la chair — les succubes"
   },
@@ -218,7 +214,15 @@
  ],
  "n15": [
   {
-   "to": "d14",
+   "to": "d1",
+   "voie": "la voie du Seuil — les Arbitres"
+  },
+  {
+   "to": "d7",
+   "voie": "la voie du Chœur Miroir — la Réflexion"
+  },
+  {
+   "to": "d13",
    "voie": "la voie du Pont — le Liage"
   }
  ],
