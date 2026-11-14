@@ -127,6 +127,18 @@ function validate(data, errors) {
     if (mod.mult != null && !(mod.mult > 0 && mod.mult <= 2)) push(`l'ecole ${key} a un mod.mult hors bornes (${mod.mult})`, 'EXI-DATA-4');
     if (mod.cout != null && !(mod.cout > 0 && mod.cout <= 2)) push(`l'ecole ${key} a un mod.cout hors bornes (${mod.cout})`, 'EXI-DATA-4');
   }
+  // lot 4 refonte v2 : tables de deblocage par niveau (J6/J11) et sorts de trio (J7)
+  const cransValides = new Set(['I', 'II', 'III', 'IV']);
+  for (const [niv, cran] of Object.entries(data.engine?.SORTS_NIVEAU ?? {})) {
+    if (!(Number(niv) >= 1) || !cransValides.has(cran)) push(`SORTS_NIVEAU : niveau ${niv} -> cran ${cran} invalide`, 'EXI-DATA-5');
+  }
+  const tousLesSorts = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? []), ...(data.grimoire?.communs ?? []), ...(data.grimoire?.race ?? []), ...(data.grimoire?.uniques ?? [])].map((s) => s.id);
+  for (const [niv, ids] of Object.entries(data.engine?.HYBRIDES_NIVEAU ?? {})) {
+    for (const id of ids ?? []) if (!tousLesSorts.includes(id)) push(`HYBRIDES_NIVEAU ${niv} : sort inconnu ${id}`, 'EXI-DATA-5');
+  }
+  for (const tr of data.engine?.SORTS_TRIO ?? []) {
+    if (!tr.nom || !(tr.cout >= 1) || !(tr.mult > 0)) push(`SORTS_TRIO : entree invalide (${tr.nom ?? 'sans nom'})`, 'EXI-DATA-5');
+  }
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();

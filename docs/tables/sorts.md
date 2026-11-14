@@ -2,14 +2,16 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-Les sorts vivent dans data/grimoire.json en six categories : `communs` (2), `entrees` (5), `race` (4), `ecole` (16), `lignee` (68), `uniques` (41).
+Les sorts vivent dans data/grimoire.json en six categories : `communs` (4), `entrees` (5), `race` (4), `ecole` (16), `lignee` (68), `uniques` (41).
 
-## Sorts communs (2)
+## Sorts communs (4)
 
 | id | nom | ecole | role | cible | cout | mult | description |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | frappe-precise | Frappe Précise | lame | degats | 1 ennemi | 2 | 1.3 | Le geste que toute carte de combat connaît : un coup net, sans gaspillage. |
 | premiers-soins | Premiers Soins | baume | soin | 1 allié | 2 | 1.15 | Le soin élémentaire que tout soigneur connaît : un pansement rapide sur la pire plaie. |
+| nova-vivifiante | Nova Vivifiante | baume | degats | 1 ennemi | 3 | 1.2 | Un éclat de lumière qui blesse l'ennemi et rend la moitié des dégâts à l'allié le plus blessé (sort hybride soin+dégâts, J11). |
+| balayage-regenere | Balayage Régénère | baume | degats | zone | 5 | 1.3 | Une vague offensive de soins : dégâts de zone, 40 % des dégâts rendus en soin à l'allié le plus blessé (hybride, J11). |
 
 ## Sorts d'entree de classe (5)
 

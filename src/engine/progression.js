@@ -186,6 +186,14 @@ function isLearned(grimoire, spellId, cran) {
 function canCastLearned(inst, grimoire, spellId, cran) {
   return isLearned(grimoire, spellId, cran) && canCast(inst, spellId);
 }
+// lot 4 refonte v2 : grimoires par zone — les crans appris (zones d'errance) se resolvent en
+// fiches complètes pour le combat, uniquement pour les ecoles ouvertes par l'exemplaire
+function grimoireSpellsOf(inst, grimoire) {
+  return (grimoire ?? [])
+    .filter((g) => g && typeof g.sort === 'string' && canCastLearned(inst, grimoire, g.sort, g.cran))
+    .map((g) => resolveSpellEntry(g))
+    .filter(Boolean);
+}
 
 // lot 5 : types d'évolution spéciaux, pilotés par les données (evolutions.json / trees.json)
 function evoEntryOf(from, to) {

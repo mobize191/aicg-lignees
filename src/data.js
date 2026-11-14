@@ -29,9 +29,13 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}) });
-const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
-  .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}), ...(s.soinPct != null ? { soinPct: s.soinPct } : {}) });
+// lot 4 (J11) : les communs hybrides (soinPct) ont leur propre clé, le commun d'attaque reste le premier
+const COMMON_SPELLS = {};
+for (const s of (DATA.grimoire.communs ?? [])) {
+  const key = s.soinPct != null ? 'hybride' : s.role === 'soin' ? 'support' : 'attaque';
+  if (!(key in COMMON_SPELLS)) COMMON_SPELLS[key] = legacySpell(s, 'commun');
+}
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
 const CLASS_SPELLS = Object.fromEntries((DATA.grimoire.entrees ?? []).filter((s) => s.classe).map((s) => [s.classe, legacySpell(s, 'classe')]));
 const SCHOOLS = DATA.schools ?? {};
@@ -134,6 +138,11 @@ const BOSS_SET_TIER = E.BOSS_SET_TIER ?? {};
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;
+
+// lot 4 refonte v2 (J6/J11/J7) : sorts debloques au fil des niveaux, hybrides de soigneur, sorts de trio
+const SORTS_NIVEAU = E.SORTS_NIVEAU ?? {};
+const HYBRIDES_NIVEAU = E.HYBRIDES_NIVEAU ?? {};
+const SORTS_TRIO = E.SORTS_TRIO ?? [];
 
 // v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
 const FX_SPELLS = E.FX_SPELLS;

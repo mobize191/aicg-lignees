@@ -77,7 +77,20 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   const iaProfile = (opts.difficulty != null ? difficultyById(opts.difficulty) : null)?.ia ?? { suboptimal: 0 };
   // Lot A (refonte direction, TRANCHÉ 12/11) : 3 actifs + 2 réserve — l'arrière joueur disparaît du plateau,
   // les slots 3-4 partent en state.reserve (hors ciblage, hors dégâts de zone, ne jouent pas)
-  const mkUnit = (c, i, tag) => { const u = makeUnit(c, `${c.id}.${tag}${i}`, c.level ?? levelFor(levels, c.id, i)); u.iid = c.iid ?? null; return u; };
+  const mkUnit = (c, i, tag) => {
+    const u = makeUnit(c, `${c.id}.${tag}${i}`, c.level ?? levelFor(levels, c.id, i));
+    u.iid = c.iid ?? null;
+    // lot 4 refonte v2 (J6/J11) : sorts debloques au fil du niveau (grimoire de l'ecole de la
+    // famille) + hybrides soin+degats des soigneurs — equipe joueur seule, les vagues gardent leur fiche
+    for (const sn of [...sortsNiveauOf(c, u.level), ...hybridesNiveauOf(c, u.level)]) {
+      const sp = resolveSpellEntry(sn);
+      if (!sp) continue;
+      const k = spellKeyOf(sp);
+      if (k && u.spells.some((x) => spellKeyOf(x) === k)) continue;
+      u.spells.push(applySchoolMod(sp));
+    }
+    return u;
+  };
   const team = {
     avant: (teamCards.avant ?? []).map((c, i) => mkUnit(c, i, 'a')),
     arriere: [],
@@ -97,6 +110,17 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   for (const u of reserve) u.rang = 'reserve';
   for (const u of enemies.avant) u.rang = 'avant';
   for (const u of enemies.arriere) u.rang = 'arriere';
+  // lot 4 refonte v2 (J7) : sorts de trio — la composition de la premiere ligne debloque un sort d'equipe
+  const trioClasses = [...new Set(team.avant.map((u) => u.classe))];
+  for (const tr of SORTS_TRIO) {
+    const cond = tr.condition ?? {};
+    const ok = (cond.distinct != null ? trioClasses.length >= cond.distinct : true)
+      && (cond.classes ? cond.classes.every((cl) => trioClasses.includes(cl)) : true);
+    if (!ok) continue;
+    for (const u of team.avant) {
+      u.spells.push({ name: tr.nom, cost: tr.cout, mult: tr.mult, largeur: tr.largeur, cible: tr.cible, role: 'degats', cat: 'trio', desc: tr.desc });
+    }
+  }
   const all = [...team.avant]; // synergies de combat calculées sur les actifs seuls (réserve hors combat) [À TRANCHER si synergies sur les 5]
   const mods = teamModifiers(all);
   if (mods.hpPct) {
@@ -588,6 +612,7 @@ function actTeamStriker(u, i, ctx, step) {
   dmg = Math.max(1, Math.round(dmg * elementMult(atkEl, target.element)));
   const slowed = foes.some((f) => f.status && f.status.slow > 0);
   const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
+  let dealt = 0; // lot 4 (J11) : total des degats reels, base du soin des sorts hybrides
   for (let h = 0; h < hits; h++) {
     let dodged = false;
     for (const tgt of hitList) {
@@ -604,6 +629,7 @@ function actTeamStriker(u, i, ctx, step) {
       const dmgC = crit ? Math.max(1, Math.round(dmgT * M.CRIT_MULT)) : dmgT;
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgC, kind, mana: u.mana, elem: elemT, side: 'team', ...(crit ? { crit: true } : {}) });
       applyDamage(tgt, dmgC, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1, crit });
+      dealt += dmgC;
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
@@ -636,6 +662,14 @@ function actTeamStriker(u, i, ctx, step) {
       }
     }
     if (dodged || !target.alive) break;
+  }
+  // lot 4 refonte v2 (J11) : sort hybride soin+degats — rend soinPct des degats a l'allie le plus blesse
+  if (spell && spell.soinPct && dealt > 0) {
+    const hurt = ctx.teamAll().filter((a) => a.alive && a.hp < a.maxHp).sort((a, b) => a.hp - b.hp)[0];
+    if (hurt) {
+      const amount = Math.min(Math.max(1, Math.round(dealt * spell.soinPct)), Math.max(0, hurt.maxHp - hurt.hp));
+      if (amount > 0) { hurt.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: hurt.uid, amount, kind: 'special' }); }
+    }
   }
   if (!spell && cmU.splash) {
     const ratio = cmU.splash / cmU.strike;

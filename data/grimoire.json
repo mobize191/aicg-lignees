@@ -19,6 +19,28 @@
    "cout": 2,
    "mult": 1.15,
    "desc": "Le soin élémentaire que tout soigneur connaît : un pansement rapide sur la pire plaie."
+  },
+  {
+   "id": "nova-vivifiante",
+   "nom": "Nova Vivifiante",
+   "ecole": "baume",
+   "role": "degats",
+   "cible": "1 ennemi",
+   "cout": 3,
+   "mult": 1.2,
+   "soinPct": 0.5,
+   "desc": "Un éclat de lumière qui blesse l'ennemi et rend la moitié des dégâts à l'allié le plus blessé (sort hybride soin+dégâts, J11)."
+  },
+  {
+   "id": "balayage-regenere",
+   "nom": "Balayage Régénère",
+   "ecole": "baume",
+   "role": "degats",
+   "cible": "zone",
+   "cout": 5,
+   "mult": 1.3,
+   "soinPct": 0.4,
+   "desc": "Une vague offensive de soins : dégâts de zone, 40 % des dégâts rendus en soin à l'allié le plus blessé (hybride, J11)."
   }
  ],
  "race": [

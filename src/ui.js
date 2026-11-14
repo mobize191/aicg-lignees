@@ -2624,6 +2624,15 @@ function enterZone(zoneId) {
     store.errance.hero.y = p.y;
   }
   if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
+  // lot 4 refonte v2 : grimoires par zone — les enseignements de la zone rejoignent le grimoire persistant
+  const zData = (DATA.zones ?? []).find((x) => x.id === zoneId);
+  const nouveaux = [];
+  for (const e of (zData?.ecolages ?? [])) {
+    const avant = (store.grimoire ?? []).length;
+    store.grimoire = learnCran(store.grimoire, e.sort, e.cran);
+    if (store.grimoire.length > avant) nouveaux.push(e.sort + ' ' + e.cran);
+  }
+  if (nouveaux.length) toast('\u2726 Grimoire : ' + nouveaux.join(', ') + ' appris dans cette zone.');
   save();
   go('#errance');
 }
@@ -5817,7 +5826,8 @@ function renderCombat(root, opts = {}) {
     // correctif terrain : la fusion acc + sorts de la forme est dédoublonnée (clé = nom, sinon id + cran)
     const spellKeys = new Set();
     const instSpells = [];
-    for (const sp of [...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean)) {
+    // lot 4 refonte v2 : les crans appris par zones (grimoire) entrent dans la liste de combat
+    for (const sp of [...grimoireSpellsOf(inst, store.grimoire), ...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean)) {
       const k = spellKeyOf(sp);
       if (k) { if (spellKeys.has(k)) continue; spellKeys.add(k); }
       instSpells.push(sp);

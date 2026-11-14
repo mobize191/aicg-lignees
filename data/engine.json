@@ -804,5 +804,45 @@
  },
  "FX_HITSTOP": true,
  "FX_HITSTOP_MS": 90,
- "FX_FLASH_MAX_PER_S": 3
+ "FX_FLASH_MAX_PER_S": 3,
+ "SORTS_NIVEAU": {
+  "2": "I",
+  "5": "II",
+  "9": "III",
+  "14": "IV"
+ },
+ "HYBRIDES_NIVEAU": {
+  "2": [
+   "nova-vivifiante",
+   "balayage-regenere"
+  ]
+ },
+ "SORTS_TRIO": [
+  {
+   "nom": "Harmonie du Trio",
+   "cout": 4,
+   "mult": 1.6,
+   "largeur": 3,
+   "cible": "zone",
+   "desc": "Trois classes différentes en première ligne : une onde harmonique frappe la zone ennemie.",
+   "condition": {
+    "distinct": 3
+   }
+  },
+  {
+   "nom": "Éclipse du Trio",
+   "cout": 6,
+   "mult": 2.6,
+   "largeur": 1,
+   "cible": "1 ennemi",
+   "desc": "Mage + Assassin + Prêtre alignés : un sort d'équipe unique, frappe massive sur une cible.",
+   "condition": {
+    "classes": [
+     "Mage",
+     "Assassin",
+     "Prêtre"
+    ]
+   }
+  }
+ ]
 }

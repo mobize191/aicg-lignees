@@ -4822,7 +4822,47 @@ const DATA = {
   },
   "FX_HITSTOP": true,
   "FX_HITSTOP_MS": 90,
-  "FX_FLASH_MAX_PER_S": 3
+  "FX_FLASH_MAX_PER_S": 3,
+  "SORTS_NIVEAU": {
+   "2": "I",
+   "5": "II",
+   "9": "III",
+   "14": "IV"
+  },
+  "HYBRIDES_NIVEAU": {
+   "2": [
+    "nova-vivifiante",
+    "balayage-regenere"
+   ]
+  },
+  "SORTS_TRIO": [
+   {
+    "nom": "Harmonie du Trio",
+    "cout": 4,
+    "mult": 1.6,
+    "largeur": 3,
+    "cible": "zone",
+    "desc": "Trois classes différentes en première ligne : une onde harmonique frappe la zone ennemie.",
+    "condition": {
+     "distinct": 3
+    }
+   },
+   {
+    "nom": "Éclipse du Trio",
+    "cout": 6,
+    "mult": 2.6,
+    "largeur": 1,
+    "cible": "1 ennemi",
+    "desc": "Mage + Assassin + Prêtre alignés : un sort d'équipe unique, frappe massive sur une cible.",
+    "condition": {
+     "classes": [
+      "Mage",
+      "Assassin",
+      "Prêtre"
+     ]
+    }
+   }
+  ]
  },
  "equipment": {
   "pieces": [
@@ -8836,6 +8876,28 @@ const DATA = {
     "cout": 2,
     "mult": 1.15,
     "desc": "Le soin élémentaire que tout soigneur connaît : un pansement rapide sur la pire plaie."
+   },
+   {
+    "id": "nova-vivifiante",
+    "nom": "Nova Vivifiante",
+    "ecole": "baume",
+    "role": "degats",
+    "cible": "1 ennemi",
+    "cout": 3,
+    "mult": 1.2,
+    "soinPct": 0.5,
+    "desc": "Un éclat de lumière qui blesse l'ennemi et rend la moitié des dégâts à l'allié le plus blessé (sort hybride soin+dégâts, J11)."
+   },
+   {
+    "id": "balayage-regenere",
+    "nom": "Balayage Régénère",
+    "ecole": "baume",
+    "role": "degats",
+    "cible": "zone",
+    "cout": 5,
+    "mult": 1.3,
+    "soinPct": 0.4,
+    "desc": "Une vague offensive de soins : dégâts de zone, 40 % des dégâts rendus en soin à l'allié le plus blessé (hybride, J11)."
    }
   ],
   "race": [
@@ -17312,9 +17374,13 @@ const PALIERS = E.PALIERS;
 const SYNERGIES = DATA.synergies;
 const MONSTER_MANA = E.MONSTER_MANA;
 const RAW = DATA.monsters;
-const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}) });
-const COMMON_SPELLS = Object.fromEntries((DATA.grimoire.communs ?? [])
-  .map((s) => [s.role === 'soin' ? 'support' : 'attaque', legacySpell(s, 'commun')]));
+const legacySpell = (s, cat) => ({ name: s.nom, cost: s.cout, mult: s.mult, cat, desc: s.desc, ...(s.ecole ? { ecole: s.ecole } : {}), ...(s.role ? { role: s.role } : {}), ...(s.cible ? { cible: s.cible } : {}), ...(s.taux != null ? { taux: s.taux } : {}), ...(s.tours != null ? { tours: s.tours } : {}), ...(s.curse != null ? { curse: s.curse } : {}), ...(s.soinPct != null ? { soinPct: s.soinPct } : {}) });
+// lot 4 (J11) : les communs hybrides (soinPct) ont leur propre clé, le commun d'attaque reste le premier
+const COMMON_SPELLS = {};
+for (const s of (DATA.grimoire.communs ?? [])) {
+  const key = s.soinPct != null ? 'hybride' : s.role === 'soin' ? 'support' : 'attaque';
+  if (!(key in COMMON_SPELLS)) COMMON_SPELLS[key] = legacySpell(s, 'commun');
+}
 const RACE_SPELLS = Object.fromEntries((DATA.grimoire.race ?? []).map((s) => [s.race, legacySpell(s, 'race')]));
 const CLASS_SPELLS = Object.fromEntries((DATA.grimoire.entrees ?? []).filter((s) => s.classe).map((s) => [s.classe, legacySpell(s, 'classe')]));
 const SCHOOLS = DATA.schools ?? {};
@@ -17417,6 +17483,11 @@ const BOSS_SET_TIER = E.BOSS_SET_TIER ?? {};
 // recâblage famille → école : la clé d'école réelle d'une famille (seules lame et appel coïncident)
 
 const FAM_SCHOOL = E.FAM_SCHOOL;
+
+// lot 4 refonte v2 (J6/J11/J7) : sorts debloques au fil des niveaux, hybrides de soigneur, sorts de trio
+const SORTS_NIVEAU = E.SORTS_NIVEAU ?? {};
+const HYBRIDES_NIVEAU = E.HYBRIDES_NIVEAU ?? {};
+const SORTS_TRIO = E.SORTS_TRIO ?? [];
 
 // v0.48 : sort signature -> vidéo fx (webm rendus dans site-assets/fx/, jamais en base64)
 const FX_SPELLS = E.FX_SPELLS;
@@ -17597,6 +17668,18 @@ function validate(data, errors) {
     if (!mod) continue;
     if (mod.mult != null && !(mod.mult > 0 && mod.mult <= 2)) push(`l'ecole ${key} a un mod.mult hors bornes (${mod.mult})`, 'EXI-DATA-4');
     if (mod.cout != null && !(mod.cout > 0 && mod.cout <= 2)) push(`l'ecole ${key} a un mod.cout hors bornes (${mod.cout})`, 'EXI-DATA-4');
+  }
+  // lot 4 refonte v2 : tables de deblocage par niveau (J6/J11) et sorts de trio (J7)
+  const cransValides = new Set(['I', 'II', 'III', 'IV']);
+  for (const [niv, cran] of Object.entries(data.engine?.SORTS_NIVEAU ?? {})) {
+    if (!(Number(niv) >= 1) || !cransValides.has(cran)) push(`SORTS_NIVEAU : niveau ${niv} -> cran ${cran} invalide`, 'EXI-DATA-5');
+  }
+  const tousLesSorts = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? []), ...(data.grimoire?.communs ?? []), ...(data.grimoire?.race ?? []), ...(data.grimoire?.uniques ?? [])].map((s) => s.id);
+  for (const [niv, ids] of Object.entries(data.engine?.HYBRIDES_NIVEAU ?? {})) {
+    for (const id of ids ?? []) if (!tousLesSorts.includes(id)) push(`HYBRIDES_NIVEAU ${niv} : sort inconnu ${id}`, 'EXI-DATA-5');
+  }
+  for (const tr of data.engine?.SORTS_TRIO ?? []) {
+    if (!tr.nom || !(tr.cout >= 1) || !(tr.mult > 0)) push(`SORTS_TRIO : entree invalide (${tr.nom ?? 'sans nom'})`, 'EXI-DATA-5');
   }
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
@@ -18230,6 +18313,7 @@ function schoolModOf(ecoleId) {
 }
 function applySchoolMod(sp) {
   if (!sp || sp.schoolModApplied) return sp;
+  if (sp.soinPct != null) return sp; // hybrides (J11) : le drain EST la compensation du mod de l'ecole baume
   const mod = schoolModOf(sp.ecole);
   if (!mod) return sp;
   const out = { ...sp, schoolModApplied: true };
@@ -18273,6 +18357,7 @@ function resolveSpellEntry(sp) {
     sort: sp.sort,
     ...(sp.cran != null ? { cran: sp.cran } : {}),
     ...(larg != null ? { largeur: larg } : {}),
+    ...((c.soinPct ?? def.soinPct) != null ? { soinPct: c.soinPct ?? def.soinPct } : {}),
   };
 }
 // cle d'unicite d'un sort pour dédoublonner : nom résolu, sinon id de sort + cran
@@ -18367,6 +18452,35 @@ function largeurOfSpell(sp) {
   return 1;
 }
 // compat nom seul : un nom sans porteur = pas de cran -> monocible pour les sorts d'école (lot 3)
+// lot 4 refonte v2 (J6) : grimoire de l'ecole de la famille debloque au fil des niveaux
+// (table SORTS_NIVEAU en data : niveau -> cran), jamais des paliers de rarete
+function sortsNiveauOf(card, lvl) {
+  const out = [];
+  if (!card || lvl == null) return out;
+  const famKey = card.family ? (FAM_SCHOOL[card.family] ?? card.family) : null;
+  const schools = new Set(famKey ? [famKey] : profilSchools(card.classe ?? ''));
+  for (const [niveau, cran] of Object.entries(SORTS_NIVEAU ?? {})) {
+    if (!(lvl >= Number(niveau))) continue;
+    for (const s of (DATA.grimoire?.ecole ?? [])) {
+      if (!schools.has(s.ecole)) continue;
+      const c = s.crans?.[cran];
+      // que les crans offensifs (mult) : le controle/soin par niveau c'est le grimoire des zones,
+      // sinon l'IA Auto spame le controle sans jamais frapper (marathons mesurés au harnas)
+      if (c && !c.vide && c.mult != null) out.push({ sort: s.id, cran });
+    }
+  }
+  return out;
+}
+// lot 4 refonte v2 (J11) : sorts hybrides soin+degats des soigneurs, par niveau (HYBRIDES_NIVEAU en data)
+function hybridesNiveauOf(card, lvl) {
+  const out = [];
+  if (!card || lvl == null || card.classe !== 'Pr\u00eatre') return out;
+  for (const [niveau, ids] of Object.entries(HYBRIDES_NIVEAU ?? {})) {
+    if (!(lvl >= Number(niveau))) continue;
+    for (const id of ids ?? []) if (getSpellDef(id)) out.push({ sort: id });
+  }
+  return out;
+}
 function largeurOfSpellName(name) {
   return largeurOfSpell({ name });
 }
@@ -18450,7 +18564,20 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   const iaProfile = (opts.difficulty != null ? difficultyById(opts.difficulty) : null)?.ia ?? { suboptimal: 0 };
   // Lot A (refonte direction, TRANCHÉ 12/11) : 3 actifs + 2 réserve — l'arrière joueur disparaît du plateau,
   // les slots 3-4 partent en state.reserve (hors ciblage, hors dégâts de zone, ne jouent pas)
-  const mkUnit = (c, i, tag) => { const u = makeUnit(c, `${c.id}.${tag}${i}`, c.level ?? levelFor(levels, c.id, i)); u.iid = c.iid ?? null; return u; };
+  const mkUnit = (c, i, tag) => {
+    const u = makeUnit(c, `${c.id}.${tag}${i}`, c.level ?? levelFor(levels, c.id, i));
+    u.iid = c.iid ?? null;
+    // lot 4 refonte v2 (J6/J11) : sorts debloques au fil du niveau (grimoire de l'ecole de la
+    // famille) + hybrides soin+degats des soigneurs — equipe joueur seule, les vagues gardent leur fiche
+    for (const sn of [...sortsNiveauOf(c, u.level), ...hybridesNiveauOf(c, u.level)]) {
+      const sp = resolveSpellEntry(sn);
+      if (!sp) continue;
+      const k = spellKeyOf(sp);
+      if (k && u.spells.some((x) => spellKeyOf(x) === k)) continue;
+      u.spells.push(applySchoolMod(sp));
+    }
+    return u;
+  };
   const team = {
     avant: (teamCards.avant ?? []).map((c, i) => mkUnit(c, i, 'a')),
     arriere: [],
@@ -18470,6 +18597,17 @@ function initCombat(teamCards, enemyCards, seed, levels = {}, opts = {}) {
   for (const u of reserve) u.rang = 'reserve';
   for (const u of enemies.avant) u.rang = 'avant';
   for (const u of enemies.arriere) u.rang = 'arriere';
+  // lot 4 refonte v2 (J7) : sorts de trio — la composition de la premiere ligne debloque un sort d'equipe
+  const trioClasses = [...new Set(team.avant.map((u) => u.classe))];
+  for (const tr of SORTS_TRIO) {
+    const cond = tr.condition ?? {};
+    const ok = (cond.distinct != null ? trioClasses.length >= cond.distinct : true)
+      && (cond.classes ? cond.classes.every((cl) => trioClasses.includes(cl)) : true);
+    if (!ok) continue;
+    for (const u of team.avant) {
+      u.spells.push({ name: tr.nom, cost: tr.cout, mult: tr.mult, largeur: tr.largeur, cible: tr.cible, role: 'degats', cat: 'trio', desc: tr.desc });
+    }
+  }
   const all = [...team.avant]; // synergies de combat calculées sur les actifs seuls (réserve hors combat) [À TRANCHER si synergies sur les 5]
   const mods = teamModifiers(all);
   if (mods.hpPct) {
@@ -18961,6 +19099,7 @@ function actTeamStriker(u, i, ctx, step) {
   dmg = Math.max(1, Math.round(dmg * elementMult(atkEl, target.element)));
   const slowed = foes.some((f) => f.status && f.status.slow > 0);
   const hits = (mods.doubleChance && ctx.state.rng() < mods.doubleChance) || slowed ? 2 : 1;
+  let dealt = 0; // lot 4 (J11) : total des degats reels, base du soin des sorts hybrides
   for (let h = 0; h < hits; h++) {
     let dodged = false;
     for (const tgt of hitList) {
@@ -18977,6 +19116,7 @@ function actTeamStriker(u, i, ctx, step) {
       const dmgC = crit ? Math.max(1, Math.round(dmgT * M.CRIT_MULT)) : dmgT;
       ctx.events.push({ type: 'attack', sourceId: u.uid, targetId: tgt.uid, amount: dmgC, kind, mana: u.mana, elem: elemT, side: 'team', ...(crit ? { crit: true } : {}) });
       applyDamage(tgt, dmgC, ctx.events, 'enemies', { allies: foes }, true, { state: ctx.state, zone: hitList.length > 1, crit });
+      dealt += dmgC;
       if (tgt.alive && spell && spell.dot) {
         tgt.status.dot = { dmg: Math.max(1, Math.round(dmgT * (spell.dot.pct ?? M.DOT_DEFAULT_PCT))), turns: spell.dot.turns ?? 2 };
         ctx.events.push({ type: 'status', side: 'enemies', targetId: tgt.uid, kind: 'dot', value: tgt.status.dot.dmg });
@@ -19009,6 +19149,14 @@ function actTeamStriker(u, i, ctx, step) {
       }
     }
     if (dodged || !target.alive) break;
+  }
+  // lot 4 refonte v2 (J11) : sort hybride soin+degats — rend soinPct des degats a l'allie le plus blesse
+  if (spell && spell.soinPct && dealt > 0) {
+    const hurt = ctx.teamAll().filter((a) => a.alive && a.hp < a.maxHp).sort((a, b) => a.hp - b.hp)[0];
+    if (hurt) {
+      const amount = Math.min(Math.max(1, Math.round(dealt * spell.soinPct)), Math.max(0, hurt.maxHp - hurt.hp));
+      if (amount > 0) { hurt.hp += amount; ctx.events.push({ type: 'heal', side: 'team', sourceId: u.uid, targetId: hurt.uid, amount, kind: 'special' }); }
+    }
   }
   if (!spell && cmU.splash) {
     const ratio = cmU.splash / cmU.strike;
@@ -19821,6 +19969,14 @@ function isLearned(grimoire, spellId, cran) {
 }
 function canCastLearned(inst, grimoire, spellId, cran) {
   return isLearned(grimoire, spellId, cran) && canCast(inst, spellId);
+}
+// lot 4 refonte v2 : grimoires par zone — les crans appris (zones d'errance) se resolvent en
+// fiches complètes pour le combat, uniquement pour les ecoles ouvertes par l'exemplaire
+function grimoireSpellsOf(inst, grimoire) {
+  return (grimoire ?? [])
+    .filter((g) => g && typeof g.sort === 'string' && canCastLearned(inst, grimoire, g.sort, g.cran))
+    .map((g) => resolveSpellEntry(g))
+    .filter(Boolean);
 }
 
 // lot 5 : types d'évolution spéciaux, pilotés par les données (evolutions.json / trees.json)
@@ -23761,6 +23917,15 @@ function enterZone(zoneId) {
     store.errance.hero.y = p.y;
   }
   if (!store.zonesVisitees.includes(zoneId)) store.zonesVisitees.push(zoneId);
+  // lot 4 refonte v2 : grimoires par zone — les enseignements de la zone rejoignent le grimoire persistant
+  const zData = (DATA.zones ?? []).find((x) => x.id === zoneId);
+  const nouveaux = [];
+  for (const e of (zData?.ecolages ?? [])) {
+    const avant = (store.grimoire ?? []).length;
+    store.grimoire = learnCran(store.grimoire, e.sort, e.cran);
+    if (store.grimoire.length > avant) nouveaux.push(e.sort + ' ' + e.cran);
+  }
+  if (nouveaux.length) toast('\u2726 Grimoire : ' + nouveaux.join(', ') + ' appris dans cette zone.');
   save();
   go('#errance');
 }
@@ -26954,7 +27119,8 @@ function renderCombat(root, opts = {}) {
     // correctif terrain : la fusion acc + sorts de la forme est dédoublonnée (clé = nom, sinon id + cran)
     const spellKeys = new Set();
     const instSpells = [];
-    for (const sp of [...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean)) {
+    // lot 4 refonte v2 : les crans appris par zones (grimoire) entrent dans la liste de combat
+    for (const sp of [...grimoireSpellsOf(inst, store.grimoire), ...(inst.acc ?? []), ...(base.spells ?? [])].map(resolveSpellEntry).filter(Boolean)) {
       const k = spellKeyOf(sp);
       if (k) { if (spellKeys.has(k)) continue; spellKeys.add(k); }
       instSpells.push(sp);

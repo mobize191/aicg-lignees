@@ -373,6 +373,7 @@ function schoolModOf(ecoleId) {
 }
 function applySchoolMod(sp) {
   if (!sp || sp.schoolModApplied) return sp;
+  if (sp.soinPct != null) return sp; // hybrides (J11) : le drain EST la compensation du mod de l'ecole baume
   const mod = schoolModOf(sp.ecole);
   if (!mod) return sp;
   const out = { ...sp, schoolModApplied: true };
@@ -416,6 +417,7 @@ function resolveSpellEntry(sp) {
     sort: sp.sort,
     ...(sp.cran != null ? { cran: sp.cran } : {}),
     ...(larg != null ? { largeur: larg } : {}),
+    ...((c.soinPct ?? def.soinPct) != null ? { soinPct: c.soinPct ?? def.soinPct } : {}),
   };
 }
 // cle d'unicite d'un sort pour dédoublonner : nom résolu, sinon id de sort + cran
@@ -510,6 +512,35 @@ function largeurOfSpell(sp) {
   return 1;
 }
 // compat nom seul : un nom sans porteur = pas de cran -> monocible pour les sorts d'école (lot 3)
+// lot 4 refonte v2 (J6) : grimoire de l'ecole de la famille debloque au fil des niveaux
+// (table SORTS_NIVEAU en data : niveau -> cran), jamais des paliers de rarete
+function sortsNiveauOf(card, lvl) {
+  const out = [];
+  if (!card || lvl == null) return out;
+  const famKey = card.family ? (FAM_SCHOOL[card.family] ?? card.family) : null;
+  const schools = new Set(famKey ? [famKey] : profilSchools(card.classe ?? ''));
+  for (const [niveau, cran] of Object.entries(SORTS_NIVEAU ?? {})) {
+    if (!(lvl >= Number(niveau))) continue;
+    for (const s of (DATA.grimoire?.ecole ?? [])) {
+      if (!schools.has(s.ecole)) continue;
+      const c = s.crans?.[cran];
+      // que les crans offensifs (mult) : le controle/soin par niveau c'est le grimoire des zones,
+      // sinon l'IA Auto spame le controle sans jamais frapper (marathons mesurés au harnas)
+      if (c && !c.vide && c.mult != null) out.push({ sort: s.id, cran });
+    }
+  }
+  return out;
+}
+// lot 4 refonte v2 (J11) : sorts hybrides soin+degats des soigneurs, par niveau (HYBRIDES_NIVEAU en data)
+function hybridesNiveauOf(card, lvl) {
+  const out = [];
+  if (!card || lvl == null || card.classe !== 'Pr\u00eatre') return out;
+  for (const [niveau, ids] of Object.entries(HYBRIDES_NIVEAU ?? {})) {
+    if (!(lvl >= Number(niveau))) continue;
+    for (const id of ids ?? []) if (getSpellDef(id)) out.push({ sort: id });
+  }
+  return out;
+}
 function largeurOfSpellName(name) {
   return largeurOfSpell({ name });
 }
