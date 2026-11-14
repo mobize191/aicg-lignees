@@ -1,5 +1,12 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 59, couloir design) : PROMPT CORRECTIF EXCEPTION v3.4 LIVRÉ — `docs/prompt-exception-v34.md` : câblage complet de la mécanique Exception (E1, bloquant B1 de la suite 57) + marqueurs CSS par thème (E2, bloquant B2) + lot retries design (E3, couloir local) — statut À LANCER par le couloir 1
+
+- **E1 (code, B1)** : tirage Exception dans `newInst` au patron du lot 8 SHINY (1/100 à l'obtention via `uiRand`, thème 50/50 r/o, drapeau sur l'exemplaire, coexistence shiny/Exception actée suites 40/57) ; `artKeyOf` chaîné **shiny > exception > classique** avec fallback propre ; apposition passée au rng seedé (exit `Math.random()`) ; persistance + **migration versionnée idempotente** (patron shiny v32, tirage seedé des exemplaires existants) ; héritage fusion miroir du shiny (≥1 parent Exception => enfant Exception, thème re-tiré, cumul avec shiny) ; compteur + filtre collection ; tests + smoke dédiés. **Digest INCHANGÉ attendu** (cosmétique), MESURE obligatoire, STOP si écart.
+- **E2 (CSS, B2)** : le marqueur doré unique devient deux marqueurs thématiques — `.exception-r` sweep or 60° conservé, `.exception-o` **liseré rouge sombre** (spec §2, suite 40 confirmait des marqueurs distincts) ; badges « ✦ Repos » / « ✧ Obscure ».
+- **E3 (retries, couloir local ComfyUI)** : e31 Hydre **3 têtes ×3 versions** (canon non tenu), s18 Kiri armure **noire intégrale**, e14-r vraie scène de vie (confrontation refusée), d28 motif mouche optionnel à trancher par Marc-Olivier. Seeds en suite de `seeds-v3.csv`, remplacement des clés dans `assets-v34.json`, QA vision sur les retries uniquement.
+- **Rappel du tranchage en attente** (suite 57) : d20 décolleté, p4 au manifeste, définition Repos sur les cartes M. **Baseline** : verrouillage de `d630d83e…`/`584f5d16…` à arbitrer par Marc-Olivier (suite 58 : prêt au verrouillage).
+
 > ⚠️ RÈGLE (15/11, suite 57) : ce journal dépasse la limite de lecture des outils (~100 Ko). TOUT couloir qui le met à jour DOIT relire la version complète par morceaux (offset) ou depuis le commit précédent — JAMAIS pousser une base tronquée (3 pertes de queue constatées). Envisager un découpage en volumes si ça se reproduit.
 
 ## 2026-11-15 (suite 58, check indépendant pilotage) : REFONTE v2 ENTIÈREMENT VÉRIFIÉE — TOUTES LES PREUVES REJOUÉES DE ZÉRO ET REPRODUITES À L'IDENTIQUE — verdict : PRÊT AU VERROUILLAGE de la baseline proposée, 4 tranchages d'équilibre ouverts documentés
