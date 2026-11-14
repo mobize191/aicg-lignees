@@ -212,6 +212,7 @@ const API_PAIRS = {
   newInst: 'newInst', addGem: 'addGem', spendGems: 'spendGems',
   addXpI: 'addXpI',
   addCardIid: 'addCardIid',
+  removeCard: 'removeCard', // bots-boucle.mjs : retrait d'une carte de l'équipe par le vrai chemin (splice, pas de rembourrage)
   _setAuto: '() => {}', // v1.39 lot 2 : le mode auto n'existe plus, no-op pour les appels de test
   feedback: 'feedback', hitStopLarge: 'hitStopLarge', // Lot 2 : feedback 3 tiers testable
   _autoMode: '() => false',
