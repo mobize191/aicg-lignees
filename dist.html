@@ -25675,10 +25675,9 @@ function renderErrance(root) {
         }
         return;
       } else if (o.type === 'retour') { // v1.40 : retour ville -> hub-ville (Accueil), pas la sélection des zones
-        persistErrancePos(); save();
+        persistErrancePos(); store.errance = null; save();
         toast('✨ Retour à la ville.');
-        go('#accueil');
-        return;
+        go('#accueil'); return; // ui-v1.53 : errance=null au retour ville (état d'un rechargement)
       } else if (o.type === 'jarre') {
         const jid = `jarre-${o.x}-${o.y}`;
         const r = interactJarre(st, jid);
@@ -25756,7 +25755,7 @@ function renderErrance(root) {
   // §10 iOS : pointerup/pointercancel écoutés sur window, pas sur le canvas
   window.addEventListener('pointerup', () => { dragging = false; });
   window.addEventListener('pointercancel', () => { dragging = false; });
-  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); save(); go('#accueil'); }; // v1.40 : hub-ville = Accueil
+  root.querySelector('#errance-back').onclick = () => { persistErrancePos(); store.errance = null; save(); go('#accueil'); }; // v1.40 : hub-ville = Accueil — correctif ui-v1.53 : store.errance = null sinon la boucle rAF continue en coulisses (rencontres/combats surgissent depuis un autre écran)
 }
 
 function renderHome(root) {
@@ -28983,7 +28982,7 @@ function renderAutel(root) {
   if (rst) rst.onclick = () => { autelSel = []; autelPlan = null; autelConfirm = false; renderAutel(root); };
   root.querySelectorAll('.autel-row').forEach((el) => {
     el.onclick = () => {
-      const iid = el.dataset.autelIid;
+      const iid = Number(el.dataset.autelIid); // correctif ui-v1.53 : dataset = chaîne, iids = nombres — sinon la sélection et la fusion ne marchent jamais
       if (autelSel.includes(iid)) autelSel = autelSel.filter((x) => x !== iid);
       else if (autelSel.length < 2) autelSel.push(iid);
       autelPlan = null; autelConfirm = false;
@@ -29164,6 +29163,7 @@ const STATUS_DOC = [
 
 const HISTORY = [
   ['Exception v3.4 (lot E1) : 1 exemplaire sur 100 est une EXCEPTION (thème Repos -r ou Obscures -o du manifeste v3.4) — cosmétique pure qui coexiste avec le ✨ Shiny, se transmet à la fusion et se sauvegarde (migration v33).', 'Art thématique <id>-r / <id>-o chaîné après le shiny, badge ✦, apposition du thème en fiche et collection, compteur ✦ + filtre « Exceptions seules ».'],
+  ['correctifs ui-v1.53 : des bots jouent PAR L\u2019UI, 2 bugs d\u2019interface corrigés', 'Le harnas bot-ui.mjs ne pilote QUE le DOM (39 216 clics pour 70 bots : départ, nav, équipe, donjons, combats tactiques, Récompenses, boutique, guilde, Autel par clics, errance) : 528 combats, 134 victoires, 285 captures, 0 exception, 0 divergence save → load. Deux bugs prouvés par sonde avant/après : la fusion de l\u2019Autel ne marchait JAMAIS (dataset.autelIid chaîne vs iids nombres : sélection invisible, aperçu indisponible, correctif Number()) ; le monde d\u2019errance vivait en coulisse après le retour (#errance-back ne remettait pas store.errance à null : le héros marchait et les rencontres déclenchaient des combats depuis un autre écran, correctif errance=null). 373 tests, smoke 483, digest INCHANGÉ d630d83e… 419/3000.'],
   ['correctifs bots-v1.52 : 500 bots jouent le jeu en boucle', 'Le harnas bots-boucle.mjs simule des PARTIES COMPLÈTES (donjons joués comme un joueur, errance top-down, économie boutique/guilde/forge, fusion à l’Autel, navigation, save → load comparé) avec des invariants vérifiés après CHAQUE action : 500 bots en essaim (29 735 actions, 13 441 combats, 72 fusions, 780 achats, 3 629 captures DQM, 1 019 zones débloquées) : 0 exception, 0 anomalie — contre 447 anomalies et 336 exceptions pour 150 bots sur le dist d’origine. Quatre correctifs : enfant de fusion avec iid ENTIER (plus jamais « fus-A-B », migration des vieilles sauvegardes), 3 exemplaires par carte en équipe préservés au rechargement, PV/mana max hors combat = VRAI plafond de combat (cran de race, éclats de famille, shiny, fusion, équipement, mana enrichi par l’INT), buyCompagnon refuse gracieusement un id inconnu. 371 tests, smoke 483, digest INCHANGÉ d630d83e… 419/3000.'],
   ['Refonte v2 CLÔTURÉE (lots 0-9, prompt docs/prompt-refonte-v2.md)', 'Rééquilibrage M1 (5 stats, INT pilote les sorts, défense en ratio, cran de race 5/10/15 % PV), gel v1 (54 cartes figées en data), donjons par famille (13 donjons carte 1 + 3 divins, difficulté Royale +10), fusion v4 (Autel des Lignées), menus v2 (cibles 44 px, retour systématique), SHINY (1/100 à l’obtention, variance +3-5 % couplée, art « <id>-s », fusion héréditaire), XP 1-100 (courbe cubique n^3, niveaux de donjon étirés sur la grille v1). 355 tests, smoke 483, validateur 0 erreur, digests 29c995da… 733/3000 et bce556b3… 2420/10000 (0 exception, 0 marathon) — nouvelle baseline PROPOSÉE au verrouillage.'],
   ['post-v1.51 : Repositionnement écran de combat (maquette v2.3 validée 14/11)', 'Commander en bas, lire en haut : rail d\u2019ordre horizontal + vitesse/pause persistants EN HAUT, barre de commandes compacte \u2264 30 % (boutons 44 px, indispo grisé avec la raison), unités plus grandes avec PV/MP et bouclier en clair, invocations en première ligne, cibles en pulse. La barre ne recouvre jamais le terrain. 279 tests, smoke 421, digest inchangé.'],

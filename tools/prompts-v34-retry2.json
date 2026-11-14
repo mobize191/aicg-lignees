@@ -1,0 +1,95 @@
+[
+ {
+  "file": "e31.jpg",
+  "id": "e31",
+  "theme": "classique",
+  "seed": 2150086,
+  "positive": "a massive multi-headed sea hydra, exactly three serpentine heads on long necks, all three heads fully visible, scaled hide, fins, coral crowns, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, with turquoise water magic glowing around them, dynamic action pose, powerful aura, signature effect, intricate background, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, single head, two heads, one-headed creature",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ },
+ {
+  "file": "e31-r.jpg",
+  "id": "e31",
+  "theme": "repos",
+  "seed": 7150086,
+  "positive": "a massive multi-headed sea hydra, exactly three serpentine heads on long necks, all three heads fully visible, scaled hide, fins, coral crowns, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, peaceful slice-of-life moment at the heart of the reef, resting calmly among the coral, all three heads relaxed and fully visible, small fish swimming around, serene calm mood, no combat, no menace, intricate background, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, slice-of-life illustration, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, single head, two heads, one-headed creature",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ },
+ {
+  "file": "e31-o.jpg",
+  "id": "e31",
+  "theme": "obscures",
+  "seed": 12150086,
+  "positive": "a massive multi-headed sea hydra, exactly three serpentine heads on long necks, all three heads fully visible, scaled hide, fins, coral crowns, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, with ember fire magic glowing around them, with an inverted spectral aura, colors reversed, ominous powerful aura, dynamic action pose, signature effect, intricate background, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, single head, two heads, one-headed creature",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ },
+ {
+  "file": "s18.jpg",
+  "id": "s18",
+  "theme": "classique",
+  "seed": 2150087,
+  "positive": "an adult woman, a human, long straight black hair, a full matte black steel plate armor, blackened dark metal, only subtle gold trim, a sheathed sword at rest, unhelmeted, a warrior in armor, a grizzled veteran warrior with a mature face, with fair skin, in a stone rampart bastion at dusk with banners and warm torchlight, dynamic action pose, powerful aura, signature effect, intricate background, full body, standing, centered, looking at the viewer, front lighting, face clearly visible, no hood, uncovered face, detailed eyes, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, close-up, portrait, bad quality, worst quality, white armor, silver armor, polished bright armor, shining chrome armor",
+  "lora": null,
+  "ipa": "s17",
+  "framing": "full body"
+ },
+ {
+  "file": "s18-r.jpg",
+  "id": "s18",
+  "theme": "repos",
+  "seed": 7150087,
+  "positive": "an adult woman, a human, long straight black hair, a full matte black steel plate armor, blackened dark metal, only subtle gold trim, a sheathed sword at rest, unhelmeted, a warrior in armor, a grizzled veteran warrior with a mature face, with fair skin, in a stone rampart bastion at dusk with banners and warm torchlight, peaceful slice-of-life moment, calm resting pose, gentle daily activity, serene expression, no magic, no combat, dynamic action pose, powerful aura, signature effect, intricate background, full body, standing, centered, looking at the viewer, front lighting, face clearly visible, no hood, uncovered face, detailed eyes, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, close-up, portrait, bad quality, worst quality, white armor, silver armor, polished bright armor, shining chrome armor",
+  "lora": null,
+  "ipa": "s18",
+  "framing": "full body"
+ },
+ {
+  "file": "s18-o.jpg",
+  "id": "s18",
+  "theme": "obscures",
+  "seed": 12150087,
+  "positive": "an adult woman, a human, long straight black hair, a full matte black steel plate armor, blackened dark metal, only subtle gold trim, a sheathed sword at rest, unhelmeted, a warrior in armor, a grizzled veteran warrior with a mature face, with fair skin, in a stone rampart bastion at dusk with banners and warm torchlight, with an inverted spectral aura, colors reversed, dynamic action pose, powerful aura, signature effect, intricate background, full body, standing, centered, looking at the viewer, front lighting, face clearly visible, no hood, uncovered face, detailed eyes, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, epic fantasy splash artwork, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, close-up, portrait, bad quality, worst quality, white armor, silver armor, polished bright armor, shining chrome armor",
+  "lora": null,
+  "ipa": "s18",
+  "framing": "full body"
+ },
+ {
+  "file": "e14-r.jpg",
+  "id": "e14",
+  "theme": "repos",
+  "seed": 7150088,
+  "positive": "a a colossal ancient armored sea monster like the Leviathan from Atlantis: The Lost Empire, massive crustacean shell carapace, glowing red eyes, tentacled maw, rows of jagged teeth, dark underwater ruins, leviathan a sea monster, a wild non-humanoid creature, no human traits, no human face, no human posture, in a deep blue and turquoise undersea setting with sea foam and coral accents, resting peacefully on the seabed, eyes half-closed in calm, small fish swimming around its massive frame, warm sunbeams filtering through the water, serene relaxed mood, no combat, no menace, full body, standing, centered, looking at the viewer, Painted in a painterly, semi-realistic fantasy illustration style, detailed shading, intricate background, slice-of-life illustration, rim lighting, full bleed artwork, edge to edge illustration",
+  "negative": "card frame, card border, ornate border, picture frame, panel border, vignette border, text, letters, numbers, watermark, signature, logo, blood splatter, gore, open wounds, blood stains, humans, humanoid, human face, human posture, attacking, menacing pose, open threatening maw, dramatic confrontation",
+  "lora": {
+   "file": "Leviatan.safetensors",
+   "trigger": "leviathan a sea monster",
+   "weight": 0.7
+  },
+  "ipa": null,
+  "framing": "full body"
+ }
+]

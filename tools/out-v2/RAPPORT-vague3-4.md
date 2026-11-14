@@ -215,3 +215,22 @@ Les 53 planches de contact (`v34/planches-qa/`) ont servi à la détection ; l'�
 | Dérive d'identité (Repos) | 2 | a46-r, b1-r |
 
 **89/99 conformes (90 %).** Les défauts sont concentrés sur le thème Repos (activité "supper at the fire" interprétée en nourriture moderne — à remplacer par une activité fantasy lors d'une prochaine régénération) et 2 défauts d'espèce isolés (k1 canidé, e11 espèce). Aucun défaut bloquant (cadre/texte/sang) sur l'ensemble.
+
+---
+
+## Retries ciblés (suite 57, CHANTEER) — 7 images remplacées dans `assets-v34.json`
+
+Génération 7/7 OK + seconde passe 3/3 OK (`/tmp/gen-v34-retry2.log`, `/tmp/gen-v34-retry2b.log`), seeds 2150086-2150088 + 2150090/7150090/12150090 consignés dans `seeds-v34.csv`. QA vision sur les retries uniquement :
+
+| Image | Défaut initial | Verdict retry | Notes |
+|---|---|---|---|
+| e31 (classique) | 1 tête | **OK** | 3 têtes bien visibles, canon hydre tenu |
+| e31-r (Repos) | 1 tête visible | **RÉSIDUEL** | 2 têtes visibles après 2 passes (3 demandées) |
+| e31-o (Obscures) | 2 têtes | **OK** | 3 têtes visibles, aura spectrale |
+| s18 (classique) | armure blanche/argent | **OK** | Armure noire mate à liseré or |
+| s18-r (Repos) | idem (DNA partagée) | **OK** | Armure noire mate, scène calme |
+| s18-o (Obscures) | idem | **OK** | Armure noire mate, aura inversée |
+| e14-r (Repos) | scène menaçante | **OK** | Colosse endormi sur le fond marin, gueule fermée, poissons — scène de vie créature |
+| e14-o (vérifié) | dérive signalée suite 57 | **OK** | Aucune dérive : carapace, yeux rouges, gueule conservés |
+
+**d28 Belzébuth** (motif mouches) : lot optionnel, en attente du tranchage de Marc-Olivier (seeds 2150089/7150089/12150089 réservés). Détails dans `docs/arbitrages.md` suite 61.

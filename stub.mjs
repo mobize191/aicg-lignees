@@ -9,6 +9,7 @@ import vm from 'node:vm';
 const VOID_TAGS = new Set(['img', 'br', 'hr', 'input', 'meta', 'link', 'source', 'area', 'base', 'col', 'embed', 'track', 'wbr']);
 
 let currentReg = null; // Map des id -> élément, posée par bootDist
+let currentDoc = null; // document du boot courant (bulle des clics pour la délégation document-level, bot-ui.mjs)
 
 function parseAttrs(str) {
   const attrs = {};
@@ -108,15 +109,19 @@ export function makeEl(tag = 'div') {
     removeEventListener() {},
     dispatch(t, ev = {}) {
       ev.preventDefault ??= () => {};
-      ev.stopPropagation ??= () => {};
+      ev.stopPropagation = () => { ev.__stopped = true; }; // le bot UI a besoin de la sémantique stopPropagation (bulle)
       ev.target ??= el;
       (listeners[t] ?? []).forEach((f) => f(ev));
+      return ev;
     },
     click(ev) {
-      this.dispatch('click', ev);
-      if (typeof this.onclick === 'function') {
-        this.onclick({ preventDefault() {}, stopPropagation() {}, target: this, currentTarget: this });
+      const e = this.dispatch('click', ev);
+      e.currentTarget = this;
+      if (!e.__stopped && typeof this.onclick === 'function') {
+        this.onclick(e);
       }
+      // comme un navigateur : le clic BULLE vers document (délégation a[href^="#"] du hub, fermeture des menus)
+      if (!e.__stopped && currentDoc) currentDoc.dispatchEvent('click', e);
     },
     appendChild(c) { c.parentNode?.removeChild?.(c); c.parentNode = this; this.children.push(c); return c; },
     insertBefore(c, ref) { c.parentNode?.removeChild?.(c); c.parentNode = this; const k = ref ? this.children.indexOf(ref) : -1; if (k >= 0) this.children.splice(k, 0, c); else this.children.push(c); return c; }, // conforme au DOM réel (référence honorée)
@@ -135,7 +140,31 @@ export function makeEl(tag = 'div') {
     },
     getAttribute(n) { return n in this._attrs ? this._attrs[n] : null; },
     removeAttribute(n) { delete this._attrs[n]; },
-    closest() { return null; },
+    get firstChild() { return this.children[0] ?? null; },
+    get lastChild() { return this.children[this.children.length - 1] ?? null; },
+    // closest réel (le jeu s'y appuie : délégation a[href^="#"], .cell-btn, header/nav…) — 1 token max
+    closest(sel) {
+      const s = String(sel).trim();
+      const m = s.match(/^([a-zA-Z][\w-]*)(?:\[([a-zA-Z-]+)(\^)?="([^"]*)"\])?$/);
+      const matchTok = (node) => {
+        if (!node || node.nodeType !== 1) return false;
+        if (s.startsWith('.')) return node.classList._set.has(s.slice(1));
+        if (s.startsWith('#')) return node._attrs.id === s.slice(1);
+        if (!m) return false;
+        if (node.tagName !== m[1].toUpperCase()) return false;
+        if (m[2]) {
+          const av = node.getAttribute(m[2]) ?? '';
+          return m[3] === '^' ? av.startsWith(m[4]) : av === m[4];
+        }
+        return true;
+      };
+      let p = this;
+      while (p) {
+        if (matchTok(p)) return p;
+        p = p.parentNode;
+      }
+      return null;
+    },
     focus() {}, blur() {}, scrollIntoView() {},
     get textContent() {
       let out = this._text ?? '';
@@ -267,6 +296,7 @@ export function bootDist(file, extraPairs = {}) {
   currentReg = els;
   const bodyEl = makeEl('body');
   const headEl = makeEl('head');
+  const docListeners = {};
   const doc = {
     body: bodyEl,
     head: headEl,
@@ -278,8 +308,12 @@ export function bootDist(file, extraPairs = {}) {
     getElementById: (id) => els.get(String(id)) ?? null,
     querySelector: (sel) => bodyEl.querySelector(sel),
     querySelectorAll: (sel) => bodyEl.querySelectorAll(sel),
-    addEventListener() {}, removeEventListener() {}, dispatchEvent() {},
+    // délégation document-level RÉELLE (le jeu s'y appuie pour les ancres du hub : a[href^="#"] hors nav)
+    addEventListener(t, f) { (docListeners[t] ??= []).push(f); },
+    removeEventListener(t, f) { const arr = docListeners[t] ?? []; const i = arr.indexOf(f); if (i >= 0) arr.splice(i, 1); },
+    dispatchEvent(t, ev = {}) { (docListeners[t] ?? []).forEach((f) => f(ev)); return true; },
   };
+  currentDoc = doc;
   const bodyStart = staticHtml.lastIndexOf('<body');
   bodyEl.innerHTML = bodyStart >= 0 ? staticHtml.slice(bodyStart) : staticHtml;
 
@@ -294,7 +328,8 @@ export function bootDist(file, extraPairs = {}) {
     navigator: { userAgent: 'smoke', language: 'fr' },
     history: { pushState() {}, replaceState() {} },
     setTimeout, clearTimeout, setInterval, clearInterval, queueMicrotask,
-    requestAnimationFrame: (fn) => setTimeout(fn, 16),
+    // comme un navigateur : rAF passe un horodatage (l'horloge du contexte, pour rester cohérente)
+    requestAnimationFrame: (fn) => setTimeout(() => fn(sandbox.performance.now()), 16),
     cancelAnimationFrame: (t) => clearTimeout(t),
     performance: { now: () => Date.now() },
     fetch: () => Promise.reject(new Error('réseau indisponible au harnas')),
@@ -304,6 +339,7 @@ export function bootDist(file, extraPairs = {}) {
       get src() { return this._src; }
     },
     matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} }),
+    scrollTo() {}, scrollY: 0, innerWidth: 390, innerHeight: 844, devicePixelRatio: 2,
     addEventListener() {}, removeEventListener() {},
     alert() {}, confirm: () => true, prompt: () => null,
     URL: { createObjectURL: () => 'blob:stub', revokeObjectURL() {} },

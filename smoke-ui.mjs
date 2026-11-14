@@ -1922,7 +1922,7 @@ async function main() {
       // seed : deux exemplaires d'une carte C hors équipe (garde-fou « unique » à passer)
       const teamIds0 = new Set((api.store.team?.slots ?? []).filter(Boolean).map((iid) => api.store.instances.find((i) => i.iid === iid)?.id));
       const seedId = api.CATALOG.find((c) => c.rarity === 'C' && !teamIds0.has(c.id))?.id;
-      if (seedId) api.store.instances.push({ iid: 'smoke-dup-1', id: seedId, lvl: 10, xp: 0, acc: [] }, { iid: 'smoke-dup-2', id: seedId, lvl: 10, xp: 0, acc: [] });
+      if (seedId) api.store.instances.push({ iid: 900001, id: seedId, lvl: 10, xp: 0, acc: [] }, { iid: 900002, id: seedId, lvl: 10, xp: 0, acc: [] }); // ui-v1.53 : iids NUMÉRIQUES comme en jeu (dataset = chaîne, comparaison par Number())
       const before = api.store.instances.length;
       // deux cartes hors équipe, avec au moins 2 exemplaires chacune (garde-fou unique)
       const counts = {};
@@ -1934,7 +1934,7 @@ async function main() {
       await wait(40);
       const rows = els.get('app').querySelectorAll('.autel-row');
       check('S28 b écran Autel des Lignées rendu (hub + liste)', els.get('app')._innerHTML.includes('Autel des Lignées') && rows.length >= 2, `${rows.length} lignes`);
-      const pick = (iid) => { const el = [...els.get('app').querySelectorAll('.autel-row')].find((r) => r.dataset.autelIid === iid); if (el) el.onclick(); };
+      const pick = (iid) => { const el = [...els.get('app').querySelectorAll('.autel-row')].find((r) => r.dataset.autelIid === String(iid)); if (el) el.onclick(); }; // dataset : chaîne ↔ iid : nombre
       pick(elig[0].iid); await wait(20); pick(elig[1].iid); await wait(20);
       const panel = els.get('app')._innerHTML;
       check('S28 c aperçu mystère (race/lignée/palier/plafond, identité masquée)', /Aperçu de la fusion/.test(panel) && /Race cible/.test(panel) && /plafond/.test(panel), panel.slice(0, 120));
