@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 66, retour terrain Marc-Olivier) : SIGNAL STYLE ÉTENDU AU LOT GEL v1 ENTIER — « la plupart des cartes du gel v1 (nouvelles v3.4) ont un style beaucoup plus MANGA que les autres » — passe de restyle à prévoir sur tout le lot, pas seulement Kiri/Isor/Méduse — R6 de la spec amendée
+
+- **Constat** : la dérive manga n'est pas ponctuelle : le lot gel v1 dans son ensemble (les ~49 nouvelles + 5 re-arts arrivées en v3.4 — camp démon d19-d36, dévoyés d37-d40, chaîne céleste p7/p8, paladin a50-a53, chevalier s15-s18, gorgones k33-k40, fées g33-g39, boss des Marées e31/e32, familles humaines des voies, gobelins régionaux) est visiblement plus manga que le reste de la collection.
+- **Décision** : R6 étendue dans la spec (commit joint) — le lot gel v1 ENTIER passe en priorité de restyle : bloc style painterly renforcé + négatif « anime, manga style » systématique sur toutes ses cartes, QA croisée contre les cartes v3.3 de référence stylistique. Le chantier de nuit N1 (§3bis) en tient compte : l'étape builder applique l'anti-manga au lot gel v1 en priorité, la double génération A/B le couvre avec le reste des classiques.
+- **Aucun changement de périmètre** : la génération de nuit reste classiques uniquement, -r/-o différées ; ce signal renforce seulement l'étape 1 du builder et la liste de cartes à corriger en premier.
+
 ## 2026-11-15 (suite 65, tranchage Marc-Olivier) : CANON PAR NOM v3.5 — LES 6 ARBITRAGES TRANCHÉS + 4 NOUVELLES RÈGLES (bougies interdites, framing 3.1 réactivé, canon mort-vivant k28-v3, Enge féeriques) + PLAN DE NUIT N1 : régénération A/B de TOUS les classiques (pas de -r/-o dans ce passage) — spec amendée `docs/images/spec-canon-noms-v35.md`
 
 - **Veuve des Récifs (e10) TRANCHÉE** : femme humaine capturée par les gobelins des récifs, ayant renoncé à son humanité pour les rejoindre et les servir — **mi-femme/mi-gobeline**, transformation visible (lore : captives devenues gobelines).
