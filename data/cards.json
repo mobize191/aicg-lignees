@@ -400,7 +400,7 @@
   "hp": 55,
   "family": "eau",
   "agi": 5,
-  "int": 7,
+  "int": 21,
   "def": 2
  },
  {
@@ -410,10 +410,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 11,
-  "hp": 62,
+  "hp": 68,
   "family": "eau",
   "agi": 6,
-  "int": 9,
+  "int": 26,
   "def": 3
  },
  {
@@ -423,10 +423,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 14,
-  "hp": 70,
+  "hp": 78,
   "family": "eau",
   "agi": 7,
-  "int": 11,
+  "int": 33,
   "def": 4
  },
  {
@@ -436,10 +436,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 20,
-  "hp": 78,
+  "hp": 73,
   "family": "eau",
   "agi": 10,
-  "int": 16,
+  "int": 33,
   "def": 5
  },
  {
@@ -449,10 +449,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 28,
-  "hp": 88,
+  "hp": 85,
   "family": "eau",
   "agi": 14,
-  "int": 22,
+  "int": 40,
   "def": 7
  },
  {
@@ -462,10 +462,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 38,
-  "hp": 105,
+  "hp": 93,
   "family": "eau",
   "agi": 19,
-  "int": 30,
+  "int": 55,
   "def": 10
  },
  {
@@ -494,7 +494,7 @@
   "hp": 55,
   "soloSpell": "Trait Incandescent",
   "agi": 5,
-  "int": 7,
+  "int": 21,
   "biome": "recrues",
   "family": "braise",
   "def": 2
@@ -733,7 +733,7 @@
   "hp": 55,
   "family": "braise",
   "agi": 5,
-  "int": 7,
+  "int": 21,
   "def": 2
  },
  {
@@ -743,10 +743,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 11,
-  "hp": 62,
+  "hp": 68,
   "family": "braise",
   "agi": 6,
-  "int": 9,
+  "int": 26,
   "def": 3
  },
  {
@@ -756,10 +756,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 14,
-  "hp": 70,
+  "hp": 78,
   "family": "braise",
   "agi": 7,
-  "int": 11,
+  "int": 33,
   "def": 4
  },
  {
@@ -769,7 +769,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 21,
-  "hp": 78,
+  "hp": 73,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -779,7 +779,7 @@
   },
   "family": "braise",
   "agi": 11,
-  "int": 17,
+  "int": 33,
   "def": 5
  },
  {
@@ -789,10 +789,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 29,
-  "hp": 88,
+  "hp": 85,
   "family": "braise",
   "agi": 15,
-  "int": 23,
+  "int": 40,
   "def": 7
  },
  {
@@ -802,10 +802,10 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 39,
-  "hp": 105,
+  "hp": 93,
   "family": "braise",
   "agi": 20,
-  "int": 31,
+  "int": 55,
   "def": 10
  },
  {
@@ -1672,7 +1672,7 @@
   "voie": "école des invocations",
   "soloSpell": "Appel Mineur — geste de palier C",
   "agi": 4,
-  "int": 6,
+  "int": 21,
   "def": 2
  },
  {
@@ -1682,12 +1682,12 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 10,
-  "hp": 62,
+  "hp": 68,
   "family": "appel",
   "voie": "école des invocations",
   "soloSpell": "Élémentaire de Braise — geste de palier UC",
   "agi": 5,
-  "int": 8,
+  "int": 26,
   "def": 3
  },
  {
@@ -1697,12 +1697,12 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 14,
-  "hp": 70,
+  "hp": 78,
   "family": "appel",
   "voie": "école des invocations",
   "soloSpell": "Meute Spirituelle — geste de palier R",
   "agi": 7,
-  "int": 11,
+  "int": 33,
   "def": 4
  },
  {
@@ -1712,12 +1712,12 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 20,
-  "hp": 78,
+  "hp": 73,
   "family": "appel",
   "voie": "école des invocations",
   "soloSpell": "Portail — geste de palier SR",
   "agi": 10,
-  "int": 16,
+  "int": 33,
   "def": 5
  },
  {
@@ -1727,12 +1727,12 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 27,
-  "hp": 88,
+  "hp": 85,
   "family": "appel",
   "voie": "école des invocations",
   "soloSpell": "Légion Céleste — geste de palier UR",
   "agi": 14,
-  "int": 22,
+  "int": 40,
   "def": 7
  },
  {
@@ -1742,12 +1742,12 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 36,
-  "hp": 105,
+  "hp": 93,
   "family": "appel",
   "voie": "école des invocations",
   "soloSpell": "Appel Suprême — geste de palier L",
   "agi": 18,
-  "int": 29,
+  "int": 55,
   "def": 9
  },
  {

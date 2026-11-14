@@ -23,6 +23,8 @@ const getZone = (id) => IDX.zones[id];
 // alias des constantes extraites : le moteur et l'UI lisent DATA, jamais de valeur en dur
 const E = DATA.engine;
 const M = E.moteur;
+// correctifs-eq v2 lot 1 : profils de classe (stat principale) — cardPower pondère l'INT des lanceurs (J1)
+const PROFILS = E.profils ?? {};
 const CLASSES = E.CLASSES;
 const ELEMENTS = E.ELEMENTS;
 const PALIERS = E.PALIERS;

@@ -79,9 +79,15 @@ function rollCrit(attacker, target, rng) {
 }
 
 function cardPower(card, lvl) {
+  const m = 1 + LEVEL_BONUS * ((lvl ?? 1) - 1);
   const st = statsAt(card, lvl, 0);
   const spellsN = (card.spells ?? []).length;
-  return (st.atk * M.POWER_ATK_WEIGHT + st.hp * M.POWER_HP_WEIGHT) * (RARITY_POWER[card.rarity] ?? 1) * (1 + M.POWER_SPELL_STEP * Math.max(0, spellsN - 1));
+  // correctifs-eq v2 lot 1 : la stat principale suit le PROFIL de classe (lanceurs Mage/Prêtre/Occultiste = INT, J1)
+  const profilStat = PROFILS[card.classe]?.stat ?? 'atk';
+  const main = profilStat === 'int'
+    ? Math.max(1, Math.round((card.int ?? Math.round(card.atk * M.INT_RATIO)) * m))
+    : st.atk;
+  return (main * M.POWER_ATK_WEIGHT + st.hp * M.POWER_HP_WEIGHT) * (RARITY_POWER[card.rarity] ?? 1) * (1 + M.POWER_SPELL_STEP * Math.max(0, spellsN - 1));
 }
 
 function statsAt(card, lvl) {

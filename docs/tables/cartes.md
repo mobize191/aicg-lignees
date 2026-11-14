@@ -88,19 +88,19 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a11 | Sorcière des Océans | SR | Neutre | - | 20 | 78 | 10 | 16 | eau | - | - |
-| a13 | Alix, Archimage des Marées | UR | Neutre | - | 28 | 88 | 14 | 22 | eau | - | - |
-| a14 | Alix, Déesse de l’Eau | L | Neutre | - | 38 | 105 | 19 | 30 | eau | - | - |
-| a19 | Allumeur de Braises | C | Neutre | - | 9 | 55 | 5 | 7 | braise | - | - |
-| a20 | Mage de la Fournaise | R | Neutre | - | 14 | 70 | 7 | 11 | braise | - | - |
-| a21 | Invocateur de Fournaise | SR | Neutre | - | 21 | 78 | 11 | 17 | braise | - | summon 0.6 (ttl 3) |
-| a22 | Solen, Archimage de la Braise | UR | Neutre | - | 29 | 88 | 15 | 23 | braise | - | - |
-| a23 | Solen, Roi des Braises | L | Neutre | - | 39 | 105 | 20 | 31 | braise | - | - |
-| a29 | Adepte des Rivières | UC | Neutre | - | 11 | 62 | 6 | 9 | eau | - | - |
-| a32 | Veilleur de Braise | UC | Neutre | - | 11 | 62 | 6 | 9 | braise | - | - |
-| a4 | Étincelle Vive | C | Neutre | - | 9 | 55 | 5 | 7 | braise | Trait Incandescent | - |
-| a5 | Apprentie des Rivières | C | Neutre | - | 9 | 55 | 5 | 7 | eau | - | - |
-| a8 | Sorcière des Rivières | R | Neutre | - | 14 | 70 | 7 | 11 | eau | - | - |
+| a11 | Sorcière des Océans | SR | Neutre | - | 20 | 73 | 10 | 33 | eau | - | - |
+| a13 | Alix, Archimage des Marées | UR | Neutre | - | 28 | 85 | 14 | 40 | eau | - | - |
+| a14 | Alix, Déesse de l’Eau | L | Neutre | - | 38 | 93 | 19 | 55 | eau | - | - |
+| a19 | Allumeur de Braises | C | Neutre | - | 9 | 55 | 5 | 21 | braise | - | - |
+| a20 | Mage de la Fournaise | R | Neutre | - | 14 | 78 | 7 | 33 | braise | - | - |
+| a21 | Invocateur de Fournaise | SR | Neutre | - | 21 | 73 | 11 | 33 | braise | - | summon 0.6 (ttl 3) |
+| a22 | Solen, Archimage de la Braise | UR | Neutre | - | 29 | 85 | 15 | 40 | braise | - | - |
+| a23 | Solen, Roi des Braises | L | Neutre | - | 39 | 93 | 20 | 55 | braise | - | - |
+| a29 | Adepte des Rivières | UC | Neutre | - | 11 | 68 | 6 | 26 | eau | - | - |
+| a32 | Veilleur de Braise | UC | Neutre | - | 11 | 68 | 6 | 26 | braise | - | - |
+| a4 | Étincelle Vive | C | Neutre | - | 9 | 55 | 5 | 21 | braise | Trait Incandescent | - |
+| a5 | Apprentie des Rivières | C | Neutre | - | 9 | 55 | 5 | 21 | eau | - | - |
+| a8 | Sorcière des Rivières | R | Neutre | - | 14 | 78 | 7 | 33 | eau | - | - |
 | b3 | Naïa, Sourcéleine | SR | Neutre | - | 22 | 76 | 11 | 18 | eau | - | - |
 | b6 | Ember, Cœur de Fournaise | SR | Neutre | - | 23 | 74 | 12 | 18 | braise | - | - |
 | c10 | Naïa, Marée Éternelle | L | Neutre | - | 38 | 100 | 19 | 30 | eau | - | - |
@@ -112,12 +112,12 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n6 | Embryon des Flammes | N | - | - | 10 | 52 | 5 | 8 | - | Souffle de Braise | - |
 | n9 | Embryon des Cieux | N | - | - | 9 | 54 | 5 | 7 | - | Rafale Céleste | - |
 | s7 | Bastion Arcanique | SR | Neutre | - | 6 | 58 | 3 | 5 | bouclier | - | atkBuff 0.25 |
-| v1 | Apprenti Invocateur | C | Neutre | - | 8 | 55 | 4 | 6 | appel | Appel Mineur — geste de palier C | - |
-| v2 | Conjurateur | UC | Neutre | - | 10 | 62 | 5 | 8 | appel | Élémentaire de Braise — geste de palier UC | - |
-| v3 | Évocateur | R | Neutre | - | 14 | 70 | 7 | 11 | appel | Meute Spirituelle — geste de palier R | - |
-| v4 | Maître des Esprits | SR | Neutre | - | 20 | 78 | 10 | 16 | appel | Portail — geste de palier SR | - |
-| v5 | Seigneur des Élémentaires | UR | Neutre | - | 27 | 88 | 14 | 22 | appel | Légion Céleste — geste de palier UR | - |
-| v6 | Archimage de l’Appel | L | Neutre | - | 36 | 105 | 18 | 29 | appel | Appel Suprême — geste de palier L | - |
+| v1 | Apprenti Invocateur | C | Neutre | - | 8 | 55 | 4 | 21 | appel | Appel Mineur — geste de palier C | - |
+| v2 | Conjurateur | UC | Neutre | - | 10 | 68 | 5 | 26 | appel | Élémentaire de Braise — geste de palier UC | - |
+| v3 | Évocateur | R | Neutre | - | 14 | 78 | 7 | 33 | appel | Meute Spirituelle — geste de palier R | - |
+| v4 | Maître des Esprits | SR | Neutre | - | 20 | 73 | 10 | 33 | appel | Portail — geste de palier SR | - |
+| v5 | Seigneur des Élémentaires | UR | Neutre | - | 27 | 85 | 14 | 40 | appel | Légion Céleste — geste de palier UR | - |
+| v6 | Archimage de l’Appel | L | Neutre | - | 36 | 93 | 18 | 55 | appel | Appel Suprême — geste de palier L | - |
 | w20 | Fée Nouvelle | C | Neutre | - | 7 | 46 | 4 | 6 | bosquet | Lueur des Bois | - |
 | w4 | Juge des Heures | SR | Neutre | - | 15 | 72 | 8 | 12 | seuil | Balance du Temps | - |
 | w8 | Choriste Miroir | UC | Neutre | - | 12 | 50 | 6 | 10 | miroir | Voix Doubles | - |

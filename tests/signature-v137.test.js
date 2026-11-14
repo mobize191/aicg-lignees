@@ -98,7 +98,7 @@ test('v1.51 lot 1 (c) : en Auto, la signature de soin d\u2019une carte soigneuse
   const team = { avant: [healer, mate], arriere: [] };
   const foes = E.DATA.monsters.filter((m) => m.dungeon === 'marees').slice(0, 2);
   const st = E.initCombat(team, foes, 99, {});
-  for (const f of [...st.enemies.avant, ...st.enemies.arriere]) f.atk = 0; // ennemis inoffensifs : l'allié blessé survit au tour
+  for (const f of [...st.enemies.avant, ...st.enemies.arriere]) { f.atk = 0; f.int = 0; f.spells = []; } // ennemis inoffensifs (correctifs-eq v2 lot 1 : les sorts des Mages montent avec l'INT)
   st.team.avant[1].hp = Math.max(1, Math.round(st.team.avant[1].maxHp * 0.2));
   const log = E.playAuto(st, 1);
   const heals = log.filter((e) => e.type === 'heal' && e.sourceId === st.team.avant[0].uid && e.targetId === st.team.avant[1].uid);

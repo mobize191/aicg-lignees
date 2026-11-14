@@ -173,10 +173,13 @@ test('le monstre temoin n\u2019est PAS dans les donnees principales (preuve de m
 test('T4.3 : la répartition agi/int dérive du profil (aucune carte mage avec agi > int)', () => {
   const E = loadEngine();
   const R = E.DATA.engine.moteur.STAT_RATIOS;
+  const monIds = new Set(E.DATA.monsters.map((m) => m.id));
   for (const c of [...E.DATA.cards, ...E.DATA.monsters]) {
     const r = R[c.classe] ?? R.Guerrier;
     assert.equal(c.agi, Math.max(1, Math.round(c.atk * r.agi)), `${c.id} agi`);
-    assert.equal(c.int, Math.max(1, Math.round(c.atk * r.int)), `${c.id} int`);
+    // correctifs-eq v2 lot 1 : INT explicite en data (INT_T par palier) pour les Mages a/v et tous les Mages monstres
+    const intExplicite = c.classe === 'Mage' && (monIds.has(c.id) || /^(a|v)\d+$/.test(c.id));
+    if (!intExplicite) assert.equal(c.int, Math.max(1, Math.round(c.atk * r.int)), `${c.id} int`);
     if (['Mage', 'Occultiste', 'Prêtre'].includes(c.classe)) {
       assert.ok(c.int >= c.agi, `${c.id} (${c.classe}) : int >= agi`);
     }

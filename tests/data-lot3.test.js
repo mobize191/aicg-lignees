@@ -32,11 +32,13 @@ test('lot 3 : INT des Prêtres/Occultistes cartes 6-10 sur C-R (derive de atk x 
   }
 });
 
-test('lot 3 : bug de PV de la série a Mage corrigé (R = 70, aligné série v)', () => {
+test('lot 3 + correctifs-eq v2 lot 1 : PV des Mages a/v alignés sur 89 % du PV Guerrier du palier (R = 78)', () => {
   const a = data.cards.filter((c) => c.id[0] === 'a' && c.classe === 'Mage');
   assert.ok(a.length >= 10);
+  const WAR_HP = { C: 62, UC: 76, R: 88, SR: 82, UR: 95, L: 105 };
+  const jsr = (x) => Math.floor(x + 0.5);
   for (const c of a) {
-    if (c.rarity === 'R') assert.equal(c.hp, 70, `${c.id} hp R`);
+    if (WAR_HP[c.rarity]) assert.equal(c.hp, jsr(WAR_HP[c.rarity] * 0.89), `${c.id} hp ${c.rarity}`);
   }
   const v3 = data.cards.find((c) => c.id === 'v3');
   const aR = a.filter((c) => c.rarity === 'R');

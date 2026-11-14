@@ -21,10 +21,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 7,
-  "hp": 46,
+  "hp": 55,
   "soloSpell": "Trait de Corail",
   "agi": 4,
-  "int": 6,
+  "int": 10,
   "def": 2
  },
  {
@@ -63,10 +63,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 20,
-  "hp": 62,
+  "hp": 73,
   "soloSpell": "Vision Noyée",
   "agi": 10,
-  "int": 16,
+  "int": 24,
   "def": 5
  },
  {
@@ -77,10 +77,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 28,
-  "hp": 78,
+  "hp": 85,
   "soloSpell": "Étreinte de l’Abîme",
   "agi": 14,
-  "int": 22,
+  "int": 30,
   "def": 7
  },
  {
@@ -556,7 +556,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 21,
-  "hp": 64,
+  "hp": 73,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -566,7 +566,7 @@
   },
   "soloSpell": "Fournaise Invoquée",
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -605,7 +605,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 39,
-  "hp": 106,
+  "hp": 93,
   "effect": {
    "kind": "summon",
    "value": 0.7,
@@ -615,7 +615,7 @@
   },
   "soloSpell": "Fournaise Éternelle",
   "agi": 20,
-  "int": 31,
+  "int": 40,
   "def": 10
  },
  {
@@ -641,10 +641,10 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 8,
-  "hp": 46,
+  "hp": 55,
   "soloSpell": "Flammèche Errante",
   "agi": 4,
-  "int": 6,
+  "int": 10,
   "def": 2
  },
  {
@@ -655,14 +655,14 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 11,
-  "hp": 50,
+  "hp": 68,
   "soloSpell": "Semence Ardente",
   "soloDot": {
    "pct": 0.25,
    "turns": 2
   },
   "agi": 6,
-  "int": 9,
+  "int": 13,
   "def": 3
  },
  {
@@ -673,7 +673,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 22,
-  "hp": 66,
+  "hp": 73,
   "soloSpell": "Vague de Cendres",
   "soloMult": 1.6,
   "soloDot": {
@@ -681,7 +681,7 @@
    "turns": 2
   },
   "agi": 11,
-  "int": 18,
+  "int": 24,
   "def": 6
  },
  {
@@ -692,7 +692,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 30,
-  "hp": 82,
+  "hp": 85,
   "soloSpell": "Colonne de Feu",
   "soloMult": 1.6,
   "soloDot": {
@@ -700,7 +700,7 @@
    "turns": 2
   },
   "agi": 15,
-  "int": 24,
+  "int": 30,
   "def": 8
  },
  {
@@ -711,7 +711,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 38,
-  "hp": 102,
+  "hp": 93,
   "soloSpell": "Fournaise de Calcine",
   "soloMult": 1.6,
   "soloDot": {
@@ -719,7 +719,7 @@
    "turns": 3
   },
   "agi": 19,
-  "int": 30,
+  "int": 40,
   "def": 10
  },
  {
@@ -894,7 +894,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 5,
-  "hp": 72,
+  "hp": 85,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -904,7 +904,7 @@
   },
   "soloSpell": "Gardiens Invoqués",
   "agi": 3,
-  "int": 4,
+  "int": 30,
   "def": 1
  },
  {
@@ -929,10 +929,10 @@
   "classe": "Mage",
   "element": "Lumière",
   "atk": 9,
-  "hp": 45,
+  "hp": 55,
   "soloSpell": "Éclat Vif",
   "agi": 5,
-  "int": 7,
+  "int": 10,
   "def": 2
  },
  {
@@ -971,10 +971,10 @@
   "classe": "Mage",
   "element": "Lumière",
   "atk": 21,
-  "hp": 63,
+  "hp": 73,
   "soloSpell": "Rayon Prismatique",
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -1027,7 +1027,7 @@
   "classe": "Mage",
   "element": "Nature",
   "atk": 21,
-  "hp": 64,
+  "hp": 73,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -1037,7 +1037,7 @@
   },
   "soloSpell": "Sève Éveillée",
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -1175,7 +1175,7 @@
   "classe": "Mage",
   "element": "Nature",
   "atk": 3,
-  "hp": 62,
+  "hp": 78,
   "effect": {
    "kind": "summon",
    "value": 0.5,
@@ -1185,7 +1185,7 @@
   },
   "soloSpell": "Sève Vitale",
   "agi": 2,
-  "int": 2,
+  "int": 17,
   "def": 1
  },
  {
@@ -1283,10 +1283,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 8,
-  "hp": 52,
+  "hp": 55,
   "soloSpell": "Crachat Trouble",
   "agi": 4,
-  "int": 6,
+  "int": 10,
   "def": 2
  },
  {
@@ -1325,10 +1325,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 21,
-  "hp": 60,
+  "hp": 73,
   "soloSpell": "Brume Mordante",
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -1339,10 +1339,10 @@
   "classe": "Mage",
   "element": "Ombre",
   "atk": 30,
-  "hp": 76,
+  "hp": 85,
   "soloSpell": "Hurlement Froid",
   "agi": 15,
-  "int": 24,
+  "int": 30,
   "def": 8
  },
  {
@@ -1784,10 +1784,10 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 9,
-  "hp": 46,
+  "hp": 55,
   "soloSpell": "Étincelle",
   "agi": 5,
-  "int": 7,
+  "int": 10,
   "def": 2
  },
  {
@@ -1826,10 +1826,10 @@
   "classe": "Mage",
   "element": "Lumière",
   "atk": 21,
-  "hp": 62,
+  "hp": 73,
   "soloSpell": "Falaise de Lumière",
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -1840,13 +1840,13 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 29,
-  "hp": 78,
+  "hp": 85,
   "soloSpell": "Pluie de Feu",
   "phoenix": {
    "delay": 4
   },
   "agi": 15,
-  "int": 23,
+  "int": 30,
   "def": 7
  },
  {
@@ -1886,7 +1886,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 30,
-  "hp": 80,
+  "hp": 85,
   "soloSpell": "Colonne Solaire",
   "soloMult": 1.6,
   "soloDot": {
@@ -1894,7 +1894,7 @@
    "turns": 2
   },
   "agi": 15,
-  "int": 24,
+  "int": 30,
   "def": 8
  },
  {
@@ -1935,14 +1935,14 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 12,
-  "hp": 50,
+  "hp": 68,
   "soloSpell": "Envol Incandescent",
   "soloDot": {
    "pct": 0.25,
    "turns": 2
   },
   "agi": 6,
-  "int": 10,
+  "int": 13,
   "def": 3
  },
  {
@@ -1953,14 +1953,14 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 15,
-  "hp": 72,
+  "hp": 78,
   "soloSpell": "Rafale de Braise",
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
   "agi": 8,
-  "int": 12,
+  "int": 17,
   "def": 4
  },
  {
@@ -1971,7 +1971,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 21,
-  "hp": 66,
+  "hp": 73,
   "soloSpell": "Éclosion Ardente",
   "soloDot": {
    "pct": 0.3,
@@ -1981,7 +1981,7 @@
    "delay": 3
   },
   "agi": 11,
-  "int": 17,
+  "int": 24,
   "def": 5
  },
  {
@@ -1992,7 +1992,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 38,
-  "hp": 100,
+  "hp": 93,
   "soloSpell": "Renaissance Pyrique",
   "soloMult": 1.6,
   "soloDot": {
@@ -2003,7 +2003,7 @@
    "delay": 3
   },
   "agi": 19,
-  "int": 30,
+  "int": 40,
   "def": 10
  },
  {
@@ -2346,12 +2346,12 @@
   "classe": "Mage",
   "element": "Lumière",
   "atk": 15,
-  "hp": 72,
+  "hp": 78,
   "soloSpell": "Balance du Temps",
   "soloCost": 5,
   "soloMult": 1.8,
   "agi": 8,
-  "int": 12,
+  "int": 17,
   "def": 4
  },
  {
@@ -2421,12 +2421,12 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 12,
-  "hp": 50,
+  "hp": 68,
   "soloSpell": "Voix Doubles",
   "soloCost": 4,
   "soloMult": 1.6,
   "agi": 6,
-  "int": 10,
+  "int": 13,
   "def": 3
  },
  {
@@ -3257,12 +3257,12 @@
   "classe": "Mage",
   "element": "Nature",
   "atk": 15,
-  "hp": 62,
+  "hp": 78,
   "soloSpell": "Lueur des Groves",
   "soloCost": 2,
   "soloMult": 1.4,
   "agi": 8,
-  "int": 12,
+  "int": 17,
   "def": 4
  },
  {
@@ -3273,12 +3273,12 @@
   "classe": "Mage",
   "element": "Nature",
   "atk": 18,
-  "hp": 68,
+  "hp": 73,
   "soloSpell": "Rire Enchanté",
   "soloCost": 3,
   "soloMult": 1.6,
   "agi": 9,
-  "int": 14,
+  "int": 24,
   "def": 5
  },
  {
@@ -3321,12 +3321,12 @@
   "classe": "Mage",
   "element": "Nature",
   "atk": 18,
-  "hp": 68,
+  "hp": 73,
   "soloSpell": "Épines Vives",
   "soloCost": 5,
   "soloMult": 1.8,
   "agi": 9,
-  "int": 14,
+  "int": 24,
   "def": 5
  },
  {
