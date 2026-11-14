@@ -21,7 +21,7 @@ console.log('BOOT OK');
 
 const playerIds = new Set(JSON.parse(readFileSync(new URL('../data/cards.json', import.meta.url), 'utf8')).map(c => c.id));
 const classes = ['Guerrier', 'Assassin', 'Mage', 'Prêtre', 'Occultiste'];
-const LVL = 12;
+const LVL = api.stretchLevel ? api.stretchLevel(12) : 12; // lot 9 : niveau projeté sur la grille v1 (mêmes rapports de force que l'ancien niveau 12)
 const DGS = ['marees', 'forge', 'bosquet', 'crypte', 'zenith'];
 const GARDE = 150;
 
