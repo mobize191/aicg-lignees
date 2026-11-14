@@ -2,9 +2,9 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**181 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
+**196 monstres** (data/monsters.json), par donjon. La classe determine les memes regles que les cartes (esquive, frappe a l'arriere).
 
-## Donjon bosquet (23)
+## Donjon bosquet (30)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -25,6 +25,13 @@
 | g3 | Sanglier de Mousse | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Culbute de Mousse | - |
 | g31 | Gobelin des Mousses | C | Assassin | Nature | - | 8 | 56 | 7 | 3 | Griffe de Mousse | - |
 | g32 | Gobelin des Racines | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Coup de Racine | - |
+| g33 | Fée des Groves | R | Mage | Nature | - | 15 | 62 | 8 | 12 | Lueur des Groves | - |
+| g34 | Fée des Jeux | SR | Mage | Nature | - | 18 | 68 | 9 | 14 | Rire Enchanté | - |
+| g35 | Souveraine des Jeux | UR | Occultiste | Nature | - | 13 | 82 | 7 | 10 | Danse des Fées | - |
+| g36 | Mab, Souveraine des Jeux | L | Occultiste | Nature | - | 15 | 94 | 8 | 12 | Royaume des Jeux | - |
+| g37 | Fée des Ronces | SR | Mage | Nature | - | 18 | 68 | 9 | 14 | Épines Vives | - |
+| g38 | Reine des Ronces | UR | Occultiste | Nature | - | 13 | 82 | 7 | 10 | Couronne d’Épines | - |
+| g39 | Aubépine, Reine des Ronces | L | Occultiste | Nature | - | 15 | 94 | 8 | 12 | Souveraineté des Ronces | - |
 | g4 | Gardien des Remparts Verts | R | Guerrier | Nature | - | 14 | 74 | 10 | 6 | Fronde de Ronce | - |
 | g5 | Prisme Vivant | SR | Mage | Lumière | - | 21 | 63 | 11 | 17 | Rayon Prismatique | - |
 | g6 | Colosse Sylvestre | UR | Guerrier | Nature | - | 29 | 82 | 20 | 12 | Poing Séculaire | - |
@@ -39,8 +46,9 @@
 | Bêtes du Fougeron | g1 -> g3 -> g4 ; g13 -> g6 -> g7 ; g14 -> g15 -> g16 | g2, g5 | g8 |
 | Dryades | g9 -> g12 -> g10 ; g11 -> g17 -> g18 ; g19 -> g20 -> g21 | - | - |
 | Gobelins des Mousses | g31 -> g32 | - | - |
+| Fées | g33 -> g34 -> g35 -> g36 ; g37 -> g38 -> g39 | - | - |
 
-## Donjon crypte (32)
+## Donjon crypte (40)
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -70,7 +78,15 @@
 | k30 | Siegfried, Chevalière du Serment Brisé | L | Assassin | Ombre | - | 40 | 98 | 36 | 16 | Lame du Serment | - |
 | k31 | Gobelin des Caveaux | C | Assassin | Ombre | - | 9 | 50 | 8 | 4 | Griffe des Ténèbres | - |
 | k32 | Gobelin des Ossements | UC | Guerrier | Ombre | - | 12 | 52 | 8 | 5 | Coup d'Os | - |
+| k33 | Serpent des Récifs | UC | Assassin | Ombre | - | 11 | 52 | 10 | 4 | Morsure des Écueils | - |
+| k34 | Fileuse du Regard | R | Assassin | Ombre | - | 15 | 62 | 14 | 6 | Fil du Regard | - |
+| k35 | Pétrifiante des Écueils | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Regard de Pierre | - |
+| k36 | Gorgonne Immaculée | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Cheveux de Serpents | - |
+| k37 | Méduse, Reine des Écueils | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Pétrification | - |
+| k38 | Mère des Serpents | SR | Assassin | Ombre | - | 18 | 68 | 16 | 7 | Nid de Serpents | - |
+| k39 | Grande Serpentine | UR | Assassin | Ombre | - | 22 | 76 | 20 | 9 | Constriction | - |
 | k4 | Chevalier Défunt | R | Guerrier | Ombre | - | 15 | 72 | 11 | 6 | Frappe Rigide | - |
+| k40 | Euryale, Nourrice des Serpents | L | Assassin | Ombre | - | 26 | 88 | 23 | 10 | Morsure des Sœurs | - |
 | k5 | Spectre des Quais | SR | Mage | Eau | - | 21 | 60 | 11 | 17 | Brume Mordante | - |
 | k6 | Banshee des Caveaux | UR | Mage | Ombre | - | 30 | 76 | 15 | 24 | Hurlement Froid | - |
 | k7 | Archiliche des Caveaux | L | Occultiste | Ombre | - | 38 | 104 | 19 | 30 | Voie du Tombeau | summon 0.7 |
@@ -85,6 +101,7 @@
 | Les Naufragés | k2 -> k12 -> k10 ; k11 -> k18 -> k19 ; k20 -> k21 -> k22 | k9 | k8 |
 | Chevalerie Défunte | k23 -> k24 -> k4 ; k25 -> k26 -> k27 ; k28 -> k29 -> k30 | - | - |
 | Gobelins des Caveaux | k31 -> k32 | - | - |
+| Gorgones | k33 -> k34 -> k35 -> k36 -> k37 ; k38 -> k39 -> k40 | - | - |
 
 ## Donjon divin (40)
 

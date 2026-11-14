@@ -302,6 +302,34 @@
    "g32": {
     "fusion": "etreinte-des-profondeurs",
     "cran": "II"
+   },
+   "g33": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g34": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "g35": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g36": {
+    "fusion": "morsure-decume",
+    "cran": "IV"
+   },
+   "g37": {
+    "fusion": "seve-rongeuse",
+    "cran": "I"
+   },
+   "g38": {
+    "fusion": "seve-rongeuse",
+    "cran": "II"
+   },
+   "g39": {
+    "fusion": "morsure-decume",
+    "cran": "IV"
    }
   }
  },
@@ -427,6 +455,38 @@
    "k32": {
     "fusion": "hurlement",
     "cran": "I"
+   },
+   "k33": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "k34": {
+    "fusion": "morsure-putride",
+    "cran": "II"
+   },
+   "k35": {
+    "fusion": "morsure-putride",
+    "cran": "III"
+   },
+   "k36": {
+    "fusion": "morsure-putride",
+    "cran": "IV"
+   },
+   "k37": {
+    "fusion": "morsure-putride",
+    "cran": "I"
+   },
+   "k38": {
+    "fusion": "morsure-putride",
+    "cran": "II"
+   },
+   "k39": {
+    "fusion": "morsure-putride",
+    "cran": "III"
+   },
+   "k40": {
+    "fusion": "morsure-putride",
+    "cran": "IV"
    }
   }
  },

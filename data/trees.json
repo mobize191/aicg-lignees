@@ -237,6 +237,20 @@
     "voie": "la forme — le devoir brisé",
     "effet": "standard",
     "ecoles": []
+   },
+   {
+    "de": "w21",
+    "vers": "k33",
+    "voie": "la forme — la gorgone",
+    "effet": "standard",
+    "ecoles": []
+   },
+   {
+    "de": "w20",
+    "vers": "g2",
+    "voie": "la forme — la fée (Luciole)",
+    "effet": "standard",
+    "ecoles": []
    }
   ]
  },

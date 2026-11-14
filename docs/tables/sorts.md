@@ -311,6 +311,13 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | g21 | - | - |
 | g31 | seve-rongeuse | I |
 | g32 | etreinte-des-profondeurs | II |
+| g33 | seve-rongeuse | I |
+| g34 | seve-rongeuse | II |
+| g35 | seve-rongeuse | I |
+| g36 | morsure-decume | IV |
+| g37 | seve-rongeuse | I |
+| g38 | seve-rongeuse | II |
+| g39 | morsure-decume | IV |
 
 ### Donjon crypte
 
@@ -348,6 +355,14 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | k30 | - | - |
 | k31 | morsure-putride | I |
 | k32 | hurlement | I |
+| k33 | morsure-putride | I |
+| k34 | morsure-putride | II |
+| k35 | morsure-putride | III |
+| k36 | morsure-putride | IV |
+| k37 | morsure-putride | I |
+| k38 | morsure-putride | II |
+| k39 | morsure-putride | III |
+| k40 | morsure-putride | IV |
 
 ### Donjon zenith
 

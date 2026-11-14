@@ -316,6 +316,9 @@ Les cartes a choix listent chaque voie possible ; l'evolution exige le niveau 10
 | a50 Paladin | u3 Croisé de l’Aube | le zèle — Croisé de l’Aube |
 | s14 Garde du Rempart | s6 Sentinelle d’Acier | fidèle au bouclier |
 | s14 Garde du Rempart | s15 Chevalier | la voie du rempart — la chevalerie |
+| w21 Gorgonne Nouvelle | k33 | la forme — la gorgone (lignée d’accueil de l’Enge des Caveaux) |
+| w20 Fée Nouvelle | g2 | la forme — la fée (Luciole, lignée d’accueil de l’Enge des Bois) |
+| g2 | g33 | la fée grandit — les Groves |
 
 ## Soudures solos (data/solo-steps.json)
 

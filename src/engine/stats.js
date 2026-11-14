@@ -90,7 +90,8 @@ function statsAt(card, lvl) {
 }
 
 function monstersOf(dungeonId) {
-  return MONSTERS.filter((m) => m.dungeon === dungeonId);
+  // gel v1 (suite 39) : les cartes gel (horsPool en data) n'entrent dans les vagues qu'au lot donjons
+  return MONSTERS.filter((m) => m.dungeon === dungeonId && !m.horsPool);
 }
 
 function allMonsters() {

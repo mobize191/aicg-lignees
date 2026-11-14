@@ -532,5 +532,23 @@
    "to": "s15",
    "voie": "la voie du rempart — la chevalerie"
   }
+ ],
+ "w21": [
+  {
+   "to": "k33",
+   "voie": "la forme — la gorgone (lignée d’accueil de l’Enge des Caveaux)"
+  }
+ ],
+ "w20": [
+  {
+   "to": "g2",
+   "voie": "la forme — la fée (Luciole, lignée d’accueil de l’Enge des Bois)"
+  }
+ ],
+ "g2": [
+  {
+   "to": "g33",
+   "voie": "la fée grandit — les Groves"
+  }
  ]
 }

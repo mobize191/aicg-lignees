@@ -126,6 +126,8 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 | n12 | k3 | la forme — le gouffre | standard | - |
 | n12 | k12 | la forme — le deuil marin | standard | - |
 | n12 | k24 | la forme — le devoir brisé | standard | - |
+| w21 | k33 | la forme — la gorgone | standard | - |
+| w20 | g2 | la forme — la fée (Luciole) | standard | - |
 
 ### Race divine (rang 3)
 
