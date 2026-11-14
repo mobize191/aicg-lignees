@@ -6,11 +6,11 @@
   "rarity": "C",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 8,
-  "hp": 58,
+  "atk": 10,
+  "hp": 59,
   "soloSpell": "Jet d’Écume",
-  "agi": 6,
-  "int": 3,
+  "agi": 7,
+  "int": 4,
   "def": 5
  },
  {
@@ -20,11 +20,11 @@
   "rarity": "C",
   "classe": "Mage",
   "element": "Eau",
-  "atk": 7,
-  "hp": 55,
+  "atk": 9,
+  "hp": 52,
   "soloSpell": "Trait de Corail",
-  "agi": 4,
-  "int": 10,
+  "agi": 5,
+  "int": 21,
   "def": 2
  },
  {
@@ -34,11 +34,11 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Eau",
-  "atk": 11,
-  "hp": 52,
+  "atk": 13,
+  "hp": 53,
   "soloSpell": "Morsure des Récifs",
-  "agi": 10,
-  "int": 4,
+  "agi": 12,
+  "int": 5,
   "def": 3
  },
  {
@@ -48,11 +48,11 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 14,
-  "hp": 74,
+  "atk": 17,
+  "hp": 84,
   "soloSpell": "Brise-Garde",
-  "agi": 10,
-  "int": 6,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -63,10 +63,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 20,
-  "hp": 73,
+  "hp": 70,
   "soloSpell": "Vision Noyée",
   "agi": 10,
-  "int": 24,
+  "int": 33,
   "def": 5
  },
  {
@@ -77,10 +77,10 @@
   "classe": "Mage",
   "element": "Eau",
   "atk": 28,
-  "hp": 85,
+  "hp": 81,
   "soloSpell": "Étreinte de l’Abîme",
   "agi": 14,
-  "int": 30,
+  "int": 40,
   "def": 7
  },
  {
@@ -90,11 +90,11 @@
   "rarity": "L",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 38,
-  "hp": 108,
+  "atk": 40,
+  "hp": 100,
   "soloSpell": "Marée Noire",
-  "agi": 27,
-  "int": 15,
+  "agi": 28,
+  "int": 16,
   "def": 23
  },
  {
@@ -118,11 +118,11 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 11,
-  "hp": 55,
+  "atk": 13,
+  "hp": 72,
   "soloSpell": "Pince de Silex",
-  "agi": 8,
-  "int": 4,
+  "agi": 9,
+  "int": 5,
   "def": 7
  },
  {
@@ -132,11 +132,11 @@
   "rarity": "SR",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 21,
-  "hp": 66,
+  "atk": 24,
+  "hp": 78,
   "soloSpell": "Colère Sismique",
-  "agi": 15,
-  "int": 8,
+  "agi": 17,
+  "int": 10,
   "def": 13
  },
  {
@@ -147,7 +147,7 @@
   "classe": "Prêtre",
   "element": "Eau",
   "atk": 8,
-  "hp": 50,
+  "hp": 62,
   "effect": {
    "kind": "heal",
    "value": 15
@@ -164,15 +164,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 9,
-  "hp": 54,
+  "atk": 10,
+  "hp": 72,
   "effect": {
    "kind": "heal",
    "value": 18
   },
   "soloSpell": "Larme Salée",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -182,15 +182,15 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 10,
-  "hp": 60,
+  "atk": 12,
+  "hp": 76,
   "effect": {
    "kind": "shield",
    "value": 22
   },
   "soloSpell": "Barrière de Corail",
-  "agi": 5,
-  "int": 8,
+  "agi": 6,
+  "int": 10,
   "def": 5
  },
  {
@@ -200,15 +200,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 74,
   "effect": {
    "kind": "heal",
    "value": 34
   },
   "soloSpell": "Bénédiction de l’Abîme",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -218,15 +218,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 11,
-  "hp": 70,
+  "atk": 20,
+  "hp": 74,
   "effect": {
    "kind": "shield",
    "value": 40
   },
   "soloSpell": "Mur de Galet",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -236,16 +236,16 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 26,
-  "hp": 72,
+  "atk": 27,
+  "hp": 84,
   "soloSpell": "Rituel des Écumes",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
-  "agi": 13,
-  "int": 21,
+  "agi": 14,
+  "int": 22,
   "def": 8
  },
  {
@@ -255,8 +255,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 35,
-  "hp": 98,
+  "atk": 36,
+  "hp": 100,
   "soloSpell": "Songe des Profondeurs",
   "soloMult": 1.6,
   "soloDot": {
@@ -264,7 +264,7 @@
    "turns": 3
   },
   "agi": 18,
-  "int": 28,
+  "int": 29,
   "def": 11
  },
  {
@@ -274,12 +274,12 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 27,
-  "hp": 82,
+  "atk": 30,
+  "hp": 90,
   "soloSpell": "Frappe Royale",
   "gimmick": "belier",
-  "agi": 19,
-  "int": 11,
+  "agi": 21,
+  "int": 12,
   "def": 16
  },
  {
@@ -289,12 +289,12 @@
   "rarity": "L",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 37,
-  "hp": 110,
+  "atk": 40,
+  "hp": 100,
   "soloSpell": "Couronne des Écumes",
   "gimmick": "belier",
-  "agi": 26,
-  "int": 15,
+  "agi": 28,
+  "int": 16,
   "def": 22
  },
  {
@@ -304,11 +304,11 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Eau",
-  "atk": 14,
-  "hp": 70,
+  "atk": 17,
+  "hp": 63,
   "soloSpell": "Vigie des Flots",
-  "agi": 13,
-  "int": 6,
+  "agi": 15,
+  "int": 7,
   "def": 4
  },
  {
@@ -318,15 +318,15 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 5,
-  "hp": 78,
+  "atk": 30,
+  "hp": 90,
   "effect": {
    "kind": "shield",
    "value": 52
   },
   "soloSpell": "Écran de Galets",
-  "agi": 4,
-  "int": 2,
+  "agi": 21,
+  "int": 12,
   "def": 3
  },
  {
@@ -336,15 +336,15 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 14,
-  "hp": 88,
+  "atk": 36,
+  "hp": 100,
   "effect": {
    "kind": "heal",
    "value": 58
   },
   "soloSpell": "Bénédiction des Berges",
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 6
  },
  {
@@ -355,7 +355,7 @@
   "classe": "Occultiste",
   "element": "Eau",
   "atk": 8,
-  "hp": 48,
+  "hp": 57,
   "effect": {
    "kind": "heal",
    "value": 14
@@ -372,15 +372,15 @@
   "rarity": "UC",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 9,
-  "hp": 52,
+  "atk": 10,
+  "hp": 56,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Marée Traîtresse",
   "soloCost": 8,
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 3
  },
  {
@@ -390,16 +390,16 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 10,
-  "hp": 58,
+  "atk": 14,
+  "hp": 64,
   "effect": {
    "kind": "stun",
    "count": 1
   },
   "soloSpell": "Chant Paralysant",
   "soloCost": 6,
-  "agi": 5,
-  "int": 8,
+  "agi": 7,
+  "int": 11,
   "def": 3
  },
  {
@@ -410,7 +410,7 @@
   "classe": "Occultiste",
   "element": "Eau",
   "atk": 20,
-  "hp": 64,
+  "hp": 71,
   "soloSpell": "Écume Tranchante",
   "soloMult": 1.6,
   "agi": 10,
@@ -424,8 +424,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 13,
-  "hp": 68,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "curse",
    "value": 0.2,
@@ -434,8 +434,8 @@
   "soloSpell": "Chant Ensorceleur",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -445,8 +445,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 14,
-  "hp": 84,
+  "atk": 36,
+  "hp": 95,
   "effect": {
    "kind": "stun",
    "count": 2
@@ -454,8 +454,8 @@
   "soloSpell": "Chant du Naufrage",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -465,12 +465,12 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 27,
-  "hp": 80,
+  "atk": 30,
+  "hp": 86,
   "soloSpell": "Corail Vengeur",
   "soloMult": 1.6,
-  "agi": 19,
-  "int": 11,
+  "agi": 21,
+  "int": 12,
   "def": 16
  },
  {
@@ -480,16 +480,16 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Eau",
-  "atk": 37,
-  "hp": 102,
+  "atk": 42,
+  "hp": 80,
   "soloSpell": "Colère des Récifs",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
-  "agi": 33,
-  "int": 15,
+  "agi": 38,
+  "int": 17,
   "def": 11
  },
  {
@@ -499,11 +499,11 @@
   "rarity": "C",
   "classe": "Guerrier",
   "element": "Feu",
-  "atk": 8,
-  "hp": 62,
+  "atk": 10,
+  "hp": 59,
   "soloSpell": "Poing de Cendre",
-  "agi": 6,
-  "int": 3,
+  "agi": 7,
+  "int": 4,
   "def": 5
  },
  {
@@ -513,10 +513,10 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 9,
-  "hp": 44,
+  "atk": 10,
+  "hp": 57,
   "soloSpell": "Lancer de Suie",
-  "agi": 8,
+  "agi": 9,
   "int": 4,
   "def": 3
  },
@@ -527,10 +527,10 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 12,
-  "hp": 50,
+  "atk": 13,
+  "hp": 53,
   "soloSpell": "Entaille Rousse",
-  "agi": 11,
+  "agi": 12,
   "int": 5,
   "def": 4
  },
@@ -541,11 +541,11 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Feu",
-  "atk": 14,
-  "hp": 76,
+  "atk": 17,
+  "hp": 84,
   "soloSpell": "Frappe de Magma",
-  "agi": 10,
-  "int": 6,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -555,8 +555,8 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 21,
-  "hp": 73,
+  "atk": 20,
+  "hp": 70,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -565,8 +565,8 @@
    "summonName": "Golem de Fournaise"
   },
   "soloSpell": "Fournaise Invoquée",
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -590,11 +590,11 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 70,
+  "atk": 17,
+  "hp": 63,
   "soloSpell": "Poigne de Suie",
-  "agi": 14,
-  "int": 6,
+  "agi": 15,
+  "int": 7,
   "def": 5
  },
  {
@@ -604,8 +604,8 @@
   "rarity": "L",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 39,
-  "hp": 93,
+  "atk": 38,
+  "hp": 89,
   "effect": {
    "kind": "summon",
    "value": 0.7,
@@ -614,8 +614,8 @@
    "summonName": "Titan de Fournaise"
   },
   "soloSpell": "Fournaise Éternelle",
-  "agi": 20,
-  "int": 40,
+  "agi": 19,
+  "int": 55,
   "def": 10
  },
  {
@@ -640,11 +640,11 @@
   "rarity": "C",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 8,
-  "hp": 55,
+  "atk": 9,
+  "hp": 52,
   "soloSpell": "Flammèche Errante",
-  "agi": 4,
-  "int": 10,
+  "agi": 5,
+  "int": 21,
   "def": 2
  },
  {
@@ -655,14 +655,14 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 11,
-  "hp": 68,
+  "hp": 65,
   "soloSpell": "Semence Ardente",
   "soloDot": {
    "pct": 0.25,
    "turns": 2
   },
   "agi": 6,
-  "int": 13,
+  "int": 26,
   "def": 3
  },
  {
@@ -672,16 +672,16 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 22,
-  "hp": 73,
+  "atk": 20,
+  "hp": 70,
   "soloSpell": "Vague de Cendres",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 6
  },
  {
@@ -691,16 +691,16 @@
   "rarity": "UR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 30,
-  "hp": 85,
+  "atk": 28,
+  "hp": 81,
   "soloSpell": "Colonne de Feu",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.35,
    "turns": 2
   },
-  "agi": 15,
-  "int": 30,
+  "agi": 14,
+  "int": 40,
   "def": 8
  },
  {
@@ -711,7 +711,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 38,
-  "hp": 93,
+  "hp": 89,
   "soloSpell": "Fournaise de Calcine",
   "soloMult": 1.6,
   "soloDot": {
@@ -719,7 +719,7 @@
    "turns": 3
   },
   "agi": 19,
-  "int": 40,
+  "int": 55,
   "def": 10
  },
  {
@@ -730,7 +730,7 @@
   "classe": "Guerrier",
   "element": "Feu",
   "atk": 40,
-  "hp": 112,
+  "hp": 100,
   "soloSpell": "Colère de Vulcain",
   "soloMult": 1.6,
   "soloDot": {
@@ -748,11 +748,11 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 48,
+  "atk": 13,
+  "hp": 53,
   "soloSpell": "Poignée de Suie",
-  "agi": 10,
-  "int": 4,
+  "agi": 12,
+  "int": 5,
   "def": 3
  },
  {
@@ -763,7 +763,7 @@
   "classe": "Prêtre",
   "element": "Ombre",
   "atk": 8,
-  "hp": 48,
+  "hp": 62,
   "effect": {
    "kind": "heal",
    "value": 14
@@ -780,15 +780,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 9,
-  "hp": 52,
+  "atk": 10,
+  "hp": 72,
   "effect": {
    "kind": "shield",
    "value": 16
   },
   "soloSpell": "Cendre Protectrice",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -798,15 +798,15 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 5,
-  "hp": 55,
+  "atk": 17,
+  "hp": 63,
   "effect": {
    "kind": "atkBuff",
    "value": 0.15
   },
   "soloSpell": "Cri de la Forge",
-  "agi": 5,
-  "int": 2,
+  "agi": 15,
+  "int": 7,
   "def": 2
  },
  {
@@ -816,15 +816,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 11,
-  "hp": 68,
+  "atk": 20,
+  "hp": 74,
   "effect": {
    "kind": "shield",
    "value": 36
   },
   "soloSpell": "Peau de Lave",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -834,15 +834,15 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 64,
+  "atk": 20,
+  "hp": 74,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Filet de Suie",
   "soloCost": 8,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -852,8 +852,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 70,
+  "atk": 27,
+  "hp": 84,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -862,8 +862,8 @@
   "soloSpell": "Tissage Ensorcelé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -873,8 +873,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 14,
-  "hp": 84,
+  "atk": 36,
+  "hp": 100,
   "effect": {
    "kind": "stun",
    "count": 2
@@ -882,8 +882,8 @@
   "soloSpell": "Linceul de Suie",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -893,8 +893,8 @@
   "rarity": "UR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 5,
-  "hp": 85,
+  "atk": 28,
+  "hp": 81,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -903,8 +903,8 @@
    "summonName": "Familier de Fournaise"
   },
   "soloSpell": "Gardiens Invoqués",
-  "agi": 3,
-  "int": 30,
+  "agi": 14,
+  "int": 40,
   "def": 1
  },
  {
@@ -914,11 +914,11 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Nature",
-  "atk": 8,
-  "hp": 58,
+  "atk": 10,
+  "hp": 57,
   "soloSpell": "Étreinte de Racines",
-  "agi": 7,
-  "int": 3,
+  "agi": 9,
+  "int": 4,
   "def": 2
  },
  {
@@ -929,10 +929,10 @@
   "classe": "Mage",
   "element": "Lumière",
   "atk": 9,
-  "hp": 55,
+  "hp": 52,
   "soloSpell": "Éclat Vif",
   "agi": 5,
-  "int": 10,
+  "int": 21,
   "def": 2
  },
  {
@@ -942,11 +942,11 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 11,
-  "hp": 54,
+  "atk": 13,
+  "hp": 72,
   "soloSpell": "Culbute de Mousse",
-  "agi": 8,
-  "int": 4,
+  "agi": 9,
+  "int": 5,
   "def": 7
  },
  {
@@ -956,11 +956,11 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 14,
-  "hp": 74,
+  "atk": 17,
+  "hp": 84,
   "soloSpell": "Fronde de Ronce",
-  "agi": 10,
-  "int": 6,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -970,11 +970,11 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Lumière",
-  "atk": 21,
-  "hp": 73,
+  "atk": 20,
+  "hp": 70,
   "soloSpell": "Rayon Prismatique",
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -984,10 +984,10 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 29,
-  "hp": 82,
+  "atk": 30,
+  "hp": 90,
   "soloSpell": "Poing Séculaire",
-  "agi": 20,
+  "agi": 21,
   "int": 12,
   "def": 17
  },
@@ -999,7 +999,7 @@
   "classe": "Guerrier",
   "element": "Lumière",
   "atk": 40,
-  "hp": 104,
+  "hp": 100,
   "soloSpell": "Aube Foliaire",
   "agi": 28,
   "int": 16,
@@ -1026,8 +1026,8 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Nature",
-  "atk": 21,
-  "hp": 73,
+  "atk": 20,
+  "hp": 70,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -1036,8 +1036,8 @@
    "summonName": "Rampant Sylvestre"
   },
   "soloSpell": "Sève Éveillée",
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -1048,7 +1048,7 @@
   "classe": "Occultiste",
   "element": "Nature",
   "atk": 20,
-  "hp": 66,
+  "hp": 74,
   "soloSpell": "Spores Vampires",
   "soloMult": 1.4,
   "soloDot": {
@@ -1066,8 +1066,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 28,
-  "hp": 80,
+  "atk": 27,
+  "hp": 84,
   "soloSpell": "Filaments Rongeants",
   "soloMult": 1.5,
   "soloDot": {
@@ -1085,7 +1085,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 37,
+  "atk": 36,
   "hp": 100,
   "soloSpell": "Nuée de Spores",
   "soloMult": 1.6,
@@ -1093,8 +1093,8 @@
    "pct": 0.4,
    "turns": 3
   },
-  "agi": 19,
-  "int": 30,
+  "agi": 18,
+  "int": 29,
   "def": 11
  },
  {
@@ -1104,12 +1104,12 @@
   "rarity": "UR",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 29,
-  "hp": 76,
+  "atk": 32,
+  "hp": 65,
   "soloSpell": "Lames de Branchage",
   "soloMult": 1.6,
-  "agi": 26,
-  "int": 12,
+  "agi": 29,
+  "int": 13,
   "def": 9
  },
  {
@@ -1119,16 +1119,16 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 38,
-  "hp": 96,
+  "atk": 42,
+  "hp": 80,
   "soloSpell": "Nuit des Sèves",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
-  "agi": 34,
-  "int": 15,
+  "agi": 38,
+  "int": 17,
   "def": 11
  },
  {
@@ -1139,7 +1139,7 @@
   "classe": "Prêtre",
   "element": "Lumière",
   "atk": 8,
-  "hp": 50,
+  "hp": 59,
   "effect": {
    "kind": "heal",
    "value": 15
@@ -1156,15 +1156,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 9,
-  "hp": 54,
+  "atk": 10,
+  "hp": 69,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Claie de Branches",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -1174,8 +1174,8 @@
   "rarity": "R",
   "classe": "Mage",
   "element": "Nature",
-  "atk": 3,
-  "hp": 78,
+  "atk": 14,
+  "hp": 71,
   "effect": {
    "kind": "summon",
    "value": 0.5,
@@ -1184,8 +1184,8 @@
    "summonName": "Sylvain des Sèves"
   },
   "soloSpell": "Sève Vitale",
-  "agi": 2,
-  "int": 17,
+  "agi": 7,
+  "int": 33,
   "def": 1
  },
  {
@@ -1195,15 +1195,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 11,
-  "hp": 68,
+  "atk": 20,
+  "hp": 71,
   "effect": {
    "kind": "shield",
    "value": 38
   },
   "soloSpell": "Voûte de Clairière",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -1213,15 +1213,15 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 13,
-  "hp": 76,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "heal",
    "value": 48
   },
   "soloSpell": "Rosée Radieuse",
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -1231,16 +1231,16 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 14,
-  "hp": 92,
+  "atk": 36,
+  "hp": 95,
   "effect": {
    "kind": "revive",
    "value": 0.6
   },
   "soloSpell": "Première Clarté",
   "soloCost": 6,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 6
  },
  {
@@ -1250,15 +1250,15 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 64,
+  "atk": 20,
+  "hp": 71,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Ombre Tissée",
   "soloCost": 8,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -1268,10 +1268,10 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 9,
-  "hp": 50,
+  "atk": 10,
+  "hp": 54,
   "soloSpell": "Griffe Ténébreuse",
-  "agi": 8,
+  "agi": 9,
   "int": 4,
   "def": 3
  },
@@ -1282,11 +1282,11 @@
   "rarity": "C",
   "classe": "Mage",
   "element": "Eau",
-  "atk": 8,
-  "hp": 55,
+  "atk": 9,
+  "hp": 50,
   "soloSpell": "Crachat Trouble",
-  "agi": 4,
-  "int": 10,
+  "agi": 5,
+  "int": 21,
   "def": 2
  },
  {
@@ -1296,10 +1296,10 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 12,
-  "hp": 52,
+  "atk": 13,
+  "hp": 69,
   "soloSpell": "Coup de Bêche Noire",
-  "agi": 8,
+  "agi": 9,
   "int": 5,
   "def": 7
  },
@@ -1310,11 +1310,11 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 72,
+  "atk": 17,
+  "hp": 80,
   "soloSpell": "Frappe Rigide",
-  "agi": 11,
-  "int": 6,
+  "agi": 12,
+  "int": 7,
   "def": 9
  },
  {
@@ -1324,11 +1324,11 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Eau",
-  "atk": 21,
-  "hp": 73,
+  "atk": 20,
+  "hp": 66,
   "soloSpell": "Brume Mordante",
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -1338,11 +1338,11 @@
   "rarity": "UR",
   "classe": "Mage",
   "element": "Ombre",
-  "atk": 30,
-  "hp": 85,
+  "atk": 28,
+  "hp": 77,
   "soloSpell": "Hurlement Froid",
-  "agi": 15,
-  "int": 30,
+  "agi": 14,
+  "int": 40,
   "def": 8
  },
  {
@@ -1352,8 +1352,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 38,
-  "hp": 104,
+  "atk": 36,
+  "hp": 95,
   "effect": {
    "kind": "summon",
    "value": 0.7,
@@ -1362,8 +1362,8 @@
    "summonName": "Garde du Tombeau"
   },
   "soloSpell": "Voie du Tombeau",
-  "agi": 19,
-  "int": 30,
+  "agi": 18,
+  "int": 29,
   "def": 11
  },
  {
@@ -1387,11 +1387,11 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 72,
+  "atk": 17,
+  "hp": 60,
   "soloSpell": "Morsure Putride",
-  "agi": 14,
-  "int": 6,
+  "agi": 15,
+  "int": 7,
   "def": 5
  },
  {
@@ -1401,16 +1401,16 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 40,
-  "hp": 100,
+  "atk": 36,
+  "hp": 95,
   "soloSpell": "Hurlement Fatal",
   "soloMult": 1.6,
   "soloDot": {
    "pct": 0.35,
    "turns": 2
   },
-  "agi": 20,
-  "int": 32,
+  "agi": 18,
+  "int": 29,
   "def": 12
  },
  {
@@ -1435,12 +1435,12 @@
   "rarity": "SR",
   "classe": "Guerrier",
   "element": "Eau",
-  "atk": 22,
-  "hp": 70,
+  "atk": 24,
+  "hp": 75,
   "soloSpell": "Sabre Englouti",
   "soloMult": 1.6,
-  "agi": 15,
-  "int": 9,
+  "agi": 17,
+  "int": 10,
   "def": 13
  },
  {
@@ -1450,8 +1450,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 28,
-  "hp": 84,
+  "atk": 27,
+  "hp": 80,
   "soloSpell": "Noyade Vengeresse",
   "soloMult": 1.5,
   "soloDot": {
@@ -1470,7 +1470,7 @@
   "classe": "Guerrier",
   "element": "Eau",
   "atk": 40,
-  "hp": 106,
+  "hp": 95,
   "soloSpell": "Harpon du Naufrage",
   "soloMult": 1.6,
   "soloDot": {
@@ -1488,11 +1488,11 @@
   "rarity": "C",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 8,
-  "hp": 60,
+  "atk": 10,
+  "hp": 56,
   "soloSpell": "Estoc Rouillé",
-  "agi": 6,
-  "int": 3,
+  "agi": 7,
+  "int": 4,
   "def": 5
  },
  {
@@ -1502,10 +1502,10 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 12,
-  "hp": 54,
+  "atk": 13,
+  "hp": 69,
   "soloSpell": "Étendard Funèbre",
-  "agi": 8,
+  "agi": 9,
   "int": 5,
   "def": 7
  },
@@ -1516,12 +1516,12 @@
   "rarity": "SR",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 20,
-  "hp": 72,
+  "atk": 24,
+  "hp": 75,
   "soloSpell": "Vigilance Éternelle",
   "soloMult": 1.6,
-  "agi": 14,
-  "int": 8,
+  "agi": 17,
+  "int": 10,
   "def": 12
  },
  {
@@ -1531,11 +1531,11 @@
   "rarity": "L",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 39,
-  "hp": 108,
+  "atk": 40,
+  "hp": 95,
   "soloSpell": "Épée de l’Aube",
   "soloMult": 1.6,
-  "agi": 27,
+  "agi": 28,
   "int": 16,
   "def": 23
  },
@@ -1546,12 +1546,12 @@
   "rarity": "SR",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 21,
-  "hp": 68,
+  "atk": 25,
+  "hp": 65,
   "soloSpell": "Serment Brisé",
   "soloMult": 1.6,
-  "agi": 19,
-  "int": 8,
+  "agi": 23,
+  "int": 10,
   "def": 6
  },
  {
@@ -1561,12 +1561,12 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 40,
-  "hp": 98,
+  "atk": 42,
+  "hp": 80,
   "soloSpell": "Lame du Serment",
   "soloMult": 1.6,
-  "agi": 36,
-  "int": 16,
+  "agi": 38,
+  "int": 17,
   "def": 12
  },
  {
@@ -1577,7 +1577,7 @@
   "classe": "Prêtre",
   "element": "Ombre",
   "atk": 8,
-  "hp": 48,
+  "hp": 59,
   "effect": {
    "kind": "heal",
    "value": 14
@@ -1594,15 +1594,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 9,
-  "hp": 52,
+  "atk": 10,
+  "hp": 69,
   "effect": {
    "kind": "shield",
    "value": 17
   },
   "soloSpell": "Drap de Nappe",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -1612,15 +1612,15 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 5,
-  "hp": 56,
+  "atk": 17,
+  "hp": 60,
   "effect": {
    "kind": "atkBuff",
    "value": 0.18
   },
   "soloSpell": "Deuil Martial",
-  "agi": 5,
-  "int": 2,
+  "agi": 15,
+  "int": 7,
   "def": 2
  },
  {
@@ -1630,15 +1630,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 71,
   "effect": {
    "kind": "heal",
    "value": 42
   },
   "soloSpell": "Eau Bénite",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -1648,8 +1648,8 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 71,
   "effect": {
    "kind": "summon",
    "value": 0.5,
@@ -1658,8 +1658,8 @@
    "summonName": "Goule Éveillée"
   },
   "soloSpell": "Rite d’Éveil",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -1669,8 +1669,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 72,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -1679,8 +1679,8 @@
    "summonName": "Serviteur Squelettique"
   },
   "soloSpell": "Légion des Caveaux",
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -1690,8 +1690,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 74,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -1700,8 +1700,8 @@
   "soloSpell": "Chagrin Noyé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -1711,8 +1711,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 14,
-  "hp": 90,
+  "atk": 36,
+  "hp": 95,
   "effect": {
    "kind": "stun",
    "count": 2
@@ -1720,8 +1720,8 @@
   "soloSpell": "Deuil Éternel",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -1731,15 +1731,15 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 13,
-  "hp": 74,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "shield",
    "value": 50
   },
   "soloSpell": "Égide Défunte",
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -1749,8 +1749,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 72,
+  "atk": 27,
+  "hp": 80,
   "effect": {
    "kind": "warcry",
    "value": 0.2,
@@ -1758,8 +1758,8 @@
   },
   "soloSpell": "Serment Rallié",
   "soloCost": 7,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -1769,11 +1769,11 @@
   "rarity": "C",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 8,
-  "hp": 60,
+  "atk": 10,
+  "hp": 62,
   "soloSpell": "Estoc Brillant",
-  "agi": 6,
-  "int": 3,
+  "agi": 7,
+  "int": 4,
   "def": 5
  },
  {
@@ -1784,10 +1784,10 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 9,
-  "hp": 55,
+  "hp": 52,
   "soloSpell": "Étincelle",
   "agi": 5,
-  "int": 10,
+  "int": 21,
   "def": 2
  },
  {
@@ -1797,10 +1797,10 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Lumière",
-  "atk": 12,
-  "hp": 50,
+  "atk": 13,
+  "hp": 56,
   "soloSpell": "Carreau Doré",
-  "agi": 11,
+  "agi": 12,
   "int": 5,
   "def": 4
  },
@@ -1811,11 +1811,11 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Feu",
-  "atk": 14,
-  "hp": 73,
+  "atk": 17,
+  "hp": 88,
   "soloSpell": "Lance Héliale",
-  "agi": 10,
-  "int": 6,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -1825,11 +1825,11 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Lumière",
-  "atk": 21,
+  "atk": 20,
   "hp": 73,
   "soloSpell": "Falaise de Lumière",
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -1839,14 +1839,14 @@
   "rarity": "UR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 29,
-  "hp": 85,
+  "atk": 28,
+  "hp": 81,
   "soloSpell": "Pluie de Feu",
   "phoenix": {
    "delay": 4
   },
-  "agi": 15,
-  "int": 30,
+  "agi": 14,
+  "int": 40,
   "def": 7
  },
  {
@@ -1856,10 +1856,10 @@
   "rarity": "L",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 41,
-  "hp": 103,
+  "atk": 40,
+  "hp": 105,
   "soloSpell": "Sentence Solaire",
-  "agi": 29,
+  "agi": 28,
   "int": 16,
   "def": 25
  },
@@ -1885,7 +1885,7 @@
   "rarity": "UR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 30,
+  "atk": 28,
   "hp": 85,
   "soloSpell": "Colonne Solaire",
   "soloMult": 1.6,
@@ -1893,8 +1893,8 @@
    "pct": 0.35,
    "turns": 2
   },
-  "agi": 15,
-  "int": 30,
+  "agi": 14,
+  "int": 40,
   "def": 8
  },
  {
@@ -1904,11 +1904,11 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 29,
-  "hp": 82,
+  "atk": 30,
+  "hp": 95,
   "soloSpell": "Perce-Aube",
   "soloMult": 1.6,
-  "agi": 20,
+  "agi": 21,
   "int": 12,
   "def": 17
  },
@@ -1919,12 +1919,12 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Lumière",
-  "atk": 39,
-  "hp": 96,
+  "atk": 42,
+  "hp": 88,
   "soloSpell": "Éclipse Montante",
   "soloMult": 1.6,
-  "agi": 35,
-  "int": 16,
+  "agi": 38,
+  "int": 17,
   "def": 12
  },
  {
@@ -1934,15 +1934,15 @@
   "rarity": "UC",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 12,
-  "hp": 68,
+  "atk": 11,
+  "hp": 65,
   "soloSpell": "Envol Incandescent",
   "soloDot": {
    "pct": 0.25,
    "turns": 2
   },
   "agi": 6,
-  "int": 13,
+  "int": 26,
   "def": 3
  },
  {
@@ -1952,15 +1952,15 @@
   "rarity": "R",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 15,
-  "hp": 78,
+  "atk": 14,
+  "hp": 74,
   "soloSpell": "Rafale de Braise",
   "soloDot": {
    "pct": 0.3,
    "turns": 2
   },
-  "agi": 8,
-  "int": 17,
+  "agi": 7,
+  "int": 33,
   "def": 4
  },
  {
@@ -1970,8 +1970,8 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Feu",
-  "atk": 21,
-  "hp": 73,
+  "atk": 20,
+  "hp": 70,
   "soloSpell": "Éclosion Ardente",
   "soloDot": {
    "pct": 0.3,
@@ -1980,8 +1980,8 @@
   "phoenix": {
    "delay": 3
   },
-  "agi": 11,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -1992,7 +1992,7 @@
   "classe": "Mage",
   "element": "Feu",
   "atk": 38,
-  "hp": 93,
+  "hp": 89,
   "soloSpell": "Renaissance Pyrique",
   "soloMult": 1.6,
   "soloDot": {
@@ -2003,7 +2003,7 @@
    "delay": 3
   },
   "agi": 19,
-  "int": 40,
+  "int": 55,
   "def": 10
  },
  {
@@ -2013,12 +2013,12 @@
   "rarity": "UR",
   "classe": "Assassin",
   "element": "Lumière",
-  "atk": 30,
-  "hp": 78,
+  "atk": 32,
+  "hp": 72,
   "soloSpell": "Verdict Solaire",
   "soloMult": 1.6,
-  "agi": 27,
-  "int": 12,
+  "agi": 29,
+  "int": 13,
   "def": 9
  },
  {
@@ -2028,12 +2028,12 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Lumière",
-  "atk": 39,
-  "hp": 100,
+  "atk": 42,
+  "hp": 88,
   "soloSpell": "Peine Capitale",
   "soloMult": 1.6,
-  "agi": 35,
-  "int": 16,
+  "agi": 38,
+  "int": 17,
   "def": 12
  },
  {
@@ -2063,7 +2063,7 @@
   "classe": "Prêtre",
   "element": "Lumière",
   "atk": 8,
-  "hp": 50,
+  "hp": 65,
   "effect": {
    "kind": "heal",
    "value": 16
@@ -2080,15 +2080,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 9,
-  "hp": 54,
+  "atk": 10,
+  "hp": 76,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Rempart Ardent",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -2098,15 +2098,15 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 10,
-  "hp": 58,
+  "atk": 12,
+  "hp": 80,
   "effect": {
    "kind": "heal",
    "value": 24
   },
   "soloSpell": "Aile du Matin",
-  "agi": 5,
-  "int": 8,
+  "agi": 6,
+  "int": 10,
   "def": 5
  },
  {
@@ -2116,15 +2116,15 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 11,
-  "hp": 68,
+  "atk": 20,
+  "hp": 78,
   "effect": {
    "kind": "heal",
    "value": 44
   },
   "soloSpell": "Bénédiction Solaire",
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -2134,8 +2134,8 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 11,
-  "hp": 64,
+  "atk": 20,
+  "hp": 74,
   "effect": {
    "kind": "reflect",
    "value": 0.25,
@@ -2143,8 +2143,8 @@
   },
   "soloSpell": "Plumage Miroir",
   "soloCost": 6,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 5
  },
  {
@@ -2154,8 +2154,8 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 13,
-  "hp": 72,
+  "atk": 27,
+  "hp": 84,
   "effect": {
    "kind": "reflect",
    "value": 0.3,
@@ -2163,8 +2163,8 @@
   },
   "soloSpell": "Renvoi Céleste",
   "soloCost": 6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -2174,8 +2174,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Feu",
-  "atk": 14,
-  "hp": 88,
+  "atk": 36,
+  "hp": 100,
   "effect": {
    "kind": "reflect",
    "value": 0.35,
@@ -2184,8 +2184,8 @@
   "soloSpell": "Immolation Retournée",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -2195,15 +2195,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 9,
-  "hp": 54,
+  "atk": 10,
+  "hp": 76,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Aube Bénie",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -2213,15 +2213,15 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 10,
-  "hp": 60,
+  "atk": 12,
+  "hp": 80,
   "effect": {
    "kind": "heal",
    "value": 26
   },
   "soloSpell": "Office du Matin",
-  "agi": 5,
-  "int": 8,
+  "agi": 6,
+  "int": 10,
   "def": 5
  },
  {
@@ -2231,8 +2231,8 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 13,
-  "hp": 74,
+  "atk": 27,
+  "hp": 88,
   "effect": {
    "kind": "warcry",
    "value": 0.2,
@@ -2240,8 +2240,8 @@
   },
   "soloSpell": "Hymne du Zénith",
   "soloCost": 7,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -2251,15 +2251,15 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 14,
-  "hp": 92,
+  "atk": 36,
+  "hp": 105,
   "effect": {
    "kind": "atkBuff",
    "value": 0.3
   },
   "soloSpell": "Cantique Final",
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 6
  },
  {
@@ -2269,8 +2269,8 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 78,
   "effect": {
    "kind": "curse",
    "value": 0.2,
@@ -2279,8 +2279,8 @@
   "soloSpell": "Colonne de Purge",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2291,11 +2291,11 @@
   "rarity": "C",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 8,
-  "hp": 60,
+  "atk": 10,
+  "hp": 54,
   "soloSpell": "Interdiction",
-  "agi": 6,
-  "int": 3,
+  "agi": 7,
+  "int": 4,
   "def": 5
  },
  {
@@ -2307,7 +2307,7 @@
   "classe": "Occultiste",
   "element": "Lumière",
   "atk": 8,
-  "hp": 50,
+  "hp": 55,
   "effect": {
    "kind": "slow"
   },
@@ -2325,7 +2325,7 @@
   "rarity": "UC",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 9,
+  "atk": 10,
   "hp": 54,
   "effect": {
    "kind": "stun",
@@ -2334,7 +2334,7 @@
   "soloSpell": "Sentence Lente",
   "soloCost": 6,
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 3
  },
  {
@@ -2345,13 +2345,13 @@
   "rarity": "R",
   "classe": "Mage",
   "element": "Lumière",
-  "atk": 15,
-  "hp": 78,
+  "atk": 14,
+  "hp": 68,
   "soloSpell": "Balance du Temps",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 8,
-  "int": 17,
+  "agi": 7,
+  "int": 33,
   "def": 4
  },
  {
@@ -2362,8 +2362,8 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 68,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -2372,8 +2372,8 @@
   "soloSpell": "Sablier Ensorcelé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2384,8 +2384,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 14,
-  "hp": 92,
+  "atk": 36,
+  "hp": 91,
   "effect": {
    "kind": "stun",
    "count": 2
@@ -2393,8 +2393,8 @@
   "soloSpell": "Arrêt du Temps",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -2405,10 +2405,10 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Eau",
-  "atk": 9,
-  "hp": 46,
+  "atk": 10,
+  "hp": 52,
   "soloSpell": "Frappe Réfléchie",
-  "agi": 8,
+  "agi": 9,
   "int": 4,
   "def": 3
  },
@@ -2420,13 +2420,13 @@
   "rarity": "UC",
   "classe": "Mage",
   "element": "Eau",
-  "atk": 12,
-  "hp": 68,
+  "atk": 11,
+  "hp": 65,
   "soloSpell": "Voix Doubles",
   "soloCost": 4,
   "soloMult": 1.6,
   "agi": 6,
-  "int": 13,
+  "int": 26,
   "def": 3
  },
  {
@@ -2437,15 +2437,15 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 10,
-  "hp": 60,
+  "atk": 12,
+  "hp": 70,
   "effect": {
    "kind": "shield",
    "value": 22
   },
   "soloSpell": "Reflet Protecteur",
-  "agi": 5,
-  "int": 8,
+  "agi": 6,
+  "int": 10,
   "def": 5
  },
  {
@@ -2456,15 +2456,15 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 68,
   "effect": {
    "kind": "copy"
   },
   "soloSpell": "Chant Miroir",
   "soloCost": 6,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2475,8 +2475,8 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 13,
-  "hp": 74,
+  "atk": 27,
+  "hp": 77,
   "effect": {
    "kind": "reflect",
    "value": 0.3,
@@ -2484,8 +2484,8 @@
   },
   "soloSpell": "Renvoi en Chœur",
   "soloCost": 6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -2496,16 +2496,16 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 14,
-  "hp": 92,
+  "atk": 36,
+  "hp": 91,
   "effect": {
    "kind": "copy"
   },
   "soloSpell": "Refrain Éternel",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -2516,11 +2516,11 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Nature",
-  "atk": 8,
-  "hp": 58,
+  "atk": 10,
+  "hp": 52,
   "soloSpell": "Fil Tendu",
-  "agi": 7,
-  "int": 3,
+  "agi": 9,
+  "int": 4,
   "def": 2
  },
  {
@@ -2531,15 +2531,15 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 9,
-  "hp": 54,
+  "atk": 10,
+  "hp": 72,
   "effect": {
    "kind": "shield",
    "value": 17
   },
   "soloSpell": "Point Serré",
   "agi": 5,
-  "int": 7,
+  "int": 8,
   "def": 4
  },
  {
@@ -2550,13 +2550,13 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Nature",
-  "atk": 15,
-  "hp": 70,
+  "atk": 17,
+  "hp": 57,
   "soloSpell": "Point de Croix",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 14,
-  "int": 6,
+  "agi": 15,
+  "int": 7,
   "def": 5
  },
  {
@@ -2567,15 +2567,15 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 11,
-  "hp": 66,
+  "atk": 20,
+  "hp": 68,
   "effect": {
    "kind": "link"
   },
   "soloSpell": "Nœud d’Or",
   "soloCost": 6,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2586,15 +2586,15 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 13,
-  "hp": 74,
+  "atk": 27,
+  "hp": 77,
   "effect": {
    "kind": "link"
   },
   "soloSpell": "Deux Rives",
   "soloCost": 5,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 6
  },
  {
@@ -2605,16 +2605,16 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 14,
-  "hp": 92,
+  "atk": 36,
+  "hp": 91,
   "effect": {
    "kind": "link"
   },
   "soloSpell": "Destin Tissé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 4
  },
  {
@@ -2624,11 +2624,11 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Nature",
-  "atk": 8,
-  "hp": 56,
+  "atk": 10,
+  "hp": 57,
   "soloSpell": "Griffe de Mousse",
-  "agi": 7,
-  "int": 3,
+  "agi": 9,
+  "int": 4,
   "def": 2
  },
  {
@@ -2638,11 +2638,11 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Nature",
-  "atk": 11,
-  "hp": 54,
+  "atk": 13,
+  "hp": 72,
   "soloSpell": "Coup de Racine",
-  "agi": 8,
-  "int": 4,
+  "agi": 9,
+  "int": 5,
   "def": 7
  },
  {
@@ -2652,10 +2652,10 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 9,
-  "hp": 50,
+  "atk": 10,
+  "hp": 57,
   "soloSpell": "Griffe des Ténèbres",
-  "agi": 8,
+  "agi": 9,
   "int": 4,
   "def": 3
  },
@@ -2666,10 +2666,10 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 12,
-  "hp": 52,
+  "atk": 13,
+  "hp": 72,
   "soloSpell": "Coup d'Os",
-  "agi": 8,
+  "agi": 9,
   "int": 5,
   "def": 7
  },
@@ -2680,10 +2680,10 @@
   "rarity": "C",
   "classe": "Assassin",
   "element": "Lumière",
-  "atk": 9,
-  "hp": 50,
+  "atk": 10,
+  "hp": 57,
   "soloSpell": "Dard Céleste",
-  "agi": 8,
+  "agi": 9,
   "int": 4,
   "def": 3
  },
@@ -2694,10 +2694,10 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Feu",
-  "atk": 12,
-  "hp": 52,
+  "atk": 13,
+  "hp": 72,
   "soloSpell": "Lame Solaire",
-  "agi": 8,
+  "agi": 9,
   "int": 5,
   "def": 7
  },
@@ -2709,13 +2709,13 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 52,
+  "atk": 13,
+  "hp": 49,
   "soloSpell": "Frôlement du Vice",
   "soloCost": 2,
   "soloMult": 1.4,
-  "agi": 10,
-  "int": 4,
+  "agi": 12,
+  "int": 5,
   "def": 3
  },
  {
@@ -2726,8 +2726,8 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 10,
-  "hp": 66,
+  "atk": 14,
+  "hp": 61,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -2736,8 +2736,8 @@
   "soloSpell": "Regard de Luxure",
   "soloCost": 3,
   "soloMult": 1.6,
-  "agi": 5,
-  "int": 8,
+  "agi": 7,
+  "int": 11,
   "def": 3
  },
  {
@@ -2748,16 +2748,16 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 72,
+  "atk": 20,
+  "hp": 68,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Haleine du Gouffre",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2768,8 +2768,8 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 77,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -2778,8 +2778,8 @@
   "soloSpell": "Charme de l’Abysse",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -2790,8 +2790,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 91,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -2800,8 +2800,8 @@
   "soloSpell": "Extase Interdite",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {
@@ -2812,8 +2812,8 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 10,
-  "hp": 66,
+  "atk": 14,
+  "hp": 61,
   "effect": {
    "kind": "slow"
   },
@@ -2821,8 +2821,8 @@
   "soloCost": 5,
   "soloMult": 1.8,
   "beast": true,
-  "agi": 5,
-  "int": 8,
+  "agi": 7,
+  "int": 11,
   "def": 3
  },
  {
@@ -2833,14 +2833,14 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 72,
+  "atk": 20,
+  "hp": 68,
   "soloSpell": "Souffle des Vices",
   "soloCost": 9,
   "soloMult": 2.6,
   "beast": true,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -2851,14 +2851,14 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 77,
   "soloSpell": "Morsure du Gouffre",
   "soloCost": 14,
   "soloMult": 3.4,
   "beast": true,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -2869,14 +2869,14 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 91,
   "soloSpell": "Dévoration Totale",
   "soloCost": 9,
   "soloMult": 2.2,
   "beast": true,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {
@@ -2887,13 +2887,13 @@
   "rarity": "UC",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 10,
+  "atk": 13,
   "hp": 66,
   "soloSpell": "Grondement des Fosses",
   "soloCost": 2,
   "soloMult": 1.4,
-  "agi": 7,
-  "int": 4,
+  "agi": 9,
+  "int": 5,
   "def": 6
  },
  {
@@ -2904,13 +2904,13 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 72,
+  "atk": 17,
+  "hp": 77,
   "soloSpell": "Coup des Fosses",
   "soloCost": 3,
   "soloMult": 1.6,
-  "agi": 9,
-  "int": 5,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -2921,8 +2921,8 @@
   "rarity": "SR",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 16,
-  "hp": 80,
+  "atk": 24,
+  "hp": 71,
   "effect": {
    "kind": "stun",
    "count": 1
@@ -2930,8 +2930,8 @@
   "soloSpell": "Cri de Fureur",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 11,
-  "int": 6,
+  "agi": 17,
+  "int": 10,
   "def": 10
  },
  {
@@ -2942,8 +2942,8 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 20,
-  "hp": 88,
+  "atk": 30,
+  "hp": 83,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -2952,8 +2952,8 @@
   "soloSpell": "Terreur Majeure",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 14,
-  "int": 8,
+  "agi": 21,
+  "int": 12,
   "def": 12
  },
  {
@@ -2964,8 +2964,8 @@
   "rarity": "L",
   "classe": "Guerrier",
   "element": "Ombre",
-  "atk": 24,
-  "hp": 100,
+  "atk": 40,
+  "hp": 91,
   "effect": {
    "kind": "stun",
    "count": 1
@@ -2973,8 +2973,8 @@
   "soloSpell": "Sceptre du Jugement",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 17,
-  "int": 10,
+  "agi": 28,
+  "int": 16,
   "def": 14
  },
  {
@@ -2985,13 +2985,13 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 10,
-  "hp": 66,
+  "atk": 14,
+  "hp": 61,
   "soloSpell": "Écho des Fosses",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 5,
-  "int": 8,
+  "agi": 7,
+  "int": 11,
   "def": 3
  },
  {
@@ -3002,13 +3002,13 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 72,
+  "atk": 20,
+  "hp": 68,
   "soloSpell": "Rugissement du Fléau",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -3019,13 +3019,13 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 77,
   "soloSpell": "Voix de l’Abysse",
   "soloCost": 14,
   "soloMult": 3.4,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -3036,8 +3036,8 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 91,
   "effect": {
    "kind": "curse",
    "value": 0.25,
@@ -3046,8 +3046,8 @@
   "soloSpell": "Souffle Noir",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {
@@ -3058,13 +3058,13 @@
   "rarity": "R",
   "classe": "Guerrier",
   "element": "Feu",
-  "atk": 13,
-  "hp": 72,
+  "atk": 17,
+  "hp": 77,
   "soloSpell": "Éclat Dévoyé",
   "soloCost": 2,
   "soloMult": 1.4,
-  "agi": 9,
-  "int": 5,
+  "agi": 12,
+  "int": 7,
   "def": 8
  },
  {
@@ -3075,16 +3075,16 @@
   "rarity": "SR",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 16,
-  "hp": 80,
+  "atk": 24,
+  "hp": 71,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Zénith Fêlé",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 11,
-  "int": 6,
+  "agi": 17,
+  "int": 10,
   "def": 10
  },
  {
@@ -3095,13 +3095,13 @@
   "rarity": "UR",
   "classe": "Guerrier",
   "element": "Lumière",
-  "atk": 20,
-  "hp": 88,
+  "atk": 30,
+  "hp": 83,
   "soloSpell": "Voûte Renversée",
   "soloCost": 14,
   "soloMult": 3.4,
-  "agi": 14,
-  "int": 8,
+  "agi": 21,
+  "int": 12,
   "def": 12
  },
  {
@@ -3112,13 +3112,13 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 14,
-  "hp": 94,
+  "atk": 36,
+  "hp": 91,
   "soloSpell": "Lumière Noire",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 7,
-  "int": 11,
+  "agi": 18,
+  "int": 29,
   "def": 6
  },
  {
@@ -3128,13 +3128,13 @@
   "rarity": "UC",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 52,
+  "atk": 13,
+  "hp": 51,
   "soloSpell": "Morsure des Écueils",
   "soloCost": 2,
   "soloMult": 1.4,
-  "agi": 10,
-  "int": 4,
+  "agi": 12,
+  "int": 5,
   "def": 3
  },
  {
@@ -3144,13 +3144,13 @@
   "rarity": "R",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 62,
+  "atk": 17,
+  "hp": 60,
   "soloSpell": "Fil du Regard",
   "soloCost": 3,
   "soloMult": 1.6,
-  "agi": 14,
-  "int": 6,
+  "agi": 15,
+  "int": 7,
   "def": 5
  },
  {
@@ -3160,13 +3160,13 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 11,
-  "hp": 72,
+  "atk": 20,
+  "hp": 71,
   "soloSpell": "Regard de Pierre",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 6,
-  "int": 9,
+  "agi": 10,
+  "int": 16,
   "def": 3
  },
  {
@@ -3176,13 +3176,13 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 80,
   "soloSpell": "Cheveux de Serpents",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -3192,13 +3192,13 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 95,
   "soloSpell": "Pétrification",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {
@@ -3208,13 +3208,13 @@
   "rarity": "SR",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 18,
-  "hp": 68,
+  "atk": 25,
+  "hp": 65,
   "soloSpell": "Nid de Serpents",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 16,
-  "int": 7,
+  "agi": 23,
+  "int": 10,
   "def": 5
  },
  {
@@ -3224,13 +3224,13 @@
   "rarity": "UR",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 22,
-  "hp": 76,
+  "atk": 32,
+  "hp": 65,
   "soloSpell": "Constriction",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 20,
-  "int": 9,
+  "agi": 29,
+  "int": 13,
   "def": 7
  },
  {
@@ -3240,13 +3240,13 @@
   "rarity": "L",
   "classe": "Assassin",
   "element": "Ombre",
-  "atk": 26,
-  "hp": 88,
+  "atk": 42,
+  "hp": 80,
   "soloSpell": "Morsure des Sœurs",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 23,
-  "int": 10,
+  "agi": 38,
+  "int": 17,
   "def": 8
  },
  {
@@ -3256,13 +3256,13 @@
   "rarity": "R",
   "classe": "Mage",
   "element": "Nature",
-  "atk": 15,
-  "hp": 78,
+  "atk": 14,
+  "hp": 71,
   "soloSpell": "Lueur des Groves",
   "soloCost": 2,
   "soloMult": 1.4,
-  "agi": 8,
-  "int": 17,
+  "agi": 7,
+  "int": 33,
   "def": 4
  },
  {
@@ -3272,13 +3272,13 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Nature",
-  "atk": 18,
-  "hp": 73,
+  "atk": 20,
+  "hp": 66,
   "soloSpell": "Rire Enchanté",
   "soloCost": 3,
   "soloMult": 1.6,
-  "agi": 9,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -3288,13 +3288,13 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 80,
   "soloSpell": "Danse des Fées",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -3304,13 +3304,13 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 95,
   "soloSpell": "Royaume des Jeux",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {
@@ -3320,13 +3320,13 @@
   "rarity": "SR",
   "classe": "Mage",
   "element": "Nature",
-  "atk": 18,
-  "hp": 73,
+  "atk": 20,
+  "hp": 66,
   "soloSpell": "Épines Vives",
   "soloCost": 5,
   "soloMult": 1.8,
-  "agi": 9,
-  "int": 24,
+  "agi": 10,
+  "int": 33,
   "def": 5
  },
  {
@@ -3336,13 +3336,13 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 13,
-  "hp": 82,
+  "atk": 27,
+  "hp": 80,
   "soloSpell": "Couronne d’Épines",
   "soloCost": 9,
   "soloMult": 2.6,
-  "agi": 7,
-  "int": 10,
+  "agi": 14,
+  "int": 22,
   "def": 4
  },
  {
@@ -3352,13 +3352,13 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 15,
-  "hp": 94,
+  "atk": 36,
+  "hp": 95,
   "soloSpell": "Souveraineté des Ronces",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 8,
-  "int": 12,
+  "agi": 18,
+  "int": 29,
   "def": 5
  },
  {

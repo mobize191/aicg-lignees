@@ -29,12 +29,11 @@ test('lot 1 eq v2 : INT des Mages a/v = INT_T[palier] ; PV = 89 % du PV Guerrier
   }
 });
 
-test('lot 1 eq v2 : Mages monstres = parité ATQ Guerrier du palier ; PV = 89 % du PV Guerrier (les deux collections)', () => {
+test('lot 1 eq v2 : Mages monstres >= parité ATQ Guerrier du palier (les deux collections ; lot 3 relève ensuite à la bande carte)', () => {
   const mons = data.monsters.filter((m) => m.classe === 'Mage' && WAR_ATK[m.rarity]);
   assert.ok(mons.length >= 10);
   for (const m of mons) {
-    assert.equal(m.int, WAR_ATK[m.rarity], `${m.id} (${m.rarity}) INT ${m.int} = ATQ Guerrier`);
-    assert.equal(m.hp, jsr(WAR_HP[m.rarity] * 0.89), `${m.id} PV`);
+    assert.ok(m.int >= WAR_ATK[m.rarity], `${m.id} (${m.rarity}) INT ${m.int} >= ATQ Guerrier ${WAR_ATK[m.rarity]} (lot 3 : bande carte ${INT_T[m.rarity]})`);
   }
 });
 

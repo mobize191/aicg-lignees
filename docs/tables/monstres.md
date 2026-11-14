@@ -8,36 +8,36 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| g1 | Rampant du Fougeron | C | Assassin | Nature | - | 8 | 58 | 7 | 3 | Étreinte de Racines | - |
-| g10 | Druidesse des Sèves | R | Mage | Nature | - | 3 | 78 | 2 | 17 | Sève Vitale | summon 0.5 |
-| g11 | Oracle des Clairières | SR | Prêtre | Lumière | - | 11 | 68 | 6 | 9 | Voûte de Clairière | shield 38 |
-| g12 | Bergère des Sèves | UC | Prêtre | Nature | - | 9 | 54 | 5 | 7 | Claie de Branches | shield 18 |
-| g13 | Semeur Sylvestre | SR | Mage | Nature | - | 21 | 73 | 11 | 24 | Sève Éveillée | summon 0.6 |
-| g14 | Mycolithe | SR | Occultiste | Nature | - | 20 | 66 | 10 | 16 | Spores Vampires | - |
-| g15 | Mycélium Vivant | UR | Occultiste | Nature | - | 28 | 80 | 14 | 22 | Filaments Rongeants | - |
-| g16 | Mycola, Reine des Spores | L | Occultiste | Nature | - | 37 | 100 | 19 | 30 | Nuée de Spores | - |
-| g17 | Dryade Radieuse | UR | Prêtre | Lumière | - | 13 | 76 | 7 | 10 | Rosée Radieuse | heal 48 |
-| g18 | Adriel, Lumignole des Clairières | L | Prêtre | Lumière | - | 14 | 92 | 7 | 11 | Première Clarté | revive 0.6 |
-| g19 | Dryade du Sous-Bois | SR | Occultiste | Ombre | - | 11 | 64 | 6 | 9 | Ombre Tissée | slow |
-| g2 | Luciole Hargneuse | C | Mage | Lumière | - | 9 | 55 | 5 | 10 | Éclat Vif | - |
-| g20 | Rôdeuse des Sous-Bois | UR | Assassin | Ombre | - | 29 | 76 | 26 | 12 | Lames de Branchage | - |
-| g21 | Vesna, Dryade du Sous-Bois | L | Assassin | Ombre | - | 38 | 96 | 34 | 15 | Nuit des Sèves | - |
-| g3 | Sanglier de Mousse | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Culbute de Mousse | - |
-| g31 | Gobelin des Mousses | C | Assassin | Nature | - | 8 | 56 | 7 | 3 | Griffe de Mousse | - |
-| g32 | Gobelin des Racines | UC | Guerrier | Nature | - | 11 | 54 | 8 | 4 | Coup de Racine | - |
-| g33 | Fée des Groves | R | Mage | Nature | - | 15 | 78 | 8 | 17 | Lueur des Groves | - |
-| g34 | Fée des Jeux | SR | Mage | Nature | - | 18 | 73 | 9 | 24 | Rire Enchanté | - |
-| g35 | Souveraine des Jeux | UR | Occultiste | Nature | - | 13 | 82 | 7 | 10 | Danse des Fées | - |
-| g36 | Mab, Souveraine des Jeux | L | Occultiste | Nature | - | 15 | 94 | 8 | 12 | Royaume des Jeux | - |
-| g37 | Fée des Ronces | SR | Mage | Nature | - | 18 | 73 | 9 | 24 | Épines Vives | - |
-| g38 | Reine des Ronces | UR | Occultiste | Nature | - | 13 | 82 | 7 | 10 | Couronne d’Épines | - |
-| g39 | Aubépine, Reine des Ronces | L | Occultiste | Nature | - | 15 | 94 | 8 | 12 | Souveraineté des Ronces | - |
-| g4 | Gardien des Remparts Verts | R | Guerrier | Nature | - | 14 | 74 | 10 | 6 | Fronde de Ronce | - |
-| g5 | Prisme Vivant | SR | Mage | Lumière | - | 21 | 73 | 11 | 24 | Rayon Prismatique | - |
-| g6 | Colosse Sylvestre | UR | Guerrier | Nature | - | 29 | 82 | 20 | 12 | Poing Séculaire | - |
-| g7 | Patriarche du Bosquet | L | Guerrier | Lumière | - | 40 | 104 | 28 | 16 | Aube Foliaire | - |
+| g1 | Rampant du Fougeron | C | Assassin | Nature | - | 10 | 57 | 9 | 4 | Étreinte de Racines | - |
+| g10 | Druidesse des Sèves | R | Mage | Nature | - | 14 | 71 | 7 | 33 | Sève Vitale | summon 0.5 |
+| g11 | Oracle des Clairières | SR | Prêtre | Lumière | - | 20 | 71 | 10 | 16 | Voûte de Clairière | shield 38 |
+| g12 | Bergère des Sèves | UC | Prêtre | Nature | - | 10 | 69 | 5 | 8 | Claie de Branches | shield 18 |
+| g13 | Semeur Sylvestre | SR | Mage | Nature | - | 20 | 70 | 10 | 33 | Sève Éveillée | summon 0.6 |
+| g14 | Mycolithe | SR | Occultiste | Nature | - | 20 | 74 | 10 | 16 | Spores Vampires | - |
+| g15 | Mycélium Vivant | UR | Occultiste | Nature | - | 27 | 84 | 14 | 22 | Filaments Rongeants | - |
+| g16 | Mycola, Reine des Spores | L | Occultiste | Nature | - | 36 | 100 | 18 | 29 | Nuée de Spores | - |
+| g17 | Dryade Radieuse | UR | Prêtre | Lumière | - | 27 | 80 | 14 | 22 | Rosée Radieuse | heal 48 |
+| g18 | Adriel, Lumignole des Clairières | L | Prêtre | Lumière | - | 36 | 95 | 18 | 29 | Première Clarté | revive 0.6 |
+| g19 | Dryade du Sous-Bois | SR | Occultiste | Ombre | - | 20 | 71 | 10 | 16 | Ombre Tissée | slow |
+| g2 | Luciole Hargneuse | C | Mage | Lumière | - | 9 | 52 | 5 | 21 | Éclat Vif | - |
+| g20 | Rôdeuse des Sous-Bois | UR | Assassin | Ombre | - | 32 | 65 | 29 | 13 | Lames de Branchage | - |
+| g21 | Vesna, Dryade du Sous-Bois | L | Assassin | Ombre | - | 42 | 80 | 38 | 17 | Nuit des Sèves | - |
+| g3 | Sanglier de Mousse | UC | Guerrier | Nature | - | 13 | 72 | 9 | 5 | Culbute de Mousse | - |
+| g31 | Gobelin des Mousses | C | Assassin | Nature | - | 10 | 57 | 9 | 4 | Griffe de Mousse | - |
+| g32 | Gobelin des Racines | UC | Guerrier | Nature | - | 13 | 72 | 9 | 5 | Coup de Racine | - |
+| g33 | Fée des Groves | R | Mage | Nature | - | 14 | 71 | 7 | 33 | Lueur des Groves | - |
+| g34 | Fée des Jeux | SR | Mage | Nature | - | 20 | 66 | 10 | 33 | Rire Enchanté | - |
+| g35 | Souveraine des Jeux | UR | Occultiste | Nature | - | 27 | 80 | 14 | 22 | Danse des Fées | - |
+| g36 | Mab, Souveraine des Jeux | L | Occultiste | Nature | - | 36 | 95 | 18 | 29 | Royaume des Jeux | - |
+| g37 | Fée des Ronces | SR | Mage | Nature | - | 20 | 66 | 10 | 33 | Épines Vives | - |
+| g38 | Reine des Ronces | UR | Occultiste | Nature | - | 27 | 80 | 14 | 22 | Couronne d’Épines | - |
+| g39 | Aubépine, Reine des Ronces | L | Occultiste | Nature | - | 36 | 95 | 18 | 29 | Souveraineté des Ronces | - |
+| g4 | Gardien des Remparts Verts | R | Guerrier | Nature | - | 17 | 84 | 12 | 7 | Fronde de Ronce | - |
+| g5 | Prisme Vivant | SR | Mage | Lumière | - | 20 | 70 | 10 | 33 | Rayon Prismatique | - |
+| g6 | Colosse Sylvestre | UR | Guerrier | Nature | - | 30 | 90 | 21 | 12 | Poing Séculaire | - |
+| g7 | Patriarche du Bosquet | L | Guerrier | Lumière | - | 40 | 100 | 28 | 16 | Aube Foliaire | - |
 | g8 | Cœur du Bosquet | M | Guerrier | Nature | - | 53 | 146 | 37 | 21 | Racine-Monde | - |
-| g9 | Lueur Bienveillante | C | Prêtre | Lumière | - | 8 | 50 | 4 | 6 | Baume Lumineux | heal 15 |
+| g9 | Lueur Bienveillante | C | Prêtre | Lumière | - | 8 | 59 | 4 | 6 | Baume Lumineux | heal 15 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
@@ -52,46 +52,46 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| k1 | Rôdeur des Caveaux | C | Assassin | Ombre | - | 9 | 50 | 8 | 4 | Griffe Ténébreuse | - |
-| k10 | Meneuse de Deuil | R | Assassin | Ombre | - | 5 | 56 | 5 | 2 | Deuil Martial | atkBuff 0.18 |
-| k11 | Prieuse des Naufragés | SR | Prêtre | Eau | - | 11 | 66 | 6 | 9 | Eau Bénite | heal 42 |
-| k12 | Veilleuse de Bord | UC | Prêtre | Eau | - | 9 | 52 | 5 | 7 | Drap de Nappe | shield 17 |
-| k13 | Goule des Caveaux | R | Assassin | Ombre | - | 15 | 72 | 14 | 6 | Morsure Putride | - |
-| k14 | Macha, Hurleuse des Caveaux | L | Occultiste | Ombre | - | 40 | 100 | 20 | 32 | Hurlement Fatal | - |
-| k15 | Éveillé des Caveaux | SR | Occultiste | Ombre | - | 11 | 66 | 6 | 9 | Rite d’Éveil | summon 0.5 |
-| k16 | Liche des Caveaux | UR | Occultiste | Ombre | - | 13 | 72 | 7 | 10 | Légion des Caveaux | summon 0.6 |
+| k1 | Rôdeur des Caveaux | C | Assassin | Ombre | - | 10 | 54 | 9 | 4 | Griffe Ténébreuse | - |
+| k10 | Meneuse de Deuil | R | Assassin | Ombre | - | 17 | 60 | 15 | 7 | Deuil Martial | atkBuff 0.18 |
+| k11 | Prieuse des Naufragés | SR | Prêtre | Eau | - | 20 | 71 | 10 | 16 | Eau Bénite | heal 42 |
+| k12 | Veilleuse de Bord | UC | Prêtre | Eau | - | 10 | 69 | 5 | 8 | Drap de Nappe | shield 17 |
+| k13 | Goule des Caveaux | R | Assassin | Ombre | - | 17 | 60 | 15 | 7 | Morsure Putride | - |
+| k14 | Macha, Hurleuse des Caveaux | L | Occultiste | Ombre | - | 36 | 95 | 18 | 29 | Hurlement Fatal | - |
+| k15 | Éveillé des Caveaux | SR | Occultiste | Ombre | - | 20 | 71 | 10 | 16 | Rite d’Éveil | summon 0.5 |
+| k16 | Liche des Caveaux | UR | Occultiste | Ombre | - | 27 | 80 | 14 | 22 | Légion des Caveaux | summon 0.6 |
 | k17 | La Mort, Faucheuse des Tombes | M | Assassin | Ombre | - | 55 | 150 | 50 | 22 | Fauchade Universelle | - |
-| k18 | Endeuillée des Flots | UR | Occultiste | Ombre | - | 13 | 74 | 7 | 10 | Chagrin Noyé | curse 0.25 |
-| k19 | Ysolde, Veuve Éternelle | L | Occultiste | Ombre | - | 14 | 90 | 7 | 11 | Deuil Éternel | stun |
-| k2 | Nymphe Croupie | C | Mage | Eau | - | 8 | 55 | 4 | 10 | Crachat Trouble | - |
-| k20 | Capitaine Noyé | SR | Guerrier | Eau | - | 22 | 70 | 15 | 9 | Sabre Englouti | - |
-| k21 | Revenu des Flots | UR | Occultiste | Eau | - | 28 | 84 | 14 | 22 | Noyade Vengeresse | - |
-| k22 | Ahab, Lord des Naufragés | L | Guerrier | Eau | - | 40 | 106 | 28 | 16 | Harpon du Naufrage | - |
-| k23 | Écuyer Défunt | C | Guerrier | Ombre | - | 8 | 60 | 6 | 3 | Estoc Rouillé | - |
-| k24 | Porte-Étendard Défunt | UC | Guerrier | Ombre | - | 12 | 54 | 8 | 5 | Étendard Funèbre | - |
-| k25 | Chevalière de la Veille | SR | Guerrier | Ombre | - | 20 | 72 | 14 | 8 | Vigilance Éternelle | - |
-| k26 | Paladine Défunte | UR | Prêtre | Lumière | - | 13 | 74 | 7 | 10 | Égide Défunte | shield 50 |
-| k27 | Jeanne d’Arc, Chevalière de la Veille | L | Guerrier | Lumière | - | 39 | 108 | 27 | 16 | Épée de l’Aube | - |
-| k28 | Chevalière du Serment | SR | Assassin | Ombre | - | 21 | 68 | 19 | 8 | Serment Brisé | - |
-| k29 | Sermenteuse Défunte | UR | Occultiste | Ombre | - | 13 | 72 | 7 | 10 | Serment Rallié | warcry 0.2 |
-| k3 | Fossoyeur Nocturne | UC | Guerrier | Ombre | - | 12 | 52 | 8 | 5 | Coup de Bêche Noire | - |
-| k30 | Siegfried, Chevalière du Serment Brisé | L | Assassin | Ombre | - | 40 | 98 | 36 | 16 | Lame du Serment | - |
-| k31 | Gobelin des Caveaux | C | Assassin | Ombre | - | 9 | 50 | 8 | 4 | Griffe des Ténèbres | - |
-| k32 | Gobelin des Ossements | UC | Guerrier | Ombre | - | 12 | 52 | 8 | 5 | Coup d'Os | - |
-| k33 | Serpent des Récifs | UC | Assassin | Ombre | - | 11 | 52 | 10 | 4 | Morsure des Écueils | - |
-| k34 | Fileuse du Regard | R | Assassin | Ombre | - | 15 | 62 | 14 | 6 | Fil du Regard | - |
-| k35 | Pétrifiante des Écueils | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Regard de Pierre | - |
-| k36 | Gorgonne Immaculée | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Cheveux de Serpents | - |
-| k37 | Méduse, Reine des Écueils | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Pétrification | - |
-| k38 | Mère des Serpents | SR | Assassin | Ombre | - | 18 | 68 | 16 | 7 | Nid de Serpents | - |
-| k39 | Grande Serpentine | UR | Assassin | Ombre | - | 22 | 76 | 20 | 9 | Constriction | - |
-| k4 | Chevalier Défunt | R | Guerrier | Ombre | - | 15 | 72 | 11 | 6 | Frappe Rigide | - |
-| k40 | Euryale, Nourrice des Serpents | L | Assassin | Ombre | - | 26 | 88 | 23 | 10 | Morsure des Sœurs | - |
-| k5 | Spectre des Quais | SR | Mage | Eau | - | 21 | 73 | 11 | 24 | Brume Mordante | - |
-| k6 | Banshee des Caveaux | UR | Mage | Ombre | - | 30 | 85 | 15 | 30 | Hurlement Froid | - |
-| k7 | Archiliche des Caveaux | L | Occultiste | Ombre | - | 38 | 104 | 19 | 30 | Voie du Tombeau | summon 0.7 |
+| k18 | Endeuillée des Flots | UR | Occultiste | Ombre | - | 27 | 80 | 14 | 22 | Chagrin Noyé | curse 0.25 |
+| k19 | Ysolde, Veuve Éternelle | L | Occultiste | Ombre | - | 36 | 95 | 18 | 29 | Deuil Éternel | stun |
+| k2 | Nymphe Croupie | C | Mage | Eau | - | 9 | 50 | 5 | 21 | Crachat Trouble | - |
+| k20 | Capitaine Noyé | SR | Guerrier | Eau | - | 24 | 75 | 17 | 10 | Sabre Englouti | - |
+| k21 | Revenu des Flots | UR | Occultiste | Eau | - | 27 | 80 | 14 | 22 | Noyade Vengeresse | - |
+| k22 | Ahab, Lord des Naufragés | L | Guerrier | Eau | - | 40 | 95 | 28 | 16 | Harpon du Naufrage | - |
+| k23 | Écuyer Défunt | C | Guerrier | Ombre | - | 10 | 56 | 7 | 4 | Estoc Rouillé | - |
+| k24 | Porte-Étendard Défunt | UC | Guerrier | Ombre | - | 13 | 69 | 9 | 5 | Étendard Funèbre | - |
+| k25 | Chevalière de la Veille | SR | Guerrier | Ombre | - | 24 | 75 | 17 | 10 | Vigilance Éternelle | - |
+| k26 | Paladine Défunte | UR | Prêtre | Lumière | - | 27 | 80 | 14 | 22 | Égide Défunte | shield 50 |
+| k27 | Jeanne d’Arc, Chevalière de la Veille | L | Guerrier | Lumière | - | 40 | 95 | 28 | 16 | Épée de l’Aube | - |
+| k28 | Chevalière du Serment | SR | Assassin | Ombre | - | 25 | 65 | 23 | 10 | Serment Brisé | - |
+| k29 | Sermenteuse Défunte | UR | Occultiste | Ombre | - | 27 | 80 | 14 | 22 | Serment Rallié | warcry 0.2 |
+| k3 | Fossoyeur Nocturne | UC | Guerrier | Ombre | - | 13 | 69 | 9 | 5 | Coup de Bêche Noire | - |
+| k30 | Siegfried, Chevalière du Serment Brisé | L | Assassin | Ombre | - | 42 | 80 | 38 | 17 | Lame du Serment | - |
+| k31 | Gobelin des Caveaux | C | Assassin | Ombre | - | 10 | 57 | 9 | 4 | Griffe des Ténèbres | - |
+| k32 | Gobelin des Ossements | UC | Guerrier | Ombre | - | 13 | 72 | 9 | 5 | Coup d'Os | - |
+| k33 | Serpent des Récifs | UC | Assassin | Ombre | - | 13 | 51 | 12 | 5 | Morsure des Écueils | - |
+| k34 | Fileuse du Regard | R | Assassin | Ombre | - | 17 | 60 | 15 | 7 | Fil du Regard | - |
+| k35 | Pétrifiante des Écueils | SR | Occultiste | Ombre | - | 20 | 71 | 10 | 16 | Regard de Pierre | - |
+| k36 | Gorgonne Immaculée | UR | Occultiste | Ombre | - | 27 | 80 | 14 | 22 | Cheveux de Serpents | - |
+| k37 | Méduse, Reine des Écueils | L | Occultiste | Ombre | - | 36 | 95 | 18 | 29 | Pétrification | - |
+| k38 | Mère des Serpents | SR | Assassin | Ombre | - | 25 | 65 | 23 | 10 | Nid de Serpents | - |
+| k39 | Grande Serpentine | UR | Assassin | Ombre | - | 32 | 65 | 29 | 13 | Constriction | - |
+| k4 | Chevalier Défunt | R | Guerrier | Ombre | - | 17 | 80 | 12 | 7 | Frappe Rigide | - |
+| k40 | Euryale, Nourrice des Serpents | L | Assassin | Ombre | - | 42 | 80 | 38 | 17 | Morsure des Sœurs | - |
+| k5 | Spectre des Quais | SR | Mage | Eau | - | 20 | 66 | 10 | 33 | Brume Mordante | - |
+| k6 | Banshee des Caveaux | UR | Mage | Ombre | - | 28 | 77 | 14 | 40 | Hurlement Froid | - |
+| k7 | Archiliche des Caveaux | L | Occultiste | Ombre | - | 36 | 95 | 18 | 29 | Voie du Tombeau | summon 0.7 |
 | k8 | Ancien Naufragé | M | Mage | Eau | - | 54 | 148 | 27 | 43 | Abîme Remontant | - |
-| k9 | Servante Pâle | C | Prêtre | Ombre | - | 8 | 48 | 4 | 6 | Soupir Glacé | heal 14 |
+| k9 | Servante Pâle | C | Prêtre | Ombre | - | 8 | 59 | 4 | 6 | Soupir Glacé | heal 14 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
@@ -107,46 +107,46 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| d1 | Garde du Seuil | C | Guerrier | Lumière | - | 8 | 60 | 6 | 3 | Interdiction | - |
-| d10 | Miroir Antiphonique | SR | Occultiste | Eau | - | 11 | 66 | 6 | 9 | Chant Miroir | copy |
-| d11 | Chef du Chœur | UR | Prêtre | Eau | - | 13 | 74 | 7 | 10 | Renvoi en Chœur | reflect 0.3 |
-| d12 | Écho, Voix Miroir | L | Occultiste | Eau | - | 14 | 92 | 7 | 11 | Refrain Éternel | copy |
-| d13 | Fileuse du Pont | C | Assassin | Nature | - | 8 | 58 | 7 | 3 | Fil Tendu | - |
-| d14 | Aiguille du Pont | UC | Prêtre | Nature | - | 9 | 54 | 5 | 7 | Point Serré | shield 17 |
-| d15 | Brodeuse des Liens | R | Assassin | Nature | - | 15 | 70 | 14 | 6 | Point de Croix | - |
-| d16 | Tisseuse des Nœuds | SR | Occultiste | Nature | - | 11 | 66 | 6 | 9 | Nœud d’Or | link |
-| d17 | Architecte du Pont | UR | Prêtre | Nature | - | 13 | 74 | 7 | 10 | Deux Rives | link |
-| d18 | Ananké, Tisseuse du Pont | L | Occultiste | Nature | - | 14 | 92 | 7 | 11 | Destin Tissé | link |
-| d19 | Démon du Désir | UC | Assassin | Ombre | - | 11 | 52 | 10 | 4 | Frôlement du Vice | - |
-| d2 | Servante du Sablier | C | Occultiste | Lumière | - | 8 | 50 | 4 | 6 | Sable Glissant | slow |
-| d20 | Succube | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Regard de Luxure | curse 0.25 |
-| d21 | Grande Succube | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Haleine du Gouffre | slow |
-| d22 | Dame du Désir | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Charme de l’Abysse | curse 0.25 |
-| d23 | Asmodia, Reine du Désir | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Extase Interdite | curse 0.25 |
-| d24 | Démon des Fosses | UC | Guerrier | Ombre | - | 10 | 66 | 7 | 4 | Grondement des Fosses | - |
-| d25 | Démon Majeur | R | Guerrier | Ombre | - | 13 | 72 | 9 | 5 | Coup des Fosses | - |
-| d26 | Seigneur Démon | SR | Guerrier | Ombre | - | 16 | 80 | 11 | 6 | Cri de Fureur | stun |
-| d27 | Prince Démon | UR | Guerrier | Ombre | - | 20 | 88 | 14 | 8 | Terreur Majeure | curse 0.25 |
-| d28 | Belzébuth, Roi des Démons | L | Guerrier | Ombre | - | 24 | 100 | 17 | 10 | Sceptre du Jugement | stun |
-| d29 | Gouffre des Vices | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Gouffre Murmurant | slow |
-| d3 | Huissier de l’Entre-Deux | UC | Occultiste | Lumière | - | 9 | 54 | 5 | 7 | Sentence Lente | stun |
-| d30 | Grand Gouffre | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Souffle des Vices | - |
-| d31 | Gueule de l’Abysse | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Morsure du Gouffre | - |
-| d32 | Famine | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Dévoration Totale | - |
-| d33 | Fléau Démoniaque | R | Occultiste | Ombre | - | 10 | 66 | 5 | 8 | Écho des Fosses | - |
-| d34 | Grand Fléau | SR | Occultiste | Ombre | - | 11 | 72 | 6 | 9 | Rugissement du Fléau | - |
-| d35 | Porte-Peste | UR | Occultiste | Ombre | - | 13 | 82 | 7 | 10 | Voix de l’Abysse | - |
-| d36 | Peste, Mère des Fléaux | L | Occultiste | Ombre | - | 15 | 94 | 8 | 12 | Souffle Noir | curse 0.25 |
-| d37 | Ange Ardent | R | Guerrier | Feu | - | 13 | 72 | 9 | 5 | Éclat Dévoyé | - |
-| d38 | Ange du Zénith | SR | Guerrier | Lumière | - | 16 | 80 | 11 | 6 | Zénith Fêlé | slow |
-| d39 | Astre Vaillant | UR | Guerrier | Lumière | - | 20 | 88 | 14 | 8 | Voûte Renversée | - |
-| d4 | Juge des Heures | R | Mage | Lumière | - | 15 | 78 | 8 | 17 | Balance du Temps | - |
-| d40 | Astre Rayonnant | L | Prêtre | Lumière | - | 14 | 94 | 7 | 11 | Lumière Noire | - |
-| d5 | Maître des Sabliers | SR | Occultiste | Lumière | - | 11 | 66 | 6 | 9 | Sablier Ensorcelé | curse 0.25 |
-| d6 | Kairos, Arbitre du Seuil | L | Occultiste | Lumière | - | 14 | 92 | 7 | 11 | Arrêt du Temps | stun |
-| d7 | Lame Miroir | C | Assassin | Eau | - | 9 | 46 | 8 | 4 | Frappe Réfléchie | - |
-| d8 | Choriste Miroir | UC | Mage | Eau | - | 12 | 68 | 6 | 13 | Voix Doubles | - |
-| d9 | Prisme du Chœur | R | Prêtre | Eau | - | 10 | 60 | 5 | 8 | Reflet Protecteur | shield 22 |
+| d1 | Garde du Seuil | C | Guerrier | Lumière | - | 10 | 54 | 7 | 4 | Interdiction | - |
+| d10 | Miroir Antiphonique | SR | Occultiste | Eau | - | 20 | 68 | 10 | 16 | Chant Miroir | copy |
+| d11 | Chef du Chœur | UR | Prêtre | Eau | - | 27 | 77 | 14 | 22 | Renvoi en Chœur | reflect 0.3 |
+| d12 | Écho, Voix Miroir | L | Occultiste | Eau | - | 36 | 91 | 18 | 29 | Refrain Éternel | copy |
+| d13 | Fileuse du Pont | C | Assassin | Nature | - | 10 | 52 | 9 | 4 | Fil Tendu | - |
+| d14 | Aiguille du Pont | UC | Prêtre | Nature | - | 10 | 72 | 5 | 8 | Point Serré | shield 17 |
+| d15 | Brodeuse des Liens | R | Assassin | Nature | - | 17 | 57 | 15 | 7 | Point de Croix | - |
+| d16 | Tisseuse des Nœuds | SR | Occultiste | Nature | - | 20 | 68 | 10 | 16 | Nœud d’Or | link |
+| d17 | Architecte du Pont | UR | Prêtre | Nature | - | 27 | 77 | 14 | 22 | Deux Rives | link |
+| d18 | Ananké, Tisseuse du Pont | L | Occultiste | Nature | - | 36 | 91 | 18 | 29 | Destin Tissé | link |
+| d19 | Démon du Désir | UC | Assassin | Ombre | - | 13 | 49 | 12 | 5 | Frôlement du Vice | - |
+| d2 | Servante du Sablier | C | Occultiste | Lumière | - | 8 | 55 | 4 | 6 | Sable Glissant | slow |
+| d20 | Succube | R | Occultiste | Ombre | - | 14 | 61 | 7 | 11 | Regard de Luxure | curse 0.25 |
+| d21 | Grande Succube | SR | Occultiste | Ombre | - | 20 | 68 | 10 | 16 | Haleine du Gouffre | slow |
+| d22 | Dame du Désir | UR | Occultiste | Ombre | - | 27 | 77 | 14 | 22 | Charme de l’Abysse | curse 0.25 |
+| d23 | Asmodia, Reine du Désir | L | Occultiste | Ombre | - | 36 | 91 | 18 | 29 | Extase Interdite | curse 0.25 |
+| d24 | Démon des Fosses | UC | Guerrier | Ombre | - | 13 | 66 | 9 | 5 | Grondement des Fosses | - |
+| d25 | Démon Majeur | R | Guerrier | Ombre | - | 17 | 77 | 12 | 7 | Coup des Fosses | - |
+| d26 | Seigneur Démon | SR | Guerrier | Ombre | - | 24 | 71 | 17 | 10 | Cri de Fureur | stun |
+| d27 | Prince Démon | UR | Guerrier | Ombre | - | 30 | 83 | 21 | 12 | Terreur Majeure | curse 0.25 |
+| d28 | Belzébuth, Roi des Démons | L | Guerrier | Ombre | - | 40 | 91 | 28 | 16 | Sceptre du Jugement | stun |
+| d29 | Gouffre des Vices | R | Occultiste | Ombre | - | 14 | 61 | 7 | 11 | Gouffre Murmurant | slow |
+| d3 | Huissier de l’Entre-Deux | UC | Occultiste | Lumière | - | 10 | 54 | 5 | 8 | Sentence Lente | stun |
+| d30 | Grand Gouffre | SR | Occultiste | Ombre | - | 20 | 68 | 10 | 16 | Souffle des Vices | - |
+| d31 | Gueule de l’Abysse | UR | Occultiste | Ombre | - | 27 | 77 | 14 | 22 | Morsure du Gouffre | - |
+| d32 | Famine | L | Occultiste | Ombre | - | 36 | 91 | 18 | 29 | Dévoration Totale | - |
+| d33 | Fléau Démoniaque | R | Occultiste | Ombre | - | 14 | 61 | 7 | 11 | Écho des Fosses | - |
+| d34 | Grand Fléau | SR | Occultiste | Ombre | - | 20 | 68 | 10 | 16 | Rugissement du Fléau | - |
+| d35 | Porte-Peste | UR | Occultiste | Ombre | - | 27 | 77 | 14 | 22 | Voix de l’Abysse | - |
+| d36 | Peste, Mère des Fléaux | L | Occultiste | Ombre | - | 36 | 91 | 18 | 29 | Souffle Noir | curse 0.25 |
+| d37 | Ange Ardent | R | Guerrier | Feu | - | 17 | 77 | 12 | 7 | Éclat Dévoyé | - |
+| d38 | Ange du Zénith | SR | Guerrier | Lumière | - | 24 | 71 | 17 | 10 | Zénith Fêlé | slow |
+| d39 | Astre Vaillant | UR | Guerrier | Lumière | - | 30 | 83 | 21 | 12 | Voûte Renversée | - |
+| d4 | Juge des Heures | R | Mage | Lumière | - | 14 | 68 | 7 | 33 | Balance du Temps | - |
+| d40 | Astre Rayonnant | L | Prêtre | Lumière | - | 36 | 91 | 18 | 29 | Lumière Noire | - |
+| d5 | Maître des Sabliers | SR | Occultiste | Lumière | - | 20 | 68 | 10 | 16 | Sablier Ensorcelé | curse 0.25 |
+| d6 | Kairos, Arbitre du Seuil | L | Occultiste | Lumière | - | 36 | 91 | 18 | 29 | Arrêt du Temps | stun |
+| d7 | Lame Miroir | C | Assassin | Eau | - | 10 | 52 | 9 | 4 | Frappe Réfléchie | - |
+| d8 | Choriste Miroir | UC | Mage | Eau | - | 11 | 65 | 6 | 26 | Voix Doubles | - |
+| d9 | Prisme du Chœur | R | Prêtre | Eau | - | 12 | 70 | 6 | 10 | Reflet Protecteur | shield 22 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
@@ -163,30 +163,30 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| f1 | Golem de Cendre | C | Guerrier | Feu | - | 8 | 62 | 6 | 3 | Poing de Cendre | - |
-| f10 | Souffleur de Braises | UC | Prêtre | Feu | - | 9 | 52 | 5 | 7 | Cendre Protectrice | shield 16 |
-| f11 | Traqueur de Suie | R | Assassin | Ombre | - | 15 | 70 | 14 | 6 | Poigne de Suie | - |
-| f12 | Gardien des Foyers | L | Mage | Feu | - | 39 | 93 | 20 | 40 | Fournaise Éternelle | summon 0.7 |
+| f1 | Golem de Cendre | C | Guerrier | Feu | - | 10 | 59 | 7 | 4 | Poing de Cendre | - |
+| f10 | Souffleur de Braises | UC | Prêtre | Feu | - | 10 | 72 | 5 | 8 | Cendre Protectrice | shield 16 |
+| f11 | Traqueur de Suie | R | Assassin | Ombre | - | 17 | 63 | 15 | 7 | Poigne de Suie | - |
+| f12 | Gardien des Foyers | L | Mage | Feu | - | 38 | 89 | 19 | 55 | Fournaise Éternelle | summon 0.7 |
 | f13 | Seigneur des Cendres | M | Assassin | Ombre | - | 54 | 142 | 49 | 22 | Nuit de Cendres | - |
-| f14 | Braise Errante | C | Mage | Feu | - | 8 | 55 | 4 | 10 | Flammèche Errante | - |
-| f15 | Semeur de Fournaise | UC | Mage | Feu | - | 11 | 68 | 6 | 13 | Semence Ardente | - |
-| f16 | Mailleur de Suie | SR | Occultiste | Ombre | - | 11 | 64 | 6 | 9 | Filet de Suie | slow |
-| f17 | Façonneur de Cendres | UR | Occultiste | Ombre | - | 13 | 70 | 7 | 10 | Tissage Ensorcelé | curse 0.25 |
-| f18 | Ombeline, Tisseuse de Suie | L | Occultiste | Ombre | - | 14 | 84 | 7 | 11 | Linceul de Suie | stun |
-| f19 | Champion de Cendre | SR | Mage | Feu | - | 22 | 73 | 11 | 24 | Vague de Cendres | - |
-| f2 | Gobelin des Fumées | C | Assassin | Ombre | - | 9 | 44 | 8 | 4 | Lancer de Suie | - |
-| f20 | Souffle Ardent | UR | Mage | Feu | - | 30 | 85 | 15 | 30 | Colonne de Feu | - |
-| f21 | Calcine, Dame des Cendres | L | Mage | Feu | - | 38 | 93 | 19 | 40 | Fournaise de Calcine | - |
-| f22 | Vulcain, Colosse Ardent | L | Guerrier | Feu | - | 40 | 112 | 28 | 16 | Colère de Vulcain | - |
-| f23 | Maître des Foyers | UR | Mage | Feu | - | 5 | 85 | 3 | 30 | Gardiens Invoqués | summon 0.6 |
-| f24 | Gobelin de Suie | UC | Assassin | Ombre | - | 11 | 48 | 10 | 4 | Poignée de Suie | - |
-| f3 | Écorcheur de Suie | UC | Assassin | Ombre | - | 12 | 50 | 11 | 5 | Entaille Rousse | - |
-| f4 | Chevalier de Braise | R | Guerrier | Feu | - | 14 | 76 | 10 | 6 | Frappe de Magma | - |
-| f5 | Invocateur des Foyers | SR | Mage | Feu | - | 21 | 73 | 11 | 24 | Fournaise Invoquée | summon 0.6 |
+| f14 | Braise Errante | C | Mage | Feu | - | 9 | 52 | 5 | 21 | Flammèche Errante | - |
+| f15 | Semeur de Fournaise | UC | Mage | Feu | - | 11 | 65 | 6 | 26 | Semence Ardente | - |
+| f16 | Mailleur de Suie | SR | Occultiste | Ombre | - | 20 | 74 | 10 | 16 | Filet de Suie | slow |
+| f17 | Façonneur de Cendres | UR | Occultiste | Ombre | - | 27 | 84 | 14 | 22 | Tissage Ensorcelé | curse 0.25 |
+| f18 | Ombeline, Tisseuse de Suie | L | Occultiste | Ombre | - | 36 | 100 | 18 | 29 | Linceul de Suie | stun |
+| f19 | Champion de Cendre | SR | Mage | Feu | - | 20 | 70 | 10 | 33 | Vague de Cendres | - |
+| f2 | Gobelin des Fumées | C | Assassin | Ombre | - | 10 | 57 | 9 | 4 | Lancer de Suie | - |
+| f20 | Souffle Ardent | UR | Mage | Feu | - | 28 | 81 | 14 | 40 | Colonne de Feu | - |
+| f21 | Calcine, Dame des Cendres | L | Mage | Feu | - | 38 | 89 | 19 | 55 | Fournaise de Calcine | - |
+| f22 | Vulcain, Colosse Ardent | L | Guerrier | Feu | - | 40 | 100 | 28 | 16 | Colère de Vulcain | - |
+| f23 | Maître des Foyers | UR | Mage | Feu | - | 28 | 81 | 14 | 40 | Gardiens Invoqués | summon 0.6 |
+| f24 | Gobelin de Suie | UC | Assassin | Ombre | - | 13 | 53 | 12 | 5 | Poignée de Suie | - |
+| f3 | Écorcheur de Suie | UC | Assassin | Ombre | - | 13 | 53 | 12 | 5 | Entaille Rousse | - |
+| f4 | Chevalier de Braise | R | Guerrier | Feu | - | 17 | 84 | 12 | 7 | Frappe de Magma | - |
+| f5 | Invocateur des Foyers | SR | Mage | Feu | - | 20 | 70 | 10 | 33 | Fournaise Invoquée | summon 0.6 |
 | f6 | Colosse de Magma | UR | Guerrier | Feu | - | 30 | 90 | 21 | 12 | Éruption | - |
-| f7 | Tisseur de Cendres | C | Prêtre | Ombre | - | 8 | 48 | 4 | 6 | Onguent de Suie | heal 14 |
-| f8 | Foreuse d’Âmes | R | Assassin | Ombre | - | 5 | 55 | 5 | 2 | Cri de la Forge | atkBuff 0.15 |
-| f9 | Idole de Magma | SR | Prêtre | Feu | - | 11 | 68 | 6 | 9 | Peau de Lave | shield 36 |
+| f7 | Tisseur de Cendres | C | Prêtre | Ombre | - | 8 | 62 | 4 | 6 | Onguent de Suie | heal 14 |
+| f8 | Foreuse d’Âmes | R | Assassin | Ombre | - | 17 | 63 | 15 | 7 | Cri de la Forge | atkBuff 0.15 |
+| f9 | Idole de Magma | SR | Prêtre | Feu | - | 20 | 74 | 10 | 16 | Peau de Lave | shield 36 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
@@ -200,38 +200,38 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| e1 | Gobelin des Marées | C | Guerrier | Eau | - | 8 | 58 | 6 | 3 | Jet d’Écume | - |
-| e10 | Veuve des Récifs | UC | Prêtre | Eau | - | 9 | 54 | 5 | 7 | Larme Salée | heal 18 |
-| e11 | Crabe des Berges | UC | Guerrier | Nature | - | 11 | 55 | 8 | 4 | Pince de Silex | - |
-| e12 | Gardien des Galets | SR | Guerrier | Nature | - | 21 | 66 | 15 | 8 | Colère Sismique | - |
-| e13 | Léviathan, Colère du Gouffre | L | Guerrier | Eau | - | 38 | 108 | 27 | 15 | Marée Noire | - |
+| e1 | Gobelin des Marées | C | Guerrier | Eau | - | 10 | 59 | 7 | 4 | Jet d’Écume | - |
+| e10 | Veuve des Récifs | UC | Prêtre | Eau | - | 10 | 72 | 5 | 8 | Larme Salée | heal 18 |
+| e11 | Crabe des Berges | UC | Guerrier | Nature | - | 13 | 72 | 9 | 5 | Pince de Silex | - |
+| e12 | Gardien des Galets | SR | Guerrier | Nature | - | 24 | 78 | 17 | 10 | Colère Sismique | - |
+| e13 | Léviathan, Colère du Gouffre | L | Guerrier | Eau | - | 40 | 100 | 28 | 16 | Marée Noire | - |
 | e14 | Titan des Marées | M | Guerrier | Eau | - | 52 | 145 | 36 | 21 | Abîme Absolu | - |
-| e15 | Ancien des Berges | SR | Prêtre | Nature | - | 11 | 70 | 6 | 9 | Mur de Galet | shield 40 |
-| e16 | Grand Chaman des Écumes | UR | Occultiste | Eau | - | 26 | 72 | 13 | 21 | Rituel des Écumes | - |
-| e17 | Zikka, Chaman des Écumes | L | Occultiste | Eau | - | 35 | 98 | 18 | 28 | Songe des Profondeurs | - |
-| e18 | Roi des Écumes | UR | Guerrier | Eau | - | 27 | 82 | 19 | 11 | Frappe Royale | - |
-| e19 | Griknir, Roi des Écumes | L | Guerrier | Eau | - | 37 | 110 | 26 | 15 | Couronne des Écumes | - |
-| e2 | Tirailleur des Récifs | C | Mage | Eau | - | 7 | 55 | 4 | 10 | Trait de Corail | - |
-| e20 | Rôdeur des Fonds | R | Assassin | Eau | - | 14 | 70 | 13 | 6 | Vigie des Flots | - |
-| e21 | Protecteur des Berges | UR | Guerrier | Nature | - | 5 | 78 | 4 | 2 | Écran de Galets | shield 52 |
-| e22 | Pontos, Aîné des Berges | L | Prêtre | Nature | - | 14 | 88 | 7 | 11 | Bénédiction des Berges | heal 58 |
-| e23 | Sirène Nouvelle | C | Occultiste | Eau | - | 8 | 48 | 4 | 6 | Berceuse des Récifs | heal 14 |
-| e24 | Chanteuse des Récifs | UC | Occultiste | Eau | - | 9 | 52 | 5 | 7 | Marée Traîtresse | slow |
-| e25 | Voix du Large | R | Occultiste | Eau | - | 10 | 58 | 5 | 8 | Chant Paralysant | stun |
-| e26 | Écumeuse des Récifs | SR | Occultiste | Eau | - | 20 | 64 | 10 | 16 | Écume Tranchante | - |
-| e27 | Sirène Ensorceleuse | UR | Occultiste | Eau | - | 13 | 68 | 7 | 10 | Chant Ensorceleur | curse 0.2 |
-| e28 | Méliane, Voix du Large | L | Occultiste | Eau | - | 14 | 84 | 7 | 11 | Chant du Naufrage | stun |
-| e29 | Gardienne des Récifs | UR | Guerrier | Eau | - | 27 | 80 | 19 | 11 | Corail Vengeur | - |
-| e3 | Pillard des Récifs | UC | Assassin | Eau | - | 11 | 52 | 10 | 4 | Morsure des Récifs | - |
-| e30 | Thalassa, Reine des Récifs | L | Assassin | Eau | - | 37 | 102 | 33 | 15 | Colère des Récifs | - |
+| e15 | Ancien des Berges | SR | Prêtre | Nature | - | 20 | 74 | 10 | 16 | Mur de Galet | shield 40 |
+| e16 | Grand Chaman des Écumes | UR | Occultiste | Eau | - | 27 | 84 | 14 | 22 | Rituel des Écumes | - |
+| e17 | Zikka, Chaman des Écumes | L | Occultiste | Eau | - | 36 | 100 | 18 | 29 | Songe des Profondeurs | - |
+| e18 | Roi des Écumes | UR | Guerrier | Eau | - | 30 | 90 | 21 | 12 | Frappe Royale | - |
+| e19 | Griknir, Roi des Écumes | L | Guerrier | Eau | - | 40 | 100 | 28 | 16 | Couronne des Écumes | - |
+| e2 | Tirailleur des Récifs | C | Mage | Eau | - | 9 | 52 | 5 | 21 | Trait de Corail | - |
+| e20 | Rôdeur des Fonds | R | Assassin | Eau | - | 17 | 63 | 15 | 7 | Vigie des Flots | - |
+| e21 | Protecteur des Berges | UR | Guerrier | Nature | - | 30 | 90 | 21 | 12 | Écran de Galets | shield 52 |
+| e22 | Pontos, Aîné des Berges | L | Prêtre | Nature | - | 36 | 100 | 18 | 29 | Bénédiction des Berges | heal 58 |
+| e23 | Sirène Nouvelle | C | Occultiste | Eau | - | 8 | 57 | 4 | 6 | Berceuse des Récifs | heal 14 |
+| e24 | Chanteuse des Récifs | UC | Occultiste | Eau | - | 10 | 56 | 5 | 8 | Marée Traîtresse | slow |
+| e25 | Voix du Large | R | Occultiste | Eau | - | 14 | 64 | 7 | 11 | Chant Paralysant | stun |
+| e26 | Écumeuse des Récifs | SR | Occultiste | Eau | - | 20 | 71 | 10 | 16 | Écume Tranchante | - |
+| e27 | Sirène Ensorceleuse | UR | Occultiste | Eau | - | 27 | 80 | 14 | 22 | Chant Ensorceleur | curse 0.2 |
+| e28 | Méliane, Voix du Large | L | Occultiste | Eau | - | 36 | 95 | 18 | 29 | Chant du Naufrage | stun |
+| e29 | Gardienne des Récifs | UR | Guerrier | Eau | - | 30 | 86 | 21 | 12 | Corail Vengeur | - |
+| e3 | Pillard des Récifs | UC | Assassin | Eau | - | 13 | 53 | 12 | 5 | Morsure des Récifs | - |
+| e30 | Thalassa, Reine des Récifs | L | Assassin | Eau | - | 42 | 80 | 38 | 17 | Colère des Récifs | - |
 | e31 | Hydre des Marées | L | Guerrier | Eau | - | 30 | 130 | 21 | 12 | Morsure Hydrique | - |
 | e32 | Souverain des Marées | L | Guerrier | Eau | - | 34 | 150 | 24 | 14 | Couronne des Marées | - |
-| e4 | Sergent des Brumes | R | Guerrier | Eau | - | 14 | 74 | 10 | 6 | Brise-Garde | - |
-| e5 | Prophète des Marées | SR | Mage | Eau | - | 20 | 73 | 10 | 24 | Vision Noyée | - |
-| e6 | Avatar de l’Abîme | UR | Mage | Eau | - | 28 | 85 | 14 | 30 | Étreinte de l’Abîme | - |
-| e7 | Moqueur des Marées | C | Prêtre | Eau | - | 8 | 50 | 4 | 6 | Chant de la Marée | heal 15 |
-| e8 | Matriarche des Récifs | R | Prêtre | Eau | - | 10 | 60 | 5 | 8 | Barrière de Corail | shield 22 |
-| e9 | Confesseur des Abysses | SR | Prêtre | Eau | - | 11 | 66 | 6 | 9 | Bénédiction de l’Abîme | heal 34 |
+| e4 | Sergent des Brumes | R | Guerrier | Eau | - | 17 | 84 | 12 | 7 | Brise-Garde | - |
+| e5 | Prophète des Marées | SR | Mage | Eau | - | 20 | 70 | 10 | 33 | Vision Noyée | - |
+| e6 | Avatar de l’Abîme | UR | Mage | Eau | - | 28 | 81 | 14 | 40 | Étreinte de l’Abîme | - |
+| e7 | Moqueur des Marées | C | Prêtre | Eau | - | 8 | 62 | 4 | 6 | Chant de la Marée | heal 15 |
+| e8 | Matriarche des Récifs | R | Prêtre | Eau | - | 12 | 76 | 6 | 10 | Barrière de Corail | shield 22 |
+| e9 | Confesseur des Abysses | SR | Prêtre | Eau | - | 20 | 74 | 10 | 16 | Bénédiction de l’Abîme | heal 34 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
@@ -245,38 +245,38 @@
 
 | id | nom | rarete | classe | element | role | ATQ | PV | AGI | INT | sort solo | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| z1 | Écuyer du Zénith | C | Guerrier | Lumière | - | 8 | 60 | 6 | 3 | Estoc Brillant | - |
-| z10 | Serre-Soleil | R | Prêtre | Lumière | - | 10 | 58 | 5 | 8 | Aile du Matin | heal 24 |
-| z11 | Prêtresse du Plein Jour | SR | Prêtre | Lumière | - | 11 | 68 | 6 | 9 | Bénédiction Solaire | heal 44 |
-| z12 | Garde-Flamme | UC | Prêtre | Feu | - | 9 | 54 | 5 | 7 | Rempart Ardent | shield 18 |
-| z13 | Centurion Ardent | UR | Mage | Feu | - | 30 | 85 | 15 | 30 | Colonne Solaire | - |
-| z14 | Lancière de l’Aube | UR | Guerrier | Lumière | - | 29 | 82 | 20 | 12 | Perce-Aube | - |
-| z15 | Aurorine, Lance de l’Aube | L | Assassin | Lumière | - | 39 | 96 | 35 | 16 | Éclipse Montante | - |
-| z16 | Essor de Flammes | UC | Mage | Feu | - | 12 | 68 | 6 | 13 | Envol Incandescent | - |
-| z17 | Oiseau de Feu | R | Mage | Feu | - | 15 | 78 | 8 | 17 | Rafale de Braise | - |
-| z18 | Cendre d’Éclosion | SR | Mage | Feu | - | 21 | 73 | 11 | 24 | Éclosion Ardente | - |
-| z19 | Pyrrha, Cendre Éternelle | L | Mage | Feu | - | 38 | 93 | 19 | 40 | Renaissance Pyrique | - |
-| z2 | Souffle-Mèche | C | Mage | Feu | - | 9 | 55 | 5 | 10 | Étincelle | - |
-| z20 | Plume Miroir | SR | Prêtre | Feu | - | 11 | 64 | 6 | 9 | Plumage Miroir | reflect 0.25 |
-| z21 | Phénix Miroir | UR | Prêtre | Feu | - | 13 | 72 | 7 | 10 | Renvoi Céleste | reflect 0.3 |
-| z22 | Fjalar, Phénix du Renvoi | L | Occultiste | Feu | - | 14 | 88 | 7 | 11 | Immolation Retournée | reflect 0.35 |
-| z23 | Chapelain du Jour | UC | Prêtre | Lumière | - | 9 | 54 | 5 | 7 | Aube Bénie | shield 18 |
-| z24 | Diacre du Plein Jour | R | Prêtre | Lumière | - | 10 | 60 | 5 | 8 | Office du Matin | heal 26 |
-| z25 | Cantatrice du Zénith | UR | Prêtre | Lumière | - | 13 | 74 | 7 | 10 | Hymne du Zénith | warcry 0.2 |
-| z26 | Célestin, Apôtre du Chant | L | Prêtre | Lumière | - | 14 | 92 | 7 | 11 | Cantique Final | atkBuff 0.3 |
-| z27 | Inquisitrice du Jour | SR | Occultiste | Lumière | - | 11 | 66 | 6 | 9 | Colonne de Purge | curse 0.2 |
-| z28 | Justicière du Jour | UR | Assassin | Lumière | - | 30 | 78 | 27 | 12 | Verdict Solaire | - |
-| z29 | Justine, Justicière du Jour | L | Assassin | Lumière | - | 39 | 100 | 35 | 16 | Peine Capitale | - |
-| z3 | Arbalétrier Doré | UC | Assassin | Lumière | - | 12 | 50 | 11 | 5 | Carreau Doré | - |
+| z1 | Écuyer du Zénith | C | Guerrier | Lumière | - | 10 | 62 | 7 | 4 | Estoc Brillant | - |
+| z10 | Serre-Soleil | R | Prêtre | Lumière | - | 12 | 80 | 6 | 10 | Aile du Matin | heal 24 |
+| z11 | Prêtresse du Plein Jour | SR | Prêtre | Lumière | - | 20 | 78 | 10 | 16 | Bénédiction Solaire | heal 44 |
+| z12 | Garde-Flamme | UC | Prêtre | Feu | - | 10 | 76 | 5 | 8 | Rempart Ardent | shield 18 |
+| z13 | Centurion Ardent | UR | Mage | Feu | - | 28 | 85 | 14 | 40 | Colonne Solaire | - |
+| z14 | Lancière de l’Aube | UR | Guerrier | Lumière | - | 30 | 95 | 21 | 12 | Perce-Aube | - |
+| z15 | Aurorine, Lance de l’Aube | L | Assassin | Lumière | - | 42 | 88 | 38 | 17 | Éclipse Montante | - |
+| z16 | Essor de Flammes | UC | Mage | Feu | - | 11 | 65 | 6 | 26 | Envol Incandescent | - |
+| z17 | Oiseau de Feu | R | Mage | Feu | - | 14 | 74 | 7 | 33 | Rafale de Braise | - |
+| z18 | Cendre d’Éclosion | SR | Mage | Feu | - | 20 | 70 | 10 | 33 | Éclosion Ardente | - |
+| z19 | Pyrrha, Cendre Éternelle | L | Mage | Feu | - | 38 | 89 | 19 | 55 | Renaissance Pyrique | - |
+| z2 | Souffle-Mèche | C | Mage | Feu | - | 9 | 52 | 5 | 21 | Étincelle | - |
+| z20 | Plume Miroir | SR | Prêtre | Feu | - | 20 | 74 | 10 | 16 | Plumage Miroir | reflect 0.25 |
+| z21 | Phénix Miroir | UR | Prêtre | Feu | - | 27 | 84 | 14 | 22 | Renvoi Céleste | reflect 0.3 |
+| z22 | Fjalar, Phénix du Renvoi | L | Occultiste | Feu | - | 36 | 100 | 18 | 29 | Immolation Retournée | reflect 0.35 |
+| z23 | Chapelain du Jour | UC | Prêtre | Lumière | - | 10 | 76 | 5 | 8 | Aube Bénie | shield 18 |
+| z24 | Diacre du Plein Jour | R | Prêtre | Lumière | - | 12 | 80 | 6 | 10 | Office du Matin | heal 26 |
+| z25 | Cantatrice du Zénith | UR | Prêtre | Lumière | - | 27 | 88 | 14 | 22 | Hymne du Zénith | warcry 0.2 |
+| z26 | Célestin, Apôtre du Chant | L | Prêtre | Lumière | - | 36 | 105 | 18 | 29 | Cantique Final | atkBuff 0.3 |
+| z27 | Inquisitrice du Jour | SR | Occultiste | Lumière | - | 20 | 78 | 10 | 16 | Colonne de Purge | curse 0.2 |
+| z28 | Justicière du Jour | UR | Assassin | Lumière | - | 32 | 72 | 29 | 13 | Verdict Solaire | - |
+| z29 | Justine, Justicière du Jour | L | Assassin | Lumière | - | 42 | 88 | 38 | 17 | Peine Capitale | - |
+| z3 | Arbalétrier Doré | UC | Assassin | Lumière | - | 13 | 56 | 12 | 5 | Carreau Doré | - |
 | z30 | Apolline, Prophétesse du Jour | M | Mage | Lumière | - | 52 | 145 | 26 | 42 | Prophétie du Plein Jour | - |
-| z31 | Gobelin des Nuages | C | Assassin | Lumière | - | 9 | 50 | 8 | 4 | Dard Céleste | - |
-| z32 | Gobelin du Soleil | UC | Guerrier | Feu | - | 12 | 52 | 8 | 5 | Lame Solaire | - |
-| z4 | Lancier Solaire | R | Guerrier | Feu | - | 14 | 73 | 10 | 6 | Lance Héliale | - |
-| z5 | Voulige d’Aube | SR | Mage | Lumière | - | 21 | 73 | 11 | 24 | Falaise de Lumière | - |
-| z6 | Phénix du Zénith | UR | Mage | Feu | - | 29 | 85 | 15 | 30 | Pluie de Feu | - |
-| z7 | Héraut du Zénith | L | Guerrier | Lumière | - | 41 | 103 | 29 | 16 | Sentence Solaire | - |
+| z31 | Gobelin des Nuages | C | Assassin | Lumière | - | 10 | 57 | 9 | 4 | Dard Céleste | - |
+| z32 | Gobelin du Soleil | UC | Guerrier | Feu | - | 13 | 72 | 9 | 5 | Lame Solaire | - |
+| z4 | Lancier Solaire | R | Guerrier | Feu | - | 17 | 88 | 12 | 7 | Lance Héliale | - |
+| z5 | Voulige d’Aube | SR | Mage | Lumière | - | 20 | 73 | 10 | 33 | Falaise de Lumière | - |
+| z6 | Phénix du Zénith | UR | Mage | Feu | - | 28 | 81 | 14 | 40 | Pluie de Feu | - |
+| z7 | Héraut du Zénith | L | Guerrier | Lumière | - | 40 | 105 | 28 | 16 | Sentence Solaire | - |
 | z8 | Astre Capiteux | M | Mage | Lumière | - | 53 | 144 | 27 | 42 | Couronnement | - |
-| z9 | Chantre du Zénith | C | Prêtre | Lumière | - | 8 | 50 | 4 | 6 | Hymne du Matin | heal 16 |
+| z9 | Chantre du Zénith | C | Prêtre | Lumière | - | 8 | 65 | 4 | 6 | Hymne du Matin | heal 16 |
 
 ### Lignees de monstres du donjon (data/monster-families.json)
 
