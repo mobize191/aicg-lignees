@@ -53,6 +53,12 @@
 | Charpentiers des Berges | Guerrier | Charpentier : tenue + outils (R4) |
 | Domaine Charpentier | Guerrier | idem (R4) |
 | Première Écuyère | Pas écuyère | Écuyère, femme (R2, R4) |
+| Porte-Étendard Défunt (k24) | Tient une bougie | Porte son ÉTENDARD (R10) |
+| Écuyer Défunt (k23) | Bougies | Écuyer mort-vivant armé (R10, R12) |
+| Chevalière de la Veille (k25) | Pas d'épée, bougies | Épée + canon mort-vivant k28-v3 (R10, R12) |
+| Enge des Brumes (n10) | Humaine | Créature féerique des brumes (R13) |
+| Enge des Bois (n11) | Humaine | Créature féerique des bois (R13) |
+| Enge des Caveaux (n12) | Humaine | Créature féerique des caveaux (R13) |
 
 ## §2 Méthodologie (3 passes)
 
@@ -60,14 +66,27 @@
 2. **Passe B — Écriture des canons + re-prompts (couloir design)** : pour chaque carte verdict ≠ OK : canon MTG/D&D de l'espèce/métier (R5), réécriture de la DNA (genre, âge, espèce) et du prompt (équipement, habits, négatifs ciblés), mise à jour de `species-map.json` + builder `build-prompts-v35.mjs`. Nouvelles règles R7/R8 pour les blocs thèmes, adaptés PAR espèce.
 3. **Passe C — Régénération ciblée (couloir local ComfyUI)** : uniquement les cartes verdict ≠ OK (pas de régénération de masse), workflow canon §15 inchangé (WAI-Illustrious v17, Euler a, 28 steps, CFG 5.5, hires ×1.25, ADetailer 0.32, crop signatures 4 %), seeds en suite de `seeds-v34.csv`, remplacement des clés existantes, QA vision avant/après sur chaque carte régénérée, validation finale par Marc-Olivier sur échantillon.
 
-## §3 Arbitrages ouverts (Marc-Olivier)
+## §2bis Règles ajoutées (retour 2, 15/11 suite 65)
 
-1. **Veuve des Récifs** : quel lore ? (gobeline veuve chaman ? monstre veuve noire des récifs ?) — le titre doit être décidé AVANT canon.
-2. **Élaboration arcanique** : être arcanique construit, ou mage rituel ? Définition à donner.
-3. **Pousse des Sèves** : plante animée, dryade ou fée ? (vérifier la famille dans le data).
-4. **Périmètre passe C** : strict (uniquement verdict ≠ OK, thèmes compris) ou étendu (re-style complet des cartes où seule la V3 est bonne) ?
-5. **Famine** : valider le canon « dévoreur colossal type Boucher de Diablo + wasting/maladie ».
-6. **Thème Obscures** : jusqu'où pousser l'inversion (re-prompt complet du bloc O pour toutes les cartes, ou seulement les verdicts ≠ OK) ?
+- **R10-PROPS INTERDITES HORS SUJET** : pas de prop récurrente qui n'est pas dans le nom de la carte. Constat : les BOUGIES envahissent toutes les cartes de morts-vivants (k24 Porte-Étendard Défunt tient une bougie au lieu de son ÉTENDARD, k23 Écuyer Défunt idem, k25 Chevalière de la Veille : bougies, pas d'épée). La bougie peut décorer l'ARRIÈRE-PLAN crypte, jamais REMPLACER l'équipement de la carte.
+- **R11-FRAMING 3.1 réactivé** : reprendre la règle actée en 3.1 — voir le CORPS COMPLET, pas seulement les visages — et renforcer le bloc description : à quoi ressemble la créature, quel est son rôle, comment elle est habillée, quelle arme/objet elle tient, qu'il y a-t-il autour d'elle. Le prompt doit DÉCRIRE la carte, pas juste un personnage posé.
+- **R12-MORTS-VIVANTS (Crypte)** : canon de style = la **k28 Chevalière du Serment de la V3** — corps squelettique avec encore des cheveux, mi-chair mi-esprit, en train de se battre. Les Défunts/Sermenteuses/Chevalières de la Veille suivent ce modèle (guerriers morts-vivants armés), pas des humains à bougies.
+- **R13-ENGE FÉERIQUES** : les Enge (n10 Enge des Brumes, n11 Enge des Bois, n12 Enge des Caveaux), mystiques de base, deviennent de VRAIES créatures féeriques (ailes, aura, corps semi-humain magique), chacune teintée de son thème (brumes/eau, bois/nature, caveaux/sombre-mort), MOINS humaines qu'actuellement.
+
+## §3 Arbitrages TRANCHÉS (Marc-Olivier, 15/11 suite 65)
+
+1. **Veuve des Récifs (e10)** : TRANCHÉ — femme humaine capturée par les gobelins des récifs, ayant renoncé à son humanité pour se joindre à eux et les servir ; **mi-femme/mi-gobeline** (chaman-gobeline possible). Canon : transformation visible, lore de captives devenues gobelines.
+2. **Élaboration/Bastion Arcanique** : TRANCHÉ — une MACHINE avec de la magie : construct avec un CŒUR MAGIQUE visible (cristal/flux arcanique dans le torse). (Carte probable : s7 Bastion Arcanique — à confirmer à la relecture.)
+3. **Pousse des Sèves (p3, famille bosquet)** : TRANCHÉ — petite/plante animée avec une mini-dryade, canon DRYADE.
+4. **Périmètre passe C** : TRANCHÉ — **restyle complet de TOUTES les cartes** (pas seulement les verdicts ≠ OK), MAIS **classiques d'abord** : les thèmes Repos/Obscures ne sont PAS régénérés dans ce premier passage. **Double génération A/B** (2 seeds par carte) pour comparaison, la nuit.
+5. **Famine (d32)** : VALIDÉ — dévoreur colossal type le Boucher de Diablo, il mange tout (d'où la famine), signes de maladie/wasting.
+6. **Thème Obscures** : DIFFÉRÉ — l'inversion (R8) s'appliquera quand les -o seront régénérés, après validation des classiques.
+
+## §3bis Plan de nuit v3.5-N1 (15/11, tranche suite 65)
+
+1. **Builder v35** : bloc style R11 sur TOUS les prompts (corps complet + détails rôle/habits/objets/entourage), négatifs ajoutés (anime, manga style ; candles hors crypte-décor), corrections species-map des ~46 cartes signalées (§1) avec les canons tranchés §3.
+2. **Régénération A/B des CLASSIQUES uniquement** : 2 seeds par carte (suite de `seeds-v34.csv`), workflow §15 inchangé, toute la nuit. PAS de -r/-o dans ce passage.
+3. **Le lendemain** : QA vision comparée A vs B vs production actuelle sur échantillon, puis relecture exhaustive passe A sur la base des nouvelles images, validation Marc-Olivier, et SEULEMENT ensuite régénération des thèmes -r/-o avec R7/R8.
 
 ## §4 Non-régressions
 

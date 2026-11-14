@@ -1,5 +1,15 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 65, tranchage Marc-Olivier) : CANON PAR NOM v3.5 — LES 6 ARBITRAGES TRANCHÉS + 4 NOUVELLES RÈGLES (bougies interdites, framing 3.1 réactivé, canon mort-vivant k28-v3, Enge féeriques) + PLAN DE NUIT N1 : régénération A/B de TOUS les classiques (pas de -r/-o dans ce passage) — spec amendée `docs/images/spec-canon-noms-v35.md`
+
+- **Veuve des Récifs (e10) TRANCHÉE** : femme humaine capturée par les gobelins des récifs, ayant renoncé à son humanité pour les rejoindre et les servir — **mi-femme/mi-gobeline**, transformation visible (lore : captives devenues gobelines).
+- **Bastion/Élaboration Arcanique TRANCHÉ** : une MACHINE avec de la magie — construct au **cœur magique visible** (probablement s7, à confirmer à la relecture).
+- **Pousse des Sèves (p3, famille bosquet) TRANCHÉE** : plante animée avec une mini-**dryade**.
+- **Famine (d32) VALIDÉE** : dévoreur colossal type le Boucher de Diablo, il mange tout (d'où la famine), signes de maladie/wasting.
+- **Périmètre TRANCHÉ** : **restyle complet de toutes les cartes**, classiques d'abord — thèmes -r/-o DIFFÉRÉS après validation des classiques ; **double génération A/B** (2 seeds par carte) pour comparaison, la nuit.
+- **Nouvelles règles (retour 2)** : **R10** aucune prop récurrente hors nom de la carte — les BOUGIES ont remplacé l'équipement sur les morts-vivants (k24 Porte-Étendard Défunt tient une bougie au lieu de son étendard, k23 Écuyer Défunt idem, k25 Chevalière de la Veille : bougies et pas d'épée) ; **R11** règle 3.1 réactivée : voir le CORPS COMPLET et décrire précisément créature/rôle/habits/arme/entourage dans le prompt ; **R12** canon mort-vivant = la **k28 Chevalière du Serment de la V3** (corps squelettique avec cheveux, mi-chair mi-esprit, qui se bat) ; **R13** les Enge (n10 Brumes, n11 Bois, n12 Caveaux) deviennent de VRAIES créatures féeriques teintées de leur thème, moins humaines.
+- **Plan de nuit N1 (§3bis de la spec)** : builder v35 (bloc style R11 global, négatifs anime/bougies, species-map corrigé sur les ~46 cartes signalées) → régénération A/B des classiques uniquement, seeds en suite, workflow §15 inchangé → le lendemain QA comparée + relecture exhaustive passe A, thèmes -r/-o seulement après validation.
+
 ## 2026-11-15 (suite 64, couloir 1) : RE-VÉRIFICATION `docs/prompt-correctifs-equilibre-v2.md` — LOTS 1-4 DÉJÀ LIVRÉS (suites 52-55), TOUT REPRODUIT À L'IDENTIQUE SUR MAIN
 
 - **Re-exécution du prompt v2 en mode vérification** (les 4 lots étaient déjà livrés et clôturés, rapport `docs/historique/correctifs-v2-equilibre.md`, baseline verrouillée suite 60) sur l'arbre courant (`10502e2` + chantier Exception) : build ✔ ; **381 tests verts** ; **smoke 498 TOUT PASSE** ; validateur **0 erreur** ; **digests 3000/10000 MESURÉS = baseline VERROUILLÉE à l'identique : `d630d83e…` 419/3000 et `584f5d16…` 1419/10000 (0 exception, 0 marathon)**.
