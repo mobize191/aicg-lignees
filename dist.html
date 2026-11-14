@@ -21093,7 +21093,10 @@ function doFusion(instances, iidA, iidB, choixSorts, plan, opts = {}) {
   const rS = opts.rng ? opts.rng() : 1;
   const shinyBonus = shiny ? loS + rS * Math.max(0, hiS - loS) : 0;
   const enfant = {
-    iid: `fus-${iidA}-${iidB}`, id: plan.childId, lvl: 1, xp: 0,
+    // correctifs-bots : l'enfant naît avec un iid ENTIER quand l'appelant en fournit un (childIid) ;
+    // l'ancien `fus-A-B` cassait byIid, les slots d'équipe et la persistance PV/mana au save/load
+    iid: Number.isInteger(opts.childIid) && opts.childIid > 0 ? opts.childIid : `fus-${iidA}-${iidB}`,
+    id: plan.childId, lvl: 1, xp: 0,
     acc,
     ...(plan.bonusAtk > 0 || plan.bonusHp > 0 ? { fusionBonus: { atk: plan.bonusAtk, hp: plan.bonusHp } } : {}),
     ...(instA.voie ? { voie: instA.voie } : {}),
@@ -22954,7 +22957,7 @@ function compagnonPrix(card) {
 }
 
 function buyCompagnon(id) {
-  const c = byId(id);
+  const c = byIdSoft(id); // correctifs-bots : refus gracieux (false) d'un id inconnu, plus de « Carte inconnue » jetée à l'écran
   const prix = c ? compagnonPrix(c) : null;
   if (!c || c.monster || prix == null) return false;
   const max = GUILDE.maxExemplaires ?? 3;
@@ -23076,18 +23079,52 @@ function buyMonster(id) {
   return false;
 }
 
+// correctifs-bots : le VRAI plafond PV/mana d'un exemplaire en combat — miroir exact de la
+// construction des unités de renderCombat (éclats de famille, shiny, bonus de fusion,
+// équipement eb+tb, makeUnit avec cran de race et mana enrichi par l'INT). statsAt seul
+// ignorait le cran, les éclats et l'équipement → plafonds faux, soins tronqués en donjon.
+function combatMaxOf(inst) {
+  const c = byId(inst.id);
+  if (!c) return null;
+  const n = c.family ? (store.shards[c.family] ?? 0) : 0;
+  const m = n > 0 ? shardMult(n) : 1; // éclats de famille fondus : bonus de stats
+  let base = { ...c, shiny: !!inst.shiny };
+  base = { ...base, atk: Math.max(1, Math.round(base.atk * m)), hp: Math.max(1, Math.round(base.hp * m)) };
+  base = applyShinyStats(base, shinyBonusOf(inst)); // lot 8 : variance shiny bornée de l'exemplaire
+  if (inst.fusionBonus) base = { ...base, atk: base.atk + (inst.fusionBonus.atk ?? 0), hp: base.hp + (inst.fusionBonus.hp ?? 0) }; // lot 6 : bonus de fusion
+  const eb = equipBonusOfCard(inst.id);
+  const tb = equipTeamBonus();
+  const u = makeUnit({
+    ...base,
+    level: inst.lvl,
+    atk: Math.max(1, Math.round(base.atk)),
+    hp: Math.max(1, Math.round(base.hp)),
+    noLossPct: inst.noLoss ?? 0,
+    equip: {
+      atkPct: eb.atkPct + tb.atkPct,
+      hpPct: eb.hpPct + tb.hpPct,
+      agiPct: eb.agiPct + tb.agiPct,
+      intPct: eb.intPct + tb.intPct,
+      manaRegen: eb.manaRegen + tb.manaRegen,
+    },
+  }, 'max', inst.lvl);
+  return { hp: u.maxHp, mana: u.manaMax };
+}
+
 // PV/mana courants d'un exemplaire hors combat : persistés dans le run, à plein sinon
+// correctifs-bots : les plafonds sont le VRAI max de combat (combatMaxOf), plus les stats nues
 function curHpManaOf(iid) {
   const inst = byIid(iid);
   if (!inst) return null;
-  const c = byId(inst.id);
-  const st = statsAt(c, inst.lvl);
+  const mx = combatMaxOf(inst);
+  const maxHp = mx ? mx.hp : statsAt(byId(inst.id), inst.lvl).hp;
+  const manaMax = mx ? mx.mana : (byId(inst.id).mana ?? SOLO_MANA.max);
   const mem = store.runState.active ? store.runState.units[iid] : null;
   return {
-    hp: mem && Number.isFinite(mem.hp) ? (mem.hp <= 0 ? 0 : Math.max(1, Math.min(st.hp, Math.round(mem.hp)))) : st.hp, // Lot C : K.O. persistant (0 PV) jusqu'au soin explicite
-    maxHp: st.hp,
-    mana: mem && Number.isFinite(mem.mana) ? Math.max(0, Math.round(mem.mana)) : (c.mana ?? SOLO_MANA.max),
-    manaMax: c.mana ?? SOLO_MANA.max,
+    hp: mem && Number.isFinite(mem.hp) ? (mem.hp <= 0 ? 0 : Math.max(1, Math.min(maxHp, Math.round(mem.hp)))) : maxHp, // Lot C : K.O. persistant (0 PV) jusqu'au soin explicite
+    maxHp,
+    mana: mem && Number.isFinite(mem.mana) ? Math.max(0, Math.min(manaMax, Math.round(mem.mana))) : manaMax,
+    manaMax,
   };
 }
 
@@ -23531,6 +23568,10 @@ function restore(data) {
     && Number.isFinite(data.errance.x) && Number.isFinite(data.errance.y))
     ? { zone: data.errance.zone, x: data.errance.x, y: data.errance.y } : null;
 
+  // correctifs-bots : les vieilles sauvegardes portent des enfants de fusion avec un iid « fus-A-B »
+  // (non entier) ; restore() leur assignait déjà un iid entier neuf, mais les slots d'équipe et le
+  // pool de run référençaient encore la vieille clé → enfant perdu de l'équipe au rechargement.
+  const iidRemap = new Map();
   if (data.version >= 6 && Array.isArray(data.instances)) {
     for (const raw of data.instances) {
       if (!raw || typeof raw.id !== 'string' || !byId(raw.id)) continue;
@@ -23549,6 +23590,7 @@ function restore(data) {
         shinyBonus: Number.isFinite(raw.shinyBonus) ? raw.shinyBonus : 0,
       };
       store.instanceSeq = Math.max(store.instanceSeq, inst.iid + 1);
+      if (raw.iid !== inst.iid) iidRemap.set(raw.iid, inst.iid); // correctifs-bots : clé legacy → iid entier
       store.instances.push(inst);
     }
     if (data.gems && typeof data.gems === 'object') {
@@ -23631,11 +23673,12 @@ function restore(data) {
     for (const t of store.teams) {
       const kept = [];
       for (const x of t.slots) {
-        if (Number.isInteger(x)) {
-          if (byIid(x)) kept.push(x);
+        const y = iidRemap.get(x) ?? x; // correctifs-bots : un slot legacy « fus-A-B » retrouve son exemplaire remappé
+        if (Number.isInteger(y)) {
+          if (byIid(y)) kept.push(y);
           continue;
         }
-        const inst = instsOf(x).find((i) => !assigned.has(i.iid));
+        const inst = instsOf(y).find((i) => !assigned.has(i.iid));
         if (inst) {
           assigned.add(inst.iid);
           kept.push(inst.iid);
@@ -23696,7 +23739,9 @@ function sanitizeTeams() {
       if (!inst) continue;
       const n = perId.get(inst.id) ?? 0;
       const owned = store.collection.get(inst.id) ?? 0;
-      if (n >= Math.min(2, owned)) continue;
+      // correctifs-bots : le cap d'exemplaires par carte en équipe est 3 (aligné sur addCardIid),
+      // pas 2 — sinon le 3e exemplaire ajouté légalement disparaissait silencieusement au rechargement
+      if (n >= Math.min(3, owned)) continue;
       const c = byId(inst.id);
       if (c && c.dungeon === 'divin') {
         if (divFams.has(c.fam) || divFams.size >= 3) continue;
@@ -28864,6 +28909,7 @@ function renderAutel(root) {
       teamIids: [...teamIids],
       ownedOf: (id) => store.instances.filter((i) => i.id === id).length,
       rng: uiRand, // lot 8 : re-tire le bonus shiny borné de l'enfant
+      childIid: store.instanceSeq++, // correctifs-bots : l'enfant naît avec un iid entier, jamais « fus-A-B »
     });
     if (!res.ok) { toast('✗ ' + res.reason, 'warn'); return; }
     store.instances = res.instances;
@@ -29025,6 +29071,7 @@ const STATUS_DOC = [
 ];
 
 const HISTORY = [
+  ['correctifs bots-v1.52 : 500 bots jouent le jeu en boucle', 'Le harnas bots-boucle.mjs simule des PARTIES COMPLÈTES (donjons joués comme un joueur, errance top-down, économie boutique/guilde/forge, fusion à l’Autel, navigation, save → load comparé) avec des invariants vérifiés après CHAQUE action : 500 bots en essaim (29 735 actions, 13 441 combats, 72 fusions, 780 achats, 3 629 captures DQM, 1 019 zones débloquées) : 0 exception, 0 anomalie — contre 447 anomalies et 336 exceptions pour 150 bots sur le dist d’origine. Quatre correctifs : enfant de fusion avec iid ENTIER (plus jamais « fus-A-B », migration des vieilles sauvegardes), 3 exemplaires par carte en équipe préservés au rechargement, PV/mana max hors combat = VRAI plafond de combat (cran de race, éclats de famille, shiny, fusion, équipement, mana enrichi par l’INT), buyCompagnon refuse gracieusement un id inconnu. 371 tests, smoke 483, digest INCHANGÉ d630d83e… 419/3000.'],
   ['Refonte v2 CLÔTURÉE (lots 0-9, prompt docs/prompt-refonte-v2.md)', 'Rééquilibrage M1 (5 stats, INT pilote les sorts, défense en ratio, cran de race 5/10/15 % PV), gel v1 (54 cartes figées en data), donjons par famille (13 donjons carte 1 + 3 divins, difficulté Royale +10), fusion v4 (Autel des Lignées), menus v2 (cibles 44 px, retour systématique), SHINY (1/100 à l’obtention, variance +3-5 % couplée, art « <id>-s », fusion héréditaire), XP 1-100 (courbe cubique n^3, niveaux de donjon étirés sur la grille v1). 355 tests, smoke 483, validateur 0 erreur, digests 29c995da… 733/3000 et bce556b3… 2420/10000 (0 exception, 0 marathon) — nouvelle baseline PROPOSÉE au verrouillage.'],
   ['post-v1.51 : Repositionnement écran de combat (maquette v2.3 validée 14/11)', 'Commander en bas, lire en haut : rail d\u2019ordre horizontal + vitesse/pause persistants EN HAUT, barre de commandes compacte \u2264 30 % (boutons 44 px, indispo grisé avec la raison), unités plus grandes avec PV/MP et bouclier en clair, invocations en première ligne, cibles en pulse. La barre ne recouvre jamais le terrain. 279 tests, smoke 421, digest inchangé.'],
   ['post-v1.51 : Correctifs sorts (TRANCH\u00c9 14/11)', 'Un sort fait d\u00e9sormais EXACTEMENT ce que sa fiche affiche (audit 309 sorts rejou\u00e9s : 0 anomalie, 85 avant). Lign\u00e9e du Vol = attaques ; signatures des recrues = l\u2019effet affich\u00e9 en Tactique ; largeur au cran du porteur ; Appel/Pont = vraie invocation ; badges contr\u00f4le/malus = effet pos\u00e9 EN PLUS des d\u00e9g\u00e2ts (stun 25 %\u219215 %, mal\u00e9diction \u221215 %\u2192\u221230 % \u00d7 2 tours, fiche \u00ab 25 % \u00b7 2 tours \u00bb). 279 tests, smoke 414, digests mesur\u00e9s `3b11106f\u2026` 871/3000 et `6c86838b\u2026` 2888/10000 (aucun recalibrage ; nouvelle baseline propos\u00e9e).'],
