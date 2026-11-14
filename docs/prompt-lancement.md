@@ -24,8 +24,8 @@ Tu travailles sur **AICG : Lignées** (repo GitHub `mobize191/aicg-lignees`, bra
 ## Chaîne de preuve (à chaque changement)
 
 1. `node build.mjs` → dist régénéré.
-2. `node --test` → 114 tests verts.
-3. `node smoke-ui.mjs` → 171 checks verts.
+2. `node --test` → 364 tests verts.
+3. `node smoke-ui.mjs` → 483 checks verts.
 4. `node combat-digest.mjs dist.html 3000` → digest et victoires notés dans `docs/roadmap.md` si le gameplay bouge.
 5. Si `data/` a bougé : `node tools/gen-tables.mjs` puis commit des tableaux.
 

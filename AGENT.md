@@ -24,12 +24,12 @@
 ## Chaîne de preuve (à chaque changement)
 
 1. `node build.mjs` → dist régénéré (le build est déterministe : deux builds sans changement donnent le même fichier).
-2. `node --test` → tous les tests verts (114 à ce jour).
-3. `node smoke-ui.mjs dist.html` → tous les checks verts (171 à ce jour).
+2. `node --test` → tous les tests verts (364 à ce jour).
+3. `node smoke-ui.mjs dist.html` → tous les checks verts (483 à ce jour).
 4. `node combat-digest.mjs dist.html 3000` → digest et victoires comparés à la baseline ; notés dans `docs/roadmap.md` si le gameplay bouge.
 5. Si `data/` a bougé : `node tools/gen-tables.mjs` puis commit des tableaux.
 
-Baseline courante (v1.12, 10/11/2026) : digest `833a6d2c60131fbd21b021c701daa90f308275961e03c479500c032eb5b98a24`, **518 victoires / 3000 combats**, 0 exception, 1 marathon (normal et documenté). Historique des baselines : `docs/roadmap.md` et `docs/arbitrages.md`.
+Baseline de référence en vigueur (15/11/2026) : `29c995da…` 733/3000 / `bce556b3…` 2420/10000 (refonte v2, 0 exception, 0 marathon) ; nouvelle baseline PROPOSÉE `d630d83e…` 419/3000 / `584f5d16…` 1419/10000 (correctifs-eq v2, suite 55), verrouillage par Marc-Olivier en attente. Historique des baselines : `docs/roadmap.md` et `docs/arbitrages.md`.
 
 ## Discipline
 
