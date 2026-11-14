@@ -1,5 +1,15 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 60, pilotage) : BASELINE VERROUILLÉE PAR MARC-OLIVIER — `d630d83e…` 419/3000 + `584f5d16…` 1419/10000 devient LA référence officielle ; les 4 tranchages d'équilibre ouverts TRANCHÉS : (a) calibration des vagues par palier LANCÉE, (b) kit Assassin à harmoniser, (c) trios différés après (a), (d) soloMult soigneurs ACTIVÉ — prompt `docs/prompt-correctifs-equilibre-v3.md` livré au couloir 1
+
+- **VERROUILLAGE (acté par Marc-Olivier, à la suite du check indépendant suite 58)** : `d630d83e222ef0d6de51366475e39ba0ce14a1e046e3e8f9f4fbcaccae629f7e` 419/3000 et `584f5d16e20e7cef31402dce7bc2e7f34eede388197bc159991afcf821c50e7f` 1419/10000 (0 exception, 0 marathon) deviennent la baseline VERROUILLÉE. La référence `29c995da…`/`bce556b3…` est retirée. M6 : tout chantier qui fait bouger le digest mesure, consigne et PROPOSE, jamais de verrouillage sans Marc-Olivier.
+- **(a) Vagues TRANCHÉ : calibrer par palier de donjon** — rendre la bande Mage R 60-70 % (retombée à 48,4 % après la conséquence I1 du lot 3 v2), relever le digest, détendre les difficultés d1/d2/d3 (cibles 70-80/70-80/~50).
+- **(b) Assassin TRANCHÉ : harmoniser le kit de sorts du monstre** avec la carte de référence (l'écart R −11,8/−12,2 est structurel, les stats sont identiques au makeUnit).
+- **(c) Trios DIFFÉRÉ : décision APRÈS le calibrage (a)** — le chantier v3 re-mesure les 4 trios en clôture, l'écart (17,0 pts vs cible ≤ 12) sera documenté + proposé, pas d'implémentation sans tranchage.
+- **(d) soloMult soigneur TRANCHÉ : ACTIVÉ** — franchir la cible ≥ 25 % pour z24/z10 (aujourd'hui 22,4-23,4 %) par pas mesurés.
+- **Chantier lancé : `docs/prompt-correctifs-equilibre-v3.md`** (3 lots + clôture, data d'abord, harnas à chaque lot, digest 3000/10000 mesurés contre la baseline VERROUILLÉE, cibles suite 42 inchangées), couloir 1.
+- Validation terrain reste conseillée : une équipe de Mages au R, une recrue Diacre du Plein Jour, un trio sans Guerrier. Commit docs seul : ni data/ ni src/ touchés, digest inchangé.
+
 ## 2026-11-15 (suite 59, couloir design) : PROMPT CORRECTIF EXCEPTION v3.4 LIVRÉ — `docs/prompt-exception-v34.md` : câblage complet de la mécanique Exception (E1, bloquant B1 de la suite 57) + marqueurs CSS par thème (E2, bloquant B2) + lot retries design (E3, couloir local) — statut À LANCER par le couloir 1
 
 - **E1 (code, B1)** : tirage Exception dans `newInst` au patron du lot 8 SHINY (1/100 à l'obtention via `uiRand`, thème 50/50 r/o, drapeau sur l'exemplaire, coexistence shiny/Exception actée suites 40/57) ; `artKeyOf` chaîné **shiny > exception > classique** avec fallback propre ; apposition passée au rng seedé (exit `Math.random()`) ; persistance + **migration versionnée idempotente** (patron shiny v32, tirage seedé des exemplaires existants) ; héritage fusion miroir du shiny (≥1 parent Exception => enfant Exception, thème re-tiré, cumul avec shiny) ; compteur + filtre collection ; tests + smoke dédiés. **Digest INCHANGÉ attendu** (cosmétique), MESURE obligatoire, STOP si écart.
