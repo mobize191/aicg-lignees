@@ -4284,26 +4284,6 @@
    }
   },
   {
-   "id": "p4",
-   "kind": "art",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": 2128026
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-12"
-   },
-   "production": {
-    "path": "assets-v3.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
    "id": "q1",
    "kind": "art",
    "source": {
@@ -7525,26 +7505,6 @@
   },
   {
    "id": "k32",
-   "kind": "art",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": null
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-12"
-   },
-   "production": {
-    "path": "assets-v3.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
-   "id": "p2",
    "kind": "art",
    "source": {
     "kind": "gen",
@@ -12044,26 +12004,6 @@
    }
   },
   {
-   "id": "p4",
-   "kind": "art",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": 2128026
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-12"
-   },
-   "production": {
-    "path": "assets-v3.1.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
    "id": "q1",
    "kind": "art",
    "source": {
@@ -15304,26 +15244,6 @@
    }
   },
   {
-   "id": "p2",
-   "kind": "art",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": null
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-12"
-   },
-   "production": {
-    "path": "assets-v3.1.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
    "id": "z31",
    "kind": "art",
    "source": {
@@ -18237,27 +18157,6 @@
     "model": "wai-illustrious-v17",
     "loras": [],
     "seed": 2128025
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-13"
-   },
-   "production": {
-    "path": "assets-v33.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
-   "id": "p4",
-   "kind": "art",
-   "wave": "3.3",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": 2128026
    },
    "qa": {
     "status": "ok",
@@ -27786,27 +27685,6 @@
     "model": "wai-illustrious-v17",
     "loras": [],
     "seed": 2128025
-   },
-   "qa": {
-    "status": "ok",
-    "date": "2026-11-12"
-   },
-   "production": {
-    "path": "assets-v32.json",
-    "w": 400,
-    "h": 560,
-    "ko": false
-   }
-  },
-  {
-   "id": "p4",
-   "kind": "art",
-   "wave": "3.2",
-   "source": {
-    "kind": "gen",
-    "model": "wai-illustrious-v17",
-    "loras": [],
-    "seed": 2128026
    },
    "qa": {
     "status": "ok",

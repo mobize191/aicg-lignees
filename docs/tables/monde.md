@@ -133,7 +133,7 @@ Les eveils font monter une carte vers une autre via une voie ; la voie ouvre des
 
 | de | vers | voie | effet | ecoles ouvertes |
 | --- | --- | --- | --- | --- |
-| n13 | p1 | l’éveil du service — le Jeune Séraphin | remplace | - |
+| n13 | p1 | l’éveil du service — le Jeune Séraphin | standard | - |
 | n14 | d19 | la voie de la chair — les succubes | standard | - |
 | n14 | d24 | la voie de la puissance — les gouffres | standard | - |
 | n15 | d1 | la voie du Seuil — les Arbitres | standard | - |

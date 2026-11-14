@@ -1282,26 +1282,6 @@
   "note": " renommé Jeune Séraphin (ACTÉ 10/11, id inchangé)"
  },
  {
-  "id": "p2",
-  "dungeon": "divin",
-  "name": "Ange Gardien",
-  "rarity": "C",
-  "classe": "Prêtre",
-  "element": "Lumière",
-  "atk": 6,
-  "hp": 58,
-  "effect": {
-   "kind": "heal",
-   "value": 20
-  },
-  "soloSpell": "Éclat d’Aube",
-  "note": "greffé à la famille de l'Aube (lot C5) ; l'éveil n13 → p1 le fait encore disparaître (v16)",
-  "agi": 3,
-  "int": 5,
-  "biome": "divin",
-  "family": "aube"
- },
- {
   "id": "p3",
   "name": "Pousse des Sèves",
   "rarity": "C",
@@ -1317,23 +1297,6 @@
   "agi": 3,
   "int": 4,
   "family": "bosquet"
- },
- {
-  "id": "p4",
-  "name": "Fidèle du Jour",
-  "rarity": "C",
-  "classe": "Prêtre",
-  "element": "Neutre",
-  "atk": 6,
-  "hp": 58,
-  "effect": {
-   "kind": "heal",
-   "value": 18
-  },
-  "voie": "voie du zèle — la commune du zèle",
-  "agi": 3,
-  "int": 5,
-  "family": "zele"
  },
  {
   "id": "q1",

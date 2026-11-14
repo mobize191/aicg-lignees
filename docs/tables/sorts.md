@@ -427,7 +427,6 @@ Fusionner un monstre enseigne son sort (`fusion`) a un cran donne.
 | n14 | morsure-decume | I |
 | n15 | oeil-du-malheur | II |
 | p1 | onde-consacree | II |
-| p2 | onde-consacree | II |
 | d19 | frisson-du-vice | I |
 | d20 | frisson-du-vice | II |
 | d21 | frisson-du-vice | III |

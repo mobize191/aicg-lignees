@@ -15,18 +15,12 @@ test('éveil de l\u2019Jeune Séraphin : l\u2019Ange Gardien disparaît, la mauv
   const E = loadEngine();
   const eveil = E.eveilOf('n13', 'p1');
   assert.ok(eveil, 'l\u2019éveil n13 -> Jeune Séraphin existe dans trees.json');
-  assert.equal(eveil.effet, 'remplace');
-  assert.equal(eveil.disparait, 'p2');
+  assert.equal(eveil.effet, 'standard', 'p2 Ange Gardien retiré au gel lot G : plus de remplace');
+  assert.equal(eveil.disparait, undefined);
   assert.ok(eveil.portes.some((p) => p.id === 'mauvaise-volonte'), 'la mauvaise volonté part de l\u2019Jeune Séraphin');
-  const instances = [
-    { iid: 'i1', id: 'n13', lvl: 10, xp: 0 },
-    { iid: 'i2', id: 'p2', lvl: 5, xp: 0, acc: [{ name: 'Garde céleste', cost: 4, mult: 1.6 }] },
-  ];
-  const retires = E.applyRemplace(instances, eveil, 'i1');
-  assert.deepEqual(retires, ['i2']);
+  const instances = [{ iid: 'i1', id: 'n13', lvl: 10, xp: 0 }];
   E.applyTreeEveil(instances[0], eveil);
   assert.equal(instances[0].id, 'p1');
-  assert.ok(instances[0].acc.some((s) => s.name === 'Garde céleste'), 'les pouvoirs de l\u2019Ange Gardien passent à l\u2019Éveillé');
   const noms = new Set(E.DATA.cards.map((c) => c.name));
   assert.ok(noms.has('Jeune Séraphin') && noms.has('Éveillé du Seuil'), 'les deux noms coexistent sans collision');
 });
@@ -57,8 +51,8 @@ test('les crans de race +10/+20/+30 s\u2019appliquent aux stats, par données un
 test('les communes déléguées existent avec leur voie (EXI-P1-3)', () => {
   const E = loadEngine();
   assert.equal(E.getCard('p3')?.name, 'Pousse des Sèves');
-  assert.equal(E.getCard('p4')?.name, 'Fidèle du Jour');
-  assert.ok(E.getCard('p3').voie && E.getCard('p4').voie);
+  assert.equal(E.getCard('p4'), undefined, 'p4 Fidèle du Jour retiré au gel lot G');
+  assert.ok(E.getCard('p3').voie, 'Pousse des Sèves garde sa voie');
 });
 
 test('errance : passage scripté de zone, récoltes dans les bornes, cadence zone/donjon (ACC-4-2)', () => {
@@ -235,7 +229,7 @@ test('contenu v3 lot C5 : greffe des 31 solos — plus aucune archive, chaque ex
   const E = loadEngine();
   const arch = E.DATA.cards.filter((c) => c.archived);
   assert.equal(arch.length, 0, 'plus aucune carte archivée (greffe ACTÉE 11/11)');
-  const exSolos = ['a3', 'a4', 'a9', 's2', 's3', 'p2', 'p3', 'p4',
+  const exSolos = ['a3', 'a4', 'a9', 's2', 's3', 'p3',
     'a34', 'a35', 'a36', 'a37', 'a38', 'a39', 'a40', 'a41', 'a42', 'a43', 'a44', 'a45', 'a46', 'a47', 'a48', 'a49',
     'b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'b7'];
   for (const id of exSolos) {

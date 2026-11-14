@@ -65,7 +65,6 @@
   ],
   "future": [
    "b4",
-   "p2",
    "s2",
    "c4",
    "c11"
@@ -172,9 +171,7 @@
    "u5",
    "u6"
   ],
-  "future": [
-   "p4"
-  ]
+  "future": []
  },
  "appel": {
   "name": "École des Invocations",

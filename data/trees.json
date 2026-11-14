@@ -264,9 +264,8 @@
     "de": "n13",
     "vers": "p1",
     "voie": "l’éveil du service — le Jeune Séraphin",
-    "effet": "remplace",
+    "effet": "standard",
     "ecoles": [],
-    "disparait": "p2",
     "portes": [
      {
       "id": "coloration",

@@ -2,7 +2,7 @@
 
 > GENERE DEPUIS data/*.json PAR tools/gen-tables.mjs : NE PAS EDITER A LA MAIN. Relancer le script apres chaque evolution des data, puis commit.
 
-**160 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 28, Mage 33, Occultiste 17, Prêtre 42.
+**158 cartes jouables** (data/cards.json), reparties : Assassin 40, Guerrier 28, Mage 33, Occultiste 17, Prêtre 40.
 
 Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + valeur). L'element et la famille sont absents des cartes non-elementaires.
 
@@ -144,7 +144,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | w5 | Maître des Sabliers | UR | Neutre | - | 4 | 66 | 2 | 3 | seuil | Sablier Ensorcelé | curse 0.25 |
 | w6 | Kairos, Juge Éternel | L | Neutre | - | 6 | 92 | 3 | 5 | seuil | Sentence Éternelle | stun |
 
-## Classe Prêtre (42)
+## Classe Prêtre (40)
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -165,9 +165,7 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | n3 | Prêtre Novice | N | Neutre | - | 4 | 52 | 2 | 3 | - | Bénédiction Modeste | heal 18 |
 | n7 | Embryon du Vivant | N | - | - | 7 | 62 | 4 | 6 | - | Sève Voleuse | heal 16 |
 | p1 | Jeune Séraphin | UC | Lumière | - | 8 | 66 | 4 | 6 | - | Éclat d’Aube | heal 24 |
-| p2 | Ange Gardien | C | Lumière | - | 6 | 58 | 3 | 5 | aube | Éclat d’Aube | heal 20 |
 | p3 | Pousse des Sèves | C | Neutre | - | 5 | 60 | 3 | 4 | bosquet | - | heal 16 |
-| p4 | Fidèle du Jour | C | Neutre | - | 6 | 58 | 3 | 5 | zele | - | heal 18 |
 | p5 | Séraphin, Porteur de Lumière | R | Neutre | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
 | p6 | Séraphin, Archange Ultime | L | Neutre | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
 | p7 | Ange de Lumière | SR | Lumière | - | 12 | 88 | 6 | 10 | seuil | Éclat d’Aile | heal 30 |
@@ -200,13 +198,13 @@ Une famille = un chemin de cartes (steps) qui monte en rarete. `future` liste le
 | eau | Famille de l’Eau | a5 Apprentie des Rivières -> a29 Adepte des Rivières -> a8 Sorcière des Rivières -> a11 Sorcière des Océans -> a13 Alix, Archimage des Marées -> a14 Alix, Déesse de l’Eau | a38, a47, a48, b3, c3, c10, w19 |
 | lame | Famille du Sabre | a1 Épéiste en Herbe -> a30 Spadassin Vigilant -> a6 Épéiste Errant -> a10 Bretteur du Zénith -> a15 Kenji, Lame Éternelle -> a17 Kenji, Sabre Céleste | b1, c1, c8 |
 | ombre | Famille de l’Ombre | a2 Rôdeur des Ombres -> a31 Guetteur Crépusculaire -> a7 Faucheur des Ombres -> a12 Fantôme du Sanctuaire -> a16 Kira, Reine des Ombres -> a18 Kira, Nuit Sans Fin | b2, s3, c2, c9, w21 |
-| aube | Famille de l’Aube | s1 Novice de l’Aube -> s13 Servante de l’Aube -> s5 Prêtresse de l’Aube -> s8 Grande Prêtresse de l’Aube -> s9 Léna, Avatar de l’Aurore -> s10 Léna, Aube Éternelle | b4, p2, s2, c4, c11 |
+| aube | Famille de l’Aube | s1 Novice de l’Aube -> s13 Servante de l’Aube -> s5 Prêtresse de l’Aube -> s8 Grande Prêtresse de l’Aube -> s9 Léna, Avatar de l’Aurore -> s10 Léna, Aube Éternelle | b4, s2, c4, c11 |
 | bouclier | Famille du Bouclier | s4 Gardien-Mécanique -> s14 Garde du Rempart -> s6 Sentinelle d’Acier -> s7 Bastion Arcanique -> s11 Argus, Rempart Éveillé -> s12 Argus, Forteresse Vivante | a3, a39, a49, a9, b5, c5, c12 |
 | braise | Famille de la Braise | a19 Allumeur de Braises -> a32 Veilleur de Braise -> a20 Mage de la Fournaise -> a21 Invocateur de Fournaise -> a22 Solen, Archimage de la Braise -> a23 Solen, Roi des Braises | a4, b6, c6, c13 |
 | bosquet | Famille du Bosquet | a24 Traqueur du Bosquet -> a33 Pisteur du Bosquet -> a25 Chasseur du Bosquet -> a26 Prédateur Sylvestre -> a27 Maïa, Lame du Bosquet -> a28 Maïa, Déesse du Bosquet | b7, p3, c7, c14, w20 |
 | crepuscule | Famille du Crépuscule | q1 Novice du Crépuscule -> q2 Disciple du Crépuscule -> q3 Prêtre du Crépuscule -> q4 Servante du Crépuscule -> q5 Grande Prêtresse de l’Ombre -> q6 Vesperine, Reine de la Nuit | - |
 | vol | Famille du Vol | t1 Mercenaire -> t2 Pillard -> t3 Brigand -> t4 Grand Brigand -> t5 Fléau des Routes -> t6 Gadianton, Chef des Brigands | a34, a35, a36, a37, a40, a41, a42, a43, a44, a45, a46 |
-| zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Lémion, Chef de la Légion Solaire | p4 |
+| zele | Famille du Zèle | u1 Fidèle du Matin -> u2 Écuyer Fervent -> u3 Croisé de l’Aube -> u4 Chapelain du Jour -> u5 Arbalétrier Doré -> u6 Lémion, Chef de la Légion Solaire | - |
 | appel | École des Invocations | v1 Apprenti Invocateur -> v2 Conjurateur -> v3 Évocateur -> v4 Maître des Esprits -> v5 Seigneur des Élémentaires -> v6 Archimage de l’Appel | - |
 | seuil | Arbitres du Seuil | w1 Garde du Seuil -> w2 Servante du Sablier -> w3 Huissier de l’Entre-Deux -> w4 Juge des Heures -> w5 Maître des Sabliers -> w6 Kairos, Juge Éternel | p5, p7, p8, p6 |
 | miroir | Chœur Miroir | w7 Lame Miroir -> w8 Choriste Miroir -> w9 Prisme du Chœur -> w10 Miroir Antiphonique -> w11 Chef du Chœur -> w12 Écho, Refrain Absolu | - |
