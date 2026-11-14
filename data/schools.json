@@ -12,6 +12,9 @@
     "voie du bretteur",
     "voie de l’assassinat"
    ]
+  },
+  "mod": {
+   "mult": 1.1
   }
  },
  "baume": {
@@ -25,6 +28,9 @@
     "la foi",
     "voie de la protection"
    ]
+  },
+  "mod": {
+   "mult": 0.8
   }
  },
  "rempart": {
@@ -38,6 +44,9 @@
     "voie du rempart",
     "voie mécanique"
    ]
+  },
+  "mod": {
+   "cout": 0.8
   }
  },
  "appel": {
@@ -67,6 +76,9 @@
     "l’ombre",
     "voie des sirènes"
    ]
+  },
+  "mod": {
+   "mult": 0.7
   }
  },
  "mauvais-oeil": {

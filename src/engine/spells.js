@@ -366,6 +366,23 @@ function cranOf(spellId, cran) {
   const s = getSchoolSpell(spellId);
   return s?.crans?.[cran] ?? null;
 }
+// lot 3 refonte v2 (E) : modificateur d'ecole en data (schools.json mod {mult, cout}),
+// applique aux sorts a la construction de l'unite ; le flag evite toute double application
+function schoolModOf(ecoleId) {
+  return (ecoleId && DATA.schools && DATA.schools[ecoleId] && DATA.schools[ecoleId].mod) || null;
+}
+function applySchoolMod(sp) {
+  if (!sp || sp.schoolModApplied) return sp;
+  const mod = schoolModOf(sp.ecole);
+  if (!mod) return sp;
+  const out = { ...sp, schoolModApplied: true };
+  if (mod.mult != null) {
+    if (out.mult != null) out.mult = out.mult * mod.mult;
+    if (out.taux != null) out.taux = Math.min(1, out.taux * mod.mult);
+  }
+  if (mod.cout != null && out.cost != null) out.cost = Math.max(1, Math.round(out.cost * mod.cout));
+  return out;
+}
 // retour terrain (10/11) : un sort h\u00e9rit\u00e9 remapp\u00e9 par le tri vit en sauvegarde comme {sort, cran}
 // ou {sort, unique} ; il se r\u00e9sout ici en fiche compl\u00e8te (nom, co\u00fbt, mult, taux, cible) pour l'affichage
 // et le moteur. L'entr\u00e9e brute reste en sauvegarde : la r\u00e9solution est sans perte et idempotente.

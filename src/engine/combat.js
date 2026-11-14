@@ -24,7 +24,7 @@ function makeUnit(card, uid = card.id, level = null) {
     level: lvl,
     shield: 0, atkBuff: 0, alive: true,
     effect: card.effect ? { ...card.effect } : null,
-    spells: (card.spells ?? []).map((s) => ({ ...s })),
+    spells: (card.spells ?? []).map((s) => applySchoolMod({ ...s })),
     crossName: card.soloSpell ?? null,
     manaMax: 0,
     manaRegen: 0,

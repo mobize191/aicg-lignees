@@ -146,16 +146,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 2,
+  "atk": 8,
   "hp": 50,
   "effect": {
    "kind": "heal",
    "value": 15
   },
   "soloSpell": "Chant de la Marée",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "e10",
@@ -164,16 +164,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 2,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "heal",
    "value": 18
   },
   "soloSpell": "Larme Salée",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "e8",
@@ -182,16 +182,16 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 3,
+  "atk": 10,
   "hp": 60,
   "effect": {
    "kind": "shield",
    "value": 22
   },
   "soloSpell": "Barrière de Corail",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "e9",
@@ -200,16 +200,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "heal",
    "value": 34
   },
   "soloSpell": "Bénédiction de l’Abîme",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "e15",
@@ -218,16 +218,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 4,
+  "atk": 11,
   "hp": 70,
   "effect": {
    "kind": "shield",
    "value": 40
   },
   "soloSpell": "Mur de Galet",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "e16",
@@ -336,16 +336,16 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 6,
+  "atk": 14,
   "hp": 88,
   "effect": {
    "kind": "heal",
    "value": 58
   },
   "soloSpell": "Bénédiction des Berges",
-  "agi": 3,
-  "int": 5,
-  "def": 3
+  "agi": 7,
+  "int": 11,
+  "def": 6
  },
  {
   "id": "e23",
@@ -354,16 +354,16 @@
   "rarity": "C",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 2,
+  "atk": 8,
   "hp": 48,
   "effect": {
    "kind": "heal",
    "value": 14
   },
   "soloSpell": "Berceuse des Récifs",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 2
  },
  {
   "id": "e24",
@@ -372,16 +372,16 @@
   "rarity": "UC",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 3,
+  "atk": 9,
   "hp": 52,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Marée Traîtresse",
   "soloCost": 8,
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 3
  },
  {
   "id": "e25",
@@ -390,7 +390,7 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 3,
+  "atk": 10,
   "hp": 58,
   "effect": {
    "kind": "stun",
@@ -398,9 +398,9 @@
   },
   "soloSpell": "Chant Paralysant",
   "soloCost": 6,
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 3
  },
  {
   "id": "e26",
@@ -424,7 +424,7 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 4,
+  "atk": 13,
   "hp": 68,
   "effect": {
    "kind": "curse",
@@ -434,9 +434,9 @@
   "soloSpell": "Chant Ensorceleur",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 7,
+  "int": 10,
+  "def": 4
  },
  {
   "id": "e28",
@@ -445,7 +445,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 5,
+  "atk": 14,
   "hp": 84,
   "effect": {
    "kind": "stun",
@@ -454,9 +454,9 @@
   "soloSpell": "Chant du Naufrage",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "e29",
@@ -762,16 +762,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Ombre",
-  "atk": 2,
+  "atk": 8,
   "hp": 48,
   "effect": {
    "kind": "heal",
    "value": 14
   },
   "soloSpell": "Onguent de Suie",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "f10",
@@ -780,16 +780,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 3,
+  "atk": 9,
   "hp": 52,
   "effect": {
    "kind": "shield",
    "value": 16
   },
   "soloSpell": "Cendre Protectrice",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "f8",
@@ -816,16 +816,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 4,
+  "atk": 11,
   "hp": 68,
   "effect": {
    "kind": "shield",
    "value": 36
   },
   "soloSpell": "Peau de Lave",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "f16",
@@ -834,16 +834,16 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 4,
+  "atk": 11,
   "hp": 64,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Filet de Suie",
   "soloCost": 8,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "f17",
@@ -852,7 +852,7 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 4,
+  "atk": 13,
   "hp": 70,
   "effect": {
    "kind": "curse",
@@ -862,9 +862,9 @@
   "soloSpell": "Tissage Ensorcelé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 7,
+  "int": 10,
+  "def": 4
  },
  {
   "id": "f18",
@@ -873,7 +873,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 5,
+  "atk": 14,
   "hp": 84,
   "effect": {
    "kind": "stun",
@@ -882,9 +882,9 @@
   "soloSpell": "Linceul de Suie",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "f23",
@@ -1138,16 +1138,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 2,
+  "atk": 8,
   "hp": 50,
   "effect": {
    "kind": "heal",
    "value": 15
   },
   "soloSpell": "Baume Lumineux",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "g12",
@@ -1156,16 +1156,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 3,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Claie de Branches",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "g10",
@@ -1195,16 +1195,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 4,
+  "atk": 11,
   "hp": 68,
   "effect": {
    "kind": "shield",
    "value": 38
   },
   "soloSpell": "Voûte de Clairière",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "g17",
@@ -1213,16 +1213,16 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 5,
+  "atk": 13,
   "hp": 76,
   "effect": {
    "kind": "heal",
    "value": 48
   },
   "soloSpell": "Rosée Radieuse",
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "g18",
@@ -1231,7 +1231,7 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 6,
+  "atk": 14,
   "hp": 92,
   "effect": {
    "kind": "revive",
@@ -1239,9 +1239,9 @@
   },
   "soloSpell": "Première Clarté",
   "soloCost": 6,
-  "agi": 3,
-  "int": 5,
-  "def": 3
+  "agi": 7,
+  "int": 11,
+  "def": 6
  },
  {
   "id": "g19",
@@ -1250,16 +1250,16 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 4,
+  "atk": 11,
   "hp": 64,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Ombre Tissée",
   "soloCost": 8,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "k1",
@@ -1576,16 +1576,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Ombre",
-  "atk": 2,
+  "atk": 8,
   "hp": 48,
   "effect": {
    "kind": "heal",
    "value": 14
   },
   "soloSpell": "Soupir Glacé",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "k12",
@@ -1594,16 +1594,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 3,
+  "atk": 9,
   "hp": 52,
   "effect": {
    "kind": "shield",
    "value": 17
   },
   "soloSpell": "Drap de Nappe",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "k10",
@@ -1630,16 +1630,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "heal",
    "value": 42
   },
   "soloSpell": "Eau Bénite",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "k15",
@@ -1648,7 +1648,7 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "summon",
@@ -1658,9 +1658,9 @@
    "summonName": "Goule Éveillée"
   },
   "soloSpell": "Rite d’Éveil",
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "k16",
@@ -1669,7 +1669,7 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 5,
+  "atk": 13,
   "hp": 72,
   "effect": {
    "kind": "summon",
@@ -1679,9 +1679,9 @@
    "summonName": "Serviteur Squelettique"
   },
   "soloSpell": "Légion des Caveaux",
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 4
  },
  {
   "id": "k18",
@@ -1690,7 +1690,7 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 5,
+  "atk": 13,
   "hp": 74,
   "effect": {
    "kind": "curse",
@@ -1700,9 +1700,9 @@
   "soloSpell": "Chagrin Noyé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 4
  },
  {
   "id": "k19",
@@ -1711,7 +1711,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 6,
+  "atk": 14,
   "hp": 90,
   "effect": {
    "kind": "stun",
@@ -1720,9 +1720,9 @@
   "soloSpell": "Deuil Éternel",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 3,
-  "int": 5,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "k26",
@@ -1731,16 +1731,16 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 5,
+  "atk": 13,
   "hp": 74,
   "effect": {
    "kind": "shield",
    "value": 50
   },
   "soloSpell": "Égide Défunte",
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "k29",
@@ -1749,7 +1749,7 @@
   "rarity": "UR",
   "classe": "Occultiste",
   "element": "Ombre",
-  "atk": 5,
+  "atk": 13,
   "hp": 72,
   "effect": {
    "kind": "warcry",
@@ -1758,9 +1758,9 @@
   },
   "soloSpell": "Serment Rallié",
   "soloCost": 7,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 4
  },
  {
   "id": "z1",
@@ -2062,16 +2062,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 2,
+  "atk": 8,
   "hp": 50,
   "effect": {
    "kind": "heal",
    "value": 16
   },
   "soloSpell": "Hymne du Matin",
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "z12",
@@ -2080,16 +2080,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 3,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Rempart Ardent",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "z10",
@@ -2098,16 +2098,16 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 3,
+  "atk": 10,
   "hp": 58,
   "effect": {
    "kind": "heal",
    "value": 24
   },
   "soloSpell": "Aile du Matin",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "z11",
@@ -2116,16 +2116,16 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 4,
+  "atk": 11,
   "hp": 68,
   "effect": {
    "kind": "heal",
    "value": 44
   },
   "soloSpell": "Bénédiction Solaire",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "z20",
@@ -2134,7 +2134,7 @@
   "rarity": "SR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 4,
+  "atk": 11,
   "hp": 64,
   "effect": {
    "kind": "reflect",
@@ -2143,9 +2143,9 @@
   },
   "soloSpell": "Plumage Miroir",
   "soloCost": 6,
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 6,
+  "int": 9,
+  "def": 5
  },
  {
   "id": "z21",
@@ -2154,7 +2154,7 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Feu",
-  "atk": 5,
+  "atk": 13,
   "hp": 72,
   "effect": {
    "kind": "reflect",
@@ -2163,9 +2163,9 @@
   },
   "soloSpell": "Renvoi Céleste",
   "soloCost": 6,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "z22",
@@ -2174,7 +2174,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Feu",
-  "atk": 6,
+  "atk": 14,
   "hp": 88,
   "effect": {
    "kind": "reflect",
@@ -2184,9 +2184,9 @@
   "soloSpell": "Immolation Retournée",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 3,
-  "int": 5,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "z23",
@@ -2195,16 +2195,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 3,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "shield",
    "value": 18
   },
   "soloSpell": "Aube Bénie",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "z24",
@@ -2213,16 +2213,16 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 4,
+  "atk": 10,
   "hp": 60,
   "effect": {
    "kind": "heal",
    "value": 26
   },
   "soloSpell": "Office du Matin",
-  "agi": 2,
-  "int": 3,
-  "def": 2
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "z25",
@@ -2231,7 +2231,7 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 5,
+  "atk": 13,
   "hp": 74,
   "effect": {
    "kind": "warcry",
@@ -2240,9 +2240,9 @@
   },
   "soloSpell": "Hymne du Zénith",
   "soloCost": 7,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "z26",
@@ -2251,16 +2251,16 @@
   "rarity": "L",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 6,
+  "atk": 14,
   "hp": 92,
   "effect": {
    "kind": "atkBuff",
    "value": 0.3
   },
   "soloSpell": "Cantique Final",
-  "agi": 3,
-  "int": 5,
-  "def": 3
+  "agi": 7,
+  "int": 11,
+  "def": 6
  },
  {
   "id": "z27",
@@ -2269,7 +2269,7 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "curse",
@@ -2279,9 +2279,9 @@
   "soloSpell": "Colonne de Purge",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "d1",
@@ -2306,16 +2306,16 @@
   "rarity": "C",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 2,
+  "atk": 8,
   "hp": 50,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Sable Glissant",
   "soloCost": 8,
-  "agi": 1,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 2
  },
  {
   "id": "d3",
@@ -2325,7 +2325,7 @@
   "rarity": "UC",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 3,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "stun",
@@ -2333,9 +2333,9 @@
   },
   "soloSpell": "Sentence Lente",
   "soloCost": 6,
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 3
  },
  {
   "id": "d4",
@@ -2362,7 +2362,7 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "curse",
@@ -2372,9 +2372,9 @@
   "soloSpell": "Sablier Ensorcelé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "d6",
@@ -2384,7 +2384,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Lumière",
-  "atk": 6,
+  "atk": 14,
   "hp": 92,
   "effect": {
    "kind": "stun",
@@ -2393,9 +2393,9 @@
   "soloSpell": "Arrêt du Temps",
   "soloCost": 7,
   "soloMult": 2,
-  "agi": 3,
-  "int": 5,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "d7",
@@ -2437,16 +2437,16 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 3,
+  "atk": 10,
   "hp": 60,
   "effect": {
    "kind": "shield",
    "value": 22
   },
   "soloSpell": "Reflet Protecteur",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "d10",
@@ -2456,16 +2456,16 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "copy"
   },
   "soloSpell": "Chant Miroir",
   "soloCost": 6,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "d11",
@@ -2475,7 +2475,7 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Eau",
-  "atk": 5,
+  "atk": 13,
   "hp": 74,
   "effect": {
    "kind": "reflect",
@@ -2484,9 +2484,9 @@
   },
   "soloSpell": "Renvoi en Chœur",
   "soloCost": 6,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "d12",
@@ -2496,7 +2496,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Eau",
-  "atk": 6,
+  "atk": 14,
   "hp": 92,
   "effect": {
    "kind": "copy"
@@ -2504,9 +2504,9 @@
   "soloSpell": "Refrain Éternel",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 3,
-  "int": 5,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "d13",
@@ -2531,16 +2531,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 3,
+  "atk": 9,
   "hp": 54,
   "effect": {
    "kind": "shield",
    "value": 17
   },
   "soloSpell": "Point Serré",
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 7,
+  "def": 4
  },
  {
   "id": "d15",
@@ -2567,16 +2567,16 @@
   "rarity": "SR",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 4,
+  "atk": 11,
   "hp": 66,
   "effect": {
    "kind": "link"
   },
   "soloSpell": "Nœud d’Or",
   "soloCost": 6,
-  "agi": 2,
-  "int": 3,
-  "def": 1
+  "agi": 6,
+  "int": 9,
+  "def": 3
  },
  {
   "id": "d17",
@@ -2586,16 +2586,16 @@
   "rarity": "UR",
   "classe": "Prêtre",
   "element": "Nature",
-  "atk": 5,
+  "atk": 13,
   "hp": 74,
   "effect": {
    "kind": "link"
   },
   "soloSpell": "Deux Rives",
   "soloCost": 5,
-  "agi": 3,
-  "int": 4,
-  "def": 2
+  "agi": 7,
+  "int": 10,
+  "def": 6
  },
  {
   "id": "d18",
@@ -2605,7 +2605,7 @@
   "rarity": "L",
   "classe": "Occultiste",
   "element": "Nature",
-  "atk": 6,
+  "atk": 14,
   "hp": 92,
   "effect": {
    "kind": "link"
@@ -2613,9 +2613,9 @@
   "soloSpell": "Destin Tissé",
   "soloCost": 6,
   "soloMult": 2,
-  "agi": 3,
-  "int": 5,
-  "def": 2
+  "agi": 7,
+  "int": 11,
+  "def": 4
  },
  {
   "id": "g31",

@@ -120,7 +120,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "prix": 200,
@@ -148,7 +148,7 @@
    "ligne": "frappe",
    "rarity": "UC",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.1
    },
    "prix": 400,
@@ -176,7 +176,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "prix": 800,
@@ -204,7 +204,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "prix": 1600,
@@ -232,7 +232,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "prix": 200,
@@ -260,7 +260,7 @@
    "ligne": "frappe",
    "rarity": "UC",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.1
    },
    "prix": 400,
@@ -288,7 +288,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "prix": 800,
@@ -316,7 +316,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "prix": 1600,
@@ -456,7 +456,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "prix": 200,
@@ -484,7 +484,7 @@
    "ligne": "frappe",
    "rarity": "UC",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.1
    },
    "prix": 400,
@@ -512,7 +512,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "prix": 800,
@@ -540,7 +540,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "prix": 1600,
@@ -838,7 +838,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-marees",
@@ -854,7 +854,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-marees",
@@ -886,7 +886,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-marees",
@@ -932,7 +932,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-marees",
@@ -948,7 +948,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-marees",
@@ -980,7 +980,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-marees",
@@ -1026,7 +1026,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-marees",
@@ -1042,7 +1042,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-marees",
@@ -1074,7 +1074,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-marees",
@@ -1120,7 +1120,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-forge",
@@ -1136,7 +1136,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-forge",
@@ -1168,7 +1168,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-forge",
@@ -1214,7 +1214,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-forge",
@@ -1230,7 +1230,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-forge",
@@ -1262,7 +1262,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-forge",
@@ -1308,7 +1308,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-forge",
@@ -1324,7 +1324,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-forge",
@@ -1356,7 +1356,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-forge",
@@ -1402,7 +1402,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-bosquet",
@@ -1418,7 +1418,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-bosquet",
@@ -1450,7 +1450,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-bosquet",
@@ -1496,7 +1496,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-bosquet",
@@ -1512,7 +1512,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-bosquet",
@@ -1544,7 +1544,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-bosquet",
@@ -1590,7 +1590,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-bosquet",
@@ -1606,7 +1606,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-bosquet",
@@ -1638,7 +1638,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-bosquet",
@@ -1684,7 +1684,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-crypte",
@@ -1700,7 +1700,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-crypte",
@@ -1732,7 +1732,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-crypte",
@@ -1778,7 +1778,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-crypte",
@@ -1794,7 +1794,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-crypte",
@@ -1826,7 +1826,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-crypte",
@@ -1872,7 +1872,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-crypte",
@@ -1888,7 +1888,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-crypte",
@@ -1920,7 +1920,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-crypte",
@@ -1966,7 +1966,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-zenith",
@@ -1982,7 +1982,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-zenith",
@@ -2014,7 +2014,7 @@
    "ligne": "frappe",
    "rarity": "C",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.05
    },
    "set": "set-zenith",
@@ -2060,7 +2060,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-zenith",
@@ -2076,7 +2076,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-zenith",
@@ -2108,7 +2108,7 @@
    "ligne": "frappe",
    "rarity": "R",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.15
    },
    "set": "set-zenith",
@@ -2154,7 +2154,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-zenith",
@@ -2170,7 +2170,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-zenith",
@@ -2202,7 +2202,7 @@
    "ligne": "frappe",
    "rarity": "SR",
    "bonus": {
-    "stat": "atkPct",
+    "stat": "intPct",
     "pct": 0.25
    },
    "set": "set-zenith",

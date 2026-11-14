@@ -88,19 +88,19 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a11 | Sorcière des Océans | SR | Neutre | - | 20 | 65 | 10 | 16 | eau | - | - |
-| a13 | Alix, Archimage des Marées | UR | Neutre | - | 28 | 80 | 14 | 22 | eau | - | - |
-| a14 | Alix, Déesse de l’Eau | L | Neutre | - | 38 | 100 | 19 | 30 | eau | - | - |
-| a19 | Allumeur de Braises | C | Neutre | - | 9 | 43 | 5 | 7 | braise | - | - |
-| a20 | Mage de la Fournaise | R | Neutre | - | 14 | 51 | 7 | 11 | braise | - | - |
-| a21 | Invocateur de Fournaise | SR | Neutre | - | 21 | 65 | 11 | 17 | braise | - | summon 0.6 (ttl 3) |
-| a22 | Solen, Archimage de la Braise | UR | Neutre | - | 29 | 80 | 15 | 23 | braise | - | - |
-| a23 | Solen, Roi des Braises | L | Neutre | - | 39 | 100 | 20 | 31 | braise | - | - |
-| a29 | Adepte des Rivières | UC | Neutre | - | 11 | 46 | 6 | 9 | eau | - | - |
-| a32 | Veilleur de Braise | UC | Neutre | - | 11 | 47 | 6 | 9 | braise | - | - |
-| a4 | Étincelle Vive | C | Neutre | - | 9 | 40 | 5 | 7 | braise | Trait Incandescent | - |
-| a5 | Apprentie des Rivières | C | Neutre | - | 9 | 42 | 5 | 7 | eau | - | - |
-| a8 | Sorcière des Rivières | R | Neutre | - | 14 | 50 | 7 | 11 | eau | - | - |
+| a11 | Sorcière des Océans | SR | Neutre | - | 20 | 78 | 10 | 16 | eau | - | - |
+| a13 | Alix, Archimage des Marées | UR | Neutre | - | 28 | 88 | 14 | 22 | eau | - | - |
+| a14 | Alix, Déesse de l’Eau | L | Neutre | - | 38 | 105 | 19 | 30 | eau | - | - |
+| a19 | Allumeur de Braises | C | Neutre | - | 9 | 55 | 5 | 7 | braise | - | - |
+| a20 | Mage de la Fournaise | R | Neutre | - | 14 | 70 | 7 | 11 | braise | - | - |
+| a21 | Invocateur de Fournaise | SR | Neutre | - | 21 | 78 | 11 | 17 | braise | - | summon 0.6 (ttl 3) |
+| a22 | Solen, Archimage de la Braise | UR | Neutre | - | 29 | 88 | 15 | 23 | braise | - | - |
+| a23 | Solen, Roi des Braises | L | Neutre | - | 39 | 105 | 20 | 31 | braise | - | - |
+| a29 | Adepte des Rivières | UC | Neutre | - | 11 | 62 | 6 | 9 | eau | - | - |
+| a32 | Veilleur de Braise | UC | Neutre | - | 11 | 62 | 6 | 9 | braise | - | - |
+| a4 | Étincelle Vive | C | Neutre | - | 9 | 55 | 5 | 7 | braise | Trait Incandescent | - |
+| a5 | Apprentie des Rivières | C | Neutre | - | 9 | 55 | 5 | 7 | eau | - | - |
+| a8 | Sorcière des Rivières | R | Neutre | - | 14 | 70 | 7 | 11 | eau | - | - |
 | b3 | Naïa, Sourcéleine | SR | Neutre | - | 22 | 76 | 11 | 18 | eau | - | - |
 | b6 | Ember, Cœur de Fournaise | SR | Neutre | - | 23 | 74 | 12 | 18 | braise | - | - |
 | c10 | Naïa, Marée Éternelle | L | Neutre | - | 38 | 100 | 19 | 30 | eau | - | - |
@@ -138,9 +138,9 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | w12 | Écho, Refrain Absolu | L | Neutre | - | 6 | 92 | 3 | 5 | miroir | Refrain Absolu | copy |
 | w16 | Tisseuse des Nœuds | SR | Neutre | - | 4 | 66 | 2 | 3 | pont | Nœud d’Or | link |
 | w18 | Ananké, Gardienne des Rives | L | Neutre | - | 6 | 92 | 3 | 5 | pont | Destin Gardé | link |
-| w19 | Sirène Nouvelle | C | Neutre | - | 7 | 50 | 4 | 6 | eau | Berceuse des Brumes | - |
-| w2 | Servante du Sablier | UC | Neutre | - | 2 | 50 | 1 | 2 | seuil | Sable Glissant | slow |
-| w3 | Huissier de l’Entre-Deux | R | Neutre | - | 3 | 54 | 2 | 2 | seuil | Sentence Lente | stun |
+| w19 | Sirène Nouvelle | C | Neutre | - | 8 | 50 | 4 | 6 | eau | Berceuse des Brumes | - |
+| w2 | Servante du Sablier | UC | Neutre | - | 10 | 50 | 5 | 8 | seuil | Sable Glissant | slow |
+| w3 | Huissier de l’Entre-Deux | R | Neutre | - | 12 | 54 | 6 | 10 | seuil | Sentence Lente | stun |
 | w5 | Maître des Sabliers | UR | Neutre | - | 4 | 66 | 2 | 3 | seuil | Sablier Ensorcelé | curse 0.25 |
 | w6 | Kairos, Juge Éternel | L | Neutre | - | 6 | 92 | 3 | 5 | seuil | Sentence Éternelle | stun |
 
@@ -148,12 +148,12 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 
 | id | nom | rarete | element | role | ATQ | PV | AGI | INT | famille | sort signature | effet |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| a3 | Garde-Promesse | C | Neutre | - | 7 | 65 | 4 | 6 | bouclier | Serment Protecteur | - |
-| a35 | Palefrenière Errante | C | Neutre | - | 2 | 52 | 1 | 2 | vol | Litière Douce | heal 14 |
-| a39 | Veilleuse du Guet | UC | Neutre | - | 3 | 54 | 2 | 2 | bouclier | Lanterne du Guet | heal 20 |
-| a42 | Écuyère des Routes | UC | Neutre | - | 3 | 62 | 2 | 2 | vol | Selle Réconfortante | heal 20 |
-| a43 | Première Écuyère | R | Neutre | - | 4 | 72 | 2 | 3 | vol | Bénédiction du Chemin | heal 28 |
-| a49 | Capitaine du Guet | R | Neutre | - | 4 | 66 | 2 | 3 | bouclier | Ronde Éclairée | heal 30 |
+| a3 | Garde-Promesse | C | Neutre | - | 8 | 65 | 4 | 6 | bouclier | Serment Protecteur | - |
+| a35 | Palefrenière Errante | C | Neutre | - | 8 | 52 | 4 | 6 | vol | Litière Douce | heal 14 |
+| a39 | Veilleuse du Guet | UC | Neutre | - | 10 | 54 | 5 | 8 | bouclier | Lanterne du Guet | heal 20 |
+| a42 | Écuyère des Routes | UC | Neutre | - | 10 | 62 | 5 | 8 | vol | Selle Réconfortante | heal 20 |
+| a43 | Première Écuyère | R | Neutre | - | 12 | 72 | 6 | 10 | vol | Bénédiction du Chemin | heal 28 |
+| a49 | Capitaine du Guet | R | Neutre | - | 12 | 66 | 6 | 10 | bouclier | Ronde Éclairée | heal 30 |
 | b4 | Aïna, Voix du Matin | SR | Neutre | - | 4 | 78 | 2 | 3 | aube | - | heal 46 |
 | b5 | Roc, Épaule du Monde | SR | Neutre | - | 5 | 96 | 3 | 4 | bouclier | - | shield 44 |
 | c11 | Aïna, Aurore Immortelle | L | Neutre | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
@@ -161,21 +161,21 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | c4 | Aïna, Chant de l’Aube | UR | Neutre | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
 | c5 | Roc, Montagne Vivante | UR | Neutre | - | 6 | 92 | 3 | 5 | bouclier | - | shield 55 |
 | n11 | Enge des Bois | N | - | - | 6 | 60 | 3 | 5 | - | Souffle des Sèves | heal 18 |
-| n13 | Ange | C | Lumière | - | 6 | 58 | 3 | 5 | - | Éclat d’Aube | heal 20 |
+| n13 | Ange | C | Lumière | - | 8 | 58 | 4 | 6 | - | Éclat d’Aube | heal 20 |
 | n3 | Prêtre Novice | N | Neutre | - | 4 | 52 | 2 | 3 | - | Bénédiction Modeste | heal 18 |
 | n7 | Embryon du Vivant | N | - | - | 7 | 62 | 4 | 6 | - | Sève Voleuse | heal 16 |
-| p1 | Jeune Séraphin | UC | Lumière | - | 8 | 66 | 4 | 6 | - | Éclat d’Aube | heal 24 |
-| p3 | Pousse des Sèves | C | Neutre | - | 5 | 60 | 3 | 4 | bosquet | - | heal 16 |
-| p5 | Séraphin, Porteur de Lumière | R | Neutre | - | 10 | 80 | 5 | 8 | seuil | Éclat du Matin | heal 40 |
+| p1 | Jeune Séraphin | UC | Lumière | - | 10 | 66 | 5 | 8 | - | Éclat d’Aube | heal 24 |
+| p3 | Pousse des Sèves | C | Neutre | - | 8 | 60 | 4 | 6 | bosquet | - | heal 16 |
+| p5 | Séraphin, Porteur de Lumière | R | Neutre | - | 12 | 80 | 6 | 10 | seuil | Éclat du Matin | heal 40 |
 | p6 | Séraphin, Archange Ultime | L | Neutre | - | 12 | 100 | 6 | 10 | seuil | Aube Éternelle | heal 60 |
 | p7 | Ange de Lumière | SR | Lumière | - | 12 | 88 | 6 | 10 | seuil | Éclat d’Aile | heal 30 |
 | p8 | Archange | UR | Lumière | - | 14 | 96 | 7 | 11 | seuil | Jugement Ailé | heal 30 |
-| s1 | Novice de l’Aube | C | Neutre | - | 3 | 50 | 2 | 2 | aube | - | heal 18 |
+| s1 | Novice de l’Aube | C | Neutre | - | 8 | 50 | 4 | 6 | aube | - | heal 18 |
 | s10 | Léna, Aube Éternelle | L | Neutre | - | 6 | 105 | 3 | 5 | aube | - | heal 80 |
-| s13 | Servante de l’Aube | UC | Neutre | - | 3 | 55 | 2 | 2 | aube | - | heal 22 |
-| s14 | Garde du Rempart | UC | Neutre | - | 3 | 58 | 2 | 2 | bouclier | - | shield 20 |
-| s2 | Médecin de Camp | C | Neutre | - | 2 | 48 | 1 | 2 | aube | Baume Apaisant | heal 16 |
-| s5 | Prêtresse de l’Aube | R | Neutre | - | 3 | 60 | 2 | 2 | aube | - | heal 26 |
+| s13 | Servante de l’Aube | UC | Neutre | - | 10 | 55 | 5 | 8 | aube | - | heal 22 |
+| s14 | Garde du Rempart | UC | Neutre | - | 10 | 58 | 5 | 8 | bouclier | - | shield 20 |
+| s2 | Médecin de Camp | C | Neutre | - | 8 | 48 | 4 | 6 | aube | Baume Apaisant | heal 16 |
+| s5 | Prêtresse de l’Aube | R | Neutre | - | 12 | 60 | 6 | 10 | aube | - | heal 26 |
 | s8 | Grande Prêtresse de l’Aube | SR | Neutre | - | 4 | 70 | 2 | 3 | aube | - | heal 40 |
 | s9 | Léna, Avatar de l’Aurore | UR | Neutre | - | 5 | 85 | 3 | 4 | aube | - | heal 58 |
 | u1 | Fidèle du Matin | C | Neutre | - | 8 | 55 | 4 | 6 | zele | Étincelle de Foi — geste de palier C | - |
@@ -185,9 +185,9 @@ Le sort signature est le `soloSpell` ; l'effet est le champ `effect` (kind + val
 | u5 | Arbalétrier Doré | UR | Neutre | - | 27 | 88 | 14 | 22 | zele | Aurore Radieuse — geste de palier UR | - |
 | u6 | Lémion, Chef de la Légion Solaire | L | Neutre | - | 36 | 105 | 18 | 29 | zele | Lumière Éternelle — geste de palier L | - |
 | w11 | Chef du Chœur | UR | Neutre | - | 5 | 74 | 3 | 4 | miroir | Renvoi en Chœur | reflect 0.3 |
-| w14 | Aiguille du Pont | UC | Neutre | - | 3 | 54 | 2 | 2 | pont | Point Serré | shield 17 |
+| w14 | Aiguille du Pont | UC | Neutre | - | 10 | 54 | 5 | 8 | pont | Point Serré | shield 17 |
 | w17 | Architecte du Pont | UR | Neutre | - | 5 | 74 | 3 | 4 | pont | Deux Rives | link |
-| w9 | Prisme du Chœur | R | Neutre | - | 3 | 60 | 2 | 2 | miroir | Reflet Protecteur | shield 22 |
+| w9 | Prisme du Chœur | R | Neutre | - | 12 | 60 | 6 | 10 | miroir | Reflet Protecteur | shield 22 |
 
 ## Familles de lignee (data/families.json)
 

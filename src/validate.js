@@ -120,6 +120,13 @@ function validate(data, errors) {
   // sorts d'école (EXI-P2-2, ACC-2-1) : école existante, 4 marches ou vide motivé,
   // coûts strictement croissants, taux décroissants quand la largeur monte
   const ecoles = data.schools ?? {};
+  // lot 3 refonte v2 (E) : modificateur d'ecole en data, bornes lisibles
+  for (const [key, sc] of Object.entries(ecoles)) {
+    const mod = sc?.mod;
+    if (!mod) continue;
+    if (mod.mult != null && !(mod.mult > 0 && mod.mult <= 2)) push(`l'ecole ${key} a un mod.mult hors bornes (${mod.mult})`, 'EXI-DATA-4');
+    if (mod.cout != null && !(mod.cout > 0 && mod.cout <= 2)) push(`l'ecole ${key} a un mod.cout hors bornes (${mod.cout})`, 'EXI-DATA-4');
+  }
   const largeurRang = (l) => (l === 'equipe' || l === 'equipe-renforcee' ? 4 : l === 'tous' ? 5 : Number(l) || 0);
   const tousSortsEcole = [...(data.grimoire?.ecole ?? []), ...(data.grimoire?.entrees ?? [])];
   const idsSorts = new Set();

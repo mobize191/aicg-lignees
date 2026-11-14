@@ -190,7 +190,7 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 6,
+  "atk": 8,
   "hp": 58,
   "effect": {
    "kind": "heal",
@@ -198,10 +198,10 @@
   },
   "soloSpell": "Éclat d’Aube",
   "raciale": true,
-  "agi": 3,
-  "int": 5,
+  "agi": 4,
+  "int": 6,
   "biome": "divin",
-  "def": 3
+  "def": 4
  },
  {
   "id": "n14",
@@ -397,7 +397,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 9,
-  "hp": 42,
+  "hp": 55,
   "family": "eau",
   "agi": 5,
   "int": 7,
@@ -410,7 +410,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 11,
-  "hp": 46,
+  "hp": 62,
   "family": "eau",
   "agi": 6,
   "int": 9,
@@ -423,7 +423,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 14,
-  "hp": 50,
+  "hp": 70,
   "family": "eau",
   "agi": 7,
   "int": 11,
@@ -436,7 +436,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 20,
-  "hp": 65,
+  "hp": 78,
   "family": "eau",
   "agi": 10,
   "int": 16,
@@ -449,7 +449,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 28,
-  "hp": 80,
+  "hp": 88,
   "family": "eau",
   "agi": 14,
   "int": 22,
@@ -462,7 +462,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 38,
-  "hp": 100,
+  "hp": 105,
   "family": "eau",
   "agi": 19,
   "int": 30,
@@ -474,7 +474,7 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 7,
+  "atk": 8,
   "hp": 65,
   "effect": null,
   "soloSpell": "Serment Protecteur",
@@ -482,7 +482,7 @@
   "int": 6,
   "biome": "recrues",
   "family": "bouclier",
-  "def": 3
+  "def": 4
  },
  {
   "id": "a4",
@@ -491,7 +491,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 9,
-  "hp": 40,
+  "hp": 55,
   "soloSpell": "Trait Incandescent",
   "agi": 5,
   "int": 7,
@@ -520,16 +520,16 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 8,
   "hp": 50,
   "family": "aube",
   "effect": {
    "kind": "heal",
    "value": 18
   },
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 4,
+  "int": 6,
+  "def": 4
  },
  {
   "id": "s13",
@@ -537,16 +537,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 10,
   "hp": 55,
   "family": "aube",
   "effect": {
    "kind": "heal",
    "value": 22
   },
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "s5",
@@ -554,16 +554,16 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 12,
   "hp": 60,
   "family": "aube",
   "effect": {
    "kind": "heal",
    "value": 26
   },
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 6,
+  "int": 10,
+  "def": 5
  },
  {
   "id": "s8",
@@ -631,7 +631,8 @@
   },
   "agi": 1,
   "int": 1,
-  "def": 1
+  "def": 1,
+  "budget": "tank"
  },
  {
   "id": "s14",
@@ -639,16 +640,16 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 10,
   "hp": 58,
   "family": "bouclier",
   "effect": {
    "kind": "shield",
    "value": 20
   },
-  "agi": 2,
-  "int": 2,
-  "def": 1
+  "agi": 5,
+  "int": 8,
+  "def": 5
  },
  {
   "id": "s6",
@@ -665,7 +666,8 @@
   },
   "agi": 3,
   "int": 2,
-  "def": 2
+  "def": 2,
+  "budget": "tank"
  },
  {
   "id": "s7",
@@ -682,7 +684,8 @@
   },
   "agi": 3,
   "int": 5,
-  "def": 2
+  "def": 2,
+  "budget": "tank"
  },
  {
   "id": "s11",
@@ -699,7 +702,8 @@
   },
   "agi": 4,
   "int": 2,
-  "def": 4
+  "def": 4,
+  "budget": "tank"
  },
  {
   "id": "s12",
@@ -716,7 +720,8 @@
   },
   "agi": 5,
   "int": 3,
-  "def": 4
+  "def": 4,
+  "budget": "tank"
  },
  {
   "id": "a19",
@@ -725,7 +730,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 9,
-  "hp": 43,
+  "hp": 55,
   "family": "braise",
   "agi": 5,
   "int": 7,
@@ -738,7 +743,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 11,
-  "hp": 47,
+  "hp": 62,
   "family": "braise",
   "agi": 6,
   "int": 9,
@@ -751,7 +756,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 14,
-  "hp": 51,
+  "hp": 70,
   "family": "braise",
   "agi": 7,
   "int": 11,
@@ -764,7 +769,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 21,
-  "hp": 65,
+  "hp": 78,
   "effect": {
    "kind": "summon",
    "value": 0.6,
@@ -784,7 +789,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 29,
-  "hp": 80,
+  "hp": 88,
   "family": "braise",
   "agi": 15,
   "int": 23,
@@ -797,7 +802,7 @@
   "classe": "Mage",
   "element": "Neutre",
   "atk": 39,
-  "hp": 100,
+  "hp": 105,
   "family": "braise",
   "agi": 20,
   "int": 31,
@@ -887,18 +892,18 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 2,
+  "atk": 8,
   "hp": 48,
   "effect": {
    "kind": "heal",
    "value": 16
   },
   "soloSpell": "Baume Apaisant",
-  "agi": 1,
-  "int": 2,
+  "agi": 4,
+  "int": 6,
   "biome": "recrues",
   "family": "aube",
-  "def": 1
+  "def": 4
  },
  {
   "id": "s3",
@@ -940,18 +945,18 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 2,
+  "atk": 8,
   "hp": 52,
   "effect": {
    "kind": "heal",
    "value": 14
   },
   "soloSpell": "Litière Douce",
-  "agi": 1,
-  "int": 2,
+  "agi": 4,
+  "int": 6,
   "biome": "recrues",
   "family": "vol",
-  "def": 1
+  "def": 4
  },
  {
   "id": "a36",
@@ -1004,18 +1009,18 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 10,
   "hp": 54,
   "effect": {
    "kind": "heal",
    "value": 20
   },
   "soloSpell": "Lanterne du Guet",
-  "agi": 2,
-  "int": 2,
+  "agi": 5,
+  "int": 8,
   "biome": "recrues",
   "family": "bouclier",
-  "def": 1
+  "def": 5
  },
  {
   "id": "a40",
@@ -1065,7 +1070,7 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 10,
   "hp": 62,
   "effect": {
    "kind": "heal",
@@ -1078,11 +1083,11 @@
   "gimmick": "litiere",
   "gimmickName": "Litière de Camp",
   "gimmickDesc": "Au départ du combat : bouclier de 15 % PV max pour toute l’équipe.",
-  "agi": 2,
-  "int": 2,
+  "agi": 5,
+  "int": 8,
   "biome": "recrues",
   "family": "vol",
-  "def": 1
+  "def": 5
  },
  {
   "id": "a43",
@@ -1090,7 +1095,7 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 4,
+  "atk": 12,
   "hp": 72,
   "effect": {
    "kind": "heal",
@@ -1103,11 +1108,11 @@
   "gimmick": "benediction",
   "gimmickName": "Dernière Bénédiction",
   "gimmickDesc": "En tombant : soigne toute l’équipe de 20 % des PV max de chacun.",
-  "agi": 2,
-  "int": 3,
+  "agi": 6,
+  "int": 10,
   "biome": "recrues",
   "family": "vol",
-  "def": 2
+  "def": 5
  },
  {
   "id": "a44",
@@ -1220,7 +1225,7 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 4,
+  "atk": 12,
   "hp": 66,
   "effect": {
    "kind": "heal",
@@ -1233,11 +1238,11 @@
   "gimmick": "ronde",
   "gimmickName": "Ronde Éclairée",
   "gimmickDesc": "Chaque tour : +3 % d’ATQ cumulée pour toute l’équipe (plafond +90 %).",
-  "agi": 2,
-  "int": 3,
+  "agi": 6,
+  "int": 10,
   "biome": "recrues",
   "family": "bouclier",
-  "def": 2
+  "def": 5
  },
  {
   "id": "b1",
@@ -1352,7 +1357,7 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Lumière",
-  "atk": 8,
+  "atk": 10,
   "hp": 66,
   "effect": {
    "kind": "heal",
@@ -1361,11 +1366,11 @@
   "soloSpell": "Éclat d’Aube",
   "raciale": true,
   "voie": "l’éveil du service — le Jeune Séraphin",
-  "agi": 4,
-  "int": 6,
+  "agi": 5,
+  "int": 8,
   "biome": "divin",
   "note": " renommé Jeune Séraphin (ACTÉ 10/11, id inchangé)",
-  "def": 4
+  "def": 5
  },
  {
   "id": "p3",
@@ -1373,17 +1378,17 @@
   "rarity": "C",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 5,
+  "atk": 8,
   "hp": 60,
   "effect": {
    "kind": "heal",
    "value": 16
   },
   "voie": "voie sylvestre — les Dryades",
-  "agi": 3,
-  "int": 4,
+  "agi": 4,
+  "int": 6,
   "family": "bosquet",
-  "def": 2
+  "def": 4
  },
  {
   "id": "q1",
@@ -1977,17 +1982,17 @@
   "rarity": "UC",
   "classe": "Occultiste",
   "element": "Neutre",
-  "atk": 2,
+  "atk": 10,
   "hp": 50,
   "family": "seuil",
-  "agi": 1,
-  "int": 2,
+  "agi": 5,
+  "int": 8,
   "effect": {
    "kind": "slow"
   },
   "soloSpell": "Sable Glissant",
   "soloCost": 8,
-  "def": 1
+  "def": 3
  },
  {
   "id": "w3",
@@ -1995,18 +2000,18 @@
   "rarity": "R",
   "classe": "Occultiste",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 12,
   "hp": 54,
   "family": "seuil",
-  "agi": 2,
-  "int": 2,
+  "agi": 6,
+  "int": 10,
   "effect": {
    "kind": "stun",
    "count": 1
   },
   "soloSpell": "Sentence Lente",
   "soloCost": 6,
-  "def": 1
+  "def": 4
  },
  {
   "id": "w4",
@@ -2101,17 +2106,17 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 12,
   "hp": 60,
   "family": "miroir",
-  "agi": 2,
-  "int": 2,
+  "agi": 6,
+  "int": 10,
   "effect": {
    "kind": "shield",
    "value": 22
   },
   "soloSpell": "Reflet Protecteur",
-  "def": 1
+  "def": 5
  },
  {
   "id": "w10",
@@ -2190,17 +2195,17 @@
   "rarity": "UC",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 3,
+  "atk": 10,
   "hp": 54,
   "family": "pont",
-  "agi": 2,
-  "int": 2,
+  "agi": 5,
+  "int": 8,
   "effect": {
    "kind": "shield",
    "value": 17
   },
   "soloSpell": "Point Serré",
-  "def": 1
+  "def": 5
  },
  {
   "id": "w15",
@@ -2279,7 +2284,7 @@
   "rarity": "R",
   "classe": "Prêtre",
   "element": "Neutre",
-  "atk": 10,
+  "atk": 12,
   "hp": 80,
   "effect": {
    "kind": "heal",
@@ -2288,8 +2293,8 @@
   "soloSpell": "Éclat du Matin",
   "soloCost": 5,
   "family": "seuil",
-  "agi": 5,
-  "int": 8,
+  "agi": 6,
+  "int": 10,
   "def": 5
  },
  {
@@ -2318,7 +2323,7 @@
   "rarity": "C",
   "classe": "Occultiste",
   "element": "Neutre",
-  "atk": 7,
+  "atk": 8,
   "hp": 50,
   "soloSpell": "Berceuse des Brumes",
   "family": "eau",
