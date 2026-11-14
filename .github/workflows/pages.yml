@@ -35,7 +35,9 @@ jobs:
           cp assets-v3.1.json site/assets-v3.1.json
           cp assets-v32.json site/assets-v32.json
           cp assets-v33.json site/assets-v33.json
-          cp assets-v34.json site/assets-v34.json
+          # v3.4 : manifeste genere cote couloir design — copie seulement s'il est present dans le depot
+          # (le jeu tolere son absence : bouton grise libelle, version courante inchangee — smoke S27 f)
+          if [ -f assets-v34.json ]; then cp assets-v34.json site/assets-v34.json; fi
           cp -r site-assets/fx site/fx
           cp -r site-assets/errance site/errance
       - uses: actions/upload-pages-artifact@v3

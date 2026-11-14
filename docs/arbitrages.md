@@ -1,5 +1,11 @@
 # Journal des arbitrages et décisions
 
+## 2026-11-15 (suite 51, exécution couloir 1) : RÉPARATION CI — deploy Pages tolérant au manifeste v3.4 absent — statut ACTÉ
+
+- **Diagnostic** : les 2 derniers runs main en `failure` (c522fb6 v3.4 code, fccab21 merge refonte v2) — job `test` OK sur fccab21 (355/355), job `deploy` en échec sur `cp: cannot stat 'assets-v34.json'` : le workflow `pages.yml` (commit v3.4) copiait `assets-v34.json`, manifeste généré côté couloir design et **absent du dépôt**. Le run c522fb6 échouait en plus au job `test` (tests art-switch encore à 4 versions — corrigé par le merge suite 50).
+- **Réparation** (minimale, intention préservée) : les 4 manifestes historiques restent des `cp` obligatoires ; le v3.4 passe en `if [ -f assets-v34.json ]; then cp …; fi` — le jeu tolère déjà un manifeste manquant (bouton 🖼️ gris-é libellé, version courante inchangée, smoke S27 f), donc le déploiement Pages peut se faire sans. Dès que le couloir design livre `assets-v34.json` au dépôt, il est déployé sans nouveau changement de workflow.
+- **Vérification** : YAML parsé (jobs test+deploy intacts), commit poussé sur main, run CI relancé et suivi jusqu'à sa conclusion.
+
 ## 2026-11-15 (suite 50, exécution couloir 1) : MERGE main (v3.4 couloir arts) DANS vibe/refonte-v2-ff7146 — conflits résolus en combinant les deux côtés — digest 3000 INCHANGÉ `29c995da…` 733/3000 — 355 tests, smoke 483, validateur 0 erreur
 
 - **Merge `origin/main` (v3.4 : switch 5 versions d'illustrations + mécanique Exception + BOSS_CARD_MAP + déploiement assets-v34.json) dans la branche refonte v2.** 2 conflits résolus en combinant : (1) `src/engine/combat.js` — sélection du boss : `royale.boss` (lot 5) > `BOSS_CARD_MAP` (v3.4) > `bossPaliers` > `bossCards`, variance de stats conservée ; (2) `src/ui.js` — `artKeyOf` shiny (lot 8, clé `<id>-s`) + variantes Exception `-r`/`-o` (v3.4) chaînées, fallback art classique pour les deux.
