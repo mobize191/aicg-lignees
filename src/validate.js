@@ -82,6 +82,29 @@ function validate(data, errors) {
   const noms = (data.cards ?? []).map((c) => c.name);
   if (new Set(noms).size !== noms.length) push('des cartes partagent le meme nom', 'EXI-P1-2');
   // zones (EXI-P1-4, EXI-P4-1, EXI-P4-2) : cadence, drops N, rencontres, récoltes, enseignements
+  // lot 5 donjons par famille (EXI-DJ-1) : pool valide, escalier de boss (M interdit), royale = palier+10, zone.donjon existe
+  for (const d of data.dungeons ?? []) {
+    if (!(d.region >= 1 && d.region <= 4)) push(`le donjon ${d.id} a une region invalide (${d.region})`, 'EXI-DJ-1');
+    if (!(d.palier >= 1)) push(`le donjon ${d.id} a un palier invalide (${d.palier})`, 'EXI-DJ-1');
+    for (const id of d.pool ?? []) {
+      const pm = data.monsters?.find((m) => m.id === id);
+      if (!pm) push(`le donjon ${d.id} a un pool inconnu ${id}`, 'EXI-DJ-1');
+      else if (pm.horsPool) push(`le donjon ${d.id} met un boss horsPool ${id} dans son pool`, 'EXI-DJ-1');
+    }
+    for (const bp of d.bossPaliers ?? []) {
+      const ref = data.monsters?.find((m) => m.id === bp.ref);
+      if (!ref) push(`le donjon ${d.id} a un bossPaliers inconnu ${bp.ref}`, 'EXI-DJ-1');
+      else if (ref.rarity === 'M' && bp.floor !== d.floors) push(`le donjon ${d.id} met un M (${bp.ref}) dans un escalier (autorise en boss final seulement)`, 'EXI-DJ-1');
+    }
+    if (d.royale) {
+      const attendu = (d.palier ?? 0) + 10; // chaîne royale = palier + 10 (spec §1), cap 100 = lot 9
+      if (d.royale.palier !== attendu) push(`le donjon ${d.id} a une royale palier ${d.royale.palier} au lieu de ${attendu}`, 'EXI-DJ-1');
+      if (d.royale.boss && !monsterIds.has(d.royale.boss)) push(`le donjon ${d.id} a un boss royal inconnu ${d.royale.boss}`, 'EXI-DJ-1');
+    }
+  }
+  for (const z of data.zones ?? []) {
+    if (z.donjon && !(data.dungeons ?? []).some((d) => d.id === z.donjon)) push(`la zone ${z.id} pointe un donjon inconnu ${z.donjon}`, 'EXI-DJ-1');
+  }
   const gemTiers = new Set(data.engine?.GEM_TIERS ?? []);
   const sortsEcoleIds = new Set((data.grimoire?.ecole ?? []).map((s) => s.id));
   for (const z of data.zones ?? []) {

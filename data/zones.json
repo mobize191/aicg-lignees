@@ -236,7 +236,9 @@
     "encRate": 0.16,
     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
    }
-  }
+  },
+  "region": 1,
+  "donjon": "gobelins-ecumes"
  },
  {
   "id": "zone-forge",
@@ -374,7 +376,9 @@
     "encRate": 0.17,
     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
    }
-  }
+  },
+  "region": 1,
+  "donjon": "enfants-braise"
  },
  {
   "id": "zone-bosquet",
@@ -448,7 +452,7 @@
    }
   ],
   "recrute": {
-   "taux": 0.10
+   "taux": 0.1
   },
   "materiau": {
    "id": "seve",
@@ -504,7 +508,9 @@
     "encRate": 0.15,
     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
    }
-  }
+  },
+  "region": 1,
+  "donjon": "dryades-bosquet"
  },
  {
   "id": "zone-crypte",
@@ -651,7 +657,9 @@
     "encRate": 0.18,
     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
    }
-  }
+  },
+  "region": 1,
+  "donjon": "spectres-crypte"
  },
  {
   "id": "zone-zenith",
@@ -797,6 +805,8 @@
     "encRate": 0.2,
     "note": "Lot 5 : même table pilote le taux de rencontre (encRate, lu par le moteur) et l’intensité affichée"
    }
-  }
+  },
+  "region": 1,
+  "donjon": "clerge-zenith"
  }
 ]

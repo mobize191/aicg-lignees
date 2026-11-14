@@ -90,7 +90,10 @@ function statsAt(card, lvl) {
 }
 
 function monstersOf(dungeonId) {
-  // gel v1 (suite 39) : les cartes gel (horsPool en data) n'entrent dans les vagues qu'au lot donjons
+  // lot 5 donjons par famille : un donjon peut declarer son pool (familles porteuses) ;
+  // sinon pool historique = tous les monstres du biome. Les horsPool (boss dédiés) restent exclus
+  const d = DUNGEONS.find((x) => x.id === dungeonId);
+  if (d?.pool?.length) return MONSTERS.filter((m) => d.pool.includes(m.id) && !m.horsPool);
   return MONSTERS.filter((m) => m.dungeon === dungeonId && !m.horsPool);
 }
 

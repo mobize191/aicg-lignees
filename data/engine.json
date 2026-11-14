@@ -692,7 +692,8 @@
   },
   "TAUNT_CHARGES": 2,
   "TAUNT_TURNS": 3,
-  "SHIELD_CAP_RATIO": 0.35
+  "SHIELD_CAP_RATIO": 0.35,
+  "ROYALE_LEVEL_BONUS": 10
  },
  "profils": {
   "Guerrier": {

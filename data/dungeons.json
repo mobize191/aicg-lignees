@@ -26,7 +26,31 @@
   "bossCards": {
    "5": "e31",
    "10": "e32"
-  }
+  },
+  "region": 1,
+  "biome": "marees",
+  "famille": "Abîmaux",
+  "palier": 24,
+  "majeur": true,
+  "bossPaliers": [
+   {
+    "floor": 5,
+    "ref": "e31"
+   },
+   {
+    "floor": 10,
+    "ref": "e32"
+   }
+  ],
+  "royale": {
+   "palier": 34,
+   "boss": "e22",
+   "panoplie": "set-marees"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
  },
  {
   "id": "forge",
@@ -49,7 +73,31 @@
   "bossCards": {
    "5": "f23",
    "10": "f13"
-  }
+  },
+  "region": 1,
+  "biome": "forge",
+  "famille": "Cendrels",
+  "palier": 24,
+  "majeur": true,
+  "bossPaliers": [
+   {
+    "floor": 5,
+    "ref": "f23"
+   },
+   {
+    "floor": 10,
+    "ref": "f13"
+   }
+  ],
+  "royale": {
+   "palier": 34,
+   "boss": "f21",
+   "panoplie": "set-forge"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
  },
  {
   "id": "bosquet",
@@ -77,7 +125,31 @@
   "bossCards": {
    "5": "g16",
    "10": "g8"
-  }
+  },
+  "region": 1,
+  "biome": "bosquet",
+  "famille": "Bêtes du Fougeron",
+  "palier": 24,
+  "majeur": true,
+  "bossPaliers": [
+   {
+    "floor": 5,
+    "ref": "g16"
+   },
+   {
+    "floor": 10,
+    "ref": "g8"
+   }
+  ],
+  "royale": {
+   "palier": 34,
+   "boss": "g7",
+   "panoplie": "set-bosquet"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
  },
  {
   "id": "crypte",
@@ -103,7 +175,31 @@
   "bossCards": {
    "5": "k13",
    "10": "k17"
-  }
+  },
+  "region": 1,
+  "biome": "crypte",
+  "famille": "Les Naufragés",
+  "palier": 24,
+  "majeur": true,
+  "bossPaliers": [
+   {
+    "floor": 5,
+    "ref": "k13"
+   },
+   {
+    "floor": 10,
+    "ref": "k17"
+   }
+  ],
+  "royale": {
+   "palier": 34,
+   "boss": "k22",
+   "panoplie": "set-crypte"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
  },
  {
   "id": "zenith",
@@ -129,6 +225,582 @@
   "bossCards": {
    "5": "z6",
    "10": "z8"
-  }
+  },
+  "region": 1,
+  "biome": "zenith",
+  "famille": "Légion Solaire",
+  "palier": 24,
+  "majeur": true,
+  "bossPaliers": [
+   {
+    "floor": 5,
+    "ref": "z6"
+   },
+   {
+    "floor": 10,
+    "ref": "z8"
+   }
+  ],
+  "royale": {
+   "palier": 34,
+   "boss": "z7",
+   "panoplie": "set-zenith"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "gobelins-ecumes",
+  "name": "L'Antre des Écumes",
+  "desc": "Donjon de la famille Gobelins des Écumes (carte régionale 1, ~niveau 3). Escalier de boss par paliers, mode Royale +10.",
+  "region": 1,
+  "biome": "marees",
+  "famille": "Gobelins des Écumes",
+  "palier": 3,
+  "floors": 3,
+  "tier": 0,
+  "accent": "#4fc3f7",
+  "types": [],
+  "icon": "0001F30A",
+  "art": "",
+  "req": null,
+  "pool": [
+   "e1",
+   "e3",
+   "e4",
+   "e5",
+   "e16",
+   "e17",
+   "e18",
+   "e19",
+   "e2",
+   "e10",
+   "e8"
+  ],
+  "salles": [
+   [
+    "e1",
+    "e3",
+    "e4",
+    "e5"
+   ],
+   [
+    "e16",
+    "e17"
+   ],
+   [
+    "e18",
+    "e19"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Griknir, Roi des Écumes"
+  },
+  "bossCards": {
+   "3": "e19"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "e19"
+   }
+  ],
+  "royale": {
+   "palier": 13,
+   "boss": "e22",
+   "panoplie": "set-marees"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "enfants-braise",
+  "name": "La Forge des Enfants de la Braise",
+  "desc": "Donjon de la famille Enfants de la Braise (carte régionale 1, ~niveau 8). Escalier de boss par paliers, mode Royale +10.",
+  "region": 1,
+  "biome": "forge",
+  "famille": "Enfants de la Braise",
+  "palier": 8,
+  "floors": 3,
+  "tier": 1,
+  "accent": "#ff7043",
+  "types": [],
+  "icon": "0001F525",
+  "art": "",
+  "req": null,
+  "pool": [
+   "f14",
+   "f15",
+   "f4",
+   "f9",
+   "f6",
+   "f22",
+   "f5",
+   "f23",
+   "f12"
+  ],
+  "salles": [
+   [
+    "f14",
+    "f15",
+    "f4"
+   ],
+   [
+    "f9",
+    "f6",
+    "f22"
+   ],
+   [
+    "f5",
+    "f23",
+    "f12"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Vulcain, Colosse Ardent"
+  },
+  "bossCards": {
+   "3": "f22"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "f22"
+   }
+  ],
+  "royale": {
+   "palier": 18,
+   "boss": "f21",
+   "panoplie": "set-forge"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "dryades-bosquet",
+  "name": "Le Bosquet des Dryades",
+  "desc": "Donjon de la famille Dryades (carte régionale 1, ~niveau 13). Escalier de boss par paliers, mode Royale +10.",
+  "region": 1,
+  "biome": "bosquet",
+  "famille": "Dryades",
+  "palier": 13,
+  "floors": 3,
+  "tier": 2,
+  "accent": "#66bb6a",
+  "types": [],
+  "icon": "0001F343",
+  "art": "",
+  "req": null,
+  "pool": [
+   "g9",
+   "g12",
+   "g10",
+   "g11",
+   "g17",
+   "g18",
+   "g19",
+   "g20",
+   "g21"
+  ],
+  "salles": [
+   [
+    "g9",
+    "g12",
+    "g10"
+   ],
+   [
+    "g11",
+    "g17",
+    "g18"
+   ],
+   [
+    "g19",
+    "g20",
+    "g21"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Vesna, Dryade du Sous-Bois"
+  },
+  "bossCards": {
+   "3": "g21"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "g21"
+   }
+  ],
+  "royale": {
+   "palier": 23,
+   "boss": "g7",
+   "panoplie": "set-bosquet"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "spectres-crypte",
+  "name": "La Crypte des Spectres",
+  "desc": "Donjon de la famille Spectres des Caveaux (carte régionale 1, ~niveau 17). Escalier de boss par paliers, mode Royale +10.",
+  "region": 1,
+  "biome": "crypte",
+  "famille": "Spectres des Caveaux",
+  "palier": 17,
+  "floors": 3,
+  "tier": 3,
+  "accent": "#9575cd",
+  "types": [],
+  "icon": "0001F480",
+  "art": "",
+  "req": null,
+  "pool": [
+   "k1",
+   "k3",
+   "k13",
+   "k5",
+   "k6",
+   "k14",
+   "k15",
+   "k16",
+   "k7",
+   "k17"
+  ],
+  "salles": [
+   [
+    "k1",
+    "k3",
+    "k13"
+   ],
+   [
+    "k5",
+    "k6",
+    "k14"
+   ],
+   [
+    "k15",
+    "k16",
+    "k7"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Archiliche des Caveaux"
+  },
+  "bossCards": {
+   "3": "k7"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "k7"
+   }
+  ],
+  "royale": {
+   "palier": 27,
+   "boss": "k22",
+   "panoplie": "set-crypte"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "clerge-zenith",
+  "name": "Le Temple du Clergé du Plein Jour",
+  "desc": "Donjon de la famille Clergé du Plein Jour (carte régionale 1, ~niveau 21). Escalier de boss par paliers, mode Royale +10.",
+  "region": 1,
+  "biome": "zenith",
+  "famille": "Clergé du Plein Jour",
+  "palier": 21,
+  "floors": 3,
+  "tier": 4,
+  "accent": "#fff176",
+  "types": [],
+  "icon": "⛩️",
+  "art": "",
+  "req": null,
+  "pool": [
+   "z9",
+   "z23",
+   "z24",
+   "z11",
+   "z25",
+   "z26",
+   "z27",
+   "z28",
+   "z29",
+   "z30"
+  ],
+  "salles": [
+   [
+    "z9",
+    "z23",
+    "z24",
+    "z11"
+   ],
+   [
+    "z25",
+    "z26"
+   ],
+   [
+    "z27",
+    "z28",
+    "z29"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Justine, Justicière du Jour"
+  },
+  "bossCards": {
+   "3": "z29"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "z29"
+   }
+  ],
+  "royale": {
+   "palier": 31,
+   "boss": "z7",
+   "panoplie": "set-zenith"
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "donjon-demons",
+  "name": "Donjon des Démons",
+  "desc": "Sommet divin du jeu (~niveau 95) : stats renforcées, boss Belzébuth, Roi des Démons. Royale +10.",
+  "region": 4,
+  "biome": "divin",
+  "famille": "La Puissance (camp démon)",
+  "palier": 95,
+  "floors": 3,
+  "tier": 19,
+  "accent": "#b71c1c",
+  "types": [],
+  "icon": "0001F47F",
+  "art": "",
+  "req": null,
+  "pool": [
+   "d19",
+   "d20",
+   "d21",
+   "d22",
+   "d23",
+   "d29",
+   "d30",
+   "d31",
+   "d32",
+   "d24",
+   "d25",
+   "d26",
+   "d27",
+   "d28",
+   "d33",
+   "d34",
+   "d35",
+   "d36"
+  ],
+  "salles": [
+   [
+    "d19",
+    "d20",
+    "d21",
+    "d22",
+    "d23"
+   ],
+   [
+    "d29",
+    "d30",
+    "d31",
+    "d32",
+    "d24"
+   ],
+   [
+    "d25",
+    "d26",
+    "d27",
+    "d28",
+    "d33",
+    "d34",
+    "d35",
+    "d36"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Belzébuth, Roi des Démons"
+  },
+  "bossCards": {
+   "3": "d28"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "d28"
+   }
+  ],
+  "royale": {
+   "palier": 105,
+   "boss": "d28",
+   "panoplie": null
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "donjon-anges",
+  "name": "Donjon des Anges",
+  "desc": "Sommet divin du jeu (~niveau 97) : stats renforcées, boss Astre Rayonnant. Royale +10.",
+  "region": 4,
+  "biome": "divin",
+  "famille": "Les Dévoyés (camp ange)",
+  "palier": 97,
+  "floors": 3,
+  "tier": 19,
+  "accent": "#fff9c4",
+  "types": [],
+  "icon": "0001F607",
+  "art": "",
+  "req": null,
+  "pool": [
+   "d37",
+   "d38",
+   "d39",
+   "d40"
+  ],
+  "salles": [
+   [
+    "d37",
+    "d38",
+    "d39"
+   ],
+   [
+    "d40"
+   ],
+   []
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Astre Rayonnant"
+  },
+  "bossCards": {
+   "3": "d40"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "d40"
+   }
+  ],
+  "royale": {
+   "palier": 107,
+   "boss": "d40",
+   "panoplie": null
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
+ },
+ {
+  "id": "donjon-equilibre",
+  "name": "Donjon de l'Équilibre",
+  "desc": "Sommet divin du jeu (~niveau 100) : stats renforcées, boss Kairos, Arbitre du Seuil. Royale +10.",
+  "region": 4,
+  "biome": "divin",
+  "famille": "Arbitres du Seuil / Chœur Miroir / Tisseuses du Pont",
+  "palier": 100,
+  "floors": 3,
+  "tier": 19,
+  "accent": "#eceff1",
+  "types": [],
+  "icon": "⚖️",
+  "art": "",
+  "req": null,
+  "pool": [
+   "d1",
+   "d2",
+   "d3",
+   "d4",
+   "d5",
+   "d6",
+   "d7",
+   "d9",
+   "d10",
+   "d11",
+   "d12",
+   "d13",
+   "d15",
+   "d16",
+   "d17",
+   "d18"
+  ],
+  "salles": [
+   [
+    "d1",
+    "d2",
+    "d3"
+   ],
+   [
+    "d4",
+    "d5",
+    "d6"
+   ],
+   [
+    "d7",
+    "d9",
+    "d10",
+    "d11",
+    "d12",
+    "d13",
+    "d15",
+    "d16",
+    "d17",
+    "d18"
+   ]
+  ],
+  "shards": [],
+  "bossNames": {
+   "3": "Kairos, Arbitre du Seuil"
+  },
+  "bossCards": {
+   "3": "d6"
+  },
+  "bossPaliers": [
+   {
+    "floor": 3,
+    "ref": "d6"
+   }
+  ],
+  "royale": {
+   "palier": 110,
+   "boss": "d6",
+   "panoplie": null
+  },
+  "difficultes": [
+   "normale",
+   "royale"
+  ]
  }
 ]

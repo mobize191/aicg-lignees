@@ -328,10 +328,11 @@ test('boucle v2 lot 1 : action Objet en combat — la gorgée coûte le tour (st
   assert.ok(!r.done || st.winner, 'le tour est consommé comme une action');
 });
 
-test('boucle v2 lot 2 : niveaux de donjon 1 → 25, un par marche (donjon × mode)', () => {
+test('boucle v2 lot 2 : niveaux de donjon 1 → 25, un par marche (donjon majeur × mode)', () => {
   const E = loadEngine();
   const seen = new Set();
-  for (const d of E.DATA.dungeons) {
+  const majeurs = E.DATA.dungeons.filter((d) => d.majeur);
+  for (const d of majeurs) {
     for (const df of E.DATA.difficulties) {
       const lv = E.dungeonLevelOf(d.id, df.id);
       assert.ok(lv >= 1 && lv <= 25, `niveau ${lv} dans 1..25`);
@@ -342,6 +343,11 @@ test('boucle v2 lot 2 : niveaux de donjon 1 → 25, un par marche (donjon × mod
   assert.equal(seen.size, 25, '25 marches');
   assert.equal(E.dungeonLevelOf('marees', 1), 1);
   assert.equal(E.dungeonLevelOf('zenith', 5), 25);
+  // lot 5 : les donjons de famille hors grille rendent leur palier (et +10 en Royale)
+  for (const d of E.DATA.dungeons.filter((x) => !x.majeur)) {
+    assert.equal(E.dungeonLevelOf(d.id, 2), d.palier, `${d.id} rend son palier`);
+    assert.equal(E.dungeonLevelOf(d.id, 'royale'), d.palier + 10, `${d.id} royale +10`);
+  }
 });
 
 test('boucle v2 lot 2 : les vagues suivent la bande de rareté de la marche, boss haut de bande', () => {

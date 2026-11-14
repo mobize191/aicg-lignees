@@ -57,7 +57,7 @@ test('lot C gel : validateur 0 erreur + hors pools de donjons', () => {
   const errs = [];
   E.validate(E.DATA, errs);
   assert.deepEqual(errs, []);
-  const inPools = new Set();
-  for (const d of E.DATA.dungeons) for (const m of E.monstersOf(d.id)) inPools.add(m.id);
-  for (const id of ['d37', 'd38', 'd39', 'd40']) assert.ok(!inPools.has(id), id + ' hors pools');
+  // lot 5 : les anges dévoyés entrent dans le pool du Donjon des Anges (horsPool retiré)
+  const poolAnges = new Set(E.monstersOf('donjon-anges').map((m) => m.id));
+  for (const id of ['d37', 'd38', 'd39', 'd40']) assert.ok(poolAnges.has(id), id + ' dans le pool du Donjon des Anges');
 });

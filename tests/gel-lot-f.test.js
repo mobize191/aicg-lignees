@@ -23,10 +23,16 @@ test('lot F gel : gorgones k33-k40 et fées g33-g39 présentes, mystiques, hors 
     assert.equal(m.name, nom);
     assert.equal(m.rarity, pal);
     assert.equal(E.raceOfCard(m), 'mystique');
-    assert.equal(m.horsPool, true, id + ' hors pool (gel)');
+    assert.ok(!m.horsPool, id + ' entré dans les pools au lot 5 (donjons par famille)');
   }
+  // lot 5 : gorgones dans le pool de la Crypte, fées dans celui du Bosquet
+  const poolCrypte = new Set(E.monstersOf('crypte').map((m) => m.id));
+  const poolBosquet = new Set(E.monstersOf('bosquet').map((m) => m.id));
+  for (let i = 33; i <= 40; i++) assert.ok(poolCrypte.has(`k${i}`), `k${i} dans les vagues de la Crypte`);
+  for (let i = 33; i <= 39; i++) assert.ok(poolBosquet.has(`g${i}`), `g${i} dans les vagues du Bosquet`);
+  // les boss dédiés (e31/e32) restent hors pools de vagues aléatoires
   for (const d of E.DATA.dungeons) {
-    for (const m of E.monstersOf(d.id)) assert.ok(!m.horsPool, m.id + ' hors pool');
+    for (const m of E.monstersOf(d.id)) assert.ok(!m.horsPool, m.id + ' hors pool (boss Card)');
   }
 });
 

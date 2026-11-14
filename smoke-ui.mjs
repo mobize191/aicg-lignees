@@ -950,7 +950,7 @@ async function main() {
   // ---------- boucle v2 lot 2 : niveaux de donjon et bandes de rareté ----------
   {
     mem.clear();
-    check('B2 a 25 marches nivelées 1..25', (() => { const v = new Set(); for (const d of api.DUNGEONS) for (const df of api.DIFFICULTIES) v.add(api.dungeonLevelOf(d.id, df.id)); return v.size === 25 && Math.min(...v) === 1 && Math.max(...v) === 25; })(), '');
+    check('B2 a 25 marches 1..25 (majeurs) + palier propre aux donjons de famille (lot 5)', (() => { const v = new Set(); for (const d of api.DUNGEONS.filter((x) => x.majeur)) for (const df of api.DIFFICULTIES) v.add(api.dungeonLevelOf(d.id, df.id)); const fams = api.DUNGEONS.filter((x) => !x.majeur); return v.size === 25 && Math.min(...v) === 1 && Math.max(...v) === 25 && fams.length === 8 && fams.every((d) => api.dungeonLevelOf(d.id, 2) === d.palier && api.dungeonLevelOf(d.id, 'royale') === d.palier + 10); })(), '');
     api.go('#donjons');
     await wait(40);
     const dgHtml = els.get('app')?._innerHTML ?? '';

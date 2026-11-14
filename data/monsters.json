@@ -3135,7 +3135,6 @@
   "soloMult": 1.4,
   "agi": 10,
   "int": 4,
-  "horsPool": true,
   "def": 3
  },
  {
@@ -3152,7 +3151,6 @@
   "soloMult": 1.6,
   "agi": 14,
   "int": 6,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3169,7 +3167,6 @@
   "soloMult": 1.8,
   "agi": 6,
   "int": 9,
-  "horsPool": true,
   "def": 3
  },
  {
@@ -3186,7 +3183,6 @@
   "soloMult": 2.6,
   "agi": 7,
   "int": 10,
-  "horsPool": true,
   "def": 4
  },
  {
@@ -3203,7 +3199,6 @@
   "soloMult": 2,
   "agi": 8,
   "int": 12,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3220,7 +3215,6 @@
   "soloMult": 1.8,
   "agi": 16,
   "int": 7,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3237,7 +3231,6 @@
   "soloMult": 2.6,
   "agi": 20,
   "int": 9,
-  "horsPool": true,
   "def": 7
  },
  {
@@ -3254,7 +3247,6 @@
   "soloMult": 2,
   "agi": 23,
   "int": 10,
-  "horsPool": true,
   "def": 8
  },
  {
@@ -3271,7 +3263,6 @@
   "soloMult": 1.4,
   "agi": 8,
   "int": 12,
-  "horsPool": true,
   "def": 4
  },
  {
@@ -3288,7 +3279,6 @@
   "soloMult": 1.6,
   "agi": 9,
   "int": 14,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3305,7 +3295,6 @@
   "soloMult": 2.6,
   "agi": 7,
   "int": 10,
-  "horsPool": true,
   "def": 4
  },
  {
@@ -3322,7 +3311,6 @@
   "soloMult": 2,
   "agi": 8,
   "int": 12,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3339,7 +3327,6 @@
   "soloMult": 1.8,
   "agi": 9,
   "int": 14,
-  "horsPool": true,
   "def": 5
  },
  {
@@ -3356,7 +3343,6 @@
   "soloMult": 2.6,
   "agi": 7,
   "int": 10,
-  "horsPool": true,
   "def": 4
  },
  {
@@ -3373,7 +3359,6 @@
   "soloMult": 2,
   "agi": 8,
   "int": 12,
-  "horsPool": true,
   "def": 5
  },
  {

@@ -29,10 +29,15 @@ test('lot A gel : écoles le Vice / la Fureur + 2×6 sorts de lignée + signatur
   assert.equal(E.DATA.engine.FAM_SCHOOL.puissance, 'fureur');
 });
 
-test('lot A gel : les nouvelles cartes sont hors pools de donjons (digest inchangé attendu)', () => {
-  const inPools = new Set();
-  for (const d of E.DATA.dungeons) for (const m of E.monstersOf(d.id)) inPools.add(m.id);
-  for (let i = 19; i <= 36; i++) assert.ok(!inPools.has(`d${i}`), `d${i} hors pools`);
+test('lot A gel + lot 5 donjons : le camp démon entre dans le pool du Donjon des Démons', () => {
+  // au lot 1 (suite 39) les cartes gel étaient horsPool (digest inchangé) ; au lot 5 elles entrent
+  // dans les pools des donjons de famille (spec-donjons §4, IMPACT DIGEST majeur mesuré)
+  const poolDemons = new Set(E.monstersOf('donjon-demons').map((m) => m.id));
+  for (let i = 19; i <= 36; i++) assert.ok(poolDemons.has(`d${i}`), `d${i} dans le pool du Donjon des Démons`);
+  // les boss dédiés (cartes bossCards) restent hors des pools de vagues aléatoires
+  for (const d of E.DATA.dungeons) {
+    for (const m of E.monstersOf(d.id)) assert.ok(!m.horsPool, `${m.id} hors pool (boss Card)`);
+  }
   assert.equal(E.raceOfCard(E.getMonster('d23')), 'divine');
 });
 

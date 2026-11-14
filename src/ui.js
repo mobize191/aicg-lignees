@@ -2594,12 +2594,14 @@ function dungeonOfZone(zoneId) {
   return String(zoneId).replace(/^zone-/, '');
 }
 
-function startZoneFight(zoneId, { donjon = false } = {}) {
+function startZoneFight(zoneId, { donjon = false, royale = false } = {}) {
   // correctifs v1.37 lot 1 : garde équipe (défensif) + genre de combat rattaché au run
   const g = gardeEquipe(store);
   if (!g.ok) { toast('✗ Composez d\'abord votre équipe.', 'warn'); go('#equipe'); return; }
   store.zoneFightCount = (store.zoneFightCount ?? 0) + 1; // v1.38 lot 2 : compteur persisté, intégré au seed de la vague
-  store.zoneFight = { zone: zoneId, donjon };
+  // lot 5 donjons par famille : le donjon de la zone = la famille porteuse (zone.donjon en data)
+  const zoneData = (DATA.zones ?? []).find((x) => x.id === zoneId);
+  store.zoneFight = { zone: zoneId, donjon, royale, donjonId: donjon ? (zoneData?.donjon ?? null) : null };
   store.runState.kind = donjon ? 'donjon' : 'zone';
   figerHero(store.errance); // lot 7 : héros figé pendant le combat
   store.dungeon = dungeonOfZone(zoneId);
@@ -3029,7 +3031,18 @@ function renderErrance(root) {
         save();
       } else if (o.type === 'porte') {
         persistErrancePos(); save();
-        startZoneFight(st.zone, { donjon: true });
+        // lot 5 : 2 difficultés à l'entrée du donjon — Normale / Royale (+10 niveaux, boss royal, panoplie)
+        const djPorte = dungeonById((DATA.zones ?? []).find((x) => x.id === st.zone)?.donjon ?? dungeonOfZone(st.zone));
+        if (djPorte?.royale) {
+          const ov = document.createElement('div');
+          ov.className = 'modal-overlay';
+          ov.innerHTML = `<div class="modal-box" style="max-width:420px"><h3>\u2694 ${djPorte.name}</h3><p class="muted">Deux difficult\u00e9s \u00e0 l'entr\u00e9e. La <b>Royale</b> ouvre \u00e0 +10 niveaux, remplace le boss par la t\u00eate royale et fait tomber la panoplie.</p><div class="row" style="gap:8px;justify-content:center"><button type="button" class="btn big" id="dj-normale">Normale</button><button type="button" class="btn big gold" id="dj-royale">\ud83d\udc51 Royale (+10)</button></div></div>`;
+          document.body.appendChild(ov);
+          ov.querySelector('#dj-normale').onclick = () => { ov.remove(); startZoneFight(st.zone, { donjon: true, royale: false }); };
+          ov.querySelector('#dj-royale').onclick = () => { ov.remove(); startZoneFight(st.zone, { donjon: true, royale: true }); };
+        } else {
+          startZoneFight(st.zone, { donjon: true });
+        }
         return;
       } else if (o.type === 'retour') { // v1.40 : retour ville -> hub-ville (Accueil), pas la sélection des zones
         persistErrancePos(); save();
@@ -5391,6 +5404,18 @@ async function animate(events, ms, gen = null) {
           if (nbEnnemis > 0) questProgress('tuer', nbEnnemis);
           const lastRewards = stageRewards(store.seed, store.stage, 0, store.dungeon, store.diff);
           if (lastRewards?.boss) questProgress('boss');
+          // lot 5 : boss d'un donjon en Royale -> drop garanti d'une pièce de la panoplie du donjon
+          if (store.zoneFight?.royale && lastRewards?.boss) {
+            const djR = dungeonById(store.zoneFight.donjonId ?? store.dungeon);
+            const setId = djR?.royale?.panoplie;
+            const pieces = setId ? EQUIPMENT.filter((p) => p.set === setId) : [];
+            if (pieces.length) {
+              const p = pieces[Math.floor(uiRand() * pieces.length)];
+              addEquipmentPiece(p.id, 1);
+              pushRecomp('drop', '\ud83d\udc51 Pièce de panoplie royale', `${p.nom} (set ${setId})`, p.rarity);
+              toast(`\ud83d\udc51 ${p.nom} — panoplie royale !`);
+            }
+          }
           if (finalClear) questProgress('finirDonjon');
           // bloc visuel : combat de zone (errance) — grâce au retour, déblocage si donjon de zone
           if (store.zoneFight) {
@@ -5780,7 +5805,9 @@ function renderCombat(root, opts = {}) {
   const zoneWaveSize = zfCount != null ? (getZone(store.zoneFight.zone)?.errance?.waveSize ?? [2, 3]) : null; // taille de vague en data
   const wseed = defi ? dailySeed() : waveSeedFor(store.dungeon, store.diff, zfCount);
   const defiLvl = store.dailyLevel && store.dailyLevel.day === todayKey() ? store.dailyLevel.lvl : teamLevel();
-  const wave = defi ? makeDailyWave(wseed, defiLvl) : makeWave(wseed, store.stage, store.dungeon, store.diff, defi ? null : store.runMod, zoneWaveSize);
+  const waveDjId = store.zoneFight?.donjon && store.zoneFight?.donjonId ? store.zoneFight.donjonId : store.dungeon;
+  const waveDiff = store.zoneFight?.royale ? 'royale' : store.diff; // lot 5 : difficulté Royale du donjon
+  const wave = defi ? makeDailyWave(wseed, defiLvl) : makeWave(wseed, store.stage, waveDjId, waveDiff, defi ? null : store.runMod, zoneWaveSize);
   
   let discovery = '';
   if (!defi && store.diff === 1 && dungeonById(store.dungeon).tier === 0

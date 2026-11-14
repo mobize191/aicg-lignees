@@ -38,6 +38,14 @@ Ce fichier est LA source de verite du moteur : aucune valeur de design ne vit da
 | bosquet | Le Bosquet Vermeil | 10 | 2 | Nature/Lumière | 🌿 | a35, a36, a37, a39 | et.5 : Mycola, Reine des Spores ; et.10 : Cœur du Bosquet |
 | crypte | La Crypte Noyée | 10 | 3 | Ombre/Eau | 💀 | a34, a38 | et.5 : Goule des Caveaux ; et.10 : La Mort, Faucheuse des Tombes |
 | zenith | Le Zénith Ardent | 10 | 4 | Lumière/Feu | ☀️ | a37, a39 | et.5 : Phénix du Zénith ; et.10 : Astre Capiteux |
+| gobelins-ecumes | L'Antre des Écumes | 3 | 0 | - | 0001F30A | - | et.3 : Griknir, Roi des Écumes |
+| enfants-braise | La Forge des Enfants de la Braise | 3 | 1 | - | 0001F525 | - | et.3 : Vulcain, Colosse Ardent |
+| dryades-bosquet | Le Bosquet des Dryades | 3 | 2 | - | 0001F343 | - | et.3 : Vesna, Dryade du Sous-Bois |
+| spectres-crypte | La Crypte des Spectres | 3 | 3 | - | 0001F480 | - | et.3 : Archiliche des Caveaux |
+| clerge-zenith | Le Temple du Clergé du Plein Jour | 3 | 4 | - | ⛩️ | - | et.3 : Justine, Justicière du Jour |
+| donjon-demons | Donjon des Démons | 3 | 19 | - | 0001F47F | - | et.3 : Belzébuth, Roi des Démons |
+| donjon-anges | Donjon des Anges | 3 | 19 | - | 0001F607 | - | et.3 : Astre Rayonnant |
+| donjon-equilibre | Donjon de l'Équilibre | 3 | 19 | - | ⚖️ | - | et.3 : Kairos, Arbitre du Seuil |
 
 ## Difficultes (data/difficulties.json)
 

@@ -1006,6 +1006,8 @@ function dungeonById(id) {
 }
 
 function difficultyById(id) {
+  // lot 5 donjons : la difficulté Royale = Normale + ROYALE_LEVEL_BONUS niveaux, boss royal
+  if (id === 'royale') { const base = DIFFICULTIES[1] ?? DIFFICULTIES[0]; return { ...base, id: 'royale', name: 'Royale', royale: true }; }
   return DIFFICULTIES.find((d) => d.id === id) ?? DIFFICULTIES[0];
 }
 
@@ -1014,7 +1016,12 @@ function difficultyById(id) {
 function dungeonLevelOf(dungeonId, diff = 1) {
   const d = dungeonById(dungeonId);
   const n = DIFFICULTIES.length;
-  return (d.tier ?? 0) * n + Math.max(1, Math.min(n, Number(diff) || 1));
+  // lot 5 : les donjons de famille ont leur palier propre (hors grille 25 marches des majeurs)
+  if (!d.majeur && d.palier != null) {
+    return d.palier + (diff === 'royale' ? (M.ROYALE_LEVEL_BONUS ?? 10) : 0);
+  }
+  const base = (d.tier ?? 0) * n + Math.max(1, Math.min(n, Number(diff) || 1));
+  return diff === 'royale' ? base + (M.ROYALE_LEVEL_BONUS ?? 10) : base;
 }
 
 // bande de rareté d'une marche, en données (bande[0] → bande[1])
@@ -1066,12 +1073,13 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   const rng = mulberry32(hashSeed(seed, stage));
   const dungeon = dungeonById(dungeonId);
   const DIFF = difficultyById(diff);
+  const royale = diff === 'royale'; // lot 5 : Royale = +ROYALE_LEVEL_BONUS niveaux, boss royal du donjon
   // boucle v2 lot 2 : la bande de rareté de la marche pilote le bestiaire (thématique, croissant par mode)
   const [bandMin, bandMax] = bandOf(diff);
   const minRank = RANK[bandMin] ?? RANK[DIFF.minR];
   const capRank = Math.min(RANK[bandMax] ?? RANK[DIFF.mobCap], minRank + spreadAt(stage));
   const POOL = monstersOf(dungeon.id);
-  const levelFor = (rarity, boss = false) => levelIn(dungeon, stage, rarity, boss);
+  const levelFor = (rarity, boss = false) => levelIn(dungeon, stage, rarity, boss) + (royale ? (M.ROYALE_LEVEL_BONUS ?? 10) : 0);
 
   const poolOf = (pool, minR = minRank, maxR = capRank) => {
     const p = pool.filter((c) => RANK[c.rarity] >= minR && RANK[c.rarity] <= maxR);
@@ -1092,13 +1100,15 @@ function makeWave(seed, stage, dungeonId = 'marees', diff = 1, runMod = null, wa
   };
 
   const isFinal = stage === dungeon.floors;
-  const isBoss = DIFF.allBoss || stage % 5 === 0;
+  const isBoss = isFinal || DIFF.allBoss || stage % 5 === 0; // lot 5 : étage final d'un donjon de famille (floors 3) est toujours un boss
   let wave;
   if (isBoss) {
     const bossRarity = isFinal ? DIFF.boss10 : DIFF.boss5;
     const [hpMult, atkMult] = isFinal ? [M.FINAL_HP_MULT, M.FINAL_ATK_MULT] : stage % 5 === 0 ? [M.BOSS_HP_MULT, M.BOSS_ATK_MULT] : [M.ELITE_HP_MULT, M.ELITE_ATK_MULT];
     // gel lot I (suite 16) : boss non aléatoire — la carte dédiée du donjon (bossCards en data)
-    const bossCardId = dungeon.bossCards?.[String(stage)];
+    // lot 5 : escalier de boss (bossPaliers), et boss de la difficult Royale quand present
+    const bossCardId = (royale && dungeon.royale?.boss) ? dungeon.royale.boss
+      : (dungeon.bossPaliers?.find((bp) => bp.floor === stage)?.ref ?? dungeon.bossCards?.[String(stage)]);
     const bossCard = bossCardId ? MONSTERS.find((m) => m.id === bossCardId) : null;
     const boss = bossCard
       ? { ...bossCard, level: levelFor(bossCard.rarity, true), atk: Math.max(1, Math.round(bossCard.atk * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * atkMult)), hp: Math.max(1, Math.round(bossCard.hp * (M.WAVE_VAR_MIN + M.WAVE_VAR_SPAN * rng()) * hpMult)) }
